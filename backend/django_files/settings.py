@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',                 # <- Agreado 
     'rest_framework',              # <- Agreado
+    'rest_framework.authtoken',    # <- Agreado
     'coreapi',                     # <- Agreado
     'informe',                     # <- Agreado
     'organo_colegiado',            # <- Agreado
