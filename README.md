@@ -1,9 +1,9 @@
-# SIAP
-================================================================
+ SIAP
+-----------------------------------------------------------------
  Instalar y correr Docker
  Abrir dos terminales, una para back y otra para front.
  Nota: El build solo se hace una vez o al cambiar dependencias.
-================================================================
+-----------------------------------------------------------------
 
 ## Back:
 
