@@ -1,0 +1,20 @@
+# Usar una imagen base con Node.js
+FROM node:14
+
+# Establecer la carpeta de trabajo
+WORKDIR /app
+
+# Copiar los archivos package.json y package-lock.json e instalarlos
+COPY package.json package-lock.json ./
+
+# Instalar paquetes de node
+RUN npm install
+
+# Copiar el resto de los archivos
+COPY . .
+
+# Exponemos el puerto 5173 
+EXPOSE 5173
+
+# Ejecutamos el servidor de ViteJS
+CMD ["npm", "run", "dev","--host"]

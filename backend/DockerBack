@@ -1,0 +1,23 @@
+# Jalar y usar imagen base de python
+FROM python:3.11.5-slim
+
+# Limpiar para reducir el tamaño de la imagen
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Establer la carpeta de trabajo
+WORKDIR /app
+
+# Copiar archivo requerimientos
+COPY requirements.txt .
+
+# Copiar archivo requerimientos
+RUN pip3 install --no-cache-dir -r requirements.txt -v
+
+# Copiar resto de archivos
+COPY . .
+
+# Exponer el puerto 8000 (por defecto de Django)
+EXPOSE 8000
+
+# Ejecutar el servidor
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
