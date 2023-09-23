@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
+from .models import PreguntaEvaluacion, Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
 
 class ProyectoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,8 +30,11 @@ class EvaluacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluacion
         fields = '__all__'
-from rest_framework import serializers
-from .models import VersionProyecto, DesignacionAsistente
+
+class PreguntaEvaluacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PreguntaEvaluacion
+        fields = '__all__'
 
 class VersionProyectoSerializer(serializers.ModelSerializer):
     class Meta:

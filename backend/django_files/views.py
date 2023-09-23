@@ -8,17 +8,18 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 
-@api_view(['POST'])
+@api_view(['POST'])                                                                # Vista asociada a una solicitud POST
 def signup(request):
-    serializer = UserSerializer(data=request.data)
+    serializer = UserSerializer(data=request.data)                                 # Se crea un serializador para el usuario y se le pasa la data de la solicitud
     if serializer.is_valid():
-        serializer.save()
-        user = User.objects.get(username=request.data['username'])
-        user.set_password(request.data['password'])
-        user.save()
-        token = Token.objects.create(user=user)
-        return Response({'token': token.key, 'user': serializer.data})
-    return Response(serializer.errors, status=status.HTTP_200_OK)
+        serializer.save()                                                          # Guarda el nuevo usuario en la base de datos  
+        user = User.objects.get(username=request.data['username'])                 # Se recupera de la base de datos el objeto de usuario recién creado 
+        user.set_password(request.data['password'])                                # Se setea la contraseña del usuario usando la proporcionada en la solicitud
+        user.save()                                                                # Se guarda el usuario nuevamente en la base de datos
+        token = Token.objects.create(user=user)                                    # Se crea un token de autenticación para el usuario recién registrado. 
+                                                                                   # Esto permite que el usuario inicie sesión en futuras solicitudes utilizando este token.
+        return Response({'token': token.key, 'user': serializer.data})             # Se devuelve una respuesta HTTP con un token y los datos del usuario registrado en un JSON.
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def login(request):
