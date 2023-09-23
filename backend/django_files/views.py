@@ -7,9 +7,11 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
+from .permisos import PermisoPorRol
 
+# Signup
 @api_view(['POST'])                                                                # Vista asociada a una solicitud POST
-def signup(request):
+def signup(request):                                                               
     serializer = UserSerializer(data=request.data)                                 # Se crea un serializador para el usuario y se le pasa la data de la solicitud
     if serializer.is_valid():
         serializer.save()                                                          # Guarda el nuevo usuario en la base de datos  
@@ -21,6 +23,7 @@ def signup(request):
         return Response({'token': token.key, 'user': serializer.data})             # Se devuelve una respuesta HTTP con un token y los datos del usuario registrado en un JSON.
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Login
 @api_view(['POST'])
 def login(request):
     user = get_object_or_404(User, username=request.data['username'])
@@ -30,8 +33,39 @@ def login(request):
     serializer = UserSerializer(user)
     return Response({'token': token.key, 'user': serializer.data})
 
+# Test token
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed!")
+
+# Get users
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated, PermisoPorRol])
+def get_users(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+# Delete user
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated, PermisoPorRol])
+def delete_user(request, username):
+    user = get_object_or_404(User, username=username)
+    user.delete()
+    return Response("Usuario eliminado")
+
+# Update user
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated, PermisoPorRol])
+def update_user(request, username):
+    user = get_object_or_404(User, username=username)
+    serializer = UserSerializer(user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

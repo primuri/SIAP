@@ -11,10 +11,33 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "username": "usuarioEvaluador", "password": "root1234" }
+{ "username": "root", "password": "root" }
 
 ### Probar acceso a views
 
 GET http://127.0.0.1:8000/informe/informes/
 Content-Type: application/json
-Authorization: token 189eb37131344a30203a67ff0478b8174e107470
+Authorization: token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
+
+### Obtener usuarios
+
+GET http://127.0.0.1:8000/obtener_usuarios
+Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
+Content-Type: application/json
+
+### Actualizar usuario 
+PUT http://127.0.0.1:8000/actualizar_usuario/prueba/ HTTP/1.1
+Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
+Content-Type: application/json
+
+{
+    "username": "prueba",
+    "first_name": "pru-e-ba",
+    "last_name": "ba-e-pru",
+    "password": "pbkdf2_sha256$600000$WzCKQC2ZnyW3jVfzx3Vn22$CQqORqH1fn1bO2HAV0hqoDJeLLbh4WgSM7EeEdQS1cY="
+}
+
+### Eliminar usuario
+
+DELETE http://127.0.0.1:8000/eliminar_usuario/primuri/ HTTP/1.1
+Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -11,7 +11,10 @@ urlpatterns = [
     path('producto/', include('producto.urls')),
     path('version_proyecto/', include('version_proyecto.urls')),
     path('propuesta_proyecto/', include('propuesta_proyecto.urls')),
-    re_path('signup', views.signup),
-    re_path('login', views.login),
-    re_path('test_token', views.test_token),
+    path('signup', views.signup),
+    path('login', views.login),
+    path('test_token', views.test_token),
+    path('obtener_usuarios', views.get_users),
+    path('actualizar_usuario/<str:username>/', views.update_user),
+    path('eliminar_usuario/<str:username>/', views.delete_user),
 ]
