@@ -1,24 +1,20 @@
 
+### Crear usuario
+
 POST http://127.0.0.1:8000/signup 
 Content-Type: application/json
 
 { "username": "primuri", "password": "cookie", "email": "priscila@primarix.com"}
 
-###
+### Inicio de sesion
 
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
 { "username": "usuarioEvaluador", "password": "root1234" }
 
-###
+### Probar acceso a views
 
-GET http://127.0.0.1:8000/test_token
-Content-Type: application/json
-Authorization: token 1bcc0cbb6374934049c51f75b0552566e8f4c8fa
-
-###
-
-GET http://127.0.0.1:8000/organo_colegiado/integrante/
+GET http://127.0.0.1:8000/informe/informes/
 Content-Type: application/json
 Authorization: token 189eb37131344a30203a67ff0478b8174e107470
