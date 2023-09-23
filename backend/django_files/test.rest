@@ -2,9 +2,15 @@
 ### Crear usuario
 
 POST http://127.0.0.1:8000/signup 
+Authorization: token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
 Content-Type: application/json
 
-{ "username": "primuri", "password": "cookie", "email": "priscila@primarix.com"}
+{
+  "username": "primurasi", 
+  "password": "cookie", 
+  "email": "priscila@primarix.com"
+}
+
 
 ### Inicio de sesion
 
@@ -40,5 +46,5 @@ Content-Type: application/json
 
 ### Eliminar usuario
 
-DELETE http://127.0.0.1:8000/eliminar_usuario/primuri/ HTTP/1.1
+DELETE http://127.0.0.1:8000/eliminar_usuario/primurasi/ HTTP/1.1
 Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa

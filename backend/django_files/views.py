@@ -10,7 +10,9 @@ from .serializers import UserSerializer
 from .permisos import PermisoPorRol
 
 # Signup
-@api_view(['POST'])                                                                # Vista asociada a una solicitud POST
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated, PermisoPorRol])                                                                # Vista asociada a una solicitud POST
 def signup(request):                                                               
     serializer = UserSerializer(data=request.data)                                 # Se crea un serializador para el usuario y se le pasa la data de la solicitud
     if serializer.is_valid():
