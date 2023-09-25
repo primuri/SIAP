@@ -31,7 +31,7 @@ class ColaboradorPrincipal(models.Model):
 
     class Meta:
         db_table = 'colaborador_principal'
-        unique_together = (('id_academico_fk', 'id_codigo_cimpa_fk'),)
+        unique_together = (('id_academico_fk', 'id_codigo_cimpa_fk','id_vigencia_fk'),)
 
 class DocumentoAsociado(models.Model):
     id_documentos_asociados = models.AutoField(primary_key=True)
@@ -41,3 +41,4 @@ class DocumentoAsociado(models.Model):
 
     class Meta:
         db_table = 'documento_asociado'
+        unique_together = (( 'documento','id_codigo_cimpa_fk'),) # Para evitar que un mismo documento asociado este 2 veces
