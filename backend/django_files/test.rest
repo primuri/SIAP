@@ -6,9 +6,8 @@ Authorization: token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
 Content-Type: application/json
 
 {
-  "username": "primurasi", 
-  "password": "cookie", 
-  "email": "priscila@primarix.com"
+  "correo": "root@root.com", 
+  "password": "root", 
 }
 
 
@@ -17,7 +16,7 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "username": "root", "password": "root" }
+{ "correo": "root@root.com", "password": "root" }
 
 ### Probar acceso a views
 
