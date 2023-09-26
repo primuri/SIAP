@@ -16,8 +16,22 @@ body {
   min-height: 100vh;
 }
 
-input{
+.background-color-celeste-ucr{
+  background-color: var(--celeste-ucr);
+}
+.background-color-gris-c-ucr{
   background-color: var(--gris-claro-ucr);
+}
+.background-color-rojo-ucr{
+  background-color: var(--rojo-ucr);
+}
+input,button{
+  background-color: var(--gris-claro-ucr);
+  border: transparent;
+  outline: none;
+}
+select{
+  outline: none;
 }
 
 input[type="submit"]{
@@ -67,4 +81,51 @@ main{
 }
 .cancel-button{
   background-color: var(--gris-oscuro-urc);
+}
+
+table{
+  width: 80vw;
+  box-shadow: 1px 1px 6px #9191916b;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 10px;
+}
+
+table thead{
+  border-radius: 5px 5px 0 0;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+table thead tr{
+  background-color: var(--celeste-ucr);
+  color: white;
+  font-weight: lighter;
+  padding: 1rem;
+}
+table thead tr:last-child(){
+  border-radius: 0 5px 0 0;
+}
+table thead tr:first-child(){
+  border-radius: 5px 0 0 0;
+}
+table tbody td{
+  cursor: pointer;
+}
+table tbody tr:nth-child(odd){
+  background-color: #E4E4E4;
+}
+table tbody tr:nth-child(even){
+  background-color: #e1dbdb;
+}
+.page-number.active{
+  background-color: var(--gris-oscuro-urc);
+  color: white;
+}
+
+.modal {
+  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.355);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }

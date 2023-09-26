@@ -3,7 +3,8 @@ import add from '../assets/plus-i.png'
 export const Add = ({onClick}) =>{
     return(
         <button 
-        className='table-button border-0 p-3 rounded text-white'
+        type='button'
+        className='table-button border-0 p-2 ps-3 pe-3 rounded-3 text-white fs-5 d-flex align-items-center'
         onClick={onClick}>
           <span><img src={add}/></span> Agregar
         </button>
