@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
+import datetime
 
 class NombreCompleto(models.Model):
     id_nombre_completo = models.AutoField(primary_key=True)
@@ -11,7 +13,7 @@ class NombreCompleto(models.Model):
 
 class AreaEspecialidad(models.Model):
     id_area_especialidad = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=128)
+    nombre = models.CharField(max_length=128, unique=True)
 
     class Meta:
         db_table = 'area_especialidad'
@@ -45,7 +47,7 @@ class Academico(models.Model):
 
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)
-    numero_tel = models.CharField(max_length=45)
+    numero_tel = models.CharField(max_length=45, unique=True) # para evitar que varios academicos tengan el mismo numeor de telefono
     id_academico_fk = models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
 
     class Meta:
@@ -53,17 +55,18 @@ class Telefono(models.Model):
 
 class Titulos(models.Model):
     id_titulos = models.AutoField(primary_key=True)
-    anio = models.IntegerField()
+    anio = models.IntegerField( validators=[ MaxValueValidator(datetime.date.today().year), MinValueValidator(1930) ] ) # para evitar que pongan una fecha a futuro o una fecha muy al pasado
     grado = models.CharField(max_length=64)
     detalle = models.CharField(max_length=80)
     institución = models.CharField(max_length=255)
-    id_academico_fk = models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
+    id_academico_fk =  models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
 
     class Meta:
         db_table = 'titulos'
+        unique_together = (('grado', 'id_academico_fk','detalle','institución','anio'),) # Para evitar que un academico tenga un mismo titulo 2 veces
 
 class Evaluador(models.Model):
-    id_evaluador = models.IntegerField(primary_key=True)
+    id_evaluador = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
     correo = models.CharField(max_length=45)
     universidad_fk = models.ForeignKey(Universidad, on_delete=models.PROTECT, db_column='universidad_fk')
@@ -72,6 +75,7 @@ class Evaluador(models.Model):
 
     class Meta:
         db_table = 'evaluador'
+        unique_together = (('tipo', 'correo','universidad_fk','id_area_especialidad_fk','id_nombre_completo_fk'),) # Para evitar que un mismo evaluador este 2 veces
 
 class Asistente(models.Model):
     id_asistente_carnet = models.CharField(max_length=10, primary_key=True)
