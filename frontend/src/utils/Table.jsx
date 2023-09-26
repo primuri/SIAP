@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns, data, onClick }) => {
+export const Table = ({ columns, data, onClick, dataKeys}) => {
   const [currentPage, setCurrentPage] = useState(1); 
   const [itemsPerPage, setItemsPerPage] = useState(10); 
 
@@ -59,7 +59,7 @@ export const Table = ({ columns, data, onClick }) => {
           <tbody>
             {currentItems.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => onClick(row)}>
-                {Object.keys(row).map((column, colIndex) => (
+                {dataKeys.map((column, colIndex) => (
                   <td key={colIndex}>{row[column]}</td>
                 ))}
               </tr>
@@ -96,4 +96,5 @@ Table.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   onClick: PropTypes.func.isRequired,
+  dataKeys: PropTypes.array.isRequired,
 };
