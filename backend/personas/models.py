@@ -31,7 +31,7 @@ class Universidad(models.Model):
 class Academico(models.Model):
     id_academico = models.AutoField(primary_key=True)
     cedula = models.CharField(max_length=20, unique=True)
-    foto = models.BinaryField(blank=True, null=True)
+    foto = models.CharField(max_length=2048)
     sitio_web = models.CharField(max_length=255, blank=True, null=True)
     grado_maximo = models.CharField(max_length=128)
     correo = models.CharField(max_length=64)
