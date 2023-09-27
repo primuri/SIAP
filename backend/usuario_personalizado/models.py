@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group
 
 class UsuarioManager(BaseUserManager):
 
@@ -33,17 +33,13 @@ class UsuarioManager(BaseUserManager):
         return self._create_user(correo, password, **extra_fields)
 
 class Usuario(AbstractBaseUser, PermissionsMixin): 
-    
     correo = models.EmailField(db_index=True, unique=True, max_length=254)
-
-    is_staff = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
-
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'correo'
-
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
