@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
+from usuario_personalizado.models import Usuario
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 from .permisos import PermisoPorRol
@@ -17,7 +17,7 @@ def signup(request):
     serializer = UserSerializer(data=request.data)                                 # Se crea un serializador para el usuario y se le pasa la data de la solicitud
     if serializer.is_valid():
         serializer.save()                                                          # Guarda el nuevo usuario en la base de datos  
-        user = User.objects.get(username=request.data['username'])                 # Se recupera de la base de datos el objeto de usuario recién creado 
+        user = Usuario.objects.get(correo=request.data['correo'])                 # Se recupera de la base de datos el objeto de usuario recién creado 
         user.set_password(request.data['password'])                                # Se setea la contraseña del usuario usando la proporcionada en la solicitud
         user.save()                                                                # Se guarda el usuario nuevamente en la base de datos
         token = Token.objects.create(user=user)                                    # Se crea un token de autenticación para el usuario recién registrado. 
@@ -28,7 +28,7 @@ def signup(request):
 # Login
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, username=request.data['username'])
+    user = get_object_or_404(Usuario, correo=request.data['correo'])
     if not user.check_password(request.data['password']):
         return Response("missing user", status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user=user)
@@ -47,7 +47,7 @@ def test_token(request):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
 def get_users(request):
-    users = User.objects.all()
+    users = Usuario.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
@@ -55,8 +55,8 @@ def get_users(request):
 @api_view(['DELETE'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
-def delete_user(request, username):
-    user = get_object_or_404(User, username=username)
+def delete_user(request, correo):
+    user = get_object_or_404(Usuario, correo=correo)
     user.delete()
     return Response("Usuario eliminado")
 
@@ -64,8 +64,8 @@ def delete_user(request, username):
 @api_view(['PUT'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
-def update_user(request, username):
-    user = get_object_or_404(User, username=username)
+def update_user(request, correo):
+    user = get_object_or_404(Usuario, correo=correo)
     serializer = UserSerializer(user, data=request.data)
     if serializer.is_valid():
         serializer.save()
