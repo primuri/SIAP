@@ -11,13 +11,20 @@ Content-Type: application/json
   "groups": ["invitado"]
 }
 
-
 ### Inicio de sesion
 
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "correo": "pepe@email.com", "password": "root" }
+{ "correo": "root@root.com", "password": "root" }
+
+### Obtener usuarios
+
+GET http://127.0.0.1:8000/obtener_usuarios
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+
 
 ### Probar acceso a views
 

@@ -45,8 +45,6 @@ export const InicioSesion = () => {
       } catch (error) {
         setError('Usuario o contraseña incorrectos');
       }
-    
-
   };
 
   return (
