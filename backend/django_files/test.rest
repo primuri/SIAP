@@ -24,34 +24,25 @@ GET http://127.0.0.1:8000/obtener_usuarios
 Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
 Content-Type: application/json
 
-
-
-### Probar acceso a views
-
-GET http://127.0.0.1:8000/informe/informes/
-Content-Type: application/json
-Authorization: token c926290d44c2b0b595d8279347a0b3d595dcee26
-
-### Obtener usuarios
-
-GET http://127.0.0.1:8000/obtener_usuarios
-Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
-Content-Type: application/json
-
-### Actualizar usuario 
-
-PUT http://127.0.0.1:8000/actualizar_usuario/primuri/ HTTP/1.1
-Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
-Content-Type: application/json
-
-{
-    "username": "primuri",
-    "first_name": "pri",
-    "last_name": "muri",
-    "password": "pbkdf2_sha256$600000$MuifscRqLOH0Bb6uNQ4QQT$TOkmYsZuMrRsiyvfEkxauRMqVs4GQb3DUtFmYb/WRGY="
-}
-
 ### Eliminar usuario
 
 DELETE http://127.0.0.1:8000/eliminar_usuario/pepe@email.com/ HTTP/1.1
 Authorization: Token 86119619985b6debd31cbdb792c9a9c8b5f91fbc
+
+### Obtener academicos
+
+GET http://127.0.0.1:8000/personas/academico/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+### Obtener titulos
+
+GET http://127.0.0.1:8000/personas/titulos/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+### Obtener telefonos
+
+GET http://127.0.0.1:8000/personas/telefono/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json

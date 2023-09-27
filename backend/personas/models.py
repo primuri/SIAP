@@ -48,7 +48,7 @@ class Academico(models.Model):
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)
     numero_tel = models.CharField(max_length=45, unique=True) # para evitar que varios academicos tengan el mismo numeor de telefono
-    id_academico_fk = models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
+    id_academico_fk = models.ForeignKey(Academico, on_delete=models.CASCADE, db_column='id_academico_fk')
 
     class Meta:
         db_table = 'telefono'
@@ -59,7 +59,7 @@ class Titulos(models.Model):
     grado = models.CharField(max_length=64)
     detalle = models.CharField(max_length=80)
     institución = models.CharField(max_length=255)
-    id_academico_fk =  models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
+    id_academico_fk =  models.ForeignKey(Academico, on_delete=models.CASCADE, db_column='id_academico_fk')
 
     class Meta:
         db_table = 'titulos'
