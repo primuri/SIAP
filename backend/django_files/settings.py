@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'producto',                    # <- Agreado
     'propuesta_proyecto',          # <- Agreado
     'version_proyecto',            # <- Agreado
+    'usuario_personalizado',            # <- Agreado
 ]
 
 MIDDLEWARE = [
@@ -92,6 +93,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'usuario_personalizado.Usuario'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

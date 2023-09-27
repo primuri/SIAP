@@ -2,13 +2,13 @@
 ### Crear usuario
 
 POST http://127.0.0.1:8000/signup 
-Authorization: token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
+Authorization: token 86119619985b6debd31cbdb792c9a9c8b5f91fbc
 Content-Type: application/json
 
 {
-  "username": "primurasi", 
-  "password": "cookie", 
-  "email": "priscila@primarix.com"
+  "correo": "pepe@email.com", 
+  "password": "root", 
+  "groups": ["invitado"]
 }
 
 
@@ -17,13 +17,13 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "username": "root", "password": "root" }
+{ "correo": "pepe@email.com", "password": "root" }
 
 ### Probar acceso a views
 
 GET http://127.0.0.1:8000/informe/informes/
 Content-Type: application/json
-Authorization: token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
+Authorization: token c926290d44c2b0b595d8279347a0b3d595dcee26
 
 ### Obtener usuarios
 
@@ -46,5 +46,5 @@ Content-Type: application/json
 
 ### Eliminar usuario
 
-DELETE http://127.0.0.1:8000/eliminar_usuario/primurasi/ HTTP/1.1
-Authorization: Token dd2dc2f7ddffd73c0af2277eff3856214bd0c6fa
+DELETE http://127.0.0.1:8000/eliminar_usuario/pepe@email.com/ HTTP/1.1
+Authorization: Token 86119619985b6debd31cbdb792c9a9c8b5f91fbc
