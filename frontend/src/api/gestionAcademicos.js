@@ -73,26 +73,36 @@ export const obtenerAcademicos = (token) => {
     });
 };
 
-export const agregarAcademico = (academico, nombre, area, universidad, titulos, telefonos, token) => {
-    const id_nombre_completo = obtenerNombre(nombre, token);
-    const id_area_especialidad = obtenerArea(area, token);
-    const id_universidad = obtenerUniversidad(universidad, token);
-    
-    academico.id_nombre_completo_fk = id_nombre_completo;
-    academico.id_area_especialidad_fk = id_area_especialidad;
-    academico.universidad_fk = id_universidad;
+export const agregarAcademico = async (academico,  token) => {
+   
 
-    const responseAcademico = SIAPAPI.post('personas/academico', academico, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
+    try {
+        const id_nombre_creado = await obtenerNombre(academico.id_nombre_completo_fk,token);
+        delete academico.id_nombre_completo_fk;
+        academico.id_nombre_completo_fk = id_nombre_creado;
+        
+        const id_area_creada = await obtenerArea(academico.id_area_especialidad_fk,token);
+        delete academico.id_area_especialidad_fk;
+        academico.id_area_especialidad_fk = id_area_creada;
 
-    agregarTitulos(titulos, responseAcademico.data.id_academico, token);
-    agregarTelefonos(telefonos, responseAcademico.data.id_academico, token);
+        const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk,token);
+        delete academico.universidad_fk;
+        academico.universidad_fk = id_universidad_creada;
+        
+        const response_academico = await SIAPAPI.post('personas/academico/', academico, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-    return responseAcademico;
+        //await agregarTitulos(titulos, responseAcademico.data.id_academico, token);
+        //await agregarTelefonos(telefonos, responseAcademico.data.id_academico, token);
+        return response_academico;
+    } catch(error) {
+        console.error("Error agregando académico: ", error);
+        throw error;
+    }
 };
 
 export const editarAcademico = (academico, titulos, telefonos, token) => {
@@ -119,87 +129,51 @@ export const eliminarAcademico = (id, token) => {
 };
 
 
-const obtenerNombre = (nombre, token) => {
-    const responseNombre = SIAPAPI.get('personas/nombre_completo', {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const nombreEncontrado = responseNombre.data.find((nombreActual) =>
-        (
-            nombreActual.nombre === nombre.nombre &&
-            nombreActual.apellido === nombre.apellido &&
-            nombreActual.segundo_apellido === nombre.segundo_apellido
-        ));
-
-    if (nombreEncontrado) {
-        return nombreEncontrado.id_nombre_completo;
-    } else {
-        const responseNombre = SIAPAPI.post('personas/nombre_completo', nombre, {
+const obtenerNombre = async (nombre, token) => {
+    try {
+        const response_nombre = await SIAPAPI.post('personas/nombre_completo/', nombre, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         });
+        const id_nombre_creado = response_nombre.data.id_nombre_completo;
+        return id_nombre_creado;
+    } catch(error) {
+        console.error("Error agregando nombre: ", error);
+        throw error;
+    } 
+};
 
-        return responseNombre.data.id_nombre_completo;
+const obtenerArea = async (area, token) => {
+     try {
+        const response_area = await SIAPAPI.post('personas/area_especialidad/', area, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_area_creada = response_area.data.id_area_especialidad;
+        return id_area_creada;
+    } catch(error) {
+        console.error("Error agregando area de especialidad: ", error);
+        throw error;
     }
 };
 
-const obtenerArea = (area, token) => {
-    const responseArea = SIAPAPI.get('personas/area_especialidad', {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const areaEncontrada = responseArea.data.find((areaActual) =>
-        (
-            areaActual.nombre === area.nombre
-        ));
-
-    if (areaEncontrada) {
-        return areaEncontrada.id_area_especialidad;
-    } else {
-        const responseArea = SIAPAPI.post('personas/area_especialidad', area, {
+const obtenerUniversidad = async (universidad, token) => {
+    try {
+        const response_universidad = await SIAPAPI.post('personas/universidad/', universidad, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-
-        return responseArea.data.id_area_especialidad;
-    }
-};
-
-const obtenerUniversidad = (universidad, token) => {
-    const responseUniversidad = SIAPAPI.get('personas/universidad', {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const universidadEncontrada = responseUniversidad.data.find((universidadActual) =>
-        (
-            universidadActual.nombre === universidad.nombre &&
-            universidadActual.pais === universidad.pais
-        ));
-
-    if (universidadEncontrada) {
-        return universidadEncontrada.id_universidad;
-    } else {
-        const responseUniversidad = SIAPAPI.post('personas/universidad', universidad, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        return responseUniversidad.data.id_universidad;
+        const id_universidad_creada = response_universidad.data.id_universidad;
+        return id_universidad_creada;
+    } catch(error) {
+        console.error("Error agregando universidad: ", error);
+        throw error;
     }
 };
 

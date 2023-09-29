@@ -6,6 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { eliminarAcademico } from "../../api/gestionAcademicos"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
+import { agregarAcademico } from "../../api/gestionAcademicos"
 
 export const GestionAcademicos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -44,10 +45,17 @@ export const GestionAcademicos = () => {
         setAddClick(true)
     }
     //aqui se manejan los datos que se van a enviar para agregar el academico. e es un json con los datos del form
-    const addAcademico = (e) => {
-        console.log(e)
-        setAddClick(false)
+    const addAcademico = async (formData) => {       
+        try {
+            const Datos = JSON.parse(formData);
+            const response = await agregarAcademico(Datos, localStorage.getItem("token"));
+            console.log("Académico agregado con éxito:", response.data);
+            setAddClick(false);
+        } catch (error) {
+            console.error("Error al agregar académico:", error);
+        }
     }
+    
 
     //Manjeo de las funciones para el formulario cuando se quiere editar un academico
     //funcion para cuando se hace click en una tabla.
