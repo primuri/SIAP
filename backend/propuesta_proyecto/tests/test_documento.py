@@ -5,18 +5,81 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from ..models import DocumentoAsociado, PropuestaProyecto
 from django.contrib.auth.models import Group
+from usuario_personalizado.models import Usuario
 
 class DocumentoAsociadoTests(APITestCase):
 
     def setUp(self):
 
-        # Crea el usuario de prueba
-        self.user = User.objects.create_user(username='testuser', password='testpassword', is_staff=True, is_superuser=True)
+        # Crea el usuario de prueba usando el modelo personalizado
+        self.user = Usuario.objects.create_user(correo='testuser@example.com', password='testpassword')
         admin_group, created = Group.objects.get_or_create(name='administrador')
         self.user.groups.add(admin_group)
         self.token = Token.objects.create(user=self.user)
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.nombre_completo_data = {
+            'nombre': 'Juan',
+            'apellido': 'Perez',
+            'segundo_apellido': 'Ramirez'
+        }
+
+        self.area_especialidad_data = {
+            'nombre': 'Física'
+        }
+
+        self.universidad_data = {
+            'pais': 'Costa Rica',
+            'nombre': 'Universidad de Costa Rica'
+        }
+
+        self.vigencia_data = {
+            'fecha_inicio': '2023-09-04T15:30:00',
+            'fecha_fin': '2024-09-04T12:45:00'
+        }
+
+        # Guardar estos datos y almacenar sus IDs
+        response = self.client.post(reverse('nombrecompleto-list'), self.nombre_completo_data, format='json')
+        self.nombre_completo_id = response.data['id_nombre_completo']
+
+        response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad_data, format='json')
+        self.area_especialidad_id = response.data['id_area_especialidad']
+
+        response = self.client.post(reverse('universidad-list'), self.universidad_data, format='json')
+        self.universidad_id = response.data['id_universidad']
+
+        response = self.client.post(reverse('vigencia-list'), self.vigencia_data, format='json')
+        self.vigencia_id = response.data['id_vigencia']
+
+        self.academico_data = {
+            'cedula': '118240782',
+            'foto': 'foto',
+            'sitio_web': 'http://google.com',
+            'grado_maximo': 'Bachillerato',
+            'correo': 'brandon.castillo.badilla@est.una.ac.cr',
+            'area_de_trabajo': 'Circo',
+            'categoria_en_regimen': 'Junior',
+            'pais_procedencia': 'Costa Rica',
+            'id_nombre_completo_fk': self.nombre_completo_id,
+            'id_area_especialidad_fk': self.area_especialidad_id,
+            'universidad_fk': self.universidad_id
+        }
+
+        response = self.client.post(reverse('academico-list'), self.academico_data, format='json')
+        self.academico_id = response.data['id_academico']
+
+        # Crear datos para ColaboradorPrincipal
+        self.colaborador_data = {
+            'tipo': 'Principal',
+            'carga': '50%',
+            'estado': 'Activo',
+            'id_vigencia_fk': self.vigencia_id,
+            'id_academico_fk': self.academico_id
+        }
+        response = self.client.post(reverse('colaboradorprincipal-list'), self.colaborador_data, format='json')
+        self.colaborador_id = response.data['id_colaborador_principal']
+
 
         # Crea los datos de Prueba relacionados
         self.propuesta_proyecto_data = {
@@ -26,7 +89,8 @@ class DocumentoAsociadoTests(APITestCase):
             'nombre': 'Propuesta 1',
             'descripcion': 'Descripción de la propuesta',
             'fecha_vigencia': '2023-09-24T15:30:00',
-            'actividad': 'Actividad de la propuesta'
+            'actividad': 'Actividad de la propuesta',
+            'id_colaborador_principal_fk': self.colaborador_id,
         }
 
         response = self.client.post(reverse('propuestaproyecto-list'), self.propuesta_proyecto_data, format='json')

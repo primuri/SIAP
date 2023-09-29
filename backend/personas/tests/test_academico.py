@@ -4,13 +4,14 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User, Group
 from ..models import Academico
+from usuario_personalizado.models import Usuario
 
 class AcademicoTests(APITestCase):
 
     def setUp(self):
 
-    # Crea el usuario de prueba
-        self.user = User.objects.create_user(username='testuser', password='testpassword', is_staff=True, is_superuser=True)
+        # Crea el usuario de prueba usando el modelo personalizado
+        self.user = Usuario.objects.create_user(correo='testuser@example.com', password='testpassword')
         admin_group, created = Group.objects.get_or_create(name='administrador')
         self.user.groups.add(admin_group)
         self.token = Token.objects.create(user=self.user)
@@ -43,7 +44,7 @@ class AcademicoTests(APITestCase):
 
         self.data = {
             'cedula': '118240782',
-            'foto': None,
+            'foto': 'foto',
             'sitio_web': 'http://google.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandon.castillo.badilla@est.una.ac.cr',
@@ -60,6 +61,7 @@ class AcademicoTests(APITestCase):
 
         url = reverse('academico-list')
         response = self.client.post(url, self.data, format='json')
+        
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -73,7 +75,7 @@ class AcademicoTests(APITestCase):
         # Datos actualizados
         update_data = {
             'cedula': '118240782',
-            'foto': None,
+            'foto': 'foto',
             'sitio_web': 'http://118240782.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandonchin07@gmail.com',
@@ -88,7 +90,7 @@ class AcademicoTests(APITestCase):
         
         url = reverse('academico-detail', args=[1])
         response = self.client.put(url, update_data, format='json')
-        academico = Academico.objects.get(id_academico=1)
+        academico = Academico.objects.get(id_academico='1')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -119,7 +121,7 @@ class AcademicoTests(APITestCase):
         # Creando datos de prueba 2
         data2 = {
             'cedula': '87654321',
-            'foto': None,
+            'foto': 'foto',
             'sitio_web': 'http://87654321.com',
             'grado_maximo': 'Licenciatura',
             'correo': 'brandon.castillo@email.com',
@@ -133,14 +135,14 @@ class AcademicoTests(APITestCase):
 
         data3 = {
             'cedula': '87654321',
-            'foto': None,
+            'foto': 'foto',
             'sitio_web': 'http://87654321.com',
             'grado_maximo': 'Licenciatura',
             'correo': 'brandon.castillo@email.com',
             'area_de_trabajo': 'Dermatología',
             'categoria_en_regimen': 'Junior',
             'pais_procedencia': 'Nicaragua',
-              'id_nombre_completo_fk': response_nombre.data['id_nombre_completo'],
+            'id_nombre_completo_fk': response_nombre.data['id_nombre_completo'],
             'id_area_especialidad_fk': response_area.data['id_area_especialidad'], 
             'universidad_fk': response_universidad.data['id_universidad']  
         }

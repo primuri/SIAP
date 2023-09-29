@@ -30,8 +30,8 @@ class PropuestaProyectoSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(PropuestaProyectoSerializer, self).to_representation(instance)
-        rep['id_colaborador_principal_fk'] = VigenciaSerializer(instance.id_colaborador_principal_fk).data
-    
+        rep['id_colaborador_principal_fk'] = ColaboradorPrincipalSerializer(instance.id_colaborador_principal_fk).data
+        return rep
     
 class DocumentoAsociadoSerializer(serializers.ModelSerializer):
     id_codigo_cimpa_fk = serializers.PrimaryKeyRelatedField(queryset=PropuestaProyecto.objects.all())

@@ -5,13 +5,14 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from ..models import Telefono
 from django.contrib.auth.models import Group
+from usuario_personalizado.models import Usuario
 
 class TelefonoTests(APITestCase):
 
     def setUp(self):
 
-        # Crea el usuario de prueba
-        self.user = User.objects.create_user(username='testuser', password='testpassword', is_staff=True, is_superuser=True)
+        # Crea el usuario de prueba usando el modelo personalizado
+        self.user = Usuario.objects.create_user(correo='testuser@example.com', password='testpassword')
         admin_group, created = Group.objects.get_or_create(name='administrador')
         self.user.groups.add(admin_group)
         self.token = Token.objects.create(user=self.user)
@@ -44,7 +45,7 @@ class TelefonoTests(APITestCase):
 
         self.academico_data = {
             'cedula': '118240782',
-            'foto': None,
+            'foto': 'foto',
             'sitio_web': 'http://google.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandon.castillo.badilla@est.una.ac.cr',
@@ -116,7 +117,7 @@ class TelefonoTests(APITestCase):
        
         academico_data2 = {
             'cedula': '87654321',
-            'foto': None,
+            'foto': 'foto',
             'sitio_web': 'http://87654321.com',
             'grado_maximo': 'Licenciatura',
             'correo': 'brandon.castillo@email.com',
