@@ -7,6 +7,13 @@ import { Search } from "../../utils/Search"
 import { eliminarAcademico } from "../../api/gestionAcademicos"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 import { agregarAcademico } from "../../api/gestionAcademicos"
+import { editarAcademico } from "../../api/gestionAcademicos"
+import { editarNombre } from "../../api/gestionAcademicos"
+import { editarArea } from "../../api/gestionAcademicos"
+import { editarUniversidad } from "../../api/gestionAcademicos"
+import { eliminarArea } from "../../api/gestionAcademicos"
+import { eliminarNombre } from "../../api/gestionAcademicos"
+import { eliminarUniversidad } from "../../api/gestionAcademicos"
 
 export const GestionAcademicos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -59,19 +66,52 @@ export const GestionAcademicos = () => {
 
     //Manjeo de las funciones para el formulario cuando se quiere editar un academico
     //funcion para cuando se hace click en una tabla.
-    const elementClicked = (user) =>{
-        console.log(user)
-        setAcademico(user)
+    const elementClicked = (selectedAcademico) =>{
+        setAcademico(selectedAcademico)
         setEdit(true)
     }
     //manejo de los datos del form de editar academico
-    const editAcademico = (e) => {
-        console.log(e)
-        setEdit(false)
+    const editAcademico = async (formData) => {       
+        try {
+            const Datos = JSON.parse(formData);
+
+            const id_nom = Datos.id_nombre_completo_fk.id_nombre_completo;
+            await editarNombre(id_nom,Datos.id_nombre_completo_fk, localStorage.getItem("token"));
+            const id_nombre_editado = Datos.id_nombre_completo_fk.id_nombre_completo;
+            delete Datos.id_nombre_completo_fk;
+            Datos.id_nombre_completo_fk = id_nombre_editado;
+
+            const id_are = Datos.id_area_especialidad_fk.id_area_especialidad;
+            await editarArea(id_are,Datos.id_area_especialidad_fk, localStorage.getItem("token"));
+            const id_area_editada = Datos.id_area_especialidad_fk.id_area_especialidad;
+            delete Datos.id_area_especialidad_fk;
+            Datos.id_area_especialidad_fk = id_area_editada;
+
+            const id_univ = Datos.universidad_fk.id_universidad;
+            await editarUniversidad(id_univ,Datos.universidad_fk, localStorage.getItem("token"));
+            const id_universidad_editada = Datos.universidad_fk.id_universidad;
+            delete Datos.universidad_fk;
+            Datos.universidad_fk = id_universidad_editada;
+
+            const id_acade = Datos.id_academico;
+            delete Datos.id_academico;
+            const response = await editarAcademico(id_acade,Datos, localStorage.getItem("token"));
+            console.log("Académico editado con éxito:", response.data);
+            const updatedAcademico = response.data;
+            const updatedAcademicos = academicos.map(acade => 
+                acade.id_academico === updatedAcademico.id_academico ? updatedAcademico : acade
+            );
+            setData(updatedAcademicos);
+            setAcademicos(updatedAcademicos);
+            setEdit(false);
+        } catch (error) {
+            console.error("Error al editar el académico:", error);
+        }
     }
     //se maneja el borrar academico.
     const eliminarAcademicos = async (id) => {
         try {
+            
             await eliminarAcademico(id, localStorage.getItem('token'));
             const updatedAcademicos = academicos.filter(academico => academico.id_academico !== id);
             setData(updatedAcademicos);
@@ -112,7 +152,7 @@ export const GestionAcademicos = () => {
                         onSubmit={editAcademico} 
                         onCancel={onCancel} 
                         onDelete={() => eliminarAcademicos(academico.id_academico)}
-                        user={academico}
+                        academico={academico}
                         >
                         </AcademicosForm>
                     </Modal>

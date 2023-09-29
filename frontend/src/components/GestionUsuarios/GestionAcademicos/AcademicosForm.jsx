@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
   const [formData, setFormData] = useState({
+    id_academico: academico ? academico.id_academico : null,
     cedula: academico ? academico.cedula : "",
     foto: academico ? academico.foto : null,
     sitio_web: academico ? academico.sitio_web : "",
@@ -94,19 +95,19 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
           onChange={handleChange}
           required
         />
-        <label htmlFor="foto">Subir Foto</label>
+       <label htmlFor="foto">Subir Foto</label>
         <input
-          type="file"
-          name="foto"
-          id="foto"
-          onChange={handleFileChange}
+            type="file"
+            name="foto"
+            id="foto"
+            onChange={handleFileChange}
         />
         <label htmlFor="sitioWeb">Sitio Web</label>
         <input
           type="url"
           name="sitio_web"
           id="sitio_web"
-          value={formData.sitioWeb}
+          value={formData.sitio_web}
           onChange={handleChange}
         />
         <label htmlFor="AreaTrabajo">Area de Trabajo</label>
@@ -120,7 +121,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         <select
           name="grado_maximo"
           id="grado_maximo"
-          value={formData.gradoMaximo}
+          value={formData.grado_maximo}
           onChange={handleChange}
         >
           <option value="">Seleccionar grado</option>
@@ -141,7 +142,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         <input
           type="text"
           name="id_area_especialidad_fk.nombre"
-          id="areaDeTrabajo"
+          id="areaEspecialidad"
           value={formData.id_area_especialidad_fk.nombre}
           onChange={handleChange}
         />
@@ -149,7 +150,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         <select
           name="categoria_en_regimen"
           id="categoria_en_regimen"
-          value={formData.categoriaEnRegimen}
+          value={formData.categoria_en_regimen}
           onChange={handleChange}
         >
           <option value="">Seleccionar categoría</option>
@@ -161,7 +162,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
           type="text"
           name="pais_procedencia"
           id="pais_procedencia"
-          value={formData.paisProcedencia}
+          value={formData.pais_procedencia}
           onChange={handleChange}
         />
         <label htmlFor="universidadNombre">Nombre de la Universidad</label>
