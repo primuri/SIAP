@@ -77,7 +77,7 @@ export const agregarAcademico = (academico, nombre, area, universidad, titulos, 
     const id_nombre_completo = obtenerNombre(nombre, token);
     const id_area_especialidad = obtenerArea(area, token);
     const id_universidad = obtenerUniversidad(universidad, token);
-
+    
     academico.id_nombre_completo_fk = id_nombre_completo;
     academico.id_area_especialidad_fk = id_area_especialidad;
     academico.universidad_fk = id_universidad;
@@ -109,14 +109,15 @@ export const editarAcademico = (academico, titulos, telefonos, token) => {
     return responseAcademico;
 };
 
-export const eliminarAcademico = (academico, token) => {
-    return SIAPAPI.delete(`personas/academico/${academico.id_academico}`, {
+export const eliminarAcademico = (id, token) => {
+    return SIAPAPI.delete(`personas/academico/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     });
 };
+
 
 const obtenerNombre = (nombre, token) => {
     const responseNombre = SIAPAPI.get('personas/nombre_completo', {

@@ -4,7 +4,8 @@ import {Modal} from "../../utils/Modal"
 import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademicos/AcademicosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-
+import { eliminarAcademico } from "../../api/gestionAcademicos"
+import { obtenerAcademicos } from "../../api/gestionAcademicos"
 
 export const GestionAcademicos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -16,26 +17,22 @@ export const GestionAcademicos = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [isLoadingData, setIsLoadingData] = useState(true);
-    if(user.groups[0] != 1){
+    if(user.groups[0] != "administrador"){
         setError(true)
     }
     //Aqui se va a hacer la primera solicitud al servidor para los academicos.
     useEffect(() => {
-        if (isLoadingData) {
-            //Prueba de tabla, esto es un ejemplo datos va a ser innecesario para el caso real, se pide la lista al backend y se mete la 
-            //respuesta en setData y en setAcademicos.
-            const datos = [
-                { id: '1234', nombre: 'Gorki', correo: 'gorkir6@gmail.com', universidad: 'UNA' },
-                { id: '9634', nombre: 'Brandon', correo: 'Brandon@gmail.com', universidad: 'UCR' },
-                { id: '2234', nombre: 'Priscila', correo: 'Priscila@gmail.com', universidad: 'UNED' },
-                { id: '5234', nombre: 'Wendy', correo: 'Wendy@gmail.com', universidad: 'UNA' },
-                { id: '9234', nombre: 'Ariel', correo: 'Ariel@gmail.com', universidad: 'UNA' },
-            ];
-            setData(datos);
-            setAcademicos(datos);
-            setIsLoadingData(false); // Desactiva la carga después de la primera vez
+        async function carga() {
+            try {
+                const res = await obtenerAcademicos(localStorage.getItem('token'));
+                setData(res.data)
+                setAcademicos(res.data)
+            } catch (error) {
+                console.error("Error al cargar los Academicos:", error);
+            }
         }
-    }, [isLoadingData]);
+        carga(); 
+    }, []);
     //cierra culaquier modal
     const onCancel = () => {
         setAddClick(false)
@@ -49,7 +46,6 @@ export const GestionAcademicos = () => {
     //aqui se manejan los datos que se van a enviar para agregar el academico. e es un json con los datos del form
     const addAcademico = (e) => {
         console.log(e)
-        
         setAddClick(false)
     }
 
@@ -66,19 +62,29 @@ export const GestionAcademicos = () => {
         setEdit(false)
     }
     //se maneja el borrar academico.
-    const eliminarAcademico = (id) => {
-        //Se pide la confirmacion primero si se confirma se hace.
-        //Si se eliminar se pone el setEdit(false) y se recarga la pagina, para recargar la lista de academicos
-        console.log(id)
-        setEdit(false)
+    const eliminarAcademicos = async (id) => {
+        try {
+            await eliminarAcademico(id, localStorage.getItem('token'));
+            const updatedAcademicos = academicos.filter(academico => academico.id_academico !== id);
+            setData(updatedAcademicos);
+            setAcademicos(updatedAcademicos);
+            console.log("Académico eliminado con éxito");
+        } catch (error) {
+            console.error("Error al eliminar el académico:", error);
+        }
+    
+        setEdit(false);
     }
+    
+
+
     //se filtra
     const search = (col, filter) =>{
         const matches = data.filter((e) => e[col].toString().includes(filter));
         setAcademicos(matches)
     }
     const columns = ['ID', 'Nombre', 'Correo','Universidad'];
-    const dataKeys = ['id','nombre','correro', 'universidad']
+    const dataKeys = ['id_academico','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
     return(
     <main >
         {!error ? (
@@ -86,7 +92,7 @@ export const GestionAcademicos = () => {
             <h1>Gestión de académicos</h1>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
-            <Search colNames={columns} columns={academicos.length > 0? Object.keys(academicos[0]): null} onSearch={search}></Search>
+            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
             <Table columns={columns} data={academicos} dataKeys={dataKeys} onClick={elementClicked}></Table>
             {addClick && (<Modal ><AcademicosForm onSubmit={addAcademico} onCancel={onCancel} mode={1}></AcademicosForm></Modal>)}
@@ -97,7 +103,7 @@ export const GestionAcademicos = () => {
                         mode={2}
                         onSubmit={editAcademico} 
                         onCancel={onCancel} 
-                        onDelete={() => eliminarAcademico(academico.id)}
+                        onDelete={() => eliminarAcademicos(academico.id_academico)}
                         user={academico}
                         >
                         </AcademicosForm>

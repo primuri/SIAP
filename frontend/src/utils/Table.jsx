@@ -6,6 +6,11 @@ export const Table = ({ columns, data, onClick, dataKeys}) => {
   const [itemsPerPage, setItemsPerPage] = useState(10); 
 
 
+  function getValueByPath(obj, path) {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  }
+
+
   const getTotalPages = useCallback(() => {
     return Math.ceil(data.length / itemsPerPage);
   }, [data, itemsPerPage]);
@@ -60,7 +65,7 @@ export const Table = ({ columns, data, onClick, dataKeys}) => {
             {currentItems.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => onClick(row)}>
                 {dataKeys.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column]}</td>
+                  <td key={colIndex}>{getValueByPath(row,column)}</td>
                 ))}
               </tr>
             ))}
