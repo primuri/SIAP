@@ -3,9 +3,11 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import { Header } from './components/Layout/Header'
 import './App.css'
 import GestionUsuarios from "./routes/GestionUsuarios"
+import GestionPropuestas from "./routes/GestionPropuestas"
 import { useEffect } from 'react'
 import { Home } from './pages/Home'
 import { Sidebar } from './components/Layout/Sidebar'
+import { Footer } from './components/Layout/Footer'
 
 function App() {
   useEffect(() => {
@@ -24,9 +26,11 @@ function App() {
         <Sidebar></Sidebar>
         <Routes>
           {GestionUsuarios}
+          {GestionPropuestas}
           <Route path='/' element={<Home></Home>}></Route>
         </Routes>
       </div>
+      <Footer/>
     </BrowserRouter>
   )
 }
