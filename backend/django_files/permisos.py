@@ -14,7 +14,7 @@ class PermisoPorRol(permissions.BasePermission):
                     return (request.method in ['GET'] and (view.view_name in ['organos_colegiados', 'integrantes', 'convocatorias', 'agendas', 'actas', 'sesiones', 'invitados', 'seguimientos', 'acuerdos', 'participantes']))
         return (request.user.groups.filter(name='administrador').exists())
 
-    def has_object_permission(self, request, view):
+    def has_object_permission(self, request, view, obj):
         if request.user.groups.filter(name='evaluador').exists():
             return ((request.method in ['GET'] and view.view_name in ['proyectos', 'versiones_proyectos', 'informes']) or 
                     (request.method in ['GET', 'POST'] and view.view_name in ['evaluaciones', 'preguntas_evaluaciones']))
