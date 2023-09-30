@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'producto',                    # <- Agreado
     'propuesta_proyecto',          # <- Agreado
     'version_proyecto',            # <- Agreado
+    'usuario_personalizado',            # <- Agreado
 ]
 
 MIDDLEWARE = [
@@ -92,6 +94,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'usuario_personalizado.Usuario'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

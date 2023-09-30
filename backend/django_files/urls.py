@@ -15,6 +15,6 @@ urlpatterns = [
     path('login', views.login),
     path('test_token', views.test_token),
     path('obtener_usuarios', views.get_users),
-    path('actualizar_usuario/<str:username>/', views.update_user),
-    path('eliminar_usuario/<str:username>/', views.delete_user),
+    path('actualizar_usuario/<str:correo>/', views.update_user),
+    path('eliminar_usuario/<str:correo>/', views.delete_user),
 ]

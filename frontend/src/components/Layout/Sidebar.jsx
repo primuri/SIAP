@@ -2,7 +2,7 @@ import {NavLink} from 'react-router-dom'
 export const Sidebar = () => {
    const usuario = JSON.parse(localStorage.getItem('user'));
    const menu = {
-    1: [
+    "administrador": [
       { label: 'Gestión de<br/>usuarios', link: '/gestion-usuarios' },
       { label: 'Gestión de<br/> propuestas', link: '/gestion-propuestas' },
       { label: 'Gestión de<br/> proyectos', link: '/gestion-proyectos' },
@@ -11,11 +11,11 @@ export const Sidebar = () => {
       { label: 'Gestión de<br/> presupuestos', link: '/gestion-presupuestos' },
       { label: 'Gestión de<br/> informes', link: '/gestion-informes' },
     ],
-    2: [
+    "evaluador": [
       { label: 'Dashboard', link: '/dashboard' },
       { label: 'Evaluaciones', link: '/evaluaciones' },
     ],
-    3: [
+    "investigador": [
       { label: 'Dashboard', link: '/dashboard' },
       { label: 'Perfil', link: '/perfil' },
     ],

@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import {login} from '../../../api/gestionUsuarios'
 export const InicioSesion = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    correo: '',
     password: '',
   });
 
   const [error, setError] = useState('');
   const resetForm = () => {
     setFormData({
-      username: '',
+      correo: '',
       password: '',
     });
   };
@@ -29,10 +29,10 @@ export const InicioSesion = () => {
     e.preventDefault();
 
     // Validar la contraseña antes de enviarla
-    if (!validatePassword(formData.password)) {
-      setError('La contraseña debe contener al menos una mayúscula, un número y un caracter especial, y tener al menos 8 caracteres.');
-      return;
-    }
+    //if (!validatePassword(formData.password)) {
+    //  setError('La contraseña debe contener al menos una mayúscula, un número y un caracter especial, y tener al menos 8 caracteres.');
+    //  return;
+    //}
     setError('');
     try {
         const response = await login(formData)
@@ -45,8 +45,6 @@ export const InicioSesion = () => {
       } catch (error) {
         setError('Usuario o contraseña incorrectos');
       }
-    
-
   };
 
   return (
@@ -59,9 +57,9 @@ export const InicioSesion = () => {
           <input
             type="email"
             className="border-0 rounded p-1"
-            name="username"
-            value={formData.username}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            name="correo"
+            value={formData.correo}
+            onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
           />
         </>
         <>
