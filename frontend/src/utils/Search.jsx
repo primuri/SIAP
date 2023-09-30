@@ -18,7 +18,7 @@ export const Search = ({ columns, colNames, onSearch }) => {
             <select
                 value={selectedColumn}
                 onChange={(e) => setSelectedColumn(e.target.value)}
-                className="rounded-start-3 p-2 border-0"
+                className="rounded-start-3 p-2 border-1 "
             > 
                 <option value="">Seleccionar columna</option>
                 { 

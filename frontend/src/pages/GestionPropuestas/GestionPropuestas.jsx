@@ -73,10 +73,20 @@ export const GestionPropuestas = () => {
         setEdit(false)
     }
     //se filtra
-    const search = (col, filter) =>{
-        const matches = data.filter((e) => e[col].toString().includes(filter));
-        setPropuestas(matches)
+    function getValueByPath(obj, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
     }
+    //se filtra
+    const search = (col, filter) => {
+        const matches = data.filter((e) => {
+          if (col.includes('.')) {
+            const value = getValueByPath(e, col);
+            return value && value.toString().includes(filter);
+          }
+          return e[col].toString().includes(filter);
+        });
+        setPropuestas(matches);
+      };
     const columns = ['ID', 'Nombre', 'Correo','Universidad'];
     const dataKeys = ['id','nombre','correo', 'universidad']
     return(
@@ -86,7 +96,7 @@ export const GestionPropuestas = () => {
             <h1>Gestión de propuestas</h1>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
-            <Search colNames={columns} columns={propuestas.length > 0? Object.keys(propuestas[0]): null} onSearch={search}></Search>
+            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
             <Table columns={columns} data={propuestas} dataKeys={dataKeys} onClick={elementClicked}></Table>
             {addClick && (<Modal ><PropuestasForm onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}

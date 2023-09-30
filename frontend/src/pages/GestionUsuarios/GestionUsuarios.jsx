@@ -74,10 +74,20 @@ export const GestionUsuarios = () => {
         setEdit(false)
     }
     //se filtra
-    const search = (col, filter) =>{
-        const matches = data.filter((e) => e[col].toString().includes(filter));
-        setUsuarios(matches)
+    function getValueByPath(obj, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
     }
+    //se filtra
+    const search = (col, filter) => {
+        const matches = data.filter((e) => {
+          if (col.includes('.')) {
+            const value = getValueByPath(e, col);
+            return value && value.toString().includes(filter);
+          }
+          return e[col].toString().includes(filter);
+        });
+        setUsuarios(matches);
+      };
     const columns = ['ID', 'Correo','Rol'];
     const dataKeys = ['id', 'correo', 'rol']
     return(
@@ -87,7 +97,7 @@ export const GestionUsuarios = () => {
             <h1>Gestión de usuarios</h1>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
-            <Search colNames={columns} columns={usuarios.length > 0? Object.keys(usuarios[0]): null} onSearch={search}></Search>
+            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
             <Table columns={columns} data={usuarios} dataKeys={dataKeys} onClick={elementClicked}></Table>
             {addClick && (<Modal ><UsuariosForm onSubmit={addUsuario} onCancel={onCancel} mode={1}></UsuariosForm></Modal>)}
