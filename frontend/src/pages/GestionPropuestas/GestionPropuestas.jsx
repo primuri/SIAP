@@ -16,7 +16,7 @@ export const GestionPropuestas = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [isLoadingData, setIsLoadingData] = useState(true);
-    if(user.groups[0] != 1){
+    if(user.groups[0] != "administrador"){
         setError(true)
     }
     //Aqui se va a hacer la primera solicitud al servidor para los academicos.

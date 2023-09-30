@@ -6,6 +6,7 @@ import GestionUsuarios from "./routes/GestionUsuarios"
 import { useEffect } from 'react'
 import { Home } from './pages/Home'
 import { Sidebar } from './components/Layout/Sidebar'
+import GestionPropuestas from './routes/GestionPropuestas'
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
         <Sidebar></Sidebar>
         <Routes>
           {GestionUsuarios}
+          {GestionPropuestas}
           <Route path='/' element={<Home></Home>}></Route>
         </Routes>
       </div>
