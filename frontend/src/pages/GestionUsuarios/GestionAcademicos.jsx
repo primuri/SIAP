@@ -125,12 +125,20 @@ export const GestionAcademicos = () => {
     }
     
 
-
-    //se filtra
-    const search = (col, filter) =>{
-        const matches = data.filter((e) => e[col].toString().includes(filter));
-        setAcademicos(matches)
+    function getValueByPath(obj, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
     }
+    //se filtra
+    const search = (col, filter) => {
+        const matches = data.filter((e) => {
+          if (col.includes('.')) {
+            const value = getValueByPath(e, col);
+            return value && value.toString().includes(filter);
+          }
+          return e[col].toString().includes(filter);
+        });
+        setAcademicos(matches);
+      };
     const columns = ['ID', 'Nombre', 'Correo','Universidad'];
     const dataKeys = ['id_academico','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
     return(
