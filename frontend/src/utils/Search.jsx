@@ -12,27 +12,21 @@ export const Search = ({ columns, colNames, onSearch }) => {
             onSearch(selectedColumn, searchText || "");
         }
     };
-
+    
     return (
         <div>
             <select
                 value={selectedColumn}
                 onChange={(e) => setSelectedColumn(e.target.value)}
-                className="rounded-start-3 p-2 border-0"
+                className="rounded-start-3 p-2 border-1 "
             > 
                 <option value="">Seleccionar columna</option>
-                { columns != null?(
+                { 
                     colNames.map((colName, index) => (
                         <option key={index} value={columns[index]}>
                             {colName}
                         </option>
-                ))):(
-                    colNames.map((colName, index) => (
-                        <option key={index}>
-                            {colName}
-                        </option>
-                    ))
-                ) }
+                ))}
             </select>
             <input
                 type="text"

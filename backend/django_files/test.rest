@@ -2,13 +2,15 @@
 ### Crear usuario
 
 POST http://127.0.0.1:8000/signup 
-Authorization: token 86119619985b6debd31cbdb792c9a9c8b5f91fbc
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
 Content-Type: application/json
 
 {
-  "correo": "pepe@email.com", 
+  "correo": "prueba4@email.com", 
   "password": "root", 
-  "groups": ["invitado"]
+  "groups": ["administrador"],
+  "academico_fk" : "1",
+  "evaluador_fk" : "1"
 }
 
 ### Inicio de sesion
@@ -32,6 +34,13 @@ Authorization: Token 86119619985b6debd31cbdb792c9a9c8b5f91fbc
 ### Obtener academicos
 
 GET http://127.0.0.1:8000/personas/academico/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+
+### Obtener evaluadores
+
+GET http://127.0.0.1:8000/personas/evaluador/
 Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
 Content-Type: application/json
 

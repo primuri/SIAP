@@ -16,7 +16,7 @@ export const GestionEvaluadores = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [isLoadingData, setIsLoadingData] = useState(true);
-    if(user.groups[0] != 1){
+    if(user.groups[0] != "administrador"){
         setError(true)
     }
     //Aqui se va a hacer la primera solicitud al servidor para los academicos.
@@ -73,11 +73,20 @@ export const GestionEvaluadores = () => {
         console.log(id)
         setEdit(false)
     }
-    //se filtra
-    const search = (col, filter) =>{
-        const matches = data.filter((e) => e[col].toString().includes(filter));
-        setEvaluadores(matches)
+    function getValueByPath(obj, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
     }
+    //se filtra
+    const search = (col, filter) => {
+        const matches = data.filter((e) => {
+          if (col.includes('.')) {
+            const value = getValueByPath(e, col);
+            return value && value.toString().includes(filter);
+          }
+          return e[col].toString().includes(filter);
+        });
+        setEvaluadores(matches);
+      };
     const columns = ['ID', 'Nombre', 'Correo','Universidad'];
     const dataKeys = ['id','nombre','correo', 'universidad']
     return(
@@ -87,7 +96,7 @@ export const GestionEvaluadores = () => {
             <h1>Gestión de evaluadores</h1>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
-            <Search colNames={columns} columns={evaluadores.length > 0? Object.keys(evaluadores[0]): null} onSearch={search}></Search>
+            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
             <Table columns={columns} data={evaluadores} dataKeys={dataKeys} onClick={elementClicked}></Table>
             {addClick && (<Modal ><EvaluadoresForm onSubmit={addEvaluador} onCancel={onCancel} mode={1}></EvaluadoresForm></Modal>)}

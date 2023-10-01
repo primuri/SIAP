@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import {login} from '../../../api/gestionUsuarios'
+import {Toaster, toast} from 'react-hot-toast'
 export const InicioSesion = () => {
   const [formData, setFormData] = useState({
     correo: '',
     password: '',
   });
-
-  const [error, setError] = useState('');
   const resetForm = () => {
     setFormData({
       correo: '',
@@ -33,7 +32,6 @@ export const InicioSesion = () => {
     //  setError('La contraseña debe contener al menos una mayúscula, un número y un caracter especial, y tener al menos 8 caracteres.');
     //  return;
     //}
-    setError('');
     try {
         const response = await login(formData)
   
@@ -43,7 +41,15 @@ export const InicioSesion = () => {
         // Redirigir a la página principal o realizar otras acciones necesarias
         window.location.href = '/'
       } catch (error) {
-        setError('Usuario o contraseña incorrectos');
+        toast.error('Usuario o contraseña incorrectos', {
+          duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+          position: 'bottom-right', // Posición en la pantalla
+          style: {
+            background: '#670000',
+            color: '#fff',
+          },
+        });
+
       }
   };
 
@@ -74,7 +80,7 @@ export const InicioSesion = () => {
         </>
         <input type="submit" value="Iniciar Sesión" className="border-0 rounded mt-4 p-3 text-light shadow" />
       </form>
-      {error && <p className="text-danger mt-2">{error}</p>}
+      <Toaster></Toaster>
     </div>
   );
 };
