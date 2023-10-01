@@ -28,8 +28,8 @@ Content-Type: application/json
 
 ### Eliminar usuario
 
-DELETE http://127.0.0.1:8000/eliminar_usuario/pepe@email.com/ HTTP/1.1
-Authorization: Token 86119619985b6debd31cbdb792c9a9c8b5f91fbc
+DELETE http://127.0.0.1:8000/personas/academico/11/ HTTP/1.1
+Authorization: Token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
 
 ### Obtener academicos
 
