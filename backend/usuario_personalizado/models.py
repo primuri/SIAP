@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group
+from personas.models import Evaluador, Academico
 
 class UsuarioManager(BaseUserManager):
 
@@ -37,6 +38,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+
+    evaluador_fk = models.ForeignKey(Evaluador, on_delete=models.SET_NULL, blank=True, null=True)
+    academico_fk = models.ForeignKey(Academico, on_delete=models.SET_NULL, blank=True, null=True)
+
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'correo'
