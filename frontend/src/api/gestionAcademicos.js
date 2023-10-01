@@ -6,21 +6,9 @@ import axios from 'axios'
     {     
         {
         "id_academico": 1,
-        "id_nombre_completo_fk": {
-        "id_nombre_completo": 1,
-        "nombre": "asd",
-        "apellido": "asda",
-        "segundo_apellido": "sd"
-        },
-        "id_area_especialidad_fk": {
-        "id_area_especialidad": 1,
-        "nombre": "asd"
-        },
-        "universidad_fk": {
-        "id_universidad": 1,
-        "pais": "asdas",
-        "nombre": "asdasd"
-        },
+        "id_nombre_completo_fk": 1
+        "id_area_especialidad_fk": 1
+        "universidad_fk": 1
         "cedula": "asd",
         "foto": "foto",
         "sitio_web": "asdas",
@@ -64,8 +52,8 @@ const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
-export const obtenerAcademicos = (token) => {
-    return SIAPAPI.get('personas/academico', {
+export const obtenerAcademicos = async (token) => {
+    return await SIAPAPI.get('personas/academico', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -95,8 +83,8 @@ export const agregarAcademico = async (academico,  token) => {
             }
         });
 
-        //await agregarTitulos(titulos, responseAcademico.data.id_academico, token);
-        //await agregarTelefonos(telefonos, responseAcademico.data.id_academico, token);
+        //await agregarTitulos(titulos, response_academico.data.id_academico, token);
+        //await agregarTelefonos(telefonos, response_academico.data.id_academico, token);
         return response_academico;
     } catch(error) {
         console.error("Error agregando académico: ", error);
@@ -104,22 +92,22 @@ export const agregarAcademico = async (academico,  token) => {
     }
 };
 
-export const editarAcademico = (id,academico, token) => {
-    const responseAcademico = SIAPAPI.put(`personas/academico/${id}/`, academico, {
+export const editarAcademico = async (id, academico, token) => {
+    const responseAcademico = await SIAPAPI.put(`personas/academico/${id}/`, academico, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     });
 
-    //actualizarTitulos(titulos, token);
-    //actualizarTelefonos(telefonos, token);
+    // await actualizarTitulos(titulos, token);
+    // await actualizarTelefonos(telefonos, token);
 
     return responseAcademico;
 };
 
-export const eliminarAcademico = (id, token) => {
-    return SIAPAPI.delete(`personas/academico/${id}`, {
+export const eliminarAcademico = async (id, token) => {
+    return await SIAPAPI.delete(`personas/academico/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -144,8 +132,8 @@ const obtenerNombre = async (nombre, token) => {
     } 
 };
 
-export const editarNombre = (id, nombre, token) => {
-    const responseNombre = SIAPAPI.put(`personas/nombre_completo/${id}/`, nombre, {
+export const editarNombre = async (id, nombre, token) => {
+    const responseNombre = await SIAPAPI.put(`personas/nombre_completo/${id}/`, nombre, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -154,8 +142,8 @@ export const editarNombre = (id, nombre, token) => {
     return responseNombre;
 };
 
-export const eliminarNombre = (id, token) => {
-    return SIAPAPI.delete(`personas/nombre_completo/${id}`, {
+export const eliminarNombre = async (id, token) => {
+    return await SIAPAPI.delete(`personas/nombre_completo/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -179,8 +167,8 @@ const obtenerArea = async (area, token) => {
     }
 };
 
-export const editarArea = (id, area, token) => {
-    const responseArea = SIAPAPI.put(`personas/area_especialidad/${id}/`, area, {
+export const editarArea = async (id, area, token) => {
+    const responseArea = await SIAPAPI.put(`personas/area_especialidad/${id}/`, area, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -189,8 +177,8 @@ export const editarArea = (id, area, token) => {
     return responseArea;
 };
 
-export const eliminarArea = (id, token) => {
-    return SIAPAPI.delete(`personas/area_especialidad/${id}`, {
+export const eliminarArea = async (id, token) => {
+    return await SIAPAPI.delete(`personas/area_especialidad/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -215,8 +203,8 @@ const obtenerUniversidad = async (universidad, token) => {
     }
 };
 
-export const editarUniversidad = (id, universidad, token) => {
-    const responseUniversidad = SIAPAPI.put(`personas/universidad/${id}/`, universidad, {
+export const editarUniversidad = async (id, universidad, token) => {
+    const responseUniversidad = await SIAPAPI.put(`personas/universidad/${id}/`, universidad, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -225,8 +213,8 @@ export const editarUniversidad = (id, universidad, token) => {
     return responseUniversidad;
 };
 
-export const eliminarUniversidad = (id, token) => {
-    return SIAPAPI.delete(`personas/universidad/${id}`, {
+export const eliminarUniversidad = async (id, token) => {
+    return await SIAPAPI.delete(`personas/universidad/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -236,9 +224,9 @@ export const eliminarUniversidad = (id, token) => {
 
 
 const agregarTitulos = (titulos, id_academico, token) => {
-    titulos.forEach(titulo => {
+    titulos.forEach(async titulo => {
         titulo.id_academico_fk = id_academico;
-        SIAPAPI.post('personas/titulos', titulo, {
+        await SIAPAPI.post('personas/titulos', titulo, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -248,9 +236,9 @@ const agregarTitulos = (titulos, id_academico, token) => {
 };
 
 const agregarTelefonos = (telefonos, id_academico, token) => {
-    telefonos.forEach(telefono => {
+    telefonos.forEach(async telefono => {
         telefono.id_academico_fk = id_academico;
-        SIAPAPI.post('personas/telefono', telefono, {
+        await SIAPAPI.post('personas/telefono', telefono, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -260,8 +248,8 @@ const agregarTelefonos = (telefonos, id_academico, token) => {
 };
 
 const actualizarTitulos = (titulos, token) => {
-    titulos.forEach(titulo => {
-        SIAPAPI.put(`personas/titulos/${titulo.id_titulos}`, titulo, {
+    titulos.forEach(async titulo => {
+        await SIAPAPI.put(`personas/titulos/${titulo.id_titulos}`, titulo, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -271,8 +259,8 @@ const actualizarTitulos = (titulos, token) => {
 };
 
 const actualizarTelefonos = (telefonos, token) => {
-    telefonos.forEach(telefono => {
-        SIAPAPI.put(`personas/telefono/${telefono.id_telefono}/`, telefono, {
+    telefonos.forEach(async telefono => {
+        await SIAPAPI.put(`personas/telefono/${telefono.id_telefono}/`, telefono, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'

@@ -103,13 +103,13 @@ export const GestionUsuarios = () => {
             {addClick && (<Modal ><UsuariosForm onSubmit={addUsuario} onCancel={onCancel} mode={1}></UsuariosForm></Modal>)}
             {edit && 
                 (
-                    <Modal >
+                    <Modal>
                         <UsuariosForm 
-                        mode={2}
-                        onSubmit={editUsuario} 
-                        onCancel={onCancel} 
-                        onDelete={() => eliminarUsuario(usuario.id)}
-                        user={usuario}
+                            mode={2}
+                            onSubmit={editUsuario} 
+                            onCancel={onCancel} 
+                            onDelete={() => eliminarUsuario(usuario.id)}
+                            user={usuario}
                         >
                         </UsuariosForm>
                     </Modal>
@@ -118,7 +118,7 @@ export const GestionUsuarios = () => {
         </div>
         ):(
             <div>
-                Error no tiene los permisos necesarios para ver esta página.
+                Error: no tiene los permisos necesarios para ver esta página.
             </div>
         )}
     </main>)
