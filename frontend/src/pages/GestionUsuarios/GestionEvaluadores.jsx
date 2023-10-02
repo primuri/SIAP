@@ -20,7 +20,7 @@ export const GestionEvaluadores = () => {
     const columns = ['Nombre','Correo','Tipo','Universidad']
     const dataKeys = ['id_nombre_completo_fk.nombre','correo','tipo','universidad_fk.nombre']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-     // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
+     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {loadEvaluadores()}, [reload])
     async function loadEvaluadores() {
         try {
@@ -28,7 +28,7 @@ export const GestionEvaluadores = () => {
             setData(res.data)
             setEvaluadores(res.data)
         } catch (error) {
-            toast.error('Error al cargar los datos de académico', {
+            toast.error('Error al cargar los datos de evaluadores', {
                 duration: 4000,
                 position: 'bottom-right', 
                 style: {
@@ -43,7 +43,7 @@ export const GestionEvaluadores = () => {
         try{
             const Datos = JSON.parse(formData)
             await agregarEvaluador(Datos,localStorage.getItem('token'))
-            toast.success('Usuario agregado correctamente', {
+            toast.success('Evaluador agregado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -54,7 +54,7 @@ export const GestionEvaluadores = () => {
             setAddClick(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al agregar el usuario', {
+            toast.error('Error al agregar el evaluador', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -70,7 +70,7 @@ export const GestionEvaluadores = () => {
         try{
             const Datos = JSON.parse(formData)
             await editarEvaluador(Datos.correo,Datos,localStorage.getItem('token'))
-            toast.success('Usuario actualizado correctamente', {
+            toast.success('Evaluador actualizado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -81,7 +81,7 @@ export const GestionEvaluadores = () => {
             setEdit(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al actualizar el usuario', {
+            toast.error('Error al actualizar el evaluador', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -95,7 +95,7 @@ export const GestionEvaluadores = () => {
     const deleteEvaluador = async (correo) => {
         try{
             await eliminarEvaluador(correo,localStorage.getItem('token'))
-            toast.success('Usuario eliminado correctamente', {
+            toast.success('Evaluador eliminado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -106,7 +106,7 @@ export const GestionEvaluadores = () => {
             setEdit(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al eliminar el usuario', {
+            toast.error('Error al eliminar el evaluador', {
                 duration: 4000,
                 position: 'bottom-right', 
                 style: {

@@ -4,7 +4,9 @@ import {Modal} from "../../utils/Modal"
 import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademicos/AcademicosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
+import {toast, Toaster} from 'react-hot-toast'
 import { obtenerAcademicos,agregarAcademico,editarAcademico,editarNombre,editarArea,editarUniversidad,eliminarAcademico} from "../../api/gestionAcademicos"
+import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
 export const GestionAcademicos = () => {
 
@@ -22,14 +24,21 @@ export const GestionAcademicos = () => {
     user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
     useEffect(() => { loadAcademicos() }, [reload])
 
-    // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
+    // Detecta cambios y realiza la solicitud nuevamente  
     async function loadAcademicos() {
         try {
             const res = await obtenerAcademicos(localStorage.getItem('token'))
             setData(res.data)
             setAcademicos(res.data)
         } catch (error) {
-            console.error("Error al cargar los Académicos:", error)
+            toast.error('Error al cargar los datos de academicos', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
         }
     }
 
@@ -37,12 +46,26 @@ export const GestionAcademicos = () => {
     const addAcademico = async (formData) => {       
         try {
             const Datos = JSON.parse(formData)
-            const response = await agregarAcademico(Datos, localStorage.getItem("token"))
-            console.log("Académico agregado con éxito:", response.data)
+            await agregarAcademico(Datos, localStorage.getItem("token"))
+            toast.success('Académico agregado correctamente', {
+                duration: 4000, 
+                position: 'bottom-right', 
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
             setAddClick(false)
-            setReload(reload)
+            setReload(!reload)
         } catch (error) {
-            console.error("Error al agregar académico:", error)
+            toast.error('Error al agregar el académico', {
+                duration: 4000, 
+                position: 'bottom-right',
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
         }
     }
 
@@ -69,17 +92,26 @@ export const GestionAcademicos = () => {
             delete Datos.universidad_fk
             Datos.universidad_fk = id_universidad_editada
 
-            const response = await editarAcademico(academico.id_academico, Datos, localStorage.getItem("token"))
-            console.log("Académico editado con éxito:", response.data)
-            const updatedAcademico = response.data
-            const updatedAcademicos = academicos.map(acade => 
-                acade.id_academico === updatedAcademico.id_academico ? updatedAcademico : acade
-            )
-            setData(updatedAcademicos)
-            setAcademicos(updatedAcademicos)
+            await editarAcademico(academico.id_academico, Datos, localStorage.getItem("token"))
+            toast.success('Académico editado correctamente', {
+                duration: 4000, 
+                position: 'bottom-right', 
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
             setEdit(false)
+            setReload(!reload)
         } catch (error) {
-            console.error("Error al editar el académico:", error)
+            toast.error('Error al editar el académico', {
+                duration: 4000, 
+                position: 'bottom-right',
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
         }
     }
 
@@ -88,12 +120,25 @@ export const GestionAcademicos = () => {
         try {
             
             await eliminarAcademico(id, localStorage.getItem('token'))
-            const updatedAcademicos = academicos.filter(academico => academico.id_academico !== id)
-            setData(updatedAcademicos)
-            setAcademicos(updatedAcademicos)
-            console.log("Académico eliminado con éxito")
+            toast.success('Académico eliminado correctamente', {
+                duration: 4000, 
+                position: 'bottom-right', 
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+            setEdit(false)
+            setReload(!reload)
         } catch (error) {
-            console.error("Error al eliminar el académico:", error)
+            toast.error('Error al eliminar el académico', {
+                duration: 4000, 
+                position: 'bottom-right',
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
         }
 
         setEdit(false)
@@ -160,11 +205,10 @@ export const GestionAcademicos = () => {
                         </Modal>
                     )
                 }
+                <Toaster></Toaster>
         </div>
         ):(
-            <div>
-                Error: no tiene los permisos necesarios para ver esta página.
-            </div>
+            <PermisoDenegado></PermisoDenegado>
         )}
     </main>)
 } 

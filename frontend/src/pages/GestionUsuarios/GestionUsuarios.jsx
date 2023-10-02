@@ -29,7 +29,7 @@ export const GestionUsuarios = () => {
             setData(res.data)
             setUsuarios(res.data)
         } catch (error) {
-            toast.error('Error al cargar los datos de académico', {
+            toast.error('Error al cargar los datos de usuarios', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
                 style: {

@@ -19,7 +19,7 @@ export const GestionPropuestas = () => {
     const columns = ['Correo','Rol']
     const dataKeys = ['correo','rol']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-     // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
+     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {loadEvaluadores()}, [reload])
     async function loadEvaluadores() {
         try {
@@ -27,7 +27,7 @@ export const GestionPropuestas = () => {
             setData(res.data)
             setPropuestas(res.data)
         } catch (error) {
-            toast.error('Error al cargar los datos de académico', {
+            toast.error('Error al cargar los datos de propuestas', {
                 duration: 4000,
                 position: 'bottom-right', 
                 style: {
@@ -42,7 +42,7 @@ export const GestionPropuestas = () => {
         try{
             const Datos = JSON.parse(formData)
             await agregarPropuesta(Datos,localStorage.getItem('token'))
-            toast.success('Usuario agregado correctamente', {
+            toast.success('Propuesta agregada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -53,7 +53,7 @@ export const GestionPropuestas = () => {
             setAddClick(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al agregar el usuario', {
+            toast.error('Error al agregar la propuesta', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -69,7 +69,7 @@ export const GestionPropuestas = () => {
         try{
             const Datos = JSON.parse(formData)
             await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
-            toast.success('Usuario actualizado correctamente', {
+            toast.success('Propuesta actualizada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -80,7 +80,7 @@ export const GestionPropuestas = () => {
             setEdit(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al actualizar el usuario', {
+            toast.error('Error al actualizar la propuesta', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -94,7 +94,7 @@ export const GestionPropuestas = () => {
     const deletePropuesta = async (correo) => {
         try{
             await eliminarPropuesta(correo,localStorage.getItem('token'))
-            toast.success('Usuario eliminado correctamente', {
+            toast.success('Propuesta eliminada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -105,7 +105,7 @@ export const GestionPropuestas = () => {
             setEdit(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al eliminar el usuario', {
+            toast.error('Error al eliminar la propuesta', {
                 duration: 4000,
                 position: 'bottom-right', 
                 style: {
