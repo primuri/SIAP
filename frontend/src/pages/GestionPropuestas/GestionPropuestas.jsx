@@ -41,7 +41,7 @@ export const GestionPropuestas = () => {
     const addPropuesta = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            await agregarPropuesta(Datos,localStorage.getItem('token'))
+            //await agregarPropuesta(Datos,localStorage.getItem('token'))
             toast.success('Propuesta agregada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -68,7 +68,7 @@ export const GestionPropuestas = () => {
     const editPropuesta = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
+            //await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
             toast.success('Propuesta actualizada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -93,7 +93,7 @@ export const GestionPropuestas = () => {
     // Manejo del eliminar
     const deletePropuesta = async (correo) => {
         try{
-            await eliminarPropuesta(correo,localStorage.getItem('token'))
+            //await eliminarPropuesta(correo,localStorage.getItem('token'))
             toast.success('Propuesta eliminada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right',
