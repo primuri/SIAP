@@ -4,91 +4,155 @@ import {Modal} from "../../utils/Modal"
 import { PropuestasForm } from "../../components/GestionPropuestas/PropuestasForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-
+import {toast, Toaster} from 'react-hot-toast'
+import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { obtenerPropuestas } from "../../api/gestionPropuestas"
 
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
-    const [propuestas, setPropuestas] = useState([]) //Aca van a estar los academicos que se muestran, se hace as]i para que si se busca los
-    //no se pierdan todo los academicos al usar el filter.
-    const [data,setData] = useState([])//Aca van a estar todos los academicos
-    const [propuesta, setPropuesta] = useState(null) //Este va a ser el usuario que se clickea en la tabla para editar.
-    const [error, setError] = useState(false) //Si el usuario no es un admin no puede ver la pagina y se va a mostrar otra pagina de error.
+    const [reload, setReload] = useState(false)
+    const [propuestas, setPropuestas] = useState([]) // Propuestas que se muestran
+    const [data,setData] = useState([])//Todas las propuestas
+    const [propuesta, setPropuesta] = useState(null) //Propuesta al que se le da click en la tabla para editar
+    const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const [isLoadingData, setIsLoadingData] = useState(true);
-    if(user.groups[0] != "administrador"){
-        setError(true)
-    }
-    //Aqui se va a hacer la primera solicitud al servidor para los academicos.
-    useEffect(() => {
-        if (isLoadingData) {
-            //Prueba de tabla, esto es un ejemplo datos va a ser innecesario para el caso real, se pide la lista al backend y se mete la 
-            //respuesta en setData y en setAcademicos.
-            const datos = [
-                { id: '1234', nombre: 'Gorki', correo: 'gorkir6@gmail.com', universidad: 'UNA' },
-                { id: '9634', nombre: 'Brandon', correo: 'Brandon@gmail.com', universidad: 'UCR' },
-                { id: '2234', nombre: 'Priscila', correo: 'Priscila@gmail.com', universidad: 'UNED' },
-                { id: '5234', nombre: 'Wendy', correo: 'Wendy@gmail.com', universidad: 'UNA' },
-                { id: '9234', nombre: 'Ariel', correo: 'Ariel@gmail.com', universidad: 'UNA' },
-            ];
-            setData(datos);
-            setPropuestas(datos);
-            setIsLoadingData(false); // Desactiva la carga después de la primera vez
+    const columns = ['Correo','Rol']
+    const dataKeys = ['correo','rol']
+
+    user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
+    // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
+    useEffect(() => {loadPropuestas()}, [reload])
+    async function loadPropuestas() {
+        try {
+            const res = await obtenerPropuestas(localStorage.getItem('token'))
+            setData(res.data)
+            setPropuestas(res.data)
+        } catch (error) {
+            toast.error('Error al cargar las Propuestas de proyectos', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
         }
-    }, [isLoadingData]);
-    //cierra culaquier modal
+    }
+
+    // Manejo de datos que se van a enviar para agregar
+    const addPropuesta = async (formData) => {
+        try{
+            const Datos = JSON.parse(formData)
+            await agregarPropuesta(Datos,localStorage.getItem('token'))
+            toast.success('Propuesta agregada correctamente', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                },
+            })
+            setAddClick(false)
+            setReload(!reload)
+        }catch(error){
+            toast.error('Error al agregar la propuesta', {
+                duration: 4000, 
+                position: 'bottom-right',
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+            })
+        }
+    }
+
+    // Manejo de los datos del formulario de editar 
+    const editPropuesta = async (formData) => {
+        try{
+            const Datos = JSON.parse(formData)
+            await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
+            toast.success('Propuesta actualizada correctamente', {
+                duration: 4000, 
+                position: 'bottom-right', 
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+            setEdit(false)
+            setReload(!reload)
+        }catch(error){
+            toast.error('Error al actualizar la propuesta', {
+                duration: 4000, 
+                position: 'bottom-right', 
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
+        }
+    }
+
+    // Manejo del eliminar
+    const deletePropuesta = async (correo) => {
+        try{
+            await eliminarPropuesta(correo,localStorage.getItem('token'))
+            toast.success('Propuesta eliminada correctamente', {
+                duration: 4000, 
+                position: 'bottom-right',
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+            setEdit(false)
+            setReload(!reload)
+        }catch(error){
+            toast.error('Error al eliminar la propuesta', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
+        }
+    }
+
+    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
     }
-    //Manejo de las funciones para el formulario de agregar academico
-    //muestra el modal de agregar
+    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
+        setEdit(false)
     }
-    //aqui se manejan los datos que se van a enviar para agregar el academico. e es un json con los datos del form
-    const addPropuesta = (e) => {
-        console.log(e)
-        
-        setAddClick(false)
-    }
-
-    //Manjeo de las funciones para el formulario cuando se quiere editar un academico
-    //funcion para cuando se hace click en una tabla.
+    // Al hacer click en la tabla
     const elementClicked = (user) =>{
         console.log(user)
         setPropuesta(user)
         setEdit(true)
-    }
-    //manejo de los datos del form de editar academico
-    const editPropuesta = (e) => {
-        console.log(e)
-        setEdit(false)
-    }
-    //se maneja el borrar academico.
-    const eliminarPropuesta = (id) => {
-        //Se pide la confirmacion primero si se confirma se hace.
-        //Si se eliminar se pone el setEdit(false) y se recarga la pagina, para recargar la lista de academicos
-        console.log(id)
-        setEdit(false)
+        setAddClick(false)
     }
     //se filtra
     function getValueByPath(obj, path) {
-        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
     //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
           if (col.includes('.')) {
-            const value = getValueByPath(e, col);
-            return value && value.toString().includes(filter);
+            const value = getValueByPath(e, col)
+            return value && value.toString().includes(filter)
           }
-          return e[col].toString().includes(filter);
+          return e[col].toString().includes(filter)
         });
-        setPropuestas(matches);
-      };
-    const columns = ['ID', 'Nombre', 'Correo','Universidad'];
-    const dataKeys = ['id','nombre','correo', 'universidad']
+        setPropuestas(matches)
+    };
+
     return(
     <main >
         {!error ? (
@@ -107,18 +171,17 @@ export const GestionPropuestas = () => {
                         mode={2}
                         onSubmit={editPropuesta} 
                         onCancel={onCancel} 
-                        onDelete={() => eliminarPropuesta(propuesta.id)}
+                        onDelete={() => deletePropuesta(propuesta.id)}
                         user={propuesta}
                         >
                         </PropuestasForm>
                     </Modal>
                 )
             }
+            <Toaster></Toaster>
         </div>
         ):(
-            <div>
-                Error no tiene los permisos necesarios para ver esta página.
-            </div>
+            <PermisoDenegado></PermisoDenegado>
         )}
     </main>)
 } 

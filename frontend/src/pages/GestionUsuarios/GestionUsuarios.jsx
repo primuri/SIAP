@@ -4,92 +4,161 @@ import { ModalPequeno } from "../../utils/ModalPequeno"
 import { UsuariosForm } from "../../components/GestionUsuarios/GestionUsuarios/UsuariosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
+import {toast, Toaster} from "react-hot-toast"
+import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { obtenerUsuarios, signup,actualizarUsuario,eliminarUsuario } from "../../api/gestionUsuarios"
 
 
 export const GestionUsuarios = () => {
     const user = JSON.parse(localStorage.getItem('user'))
-    const [usuarios, setUsuarios] = useState([]) //Aca van a estar los academicos que se muestran, se hace as]i para que si se busca los
-    //no se pierdan todo los academicos al usar el filter.
-    const [data,setData] = useState([])//Aca van a estar todos los academicos
-    const [usuario, setUsuario] = useState(null) //Este va a ser el usuario que se clickea en la tabla para editar.
-    const [error, setError] = useState(false) //Si el usuario no es un admin no puede ver la pagina y se va a mostrar otra pagina de error.
+    const [reload, setReload] = useState(false)
+    const [usuarios, setUsuarios] = useState([]) //Usuarios que se muestran
+    const [data,setData] = useState([])//Todos los usuarios
+    const [usuario, setUsuario] = useState(null) //Usuario al que se le da click en la tabla para editar
+    const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const [isLoadingData, setIsLoadingData] = useState(true);
-    if(user.groups[0] != "administrador"){
-        setError(true)
-    }
-    //Aqui se va a hacer la primera solicitud al servidor para los academicos.
-    useEffect(() => {
-        if (isLoadingData) {
-            //Prueba de tabla, esto es un ejemplo datos va a ser innecesario para el caso real, se pide la lista al backend y se mete la 
-            //respuesta en setData y en setAcademicos.
+    const columns = ['Correo','Rol']
+    const dataKeys = ['correo','rol']
+    user.groups[0] !== "administrador" ? setError(true) : null  
+    //Si no es administrador, pone el error en true
+    // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
 
-            const datos = [
-                { id: '1234', correo: 'gorkir6@gmail.com', rol: 'Admin' },
-                { id: '9634', correo: 'Brandon@gmail.com', rol: 'Evaluador' },
-                { id: '2234', correo: 'Priscila@gmail.com', rol: 'Investigador' },
-                { id: '5234', correo: 'Wendy@gmail.com', rol: 'Admin' },
-                { id: '9234', correo: 'Ariel@gmail.com', rol: 'Investigador' },
-            ];
-            setData(datos);
-            setUsuarios(datos);
-            setIsLoadingData(false); // Desactiva la carga después de la primera vez
+    useEffect(() => {loadUsuarios()}, [reload])
+    async function loadUsuarios() {
+        try {
+            const res = await obtenerUsuarios(localStorage.getItem('token'))
+            setData(res.data)
+            setUsuarios(res.data)
+        } catch (error) {
+            toast.error('Error al cargar los Usuarios', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
         }
-    }, [isLoadingData]);
-    //cierra culaquier modal
+    }	    
+
+    // Manejo de datos que se van a enviar para agregar
+    const addUsuario = async (formData) => {
+        try{
+            const Datos = JSON.parse(formData)
+            await signup(Datos,localStorage.getItem('token'))
+            toast.success('Usuario agregado correctamente', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff'
+                }
+            })
+            setAddClick(false)
+            setReload(!reload)
+        }catch(error){
+            toast.error('Error al agregar el usuario', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+            })
+        }
+    }
+
+    // Manejo de los datos del formulario de editar 
+    const editUsuario = async (formData) => {
+        try{
+            const Datos = JSON.parse(formData)
+            await actualizarUsuario(Datos.correo,Datos,localStorage.getItem('token'))
+            toast.success('Usuario actualizado correctamente', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+            })
+            setEdit(false)
+            setReload(!reload)
+        }catch(error){
+            toast.error('Error al actualizar el usuario', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+            })
+        }
+    }
+
+    // Manejo del eliminar
+    const deleteUsuario = async (correo) => {
+        try{
+            await eliminarUsuario(correo,localStorage.getItem('token'))
+            toast.success('Usuario eliminado correctamente', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+            setEdit(false)
+            setReload(!reload)
+        }catch(error){
+            toast.error('Error al eliminar el usuario', {
+                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                position: 'bottom-right', // Posición en la pantalla
+                style: {
+                  background: '#670000',
+                  color: '#fff',
+                },
+              })
+        }
+    }
+
+    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
     }
-    //Manejo de las funciones para el formulario de agregar academico
-    //muestra el modal de agregar
+    
+     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
-    }
-    //aqui se manejan los datos que se van a enviar para agregar el academico. e es un json con los datos del form
-    const addUsuario = (e) => {
-        console.log(e)
-        
-        setAddClick(false)
+        setEdit(false)
     }
 
-    //Manjeo de las funciones para el formulario cuando se quiere editar un academico
-    //funcion para cuando se hace click en una tabla.
+    // Al hacer click en la tabla
     const elementClicked = (user) =>{
         console.log(user)
         setUsuario(user)
         setEdit(true)
+        setAddClick(false)
     }
-    //manejo de los datos del form de editar academico
-    const editUsuario = (e) => {
-        console.log(e)
-        setEdit(false)
-    }
-    //se maneja el borrar academico.
-    const eliminarUsuario = (id) => {
-        //Se pide la confirmacion primero si se confirma se hace.
-        //Si se eliminar se pone el setEdit(false) y se recarga la pagina, para recargar la lista de academicos
-        console.log(id)
-        setEdit(false)
-    }
+    
     //se filtra
     function getValueByPath(obj, path) {
-        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
+
     //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
           if (col.includes('.')) {
-            const value = getValueByPath(e, col);
-            return value && value.toString().includes(filter);
+            const value = getValueByPath(e, col)
+            return value && value.toString().includes(filter)
           }
-          return e[col].toString().includes(filter);
+          return e[col].toString().includes(filter)
         });
-        setUsuarios(matches);
-      };
-    const columns = ['ID', 'Correo','Rol'];
-    const dataKeys = ['id', 'correo', 'rol']
+        setUsuarios(matches)
+    }
+
     return(
     <main >
         {!error ? (
@@ -108,18 +177,17 @@ export const GestionUsuarios = () => {
                             mode={2}
                             onSubmit={editUsuario} 
                             onCancel={onCancel} 
-                            onDelete={() => eliminarUsuario(usuario.id)}
+                            onDelete={() => deleteUsuario(usuario.id)}
                             user={usuario}
                         >
                         </UsuariosForm>
                     </ModalPequeno>
                 )
             }
+            <Toaster></Toaster>
         </div>
         ):(
-            <div>
-                Error: no tiene los permisos necesarios para ver esta página.
-            </div>
+            <PermisoDenegado></PermisoDenegado>
         )}
     </main>)
 } 
