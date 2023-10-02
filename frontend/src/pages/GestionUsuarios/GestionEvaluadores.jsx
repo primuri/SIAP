@@ -11,14 +11,14 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 export const GestionEvaluadores = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
-    const [evaluadores, setEvaluadores] = useState([]) // que se muestran
+    const [evaluadores, setEvaluadores] = useState([]) // Evaluadores que se muestran
     const [data,setData] = useState([])//Todos los evaluadores
     const [evaluador, setEvaluador] = useState(null) //Usuario al que se le da click en la tabla para editar
     const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const columns = ['Correo','Rol']
-    const dataKeys = ['correo','rol']
+    const columns = ['Nombre','Correo','Tipo','Universidad']
+    const dataKeys = ['id_nombre_completo_fk.nombre','correo','tipo','universidad_fk.nombre']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
      // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
     useEffect(() => {loadEvaluadores()}, [reload])

@@ -43,6 +43,24 @@ export const agregarEvaluador = async (evaluador, token) => {
 };
 
 export const editarEvaluador = async (id, evaluador, token) => {
+    const id_nom = evaluador.id_nombre_completo_fk.id_nombre_completo;
+    await utils.editarNombre(id_nom,evaluador.id_nombre_completo_fk, localStorage.getItem("token"));
+    const id_nombre_editado = evaluador.id_nombre_completo_fk.id_nombre_completo;
+    delete evaluador.id_nombre_completo_fk;
+    evaluador.id_nombre_completo_fk = id_nombre_editado;
+
+    const id_are = evaluador.id_area_especialidad_fk.id_area_especialidad;
+    await utils.editarArea(id_are,evaluador.id_area_especialidad_fk, localStorage.getItem("token"));
+    const id_area_editada = evaluador.id_area_especialidad_fk.id_area_especialidad;
+    delete evaluador.id_area_especialidad_fk;
+    evaluador.id_area_especialidad_fk = id_area_editada;
+
+    const id_univ = evaluador.universidad_fk.id_universidad;
+    await utils.editarUniversidad(id_univ,evaluador.universidad_fk, localStorage.getItem("token"));
+    const id_universidad_editada = evaluador.universidad_fk.id_universidad;
+    delete evaluador.universidad_fk;
+    evaluador.universidad_fk = id_universidad_editada;
+    
     const responseEvaluador = await SIAPAPI.put(`personas/evaluador/${id}/`, evaluador, {
         headers: {
             'Authorization': `token ${token}`,
