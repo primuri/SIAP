@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
-import {Modal} from "../../utils/Modal"
+import { ModalPequeno } from "../../utils/ModalPequeno"
 import { UsuariosForm } from "../../components/GestionUsuarios/GestionUsuarios/UsuariosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
@@ -161,10 +161,10 @@ export const GestionUsuarios = () => {
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
             <Table columns={columns} data={usuarios} dataKeys={dataKeys} onClick={elementClicked}></Table>
-            {addClick && (<Modal ><UsuariosForm onSubmit={addUsuario} onCancel={onCancel} mode={1}></UsuariosForm></Modal>)}
+            {addClick && (<ModalPequeno ><UsuariosForm onSubmit={addUsuario} onCancel={onCancel} mode={1}></UsuariosForm></ModalPequeno>)}
             {edit && 
                 (
-                    <Modal>
+                    <ModalPequeno>
                         <UsuariosForm 
                             mode={2}
                             onSubmit={editUsuario} 
@@ -173,7 +173,7 @@ export const GestionUsuarios = () => {
                             user={usuario}
                         >
                         </UsuariosForm>
-                    </Modal>
+                    </ModalPequeno>
                 )
             }
             <Toaster></Toaster>

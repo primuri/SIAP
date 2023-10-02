@@ -82,7 +82,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_files.wsgi.application'
-
+CORS_ALLOW_ORIGINS = [ 
+    "http://localhost:5173",
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
