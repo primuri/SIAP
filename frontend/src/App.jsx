@@ -7,11 +7,9 @@ import GestionPropuestas from "./routes/GestionPropuestas"
 import { useEffect } from 'react'
 import { Home } from './pages/Home'
 import { Sidebar } from './components/Layout/Sidebar'
-<<<<<<< HEAD
 import { Footer } from './components/Layout/Footer'
-=======
-import GestionPropuestas from './routes/GestionPropuestas'
->>>>>>> Development
+
+
 
 function App() {
   useEffect(() => {
