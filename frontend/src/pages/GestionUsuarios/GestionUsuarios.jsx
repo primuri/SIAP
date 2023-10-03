@@ -171,7 +171,7 @@ export const GestionUsuarios = () => {
                             onSubmit={editUsuario} 
                             onCancel={onCancel} 
                             onDelete={() => deleteUsuario(usuario.id)}
-                            user={usuario}
+                            usuario={usuario}
                         >
                         </UsuariosForm>
                     </ModalPequeno>

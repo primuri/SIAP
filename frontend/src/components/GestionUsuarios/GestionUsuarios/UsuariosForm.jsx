@@ -1,28 +1,25 @@
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import {Toaster, toast} from 'react-hot-toast'
-
+import { obtenerAcademicos } from "../../../api/gestionAcademicos";
+import {obtenerEvaluadores} from "../../../api/gestionEvaluadores"
 export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => {
+  // Cargar informacion
+  const [academicos, setAcademicos] = useState([]);
+  const [academicosFilter, setAcademicosFilter] = useState([]);
+  const [evaluadores, setEvaluadores] = useState([]);
+  //Cargan todos los academicos y evaluadores, para poderlos asignar
+  useEffect(()=>{
 
-    // Cargar informacion
+  },[])
   const [formData, setFormData] = useState({
     correo: usuario ? usuario.correo : "",
     rol: usuario ? usuario.groups[0] : "",
-    password: usuario ? usuario.password : "",
-    confirmar_contrasena: usuario ? usuario.password : "",
+    password:"",
+    confirmar_contrasena:"",
     academico_fk: usuario ? usuario.id_academico_fk : {},
     evaluador_fk: usuario ? usuario.id_evaluador_fk : {}
   });
-  useEffect(() => {
-    setFormData({
-        correo: usuario ? usuario.correo : "",
-        rol: usuario ? usuario.groups[0] : "",
-        password: usuario ? usuario.password : "",
-        confirmar_contrasena: usuario ? usuario.password : "",
-        academico_fk: usuario ? usuario.id_academico_fk : {},
-        evaluador_fk: usuario ? usuario.id_evaluador_fk : {}
-    });
-}, [usuario]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -44,10 +41,10 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
       }
   };
 
-  const validatePassword = (contrasena) => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&.*])[A-Za-z\d!@#$%^&.*]{8,}$/;
-    return passwordRegex.test(contrasena);
-};
+//   const validatePassword = (contrasena) => {
+//     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&.*])[A-Za-z\d!@#$%^&.*]{8,}$/;
+//     return passwordRegex.test(contrasena);
+// };
 
   const sendForm = (event) => {
     event.preventDefault();
@@ -73,7 +70,6 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
         <div className="modal-header">
             <h2>{mode == 1? ("Agregar usuario(a)"):("Editar usuario(a)")}</h2>
         </div>
-
         <form onSubmit={sendForm} className='d-flex flex-column'>
             <div className="modal-body">
                 <div className="container">
