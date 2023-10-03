@@ -56,131 +56,150 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
   return (
     <>
       <div className="modal-header">
-          <h2>{mode === 1 ? "Agregar un académico(a)" : "Editar académico(a)"}</h2>
+            <h2>{mode === 1 ? "Agregar académico(a)" : "Editar académico(a)"}</h2>
+            <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                <span aria-hidden="true" class="close-icon">&times;</span>
+            </button>
       </div>
 
-      <form onSubmit={sendForm} className='d-flex flex-column'> 
-          <div className="modal-body">
-              <div className="container">
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="cedula">Cédula</label>
-                          <input type="text" name="cedula" id="cedula" value={formData.cedula} onChange={handleChange} required/>
-                      </div>
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="nombre">Nombre</label>
-                          <input type="text" name="id_nombre_completo_fk.nombre" id="nombre" value={formData.id_nombre_completo_fk.nombre || ""} onChange={handleChange} required/>
-                        </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="apellido">Apellido</label>
-                          <input type="text" name="id_nombre_completo_fk.apellido" id="apellido" value={formData.id_nombre_completo_fk.apellido || ""} onChange={handleChange} required/>
-                      </div>
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="segundoApellido">Segundo apellido</label>
-                          <input type="text" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange}/>
-                      </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="correo">Correo</label>
-                          <input type="email" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
-                      </div>
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="paisProcedencia">País de Procedencia</label>
-                          <input type="text" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange}/>
-                      </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-auto control-label">Universidad</label>
-                      </div>
-                      <div className="col">
-                          <label htmlFor="universidadPais">País de la Universidad</label>
-                          <input type="text" name="universidad_fk.pais" id="universidadPais" value={formData.universidad_fk.pais} onChange={handleChange} required/>    
-                      </div>
-                      <div className="col">
-                          <label htmlFor="universidadNombre">Nombre de la Universidad</label>
-                          <input type="text" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required/>
-                      </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-4 control-label">Telefono</label>
-                          <input type="text" name="telefono" id="" /> 
-                      </div>
-                      <div className="col">
-                        <label className="col-sm-4 control-label">Titulos</label>
-                        <input type="text" name="titulos" id="" /> 
-                      </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="categoriaEnRegimen">Categoría en Régimen</label>
-                          <select name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange}>
-                              <option value="">Seleccionar categoría</option>
-                              <option value="Instructor">Instructor</option>
-                              <option value="Profesor Adjunto">Profesor Adjunto</option>
-                              <option value="Profesor Asociado">Profesor Asociado</option>
-                              <option value="Catedrático">Catedrático</option>
-                          </select>
-                      </div>
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="gradoMaximo">Grado Máximo</label>
-                          <select name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
-                              <option value="">Seleccionar grado</option>
-                              <option value="Br">Bachiller</option>
-                              <option value="Lic">Licenciado</option>
-                              <option value="Mtr">Máster</option>
-                              <option value="Dr">Doctor</option>
-                          </select>
-                      </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="areaEspecialidad">Área de Especialidad</label>
-                          <input type="text" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange}/>
-                      </div>
-                      <div className="col">
-                          <label className="col-sm-4 control-label" htmlFor="areaTrabajo">Área de Trabajo</label>
-                          <input name="area_de_trabajo" id="area_de_trabajo" value={formData.area_de_trabajo} onChange={handleChange} />
-                      </div>
-                  </div>
-                  <br/>
-                  <div className="row">
-                    <div className="col">
-                        <label className="col-sm-4 control-label" htmlFor="sitioWeb">Sitio Web</label>
-                        <input type="url" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange}/>
-                    </div>
-                    <div className="col">
-                        <label className="col-sm-4 control-label" htmlFor="foto">Subir Foto</label>
-                        <input type="file" name="foto" id="foto" onChange={handleFileChange}/>
-                    </div>
-                  </div>
-              </div>
-          </div>
+      <form onSubmit={sendForm} className='d-flex flex-column '> 
+            <div className="modal-body justify-content-center">
+                <div className="container ">
 
-          <div className="modal-footer">
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="cedula" className="label-personalizado mb-2">Cédula</label>
+                                <input type="text" className="form-control" name="cedula" id="cedula" value={formData.cedula} onChange={handleChange} required/>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
+                                <input type="text" className="form-control" name="id_nombre_completo_fk.nombre" id="nombre" value={formData.id_nombre_completo_fk.nombre || ""} onChange={handleChange} required/>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="apellido" className="label-personalizado mb-2">Primer Apellido</label>
+                                <input type="text" className="form-control" name="id_nombre_completo_fk.apellido" id="apellido" value={formData.id_nombre_completo_fk.apellido || ""} onChange={handleChange} required/>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo Apellido</label>
+                                <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange}/>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                            <label htmlFor="paisProcedencia" className="label-personalizado mb-2">País de Procedencia</label>
+                            <input type="text" className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange}/>
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="telefono" className="label-personalizado mb-2">Teléfonos (falta)</label>
+                            <select className="form-control" name="telefonos" id="telefonos">
+                                <option value="Tel 1">Tel 1</option>
+                                <option value="Tel 2">Tel 2</option>
+                                <option value="Agregar nuevo">Agregar nuevo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="row mb-4">
+                        <div className="col-md-6">  
+                            <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
+                            <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
+                        </div>  
+                        <div className="col-md-6"> 
+                            <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Sitio Web</label>
+                            <input type="url" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange}/>
+                        </div>
+                    </div>
+
+                    <div className="row mb-4">
+                        <div className="col-md-6"> 
+                            <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
+                            <input type="text" className="form-control" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required />
+                        </div>
+                        <div className="col-md-6"> 
+                            <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
+                            <input type="text" className="form-control" name="universidad_fk.pais" id="pais_universidad" value={formData.universidad_fk.pais} onChange={handleChange} required/>    
+                        </div>
+                    </div>
+
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                            <label htmlFor="titulos" className="label-personalizado mb-2">Títulos (Falta) </label>
+                            <select className="form-control" name="titulos" id="titulos">
+                                <option value="Instructor">Título 1</option>
+                                <option value="Profesor Adjunto">Título 2</option>
+                                <option value="Agregar nuevo">Agregar nuevo</option>
+                            </select>
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen</label>
+                            <select className="form-control" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange}>
+                                <option value="">Seleccionar categoría</option>
+                                <option value="Instructor">Instructor</option>
+                                <option value="Profesor Adjunto">Profesor Adjunto</option>
+                                <option value="Profesor Asociado">Profesor Asociado</option>
+                                <option value="Catedrático">Catedrático</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                            <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado Máximo</label>
+                            <select className="form-control" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
+                                <option value="">Seleccionar grado</option>
+                                <option value="Br">Bachiller</option>
+                                <option value="Lic">Licenciado</option>
+                                <option value="Mtr">Máster</option>
+                                <option value="Dr">Doctor</option>
+                            </select>
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad</label>
+                            <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange}/>
+                        </div>
+                    </div>
+
+
+                    <div className="row mb-4">
+
+                        <div className="col-md-6">
+                            <label htmlFor="areaTrabajo" className="label-personalizado mb-2">Área de Trabajo</label>
+                            <input type="text" className="form-control" name="area_de_trabajo" id="area_de_trabajo" value={formData.area_de_trabajo} onChange={handleChange} />
+                        </div>
+                    </div>
+
+                    <div className="col-md-6">                
+                        <label className="label-personalizado mb-2" htmlFor="foto">Subir Foto</label>
+                        <input type="file" className="form-control" name="foto" id="foto" onChange={handleFileChange}/>
+                    </div>
+
+                </div>
+            </div>
+
+          <div className="modal-footer justify-content-center">
               <div className="row">
                   <div className="col">
-                      <button type="submit" className='table-button border-0 p-2 rounded text-white'>
-                          {mode === 1 ? "Agregar" : "Editar"}
+                      <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
+                          {mode === 1 ? "Agregar" : "Guardar"}
                       </button>
                   </div>
                   <div className="col">
                       {mode === 2 && (
-                          <button type="button" onClick={onDelete} className='delete-button border-0 p-2 rounded text-white'> Eliminar </button>
+                          <button id="boton-personalizado" type="button" onClick={onDelete} className='delete-button border-0 p-2 rounded text-white'> Eliminar </button>
                       )}
-                  </div>
-                  <div className="col">
-                      <button type="button" onClick={onCancel} className='cancel-button border-0 p-2 rounded text-white'> Cancelar </button>
                   </div>
               </div>
           </div>
