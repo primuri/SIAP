@@ -25,7 +25,7 @@ class Universidad(models.Model):
 
     class Meta:
         db_table = 'universidad'
-        #unique_together = (('pais', 'nombre'),)
+        unique_together = (('pais', 'nombre'),)
 
 
 class Academico(models.Model):

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import * as uti from './utils/usuariosUtils'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
