@@ -4,7 +4,7 @@ export const Modal = ({children}) => {
         <div className="modal d-block" tabIndex="-1">
         <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
           <div className="modal-content" >
-            <div className="modal-body">
+            <div className="modal-body" >
               {children}
             </div>
           </div>
