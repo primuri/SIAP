@@ -63,7 +63,7 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
       </div>
 
       <form onSubmit={sendForm} className='d-flex flex-column '> 
-            <div className="modal-body justify-content-center" >
+            <div className="modal-body justify-content-center">
                 <div className="container ">
 
                     <div className="row mb-4">

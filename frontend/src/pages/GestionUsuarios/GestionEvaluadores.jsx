@@ -170,7 +170,7 @@ export const GestionEvaluadores = () => {
                         onSubmit={editEvaluador} 
                         onCancel={onCancel} 
                         onDelete={() => deleteEvaluador(evaluador.id)}
-                        user={evaluador}
+                        evaluador={evaluador}
                         >
                         </EvaluadoresForm>
                     </Modal>
