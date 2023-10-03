@@ -6,7 +6,9 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { obtenerPropuestas } from "../../api/gestionPropuestas"
+import { agregarDocumento, agregarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
+import { agregarPropuestas } from "../../api/gestionPropuestas"
+import { obtenerAcademicos } from "../../api/gestionAcademicos"
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -16,12 +18,36 @@ export const GestionPropuestas = () => {
     const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const columns = ['Correo','Rol']
-    const dataKeys = ['correo','rol']
+    const [academicos, setAcademicos] = useState([]);
+    const columns = ['Codigo CIMPA','Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
+    const dataKeys = ['id_codigo_cimpa_fk.id_codigo_cimpa', 'id_codigo_cimpa_fk.nombre','id_codigo_cimpa_fk.estado','id_codigo_cimpa_fk.fecha_vigencia','id_codigo_cimpa_fk.actividad','id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre','documento']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
      // Detecta cambios y realiza la solicitud nuevamente  
-    useEffect(() => {loadEvaluadores()}, [reload])
-    async function loadEvaluadores() {
+     useEffect(() => {
+        async function fetchData() {
+            loadPropuestas();
+            loadAcademicos();
+        }
+    
+        fetchData();
+    }, [reload]);
+    
+async function loadAcademicos() {
+    try {
+        const res = await obtenerAcademicos(localStorage.getItem('token'));
+        setAcademicos(res.data);
+    } catch (error) {
+        toast.error('Error al cargar los datos de académicos', {
+            duration: 4000,
+            position: 'bottom-right',
+            style: {
+                background: '#670000',
+                color: '#fff',
+            },
+        });
+    }
+}
+    async function loadPropuestas() {
         try {
             const res = await obtenerPropuestas(localStorage.getItem('token'))
             setData(res.data)
@@ -41,7 +67,7 @@ export const GestionPropuestas = () => {
     const addPropuesta = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            //await agregarPropuesta(Datos,localStorage.getItem('token'))
+            await agregarDocumento(Datos,localStorage.getItem('token'))
             toast.success('Propuesta agregada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -158,7 +184,7 @@ export const GestionPropuestas = () => {
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
             <Table columns={columns} data={propuestas} dataKeys={dataKeys} onClick={elementClicked}></Table>
-            {addClick && (<Modal ><PropuestasForm onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}
+            {addClick && (<Modal ><PropuestasForm academicos={academicos} onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}
             {edit && 
                 (
                     <Modal >
@@ -167,7 +193,8 @@ export const GestionPropuestas = () => {
                         onSubmit={editPropuesta} 
                         onCancel={onCancel} 
                         onDelete={() => deletePropuesta(propuesta.id)}
-                        user={propuesta}
+                        academicos={academicos}
+                        propuesta={propuesta}
                         >
                         </PropuestasForm>
                     </Modal>

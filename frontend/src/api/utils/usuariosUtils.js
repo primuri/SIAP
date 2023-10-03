@@ -4,7 +4,7 @@ const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
-const obtenerNombre = async (nombre, token) => {
+export const obtenerNombre = async (nombre, token) => {
     try {
         const response_nombre = await SIAPAPI.post('personas/nombre_completo/', nombre, {
             headers: {
@@ -39,7 +39,7 @@ export const eliminarNombre = async (id, token) => {
     });
 };
 
-const obtenerArea = async (area, token) => {
+export const obtenerArea = async (area, token) => {
      try {
         const response_area = await SIAPAPI.post('personas/area_especialidad/', area, {
             headers: {
@@ -75,7 +75,7 @@ export const eliminarArea = async (id, token) => {
 };
 
 
-const obtenerUniversidad = async (universidad, token) => {
+export const obtenerUniversidad = async (universidad, token) => {
     try {
         const response_universidad = await SIAPAPI.post('personas/universidad/', universidad, {
             headers: {
