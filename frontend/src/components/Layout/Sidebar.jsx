@@ -23,7 +23,7 @@ export const Sidebar = () => {
    return(
     <>
         {usuario && (
-            <nav className='bg-light d-flex justify-content-center side-bar-nav'>
+            <nav className='d-flex justify-content-center'>
                 <ul className='d-flex flex-column justify-content-start list-unstyled pt-5 row-gap-3 side-bar'>
                 {menu[usuario.groups[0]].map((e)=>{
                     return(<>

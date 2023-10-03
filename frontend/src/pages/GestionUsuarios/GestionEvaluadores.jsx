@@ -69,7 +69,7 @@ export const GestionEvaluadores = () => {
     const editEvaluador = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            await editarEvaluador(Datos.correo,Datos,localStorage.getItem('token'))
+            await editarEvaluador(evaluador.id_evaluador,Datos,localStorage.getItem('token'))
             toast.success('Evaluador actualizado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -169,8 +169,8 @@ export const GestionEvaluadores = () => {
                         mode={2}
                         onSubmit={editEvaluador} 
                         onCancel={onCancel} 
-                        onDelete={() => deleteEvaluador(evaluador.id)}
-                        user={evaluador}
+                        onDelete={() => deleteEvaluador(evaluador.id_evaluador)}
+                        evaluador={evaluador}
                         >
                         </EvaluadoresForm>
                     </Modal>

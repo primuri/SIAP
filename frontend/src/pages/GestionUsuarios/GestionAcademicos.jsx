@@ -194,7 +194,7 @@ export const GestionAcademicos = () => {
                 {addClick && (<Modal ><AcademicosForm onSubmit={addAcademico} onCancel={onCancel} mode={1}></AcademicosForm></Modal>)}
                 { edit && 
                     (
-                        <Modal >
+                        <Modal>
                             <AcademicosForm 
                                 mode={2}
                                 onSubmit={editAcademico} 

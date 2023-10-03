@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
+import search from '../assets/search-i.png'
 
 export const Search = ({ columns, colNames, onSearch }) => {
     const [selectedColumn, setSelectedColumn] = useState(""); // Estado para almacenar la columna seleccionada
@@ -18,7 +19,7 @@ export const Search = ({ columns, colNames, onSearch }) => {
             <select
                 value={selectedColumn}
                 onChange={(e) => setSelectedColumn(e.target.value)}
-                className="rounded-start-3 p-2 border-1 "
+                className="rounded-start-3 form-select d-inline p-2 shadow-sm" id="selectCol"
             > 
                 <option value="">Seleccionar columna</option>
                 { 
@@ -28,18 +29,20 @@ export const Search = ({ columns, colNames, onSearch }) => {
                         </option>
                 ))}
             </select>
+            
             <input
                 type="text"
-                placeholder="Buscar"
+                placeholder=""
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                className="p-2"
+                className="p-2 buscar-input shadow-sm"
+                
             />
             <button 
             onClick={handleSearch} 
             type="button" 
             className="background-color-celeste-ucr border-0 text-light rounded-end-3 p-2"
-            >Buscar
+            > <span className='icono'><img width={"20px"} src={search}/></span> Buscar
             </button>
         </div>
     );

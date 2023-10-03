@@ -1,13 +1,15 @@
 body{
-  background-color: #C2C1C0;
+  background-color: #ffffff;
 }
 header{
   height: 108px;
+  z-index: 1000;
 }
 .logo{
   width: 30%;
   float: left;
 }
 footer{
-  height: 108px;
+  padding: 30px 200px;
+  background-color: #323232;
 }
