@@ -18,12 +18,6 @@ export const InicioSesion = () => {
     resetForm();
   }, []);
 
-  const validatePassword = (password) => {
-    // Realiza la validación de la contraseña aquí
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&.*])[A-Za-z\d!@#$%^&.*]{8,}$/;
-    return passwordRegex.test(password);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

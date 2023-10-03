@@ -16,7 +16,7 @@ export const Sidebar = () => {
       { label: 'Evaluaciones', link: '/evaluaciones' },
     ],
     "investigador": [
-      { label: 'Dashboard', link: '/dashboard' },
+      { label: 'Dashboard', link: '/dasdas' },
       { label: 'Perfil', link: '/perfil' },
     ],
   };

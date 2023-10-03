@@ -1,6 +1,6 @@
 export const Footer = () => {
   return (
-    <footer style={{color: "var(--gris-claro-ucr)"}} className="bg-dark w-100 d-flex justify-content-between align-items-center position-absolute bottom-0 shadow">
+    <footer style={{color: "var(--gris-claro-ucr)"}} className="bg-dark vw-100 d-flex justify-content-between align-items-center bottom-0 shadow">
       <div className="d-none d-lg-block ms-5">
           <b>Dirección</b>
           <p>Costa Rica, San José, Montes de Oca, Ciudad de la Investigación, 100m N del Colegio Monterrey</p>

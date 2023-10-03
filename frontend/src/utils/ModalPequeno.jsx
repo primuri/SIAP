@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-export const Modal = ({children}) => {
+export const ModalPequeno = ({children}) => {
     return(
         <div className="modal d-block" tabIndex="-1">
-        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered">
           <div className="modal-content" >
             <div className="modal-body">
               {children}
@@ -14,6 +14,6 @@ export const Modal = ({children}) => {
 }
 
 
-Modal.propTypes = {
+ModalPequeno.propTypes = {
     children: PropTypes.object.isRequired,
 };
