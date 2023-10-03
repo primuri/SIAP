@@ -1,5 +1,6 @@
 import axios from 'axios'
 import * as utils from './utils/usuariosUtils'
+
 /* 
   Formato JSON academico (al hacer get, no post, para hacer post, el FK es solo un número, no un obj):
 

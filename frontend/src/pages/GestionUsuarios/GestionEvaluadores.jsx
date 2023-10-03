@@ -139,6 +139,7 @@ export const GestionEvaluadores = () => {
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
+
     //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {

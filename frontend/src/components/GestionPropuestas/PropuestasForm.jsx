@@ -52,12 +52,12 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete })
 
     return(
         <>
-        <div class="modal-header">
+        <div className="modal-header">
             <h2>{mode == 1? ("Agregar una propuesta"):("Editar propuesta")}</h2>
         </div>
 
         <form onSubmit={sendForm} className='d-flex flex-column'>
-            <div class="modal-body">
+            <div className="modal-body">
                 <div className="container">
                     <div className="row">
                         <div className="col">
@@ -148,7 +148,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete })
                 </div>
             </div>
 
-            <div class="modal-footer">
+            <div className="modal-footer">
                 <div className="row">
                     <div className="col">
                         <button type="submit" className='table-button border-0 p-2 rounded text-white'>

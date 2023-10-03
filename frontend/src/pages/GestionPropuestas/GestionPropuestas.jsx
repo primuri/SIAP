@@ -41,15 +41,15 @@ export const GestionPropuestas = () => {
     const addPropuesta = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            //await agregarPropuesta(Datos,localStorage.getItem('token'))
+            await agregarPropuesta(Datos,localStorage.getItem('token'))
             toast.success('Propuesta agregada correctamente', {
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                  background: 'var(--celeste-ucr)',
-                  color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
-              })
+            })
             setAddClick(false)
             setReload(!reload)
         }catch(error){
@@ -60,15 +60,15 @@ export const GestionPropuestas = () => {
                   background: '#670000',
                   color: '#fff',
                 },
-              })
+            })
         }
-        
     }
+
     // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            //await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
+            await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
             toast.success('Propuesta actualizada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -90,10 +90,11 @@ export const GestionPropuestas = () => {
               })
         }
     }
+
     // Manejo del eliminar
     const deletePropuesta = async (correo) => {
         try{
-            //await eliminarPropuesta(correo,localStorage.getItem('token'))
+            await eliminarPropuesta(correo,localStorage.getItem('token'))
             toast.success('Propuesta eliminada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right',
@@ -125,7 +126,6 @@ export const GestionPropuestas = () => {
         setAddClick(true)
         setEdit(false)
     }
-    
     // Al hacer click en la tabla
     const elementClicked = (user) =>{
         console.log(user)
@@ -133,7 +133,6 @@ export const GestionPropuestas = () => {
         setEdit(true)
         setAddClick(false)
     }
-    
     //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
