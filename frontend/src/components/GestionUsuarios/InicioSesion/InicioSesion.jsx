@@ -48,7 +48,7 @@ export const InicioSesion = () => {
   };
 
   return (
-    <div className="bg-light p-5 rounded position-absolute w-25" style={{ left: '37%', top: '30%' }}>
+    <div className="bg-white shadow p-5 rounded position-absolute w-25" style={{ left: '37%', top: '30%' }}>
       <h1 className="fs-3">Iniciar Sesión</h1>
       <hr></hr>
       <form className="d-flex flex-column row-gap-3 mt-1" onSubmit={handleSubmit}>

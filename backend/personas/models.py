@@ -38,12 +38,17 @@ class Academico(models.Model):
     area_de_trabajo = models.CharField(max_length=64)
     categoria_en_regimen = models.CharField(max_length=45)
     pais_procedencia = models.CharField(max_length=45)
-    id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.PROTECT, db_column='id_nombre_completo_fk')
-    id_area_especialidad_fk = models.ForeignKey(AreaEspecialidad, on_delete=models.PROTECT, db_column='id_area_especialidad_fk')
-    universidad_fk = models.ForeignKey(Universidad, on_delete=models.PROTECT, db_column='universidad_fk')
+    id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.CASCADE, db_column='id_nombre_completo_fk')
+    id_area_especialidad_fk = models.ForeignKey(AreaEspecialidad, on_delete=models.CASCADE, db_column='id_area_especialidad_fk')
+    universidad_fk = models.ForeignKey(Universidad, on_delete=models.DO_NOTHING, db_column='universidad_fk')
 
     class Meta:
         db_table = 'academico'
+
+    def delete(self, *args, **kwargs):
+        self.id_nombre_completo_fk.delete()
+        self.id_area_especialidad_fk.delete()
+        super().delete(*args, **kwargs)
 
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)
