@@ -25,7 +25,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header/>
-      <div className='d-flex'>
+      <div className='d-flex' id='content-box'>
         <Sidebar></Sidebar>
         <Routes>
           {GestionUsuarios}

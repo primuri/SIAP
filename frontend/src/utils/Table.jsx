@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns, data, onClick, dataKeys}) => {
-  const [currentPage, setCurrentPage] = useState(1); 
-  const [itemsPerPage, setItemsPerPage] = useState(10); 
+export const Table = ({ columns, data, onClick, dataKeys }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
 
   function getValueByPath(obj, path) {
@@ -51,13 +51,13 @@ export const Table = ({ columns, data, onClick, dataKeys}) => {
   };
 
   return (
-    <div>
-      <div style={{ minHeight: "400px", backgroundColor: "#EEEDED" }}>
-        <table className="fs-5">
-          <thead>
+    <div className="w-100">
+      <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
+        <table className="table table-striped table-hover rounded-table fs-5">
+          <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
-                <th key={index}><span className='p-3'>{column}</span></th>
+                <th key={index}><span>{column}</span></th>
               ))}
             </tr>
           </thead>
@@ -65,7 +65,7 @@ export const Table = ({ columns, data, onClick, dataKeys}) => {
             {currentItems.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => onClick(row)}>
                 {dataKeys.map((column, colIndex) => (
-                  <td key={colIndex}>{getValueByPath(row,column)}</td>
+                  <td className="mx-2" key={colIndex}>{getValueByPath(row, column)}</td>
                 ))}
               </tr>
             ))}
@@ -73,26 +73,28 @@ export const Table = ({ columns, data, onClick, dataKeys}) => {
         </table>
       </div>
       <div className="d-flex column-gap-2 justify-content-end me-2 pt-2">
-        <div>
+        <div className="form-group">
           <input
-          type="number"
-          id="itemsPerPage"
-          value={itemsPerPage}
-          onChange={(e) => {
-            const inputValue = e.target.value;
-            if (!isNaN(inputValue) && inputValue >= 1) {
-              const newValue = parseInt(inputValue, 10);
-              setItemsPerPage(newValue);
-            } else {
-              setItemsPerPage(1);
-            }
-          }}
-          min="1"
-          style={{maxWidth:"60px"}}
+            type="number"
+            id="itemsPerPage"
+            value={itemsPerPage}
+            onChange={(e) => {
+              const inputValue = e.target.value;
+              if (!isNaN(inputValue) && inputValue >= 1) {
+                const newValue = parseInt(inputValue, 10);
+                setItemsPerPage(newValue);
+              } else {
+                setItemsPerPage(1);
+              }
+            }}
+            min="1"
+            className="form-control"
+            style={{ maxWidth: "60px" }}
           />
         </div>
         {renderPageNumbers()}
       </div>
+
     </div>
   );
 };
