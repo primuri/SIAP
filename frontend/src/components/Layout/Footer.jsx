@@ -1,17 +1,30 @@
 export const Footer = () => {
-  return (
-    <footer style={{color: "var(--gris-claro-ucr)"}} className="bg-dark vw-100 d-flex justify-content-between align-items-center bottom-0 shadow">
-      <div className="d-none d-lg-block ms-5">
-          <b>Dirección</b>
-          <p>Costa Rica, San José, Montes de Oca, Ciudad de la Investigación, 100m N del Colegio Monterrey</p>
-          <p>CIMPA</p>
-      </div>
-      <div className="d-none d-lg-block column-gap-20px me-5">
-          <b>Contacto</b>
-          <p>(506) 2511-3419 / 2511-6606</p>
-          <p>cimpa@ucr.ac.cr</p>
+  const usuario = JSON.parse(localStorage.getItem('user'));
+  if(usuario === null){
+    return(<></>);
+  }else{
+    return (
+      <footer style={{color: "var(--gris-claro-ucr)", width: "100%"}} className="d-flex justify-content-between align-items-start shadow">
+        <div className="d-none d-lg-block ms-5">
+            <p>
+            <b>Dirección</b>
+            <br/> <br/>
+            Costa Rica, San José, Montes de Oca, Ciudad de la Investigación, 100m N del <br/> Colegio Monterrey
+            <br/> <br/>
+            CIMPA
+            </p>
         </div>
-    </footer>
-
-  );
+        <div className="d-none d-lg-block column-gap-20px me-5">
+            <p>
+            <b>Contacto</b>
+            <br/> <br/>
+            (506) 2511-3419 / 2511-6606
+            <br/>
+            cimpa@ucr.ac.cr
+            </p>
+          </div>
+      </footer>
+  
+    );
+  }
 };
