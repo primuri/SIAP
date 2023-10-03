@@ -19,7 +19,7 @@ export const GestionUsuarios = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const columns = ['Correo','Rol']
-    const dataKeys = ['correo','rol']
+    const dataKeys = ['correo','groups']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
      // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
     useEffect(() => {loadUsuarios()}, [reload])

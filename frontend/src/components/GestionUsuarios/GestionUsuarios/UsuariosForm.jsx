@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import {Toaster, toast} from 'react-hot-toast'
 
@@ -6,13 +6,23 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
 
     // Cargar informacion
   const [formData, setFormData] = useState({
-    id_correo: usuario ? usuario.id_correo : "",
-    rol: usuario ? usuario.rol : "",
-    contrasena: usuario ? usuario.contrasena : "",
-    confirmar_contrasena: usuario ? usuario.confirmar_contrasena : "",
-    id_academico_fk: usuario ? usuario.id_academico_fk : {},
-    id_evaluador_fk: usuario ? usuario.id_evaluador_fk : {}
+    correo: usuario ? usuario.correo : "",
+    rol: usuario ? usuario.groups[0] : "",
+    password: usuario ? usuario.password : "",
+    confirmar_contrasena: usuario ? usuario.password : "",
+    academico_fk: usuario ? usuario.id_academico_fk : {},
+    evaluador_fk: usuario ? usuario.id_evaluador_fk : {}
   });
+  useEffect(() => {
+    setFormData({
+        correo: usuario ? usuario.correo : "",
+        rol: usuario ? usuario.groups[0] : "",
+        password: usuario ? usuario.password : "",
+        confirmar_contrasena: usuario ? usuario.password : "",
+        academico_fk: usuario ? usuario.id_academico_fk : {},
+        evaluador_fk: usuario ? usuario.id_evaluador_fk : {}
+    });
+}, [usuario]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,24 +45,26 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
   };
 
   const validatePassword = (contrasena) => {
-    const passwordRegex = /^(?=.[A-Z])(?=.\d)(?=.[!@#$%^&.])[A-Za-z\d!@#$%^&.*]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&.*])[A-Za-z\d!@#$%^&.*]{8,}$/;
     return passwordRegex.test(contrasena);
-  };
+};
 
   const sendForm = (event) => {
     event.preventDefault();
-  
-    if (!validatePassword(formData.contrasena)) {
-        alert("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.");
-        return;
-    }
+    console.log(formData.contrasena)
+    // if (validatePassword(formData.contrasena) == false) {
+    //     alert("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.");
+    //     return;
+    // }
 
     if (formData.contrasena != formData.confirmar_contrasena) {
         alert("Las contraseñas no coinciden.");
         return;
     }
-    
-    const jsonData = JSON.stringify(formData);
+    const dataToSend = { ...formData };
+    delete dataToSend.confirmar_contrasena;
+
+    const jsonData = JSON.stringify(dataToSend);
     onSubmit(jsonData);
   };
 
@@ -69,7 +81,7 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
                         <div className="row"> 
                             <label className="col-sm-4 control-label" htmlFor="correo">Correo electrónico</label>      
                             <div className="col-sm-8">
-                                <input type="email" name="id_correo" id="id_correo" value={formData.id_correo} onChange={handleChange} required/> 
+                                <input type="email" name="id_correo" id="id_correo" value={formData.correo} onChange={handleChange} required/> 
                             </div>
                         </div>
                         <br/>
@@ -78,11 +90,11 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
                                 <div className="col-sm-8">
                                     <select name="rol" id="rol" value={formData.rol} onChange={handleChange}>
                                         <option value="">Seleccione un rol</option>
-                                        <option value="Administrador">Administrador</option>
-                                        <option value="Investigador">Investigador</option>                        
-                                        <option value="Evaluador">Evaluador</option>
-                                        <option value="Investigador-Evaluador">Investigador y Evaluador</option>
-                                        <option value="Invitado">Invitado</option>
+                                        <option value="administrador">Administrador</option>
+                                        <option value="investigador">Investigador</option>                        
+                                        <option value="evaluador">Evaluador</option>
+                                        <option value="investigador-Evaluador">Investigador y Evaluador</option>
+                                        <option value="invitado">Invitado</option>
                                     </select>
                                 </div>
                         </div>
@@ -90,7 +102,7 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel, onDelete }) => 
                         <div className="row">
                             <label className="col-sm-4 control-label" htmlFor="contrasena">Contraseña</label>
                             <div className="col-sm-8">
-                                <input type="password" name="contrasena" id="contrasena" value={formData.contrasena} onChange={handleChange} required/>
+                                <input type="password" name="password" id="contrasena" value={formData.password} onChange={handleChange} required/>
                             </div>
                         </div>
                         <br/>

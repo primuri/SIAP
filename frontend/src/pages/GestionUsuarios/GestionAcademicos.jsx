@@ -5,7 +5,8 @@ import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademic
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,editarNombre,editarArea,editarUniversidad,eliminarAcademico} from "../../api/gestionAcademicos"
+import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico} from "../../api/gestionAcademicos"
+import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
 export const GestionAcademicos = () => {
