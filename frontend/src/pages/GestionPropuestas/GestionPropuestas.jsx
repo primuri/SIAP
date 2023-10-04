@@ -6,8 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarDocumento, agregarVigencia, editarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
-import { agregarPropuestas } from "../../api/gestionPropuestas"
+import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, editarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -22,7 +21,14 @@ export const GestionPropuestas = () => {
     const columns = ['Codigo CIMPA','Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
     const dataKeys = ['id_codigo_cimpa_fk.id_codigo_cimpa', 'id_codigo_cimpa_fk.nombre','id_codigo_cimpa_fk.estado','id_codigo_cimpa_fk.fecha_vigencia','id_codigo_cimpa_fk.actividad','id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre','documento']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-     // Detecta cambios y realiza la solicitud nuevamente  
+    const transformedPropuestas = propuestas.map(propuesta => ({
+    ...propuesta,
+    id_codigo_cimpa_fk: {
+        ...propuesta.id_codigo_cimpa_fk,
+        fecha_vigencia: formatDate(propuesta.id_codigo_cimpa_fk.fecha_vigencia)
+    }
+})); 
+    // Detecta cambios y realiza la solicitud nuevamente  
      useEffect(() => {
         async function fetchData() {
             loadPropuestas();
@@ -93,14 +99,60 @@ async function loadAcademicos() {
     // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try{
+            
             const Datos = JSON.parse(formData)
-            const id_vig = Datos.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia
-            await editarVigencia(id_vig,Datos.id_colaborador_principal_fk.id_vigencia_fk,  localStorage.getItem("token"))
-            const id_vigencia_editada = Datos.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia
-            delete Datos.id_colaborador_principal_fk.id_vigencia_fk
-            Datos.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_editada
+            console.log(Datos)
+            const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
             
             
+                let fecha_inicio_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio;
+                if (!fecha_inicio_adaptada.endsWith("Z")) {
+                    fecha_inicio_adaptada += "T00:00:00Z";
+                }
+            
+                let fecha_fin_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin;
+                if (!fecha_fin_adaptada.endsWith("Z")) {
+                    fecha_fin_adaptada += "T00:00:00Z";
+                }
+            
+                const vigencia = {
+                    fecha_inicio: fecha_inicio_adaptada,
+                    fecha_fin: fecha_fin_adaptada
+                }
+                
+            
+            
+
+            await editarVigencia(id_vig,vigencia, localStorage.getItem("token"))
+            const id_vigencia_editada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia
+            delete Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk
+            Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_editada
+            
+
+            const id_colab = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal;
+            const id_academi = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico;
+            delete Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk;
+            delete Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal;
+            Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk = id_academi;
+            await editarColaborador(id_colab,Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk, localStorage.getItem("token"))
+            delete Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk;
+            Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk = id_colab;
+            
+
+            const id_propu = Datos.id_codigo_cimpa_fk.id_codigo_cimpa;
+            const fecha_vigencia_adaptada =  Datos.id_codigo_cimpa_fk.fecha_vigencia;
+            const fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
+            delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
+            Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
+            await editarPropuesta(id_propu,Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
+            
+        
+            const id_doc = Datos.id_documentos_asociados;
+            delete Datos.id_codigo_cimpa_fk;
+            Datos.id_codigo_cimpa_fk = id_propu;
+            await editarDocumento(id_doc,Datos, localStorage.getItem("token"))
+            
+
             toast.success('Propuesta actualizada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -160,7 +212,7 @@ async function loadAcademicos() {
     }
     // Al hacer click en la tabla
     const elementClicked = (user) =>{
-        console.log(user)
+       // console.log(user)
         setPropuesta(user)
         setEdit(true)
         setAddClick(false)
@@ -189,7 +241,7 @@ async function loadAcademicos() {
                 <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
-            <Table columns={columns} data={propuestas} dataKeys={dataKeys} onClick={elementClicked}></Table>
+            <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onClick={elementClicked}></Table>
             {addClick && (<Modal ><PropuestasForm academicos={academicos} onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}
             {edit && 
                 (
@@ -213,3 +265,9 @@ async function loadAcademicos() {
         )}
     </main>)
 } 
+
+function formatDate(dateString) {
+    if (!dateString) return "";
+    return new Date(dateString).toISOString().split('T')[0];
+}
+

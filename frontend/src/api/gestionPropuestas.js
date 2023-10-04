@@ -26,6 +26,9 @@ export const agregarDocumento = async (documento_asociado,  token) => {
         const id_vigencia_creado = await agregarVigencia(vigencia,token);
         delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk;
         documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_creado;
+        const id_academi = documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico
+        delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk
+        documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk = id_academi
         documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk = parseInt(documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk, 10);
 
         const id_colaborador_creado = await agregarColaborador(documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk,token);

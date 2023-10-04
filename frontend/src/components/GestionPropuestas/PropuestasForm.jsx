@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
     // Cargar informacion
-    console.log(propuesta)
+    
     const [formData, setFormData] = useState({
+        id_documentos_asociados: propuesta ? propuesta.id_documentos_asociados: "",
         detalle: propuesta ? propuesta.detalle : "",
         documento: propuesta ? propuesta.documento : "",
         id_codigo_cimpa_fk: propuesta ? propuesta.id_codigo_cimpa_fk : {
@@ -23,16 +24,25 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     fecha_inicio: propuesta && propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio : "",
                     fecha_fin: propuesta && propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin : ""
                 },
-                id_academico_fk: propuesta && propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk : ""
+                id_academico_fk: propuesta && propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk : {
+                    id_academico: propuesta && propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico : ""
+                }
             }
         }
     });
 
-
+    const academicoSeleccionado = academicos.find(academico => 
+        String(academico.id_academico) === String(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico)
+    );
+    const nombreAcademico = academicoSeleccionado ? academicoSeleccionado.id_nombre_completo_fk.nombre : "";
+    const apellidoAcademico = academicoSeleccionado ? academicoSeleccionado.id_nombre_completo_fk.apellido : "";
+    const segundo_apellidoAcademico = academicoSeleccionado ? academicoSeleccionado.id_nombre_completo_fk.segundo_apellido : "";
+    
+    console.log(nombreAcademico)
     
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
+        
         const keys = name.split('.');
         switch (keys.length) {
             case 1:
@@ -78,7 +88,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                 console.error("Unhandled form structure depth!");
         }
     };
-    
+   
   
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -90,7 +100,6 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
     };
     
     
-
   const sendForm = (event) => {
     event.preventDefault();
     const jsonData = JSON.stringify(formData);
@@ -102,7 +111,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
         <div className="modal-header">
             <h2>{mode == 1? ("Agregar una propuesta"):("Editar propuesta")}</h2>
         </div>
-
+        
         <form onSubmit={sendForm} className='d-flex flex-column'>
             <div className="modal-body">
                 <div className="container">
@@ -127,8 +136,8 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             </select>
                         </div>
                         <div className="col">
-                            <label className="col-sm-4 control-label" htmlFor="fechaVigencia">Fecha vigencia</label>
-                            <input type="date" name="id_codigo_cimpa_fk.fecha_vigencia" id="id_codigo_cimpa_fk.fecha_vigencia" value={formData.id_codigo_cimpa_fk.fecha_vigencia} onChange={handleChange} required/> 
+                            <label className="col-sm-4 control-label" htmlFor="id_codigo_cimpa_fk.fecha_vigencia">Fecha vigencia</label>
+                            <input type="date" name="id_codigo_cimpa_fk.fecha_vigencia" id="id_codigo_cimpa_fk.fecha_vigencia" value={formData.id_codigo_cimpa_fk.fecha_vigencia ? new Date(formData.id_codigo_cimpa_fk.fecha_vigencia).toISOString().split('T')[0] : ""} onChange={handleChange} required/> 
                         </div>
                     </div>
                     <br/>
@@ -139,7 +148,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                         </div>
                         <div className="col">
                         <label className="col-sm-4 control-label" htmlFor="actividad">Actividad</label>
-                        <select name="id_codigo_cimpa_fk.actividad" id="id_codigo_cimpa_fk.actividad" value={formData.id_codigo_cimpa_fk.actividad} onChange={handleChange}>
+                        <select name="id_codigo_cimpa_fk.actividad" id="id_codigo_cimpa_fk.actividad" value={formData.id_codigo_cimpa_fk.actividad} onChange={handleChange} required>
                                 <option value="">Seleccione la actividad</option>
                                 <option value="Acción social">Acción social</option>
                                 <option value="Investigación">Investigación</option>
@@ -150,15 +159,17 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     <div className="row">
                         <div className="col">
                             <label className="col-sm-4 control-label" htmlFor="detalle">Detalle de la propuesta</label>
-                            <input type="text" name="id_codigo_cimpa_fk.detalle" id="id_codigo_cimpa_fk.detalle" value={formData.id_codigo_cimpa_fk.detalle} onChange={handleChange}/> 
+                            <input type="text" name="id_codigo_cimpa_fk.detalle" id="id_codigo_cimpa_fk.detalle" value={formData.id_codigo_cimpa_fk.detalle} onChange={handleChange}required/> 
                         </div>
-
-
-
-                        <div className="col">
+                       <div className="col">
                             <label className="col-sm-4 control-label" htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk">Colaborador(a) principal</label>
-                            <select name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk} onChange={handleChange}>
-                                <option value="">Seleccione al Colaborador</option>
+                            <select 
+                                name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" 
+                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" 
+                                value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk} onChange={handleChange}>
+                                <option value="">
+                                    {mode === 2 && nombreAcademico.length  === 0 ? "Seleccione al Colaborador" : nombreAcademico + " " + apellidoAcademico + " " + segundo_apellidoAcademico}
+                                </option>
                                 {academicos && academicos.length > 0 && academicos.map(academico => (
                                     <option key={academico.id_academico} value={academico.id_academico}>
                                         {academico.id_nombre_completo_fk.nombre + " " + academico.id_nombre_completo_fk.apellido + " " + academico.id_nombre_completo_fk.segundo_apellido}
@@ -181,7 +192,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                         </div>
                         <div className="col">
                             <label className="col-sm-4 control-label" htmlFor="cargaColaborador">Carga del colaborador</label>
-                            <select name="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.carga} onChange={handleChange}>
+                            <select name="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.carga} onChange={handleChange} required>
                                 <option value="">Seleccione la carga</option>
                                 <option value="1/8">1/8</option>
                                 <option value="1/4">1/4</option>
@@ -203,23 +214,27 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     <div className="row">
                         <div className="col">
                              <label className="col-sm-4 control-label" htmlFor="inicioVigenciaColaborador">Fecha de inicio</label>
-                            <input type="date" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio} onChange={handleChange}/>
-                       
+                            <input type="date" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio ? new Date(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""} onChange={handleChange} required/>
                         </div>
                         <div className="col">
                             <label className="col-sm-5 control-label" htmlFor="finVigenciaColaborador">Fecha finalización</label>
-                            <input type="date" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin} onChange={handleChange}/>
+                            <input type="date" 
+                            name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin" 
+                            id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin" 
+                            value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin 
+                            ? new Date(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""} 
+                            onChange={handleChange} required/>
                         </div>
                     </div>
                     <br/>
                     <div className="row">
                         <div className="col">
                             <label className="col-sm-4 control-label" htmlFor="documento_asociado.documento">Documento</label>
-                            <input type="file" name="documento" id="documento" onChange={handleFileChange}/>
+                            <input type="file" name="documento" id="documento" onChange={handleFileChange} />
                         </div>
                         <div className="col">
                             <label className="col-sm-4 control-label" htmlFor="documento_asociado.detalle">Detalle del Documento</label>
-                            <input type="text" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange}/>
+                            <input type="text" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required/>
                         </div>
                     </div>
                 </div>
