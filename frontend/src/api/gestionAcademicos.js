@@ -76,11 +76,16 @@ export const agregarAcademico = async (academico,  token) => {
         const id_area_creada = await obtenerArea(academico.id_area_especialidad_fk,token);
         delete academico.id_area_especialidad_fk;
         academico.id_area_especialidad_fk = id_area_creada;
-
-        const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk,token);
-        delete academico.universidad_fk;
-        academico.universidad_fk = id_universidad_creada;
-        
+        if(academico.universidad_fk.id_universidad){
+            let id_uni = academico.universidad_fk.id_universidad
+            delete academico.universidad_fk
+            academico.universidad_fk = id_uni
+        }else{
+            const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk,token);
+            delete academico.universidad_fk;
+            console.log("id_universidad_creada", id_universidad_creada)
+            academico.universidad_fk = id_universidad_creada;
+        }
         const response_academico = await SIAPAPI.post('personas/academico/', academico, {
             headers: {
                 'Authorization': `token ${token}`,
@@ -281,6 +286,14 @@ export const eliminarArea = async (id, token) => {
     });
 };
 
+export const obtenerUniversidades = async (token) => {
+    return await SIAPAPI.get('personas/universidad/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
 
 const obtenerUniversidad = async (universidad, token) => {
     try {

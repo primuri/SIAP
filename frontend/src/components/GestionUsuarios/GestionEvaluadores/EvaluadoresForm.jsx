@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
+import {toast, Toaster} from 'react-hot-toast'
+import { obtenerUniversidades } from "../../../api/gestionAcademicos";
 
 export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }) => {
   // Cargar informacion
+  const [universidades, setUniversidades] = useState([])
+  const [universidadesFilter, setUniversidadesFilter] = useState([]);
+  const [modoUniversidad, setModoUniversidad] = useState(mode==1?"seleccionar":"agregar")
+  
   const [formData, setFormData] = useState({
     tipo: evaluador ? evaluador.tipo : "",
     correo: evaluador ? evaluador.correo : "",
@@ -11,9 +17,62 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
     universidad_fk: evaluador ? evaluador.universidad_fk : { pais: "", nombre: "" }
   });
 
+  useEffect(()=>{
+    loadUniversidades() 
+  },[])
+  
+  useEffect(() => {
+    if (modoUniversidad === "agregar" && formData.universidad_fk.id_universidad && mode === 1) {
+        setFormData(prevState => ({
+            ...prevState,
+            universidad_fk: {
+                ...prevState.universidad_fk,
+                id_universidad: formData.universidad_fk.id_universidad,
+                nombre: "",
+                pais: ""
+            }
+        }));
+    }
+  }, [modoUniversidad]);
+  
+  const loadUniversidades = async () => {
+    try {
+        const res = await obtenerUniversidades(localStorage.getItem('token'))
+        setUniversidades(res.data)
+        
+    } catch (error) {
+        toast.error('Error al cargar los telefonos', {
+            duration: 4000,
+            position: 'bottom-right', 
+            style: {
+                background: '#670000',
+                color: '#fff',
+            },
+        })
+    }
+  }
+
+  const handleSelectUniversidad = (e, universidad) => {
+    setFormData((prev) => ({
+        ...prev,
+        universidad_fk: universidad
+    }));
+    setUniversidadesFilter([]); // Limpiar la lista desplegable
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-  
+    if (name === "universidad_fk.nombre") {
+      if(value === ""){
+          setUniversidadesFilter([]);
+      }else{
+          const filteredUniversidades = universidades.filter(universidad => 
+              universidad.nombre.toLowerCase().includes(value.toLowerCase()) || 
+              universidad.pais.toLowerCase().includes(value.toLowerCase())
+          );
+          setUniversidadesFilter(filteredUniversidades);
+      }
+    }
     if (name.includes('.')) {
       const keys = name.split('.');
       setFormData(prev => ({
@@ -73,15 +132,67 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
               </div>
 
               <div className="row mb-4">
-                        <div className="col-md-6"> 
-                            <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
-                            <input type="text" className="form-control" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required />
-                        </div>
-                        <div className="col-md-6"> 
-                            <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
-                            <input type="text" className="form-control" name="universidad_fk.pais" id="pais_universidad" value={formData.universidad_fk.pais} onChange={handleChange} required/>    
-                        </div>
-                    </div>
+                        {modoUniversidad === 'seleccionar' ? (
+                            <>
+                                <div className="col-md-6">
+                                    <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
+                                    <input
+                                        type="text"
+                                        name="universidad_fk.nombre"
+                                        id="universidadNombre"
+                                        value={formData.universidad_fk ? formData.universidad_fk.nombre : ""}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                    />
+                                    {universidadesFilter.length > 0 && (
+                                        <div
+                                            className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                            style={{ maxHeight: "40px" }}
+                                        >
+                                            {universidadesFilter.map((universidad) => {
+                                                return (
+                                                    <div
+                                                        key={universidad.id_universidad}
+                                                        className=" pointer-event ms-1"
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={(e) => {
+                                                            handleSelectUniversidad(e, universidad);
+                                                        }}
+                                                    >
+                                                        {universidad.nombre}-{universidad.pais}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="col-md-6">
+                                    <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
+                                    <input
+                                        id="pais_universidad"
+                                        type="text"
+                                        value={formData.universidad_fk ? formData.universidad_fk.pais : ""}
+                                        disabled
+                                        className="form-control"
+                                    />
+                                    
+                                </div>
+                                <button type="button" className="rounded mb-2 mt-4" style={{width:"92%",marginLeft:"2%"}} onClick={(e) =>{setModoUniversidad('agregar'); e.preventDefault()}}>Agregar nueva universidad</button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="col-md-6">
+                                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
+                                <input type="text" className="form-control" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required />
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
+                                <input type="text" className="form-control" name="universidad_fk.pais" id="pais_universidad" value={formData.universidad_fk.pais} onChange={handleChange} required />
+                            </div>
+                            <button type="button" className="rounded mb-2 mt-4" style={{width:"92%",marginLeft:"2%"}} onClick={(e) =>{setModoUniversidad('seleccionar'); e.preventDefault()}}>Seleccionar una universidad existente</button>
+                            </>
+                        )}
+              </div>
 
               <div className="row mb-4">
                 <div className="col-md-6">
@@ -115,6 +226,7 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
                 </div>
             </div>
         </form>
+        <Toaster></Toaster>
     </>)
 }
 
