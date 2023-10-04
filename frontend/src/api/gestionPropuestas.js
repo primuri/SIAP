@@ -15,27 +15,32 @@ export const obtenerPropuestas = async (token) => {
 };
 
 
-export const agregarDocumento = async (propuesta,  token) => {
+export const agregarDocumento = async (documento_asociado,  token) => {
 
     try {
         const vigencia = {
-            fecha_inicio: propuesta.colaborador_principal.id_vigencia_fk.fecha_inicio,
-            fecha_fin: propuesta.colaborador_principal.id_vigencia_fk.fecha_fin
+            fecha_inicio: documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio,
+            fecha_fin: documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin
         };
         
         const id_vigencia_creado = await agregarVigencia(vigencia,token);
-        delete propuesta.colaborador_principal.id_vigencia_fk;
-        propuesta.colaborador_principal.id_vigencia_fk = id_vigencia_creado;
-        propuesta.colaborador_principal.id_academico_fk = parseInt(propuesta.colaborador_principal.id_academico_fk, 10);
+        delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk;
+        documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_creado;
+        documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk = parseInt(documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk, 10);
 
-        const id_colaborador_creado = await agregarColaborador(propuesta.colaborador_principal,token);
-        delete propuesta.colaborador_principal;
-        propuesta.id_colaborador_principal_fk = id_colaborador_creado;
+        const id_colaborador_creado = await agregarColaborador(documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk,token);
+        delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk;
+        documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk = id_colaborador_creado;
 
-        const documento = propuesta.documento_asociado;
-        delete propuesta.documento_asociado;
+        const documento = {
+            documento: documento_asociado.documento,
+            detalle:documento_asociado.detalle
+        }
+        delete documento_asociado.documento
+        delete documento_asociado.detalle
 
-        const id_propuesta_creada = await agregarPropuestas(propuesta,token);
+        const id_propuesta_creada = await agregarPropuestas(documento_asociado.id_codigo_cimpa_fk ,token);
+        delete documento.id_codigo_cimpa_fk;
         documento.id_codigo_cimpa_fk = id_propuesta_creada;
         
         const response_documento = await SIAPAPI.post('propuesta_proyecto/documento_asociado/', documento, {
@@ -50,6 +55,23 @@ export const agregarDocumento = async (propuesta,  token) => {
         console.error("Error agregando documento del proyecto: ", error);
         throw error;
     }
+};
+
+
+export const agregarVigencia = async (vigencia, token) => {
+    try {
+        const response_vigencia = await SIAPAPI.post('propuesta_proyecto/vigencia/', vigencia, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_vigencia_creada = response_vigencia.data.id_vigencia;
+        return id_vigencia_creada;
+    } catch(error) {
+        console.error("Error agregando vigencia: ", error);
+        throw error;
+    } 
 };
 
 export const agregarColaborador = async (colaborador, token) => {
@@ -68,22 +90,6 @@ export const agregarColaborador = async (colaborador, token) => {
     } 
 };
 
-export const agregarVigencia = async (vigencia, token) => {
-    try {
-        const response_vigencia = await SIAPAPI.post('propuesta_proyecto/vigencia/', vigencia, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        const id_vigencia_creada = response_vigencia.data.id_vigencia;
-        return id_vigencia_creada;
-    } catch(error) {
-        console.error("Error agregando vigencia: ", error);
-        throw error;
-    } 
-};
-
 export const agregarPropuestas = async (propuesta, token) => {
     try {
         const response_propuesta = await SIAPAPI.post('propuesta_proyecto/propuesta_proyecto/', propuesta, {
@@ -98,4 +104,44 @@ export const agregarPropuestas = async (propuesta, token) => {
         console.error("Error agregando propuesta: ", error);
         throw error;
     } 
+};
+
+export const editarVigencia = async (id, vigencia, token) => {
+    const responseVigencia = await SIAPAPI.put(`propuesta_proyecto/vigencia/${id}/`, vigencia, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseVigencia;
+};
+
+export const editarColaborador = async (id, colaborador, token) => {
+    const responseColaborador = await SIAPAPI.put(`propuesta_proyecto/colaborador_principal/${id}/`, colaborador, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseColaborador;
+};
+
+export const editarPropuesta = async (id, propuesta, token) => {
+    const responseColaborador = await SIAPAPI.put(`propuesta_proyecto/propuesta_proyecto/${id}/`, propuesta, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseColaborador;
+};
+
+export const editarDocumento = async (id, documento, token) => {
+    const responseDocumento = await SIAPAPI.put(`propuesta_proyecto/documento_asociado/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseDocumento;
 };

@@ -6,7 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarDocumento, agregarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
+import { agregarDocumento, agregarVigencia, editarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { agregarPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 export const GestionPropuestas = () => {
@@ -94,7 +94,13 @@ async function loadAcademicos() {
     const editPropuesta = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            //await editarPropuesta(Datos.correo,Datos,localStorage.getItem('token'))
+            const id_vig = Datos.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia
+            await editarVigencia(id_vig,Datos.id_colaborador_principal_fk.id_vigencia_fk,  localStorage.getItem("token"))
+            const id_vigencia_editada = Datos.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia
+            delete Datos.id_colaborador_principal_fk.id_vigencia_fk
+            Datos.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_editada
+            
+            
             toast.success('Propuesta actualizada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
