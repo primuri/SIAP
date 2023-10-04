@@ -185,13 +185,18 @@ option{
   background-color: var(--gris-claro-ucr);
 }
 
-.icono{
+.icono {
   margin-right: 10px;
   position: relative;
   bottom: 2px;
 }
 
-        .rounded-table {
-            border-radius: 10px; /* Ajusta este valor al nivel de redondeo que desees */
-            overflow: hidden;
-        }
+.rounded-table {
+    border-radius: 10px; 
+    overflow: hidden;
+}
+
+#boton-inicioSesion {
+  width: 300px; 
+  height: 37px;
+}
