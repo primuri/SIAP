@@ -33,7 +33,7 @@ export const Header = () => {
             {usuarioGuardado.groups.includes("administrador") ? (
               <p className='mb-0'>Administrador</p>
             ) :  <p className='mb-0'>{obtenerNombreDeUsuario(usuarioGuardado.correo)}</p>}
-            <p onClick={handleLogout} style={{ color: "var(--celeste-ucr)", cursor: "pointer" }} className='mb-0'>Cerrar sesión</p>
+            <p onClick={handleLogout} style={{ color: "var(--celeste-ucr)", cursor: "pointer" }} className='mb-0 cerrar-sesion'>Cerrar sesión</p>
           </div>
           <img src={user} alt="Imagen de perfil" />
         </div>

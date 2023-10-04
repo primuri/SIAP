@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
+import icono from '../../../assets/person-i.png';
 
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
 
@@ -54,12 +55,34 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     };
 
     return (
-        <>  
-            <div className="modal-header">
-                <h2>{mode === 1 ? "Agregar académico(a)" : "Editar académico(a)"}</h2>
-                <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
-                    <span aria-hidden="true" class="close-icon">&times;</span>
-                </button>
+        <>
+            <div className="modal-header pb-0">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-1 mb-0 text-center">
+                            <div className="img-space">
+                                <img src={icono} alt="" width={'88px'} />
+                            </div>
+                        </div>
+                        <div className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar académico(a)" : "Editar académico(a)"}
+                            </h2>
+                        </div>
+                        <div className="col-1 mb-0 text-center">
+                            <button
+                                type="button"
+                                onClick={onCancel}
+                                className="close"
+                                data-dismiss="modal"
+                            >
+                                <span aria-hidden="true" className="close-icon">
+                                    &times;
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <form onSubmit={sendForm} className='d-flex flex-column '>
