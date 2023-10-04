@@ -4,7 +4,7 @@ import { Modal } from "../../utils/Modal"
 import { PropuestasForm } from "../../components/GestionPropuestas/PropuestasForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import {toast, Toaster} from 'react-hot-toast'
+import { toast, Toaster} from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, editarVigencia, eliminarColaborador, eliminarDocumento, eliminarPropuesta, eliminarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
@@ -183,8 +183,6 @@ async function loadAcademicos() {
             await eliminarPropuesta(propuesta.id_codigo_cimpa_fk.id_codigo_cimpa, localStorage.getItem('token'))
             await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
             await eliminarVigencia(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia, localStorage.getItem('token'))
-            
-
 
             toast.success('Propuesta eliminada correctamente', {
                 duration: 4000, 
