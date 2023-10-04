@@ -209,6 +209,12 @@ select.form-control {
 select{
   cursor: pointer;
 }
+
+.form-select.seleccion{
+  background-color: #EAEAEA !important;
+  height: 40px;
+  max-width: 100%;  
+}
 .select_arrow::after{
   content: "";
   width: 15px;
@@ -328,9 +334,19 @@ input[type="submit"]:focus {
 }
 
 .img-space{
-  border-radius: 8px 0 35px 0;
+  border-radius: 8px 0 30px 0;
   position: absolute;
   left: 0px;
   top: 0px;
   background-color: var(--celeste-ucr);
+}
+
+.modal-header{
+  z-index: 2;
+  background-color: white;
+}
+
+.modal-footer{
+  z-index: 2;
+  background-color: white !important;
 }
