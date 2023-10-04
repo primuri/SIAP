@@ -179,7 +179,7 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
       <div className="modal-header">
             <h2>{mode === 1 ? "Agregar académico(a)" : "Editar académico(a)"}</h2>
             <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
-                <span aria-hidden="true" className="close-icon">&times</span>
+                <span aria-hidden="true" className="close-icon">&times;</span>
             </button>
       </div>
 

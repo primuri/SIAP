@@ -175,212 +175,148 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
         <>
             <div className="modal-header">
                 <h2>{mode == 1 ? "Agregar usuario(a)" : "Editar usuario(a)"}</h2>
+                <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                    <span aria-hidden="true" className="close-icon">&times;</span>
+                </button>
+                
             </div>
             <form onSubmit={sendForm} className="d-flex flex-column">
                 <div className="modal-body">
                     <div className="container">
-                        <div className="col">
-                            <div className="row">
-                                <label className="col-sm-4 control-label" htmlFor="correo">
-                                    Correo electrónico
-                                </label>
-                                <div className="col-sm-8">
-                                    <input
-                                        type="email"
-                                        name="correo"
-                                        id="correo"
-                                        value={formData.correo}
-                                        onChange={handleChange}
-                                        required
-                                    />
+
+
+                    <div className="row mb-4">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
+                                    <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
                                 </div>
-                            </div>
-                            <br />
-                            <div className="row">
-                                <label className="col-sm-4 control-label" htmlFor="rol">
-                                    Rol
-                                </label>
-                                <div className="col-sm-8">
-                                    <select
-                                        name="rol"
-                                        id="rol"
-                                        value={formData.rol}
-                                        onChange={handleChange}
-                                        required
-                                    >
-                                        <option value="" disabled defaultValue={""}>
-                                            Seleccione un rol
-                                        </option>
+                            </div>  
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="rol" className="label-personalizado mb-2">Rol</label>
+                                    <select className="form-control" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
+                                        <option value="" disabled defaultValue={""}>Seleccione un rol</option>
                                         <option value="administrador">Administrador</option>
                                         <option value="academico">Académico</option>
                                         <option value="evaluador">Evaluador</option>
-                                        <option value="investigador-Evaluador">
-                                            Investigador y Evaluador
-                                        </option>
+                                        <option value="investigador-Evaluador">Investigador y Evaluador</option>
                                         <option value="invitado">Invitado</option>
                                     </select>
                                 </div>
-                            </div>
-                            <br />
-                            <div className="row">
-                                <label className="col-sm-4 control-label" htmlFor="contrasena">
-                                    Contraseña
-                                </label>
-                                <div className="col-sm-8">
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        id="contrasena"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required={mode !== 2 ? true : undefined}
-                                    />
+                            </div>  
+                    </div> 
+
+
+                    <div className="row mb-4">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="contrasena" className="label-personalizado mb-2">Contraseña</label>
+                                    <input type="password" className="form-control" name="password" id="contrasena" value={formData.password} onChange={handleChange} required={mode !== 2 ? true : undefined}/>
                                 </div>
-                            </div>
-                            <br />
-                            <div className="row">
-                                <label
-                                    className="col-sm-4 control-label"
-                                    htmlFor="confirmarContrasena"
-                                >
-                                    Confirmar contraseña
-                                </label>
-                                <div className="col-sm-8">
-                                    <input
-                                        type="password"
-                                        name="confirmar_contrasena"
-                                        id="confirmar_contrasena"
-                                        value={formData.confirmar_contrasena}
-                                        onChange={handleChange}
-                                        required={mode !== 2 ? true : undefined}
-                                    />
+                            </div>  
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="confirmarContrasena" className="label-personalizado mb-2">Confirmar contraseña</label>
+                                    <input type="password" className="form-control" name="confirmar_contrasena" id="confirmar_contrasena" value={formData.confirmar_contrasena} onChange={handleChange} required={mode !== 2 ? true : undefined}/>
                                 </div>
+                            </div>  
+                    </div> 
+
+
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                        {formData.rol==="academico" && (
+                            <>
+                            <div className="form-group">
+                                <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar académico</label>
+                                <div className="col-sm-8 position-relative">
+                                        <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange}/>
+                                        {(academicosFilter.length > 0) && (
+                                            <div
+                                                className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                                style={{ maxHeight: "40px" }}
+                                            >
+                                                {academicosFilter.map((academico) => {
+                                                    return (
+                                                        <div
+                                                            key={academico.id_academico}
+                                                            className=" pointer-event ms-1"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={(e) => {
+                                                                handleSelectAcademico(e, academico);
+                                                            }}
+                                                        >
+                                                            {academico.correo}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>                                   
                             </div>
-                            <br />
-                            {formData.rol==="academico" && (
-                                <>
-                                    <div className="row">
-                                        <label
-                                            className="col-sm-4 control-label"
-                                            htmlFor="asociarAcademico"
-                                        >
-                                            Asociar académico
-                                        </label>
-                                        <div className="col-sm-8 position-relative">
-                                            <input
-                                                type="text"
-                                                name="asociar_academico"
-                                                id="asociar_academico"
-                                                value={formData.asociar_academico}
-                                                onChange={handleChange}
-                                            />
-                                            {(academicosFilter.length > 0) && (
-                                                <div
-                                                    className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                    style={{ maxHeight: "40px" }}
-                                                >
-                                                    {academicosFilter.map((academico) => {
-                                                        return (
-                                                            <div
-                                                                key={academico.id_academico}
-                                                                className=" pointer-event ms-1"
-                                                                style={{ cursor: "pointer" }}
-                                                                onClick={(e) => {
-                                                                    handleSelectAcademico(e, academico);
-                                                                }}
-                                                            >
-                                                                {academico.correo}
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </div>
-                                </div>
-                                <br />
                             </>
                             )}
-                            
-                            
+                        </div> 
+                        
+
+                        <div className="col-md-6">
                             {formData.rol==="evaluador" && (
-                                <div className="row" style={{ marginBottom: "20px" }}>
-                                <label
-                                    className="col-sm-4 control-label"
-                                    htmlFor="asociarEvaluador"
-                                >
-                                    Asociar evaluador
-                                </label>
-                                <div className="col-sm-8">
-                                    <input
-                                        type="text"
-                                        name="asociar_evaluador"
-                                        id="asociar_evaluador"
-                                        value={formData.asociar_evaluador}
-                                        onChange={handleChange}
-                                    />
-                                    {evaluadoresFilter.length > 0 && (
-                                        <div
-                                            className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                            style={{ maxHeight: "40px" }}
-                                        >
-                                            {evaluadoresFilter.map((evaluador) => {
-                                                return (
-                                                    <div
-                                                        key={evaluador.id_evaluador}
-                                                        className=" pointer-event ms-1"
-                                                        style={{ cursor: "pointer" }}
-                                                        onClick={(e) => {
-                                                            handleSelectEvaluador(e, evaluador);
-                                                        }}
-                                                    >
-                                                        {evaluador.correo}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
+                            <>
+                            <div className="form-group">
+                                <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar evaluador</label>
+                                <div className="col-sm-8 position-relative">
+                                    <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange}/>
+                                        {evaluadoresFilter.length > 0 && (
+                                            <div
+                                                className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                                style={{ maxHeight: "40px" }}
+                                            >
+                                                {evaluadoresFilter.map((evaluador) => {
+                                                    return (
+                                                        <div
+                                                            key={evaluador.id_evaluador}
+                                                            className=" pointer-event ms-1"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={(e) => {
+                                                                handleSelectEvaluador(e, evaluador);
+                                                            }}
+                                                        >
+                                                            {evaluador.correo}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
                             </div>
+                            </>
                             )}
-                            
-                        </div>
+                        </div> 
+
+
+                    </div>                         
                     </div>
                 </div>
 
-                <div className="modal-footer">
-                    <div className="row">
-                        <div className="col">
-                            <button
-                                type="submit"
-                                className="table-button border-0 p-2 rounded text-white"
-                            >
-                                {mode === 1 ? "Agregar" : "Editar"}
-                            </button>
+                 
+            <div className="modal-footer justify-content-center">
+                <div className="row">
+                    <div className="col">
+                        <button id="boton-personalizado" type="submit" className="table-button border-0 p-2 rounded text-white">
+                            {mode === 1 ? "Agregar" : "Guardar"}
+                        </button>
                         </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <button
-                                    type="button"
-                                    onClick={onDelete}
-                                    className="delete-button border-0 p-2 rounded text-white"
-                                >
-                                    {" "}
-                                    Eliminar{" "}
-                                </button>
-                            )}
-                        </div>
-                        <div className="col">
-                            <button
-                                type="button"
-                                onClick={onCancel}
-                                className="cancel-button border-0 p-2 rounded text-white"
-                            >
+                    <div className="col">
+                        {mode === 2 && (
+                            <button id="boton-personalizado" type="button" onClick={onDelete} className="delete-button border-0 p-2 rounded text-white">
                                 {" "}
-                                Cancelar{" "}
+                                Eliminar{" "}
                             </button>
-                        </div>
+                        )}
                     </div>
                 </div>
+            </div>                               
             </form>
             <Toaster></Toaster>
         </>
