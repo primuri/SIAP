@@ -236,4 +236,11 @@ option {
 
 .modal-dialog-scrollable .modal-content {
   max-height: 80%!important;
+    border-radius: 10px; 
+    overflow: hidden;
+}
+
+#boton-inicioSesion {
+  width: 300px; 
+  height: 37px;
 }

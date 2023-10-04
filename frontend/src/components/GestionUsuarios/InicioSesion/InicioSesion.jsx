@@ -48,7 +48,7 @@ export const InicioSesion = () => {
   };
 
   return (
-    <div className="bg-white shadow p-5 rounded position-absolute w-25" style={{ left: '37%', top: '30%' }}>
+    <div className="bg-white shadow p-5 rounded position-absolute w-5" style={{left: '37%', top: '30%'}}>
       <h1 className="fs-3">Iniciar Sesión</h1>
       <hr></hr>
       <form className="d-flex flex-column row-gap-3 mt-1" onSubmit={handleSubmit}>
@@ -56,23 +56,24 @@ export const InicioSesion = () => {
           <label className="fw-bold">Correo Electrónico</label>
           <input
             type="email"
-            className="border-0 rounded p-1"
+            className="form-control"
             name="correo"
             value={formData.correo}
             onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
           />
         </>
+       
         <>
           <label className="fw-bold">Contraseña</label>
           <input
             type="password"
-            className="border-0 rounded p-1"
+            className="form-control"
             name="password"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
         </>
-        <input type="submit" value="Iniciar Sesión" className="border-0 rounded mt-4 p-3 text-light shadow" />
+        <input id="boton-inicioSesion" type="submit" value="Iniciar Sesión" className="rounded mt-3 mb-t text-light shadow" />
       </form>
       <Toaster></Toaster>
     </div>
