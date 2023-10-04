@@ -23,9 +23,16 @@ export const agregarEvaluador = async (evaluador, token) => {
         delete evaluador.id_area_especialidad_fk;
         evaluador.id_area_especialidad_fk = id_area_creada;
 
-        const id_universidad_creada = await obtenerUniversidad(evaluador.universidad_fk, token);
-        delete evaluador.universidad_fk;
-        evaluador.universidad_fk = id_universidad_creada;
+        if(evaluador.universidad_fk.id_universidad){
+            let id_uni = evaluador.universidad_fk.id_universidad
+            delete evaluador.universidad_fk
+            evaluador.universidad_fk = id_uni
+        }else{
+            const id_universidad_creada = await obtenerUniversidad(evaluador.universidad_fk,token);
+            delete evaluador.universidad_fk;
+            console.log("id_universidad_creada", id_universidad_creada)
+            evaluador.universidad_fk = id_universidad_creada;
+        }
 
         const response_evaluador = await SIAPAPI.post('personas/evaluador/', evaluador, {
             headers: {

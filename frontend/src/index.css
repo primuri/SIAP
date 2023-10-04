@@ -206,7 +206,23 @@ select.form-control {
   background-color: #EAEAEA !important;
   max-width: 300px;
 }
-
+select{
+  cursor: pointer;
+}
+.select_arrow::after{
+  content: "";
+  width: 15px;
+  height: 15px;
+  top: calc(50% + 13px);
+  right: 15%;
+  position: absolute;
+  display: inline-block;
+  background-image: url('./assets/select_arrow.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  pointer-events: none;
+}
 .close-icon {
   font-size: 150%;
   color: rgb(0, 0, 0);

@@ -5,8 +5,8 @@ import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademic
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico} from "../../api/gestionAcademicos"
-import {editarNombre,editarArea,editarUniversidad, eliminarNombre, eliminarArea} from "../../api/utils/usuariosUtils"
+import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, actualizarTelefonos, actualizarTitulos} from "../../api/gestionAcademicos"
+import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
 export const GestionAcademicos = () => {
@@ -19,8 +19,8 @@ export const GestionAcademicos = () => {
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)                             // Si hay error, se muestra una página para eso
-    const columns = ['Cedula', 'Nombre', ,'Apellido', 'Correo','Universidad']
-    const dataKeys = ['cedula','id_nombre_completo_fk.nombre','id_nombre_completo_fk.apellido' ,'correo', 'universidad_fk.nombre']
+    const columns = ['Cedula', 'Nombre','Correo','Universidad']
+    const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
 
     user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
     useEffect(() => { loadAcademicos() }, [reload])
@@ -93,6 +93,20 @@ export const GestionAcademicos = () => {
             delete Datos.universidad_fk
             Datos.universidad_fk = id_universidad_editada
 
+            const titulos = Datos?.titulos;
+            const telefonos = Datos?.telefonos;
+            delete academico.titulos;
+            delete academico.telefonos;
+            if(titulos) {
+                const titulosActualizados = titulos.map(titulo => ({
+                    ...titulo,
+                    anio: parseInt(titulo.anio)
+                }));
+                actualizarTitulos(titulosActualizados, localStorage.getItem("token"));
+            }
+            if(telefonos){
+                actualizarTelefonos(telefonos, localStorage.getItem("token"));
+            }
             await editarAcademico(academico.id_academico, Datos, localStorage.getItem("token"))
             toast.success('Académico editado correctamente', {
                 duration: 4000, 
