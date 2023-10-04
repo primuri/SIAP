@@ -1,5 +1,4 @@
 import axios from 'axios'
-import * as utils from './utils/usuariosUtils'
 
 /* 
   Formato JSON academico (al hacer get, no post, para hacer post, el FK es solo un número, no un obj):
@@ -65,15 +64,15 @@ export const obtenerAcademicos = async (token) => {
 export const agregarAcademico = async (academico,  token) => {
 
     try {
-        const id_nombre_creado = await utils.obtenerNombre(academico.id_nombre_completo_fk,token);
+        const id_nombre_creado = await obtenerNombre(academico.id_nombre_completo_fk,token);
         delete academico.id_nombre_completo_fk;
         academico.id_nombre_completo_fk = id_nombre_creado;
         
-        const id_area_creada = await utils.obtenerArea(academico.id_area_especialidad_fk,token);
+        const id_area_creada = await obtenerArea(academico.id_area_especialidad_fk,token);
         delete academico.id_area_especialidad_fk;
         academico.id_area_especialidad_fk = id_area_creada;
 
-        const id_universidad_creada = await utils.obtenerUniversidad(academico.universidad_fk,token);
+        const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk,token);
         delete academico.universidad_fk;
         academico.universidad_fk = id_universidad_creada;
         
@@ -163,3 +162,112 @@ const actualizarTelefonos = (telefonos, token) => {
         });
     });
 };
+<<<<<<< HEAD
+=======
+
+const obtenerNombre = async (nombre, token) => {
+    try {
+        const response_nombre = await SIAPAPI.post('personas/nombre_completo/', nombre, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_nombre_creado = response_nombre.data.id_nombre_completo;
+        return id_nombre_creado;
+    } catch(error) {
+        console.error("Error agregando nombre: ", error);
+        throw error;
+    } 
+};
+
+export const editarNombre = async (id, nombre, token) => {
+    const responseNombre = await SIAPAPI.put(`personas/nombre_completo/${id}/`, nombre, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseNombre;
+};
+
+export const eliminarNombre = async (id, token) => {
+    return await SIAPAPI.delete(`personas/nombre_completo/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+const obtenerArea = async (area, token) => {
+     try {
+        const response_area = await SIAPAPI.post('personas/area_especialidad/', area, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_area_creada = response_area.data.id_area_especialidad;
+        return id_area_creada;
+    } catch(error) {
+        console.error("Error agregando area de especialidad: ", error);
+        throw error;
+    }
+};
+
+export const editarArea = async (id, area, token) => {
+    const responseArea = await SIAPAPI.put(`personas/area_especialidad/${id}/`, area, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseArea;
+};
+
+export const eliminarArea = async (id, token) => {
+    return await SIAPAPI.delete(`personas/area_especialidad/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+
+const obtenerUniversidad = async (universidad, token) => {
+    try {
+        const response_universidad = await SIAPAPI.post('personas/universidad/', universidad, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_universidad_creada = response_universidad.data.id_universidad;
+        return id_universidad_creada;
+    } catch(error) {
+        console.error("Error agregando universidad: ", error);
+        throw error;
+    }
+};
+
+export const editarUniversidad = async (id, universidad, token) => {
+    const responseUniversidad = await SIAPAPI.put(`personas/universidad/${id}/`, universidad, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return responseUniversidad;
+};
+
+export const eliminarUniversidad = async (id, token) => {
+    return await SIAPAPI.delete(`personas/universidad/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+>>>>>>> Development

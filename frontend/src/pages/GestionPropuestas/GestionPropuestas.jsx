@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
-import {Modal} from "../../utils/Modal"
+import { Modal } from "../../utils/Modal"
 import { PropuestasForm } from "../../components/GestionPropuestas/PropuestasForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
