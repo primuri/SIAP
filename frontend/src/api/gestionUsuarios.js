@@ -48,7 +48,7 @@ export const eliminarUsuario = (correo, token) => {
 };
 
 export const actualizarUsuario = (correo, usuario, token) => {
-    return SIAPAPI.put(`actualizar_usuario/${correo}/`, usuario, {
+    return SIAPAPI.patch(`actualizar_usuario/${correo}/`, usuario, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type':'application/json'

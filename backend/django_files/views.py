@@ -61,13 +61,17 @@ def delete_user(request, correo):
     return Response("Usuario eliminado")
 
 # Update user
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
 def update_user(request, correo):
     user = get_object_or_404(Usuario, correo=correo)
-    serializer = UserSerializer(user, data=request.data)
+    serializer = UserSerializer(user, data=request.data, partial=True)
+    
     if serializer.is_valid():
         serializer.save()
+        if 'password' in request.data:
+            user.set_password(request.data['password'])
+            user.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
