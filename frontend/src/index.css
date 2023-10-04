@@ -9,6 +9,10 @@
   --rojo-ucr: #670000;
 }
 
+html{
+  background-color: var(--gris-claro-ucr);
+}
+
 
 body {
   margin: 0;
@@ -17,60 +21,81 @@ body {
   background-color: #bd3737;
 }
 
-.background-color-celeste-ucr{
+.background-color-celeste-ucr {
   background-color: var(--celeste-ucr);
 }
-.background-color-gris-c-ucr{
+
+.background-color-gris-c-ucr {
   background-color: var(--gris-claro-ucr);
 }
-.background-color-rojo-ucr{
+
+.background-color-rojo-ucr {
   background-color: var(--rojo-ucr);
 }
-input,button{
+
+input,
+button {
   background-color: var(--gris-claro-ucr);
   border: transparent;
   outline: none;
 }
-select{
+
+button.close{
+  background-color: transparent!important;
+}
+
+.close-icon{
+  font-size: 210%!important;
+}
+
+select {
   outline: none;
 }
 
-input[type="submit"]{
+input[type="submit"] {
   background-color: var(--celeste-ucr);
 }
 
-nav{
+nav {
   height: calc(100vh - 108px);
   margin-top: 108px;
   padding-left: 10px;
   background-color: white;
 }
-main{
+
+main {
   margin-top: 108px;
   background-color: var(--gris-claro-ucr);
 }
-.side-bar-nav{
+
+.side-bar-nav {
   background-color: white;
 }
-.side-bar{
+
+.side-bar {
   padding-right: 20px;
   background-color: white;
 }
-.side-bar hr{
+
+.side-bar hr {
   margin: 0;
   margin-left: 20px;
   z-index: 1;
 }
-.side-bar a.active{
+
+.side-bar a.active {
   font-weight: 500;
 }
-.side-bar li{
+
+.side-bar li {
   margin-left: 20px;
 }
-.side-bar li:has( > a.active){
+
+.side-bar li:has(> a.active) {
   margin-left: 0px;
 }
-.side-bar li:has( > a.active)::before{
+
+.side-bar li:has(> a.active)::before {
   content: '';
   display: block;
   width: 7px;
@@ -79,52 +104,61 @@ main{
   background-color: var(--celeste-ucr);
 }
 
-.table-button{
+.table-button {
   background-color: var(--celeste-ucr);
 }
-.delete-button{
+
+.delete-button {
   background-color: var(--rojo-ucr);
 }
-.cancel-button{
+
+.cancel-button {
   background-color: var(--gris-oscuro-urc);
 }
 
-.table{
-  width: 83vw!important;
+.table {
+  width: 83vw !important;
 }
 
-thead{
+thead {
   border-radius: 100px 100px 0 0;
   --bs-table-bg: var(--celeste-ucr);
-  --bs-table-color: 
+  --bs-table-color:
 }
-table thead tr{
+
+table thead tr {
   background-color: var(--celeste-ucr);
   color: white;
   font-weight: lighter;
   padding: 1rem;
 }
-table thead tr:last-child(){
+
+table thead tr:last-child() {
   border-radius: 0 5px 0 0;
 }
-table thead tr:first-child(){
+
+table thead tr:first-child() {
   border-radius: 5px 0 0 0;
 }
-table tbody td{
+
+table tbody td {
   cursor: pointer;
 }
-table tbody tr:nth-child(odd){
+
+table tbody tr:nth-child(odd) {
   background-color: #E4E4E4;
 }
-table tbody tr:nth-child(even){
+
+table tbody tr:nth-child(even) {
   background-color: #e1dbdb;
 }
 
-.page-number{
+.page-number {
   width: 30px;
   background-color: white;
 }
-.page-number.active{
+
+.page-number.active {
   background-color: var(--celeste-ucr);
   color: white;
 }
@@ -143,29 +177,29 @@ table tbody tr:nth-child(even){
 
 input.form-control {
   background-color: #EAEAEA !important;
-  max-width: 300px; 
+  max-width: 300px;
 }
 
 select.form-control {
   background-color: #EAEAEA !important;
-  max-width: 300px; 
+  max-width: 300px;
 }
 
 .close-icon {
-  font-size: 150%; 
-  color: rgb(0, 0, 0); 
+  font-size: 150%;
+  color: rgb(0, 0, 0);
   background-color: transparent !important;
 }
 
 #boton-personalizado {
-  width: 300px; 
+  width: 300px;
 }
 
-.buscar-input{
+.buscar-input {
   background-color: white;
 }
 
-#selectCol{
+#selectCol {
   width: 22vh;
   display: inherit;
   background-color: white;
@@ -176,22 +210,30 @@ select.form-control {
   border-bottom-right-radius: 0;
 }
 
-option{
+option {
   background-color: white;
   color: black
 }
 
-#content-box{
+#content-box {
   background-color: var(--gris-claro-ucr);
 }
 
-.icono{
+.icono {
   margin-right: 10px;
   position: relative;
   bottom: 2px;
 }
 
-        .rounded-table {
-            border-radius: 10px; /* Ajusta este valor al nivel de redondeo que desees */
-            overflow: hidden;
-        }
+.rounded-table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-header-container{
+  position: sticky;
+}
+
+.modal-dialog-scrollable .modal-content {
+  max-height: 80%!important;
+}

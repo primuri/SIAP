@@ -48,7 +48,7 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
 
         <form onSubmit={sendForm} className='d-flex flex-column'>
           <div className="modal-body">
-            <div className="container">
+            <div className="container px-5">
 
               <div className="row mb-4">
                 <div className="col">
