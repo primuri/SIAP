@@ -134,6 +134,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Documentos 
+MEDIA_URL = '/media/'                        # Cuando un usuario carga un archivo, se generará una URL que comienza con MEDIA_URL. 
+                                             # Ej:  '/documentos/docPropuesta1.jpg'.
+MEDIA_ROOT = BASE_DIR / 'media'              # Define la ubicación en el sistema de archivos donde se almacenarán los archivos. 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
