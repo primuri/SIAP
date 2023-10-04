@@ -162,8 +162,6 @@ const actualizarTelefonos = (telefonos, token) => {
         });
     });
 };
-<<<<<<< HEAD
-=======
 
 const obtenerNombre = async (nombre, token) => {
     try {
@@ -270,4 +268,3 @@ export const eliminarUniversidad = async (id, token) => {
         }
     });
 };
->>>>>>> Development

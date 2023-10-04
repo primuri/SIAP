@@ -6,7 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
 import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico} from "../../api/gestionAcademicos"
-import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
+import {editarNombre,editarArea,editarUniversidad, eliminarNombre, eliminarArea} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
 export const GestionAcademicos = () => {
@@ -117,11 +117,10 @@ export const GestionAcademicos = () => {
     }
 
     // Manejo del eliminar
-    const deleteAcademicos = async (id) => {
+    const deleteAcademicos = async (academico) => {
         try {
-            
-            await eliminarAcademico(id, localStorage.getItem('token'))
-            toast.success('Académico eliminado correctamente', {
+            await eliminarAcademico(academico.id_academico, localStorage.getItem('token'))
+             toast.success('Académico eliminado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -199,7 +198,7 @@ export const GestionAcademicos = () => {
                                 mode={2}
                                 onSubmit={editAcademico} 
                                 onCancel={onCancel} 
-                                onDelete={() => deleteAcademicos(academico.id_academico)}
+                                onDelete={() => deleteAcademicos(academico)}
                                 academico={academico}
                             >
                             </AcademicosForm>
