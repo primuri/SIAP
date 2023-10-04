@@ -91,6 +91,14 @@ main {
   margin-left: 20px;
 }
 
+.side-bar li:hover a{
+  font-weight: 500;
+}
+
+.side-bar li:hover{
+  margin-left: 17px;
+}
+
 .side-bar li:has(> a.active) {
   margin-left: 0px;
 }
@@ -99,9 +107,20 @@ main {
   content: '';
   display: block;
   width: 7px;
-  height: 100%;
+  height: 100%; /* Establece la altura inicial en 0 */
   margin-right: 10px;
   background-color: var(--celeste-ucr);
+  animation: expandLine 0.3s ease; /* Aplica la animación a ::before */
+}
+
+
+@keyframes expandLine {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
 }
 
 .table-button {
@@ -154,8 +173,10 @@ table tbody tr:nth-child(even) {
 }
 
 .page-number {
-  width: 30px;
   background-color: white;
+  height: 40px;
+  border-radius: 5px;
+  color: black
 }
 
 .page-number.active {
@@ -177,7 +198,8 @@ table tbody tr:nth-child(even) {
 
 input.form-control {
   background-color: #EAEAEA !important;
-  max-width: 300px;
+  max-width: 100%;
+  height: 40px;
 }
 
 select.form-control {
@@ -189,6 +211,14 @@ select.form-control {
   font-size: 150%;
   color: rgb(0, 0, 0);
   background-color: transparent !important;
+  position: relative;
+  bottom: 25px;
+  left: -12px;
+}
+
+.close{
+  width: 15px;
+  height: 28px;
 }
 
 #boton-personalizado {
@@ -241,6 +271,50 @@ option {
 }
 
 #boton-inicioSesion {
-  width: 300px; 
+  width: 100%; 
   height: 37px;
+}
+
+/* Estilo base para botones e inputs de tipo submit */
+button,
+input[type="submit"] {
+  padding: 10px 20px;
+  color: #fff; /* Color de texto */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative; /* Añade posicionamiento relativo para aplicar superposición */
+  transition: transform 0.1s ease;
+}
+
+/* Estilo cuando se presiona (pseudo-clase :active) */
+button:active::after,
+input[type="submit"]:active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Sombreado oscuro semitransparente */
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo cuando se enfoca (pseudo-clase :focus) */
+button:focus,
+input[type="submit"]:focus {
+  outline: none; /* Elimina el contorno predeterminado en el enfoque */
+}
+
+.cerrar-sesion:hover{
+  text-decoration: underline;
+}
+
+.img-space{
+  border-radius: 8px 0 35px 0;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: var(--celeste-ucr);
 }
