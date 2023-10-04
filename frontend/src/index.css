@@ -198,7 +198,7 @@ table tbody tr:nth-child(even) {
 
 input.form-control {
   background-color: #EAEAEA !important;
-  max-width: 100%;
+  max-width: 300px;
   height: 40px;
 }
 
@@ -239,6 +239,10 @@ select{
 
 #boton-personalizado {
   width: 300px;
+}
+
+#boton-personalizado2 {
+  width: 184px;
 }
 
 .buscar-input {
@@ -333,4 +337,13 @@ input[type="submit"]:focus {
   left: 0px;
   top: 0px;
   background-color: var(--celeste-ucr);
+}
+
+
+#asociar_evaluador {
+  max-width: 150% !important;
+}
+
+#asociar_academico {
+  max-width: 150% !important;
 }
