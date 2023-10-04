@@ -1,60 +1,134 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
+import { FormularioDinamico } from "../../../utils/FomularioDinamico";
+import { obtenerTelefonos, obtenerTitulos } from "../../../api/gestionAcademicos";
+import {toast, Toaster} from 'react-hot-toast'
 
 export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete }) => {
+    const [titulos, setTitulos] = useState([]);
+    const [telefonos, setTelefonos] = useState([]);
 
-  // Si hay informacion en el academico, la almacena en formData, sino queda vacía
-  const [formData, setFormData] = useState({
-    cedula: academico ? academico.cedula : "",
-    foto: academico ? academico.foto : "null",
-    sitio_web: academico ? academico.sitio_web : "",
-    area_de_trabajo: academico ? academico.area_de_trabajo : "",
-    grado_maximo: academico ? academico.grado_maximo : "",
-    correo: academico ? academico.correo : "",
-    categoria_en_regimen: academico ? academico.categoria_en_regimen : "",
-    pais_procedencia: academico ? academico.pais_procedencia : "",
-    id_nombre_completo_fk: academico ? academico.id_nombre_completo_fk : { nombre: "", apellido: "", segundo_apellido: "" },
-    id_area_especialidad_fk: academico ? academico.id_area_especialidad_fk : { nombre: "" },
-    universidad_fk: academico ? academico.universidad_fk : { pais: "", nombre: "" }
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-  
-    if (name.includes('.')) {
-      const keys = name.split('.');
-      setFormData(prev => ({
-        ...prev,
-        [keys[0]]: {
-          ...prev[keys[0]],
-          [keys[1]]: value
-        }
-      }));
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
-  };
-  
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    const fileName = file ? file.name : ""; 
-    setFormData({
-      ...formData,
-      foto: fileName,
+    const configuracionTitulos = [
+        { campo: 'anio', placeholder: 'Año', tipo: 'number',required:true },
+        { campo: 'grado', placeholder: 'Grado', tipo: 'text',required:true },
+        { campo: 'detalle', placeholder: 'Detalle', tipo: 'text',required:true },
+        { campo: 'institución', placeholder: 'Institución', tipo: 'text',required:true }
+    ];
+    
+    const configuracionTelefonos = [
+        { campo: 'numero_tel', placeholder: 'Número', tipo: 'text',required:true},
+    ];
+    // Si hay informacion en el academico, la almacena en formData, sino queda vacía
+    const [formData, setFormData] = useState({
+        cedula: academico ? academico.cedula : "",
+        foto: academico ? academico.foto : "null",
+        sitio_web: academico ? academico.sitio_web : "",
+        area_de_trabajo: academico ? academico.area_de_trabajo : "",
+        grado_maximo: academico ? academico.grado_maximo : "",
+        correo: academico ? academico.correo : "",
+        categoria_en_regimen: academico ? academico.categoria_en_regimen : "",
+        pais_procedencia: academico ? academico.pais_procedencia : "",
+        id_nombre_completo_fk: academico ? academico.id_nombre_completo_fk : { nombre: "", apellido: "", segundo_apellido: "" },
+        id_area_especialidad_fk: academico ? academico.id_area_especialidad_fk : { nombre: "" },
+        universidad_fk: academico ? academico.universidad_fk : { pais: "", nombre: "" }
     });
-  };
+    //si hay titulos o telefonos los carga
+    useEffect(()=>{
+        if(academico){
+            loadTitulos()
+            loadTelefonos()
+        }
+        
+    },[academico])
+    const loadTitulos = async () => {
+        try {
+            const res = await obtenerTitulos(localStorage.getItem('token'));
+            if (res.data && res.data.length > 0) {
+                const titulosFiltrados = res.data.filter(titulo => titulo.id_academico_fk.id_academico === academico.id_academico);
+                setTitulos(titulosFiltrados);
+            } else {
+                setTitulos([]); // Establecer el estado a un array vacío si la respuesta es un array vacío
+            }
+            
+        } catch (error) {
+            toast.error('Error al cargar los telefonos', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
+        }
+    }
+    const loadTelefonos = async () => {
+        try {
+            const res = await obtenerTelefonos(localStorage.getItem('token'));
+            if (res.data && res.data.length > 0) {
+                const telefonosFiltrados = res.data.filter(telefono => telefono.id_academico_fk.id_academico === academico.id_academico);
+                setTelefonos(telefonosFiltrados);
+            } else {
+                setTelefonos([]); // Establecer el estado a un array vacío si la respuesta es un array vacío
+            }
+            
+        } catch (error) {
+            toast.error('Error al cargar los telefonos', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
+        }
+    }
 
-  const sendForm = (event) => {
-    event.preventDefault();
-    const jsonData = JSON.stringify(formData);
-    onSubmit(jsonData);
-  };
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+    
+        if (name.includes('.')) {
+        const keys = name.split('.');
+        setFormData(prev => ({
+            ...prev,
+            [keys[0]]: {
+            ...prev[keys[0]],
+            [keys[1]]: value
+            }
+        }));
+        } else {
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+        }
+    };
+  
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const fileName = file ? file.name : ""; 
+        setFormData({
+        ...formData,
+        foto: fileName,
+        });
+    };
+
+    const sendForm = (event) => {
+        event.preventDefault();
+        console.log(titulos)
+        if(titulos.length>0){
+            formData.titulos = titulos
+        }
+        if(telefonos.length>0){
+        formData.telefonos = telefonos 
+        }
+        const jsonData = JSON.stringify(formData);
+        onSubmit(jsonData);
+    };
+
+    
 
   return (
-    <>
+    <div>
       <div className="modal-header">
             <h2>{mode === 1 ? "Agregar académico(a)" : "Editar académico(a)"}</h2>
             <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
@@ -62,7 +136,7 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
             </button>
       </div>
 
-      <form onSubmit={sendForm} className='d-flex flex-column position-relative '> 
+      <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center'> 
             <div className="modal-body justify-content-center">
                 <div className="container ">
 
@@ -80,7 +154,7 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
                             </div>
                         </div>  
                     </div>
-
+                    
                     <div className="row mb-4">
                         <div className="col-md-6">
                             <div className="form-group">
@@ -102,23 +176,27 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
                             <input type="text" className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange}/>
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="telefono" className="label-personalizado mb-2">Teléfonos (falta)</label>
-                            <select className="form-control" name="telefonos" id="telefonos">
-                                <option value="Tel 1">Tel 1</option>
-                                <option value="Tel 2">Tel 2</option>
-                                <option value="Agregar nuevo">Agregar nuevo</option>
-                            </select>
+                            <div className="col-md-6">  
+                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
+                                <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
+                            </div>  
                         </div>
+                        
                     </div>
-
                     <div className="row mb-4">
-                        <div className="col-md-6">  
-                            <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
-                            <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
-                        </div>  
                         <div className="col-md-6"> 
                             <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Sitio Web</label>
                             <input type="url" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange}/>
+                        </div>
+                        <div className="col-md-6">
+                            <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen</label>
+                            <select className="form-control" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange}>
+                                <option value="">Seleccionar categoría</option>
+                                <option value="Instructor">Instructor</option>
+                                <option value="Profesor Adjunto">Profesor Adjunto</option>
+                                <option value="Profesor Asociado">Profesor Asociado</option>
+                                <option value="Catedrático">Catedrático</option>
+                            </select>
                         </div>
                     </div>
 
@@ -133,29 +211,17 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
                         </div>
                     </div>
 
-                    <div className="row mb-4">
-                        <div className="col-md-6">
-                            <label htmlFor="titulos" className="label-personalizado mb-2">Títulos (Falta) </label>
-                            <select className="form-control" name="titulos" id="titulos">
-                                <option value="Instructor">Título 1</option>
-                                <option value="Profesor Adjunto">Título 2</option>
-                                <option value="Agregar nuevo">Agregar nuevo</option>
-                            </select>
-                        </div>
-                        <div className="col-md-6">
-                            <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen</label>
-                            <select className="form-control" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange}>
-                                <option value="">Seleccionar categoría</option>
-                                <option value="Instructor">Instructor</option>
-                                <option value="Profesor Adjunto">Profesor Adjunto</option>
-                                <option value="Profesor Asociado">Profesor Asociado</option>
-                                <option value="Catedrático">Catedrático</option>
-                            </select>
-                        </div>
+                    <div className="d-flex flex-column">
+                        <label htmlFor="titulos" className="label-personalizado mb-2">Títulos (Falta) </label>
+                        <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
+                    </div>
+                    <hr></hr>
+                    <div className="d-flex flex-column">
+                        <label htmlFor="titulos" className="label-personalizado mb-2">Telefonos (Falta) </label>
+                        <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
                     </div>
 
-
-                    <div className="row mb-4">
+                    <div className="row mb-4 mt-4">
                         <div className="col-md-6">
                             <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado Máximo</label>
                             <select className="form-control" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
@@ -204,7 +270,8 @@ export const AcademicosForm = ({onSubmit, mode, academico, onCancel, onDelete })
               </div>
           </div>
       </form>
-    </>
+      <Toaster></Toaster>
+    </div>
   );
 };
 

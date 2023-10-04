@@ -151,6 +151,11 @@ select.form-control {
   max-width: 300px; 
 }
 
+select::after{
+  content: '';
+  background-image: url('/frontend/src/assets/select_arrow.png');
+  
+}
 .close-icon {
   font-size: 150%; 
   color: rgb(0, 0, 0); 

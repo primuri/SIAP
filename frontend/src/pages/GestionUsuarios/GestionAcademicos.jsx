@@ -5,7 +5,7 @@ import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademic
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico} from "../../api/gestionAcademicos"
+import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, actualizarTelefonos, actualizarTitulos} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
@@ -93,6 +93,20 @@ export const GestionAcademicos = () => {
             delete Datos.universidad_fk
             Datos.universidad_fk = id_universidad_editada
 
+            const titulos = Datos?.titulos;
+            const telefonos = Datos?.telefonos;
+            delete academico.titulos;
+            delete academico.telefonos;
+            if(titulos) {
+                const titulosActualizados = titulos.map(titulo => ({
+                    ...titulo,
+                    anio: parseInt(titulo.anio)
+                }));
+                actualizarTitulos(titulosActualizados, localStorage.getItem("token"));
+            }
+            if(telefonos){
+                actualizarTelefonos(telefonos, localStorage.getItem("token"));
+            }
             await editarAcademico(academico.id_academico, Datos, localStorage.getItem("token"))
             toast.success('Académico editado correctamente', {
                 duration: 4000, 
