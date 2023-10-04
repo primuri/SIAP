@@ -4,6 +4,11 @@ import { FormularioDinamico } from "../../../utils/FomularioDinamico"
 import { obtenerTelefonos, obtenerTitulos, obtenerUniversidades } from "../../../api/gestionAcademicos"
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../../assets/person-i.png';
+import TextField from '@mui/material/TextField';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import * as React from 'react';
+
+const filter = createFilterOptions();
 
 const configuracionTitulos = [
     { campo: 'anio', placeholder: 'Año', tipo: 'number', required: true },
@@ -19,8 +24,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const [titulos, setTitulos] = useState([])
     const [telefonos, setTelefonos] = useState([])
     const [universidades, setUniversidades] = useState([])
-    const [universidadesFilter, setUniversidadesFilter] = useState([]);
-    const [modoUniversidad, setModoUniversidad] = useState(mode == 1 ? "seleccionar" : "agregar")
     // Si hay informacion en el academico, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         cedula: academico ? academico.cedula : "",
@@ -43,19 +46,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         }
         loadUniversidades()
     }, [academico])
-    useEffect(() => {
-        if (modoUniversidad === "agregar" && formData.universidad_fk.id_universidad && mode === 1) {
-            setFormData(prevState => ({
-                ...prevState,
-                universidad_fk: {
-                    ...prevState.universidad_fk,
-                    id_universidad: formData.universidad_fk.id_universidad,
-                    nombre: "",
-                    pais: ""
-                }
-            }));
-        }
-    }, [modoUniversidad]);
+
     const loadTitulos = async () => {
         try {
             const res = await obtenerTitulos(localStorage.getItem('token'))
@@ -114,26 +105,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             })
         }
     }
-    const handleSelectUniversidad = (e, universidad) => {
-        setFormData((prev) => ({
-            ...prev,
-            universidad_fk: universidad
-        }));
-        setUniversidadesFilter([]); // Limpiar la lista desplegable
-    };
+
     const handleChange = (event) => {
         const { name, value } = event.target
-        if (name === "universidad_fk.nombre") {
-            if (value === "") {
-                setUniversidadesFilter([]);
-            } else {
-                const filteredUniversidades = universidades.filter(universidad =>
-                    universidad.nombre.toLowerCase().includes(value.toLowerCase()) ||
-                    universidad.pais.toLowerCase().includes(value.toLowerCase())
-                );
-                setUniversidadesFilter(filteredUniversidades);
-            }
-        }
+
         if (name.includes('.')) {
             const keys = name.split('.')
             setFormData(prev => ({
@@ -173,7 +148,15 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         onSubmit(jsonData)
     }
 
+    const obtenerUniversidadesUnicasPorPais = (universidades) => {
+        const paisesUnicos = [...new Set(universidades.map(u => u.pais))];
+        return paisesUnicos.map(pais => universidades.find(u => u.pais === pais));
+    };
 
+    const obtenerUniversidadesUnicasPorNombre = (universidades) => {
+        const nombresUnicos = [...new Set(universidades.map(u => u.nombre))];
+        return nombresUnicos.map(nombre => universidades.find(u => u.nombre === nombre));
+    };
 
     return (
         <div>
@@ -207,7 +190,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             </div>
 
             <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center'>
-                <div className="modal-body justify-content-center" style={{padding: '3vh 4vw'}}>
+                <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container ">
 
                         <div className="row mb-4">
@@ -246,8 +229,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="text" className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
-                                    <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
-                                    <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
+                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
+                                <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
 
                         </div>
@@ -267,70 +250,134 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                         </div>
-
                         <div className="row mb-4">
-                            {modoUniversidad === 'seleccionar' ? (
-                                <>
-                                    <h4 className=" fs-5 mb-4 mt-2">Seleccione una universidad existente</h4>
-                                    <div className="col-md-6">
-                                        <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
-                                        <input
-                                            type="text"
-                                            name="universidad_fk.nombre"
-                                            id="universidadNombre"
-                                            value={formData.universidad_fk ? formData.universidad_fk.nombre : ""}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                        {universidadesFilter.length > 0 && (
-                                            <div
-                                                className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                style={{ maxHeight: "60px" }}
-                                            >
-                                                {universidadesFilter.map((universidad) => {
-                                                    return (
-                                                        <div
-                                                            key={universidad.id_universidad}
-                                                            className=" pointer-event ms-1"
-                                                            style={{ cursor: "pointer" }}
-                                                            onClick={(e) => {
-                                                                handleSelectUniversidad(e, universidad);
-                                                            }}
-                                                        >
-                                                            {universidad.nombre}-{universidad.pais}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
-                                        <input
-                                            id="pais_universidad"
-                                            type="text"
-                                            value={formData.universidad_fk ? formData.universidad_fk.pais : ""}
-                                            disabled
-                                            className="form-control"
-                                        />
+                            <div className="col-md-6">
+                                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
+                                <Autocomplete
+                                    value={formData.universidad_fk}
+                                    onChange={(event, newValue) => {
+                                        if (typeof newValue === 'string') {
+                                            setFormData({
+                                                ...formData,
+                                                universidad_fk: {nombre: newValue, pais:formData.universidad_fk.pais},
+                                            });
+                                        } else if (newValue && newValue.inputValue) {
+                                            // Create a new value from the user input
+                                            setFormData({
+                                                ...formData,
+                                                universidad_fk: {nombre: newValue.inputValue, pais:formData.universidad_fk.pais},
+                                            });
+                                        } else {
+                                            setFormData({
+                                                ...formData,
+                                                universidad_fk: {nombre: newValue.nombre, pais: formData.universidad_fk.pais},
+                                            });
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter(options, params);
 
-                                    </div>
-                                    <button type="button" className="rounded mb-2 mt-4" style={{ width: "92%", marginLeft: "2%" }} onClick={(e) => { setModoUniversidad('agregar'); e.preventDefault() }}>Agregar nueva universidad</button>
-                                </>
-                            ) : (
-                                <>
-                                    <h4 className=" fs-5 mb-4 mt-2">Agregando una nueva universidad</h4>
-                                    <div className="col-md-6">
-                                        <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
-                                        <input type="text" className="form-control" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required />
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
-                                        <input type="text" className="form-control" name="universidad_fk.pais" id="pais_universidad" value={formData.universidad_fk.pais} onChange={handleChange} required />
-                                    </div>
-                                    <button className="rounded mb-2 mt-4" style={{ width: "92%", marginLeft: "2%" }} onClick={(e) => { setModoUniversidad('seleccionar'); e.preventDefault() }}>Seleccionar una universidad existente</button>
-                                </>
-                            )}
+                                        const { inputValue } = params;
+                                        // Suggest the creation of a new value
+                                        const isExisting = options.some((option) => inputValue === option.nombre);
+                                        if (inputValue !== '' && !isExisting) {
+                                            let cadena = `Añadir "${inputValue}"`;
+                                            filtered.push({
+                                                inputValue,
+                                                nombre: cadena.normalize(),
+                                            });
+                                        }
+
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    handleHomeEndKeys
+                                    id="universidad_nombre"
+                                    options={obtenerUniversidadesUnicasPorNombre(universidades)}
+                                    getOptionLabel={(option) => {
+                                        // Value selected with enter, right from the input
+                                        if (typeof option === 'string') {
+                                            return option;
+                                        }
+                                        // Add "xxx" option created dynamically
+                                        if (option.inputValue) {
+                                            return option.inputValue;
+                                        }
+                                        // Regular option
+                                        return option.nombre;
+                                    }}
+                                    renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
+                                    sx={{ width: 300 }}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField {...params} className="form-control"/>
+                                    )}
+                                />
+                            </div >
+                            <div className="col-md-6">
+                                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
+                                <Autocomplete
+                                    value={formData.universidad_fk}
+                                    onChange={(event, newValue) => {
+                                        if (typeof newValue === 'string') {
+                                            setFormData({
+                                                ...formData,
+                                                universidad_fk: {nombre: formData.universidad_fk.nombre, pais:newValue},
+                                            });
+                                        } else if (newValue && newValue.inputValue) {
+                                            // Create a new value from the user input
+                                            setFormData({
+                                                ...formData,
+                                                universidad_fk: {nombre: formData.universidad_fk.nombre, pais:newValue.inputValue},
+                                            });
+                                        } else {
+                                            setFormData({
+                                                ...formData,
+                                                universidad_fk: {nombre: formData.universidad_fk.nombre, pais:newValue.pais},
+                                            });
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter(options, params);
+
+                                        const { inputValue } = params;
+                                        // Suggest the creation of a new value
+                                        const isExisting = options.some((option) => inputValue === option.pais);
+                                        if (inputValue !== '' && !isExisting) {
+                                            filtered.push({
+                                                inputValue,
+                                                pais: `Añadir "${inputValue}"`,
+                                            });
+                                        }
+
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    handleHomeEndKeys
+                                    id="universidad_pais"
+                                    options={obtenerUniversidadesUnicasPorPais(universidades)}
+                                    getOptionLabel={(option) => {
+                                        // Value selected with enter, right from the input
+                                        if (typeof option === 'string') {
+                                            return option;
+                                        }
+                                        // Add "xxx" option created dynamically
+                                        if (option.inputValue) {
+                                            return option.inputValue;
+                                        }
+                                        // Regular option
+                                        return option.pais;
+                                    }}
+                                    renderOption={(props, option) => <li {...props}>{option.pais}</li>}
+                                    sx={{ width: 300 }}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField {...params} className="form-control"/>
+                                    )}
+                                />
+                            </div>
                         </div>
 
                         <div className="d-flex flex-column">

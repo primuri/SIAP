@@ -27,6 +27,14 @@ class UniversidadViewSet(viewsets.ModelViewSet):
     view_name = 'universidades'
     queryset = Universidad.objects.all()
     serializer_class = UniversidadSerializer
+    
+    def get_queryset(self):
+        queryset = Universidad.objects.all()
+        nombre = self.request.query_params.get('nombre', None)
+        pais = self.request.query_params.get('pais', None)
+        if nombre is not None and pais is not None:
+            queryset = queryset.filter(nombre=nombre, pais=pais)
+        return queryset
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

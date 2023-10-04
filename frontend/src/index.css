@@ -345,7 +345,6 @@ input[type="submit"]:focus {
   background-color: var(--celeste-ucr);
 }
 
-<<<<<<< HEAD
 .modal-header{
   z-index: 2;
   background-color: white;
@@ -355,7 +354,6 @@ input[type="submit"]:focus {
   z-index: 2;
   background-color: white !important;
 }
-=======
 
 #asociar_evaluador {
   max-width: 150% !important;
@@ -364,4 +362,3 @@ input[type="submit"]:focus {
 #asociar_academico {
   max-width: 150% !important;
 }
->>>>>>> Priscila
