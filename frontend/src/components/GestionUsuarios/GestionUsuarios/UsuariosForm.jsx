@@ -155,7 +155,15 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
         delete dataToSend.confirmar_contrasena;
         delete dataToSend.asociar_academico;
         delete dataToSend.asociar_evaluador;
-    
+        if(dataToSend.rol==='evaluador'){
+            if(dataToSend.academico_fk){
+                dataToSend.academico_fk = null
+            }
+        }else if(dataToSend.rol==='academico'){
+            if(dataToSend.evaluador_fk){
+                dataToSend.evaluador_fk= null
+            }
+        }
         // Asignar el rol al array de grupos
         dataToSend.groups = [dataToSend.rol];
         delete dataToSend.rol;
@@ -200,7 +208,7 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                                         <option value="administrador">Administrador</option>
                                         <option value="academico">Investigador</option>
                                         <option value="evaluador">Evaluador</option>
-                                        <option value="investigador-Evaluador">Investigador y Evaluador</option>
+                                        <option value="investigador-evaluador">Investigador y Evaluador</option>
                                         <option value="invitado">Invitado</option>
                                     </select>
                                 </div>
@@ -224,10 +232,10 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                     </div> 
 
 
-                    
-                    {formData.rol==="academico" && (
+                    <div className="row mb-4">
+                    {(formData.rol==="academico" || formData.rol==="investigador-evaluador" ) && (
                         <>
-                            <div className="row mb-4">
+                            
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador</label>
@@ -248,6 +256,7 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                                                                         handleSelectAcademico(e, academico);
                                                                     }}
                                                                 >
+                                                                    {academico.correo}
                                                                 </div>
                                                             );
                                                         })}
@@ -256,13 +265,13 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                                         </div>
                                     </div>
                                 </div> 
-                            </div>  
+                            
                         </>
                     )}   
        
-                    {formData.rol==="evaluador" && (
+                    {(formData.rol==="evaluador" ||formData.rol==="investigador-evaluador" ) && (
                         <>
-                            <div className="row mb-4">
+                            
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador</label>
@@ -292,9 +301,10 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                                         </div>
                                     </div>
                                 </div> 
-                            </div>  
+                             
                         </>
                     )}
+                    </div> 
                 </div>
             </div>
                  

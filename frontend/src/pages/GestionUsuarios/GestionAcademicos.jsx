@@ -98,11 +98,7 @@ export const GestionAcademicos = () => {
             delete academico.titulos;
             delete academico.telefonos;
             if(titulos) {
-                const titulosActualizados = titulos.map(titulo => ({
-                    ...titulo,
-                    anio: parseInt(titulo.anio)
-                }));
-                actualizarTitulos(titulosActualizados, localStorage.getItem("token"));
+                actualizarTitulos(titulos,academico.id_academico, localStorage.getItem("token"));
             }
             if(telefonos){
                 actualizarTelefonos(telefonos, localStorage.getItem("token"));
@@ -129,6 +125,8 @@ export const GestionAcademicos = () => {
               })
         }
     }
+
+
 
     // Manejo del eliminar
     const deleteAcademicos = async (academico) => {

@@ -181,18 +181,29 @@ const agregarTelefonos = (telefonos, id_academico, token) => {
     }
 };
 
-export const actualizarTitulos = (titulos, token) => {
+export const actualizarTitulos = (titulos,academico_id, token) => {
     try{
         titulos.forEach(async titulo => {
-            let id_titulos = titulo.id_titulos
-            delete titulo.id_titulos
-            delete titulo.id_academico_fk
-            await SIAPAPI.put(`personas/titulos/${id_titulos}/`, titulo, {
+            if (titulo.id_titulos){
+                let id_titulos = titulo.id_titulos
+                delete titulo.id_titulos
+                titulo.id_academico_fk = academico_id
+                await SIAPAPI.put(`personas/titulos/${id_titulos}/`, titulo, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }else{
+                titulo.id_academico_fk = academico_id;
+                await SIAPAPI.post('personas/titulos/', titulo, {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
                 }
-            });
+                });
+            }
+            
         });
     }catch(error){
         console.error(error)
@@ -200,15 +211,30 @@ export const actualizarTitulos = (titulos, token) => {
     }
 };
 
-export const actualizarTelefonos = (telefonos, token) => {
+
+export const actualizarTelefonos = (telefonos,academico_id,token) => {
     try{    
         telefonos.forEach(async telefono => {
-            await SIAPAPI.put(`personas/telefono/${telefono.id_telefono}/`, telefono, {
+            if(telefono.id_telefono){
+                let id_telefono = telefono.id_telefono
+                delete telefono.id_telefono
+                telefono.id_academico_fk = academico_id
+                await SIAPAPI.put(`personas/telefono/${id_telefono}/`, telefono, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }else{
+                telefono.id_academico_fk = academico_id;
+                await SIAPAPI.post('personas/telefono/', telefono, {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
                 }
-            });
+                });
+            }
+            
         });
     }catch(error){
         console.error(error)
