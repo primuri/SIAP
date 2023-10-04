@@ -148,3 +148,45 @@ export const editarDocumento = async (id, documento, token) => {
     });
     return responseDocumento;
 };
+
+
+export const eliminarDocumento = async (id, token) => {
+    return await SIAPAPI.delete(`propuesta_proyecto/documento_asociado/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+
+export const eliminarPropuesta = async (id, token) => {
+    return await SIAPAPI.delete(`propuesta_proyecto/propuesta_proyecto/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+
+export const eliminarColaborador = async (id, token) => {
+    return await SIAPAPI.delete(`propuesta_proyecto/colaborador_principal/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+
+export const eliminarVigencia = async (id, token) => {
+    return await SIAPAPI.delete(`propuesta_proyecto/vigencia/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+

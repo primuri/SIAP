@@ -6,7 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, editarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
+import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, editarVigencia, eliminarColaborador, eliminarDocumento, eliminarPropuesta, eliminarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -176,9 +176,16 @@ async function loadAcademicos() {
     }
 
     // Manejo del eliminar
-    const deletePropuesta = async (correo) => {
+    const deletePropuesta = async (propuesta) => {
         try{
-           // await eliminarPropuesta(correo,localStorage.getItem('token'))
+           
+            await eliminarDocumento(propuesta.id_documentos_asociados, localStorage.getItem('token'))
+            await eliminarPropuesta(propuesta.id_codigo_cimpa_fk.id_codigo_cimpa, localStorage.getItem('token'))
+            await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
+            await eliminarVigencia(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia, localStorage.getItem('token'))
+            
+
+
             toast.success('Propuesta eliminada correctamente', {
                 duration: 4000, 
                 position: 'bottom-right',
@@ -250,7 +257,7 @@ async function loadAcademicos() {
                         mode={2}
                         onSubmit={editPropuesta} 
                         onCancel={onCancel} 
-                        onDelete={() => deletePropuesta(propuesta.id)}
+                        onDelete={() => deletePropuesta(propuesta)}
                         academicos={academicos}
                         propuesta={propuesta}
                         >
