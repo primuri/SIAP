@@ -65,7 +65,11 @@ export const Table = ({ columns, data, onClick, dataKeys }) => {
             {currentItems.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => onClick(row)}>
                 {dataKeys.map((column, colIndex) => (
-                  <td className="mx-2" key={colIndex}>{getValueByPath(row, column).split('/').pop()}</td>
+                  <td className="mx-2" key={colIndex}>
+                  {typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
+                    ? getValueByPath(row, column).split('/').pop()
+                    : getValueByPath(row, column)}
+                </td>
                 ))}
               </tr>
             ))}
