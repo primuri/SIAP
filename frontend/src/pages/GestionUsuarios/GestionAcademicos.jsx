@@ -5,7 +5,7 @@ import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademic
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad} from "../../api/gestionAcademicos"
+import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
@@ -124,10 +124,19 @@ export const GestionAcademicos = () => {
             delete academico.titulos;
             delete academico.telefonos;
             if(titulos) {
-                actualizarTitulos(titulos,academico.id_academico, localStorage.getItem("token"));
+                if(typeof titulos.id_academico_fk === 'undefined'){
+                    await agregarTitulos(titulos, academico.id_academico, localStorage.getItem("token"))
+                }else{
+                    await actualizarTitulos(titulos, localStorage.getItem("token"));
+
+                }
             }
             if(telefonos){
-                actualizarTelefonos(telefonos, localStorage.getItem("token"));
+                if(typeof telefonos.id_academico_fk === 'undefined'){
+                    await agregarTelefonos(telefonos, academico.id_academico, localStorage.getItem("token"))
+                }else{
+                    await actualizarTelefonos(telefonos, localStorage.getItem("token"));
+                }
             }
             await editarAcademico(academico.id_academico, Datos, localStorage.getItem("token"))
             toast.success('Académico editado correctamente', {

@@ -147,7 +147,7 @@ export const obtenerTelefonos = async (token) => {
     });
 };
 
-const agregarTitulos = (titulos, id_academico, token) => {
+export const agregarTitulos = (titulos, id_academico, token) => {
     try {
         titulos.forEach(async titulo => {
             titulo.id_academico_fk = id_academico;
@@ -164,7 +164,7 @@ const agregarTitulos = (titulos, id_academico, token) => {
     }
 };
 
-const agregarTelefonos = (telefonos, id_academico, token) => {
+export const agregarTelefonos = (telefonos, id_academico, token) => {
     try {
         telefonos.forEach(async telefono => {
             telefono.id_academico_fk = id_academico;
