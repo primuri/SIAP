@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import {toast, Toaster} from 'react-hot-toast'
 import { obtenerUniversidades } from "../../../api/gestionAcademicos";
+import icono from '../../../assets/person-i.png';
 
 export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }) => {
   // Cargar informacion
@@ -98,15 +99,37 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
 
     return(
         <>
-        <div className="modal-header">
-            <h2>{mode == 1? ("Agregar evaluador(a)"):("Editar evaluador(a)")}</h2>
-            <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
-                <span aria-hidden="true" className="close-icon">&times;</span>
-            </button>
-        </div>
+        <div className="modal-header pb-0 position-sticky top-0">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-1 mb-0 text-center">
+                            <div className="img-space">
+                                <img src={icono} alt="" width={'72px'} />
+                            </div>
+                        </div>
+                        <div className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar evaluador(a)" : "Editar evaluador(a)"}
+                            </h2>
+                        </div>
+                        <div className="col-1 mb-0 text-center">
+                            <button
+                                type="button"
+                                onClick={onCancel}
+                                className="close"
+                                data-dismiss="modal"
+                            >
+                                <span aria-hidden="true" className="close-icon">
+                                    &times;
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         <form onSubmit={sendForm} className='d-flex flex-column'>
-          <div className="modal-body">
+          <div className="modal-body" style={{padding: '3vh 4vw'}}>
             <div className="container">
 
               <div className="row mb-4">

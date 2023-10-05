@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { Toaster, toast } from "react-hot-toast";
 import { obtenerAcademicos } from "../../../api/gestionAcademicos";
 import { obtenerEvaluadores } from "../../../api/gestionEvaluadores";
+import icono from '../../../assets/person-i.png';
+
+
 export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
     // Cargar informacion
     const [academicos, setAcademicos] = useState([]);
@@ -181,15 +184,36 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
 
     return (
         <>
-            <div className="modal-header">
-                <h2>{mode == 1 ? "Agregar usuario(a)" : "Editar usuario(a)"}</h2>
-                <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
-                    <span aria-hidden="true" className="close-icon">&times;</span>
-                </button>
-                
+           <div className="modal-header pb-0 position-sticky top-0">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-1 mb-0 text-center">
+                            <div className="img-space">
+                                <img src={icono} alt="" width={'72px'} />
+                            </div>
+                        </div>
+                        <div className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar usuario(a)" : "Editar usuario(a)"}
+                            </h2>
+                        </div>
+                        <div className="col-1 mb-0 text-center">
+                            <button
+                                type="button"
+                                onClick={onCancel}
+                                className="close"
+                                data-dismiss="modal"
+                            >
+                                <span aria-hidden="true" className="close-icon">
+                                    &times;
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <form onSubmit={sendForm} className="d-flex flex-column">
-                <div className="modal-body">
+                <div className="modal-body" >
                     <div className="container">
 
 

@@ -5,7 +5,7 @@ import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademic
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, actualizarTelefonos, actualizarTitulos} from "../../api/gestionAcademicos"
+import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, actualizarTelefonos, actualizarTitulos, obtenerUniversidad, buscarUniversidad} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
@@ -87,11 +87,21 @@ export const GestionAcademicos = () => {
             delete Datos.id_area_especialidad_fk
             Datos.id_area_especialidad_fk = id_area_editada
 
-            const id_univ = Datos.universidad_fk.id_universidad
-            await editarUniversidad(id_univ,Datos.universidad_fk, localStorage.getItem("token"))
-            const id_universidad_editada = Datos.universidad_fk.id_universidad
-            delete Datos.universidad_fk
-            Datos.universidad_fk = id_universidad_editada
+            let nombre = Datos.universidad_fk.nombre;
+            let pais = Datos.universidad_fk.pais;
+
+           const responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
+            
+            var id_univ = {};
+
+            if(responseUniversidad !== undefined){
+               id_univ  = responseUniversidad.id_universidad;
+            }else{
+                id_univ = await obtenerUniversidad(Datos.universidad_fk, localStorage.getItem("token"));
+            }
+
+            delete Datos.universidad_fk;
+            Datos.universidad_fk = id_univ;
 
             const titulos = Datos?.titulos;
             const telefonos = Datos?.telefonos;

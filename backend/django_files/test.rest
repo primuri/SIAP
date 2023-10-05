@@ -52,6 +52,6 @@ Content-Type: application/json
 
 ### Obtener telefonos
 
-GET http://127.0.0.1:8000/personas/telefono/
-Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+GET http://127.0.0.1:8000/personas/universidad?nombre=Universidad%20Nacional&pais=Polonia/
+Authorization: token 357cff9eed614b19d1020eeb0208bf124abbff10
 Content-Type: application/json
