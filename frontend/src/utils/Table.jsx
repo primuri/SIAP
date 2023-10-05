@@ -65,7 +65,7 @@ export const Table = ({ columns, data, onClick, dataKeys }) => {
             {currentItems.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => onClick(row)}>
                 {dataKeys.map((column, colIndex) => (
-                  <td className="mx-2" key={colIndex}>{getValueByPath(row, column)}</td>
+                  <td className="mx-2" key={colIndex}>{getValueByPath(row, column).split('/').pop()}</td>
                 ))}
               </tr>
             ))}

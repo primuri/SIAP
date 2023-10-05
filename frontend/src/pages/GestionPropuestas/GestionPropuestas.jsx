@@ -27,7 +27,7 @@ export const GestionPropuestas = () => {
         ...propuesta.id_codigo_cimpa_fk,
         fecha_vigencia: formatDate(propuesta.id_codigo_cimpa_fk.fecha_vigencia)
     }
-})); 
+    })); 
     // Detecta cambios y realiza la solicitud nuevamente  
      useEffect(() => {
         async function fetchData() {
@@ -38,26 +38,28 @@ export const GestionPropuestas = () => {
         fetchData();
     }, [reload]);
     
-async function loadAcademicos() {
-    try {
-        const res = await obtenerAcademicos(localStorage.getItem('token'));
-        setAcademicos(res.data);
-    } catch (error) {
-        toast.error('Error al cargar los datos de académicos', {
-            duration: 4000,
-            position: 'bottom-right',
-            style: {
-                background: '#670000',
-                color: '#fff',
-            },
-        });
+    async function loadAcademicos() {
+        try {
+            const res = await obtenerAcademicos(localStorage.getItem('token'));
+            setAcademicos(res.data);
+        } catch (error) {
+            toast.error('Error al cargar los datos de académicos', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
+        }
     }
-}
     async function loadPropuestas() {
         try {
             const res = await obtenerPropuestas(localStorage.getItem('token'))
             setData(res.data)
+            console.log(res.data)
             setPropuestas(res.data)
+            
         } catch (error) {
             toast.error('Error al cargar los datos de propuestas', {
                 duration: 4000,
@@ -72,8 +74,8 @@ async function loadAcademicos() {
     // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {
         try{
-            const Datos = JSON.parse(formData)
-            await agregarDocumento(Datos,localStorage.getItem('token'))
+            
+            await agregarDocumento(formData,localStorage.getItem('token'))
             toast.success('Propuesta agregada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -100,7 +102,8 @@ async function loadAcademicos() {
     const editPropuesta = async (formData) => {
         try{
             
-            const Datos = JSON.parse(formData)
+            const Datos = JSON.parse(formData.get('json'))
+            formData.delete('json');
             console.log(Datos)
             const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
             
@@ -150,8 +153,9 @@ async function loadAcademicos() {
             const id_doc = Datos.id_documentos_asociados;
             delete Datos.id_codigo_cimpa_fk;
             Datos.id_codigo_cimpa_fk = id_propu;
-            await editarDocumento(id_doc,Datos, localStorage.getItem("token"))
-            
+            formData.append('detalle', Datos.detalle)
+            formData.append('id_codigo_cimpa_fk',Datos.id_codigo_cimpa_fk)
+            await editarDocumento(id_doc,formData, localStorage.getItem("token"))
 
             toast.success('Propuesta actualizada correctamente', {
                 duration: 4000, 

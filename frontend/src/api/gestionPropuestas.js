@@ -15,9 +15,11 @@ export const obtenerPropuestas = async (token) => {
 };
 
 
-export const agregarDocumento = async (documento_asociado,  token) => {
+export const agregarDocumento = async (combinedData,  token) => {
 
     try {
+        const documento_asociado = JSON.parse(combinedData.get('json'));
+        combinedData.delete('json');
         const vigencia = {
             fecha_inicio: documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio,
             fecha_fin: documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin
@@ -35,21 +37,17 @@ export const agregarDocumento = async (documento_asociado,  token) => {
         delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk;
         documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk = id_colaborador_creado;
 
-        const documento = {
-            documento: documento_asociado.documento,
-            detalle:documento_asociado.detalle
-        }
+        combinedData.append('detalle', documento_asociado.detalle);
         delete documento_asociado.documento
         delete documento_asociado.detalle
 
         const id_propuesta_creada = await agregarPropuestas(documento_asociado.id_codigo_cimpa_fk ,token);
-        delete documento.id_codigo_cimpa_fk;
-        documento.id_codigo_cimpa_fk = id_propuesta_creada;
+        combinedData.append('id_codigo_cimpa_fk',id_propuesta_creada)
         
-        const response_documento = await SIAPAPI.post('propuesta_proyecto/documento_asociado/', documento, {
+        const response_documento = await SIAPAPI.post('propuesta_proyecto/documento_asociado/', combinedData, {
             headers: {
                 'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             }
         });
 
@@ -95,6 +93,7 @@ export const agregarColaborador = async (colaborador, token) => {
 
 export const agregarPropuestas = async (propuesta, token) => {
     try {
+        console.log("propuesta:", propuesta)
         const response_propuesta = await SIAPAPI.post('propuesta_proyecto/propuesta_proyecto/', propuesta, {
             headers: {
                 'Authorization': `token ${token}`,
@@ -140,10 +139,10 @@ export const editarPropuesta = async (id, propuesta, token) => {
 };
 
 export const editarDocumento = async (id, documento, token) => {
-    const responseDocumento = await SIAPAPI.put(`propuesta_proyecto/documento_asociado/${id}/`, documento, {
+    const responseDocumento = await SIAPAPI.patch(`propuesta_proyecto/documento_asociado/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     });
     return responseDocumento;

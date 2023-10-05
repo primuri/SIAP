@@ -130,70 +130,78 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
                     <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
                 </div>
               </div>
-
-              <div className="row mb-4">
-                        {modoUniversidad === 'seleccionar' ? (
-                            <>
-                                <div className="col-md-6">
-                                    <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
-                                    <input
-                                        type="text"
-                                        name="universidad_fk.nombre"
-                                        id="universidadNombre"
-                                        value={formData.universidad_fk ? formData.universidad_fk.nombre : ""}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                    />
-                                    {universidadesFilter.length > 0 && (
-                                        <div
-                                            className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                            style={{ maxHeight: "40px" }}
-                                        >
-                                            {universidadesFilter.map((universidad) => {
-                                                return (
-                                                    <div
-                                                        key={universidad.id_universidad}
-                                                        className=" pointer-event ms-1"
-                                                        style={{ cursor: "pointer" }}
-                                                        onClick={(e) => {
-                                                            handleSelectUniversidad(e, universidad);
-                                                        }}
-                                                    >
-                                                        {universidad.nombre}-{universidad.pais}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="col-md-6">
-                                    <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
-                                    <input
-                                        id="pais_universidad"
-                                        type="text"
-                                        value={formData.universidad_fk ? formData.universidad_fk.pais : ""}
-                                        disabled
-                                        className="form-control"
-                                    />
-                                    
-                                </div>
-                                <button type="button" className="rounded mb-2 mt-4" style={{width:"92%",marginLeft:"2%"}} onClick={(e) =>{setModoUniversidad('agregar'); e.preventDefault()}}>Agregar nueva universidad</button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="col-md-6">
-                                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
-                                <input type="text" className="form-control" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required />
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
-                                <input type="text" className="form-control" name="universidad_fk.pais" id="pais_universidad" value={formData.universidad_fk.pais} onChange={handleChange} required />
-                            </div>
-                            <button type="button" className="rounded mb-2 mt-4" style={{width:"92%",marginLeft:"2%"}} onClick={(e) =>{setModoUniversidad('seleccionar'); e.preventDefault()}}>Seleccionar una universidad existente</button>
-                            </>
-                        )}
-              </div>
-
+              {modoUniversidad === 'seleccionar' ? (
+                  <>
+                    <div className="row mb-4">
+                      <div className="rounded col-md-6 mb-2 mt-4 text-black">
+                        <button type="button" className="rounded text-light background-color-celeste-ucr" onClick={(e) =>{setModoUniversidad('agregar'); e.preventDefault()}}>Agregar nueva universidad</button>
+                      </div>
+                    </div>
+                    <div className="row mb-4">
+                      <div className="col-md-6">
+                          <label htmlFor="universidadNombre" className="label-personalizado mb-2">Buscar Universidad</label>
+                          <input
+                              type="text"
+                              name="universidad_fk.nombre"
+                              id="universidadNombre"
+                              value={formData.universidad_fk ? formData.universidad_fk.nombre : ""}
+                              onChange={handleChange}
+                              className="form-control"
+                          />
+                          {universidadesFilter.length > 0 && (
+                              <div
+                                  className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                  style={{ maxHeight: "60px",zIndex:"10" }}
+                              >
+                                  {universidadesFilter.map((universidad) => {
+                                      return (
+                                          <div
+                                              key={universidad.id_universidad}
+                                              className=" pointer-event ms-1"
+                                              style={{ cursor: "pointer" }}
+                                              onClick={(e) => {
+                                                  handleSelectUniversidad(e, universidad);
+                                              }}
+                                          >
+                                              {universidad.nombre}-{universidad.pais}
+                                          </div>
+                                      );
+                                  })}
+                              </div>
+                          )}
+                      </div>
+                      <div className="col-md-6">
+                          <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad seleccionada</label>
+                          <input
+                              id="pais_universidad"
+                              type="text"
+                              value={formData.universidad_fk ? formData.universidad_fk.pais : ""}
+                              disabled
+                              className="form-control"
+                          />
+                          
+                      </div>
+                    </div>
+                  </>
+              ) : (
+                  <>
+                    <div className="row mb-4">
+                      <div className="rounded col-md-6 mb-2 mt-4 text-black">
+                        <button type="button" className="rounded text-light background-color-celeste-ucr" onClick={(e) =>{setModoUniversidad('seleccionar'); e.preventDefault()}}>Seleccionar una universidad existente</button>
+                      </div>
+                    </div>
+                    <div className="row mb-4">
+                      <div className="col-md-6">
+                          <label htmlFor="universidadNombre" className="label-personalizado mb-2">Agregar una nueva Universidad</label>
+                          <input type="text" className="form-control" name="universidad_fk.nombre" id="universidadNombre" value={formData.universidad_fk.nombre} onChange={handleChange} required />
+                      </div>
+                      <div className="col-md-6">
+                          <label htmlFor="universidadPais" className="label-personalizado mb-2">Agregar país de la nueva Universidad</label>
+                          <input type="text" className="form-control" name="universidad_fk.pais" id="pais_universidad" value={formData.universidad_fk.pais} onChange={handleChange} required />
+                      </div>
+                    </div>
+                  </>
+              )}
               <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de especialidad</label>

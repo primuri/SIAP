@@ -4,7 +4,8 @@ import icono from '../../assets/person-i.png';
 
 export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
     // Cargar informacion
-    
+    const [fileData, setFileData] = useState(null);
+
     const [formData, setFormData] = useState({
         id_documentos_asociados: propuesta ? propuesta.id_documentos_asociados: "",
         detalle: propuesta ? propuesta.detalle : "",
@@ -103,19 +104,19 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
    
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        const fileName = file ? file.name : ""; 
-        setFormData(prev => ({
-            ...prev,
-            documento: fileName
-        }));
+        setFileData(file);  
     };
     
+    const sendForm = (event) => {
+        event.preventDefault();
     
-  const sendForm = (event) => {
-    event.preventDefault();
-    const jsonData = JSON.stringify(formData);
-    onSubmit(jsonData);
-  };
+        const combinedData = new FormData();
+        if (fileData) {
+            combinedData.append('documento', fileData);
+        }
+        combinedData.append('json', JSON.stringify(formData));
+        onSubmit(combinedData);
+    };
 
     return(
         <>
@@ -137,7 +138,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
             </div>   
         </div>
 
-        <form onSubmit={sendForm} className='d-flex flex-column'>
+        <form onSubmit={sendForm} className='d-flex flex-column' encType="multipart/form-data">
             <div className="modal-body" style={{padding: '3vh 4vw'}}>
                 <div className="container">
 
@@ -259,7 +260,15 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     <div className="row mb-4">
                         <div className="col-md-6">
                             <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">Documento</label>
-                            <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange} />
+                            <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange} 
+                            required={mode==1? true: ''} />
+                            {mode == 2? (
+                            <a href={formData.documento} target="blank_" 
+                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                {formData.documento.split('/').pop()}
+                            </a>
+                            ) 
+                            : ""}
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del Documento</label>
