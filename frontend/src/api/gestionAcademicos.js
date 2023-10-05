@@ -184,9 +184,10 @@ const agregarTelefonos = (telefonos, id_academico, token) => {
 export const actualizarTitulos = (titulos, token) => {
     try {
         titulos.forEach(async titulo => {
-            let id_titulos = titulo.id_titulos
-            delete titulo.id_titulos
-            delete titulo.id_academico_fk
+            let id_titulos = titulo.id_titulos;
+            let id_academico = titulo.id_academico_fk.id_academico;
+            delete titulo.id_academico_fk;
+            titulo.id_academico_fk = id_academico;
             await SIAPAPI.put(`personas/titulos/${id_titulos}/`, titulo, {
                 headers: {
                     'Authorization': `token ${token}`,
@@ -305,6 +306,21 @@ export const obtenerUniversidad = async (universidad, token) => {
         });
         const id_universidad_creada = response_universidad.data.id_universidad;
         return id_universidad_creada;
+    } catch (error) {
+        console.error("Error agregando universidad: ", error);
+        throw error;
+    }
+};
+
+export const obtenerUniversidadCompleta = async (universidad, token) => {
+    try {
+        const response_universidad = await SIAPAPI.post('personas/universidad/', universidad, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return response_universidad.data;
     } catch (error) {
         console.error("Error agregando universidad: ", error);
         throw error;
