@@ -364,3 +364,23 @@ input[type="submit"]:focus {
   max-width: 150% !important;
 }
 
+.agregarBtn{
+  color: black;
+}
+
+.eliminarBtn{
+  color: black;
+}
+
+.MuiInputBase-root, .MuiOutlinedInput-root, .MuiInputBase-colorPrimary, .MuiInputBase-fullWidth, .MuiInputBase-formControl, .MuiInputBase-adornedEnd, .MuiAutocomplete-inputRoot, .css-1h51icj-MuiAutocomplete-root .MuiOutlinedInput-root, .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
+  background-color: var(--gris-claro-ucr);
+  height: 40px;
+  text-align: center;
+  border: none;
+  max-width: 13.5vw!important;
+}
+
+.css-1h51icj-MuiAutocomplete-root .MuiOutlinedInput-root, .css-1wuilmg-MuiAutocomplete-root .MuiOutlinedInput-root {
+  font-family: var(--bs-body-font-family)!important;
+  padding: 0px 5px!important;
+}

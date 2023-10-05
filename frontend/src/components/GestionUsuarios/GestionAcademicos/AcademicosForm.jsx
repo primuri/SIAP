@@ -140,9 +140,11 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         event.preventDefault()
         if (titulos.length > 0) {
             formData.titulos = titulos
+            console.log(titulos)
         }
         if (telefonos.length > 0) {
             formData.telefonos = telefonos
+            console.log(telefonos)
         }
         const jsonData = JSON.stringify(formData)
         onSubmit(jsonData)
@@ -253,24 +255,24 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
-                                <Autocomplete
+                                <Autocomplete className="universidadAuto"
                                     value={formData.universidad_fk}
                                     onChange={(event, newValue) => {
                                         if (typeof newValue === 'string') {
                                             setFormData({
                                                 ...formData,
-                                                universidad_fk: {nombre: newValue, pais:formData.universidad_fk.pais},
+                                                universidad_fk: { nombre: newValue, pais: formData.universidad_fk.pais },
                                             });
                                         } else if (newValue && newValue.inputValue) {
                                             // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
-                                                universidad_fk: {nombre: newValue.inputValue, pais:formData.universidad_fk.pais},
+                                                universidad_fk: { nombre: newValue.inputValue, pais: formData.universidad_fk.pais },
                                             });
                                         } else {
                                             setFormData({
                                                 ...formData,
-                                                universidad_fk: {nombre: newValue.nombre, pais: formData.universidad_fk.pais},
+                                                universidad_fk: { nombre: newValue.nombre, pais: formData.universidad_fk.pais },
                                             });
                                         }
                                     }}
@@ -308,10 +310,9 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                         return option.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
-                                    sx={{ width: 300 }}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control"/>
+                                        <TextField {...params} className="form-control" />
                                     )}
                                 />
                             </div >
@@ -323,18 +324,18 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                         if (typeof newValue === 'string') {
                                             setFormData({
                                                 ...formData,
-                                                universidad_fk: {nombre: formData.universidad_fk.nombre, pais:newValue},
+                                                universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue },
                                             });
                                         } else if (newValue && newValue.inputValue) {
                                             // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
-                                                universidad_fk: {nombre: formData.universidad_fk.nombre, pais:newValue.inputValue},
+                                                universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue.inputValue },
                                             });
                                         } else {
                                             setFormData({
                                                 ...formData,
-                                                universidad_fk: {nombre: formData.universidad_fk.nombre, pais:newValue.pais},
+                                                universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue.pais },
                                             });
                                         }
                                     }}
@@ -374,20 +375,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     sx={{ width: 300 }}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control"/>
+                                        <TextField {...params} className="form-control" />
                                     )}
                                 />
                             </div>
-                        </div>
-
-                        <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2">Títulos </label>
-                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
-                        </div>
-                        <hr></hr>
-                        <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2">Telefonos </label>
-                            <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
                         </div>
 
                         <div className="row mb-4 mt-4">
@@ -407,19 +398,30 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                         </div>
 
-
                         <div className="row mb-4">
 
                             <div className="col-md-6">
                                 <label htmlFor="areaTrabajo" className="label-personalizado mb-2">Área de Trabajo</label>
                                 <input type="text" className="form-control" name="area_de_trabajo" id="area_de_trabajo" value={formData.area_de_trabajo} onChange={handleChange} />
                             </div>
-                        </div>
-
-                        <div className="col-md-6">
+                            <div className="col-md-6">
                             <label className="label-personalizado mb-2" htmlFor="foto">Subir Foto</label>
                             <input type="file" className="form-control" name="foto" id="foto" onChange={handleFileChange} />
                         </div>
+                        </div>
+                        <hr></hr>
+
+                        <div className="d-flex flex-column">
+                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos </label>
+                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
+                        </div>
+                        <hr></hr>
+                        <div className="d-flex flex-column">
+                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos </label>
+                            <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
+                        </div>
+
+                        
 
                     </div>
                 </div>

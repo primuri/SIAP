@@ -51,11 +51,11 @@ export const FormularioDinamico = ({ items, setItems, configuracion }) => {
                         ))}
                     
                     
-                        <button type="button" className="rounded mb-2 " style={{width:"95%"}} onClick={() => eliminarItem(index)}>Eliminar</button>
+                        <button type="button" className="rounded mb-2 eliminarBtn" onClick={() => eliminarItem(index)}>Eliminar</button>
                     
                 </>
         ))}
-            <button type="button" className="rounded" style={{width:"95%"}} onClick={agregarItem}>+</button>
+            <button type="button" className="rounded agregarBtn " style={{width:"100%"}} onClick={agregarItem}>+</button>
         </>
     );
 };
