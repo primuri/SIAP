@@ -225,13 +225,13 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula</label>
+                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula <span class="required">*</span> </label>
                                     <input type="text" className="form-control" name="cedula" id="cedula" value={formData.cedula} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
+                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span class="required">*</span> </label>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.nombre" id="nombre" value={formData.id_nombre_completo_fk.nombre || ""} onChange={handleChange} required />
                                 </div>
                             </div>
@@ -240,21 +240,21 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="apellido" className="label-personalizado mb-2">Primer Apellido</label>
+                                    <label htmlFor="apellido" className="label-personalizado mb-2">Primer Apellido <span class="required">*</span> </label>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.apellido" id="apellido" value={formData.id_nombre_completo_fk.apellido || ""} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo Apellido</label>
-                                    <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} required/>
+                                    <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange}/>
                                 </div>
                             </div>
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="paisProcedencia" className="label-personalizado mb-2">País de Procedencia</label>
+                                <label htmlFor="paisProcedencia" className="label-personalizado mb-2">País de Procedencia <span class="required">*</span> </label>
                                 <select className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} required>
                                     <option value="">Seleccione un país</option>
                                     {Paises.map((pais) => (
@@ -262,30 +262,34 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
+                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span class="required">*</span></label>
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
 
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Sitio Web</label>
+                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página Personal</label>
                                 <input type="url" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
                             <div className="col-md-6 position-relative">
-                                <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen</label>
+                                <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen <span class="required">*</span> </label>
                                 <select className="form-select seleccion" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange} required>
                                     <option value="">Seleccionar categoría</option>
+                                    <option value="Catedrático">Catedrático</option>
+                                    <option value="Exbecario">Exbecario</option>
                                     <option value="Instructor">Instructor</option>
+                                    <option value="Interino Bachiller">Interino Bachiller</option>
+                                    <option value="Interino Licenciado">Interino Licenciado</option>
                                     <option value="Profesor Adjunto">Profesor Adjunto</option>
                                     <option value="Profesor Asociado">Profesor Asociado</option>
-                                    <option value="Catedrático">Catedrático</option>
+                                    <option value="No Aplica">No Aplica</option>
                                 </select>
                             </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
+                                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad <span class="required">*</span> </label>
                                 <Autocomplete className="universidadAuto"
                                     value={formData.universidad_fk}
                                     onChange={(event, newValue) => {
@@ -348,7 +352,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 />
                             </div >
                             <div className="col-md-6">
-                                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad</label>
+                                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad <span class="required">*</span> </label>
                                 <Autocomplete
                                     value={formData.universidad_fk}
                                     onChange={(event, newValue) => {
@@ -414,7 +418,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
                         <div className="row mb-4 mt-4">
                             <div className="col-md-6 position-relative">
-                                <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado Máximo</label>
+                                <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado Máximo <span class="required">*</span> </label>
                                 <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
                                     <option value="">Seleccionar grado</option>
                                     <option value="Br">Bachiller</option>
@@ -424,7 +428,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad</label>
+                                <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad <span class="required">*</span> </label>
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required/>
                             </div>
                         </div>
@@ -432,7 +436,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
 
                             <div className="col-md-6">
-                                <label htmlFor="areaTrabajo" className="label-personalizado mb-2">Área de Trabajo</label>
+                                <label htmlFor="areaTrabajo" className="label-personalizado mb-2">Área de Trabajo <span class="required">*</span> </label>
                                 <input type="text" className="form-control" name="area_de_trabajo" id="area_de_trabajo" value={formData.area_de_trabajo} onChange={handleChange} required/>
                             </div>
                             <div className="col-md-6">
@@ -443,12 +447,12 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <hr></hr>
 
                         <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos </label>
+                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos <span class="required">*</span> </label>
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
                         </div>
                         <hr></hr>
                         <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos </label>
+                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos <span class="required">*</span> </label>
                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
                         </div>
 

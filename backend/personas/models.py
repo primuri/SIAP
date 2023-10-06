@@ -6,7 +6,7 @@ class NombreCompleto(models.Model):
     id_nombre_completo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
     apellido = models.CharField(max_length=150)
-    segundo_apellido = models.CharField(max_length=150)
+    segundo_apellido = models.CharField(max_length=150, blank=True, null=True)
 
     class Meta:
         db_table = 'nombre_completo'

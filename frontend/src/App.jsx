@@ -9,8 +9,6 @@ import { Home } from './pages/Home'
 import { Sidebar } from './components/Layout/Sidebar'
 import { Footer } from './components/Layout/Footer'
 
-
-
 function App() {
   useEffect(() => {
     const user = localStorage.getItem('user');
