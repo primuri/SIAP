@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from ..models import DocumentoAsociado, PropuestaProyecto
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 class DocumentoAsociadoTests(APITestCase):
 
@@ -96,17 +98,19 @@ class DocumentoAsociadoTests(APITestCase):
         response = self.client.post(reverse('propuestaproyecto-list'), self.propuesta_proyecto_data, format='json')
         self.propuesta_proyecto_id = response.data['id_codigo_cimpa']
 
+        file = SimpleUploadedFile("documento1.pdf", b"content of the pdf")
+
         # Crea los datos de Prueba
         self.data = {
             'detalle': 'Detalle de documento',
-            'documento': 'Enlace/documento1.pdf',
+            'documento': file,
             'id_codigo_cimpa_fk': self.propuesta_proyecto_id
         }
 
     def test_post_documento_asociado(self):
 
         url = reverse('documentoasociado-list')
-        response = self.client.post(url, self.data, format='json')
+        response = self.client.post(url, self.data, format='multipart')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -114,42 +118,44 @@ class DocumentoAsociadoTests(APITestCase):
         self.assertEqual(DocumentoAsociado.objects.get().detalle, 'Detalle de documento')
 
     def test_put_documento_asociado(self):
+        file = SimpleUploadedFile("documento6.pdf", b"content of the pdf66")
 
         # Datos actualizados
         update_data = {
             'detalle': 'Detalle actualizado',
-            'documento': 'Enlace/documento2.pdf',
+            'documento': file,
             'id_codigo_cimpa_fk': self.propuesta_proyecto_id
         }
 
-        self.client.post(reverse('documentoasociado-list'), self.data, format='json')
+        self.client.post(reverse('documentoasociado-list'), self.data, format='multipart')
         url = reverse('documentoasociado-detail', args=[1])
-        response = self.client.put(url, update_data, format='json')
+        response = self.client.put(url, update_data, format='multipart')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(DocumentoAsociado.objects.get().detalle, 'Detalle actualizado')
 
     def test_get_lista_documentos_asociados(self):
+        file2 = SimpleUploadedFile("documento2.pdf", b"content of the pdf2")
 
         # Creando datos de prueba 2
         data2 = {
             'detalle': 'Otro detalle',
-            'documento': 'Enlace/documento3.pdf',
+            'documento': file2,
             'id_codigo_cimpa_fk': self.propuesta_proyecto_id
         }
 
         data3 = {
             'detalle': 'Detalle Duplicado',
-            'documento': 'Enlace/documento3.pdf',  
+            'documento': file2,  
             'id_codigo_cimpa_fk': self.propuesta_proyecto_id 
         }
 
-        self.client.post(reverse('documentoasociado-list'), self.data, format='json')
-        self.client.post(reverse('documentoasociado-list'), data2, format='json')
+        self.client.post(reverse('documentoasociado-list'), self.data, format='multipart')
+        self.client.post(reverse('documentoasociado-list'), data2, format='multipart')
         url = reverse('documentoasociado-list')
         response = self.client.get(url)
-        response2 = self.client.post(reverse('documentoasociado-list'), data3, format='json')
+        response2 = self.client.post(reverse('documentoasociado-list'), data3, format='multipart')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -159,7 +165,7 @@ class DocumentoAsociadoTests(APITestCase):
 
     def test_get_buscar_documento_asociado(self):
 
-        self.client.post(reverse('documentoasociado-list'), self.data, format='json')
+        self.client.post(reverse('documentoasociado-list'), self.data, format='multipart')
         url = reverse('documentoasociado-detail', args=[1])
         response = self.client.get(url)
 
@@ -169,7 +175,7 @@ class DocumentoAsociadoTests(APITestCase):
 
     def test_delete_documento_asociado(self):
 
-        self.client.post(reverse('documentoasociado-list'), self.data, format='json')
+        self.client.post(reverse('documentoasociado-list'), self.data, format='multipart')
         url = reverse('documentoasociado-detail', args=[1])
         response = self.client.delete(url)
 

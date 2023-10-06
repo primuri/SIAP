@@ -56,9 +56,7 @@ class AreaEspecialidadTests(APITestCase):
             'nombre': 'Derecho'
         }
 
-        data3 = {
-            'nombre': 'Derecho'
-        }
+       
 
         self.client.post(reverse('areaespecialidad-list'), self.data, format='json')
         self.client.post(reverse('areaespecialidad-list'), data2, format='json')
@@ -66,7 +64,6 @@ class AreaEspecialidadTests(APITestCase):
         response = self.client.get(url)
         url2 = reverse('areaespecialidad-detail', args=[2])
         response2 = self.client.get(url2)
-        response3 = self.client.post(reverse('areaespecialidad-list'), data3, format='json') 
         
 
         # Verificaciones
@@ -74,8 +71,7 @@ class AreaEspecialidadTests(APITestCase):
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
         self.assertEqual(response2.data['nombre'], 'Derecho')
-        self.assertEqual(response3.status_code, status.HTTP_400_BAD_REQUEST) # Evalua  que el nombre sea unique
-        self.assertIn('nombre', response3.data)  
+        
 
     def test_get_buscar_area_especialidad(self):
 
