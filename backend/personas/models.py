@@ -13,7 +13,7 @@ class NombreCompleto(models.Model):
 
 class AreaEspecialidad(models.Model):
     id_area_especialidad = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=128)
+    nombre = models.CharField(max_length=128, unique=True)
 
     class Meta:
         db_table = 'area_especialidad'

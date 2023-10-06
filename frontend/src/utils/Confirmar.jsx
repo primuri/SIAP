@@ -1,22 +1,24 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-export const Confirmar = () => {
+
+export const Confirmar = ({ onConfirm, onCancel }) => {
     return(
         <div className="modal d-block" tabIndex="-1">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content" >
             <div className="modal-header">
-                <h2>ELIMINAR</h2>
+                <h4>ELIMINAR</h4>
+                <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                    <span aria-hidden="true" className="close-icon">&times;</span>
+                </button>
             </div>
             <div className="modal-body">
-              <p>Se eliminará el registro seleccionado permanentemente</p>
+              <p>¿Está seguro de que desea eliminar este registro?</p>
             </div>
             <div className="modal-footer">
                 <div className="row">
                     <div className="col">
-                        <button type="button" className='delete-button border-0 p-2 rounded text-white'> Eliminar </button>
-                    </div>
-                    <div className="col">
-                        <button type="button" className='cancel-button border-0 p-2 rounded text-white' data-bs-dismiss="modal"> Cancelar </button>
+                        <button type="button" className='delete-button border-0 p-2 rounded text-white' onClick={onConfirm}> Eliminar </button>
                     </div>
                 </div>
             </div>
@@ -25,3 +27,10 @@ export const Confirmar = () => {
       </div>
       )
 }
+
+Confirmar.propTypes = {
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
+
+export default Confirmar;

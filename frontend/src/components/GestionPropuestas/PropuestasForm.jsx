@@ -1,10 +1,12 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
 import icono from '../../assets/person-i.png';
+import { Confirmar } from '../../utils/Confirmar'
 
 export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const [formData, setFormData] = useState({
         id_documentos_asociados: propuesta ? propuesta.id_documentos_asociados: "",
@@ -117,6 +119,20 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
         combinedData.append('json', JSON.stringify(formData));
         onSubmit(combinedData);
     };
+
+    const handleDeleteClick = () => {
+        setShowConfirmation(true);
+    };
+    
+    const handleDeleteConfirm = () => {
+        onDelete();
+        setShowConfirmation(false);
+    };
+    
+    const handleDeleteCancel = () => {
+        setShowConfirmation(false);
+    };
+    
 
     return(
         <>
@@ -287,7 +303,10 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     </div>
                     <div className="col">
                         {mode === 2 && (
-                            <button type="button" id="boton-personalizado" onClick={onDelete} className='delete-button border-0 p-2 rounded text-white'> Eliminar </button>
+                            <>
+                                <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                {showConfirmation && ( <Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} /> )}
+                            </>
                         )}
                     </div>
                 </div>

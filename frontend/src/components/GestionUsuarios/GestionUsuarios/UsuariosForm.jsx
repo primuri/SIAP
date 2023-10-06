@@ -4,7 +4,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { obtenerAcademicos } from "../../../api/gestionAcademicos";
 import { obtenerEvaluadores } from "../../../api/gestionEvaluadores";
 import icono from '../../../assets/person-i.png';
-
+import { Confirmar } from '../../../utils/Confirmar'
 
 export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
     // Cargar informacion
@@ -12,6 +12,8 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
     const [academicosFilter, setAcademicosFilter] = useState([]);
     const [evaluadores, setEvaluadores] = useState([]);
     const [evaluadoresFilter, setEvaluadoresFilter] = useState([]);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
     //Cargan todos los academicos y evaluadores, para poderlos asignar
     useEffect(() => {
         loadAcademicos();
@@ -181,7 +183,19 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
         onSubmit(jsonData);
     };
     
-
+    const handleDeleteClick = () => {
+        setShowConfirmation(true);
+    };
+    
+    const handleDeleteConfirm = () => {
+        onDelete();
+        setShowConfirmation(false);
+    };
+    
+    const handleDeleteCancel = () => {
+        setShowConfirmation(false);
+    };
+    
     return (
         <>
            <div className="modal-header pb-0 position-sticky top-0">
@@ -335,16 +349,16 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
             <div className="modal-footer justify-content-center">
                 <div className="row">
                     <div className="col">
-                        <button id="boton-personalizado2" type="submit" className="table-button border-0 p-2 rounded text-white">
+                        <button id="boton-personalizado" type="submit" className="table-button border-0 p-2 rounded text-white">
                             {mode === 1 ? "Agregar" : "Guardar"}
                         </button>
                         </div>
                     <div className="col">
                         {mode === 2 && (
-                            <button id="boton-personalizado2" type="button" onClick={onDelete} className="delete-button border-0 p-2 rounded text-white">
-                                {" "}
-                                Eliminar{" "}
-                            </button>
+                            <>
+                                <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                {showConfirmation && ( <Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} /> )}
+                            </>
                         )}
                     </div>
                 </div>

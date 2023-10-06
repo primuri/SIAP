@@ -7,6 +7,9 @@ import icono from '../../../assets/person-i.png';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import * as React from 'react';
+import { Confirmar } from '../../../utils/Confirmar'
+import Paises from '../../../utils/Paises.json'
+
 
 const filter = createFilterOptions();
 
@@ -23,7 +26,10 @@ const configuracionTelefonos = [
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
     const [titulos, setTitulos] = useState([])
     const [telefonos, setTelefonos] = useState([])
-    const [universidades, setUniversidades] = useState([])
+    const [universidades, setUniversidades] = useState([]) 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [paisSeleccionado, setPaisSeleccionado] = useState(academico ? academico.pais_procedencia : "");
+
     // Si hay informacion en el academico, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         cedula: academico ? academico.cedula : "",
@@ -109,6 +115,14 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const handleChange = (event) => {
         const { name, value } = event.target
 
+        if (name === "pais_procedencia") {
+            setPaisSeleccionado(value);
+            setFormData({
+              ...formData,
+              [name]: value,
+            });
+        }
+
         if (name.includes('.')) {
             const keys = name.split('.')
             setFormData(prev => ({
@@ -160,6 +174,19 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         return nombresUnicos.map(nombre => universidades.find(u => u.nombre === nombre));
     };
 
+    const handleDeleteClick = () => {
+        setShowConfirmation(true);
+    };
+    
+    const handleDeleteConfirm = () => {
+        onDelete();
+        setShowConfirmation(false);
+    };
+    
+    const handleDeleteCancel = () => {
+        setShowConfirmation(false);
+    };
+    
     return (
         <div>
             <div className="modal-header pb-0 position-sticky top-0">
@@ -220,7 +247,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo Apellido</label>
-                                    <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
+                                    <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} required/>
                                 </div>
                             </div>
                         </div>
@@ -228,7 +255,11 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="paisProcedencia" className="label-personalizado mb-2">País de Procedencia</label>
-                                <input type="text" className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} />
+                                <select className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} required>
+                                    <option value="">Seleccione un país</option>
+                                    {Paises.map((pais) => (
+                                        <option key={pais.value} value={pais.value}> {pais.label} </option> ))}
+                                </select>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
@@ -243,7 +274,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen</label>
-                                <select className="form-select seleccion" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange}>
+                                <select className="form-select seleccion" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange} required>
                                     <option value="">Seleccionar categoría</option>
                                     <option value="Instructor">Instructor</option>
                                     <option value="Profesor Adjunto">Profesor Adjunto</option>
@@ -384,7 +415,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4 mt-4">
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado Máximo</label>
-                                <select className="form-control" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
+                                <select className="form-control" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange} required>
                                     <option value="">Seleccionar grado</option>
                                     <option value="Br">Bachiller</option>
                                     <option value="Lic">Licenciado</option>
@@ -394,7 +425,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad</label>
-                                <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} />
+                                <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required/>
                             </div>
                         </div>
 
@@ -402,7 +433,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
                             <div className="col-md-6">
                                 <label htmlFor="areaTrabajo" className="label-personalizado mb-2">Área de Trabajo</label>
-                                <input type="text" className="form-control" name="area_de_trabajo" id="area_de_trabajo" value={formData.area_de_trabajo} onChange={handleChange} />
+                                <input type="text" className="form-control" name="area_de_trabajo" id="area_de_trabajo" value={formData.area_de_trabajo} onChange={handleChange} required/>
                             </div>
                             <div className="col-md-6">
                             <label className="label-personalizado mb-2" htmlFor="foto">Subir Foto</label>
@@ -435,7 +466,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         </div>
                         <div className="col">
                             {mode === 2 && (
-                                <button id="boton-personalizado" type="button" onClick={onDelete} className='delete-button border-0 p-2 rounded text-white'> Eliminar </button>
+                                <>
+                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                    {showConfirmation && ( <Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} /> )}
+                                </>
                             )}
                         </div>
                     </div>

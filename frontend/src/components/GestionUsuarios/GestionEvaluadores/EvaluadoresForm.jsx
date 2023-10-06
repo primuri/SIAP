@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import {toast, Toaster} from 'react-hot-toast'
 import { obtenerUniversidades } from "../../../api/gestionAcademicos";
 import icono from '../../../assets/person-i.png';
+import { Confirmar } from '../../../utils/Confirmar'
 
 export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }) => {
   // Cargar informacion
   const [universidades, setUniversidades] = useState([])
   const [universidadesFilter, setUniversidadesFilter] = useState([]);
   const [modoUniversidad, setModoUniversidad] = useState(mode==1?"seleccionar":"agregar")
-  
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   const [formData, setFormData] = useState({
     tipo: evaluador ? evaluador.tipo : "",
     correo: evaluador ? evaluador.correo : "",
@@ -97,6 +99,19 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
     onSubmit(jsonData);
   };
 
+  const handleDeleteClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    onDelete();
+    setShowConfirmation(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowConfirmation(false);
+  };
+
     return(
         <>
         <div className="modal-header pb-0 position-sticky top-0">
@@ -146,7 +161,7 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
               <div className="row mb-4">
                 <div className="col-md-6">
                   <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label>
-                  <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange}/>
+                  <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} required/>
                 </div>
                 <div className="col-md-6">
                     <label htmlFor="correo" className="label-personalizado mb-2">Correo</label>
@@ -170,6 +185,7 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
                               value={formData.universidad_fk ? formData.universidad_fk.nombre : ""}
                               onChange={handleChange}
                               className="form-control"
+                              required
                           />
                           {universidadesFilter.length > 0 && (
                               <div
@@ -228,11 +244,11 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
               <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de especialidad</label>
-                    <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange}/>
+                    <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required/>
                 </div>
                 <div className="col-md-6">
                   <label htmlFor="tipo" className="label-personalizado mb-2">Tipo</label>               
-                  <select className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange}>
+                  <select className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
                       <option value="">Seleccionar tipo</option>
                       <option value="Interno">Interno</option>
                       <option value="Externo">Externo Adjunto</option>
@@ -251,7 +267,10 @@ export const EvaluadoresForm = ({onSubmit, mode, evaluador, onCancel, onDelete }
                     </div>
                     <div className="col">
                         {mode === 2 && (
-                            <button id="boton-personalizado" type="button" onClick={onDelete} className='delete-button border-0 p-2 rounded text-white'> Eliminar </button>
+                            <>
+                                <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                {showConfirmation && ( <Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} /> )}
+                            </>
                         )}
                     </div>
                 </div>
