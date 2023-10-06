@@ -108,24 +108,30 @@ export const GestionPropuestas = () => {
             const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
             
             
-                let fecha_inicio_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio;
+            let fecha_inicio_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio;
+            let fecha_fin_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin;
+
+            if (!fecha_inicio_adaptada) {
+                fecha_inicio_adaptada = null;
+            }else {
                 if (!fecha_inicio_adaptada.endsWith("Z")) {
                     fecha_inicio_adaptada += "T00:00:00Z";
                 }
-            
-                let fecha_fin_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin;
+            }
+
+            if (!fecha_fin_adaptada) {
+               fecha_fin_adaptada = null;
+            } else {
                 if (!fecha_fin_adaptada.endsWith("Z")) {
                     fecha_fin_adaptada += "T00:00:00Z";
                 }
+            }
             
-                const vigencia = {
-                    fecha_inicio: fecha_inicio_adaptada,
-                    fecha_fin: fecha_fin_adaptada
-                }
+            const vigencia = {
+                fecha_inicio: fecha_inicio_adaptada,
+                fecha_fin: fecha_fin_adaptada
+            }
                 
-            
-            
-
             await editarVigencia(id_vig,vigencia, localStorage.getItem("token"))
             const id_vigencia_editada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia
             delete Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk

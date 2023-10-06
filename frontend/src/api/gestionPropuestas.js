@@ -20,12 +20,23 @@ export const agregarDocumento = async (combinedData,  token) => {
     try {
         const documento_asociado = JSON.parse(combinedData.get('json'));
         combinedData.delete('json');
-        const vigencia = {
-            fecha_inicio: documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio,
-            fecha_fin: documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin
-        };
+        let fecha_ini = documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio;
+        let fecha_fi = documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin;
+       
+
+        if (!fecha_ini || fecha_ini.trim() === "") {
+            fecha_ini = null;
+        }
         
-        const id_vigencia_creado = await agregarVigencia(vigencia,token);
+        if (!fecha_fi || fecha_fi.trim() === ""){
+            fecha_fi = null;
+        }
+        const vigencia = {
+                fecha_inicio: fecha_ini,
+                fecha_fin: fecha_fi
+        } 
+        const id_vigencia_creado = await agregarVigencia(vigencia,token)
+        
         delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk;
         documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_creado;
         const id_academi = documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico
