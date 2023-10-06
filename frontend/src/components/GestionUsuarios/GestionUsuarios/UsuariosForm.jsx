@@ -54,6 +54,7 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
     }
 
     const [formData, setFormData] = useState({
+        id: usuario ? usuario.id : "",
         correo: usuario ? usuario.correo : "",
         rol: usuario ? usuario.groups[0] : "",
         password: "",

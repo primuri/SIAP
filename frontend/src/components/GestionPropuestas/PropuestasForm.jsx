@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
 
+
 export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
@@ -249,7 +250,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     <div className="row mb-2">
                         <div className="col"> </div>
                         <div className="col"> 
-                            <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia del Colaborador <span class="required">*</span> </label>
+                            <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia del Colaborador</label>
                         </div>
                         <div className="col"> </div>
                     </div>

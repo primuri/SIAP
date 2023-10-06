@@ -70,7 +70,7 @@ export const GestionUsuarios = () => {
     const editUsuario = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            await actualizarUsuario(Datos.correo,Datos,localStorage.getItem('token'))
+            await actualizarUsuario(Datos.id,Datos,localStorage.getItem('token'))
             toast.success('Usuario actualizado correctamente', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
@@ -93,9 +93,9 @@ export const GestionUsuarios = () => {
         }
     }
     // Manejo del eliminar
-    const deleteUsuario = async (correo) => {
+    const deleteUsuario = async (id) => {
         try{
-            await eliminarUsuario(correo,localStorage.getItem('token'))
+            await eliminarUsuario(id,localStorage.getItem('token'))
             toast.success('Usuario eliminado correctamente', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
@@ -170,7 +170,7 @@ export const GestionUsuarios = () => {
                             mode={2}
                             onSubmit={editUsuario} 
                             onCancel={onCancel} 
-                            onDelete={() => deleteUsuario(usuario.correo)}
+                            onDelete={() => deleteUsuario(usuario.id)}
                             usuario={usuario}
                         >
                         </UsuariosForm>

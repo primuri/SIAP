@@ -13,12 +13,13 @@ urlpatterns = [
     path('producto/', include('producto.urls')),
     path('version_proyecto/', include('version_proyecto.urls')),
     path('propuesta_proyecto/', include('propuesta_proyecto.urls')),
-    path('signup', views.signup),
-    path('login', views.login),
-    path('test_token', views.test_token),
-    path('obtener_usuarios', views.get_users),
-    path('actualizar_usuario/<str:correo>/', views.update_user),
-    path('eliminar_usuario/<str:correo>/', views.delete_user),
+    path('signup', views.signup, name='signup'),
+    path('login', views.login, name='login'),
+    path('test_token', views.test_token, name='test_token'),
+    path('obtener_usuarios', views.get_users, name='obtener_usuarios'),
+    path('usuario/<int:id>/', views.get_user_by_id, name='get_user_by_id'),
+    path('actualizar_usuario/<int:id>/', views.update_user, name='actualizar_usuario'),
+    path('eliminar_usuario/<int:id>/', views.delete_user, name='eliminar_usuario'),
 ]
 
 if settings.DEBUG:
