@@ -38,8 +38,8 @@ export const obtenerUsuarios = (token) => {
     });
 };
 
-export const eliminarUsuario = (correo, token) => {
-    return SIAPAPI.delete(`eliminar_usuario/${correo}/`,{
+export const eliminarUsuario = (id, token) => {
+    return SIAPAPI.delete(`eliminar_usuario/${id}/`,{
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type':'application/json'
@@ -47,8 +47,8 @@ export const eliminarUsuario = (correo, token) => {
     });
 };
 
-export const actualizarUsuario = (correo, usuario, token) => {
-    return SIAPAPI.patch(`actualizar_usuario/${correo}/`, usuario, {
+export const actualizarUsuario = (id, usuario, token) => {
+    return SIAPAPI.patch(`actualizar_usuario/${id}/`, usuario, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type':'application/json'

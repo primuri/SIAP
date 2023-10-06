@@ -20,6 +20,8 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
         loadEvaluadores();
     }, []);
 
+    const [showPassword, setShowPassword] = useState(false);  
+
     async function loadAcademicos() {
         try {
             const res = await obtenerAcademicos(localStorage.getItem("token"));
@@ -52,6 +54,7 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
     }
 
     const [formData, setFormData] = useState({
+        id: usuario ? usuario.id : "",
         correo: usuario ? usuario.correo : "",
         rol: usuario ? usuario.groups[0] : "",
         password: "",
@@ -234,13 +237,13 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                     <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
+                                    <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span class="required">*</span> </label>
                                     <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required/>
                                 </div>
                             </div>  
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="rol" className="label-personalizado mb-2">Rol</label>
+                                    <label htmlFor="rol" className="label-personalizado mb-2">Rol <span class="required">*</span> </label>
                                     <select className="form-select seleccion" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un rol</option>
                                         <option value="administrador">Administrador</option>
@@ -257,14 +260,15 @@ export const UsuariosForm = ({onSubmit, mode, usuario, onCancel,onDelete,}) => {
                     <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="contrasena" className="label-personalizado mb-2">Contraseña</label>
-                                    <input type="password" className="form-control" name="password" id="contrasena" value={formData.password} onChange={handleChange} required={mode !== 2 ? true : undefined}/>
+                                    <label htmlFor="contrasena" className="label-personalizado mb-2">Contraseña <span class="required">*</span> </label>
+                                    <input type={showPassword ? 'text' : 'password'} className="form-control" name="password" id="contrasena" value={formData.password} onChange={handleChange} required={mode !== 2 ? true : undefined}/>
+                                    <button type="button" className="btn btn-link" onClick={() => setShowPassword(!showPassword)}> ojo </button>
                                 </div>
                             </div>  
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="confirmarContrasena" className="label-personalizado mb-2">Confirmar contraseña</label>
-                                    <input type="password" className="form-control" name="confirmar_contrasena" id="confirmar_contrasena" value={formData.confirmar_contrasena} onChange={handleChange} required={mode !== 2 ? true : undefined}/>
+                                    <label htmlFor="confirmarContrasena" className="label-personalizado mb-2">Confirmar contraseña <span class="required">*</span> </label>
+                                    <input type={showPassword ? 'text' : 'password'} className="form-control" name="confirmar_contrasena" id="confirmar_contrasena" value={formData.confirmar_contrasena} onChange={handleChange} required={mode !== 2 ? true : undefined}/>
                                 </div>
                             </div>  
                     </div> 

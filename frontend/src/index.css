@@ -386,3 +386,23 @@ input[type="submit"]:focus {
 .css-1wuilmg-MuiAutocomplete-root {
   width: 100%!important;
 }
+
+/* Estilos para el ícono de ojo y el campo de contraseña */
+.password-input {
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  flex-grow: 1;
+}
+
+.toggle-password {
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: 18px;
+}
+
+.required {
+  color: red;
+}

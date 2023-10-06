@@ -3,12 +3,23 @@ from .models import PropuestaProyecto, Vigencia, ColaboradorPrincipal, Documento
 from personas.serializers import AcademicoSerializer
 
 class VigenciaSerializer(serializers.ModelSerializer):
+    
+    def validate_fecha_inicio(self, value):
+        if value == "":
+            return None
+        return value
+    
+    def validate_fecha_fin(self, value):
+        if value == "":
+            return None
+        return value
+
     class Meta:
         model = Vigencia
         fields = '__all__'
 
 class ColaboradorPrincipalSerializer(serializers.ModelSerializer):
-    id_vigencia_fk =  serializers.PrimaryKeyRelatedField(queryset=Vigencia.objects.all())
+    id_vigencia_fk =  serializers.PrimaryKeyRelatedField(queryset=Vigencia.objects.all(), required=False)
     id_academico_fk =  serializers.PrimaryKeyRelatedField(queryset=Academico.objects.all())
 
     class Meta:
@@ -17,7 +28,11 @@ class ColaboradorPrincipalSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(ColaboradorPrincipalSerializer, self).to_representation(instance)
-        rep['id_vigencia_fk'] = VigenciaSerializer(instance.id_vigencia_fk).data
+        if instance.id_vigencia_fk:
+            rep['id_vigencia_fk'] = VigenciaSerializer(instance.id_vigencia_fk).data
+        else:
+            rep['id_vigencia_fk'] = None
+
         rep['id_academico_fk'] = AcademicoSerializer(instance.id_academico_fk).data
         return rep
     

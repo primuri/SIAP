@@ -34,6 +34,7 @@ class UsuarioManager(BaseUserManager):
         return self._create_user(correo, password, **extra_fields)
 
 class Usuario(AbstractBaseUser, PermissionsMixin): 
+    id = models.AutoField(primary_key=True)
     correo = models.EmailField(db_index=True, unique=True, max_length=254)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

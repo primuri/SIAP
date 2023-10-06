@@ -1,11 +1,14 @@
 from django.db import models
 from personas.models import Academico
 import os
+from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class Vigencia(models.Model):
     id_vigencia = models.AutoField(primary_key=True)
-    fecha_inicio = models.DateTimeField()
-    fecha_fin = models.DateTimeField()
+    fecha_inicio = models.DateTimeField( blank=True, null=True)
+    fecha_fin = models.DateTimeField( blank=True, null=True)
 
     class Meta:
         db_table = 'vigencia'
@@ -15,7 +18,7 @@ class ColaboradorPrincipal(models.Model):
     tipo = models.CharField(max_length=80)
     carga = models.CharField(max_length=80)
     estado = models.CharField(max_length=45)
-    id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT, db_column='id_vigencia_fk')
+    id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT, db_column='id_vigencia_fk',  blank=True, null=True)
     id_academico_fk = models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
 
     class Meta:
@@ -23,10 +26,10 @@ class ColaboradorPrincipal(models.Model):
 
 class PropuestaProyecto(models.Model):
     id_codigo_cimpa = models.CharField(max_length=45, primary_key=True)
-    detalle = models.CharField(max_length=255)
+    objetivo_general = models.CharField(max_length=255)
     estado = models.CharField(max_length=45)
     nombre = models.CharField(max_length=360)
-    descripcion = models.CharField(max_length=1024)
+    descripcion = models.CharField(max_length=5000)
     fecha_vigencia = models.DateTimeField()
     actividad = models.CharField(max_length=128)
     id_colaborador_principal_fk = models.ForeignKey(ColaboradorPrincipal, on_delete=models.PROTECT, db_column='id_colaborador_principal_fk')
@@ -43,3 +46,18 @@ class DocumentoAsociado(models.Model):
     class Meta:
         db_table = 'documento_asociado'
         unique_together = (( 'documento','id_codigo_cimpa_fk'),) # Para evitar que un mismo documento asociado este 2 veces
+
+def documento_asociado_delete(sender, instance, **kwargs):
+    instance.documento.delete(save=False)
+pre_delete.connect(documento_asociado_delete, sender=DocumentoAsociado)
+
+def documento_asociado_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.documento != instance.documento:
+        obj.documento.delete(save=False)
+
+pre_save.connect(documento_asociado_sustituir, sender=DocumentoAsociado)

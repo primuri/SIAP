@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
 
+
 export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
@@ -14,7 +15,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
         documento: propuesta ? propuesta.documento : "",
         id_codigo_cimpa_fk: propuesta ? propuesta.id_codigo_cimpa_fk : {
             nombre: propuesta ? propuesta.id_codigo_cimpa_fk.nombre : "",
-            detalle: propuesta ? propuesta.id_codigo_cimpa_fk.detalle : "",
+            objetivo_general: propuesta ? propuesta.id_codigo_cimpa_fk.objetivo_general : "",
             estado: propuesta ? propuesta.id_codigo_cimpa_fk.estado : "",
             actividad: propuesta ? propuesta.id_codigo_cimpa_fk.actividad : "",
             fecha_vigencia: propuesta ? propuesta.id_codigo_cimpa_fk.fecha_vigencia : "",
@@ -160,11 +161,11 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
 
                     <div className="row mb-4">
                         <div className="col-md-6">
-                            <label htmlFor="codigoCimpa" className="label-personalizado mb-2">Código CIMPA</label>
+                            <label htmlFor="codigoCimpa" className="label-personalizado mb-2">Código CIMPA <span class="required">*</span> </label>
                             <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_codigo_cimpa" id="id_codigo_cimpa_fk.id_codigo_cimpa" value={formData.id_codigo_cimpa_fk.id_codigo_cimpa} onChange={handleChange} disabled={mode === 2 ? true : false} required/> 
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
+                            <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span class="required">*</span> </label>
                             <input type="text" className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required/> 
                         </div>
                     </div>
@@ -172,7 +173,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
 
                     <div className="row mb-4">
                         <div className="col-md-6">
-                            <label htmlFor="estado" className="label-personalizado mb-2">Estado Propuesta</label>
+                            <label htmlFor="estado" className="label-personalizado mb-2">Estado Propuesta <span class="required">*</span> </label>
                             <select className="form-select seleccion " name="id_codigo_cimpa_fk.estado" id="id_codigo_cimpa_fk.estado" value={formData.id_codigo_cimpa_fk.estado} onChange={handleChange} required>
                                 <option value="">Seleccionar estado</option>
                                 <option value="Activo">Activo</option>
@@ -180,18 +181,18 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             </select>
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="id_codigo_cimpa_fk.fecha_vigencia" className="label-personalizado mb-2">Fecha vigencia</label>
+                            <label htmlFor="id_codigo_cimpa_fk.fecha_vigencia" className="label-personalizado mb-2">Fecha vigencia <span class="required">*</span> </label>
                             <input type="date" className="form-control" name="id_codigo_cimpa_fk.fecha_vigencia" id="id_codigo_cimpa_fk.fecha_vigencia" value={formData.id_codigo_cimpa_fk.fecha_vigencia ? new Date(formData.id_codigo_cimpa_fk.fecha_vigencia).toISOString().split('T')[0] : ""} onChange={handleChange} required/> 
                         </div>
                     </div>
 
                     <div className="row mb-4">
                         <div className="col-md-6">
-                            <label htmlFor="descripcion" className="label-personalizado mb-2">Descripción</label>
+                            <label htmlFor="descripcion" className="label-personalizado mb-2">Descripción <span class="required">*</span> </label>
                             <input type="text" className="form-control" name="id_codigo_cimpa_fk.descripcion" id="id_codigo_cimpa_fk.descripcion" value={formData.id_codigo_cimpa_fk.descripcion} onChange={handleChange} required/> 
                         </div>
                         <div className="col-md-6">
-                        <label htmlFor="actividad" className="label-personalizado mb-2">Actividad </label>
+                        <label htmlFor="actividad" className="label-personalizado mb-2">Actividad <span class="required">*</span> </label>
                         <select className="form-select seleccion" name="id_codigo_cimpa_fk.actividad" id="id_codigo_cimpa_fk.actividad" value={formData.id_codigo_cimpa_fk.actividad} onChange={handleChange} required>
                                 <option value="">Seleccionar actividad</option>
                                 <option value="Acción social">Acción social</option>
@@ -202,11 +203,12 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
 
                     <div className="row mb-4">
                         <div className="col-md-6">
-                            <label htmlFor="detalle" className="label-personalizado mb-2">Detalle de la propuesta</label>
-                            <input type="text" className="form-control" name="id_codigo_cimpa_fk.detalle" id="id_codigo_cimpa_fk.detalle" value={formData.id_codigo_cimpa_fk.detalle} onChange={handleChange}required/> 
+
+                            <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo General</label>
+                            <input type="text" className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange}required/> 
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" className="label-personalizado mb-2">Colaborador(a) principal</label>
+                            <label htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" className="label-personalizado mb-2">Colaborador(a) principal <span class="required">*</span> </label>
                             <select  className="form-select seleccion"
                                 name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" 
                                 id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" 
@@ -225,7 +227,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
 
                     <div className="row mb-5">
                     <div className="col-md-6">
-                            <label  htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado Colaborador</label>
+                            <label  htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado Colaborador <span class="required">*</span> </label>
                             <select className="form-select seleccion" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.estado} onChange={handleChange} required>
                                 <option value="">Seleccionar estado</option>
                                 <option value="Activo">Activo</option>
@@ -233,7 +235,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             </select>
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="cargaColaborador" className="label-personalizado mb-2">Carga del colaborador</label>
+                            <label htmlFor="cargaColaborador" className="label-personalizado mb-2">Carga del colaborador <span class="required">*</span> </label>
                             <select className="form-select seleccion"name="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.carga} onChange={handleChange} required>
                                 <option value="">Seleccionar carga</option>
                                 <option value="1/8">1/8</option>
@@ -260,7 +262,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio" 
                             value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio 
                             ? new Date(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""} 
-                            onChange={handleChange} required/>
+                            onChange={handleChange}/>
                         </div>
                         <div className="col">
                             <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización</label>
@@ -269,13 +271,13 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin" 
                             value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin 
                             ? new Date(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""} 
-                            onChange={handleChange} required/>
+                            onChange={handleChange}/>
                         </div>
                     </div>
                     <br/>
                     <div className="row mb-4">
                         <div className="col-md-6">
-                            <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">Documento</label>
+                            <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">Documento <span class="required">*</span> </label>
                             <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange} 
                             required={mode==1? true: ''} />
                             {mode == 2? (
@@ -287,7 +289,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             : ""}
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del Documento</label>
+                            <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del Documento <span class="required">* </span> </label>
                             <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required/>
                         </div>
                     </div>
