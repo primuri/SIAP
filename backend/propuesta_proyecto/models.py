@@ -2,6 +2,7 @@ from django.db import models
 from personas.models import Academico
 import os
 from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 class Vigencia(models.Model):
@@ -49,3 +50,14 @@ class DocumentoAsociado(models.Model):
 def documento_asociado_delete(sender, instance, **kwargs):
     instance.documento.delete(save=False)
 pre_delete.connect(documento_asociado_delete, sender=DocumentoAsociado)
+
+def documento_asociado_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.documento != instance.documento:
+        obj.documento.delete(save=False)
+
+pre_save.connect(documento_asociado_sustituir, sender=DocumentoAsociado)
