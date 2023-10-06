@@ -1,0 +1,66 @@
+********************
+*General Information
+********************
+Connection Name: local
+Host Name/IP Address: localhost
+Port: 3306
+User Name: root
+Save Password: True
+
+********************
+*Advanced Information
+********************
+Settings Location: C:\Users\prisc\Documents\Navicat\MySQL\servers\localhost
+Encoding: 65001 (UTF-8)
+Keepalive Interval (sec): N/A
+Use MySQL character set: True
+Use Compression: False
+Auto Connect: False
+Use Advanced Connections: False
+
+********************
+*SSL Information
+********************
+Use SSL: False
+Use Authentication: True
+Client Key: 
+Client Certificate: 
+CA Certificate: 
+
+********************
+*SSH Information
+********************
+Use SSH Tunnel: False
+Host Name/IP Address: 
+Port: 22
+User Name: 
+Authentication Method: Password
+Save Password: False
+
+********************
+*HTTP Information
+********************
+Use HTTP Tunnel: False
+Tunnel URL: 
+Encode outgoing query with base64: False
+Use password authentication: False
+User Name: 
+Save Password: False
+Use certificate authentication: False
+Client Key: 
+Client Certificate: 
+CA Certificate: 
+Use Proxy: False
+Proxy Host: 
+Proxy Port: 0
+Proxy User Name: 
+Proxy Save Password: False
+
+********************
+*Other Information
+********************
+Server Version: N/A
+Protocol: N/A
+Info: N/A
+
+
