@@ -6,6 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { obtenerEvaluadores,agregarEvaluador,editarEvaluador,eliminarEvaluador } from "../../api/gestionEvaluadores"
 import {toast, Toaster} from 'react-hot-toast'
+import { buscarUniversidad, obtenerUniversidadCompleta } from "../../api/gestionAcademicos"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
 export const GestionEvaluadores = () => {
@@ -42,6 +43,22 @@ export const GestionEvaluadores = () => {
     const addEvaluador = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
+
+            let nombre = Datos.universidad_fk.nombre;
+            let pais = Datos.universidad_fk.pais;
+
+            var responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
+            
+            var id_univ = {};
+
+            if(responseUniversidad !== undefined){
+               id_univ  = responseUniversidad.id_universidad;
+            }else{
+                responseUniversidad = await obtenerUniversidadCompleta(Datos.universidad_fk, localStorage.getItem("token"));
+            }
+
+            delete Datos.universidad_fk;
+            Datos.universidad_fk = responseUniversidad;
             await agregarEvaluador(Datos,localStorage.getItem('token'))
             toast.success('Evaluador agregado correctamente', {
                 duration: 4000, 

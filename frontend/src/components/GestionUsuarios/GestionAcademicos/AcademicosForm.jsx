@@ -101,7 +101,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             setUniversidades(res.data)
 
         } catch (error) {
-            toast.error('Error al cargar los telefonos', {
+            toast.error('Error al cargar universidades', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -415,13 +415,13 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4 mt-4">
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado Máximo</label>
-                                <select className="form-control" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange} required>
+                                <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
                                     <option value="">Seleccionar grado</option>
                                     <option value="Br">Bachiller</option>
                                     <option value="Lic">Licenciado</option>
                                     <option value="Mtr">Máster</option>
                                     <option value="Dr">Doctor</option>
-                                </select><span className="select_arrow"></span>
+                                </select>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad</label>

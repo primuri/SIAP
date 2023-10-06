@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { buscarUniversidad, obtenerUniversidad } from './gestionAcademicos';
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -23,12 +24,12 @@ export const agregarEvaluador = async (evaluador, token) => {
         delete evaluador.id_area_especialidad_fk;
         evaluador.id_area_especialidad_fk = id_area_creada;
 
-        if(evaluador.universidad_fk.id_universidad){
+        if (evaluador.universidad_fk.id_universidad) {
             let id_uni = evaluador.universidad_fk.id_universidad
             delete evaluador.universidad_fk
             evaluador.universidad_fk = id_uni
-        }else{
-            const id_universidad_creada = await obtenerUniversidad(evaluador.universidad_fk,token);
+        } else {
+            const id_universidad_creada = await obtenerUniversidad(evaluador.universidad_fk, token);
             delete evaluador.universidad_fk;
             console.log("id_universidad_creada", id_universidad_creada)
             evaluador.universidad_fk = id_universidad_creada;
@@ -50,23 +51,34 @@ export const agregarEvaluador = async (evaluador, token) => {
 
 export const editarEvaluador = async (id, evaluador, token) => {
     const id_nom = evaluador.id_nombre_completo_fk.id_nombre_completo;
-    await editarNombre(id_nom,evaluador.id_nombre_completo_fk, localStorage.getItem("token"));
+    await editarNombre(id_nom, evaluador.id_nombre_completo_fk, localStorage.getItem("token"));
     const id_nombre_editado = evaluador.id_nombre_completo_fk.id_nombre_completo;
     delete evaluador.id_nombre_completo_fk;
     evaluador.id_nombre_completo_fk = id_nombre_editado;
 
     const id_are = evaluador.id_area_especialidad_fk.id_area_especialidad;
-    await editarArea(id_are,evaluador.id_area_especialidad_fk, localStorage.getItem("token"));
+    await editarArea(id_are, evaluador.id_area_especialidad_fk, localStorage.getItem("token"));
     const id_area_editada = evaluador.id_area_especialidad_fk.id_area_especialidad;
     delete evaluador.id_area_especialidad_fk;
     evaluador.id_area_especialidad_fk = id_area_editada;
 
-    const id_univ = evaluador.universidad_fk.id_universidad;
-    await editarUniversidad(id_univ,evaluador.universidad_fk, localStorage.getItem("token"));
-    const id_universidad_editada = evaluador.universidad_fk.id_universidad;
+    let nombre = evaluador.universidad_fk.nombre;
+    let pais = evaluador.universidad_fk.pais;
+
+    const responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
+
+    var id_univ = {};
+
+    if (responseUniversidad !== undefined) {
+        id_univ = responseUniversidad.id_universidad;
+    } else {
+        id_univ = await obtenerUniversidad(evaluador.universidad_fk, localStorage.getItem("token"));
+    }
+
     delete evaluador.universidad_fk;
-    evaluador.universidad_fk = id_universidad_editada;
-    
+   evaluador.universidad_fk = id_univ;
+
+
     const responseEvaluador = await SIAPAPI.put(`personas/evaluador/${id}/`, evaluador, {
         headers: {
             'Authorization': `token ${token}`,
@@ -95,10 +107,10 @@ const obtenerNombre = async (nombre, token) => {
         });
         const id_nombre_creado = response_nombre.data.id_nombre_completo;
         return id_nombre_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando nombre: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarNombre = async (id, nombre, token) => {
@@ -121,7 +133,7 @@ export const eliminarNombre = async (id, token) => {
 };
 
 const obtenerArea = async (area, token) => {
-     try {
+    try {
         const response_area = await SIAPAPI.post('personas/area_especialidad/', area, {
             headers: {
                 'Authorization': `token ${token}`,
@@ -130,7 +142,7 @@ const obtenerArea = async (area, token) => {
         });
         const id_area_creada = response_area.data.id_area_especialidad;
         return id_area_creada;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando area de especialidad: ", error);
         throw error;
     }
@@ -155,22 +167,6 @@ export const eliminarArea = async (id, token) => {
     });
 };
 
-
-const obtenerUniversidad = async (universidad, token) => {
-    try {
-        const response_universidad = await SIAPAPI.post('personas/universidad/', universidad, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        const id_universidad_creada = response_universidad.data.id_universidad;
-        return id_universidad_creada;
-    } catch(error) {
-        console.error("Error agregando universidad: ", error);
-        throw error;
-    }
-};
 
 export const editarUniversidad = async (id, universidad, token) => {
     const responseUniversidad = await SIAPAPI.put(`personas/universidad/${id}/`, universidad, {
