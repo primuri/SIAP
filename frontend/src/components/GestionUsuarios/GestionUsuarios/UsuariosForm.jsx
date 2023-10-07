@@ -246,11 +246,11 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                     <label htmlFor="rol" className="label-personalizado mb-2">Rol <span class="required">*</span> </label>
                                     <select className="form-select seleccion" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un rol</option>
-                                        <option value="administrador">Administrador</option>
-                                        <option value="academico">Investigador</option>
-                                        <option value="evaluador">Evaluador</option>
-                                        <option value="investigador-evaluador">Investigador y Evaluador</option>
-                                        <option value="invitado">Invitado</option>
+                                        <option value="administrador">Administrador(a)</option>
+                                        <option value="academico">Investigador(a)</option>
+                                        <option value="evaluador">Evaluador(a)</option>
+                                        <option value="investigador-evaluador">Investigador(a) y Evaluador(a)</option>
+                                        <option value="invitado">Invitado(a)</option>
                                     </select>
                                 </div>
                             </div>
@@ -283,7 +283,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador</label>
+                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
                                             <div className="position-relative">
                                                 <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} />
                                                 {(academicosFilter.length > 0) && (
@@ -319,7 +319,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador</label>
+                                            <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
                                             <div className="position-relative">
                                                 <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} />
                                                 {evaluadoresFilter.length > 0 && (

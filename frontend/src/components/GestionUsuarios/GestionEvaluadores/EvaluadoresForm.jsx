@@ -162,7 +162,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                 <select className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
                   <option value="">Seleccionar tipo</option>
                   <option value="Interno">Interno</option>
-                  <option value="Externo">Externo Adjunto</option>
+                  <option value="Externo">Externo</option>
                 </select>
               </div>
             </div>

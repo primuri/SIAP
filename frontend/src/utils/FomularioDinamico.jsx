@@ -10,7 +10,14 @@ export const FormularioDinamico = ({ items, setItems, configuracion }) => {
     };
     const handleInputChange = (event, index, campo) => {
         const nuevosItems = [...items];
-        nuevosItems[index][campo] = event.target.value;
+        const valor = event.target.value;
+
+        // Establece anio en 1930 si es menor.
+        if (campo === 'anio' && valor < '1930') {
+            valor = '1930';
+        }
+
+        nuevosItems[index][campo] = valor;
         setItems(nuevosItems);
     };
 
@@ -44,6 +51,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion }) => {
                                             onChange={e => handleInputChange(e, index, conf.campo)}
                                             required={conf.required}
                                             className="form-control"
+                                            min={conf.campo === 'anio' ? '1930' : undefined}
                                         />
                                     </div>
                                 ))}

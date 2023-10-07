@@ -226,7 +226,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
 
                     <div className="row mb-5">
                     <div className="col-md-6">
-                            <label  htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado Colaborador <span class="required">*</span> </label>
+                            <label  htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado Colaborador(a) <span class="required">*</span> </label>
                             <select className="form-select seleccion" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.estado} onChange={handleChange} required>
                                 <option value="">Seleccionar estado</option>
                                 <option value="Activo">Activo</option>
@@ -234,7 +234,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                             </select>
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="cargaColaborador" className="label-personalizado mb-2">Carga del colaborador <span class="required">*</span> </label>
+                            <label htmlFor="cargaColaborador" className="label-personalizado mb-2">Carga colaborador(a) <span class="required">*</span> </label>
                             <select className="form-select seleccion"name="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.carga} onChange={handleChange} required>
                                 <option value="">Seleccionar carga</option>
                                 <option value="1/8">1/8</option>
@@ -253,7 +253,7 @@ export const PropuestasForm = ({onSubmit, mode, propuesta, onCancel, onDelete, a
                     <div className="row mb-2">
                         <div className="col"> </div>
                         <div className="col"> 
-                            <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia del Colaborador</label>
+                            <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia Colaborador(a)</label>
                         </div>
                         <div className="col"> </div>
                     </div>

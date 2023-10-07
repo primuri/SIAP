@@ -270,7 +270,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página Personal</label>
-                                <input type="url" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
+                                <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en Régimen <span class="required">*</span> </label>
