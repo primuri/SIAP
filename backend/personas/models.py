@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+import os
 import datetime
 
 class NombreCompleto(models.Model):
@@ -28,14 +29,30 @@ class Universidad(models.Model):
         unique_together = (('pais', 'nombre'),)
 
 
+def cambiar_nombre_archivo(instance, filename):
+    _, extension = os.path.splitext(filename)
+    user_id = instance.cedula
+    nuevo_nombre = f"{user_id}{extension}"
+    ruta_nuevo_archivo = os.path.join('media',nuevo_nombre)
+
+    # Renombrar el archivo en el sistema de archivos
+    os.rename(instance.foto.path, ruta_nuevo_archivo)
+
+    # Actualizar el campo 'foto' en la instancia del modelo
+    instance.foto.name = f'pfp/{nuevo_nombre}'  # Modificamos solo el nombre del archivo, no su contenido
+
+    return ruta_nuevo_archivo
+
+
 class Academico(models.Model):
     id_academico = models.AutoField(primary_key=True)
     cedula = models.CharField(max_length=20, unique=True)
-    foto = models.CharField(max_length=2048)
+    foto = models.FileField(upload_to='media/pfp', blank=True, null=True)
     sitio_web = models.CharField(max_length=255, blank=True, null=True)
     grado_maximo = models.CharField(max_length=128)
     correo = models.CharField(max_length=64)
-    area_de_trabajo = models.CharField(max_length=64)
+    correo_secundario = models.CharField(max_length=64, blank=True, null=True)
+    unidad_base = models.CharField(max_length=64)
     categoria_en_regimen = models.CharField(max_length=45)
     pais_procedencia = models.CharField(max_length=45)
     id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.CASCADE, db_column='id_nombre_completo_fk')

@@ -61,9 +61,10 @@ export const obtenerAcademicos = async (token) => {
     });
 };
 
-export const agregarAcademico = async (academico, token) => {
+export const agregarAcademico = async (formData, token) => {
 
     try {
+        const academico = JSON.parse(formData.get('json'))
         const titulos = academico?.titulos;
         const telefonos = academico?.telefonos;
         delete academico.titulos;
@@ -87,10 +88,17 @@ export const agregarAcademico = async (academico, token) => {
             console.log("id_universidad_creada", id_universidad_creada)
             academico.universidad_fk = id_universidad_creada;
         }
-        const response_academico = await SIAPAPI.post('personas/academico/', academico, {
+        delete academico.foto
+        for (const key in academico) {
+            if (Object.prototype.hasOwnProperty.call(academico, key)) {
+                formData.append(key, academico[key]);
+            }
+        }
+        
+        const response_academico = await SIAPAPI.post('personas/academico/', formData, {
             headers: {
                 'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             }
         });
         if (titulos) {
@@ -107,10 +115,10 @@ export const agregarAcademico = async (academico, token) => {
 };
 
 export const editarAcademico = async (id, academico, token) => {
-    const responseAcademico = await SIAPAPI.put(`personas/academico/${id}/`, academico, {
+    const responseAcademico = await SIAPAPI.patch(`personas/academico/${id}/`, academico, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     });
 
