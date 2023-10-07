@@ -53,7 +53,7 @@ export const Table = ({ columns, data, onClick, dataKeys }) => {
   return (
     <div className="w-100">
       <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
-        <table className="table table-striped table-hover rounded-table fs-5">
+        <table className="table table-striped table-hover rounded-table table-resizable fs-5">
           <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
