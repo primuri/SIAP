@@ -299,6 +299,11 @@ option {
 #boton-inicioSesion {
   width: 100%; 
   height: 37px;
+  padding: 0!important;
+}
+
+#boton-inicioSesion:hover {
+  background-color: #3e92bf;
 }
 
 /* Estilo base para botones e inputs de tipo submit */
@@ -410,3 +415,8 @@ input[type="submit"]:focus {
 .disabled-input{
   color: gray!important;
 }
+
+.ojo{
+  background-color: var(--gris-claro-ucr)!important;
+}
+
