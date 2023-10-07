@@ -196,7 +196,7 @@ table tbody tr:nth-child(even) {
   font-weight: 500;
 }
 
-input.form-control {
+input.form-control, textarea{
   background-color: #EAEAEA !important;
   height: 40px;
 }
@@ -405,4 +405,8 @@ input[type="submit"]:focus {
 
 .required {
   color: red;
+}
+
+.disabled-input{
+  color: gray!important;
 }
