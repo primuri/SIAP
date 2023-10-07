@@ -420,3 +420,24 @@ input[type="submit"]:focus {
   background-color: var(--gris-claro-ucr)!important;
 }
 
+/* Asegura que la tabla se expanda al máximo del contenedor padre */
+.table-resizable {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+}
+
+
+/* Establece un ancho mínimo para las columnas */
+.table-resizable th,
+.table-resizable td {
+  min-width: 100px; /* Ajusta el ancho mínimo según tus necesidades */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Permite el redimensionamiento horizontal de las columnas */
+.table-resizable th {
+  resize: horizontal;
+}
