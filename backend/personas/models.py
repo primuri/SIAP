@@ -57,6 +57,7 @@ class Academico(models.Model):
     pais_procedencia = models.CharField(max_length=45)
     id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.CASCADE, db_column='id_nombre_completo_fk')
     id_area_especialidad_fk = models.ForeignKey(AreaEspecialidad, on_delete=models.CASCADE, db_column='id_area_especialidad_fk')
+    id_area_especialidad_secundaria_fk = models.ForeignKey(AreaEspecialidad, on_delete=models.CASCADE, db_column='id_area_especialidad_secundaria_fk', related_name='academicos_secundarios', blank=True, null=True)
     universidad_fk = models.ForeignKey(Universidad, on_delete=models.DO_NOTHING, db_column='universidad_fk')
 
     class Meta:
@@ -65,6 +66,7 @@ class Academico(models.Model):
     def delete(self, *args, **kwargs):
         self.id_nombre_completo_fk.delete()
         self.id_area_especialidad_fk.delete()
+        self.id_area_especialidad_secundaria_fk.delete()
         super().delete(*args, **kwargs)
 
 class Telefono(models.Model):

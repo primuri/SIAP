@@ -43,6 +43,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         pais_procedencia: academico ? academico.pais_procedencia : "",
         id_nombre_completo_fk: academico ? academico.id_nombre_completo_fk : { nombre: "", apellido: "", segundo_apellido: "" },
         id_area_especialidad_fk: academico ? academico.id_area_especialidad_fk : { nombre: "" },
+        id_area_especialidad_secundaria_fk: academico ? academico.id_area_especialidad_secundaria_fk : { nombre: "" },
         universidad_fk: academico ? academico.universidad_fk : { pais: "", nombre: "" }
     })
     //si hay titulos o telefonos los carga
@@ -449,6 +450,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6">
                                 <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad <span className="required">*</span> </label>
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required/>
+                            </div>
+                            <div className="col-md-6 mt-4 mb-4">
+                                <label htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Área de Especialidad-</label>
+                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} required/>
                             </div>
                         </div>
 

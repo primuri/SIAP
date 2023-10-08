@@ -19,6 +19,7 @@ class UniversidadSerializer(serializers.ModelSerializer):
 class AcademicoSerializer(serializers.ModelSerializer):
     id_nombre_completo_fk = serializers.PrimaryKeyRelatedField(queryset=NombreCompleto.objects.all())
     id_area_especialidad_fk = serializers.PrimaryKeyRelatedField(queryset=AreaEspecialidad.objects.all())
+    id_area_especialidad_secundaria_fk = serializers.PrimaryKeyRelatedField(queryset=AreaEspecialidad.objects.all())
     universidad_fk = serializers.PrimaryKeyRelatedField(queryset=Universidad.objects.all())
 
     class Meta:
@@ -29,6 +30,7 @@ class AcademicoSerializer(serializers.ModelSerializer):
         rep = super(AcademicoSerializer, self).to_representation(instance)
         rep['id_nombre_completo_fk'] = NombreCompletoSerializer(instance.id_nombre_completo_fk).data
         rep['id_area_especialidad_fk'] = AreaEspecialidadSerializer(instance.id_area_especialidad_fk).data
+        rep['id_area_especialidad_secundaria_fk'] = AreaEspecialidadSerializer(instance.id_area_especialidad_secundaria_fk).data
         rep['universidad_fk'] = UniversidadSerializer(instance.universidad_fk).data
         return rep
 

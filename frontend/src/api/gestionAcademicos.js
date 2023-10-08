@@ -76,7 +76,7 @@ export const agregarAcademico = async (formData, token) => {
 
         const id_area_creada = await obtenerArea(academico.id_area_especialidad_fk, token);
         delete academico.id_area_especialidad_fk;
-        academico.id_area_especialidad_fk = id_area_creada;
+        academico.id_area_especialidad_fk = id_area_creada;zz
         
         if (academico.universidad_fk.id_universidad) {
             let id_uni = academico.universidad_fk.id_universidad
