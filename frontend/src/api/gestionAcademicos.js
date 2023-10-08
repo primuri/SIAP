@@ -78,10 +78,10 @@ export const agregarAcademico = async (formData, token) => {
         const id_area_creada = await obtenerArea(academico.id_area_especialidad_fk, token);
         delete academico.id_area_especialidad_fk;
         academico.id_area_especialidad_fk = id_area_creada;
-        if(academico.id_area_especialidad_secundaria_fk != ""){
-            const id_area_creada = await obtenerArea(academico.id_area_especialidad_secundaria_fk, token);
+        if(academico.id_area_especialidad_secundaria_fk){
+            const id_area_sec_creada = await obtenerArea(academico.id_area_especialidad_secundaria_fk, token);
             delete academico.id_area_especialidad_secundaria_fk;
-            academico.id_area_especialidad_secundaria_fk = id_area_creada;
+            academico.id_area_especialidad_secundaria_fk = id_area_sec_creada;
         }else{
             delete academico.id_area_especialidad_secundaria_fk
         }

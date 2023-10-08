@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../../utils/Confirmar'
 import Paises from '../../../utils/Paises.json'
+import Tooltip from '@mui/material/Tooltip';
 
 
 const filter = createFilterOptions();
@@ -452,8 +453,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required/>
                             </div>
                             <div className="col-md-6 mt-4 mb-4">
-                                <label htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Área de Especialidad-</label>
-                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} required/>
+                                <Tooltip title="Separar areas secundarias con coma"  placement="right-start">
+                                 <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
+                                </Tooltip>
+                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange}/>
                             </div>
                         </div>
 
