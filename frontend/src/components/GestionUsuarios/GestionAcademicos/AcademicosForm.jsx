@@ -26,7 +26,7 @@ const configuracionTelefonos = [
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
     const [titulos, setTitulos] = useState([])
     const [telefonos, setTelefonos] = useState([])
-    const [universidades, setUniversidades] = useState([]) 
+    const [universidades, setUniversidades] = useState([])
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [paisSeleccionado, setPaisSeleccionado] = useState(academico ? academico.pais_procedencia : "");
@@ -121,8 +121,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         if (name === "pais_procedencia") {
             setPaisSeleccionado(value);
             setFormData({
-              ...formData,
-              [name]: value,
+                ...formData,
+                [name]: value,
             });
         }
 
@@ -146,7 +146,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
     const handleFileChange = (event) => {
         const foto = event.target.files[0];
-        setFotoData(foto);  
+        setFotoData(foto);
     }
 
     const sendForm = (event) => {
@@ -163,7 +163,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         if (fotoData) {
             combinedData.append('foto', fotoData);
         }
-        combinedData.append('json',JSON.stringify(formData))
+        combinedData.append('json', JSON.stringify(formData))
         onSubmit(combinedData)
     }
 
@@ -184,12 +184,12 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const handleEditClick = () => {
         setShowConfirmationEdit(true);
     };
-    
+
     const handleDeleteConfirm = () => {
         onDelete();
         setShowConfirmationDelete(false);
     };
-    
+
     const handleDeleteCancel = () => {
         setShowConfirmationDelete(false);
     };
@@ -197,7 +197,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
     };
-    
+
     return (
         <div>
             <div className="modal-header pb-0 position-sticky top-0">
@@ -258,7 +258,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo Apellido</label>
-                                    <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange}/>
+                                    <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>
                         </div>
@@ -270,7 +270,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label>
-                                <input type="email" className="form-control" name="correo_secundario" id="correo" value={formData.correo_secundario} onChange={handleChange}  />
+                                <input type="email" className="form-control" name="correo_secundario" id="correo" value={formData.correo_secundario} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="row mb-4">
@@ -279,14 +279,14 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <select className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} required>
                                     <option value="">Seleccione un país</option>
                                     {Paises.map((pais) => (
-                                        <option key={pais.value} value={pais.value}> {pais.label} </option> ))}
+                                        <option key={pais.value} value={pais.value}> {pais.label} </option>))}
                                 </select>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página Personal</label>
                                 <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
-                            
+
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6 position-relative">
@@ -302,11 +302,11 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     <option value="Profesor Asociado">Profesor Asociado</option>
                                     <option value="No Aplica">No Aplica</option>
                                 </select>
-                            </div>  
+                            </div>
                             <div className="col-md-6">
                                 <label htmlFor="unidad_base" className="label-personalizado mb-2">Unidad Base <span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="unidad_base" id="unidad_base" value={formData.unidad_base} onChange={handleChange} required/>
-                            </div>             
+                                <input type="text" className="form-control" name="unidad_base" id="unidad_base" value={formData.unidad_base} onChange={handleChange} required />
+                            </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
@@ -450,25 +450,22 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de Especialidad <span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required/>
+                                <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required />
                             </div>
-                            <div className="col-md-6 mt-4 mb-4">
-                                <Tooltip title="Separar areas secundarias con coma"  placement="right-start">
-                                 <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
+                            <div className="col-md-6 mt-4">
+                                <Tooltip title="Separar areas secundarias con coma" placement="right-start">
+                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
-                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange}/>
+                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
-                        </div>
-
-                        <div className="row mb-4">
-                            {mode ==2? (
-                                <div className="col-md-6">
-                                    <img src={formData.foto} alt="" width={180} height={100} className="object-fit-contain"/>
-                                </div>
-                            ): ""}
-                            <div className="col-md-6">
-                                <label className="label-personalizado mb-2" htmlFor="foto">{mode==1?"Subir Foto":"Cambiar foto"}</label>
+                            <div className="col-md-6 mt-4">
+                                <label className="label-personalizado mb-2" htmlFor="foto">{mode == 1 ? "Subir Foto" : "Cambiar foto"}</label>
                                 <input type="file" className="form-control" name="foto" id="foto" onChange={handleFileChange} />
+                                {mode == 2 ? (
+                                <div className="col-md-6 mt-4" style={{margin:'auto'}}>
+                                    <img src={formData.foto} alt="" maxWidth={180} maxHeight={100} className="container rounded-circle" />
+                                </div>
+                            ) : ""}
                             </div>
                         </div>
                         <hr></hr>
@@ -483,14 +480,14 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
                         </div>
 
-                        
+
 
                     </div>
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
-                    <div className="col">
+                        <div className="col">
                             {mode === 1 ? (
                                 <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
                             ) : (
@@ -504,7 +501,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && ( <Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="investigador(a)"/> )}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="investigador(a)" />)}
                                 </>
                             )}
                         </div>
