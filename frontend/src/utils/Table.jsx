@@ -68,7 +68,7 @@ export const Table = ({ columns, data, onClick, dataKeys }) => {
                   <td className="mx-2" key={colIndex}>
                   {typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                     ? getValueByPath(row, column).split('/').pop()
-                    : getValueByPath(row, column)}
+                    : getValueByPath(row, column) === 'academico'? 'investigador' : getValueByPath(row, column)}
                 </td>
                 ))}
               </tr>

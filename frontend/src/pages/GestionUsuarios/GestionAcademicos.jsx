@@ -48,8 +48,9 @@ export const GestionAcademicos = () => {
     // Manejo de datos que se van a enviar para agregar
     const addAcademico = async (formData) => {       
         try {
-            const Datos = JSON.parse(formData)
 
+            const Datos = JSON.parse(formData.get('json'))
+            formData.delete('json')
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
 
@@ -65,7 +66,8 @@ export const GestionAcademicos = () => {
 
             delete Datos.universidad_fk;
             Datos.universidad_fk = responseUniversidad;
-            await agregarAcademico(Datos, localStorage.getItem("token"))
+            formData.append('json', JSON.stringify(Datos))
+            await agregarAcademico(formData, localStorage.getItem("token"))
             toast.success('Académico agregado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -91,8 +93,8 @@ export const GestionAcademicos = () => {
     // Manejo de los datos del formulario de editar 
     const editAcademico = async (formData) => {       
         try {
-            const Datos = JSON.parse(formData)
-
+            const Datos = JSON.parse(formData.get('json'))
+            formData.delete('json')
             const id_nom = Datos.id_nombre_completo_fk.id_nombre_completo
             await editarNombre(id_nom,Datos.id_nombre_completo_fk, localStorage.getItem("token"))
             const id_nombre_editado = Datos.id_nombre_completo_fk.id_nombre_completo
@@ -140,7 +142,14 @@ export const GestionAcademicos = () => {
                     await actualizarTelefonos(telefonos, localStorage.getItem("token"));
                 }
             }
-            await editarAcademico(academico.id_academico, Datos, localStorage.getItem("token"))
+            console.log(Datos)
+            delete Datos.foto
+            for (const key in Datos) {
+                if (Object.prototype.hasOwnProperty.call(academico, key)) {
+                    formData.append(key, Datos[key]);
+                }
+            }
+            await editarAcademico(academico.id_academico, formData, localStorage.getItem("token"))
             toast.success('Académico editado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
@@ -207,6 +216,7 @@ export const GestionAcademicos = () => {
 
     // Al hacer click en la tabla
     const elementClicked = (selectedAcademico) =>{
+        console.log(selectedAcademico)
         setAcademico(selectedAcademico)
         setEdit(true)
         setAddClick(false)
@@ -233,7 +243,7 @@ export const GestionAcademicos = () => {
     <main >
         {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-            <div className="d-flex flex-row"><h1>Gestión de investigadores</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+            <div className="d-flex flex-row"><h1>Gestión de investigadores</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
