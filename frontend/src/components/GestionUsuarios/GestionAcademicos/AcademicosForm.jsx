@@ -460,7 +460,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             {mode ==2? (
                                 <div className="col-md-6">
-                                    <img src={formData.foto} alt="" width={180} height={100} />
+                                    <img src={formData.foto} alt="" width={180} height={100} className="object-fit-contain"/>
                                 </div>
                             ): ""}
                             <div className="col-md-6">
