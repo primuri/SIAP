@@ -487,13 +487,15 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
-                        <div className="col">
-                            <>
-                            <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>
-                                {mode === 1 ? "Agregar" : "Guardar"}
-                            </button>
-                            {showConfirmationEdit && ( <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="investigador(a)"/> )}
-                            </>
+                    <div className="col">
+                            {mode === 1 ? (
+                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                            ) : (
+                                <>
+                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="investigador(a)" />)}
+                                </>
+                            )}
                         </div>
                         <div className="col">
                             {mode === 2 && (

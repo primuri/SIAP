@@ -364,18 +364,20 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
-                            <>
-                                <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>
-                                    {mode === 1 ? "Agregar" : "Guardar"}
-                                </button>
-                                {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="evaluador(a)" />)}
-                            </>
+                            {mode === 1 ? (
+                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                            ) : (
+                                <>
+                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="usuario(a)" />)}
+                                </>
+                            )}
                         </div>
                         <div className="col">
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="evaluador(a)" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="usuario(a)" />)}
                                 </>
                             )}
                         </div>
