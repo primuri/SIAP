@@ -15,6 +15,7 @@ export const GestionUsuarios = () => {
     const [usuarios, setUsuarios] = useState([]) //Usuarios que se muestran
     const [data,setData] = useState([])//Todos los usuarios
     const [usuario, setUsuario] = useState(null) //Usuario al que se le da click en la tabla para editar
+    const [cargado, setCargado] = useState(false)
     const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
@@ -28,6 +29,7 @@ export const GestionUsuarios = () => {
             const res = await obtenerUsuarios(localStorage.getItem('token'))
             setData(res.data)
             setUsuarios(res.data)
+            setCargado(true)
         } catch (error) {
             toast.error('Error al cargar los datos de usuarios', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
@@ -156,7 +158,7 @@ export const GestionUsuarios = () => {
     <main >
         {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-            <h1>Gestión de usuarios</h1>
+            <div className="d-flex flex-row"><h1>Gestión de usuarios</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>

@@ -13,7 +13,8 @@ const filter = createFilterOptions();
 export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete }) => {
   // Cargar informacion
   const [universidades, setUniversidades] = useState([])
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
+  const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
 
   const [formData, setFormData] = useState({
     tipo: evaluador ? evaluador.tipo : "",
@@ -81,19 +82,27 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
     return nombresUnicos.map(nombre => universidades.find(u => u.nombre === nombre));
   };
 
-
   const handleDeleteClick = () => {
-    setShowConfirmation(true);
+    setShowConfirmationDelete(true);
+  };
+
+  const handleEditClick = () => {
+    setShowConfirmationEdit(true);
   };
 
   const handleDeleteConfirm = () => {
     onDelete();
-    setShowConfirmation(false);
+    setShowConfirmationDelete(false);
   };
 
   const handleDeleteCancel = () => {
-    setShowConfirmation(false);
+    setShowConfirmationDelete(false);
   };
+
+  const handleEditCancel = () => {
+    setShowConfirmationEdit(false);
+  };
+
 
   return (
     <>
@@ -295,21 +304,21 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
             </div>
           </div>
         </div>
-
-
-
-        <div className="modal-footer justify-content-center">
+        <div className="modal-footer justify-content-center position-sticky bottom-0">
           <div className="row">
             <div className="col">
-              <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
-                {mode === 1 ? "Agregar" : "Guardar"}
-              </button>
+              <>
+                <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>
+                  {mode === 1 ? "Agregar" : "Guardar"}
+                </button>
+                {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="evaluador(a)" />)}
+              </>
             </div>
             <div className="col">
               {mode === 2 && (
                 <>
                   <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                  {showConfirmation && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} />)}
+                  {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="evaluador(a)" />)}
                 </>
               )}
             </div>

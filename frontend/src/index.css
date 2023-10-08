@@ -109,7 +109,7 @@ main {
   height: 100%; /* Establece la altura inicial en 0 */
   margin-right: 10px;
   background-color: var(--celeste-ucr);
-  animation: expandLine 0.3s ease; /* Aplica la animación a ::before */
+  animation: expandLine 0.7s ease; /* Aplica la animación a ::before */
 }
 
 

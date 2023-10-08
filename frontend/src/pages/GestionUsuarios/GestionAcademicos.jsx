@@ -13,7 +13,8 @@ export const GestionAcademicos = () => {
 
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizr la pagina.
-    const [academicos, setAcademicos] = useState([])                      // Académicos que se muestran
+    const [academicos, setAcademicos] = useState([])  
+    const [cargado, setCargado] = useState(false)                    // Académicos que se muestran
     const [data, setData] = useState([])                                  // Todos los académicos
     const [academico, setAcademico] = useState(null)                      // Usuario al que se le da click en la tabla para editar
     const [addClick, setAddClick] = useState(false) 
@@ -31,6 +32,7 @@ export const GestionAcademicos = () => {
             const res = await obtenerAcademicos(localStorage.getItem('token'))
             setData(res.data)
             setAcademicos(res.data)
+            setCargado(true)
         } catch (error) {
             toast.error('Error al cargar los datos de academicos', {
                 duration: 4000,
@@ -231,7 +233,7 @@ export const GestionAcademicos = () => {
     <main >
         {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-            <h1>Gestión de académicos</h1>
+            <div className="d-flex flex-row"><h1>Gestión de investigadores</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
             <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
