@@ -107,6 +107,12 @@ export const GestionAcademicos = () => {
             delete Datos.id_area_especialidad_fk
             Datos.id_area_especialidad_fk = id_area_editada
 
+            const id_are_sec = Datos.id_area_especialidad_secundaria_fk.id_area_especialidad
+            await editarArea(id_are_sec,Datos.id_area_especialidad_secundaria_fk, localStorage.getItem("token"))
+            const id_area_editada_sec = Datos.id_area_especialidad_secundaria_fk.id_area_especialidad
+            delete Datos.id_area_especialidad_secundaria_fk
+            Datos.id_area_especialidad_fk = id_area_editada_sec
+
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
 

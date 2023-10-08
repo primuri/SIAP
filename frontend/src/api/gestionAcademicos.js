@@ -65,6 +65,7 @@ export const agregarAcademico = async (formData, token) => {
 
     try {
         const academico = JSON.parse(formData.get('json'))
+        formData.delete('json')
         const titulos = academico?.titulos;
         const telefonos = academico?.telefonos;
         delete academico.titulos;
@@ -76,8 +77,14 @@ export const agregarAcademico = async (formData, token) => {
 
         const id_area_creada = await obtenerArea(academico.id_area_especialidad_fk, token);
         delete academico.id_area_especialidad_fk;
-        academico.id_area_especialidad_fk = id_area_creada;zz
-        
+        academico.id_area_especialidad_fk = id_area_creada;
+        if(academico.id_area_especialidad_secundaria_fk != ""){
+            const id_area_creada = await obtenerArea(academico.id_area_especialidad_secundaria_fk, token);
+            delete academico.id_area_especialidad_secundaria_fk;
+            academico.id_area_especialidad_secundaria_fk = id_area_creada;
+        }else{
+            delete academico.id_area_especialidad_secundaria_fk
+        }
         if (academico.universidad_fk.id_universidad) {
             let id_uni = academico.universidad_fk.id_universidad
             delete academico.universidad_fk
