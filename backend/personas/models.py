@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 import os
 import datetime
+from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
 
 class NombreCompleto(models.Model):
     id_nombre_completo = models.AutoField(primary_key=True)
@@ -68,6 +70,21 @@ class Academico(models.Model):
         self.id_area_especialidad_fk.delete()
         self.id_area_especialidad_secundaria_fk.delete()
         super().delete(*args, **kwargs)
+
+def imagen_asociada_delete(sender, instance, **kwargs):
+    instance.foto.delete(save=False)
+pre_delete.connect(imagen_asociada_delete, sender=Academico)
+
+def imagen_asociada_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.foto != instance.foto:
+        obj.foto.delete(save=False)
+
+pre_save.connect(imagen_asociada_sustituir, sender=Academico)
 
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)

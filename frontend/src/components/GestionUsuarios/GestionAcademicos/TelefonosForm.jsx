@@ -12,11 +12,9 @@ import Tooltip from '@mui/material/Tooltip';
 import { Modal } from "../../../utils/Modal"
 import { Table } from "../../../utils/Table"
 const filter = createFilterOptions();
-const columns = ['Numeros de Telefono']
-const dataKeys = ['numero_tel']
+const columns = ['Telefono']
+const dataKeys = ['telefono']
 
-const columns2 = ['Institucion', 'Año', 'Grado']
-const dataKeys2 = ['institución', 'anio','grado']
 
 const configuracionTitulos = [
     { campo: 'anio', placeholder: 'Año', tipo: 'number', required: true },
@@ -497,17 +495,27 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos <span className="required">*</span> </label>
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
-                            <div>
-                                <Table columns={columns2} data={titulos} dataKeys={dataKeys2} onClick={elementClicked}></Table>  
-                            </div>
                         </div>
                         <hr></hr>
+                        <Table columns={columns} data={telefonos} dataKeys={dataKeys} onClick={elementClicked}></Table>
+                        {addClick && (<Modal ><TelefonosForm onSubmit={addTelefono} onCancel={onCancel2} mode={1}></TelefonosForm></Modal>)}
+                        { edit && 
+                            (
+                                <Modal>
+                                    <TelefonosForm 
+                                        mode={2}
+                                        onSubmit={editTelefono} 
+                                        onCancel={onCancel} 
+                                        onDelete={() => deleteTelefonos(telefono)}
+                                        academico={telefono}
+                                    >
+                                    </TelefonosForm>
+                                </Modal>
+                            )
+                        }
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos <span className="required">*</span> </label>
                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
-                            <div>
-                                <Table columns={columns} data={telefonos} dataKeys={dataKeys} onClick={elementClicked}></Table>  
-                            </div>
                         </div>
 
 

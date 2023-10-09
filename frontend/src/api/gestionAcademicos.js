@@ -71,6 +71,17 @@ export const agregarAcademico = async (formData, token) => {
         delete academico.titulos;
         delete academico.telefonos;
 
+        if (academico.universidad_fk.id_universidad) {
+            let id_uni = academico.universidad_fk.id_universidad
+            delete academico.universidad_fk
+            academico.universidad_fk = id_uni
+        } else {
+            const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk, token);
+            delete academico.universidad_fk;
+            console.log("id_universidad_creada", id_universidad_creada)
+            academico.universidad_fk = id_universidad_creada;
+        }
+        
         const id_nombre_creado = await obtenerNombre(academico.id_nombre_completo_fk, token);
         delete academico.id_nombre_completo_fk;
         academico.id_nombre_completo_fk = id_nombre_creado;
@@ -85,16 +96,7 @@ export const agregarAcademico = async (formData, token) => {
         }else{
             delete academico.id_area_especialidad_secundaria_fk
         }
-        if (academico.universidad_fk.id_universidad) {
-            let id_uni = academico.universidad_fk.id_universidad
-            delete academico.universidad_fk
-            academico.universidad_fk = id_uni
-        } else {
-            const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk, token);
-            delete academico.universidad_fk;
-            console.log("id_universidad_creada", id_universidad_creada)
-            academico.universidad_fk = id_universidad_creada;
-        }
+       
         delete academico.foto
         for (const key in academico) {
             if (Object.prototype.hasOwnProperty.call(academico, key)) {
@@ -203,6 +205,7 @@ export const actualizarTitulos = (titulos, token) => {
             let id_titulos = titulo.id_titulos;
             let id_academico = titulo.id_academico_fk.id_academico;
             delete titulo.id_academico_fk;
+            delete titulo.id_titulos;
             titulo.id_academico_fk = id_academico;
             await SIAPAPI.put(`personas/titulos/${id_titulos}/`, titulo, {
                 headers: {
@@ -220,7 +223,12 @@ export const actualizarTitulos = (titulos, token) => {
 export const actualizarTelefonos = (telefonos, token) => {
     try {
         telefonos.forEach(async telefono => {
-            await SIAPAPI.put(`personas/telefono/${telefono.id_telefono}/`, telefono, {
+            let id_academico = telefono.id_academico_fk.id_academico;
+            let id_telefono = telefono.id_telefono;
+            delete telefono.id_academico_fk;
+            delete telefono.id_telefono;
+            telefono.id_academico_fk = id_academico;
+            await SIAPAPI.put(`personas/telefono/${id_telefono}/`, telefono, {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
