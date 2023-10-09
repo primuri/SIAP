@@ -370,16 +370,22 @@ input[type="submit"]:focus {
 .agregarBtn {
   border-radius: 10px;
   color: black;
-  width: 5% !important;
-  border: 0.5px solid #4AACE1;
   padding: 1%;
+  box-shadow: 0px 1px 1px -1px rgba(0,0,0,0.005), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+.agregarBtnMod{
+  border-radius: 0 0 10px 10px;
+  color: black;
+  padding: 1%;
+  box-shadow: 0px 1px 1px -1px rgba(0,0,0,0.005), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
 }
 
 .eliminarBtn {
   border-radius: 10px;
   color: black;
   width: 20% !important;
-  border: 0.5px solid #670000;
+  border: 1px solid #670000;
   padding-left: 0.05%;
   padding-right: 0.05%;
   padding-top: 1%;
@@ -450,4 +456,9 @@ input[type="submit"]:focus {
 /* Permite el redimensionamiento horizontal de las columnas */
 .table-resizable th {
   resize: horizontal;
+}
+
+.css-1elwnq4-MuiPaper-root-MuiAccordion-root:last-of-type {
+  border-bottom-left-radius: 0px!important;
+  border-bottom-right-radius: 0px!important;
 }

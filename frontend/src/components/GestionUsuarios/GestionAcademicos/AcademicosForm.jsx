@@ -480,17 +480,13 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos <span className="required">*</span> </label>
-                            <Table columns={columns2} data={titulos} dataKeys={dataKeys2}></Table>  
-                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
+                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Titulo"/>
                         </div>
                         <hr></hr>                        
                         <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos <span className="required">*</span> </label>
-                             <Table columns={columns} data={telefonos} dataKeys={dataKeys}></Table>  
-                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
+                            <label htmlFor="telefonos" className="label-personalizado mb-2 h5">Telefonos <span className="required">*</span> </label>
+                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} itemName="Telefono"/>
                         </div>
-
-
 
                     </div>
                 </div>
