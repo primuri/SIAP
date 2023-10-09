@@ -9,9 +9,14 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../../utils/Confirmar'
 import Paises from '../../../utils/Paises.json'
 import Tooltip from '@mui/material/Tooltip';
-
-
+import { Modal } from "../../../utils/Modal"
+import { Table } from "../../../utils/Table"
 const filter = createFilterOptions();
+const columns = ['Numeros de Telefono']
+const dataKeys = ['numero_tel']
+
+const columns2 = ['Institucion', 'Año', 'Grado', 'Detalle']
+const dataKeys2 = ['institución', 'anio','grado', 'detalle']
 
 const configuracionTitulos = [
     { campo: 'anio', placeholder: 'Año', tipo: 'number', required: true },
@@ -21,7 +26,7 @@ const configuracionTitulos = [
 ]
 
 const configuracionTelefonos = [
-    { campo: 'numero_tel', placeholder: 'Número', tipo: 'text', required: true },
+    { campo: 'numero_tel', placeholder: 'Número', tipo: 'tel', required: true},
 ]
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
     const [titulos, setTitulos] = useState([])
@@ -31,6 +36,9 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [paisSeleccionado, setPaisSeleccionado] = useState(academico ? academico.pais_procedencia : "");
     const [fotoData, setFotoData] = useState(null);
+    const [addClick, setAddClick] = useState(false) 
+    const [edit, setEdit] = useState(false)
+
     // Si hay informacion en el academico, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         cedula: academico ? academico.cedula : "",
@@ -54,7 +62,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             loadTelefonos()
         }
         loadUniversidades()
-    }, [academico])
+    }, [academico]) 
 
     const loadTitulos = async () => {
         try {
@@ -472,12 +480,14 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos <span className="required">*</span> </label>
+                            <Table columns={columns2} data={titulos} dataKeys={dataKeys2}></Table>  
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
                         </div>
-                        <hr></hr>
+                        <hr></hr>                        
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos <span className="required">*</span> </label>
-                            <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
+                             <Table columns={columns} data={telefonos} dataKeys={dataKeys}></Table>  
+                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
                         </div>
 
 

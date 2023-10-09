@@ -5,7 +5,7 @@ import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademic
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad} from "../../api/gestionAcademicos"
+import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
@@ -54,7 +54,7 @@ export const GestionAcademicos = () => {
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
 
-            const responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
+            let responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
             
             var id_univ = {};
 
@@ -64,6 +64,7 @@ export const GestionAcademicos = () => {
                 id_univ = await obtenerUniversidadCompleta(Datos.universidad_fk, localStorage.getItem("token"));
             }
 
+            responseUniversidad = id_univ;
             delete Datos.universidad_fk;
             Datos.universidad_fk = responseUniversidad;
             formData.append('json', JSON.stringify(Datos))
@@ -112,7 +113,6 @@ export const GestionAcademicos = () => {
             const id_area_editada_sec = Datos.id_area_especialidad_secundaria_fk.id_area_especialidad
             delete Datos.id_area_especialidad_secundaria_fk
             Datos.id_area_especialidad_secundaria_fk = id_area_editada_sec
-
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
 
@@ -141,18 +141,22 @@ export const GestionAcademicos = () => {
 
                 }
             }
+
             if(telefonos){
                 if(typeof telefonos.id_academico_fk === 'undefined'){
                     await agregarTelefonos(telefonos, academico.id_academico, localStorage.getItem("token"))
+                    
                 }else{
                     await actualizarTelefonos(telefonos, localStorage.getItem("token"));
                 }
             }
-            console.log(Datos)
             delete Datos.foto
+            delete Datos.telefonos
+            delete Datos.titulos
+    
             for (const key in Datos) {
                 if (Object.prototype.hasOwnProperty.call(academico, key)) {
-                    formData.append(key, Datos[key]);
+                   formData.append(key, Datos[key]);
                 }
             }
             await editarAcademico(academico.id_academico, formData, localStorage.getItem("token"))
@@ -183,8 +187,11 @@ export const GestionAcademicos = () => {
     // Manejo del eliminar
     const deleteAcademicos = async (academico) => {
         try {
-            await eliminarAcademico(academico.id_academico, localStorage.getItem('token'))
-             toast.success('Académico eliminado correctamente', {
+            await eliminarArea(academico.id_area_especialidad_fk.id_area_especialidad, localStorage.getItem('token'))
+            await eliminarArea(academico.id_area_especialidad_secundaria_fk.id_area_especialidad, localStorage.getItem('token'))
+            await eliminarNombre(academico.id_nombre_completo_fk.id_nombre_completo, localStorage.getItem('token'))
+             
+            toast.success('Académico eliminado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { eliminarTelefonos, eliminarTitulos } from '../api/gestionAcademicos';
 export const FormularioDinamico = ({ items, setItems, configuracion }) => {
     
     const agregarItem = () => {
@@ -10,7 +11,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion }) => {
     };
     const handleInputChange = (event, index, campo) => {
         const nuevosItems = [...items];
-        const valor = event.target.value;
+        let valor = event.target.value;
 
         // Establece anio en 1930 si es menor.
         if (campo === 'anio' && valor < '1930') {
@@ -24,7 +25,14 @@ export const FormularioDinamico = ({ items, setItems, configuracion }) => {
     const eliminarItem = (index) => {
         const nuevosItems = [...items];
         nuevosItems.splice(index, 1);
+        if (Object.keys(items[0])[0] == "id_telefono"){
+            eliminarTelefonos(items[index].id_telefono, localStorage.getItem("token"));
+        }
+        if (Object.keys(items[0])[0] == "id_titulos"){
+            eliminarTitulos(items[index].id_titulos, localStorage.getItem("token"));
+        }
         setItems(nuevosItems);
+        
     };
     const dividirEnGruposDeDos = (array) => {
         let grupos = [];
