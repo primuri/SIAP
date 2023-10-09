@@ -113,7 +113,6 @@ export const GestionAcademicos = () => {
             const id_area_editada_sec = Datos.id_area_especialidad_secundaria_fk.id_area_especialidad
             delete Datos.id_area_especialidad_secundaria_fk
             Datos.id_area_especialidad_secundaria_fk = id_area_editada_sec
-
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
 
@@ -142,9 +141,11 @@ export const GestionAcademicos = () => {
 
                 }
             }
+
             if(telefonos){
                 if(typeof telefonos.id_academico_fk === 'undefined'){
                     await agregarTelefonos(telefonos, academico.id_academico, localStorage.getItem("token"))
+                    
                 }else{
                     await actualizarTelefonos(telefonos, localStorage.getItem("token"));
                 }

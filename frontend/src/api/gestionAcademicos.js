@@ -234,12 +234,32 @@ export const actualizarTelefonos = (telefonos, token) => {
                     'Content-Type': 'application/json'
                 }
             });
+
         });
     } catch (error) {
         console.error(error)
         throw (error)
     }
 };
+
+export const eliminarTelefonos = (id, token) => {
+    return SIAPAPI.delete(`personas/telefono/${id}/`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+    });
+};
+
+export const eliminarTitulos = (id, token) => {
+    return SIAPAPI.delete(`personas/titulos/${id}/`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+    });
+};
+
 
 const obtenerNombre = async (nombre, token) => {
     try {

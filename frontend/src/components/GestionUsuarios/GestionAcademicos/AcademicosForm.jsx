@@ -15,8 +15,8 @@ const filter = createFilterOptions();
 const columns = ['Numeros de Telefono']
 const dataKeys = ['numero_tel']
 
-const columns2 = ['Institucion', 'Año', 'Grado']
-const dataKeys2 = ['institución', 'anio','grado']
+const columns2 = ['Institucion', 'Año', 'Grado', 'Detalle']
+const dataKeys2 = ['institución', 'anio','grado', 'detalle']
 
 const configuracionTitulos = [
     { campo: 'anio', placeholder: 'Año', tipo: 'number', required: true },
@@ -26,7 +26,7 @@ const configuracionTitulos = [
 ]
 
 const configuracionTelefonos = [
-    { campo: 'numero_tel', placeholder: 'Número', tipo: 'text', required: true },
+    { campo: 'numero_tel', placeholder: 'Número', tipo: 'tel', required: true},
 ]
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
     const [titulos, setTitulos] = useState([])
@@ -62,23 +62,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             loadTelefonos()
         }
         loadUniversidades()
-    }, [academico])
-
-     // Al darle click a cancelar, se cierra el modal
-     const onCancel2 = () => {
-        setAddClick(false)
-        setEdit(false)
-    }
-
-     // Al hacer click en la tabla
-     const elementClicked = (selectedTelefono) =>{
-        console.log(selectedTelefono)
-        setTelefonos(selectedTelefono)
-        setEdit(true)
-        setAddClick(false)
-    }
-
-   
+    }, [academico]) 
 
     const loadTitulos = async () => {
         try {
@@ -496,18 +480,14 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos <span className="required">*</span> </label>
+                            <Table columns={columns2} data={titulos} dataKeys={dataKeys2}></Table>  
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} />
-                            <div>
-                                <Table columns={columns2} data={titulos} dataKeys={dataKeys2} onClick={elementClicked}></Table>  
-                            </div>
                         </div>
-                        <hr></hr>
+                        <hr></hr>                        
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Telefonos <span className="required">*</span> </label>
-                            <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
-                            <div>
-                                <Table columns={columns} data={telefonos} dataKeys={dataKeys} onClick={elementClicked}></Table>  
-                            </div>
+                             <Table columns={columns} data={telefonos} dataKeys={dataKeys}></Table>  
+                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} />
                         </div>
 
 

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { eliminarTelefonos, eliminarTitulos } from '../api/gestionAcademicos';
 export const FormularioDinamico = ({ items, setItems, configuracion }) => {
     
     const agregarItem = () => {
@@ -24,7 +25,14 @@ export const FormularioDinamico = ({ items, setItems, configuracion }) => {
     const eliminarItem = (index) => {
         const nuevosItems = [...items];
         nuevosItems.splice(index, 1);
+        if (Object.keys(items[0])[0] == "id_telefono"){
+            eliminarTelefonos(items[index].id_telefono, localStorage.getItem("token"));
+        }
+        if (Object.keys(items[0])[0] == "id_titulos"){
+            eliminarTitulos(items[index].id_titulos, localStorage.getItem("token"));
+        }
         setItems(nuevosItems);
+        
     };
     const dividirEnGruposDeDos = (array) => {
         let grupos = [];
