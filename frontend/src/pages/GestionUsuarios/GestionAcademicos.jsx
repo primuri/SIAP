@@ -62,6 +62,7 @@ export const GestionAcademicos = () => {
                id_univ  = responseUniversidad.id_universidad;
             }else{
                 id_univ = await obtenerUniversidadCompleta(Datos.universidad_fk, localStorage.getItem("token"));
+                id_univ = id_univ.id_universidad;
             }
 
             responseUniversidad = id_univ;

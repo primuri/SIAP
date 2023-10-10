@@ -71,17 +71,6 @@ export const agregarAcademico = async (formData, token) => {
         delete academico.titulos;
         delete academico.telefonos;
 
-        if (academico.universidad_fk.id_universidad) {
-            let id_uni = academico.universidad_fk.id_universidad
-            delete academico.universidad_fk
-            academico.universidad_fk = id_uni
-        } else {
-            const id_universidad_creada = await obtenerUniversidad(academico.universidad_fk, token);
-            delete academico.universidad_fk;
-            console.log("id_universidad_creada", id_universidad_creada)
-            academico.universidad_fk = id_universidad_creada;
-        }
-        
         const id_nombre_creado = await obtenerNombre(academico.id_nombre_completo_fk, token);
         delete academico.id_nombre_completo_fk;
         academico.id_nombre_completo_fk = id_nombre_creado;

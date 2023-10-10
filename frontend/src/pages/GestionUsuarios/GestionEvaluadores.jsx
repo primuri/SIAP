@@ -46,7 +46,6 @@ export const GestionEvaluadores = () => {
   const addEvaluador = async (formData) => {
     try {
       const Datos = JSON.parse(formData)
-
       let nombre = Datos.universidad_fk.nombre;
       let pais = Datos.universidad_fk.pais;
 
@@ -57,9 +56,11 @@ export const GestionEvaluadores = () => {
       if (responseUniversidad !== undefined) {
         id_univ = responseUniversidad.id_universidad;
       } else {
-        responseUniversidad = await obtenerUniversidadCompleta(Datos.universidad_fk, localStorage.getItem("token"));
+        id_univ = await obtenerUniversidadCompleta(Datos.universidad_fk, localStorage.getItem("token"));
+        id_univ = id_univ.id_universidad;
       }
 
+      responseUniversidad = id_univ;
       delete Datos.universidad_fk;
       Datos.universidad_fk = responseUniversidad;
       await agregarEvaluador(Datos, localStorage.getItem('token'))
