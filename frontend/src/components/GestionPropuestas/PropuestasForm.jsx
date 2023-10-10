@@ -184,8 +184,8 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 <label htmlFor="estado" className="label-personalizado mb-2">Estado Propuesta <span className="required">*</span> </label>
                                 <select className="form-select seleccion " name="id_codigo_cimpa_fk.estado" id="id_codigo_cimpa_fk.estado" value={formData.id_codigo_cimpa_fk.estado} onChange={handleChange} required>
                                     <option value="">Seleccionar estado</option>
-                                    <option value="Activo">Aprobada</option>
-                                    <option value="Inactivo">En desarrollo</option>
+                                    <option value="Aprobada">Aprobada</option>
+                                    <option value="En desarrollo">En desarrollo</option>
                                 </select>
                             </div>
                             <div className="col-md-6">
