@@ -35,21 +35,25 @@ class PropuestaProyecto(models.Model):
     id_colaborador_principal_fk = models.ForeignKey(ColaboradorPrincipal, on_delete=models.PROTECT, db_column='id_colaborador_principal_fk')
 
     def save(self, *args, **kwargs):
-        # Utiliza una transacción para garantizar la consistencia
-        with transaction.atomic():
-            year = datetime.now().year
-            # Encuentra el máximo id_codigo_cimpa para el año actual
-            max_id = PropuestaProyecto.objects.filter(id_codigo_cimpa__contains=str(year)).aggregate(max_id=models.Max('id_codigo_cimpa'))['max_id']
-            # Si no hay registros para el año actual, inicia desde 1
-            if max_id is None:
-                max_id = 0
-            else:
-                # Extrae la parte antes del guión y convierte en int
-                max_id = int(max_id.split('-')[0])
-            # Genera el nuevo id_codigo_cimpa
-            max_id += 1
-            self.id_codigo_cimpa = f'{max_id}-{year}'
-            super().save(*args, **kwargs)
+        # Solo generamos un nuevo id_codigo_cimpa si es un nuevo objeto (no tiene pk)
+        if not self.pk:
+            # Utiliza una transacción para garantizar la consistencia
+            with transaction.atomic():
+                year = datetime.now().year
+                # Encuentra el máximo id_codigo_cimpa para el año actual
+                max_id = PropuestaProyecto.objects.filter(id_codigo_cimpa__contains=str(year)).aggregate(max_id=models.Max('id_codigo_cimpa'))['max_id']
+                # Si no hay registros para el año actual, inicia desde 1
+                if max_id is None:
+                    max_id = 0
+                else:
+                    # Extrae la parte antes del guión y convierte en int
+                    max_id = int(max_id.split('-')[0])
+                # Genera el nuevo id_codigo_cimpa
+                max_id += 1
+                self.id_codigo_cimpa = f'{max_id}-{year}'
+        
+        super().save(*args, **kwargs)
+
 
     class Meta:
         db_table = 'propuesta_proyecto'

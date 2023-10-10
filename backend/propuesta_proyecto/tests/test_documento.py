@@ -31,6 +31,10 @@ class DocumentoAsociadoTests(APITestCase):
             'nombre': 'Física'
         }
 
+        self.area_especialidad2_data = {
+            'nombre': 'Fisiologia'
+        }
+
         self.universidad_data = {
             'pais': 'Costa Rica',
             'nombre': 'Universidad de Costa Rica'
@@ -48,6 +52,10 @@ class DocumentoAsociadoTests(APITestCase):
         response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad_data, format='json')
         self.area_especialidad_id = response.data['id_area_especialidad']
 
+        response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad2_data, format='json')
+        self.area_especialidad2_id = response.data['id_area_especialidad']
+
+
         response = self.client.post(reverse('universidad-list'), self.universidad_data, format='json')
         self.universidad_id = response.data['id_universidad']
 
@@ -56,13 +64,15 @@ class DocumentoAsociadoTests(APITestCase):
 
         self.academico_data = {
             'cedula': '118240782',
-            'foto': 'foto',
+            'foto': None,
             'sitio_web': 'http://google.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandon.castillo.badilla@est.una.ac.cr',
-            'area_de_trabajo': 'Circo',
+            'correo_secundario': 'ariel@email.com',
+            'unidad_base': 'Dermatología',
             'categoria_en_regimen': 'Junior',
             'pais_procedencia': 'Costa Rica',
+            'id_area_especialidad_secundaria_fk': self.area_especialidad2_id,
             'id_nombre_completo_fk': self.nombre_completo_id,
             'id_area_especialidad_fk': self.area_especialidad_id,
             'universidad_fk': self.universidad_id
