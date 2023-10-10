@@ -462,3 +462,7 @@ input[type="submit"]:focus {
   border-bottom-left-radius: 0px!important;
   border-bottom-right-radius: 0px!important;
 }
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-style: none!important;
+}
