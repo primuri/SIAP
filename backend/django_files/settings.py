@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',                 # <- Agreado 
     'rest_framework',              # <- Agreado
+    'rest_framework.authtoken',    # <- Agreado
     'coreapi',                     # <- Agreado
     'informe',                     # <- Agreado
     'organo_colegiado',            # <- Agreado
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'producto',                    # <- Agreado
     'propuesta_proyecto',          # <- Agreado
     'version_proyecto',            # <- Agreado
+    'usuario_personalizado',            # <- Agreado
 ]
 
 MIDDLEWARE = [
@@ -79,7 +82,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_files.wsgi.application'
-
+CORS_ALLOW_ORIGINS = [ 
+    "http://localhost:5173",
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -91,6 +96,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'usuario_personalizado.Usuario'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -127,6 +133,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Documentos 
+MEDIA_URL = '/media/'                        # Cuando un usuario carga un archivo, se generará una URL que comienza con MEDIA_URL. 
+                                             # Ej:  '/documentos/docPropuesta1.jpg'.
+MEDIA_ROOT = BASE_DIR / 'media'              # Define la ubicación en el sistema de archivos donde se almacenarán los archivos. 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

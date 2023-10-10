@@ -1,34 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
+import {BrowserRouter, Route, Routes} from 'react-router-dom' 
+import { Header } from './components/Layout/Header'
 import './App.css'
+import GestionUsuarios from "./routes/GestionUsuarios"
+import GestionPropuestas from "./routes/GestionPropuestas"
+import { useEffect } from 'react'
+import { Home } from './pages/Home'
+import { Sidebar } from './components/Layout/Sidebar'
+import { Footer } from './components/Layout/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    const currentPath = window.location.pathname;
+  
+    // Si no se encuentra un usuario en el localStorage (sin iniciar sesión) y la ruta actual no es /log-in, redirige a /log-in
+    if (!user && currentPath !== '/login') {
+      window.location.href = '/login';
+    }
+  }, []);
+  
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <BrowserRouter>
+      <Header/>
+      <div className='d-flex' id='content-box'>
+        <Sidebar></Sidebar>
+        <Routes>
+          {GestionUsuarios}
+          {GestionPropuestas}
+          <Route path='/' element={<Home></Home>}></Route>
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <Footer/>
+    </BrowserRouter>
   )
 }
 

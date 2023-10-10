@@ -1,0 +1,57 @@
+
+### Crear usuario
+
+POST http://127.0.0.1:8000/signup 
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+{
+  "correo": "prueba4@email.com", 
+  "password": "root", 
+  "groups": ["administrador"],
+  "academico_fk" : "1",
+  "evaluador_fk" : "1"
+}
+
+### Inicio de sesion
+
+POST http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{ "correo": "root@root.com", "password": "root" }
+
+### Obtener usuarios
+
+GET http://127.0.0.1:8000/obtener_usuarios
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+### Eliminar usuario
+
+DELETE http://127.0.0.1:8000/personas/academico/11/ HTTP/1.1
+Authorization: Token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+
+### Obtener academicos
+
+GET http://127.0.0.1:8000/personas/academico/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+
+### Obtener evaluadores
+
+GET http://127.0.0.1:8000/personas/evaluador/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+### Obtener titulos
+
+GET http://127.0.0.1:8000/personas/titulos/
+Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Content-Type: application/json
+
+### Obtener telefonos
+
+GET http://127.0.0.1:8000/personas/universidad?nombre=Universidad%20Nacional&pais=Polonia/
+Authorization: token 357cff9eed614b19d1020eeb0208bf124abbff10
+Content-Type: application/json

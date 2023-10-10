@@ -26,3 +26,4 @@
  Desde otra terminal ->
  docker ps 			<- ver nombres contenedores
  docker exec -it <nombre> bash 	<- Para entrar por bash o un comando especifico.
+

@@ -1,69 +1,468 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;700;800&display=swap');
+
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  --celeste-ucr: #4AACE1;
+  --gris-claro-ucr: #EAEAEA;
+  --gris-oscuro-urc: #323232;
+  --rojo-ucr: #670000;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+html{
+  background-color: var(--gris-claro-ucr);
 }
 
 body {
   margin: 0;
-  display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  background-color: #bd3737;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.background-color-celeste-ucr {
+  background-color: var(--celeste-ucr);
 }
 
+.background-color-gris-c-ucr {
+  background-color: var(--gris-claro-ucr);
+}
+
+.background-color-rojo-ucr {
+  background-color: var(--rojo-ucr);
+}
+
+input,
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  background-color: var(--gris-claro-ucr);
+  border: transparent;
+  outline: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+button.close{
+  background-color: transparent!important;
+}
+
+.close-icon{
+  font-size: 210%!important;
+}
+
+select {
+  outline: none;
+}
+
+input[type="submit"] {
+  background-color: var(--celeste-ucr);
+}
+
+nav {
+  height: calc(100vh - 108px);
+  margin-top: 108px;
+  padding-left: 10px;
+  background-color: white;
+}
+
+main {
+  margin-top: 108px;
+  background-color: var(--gris-claro-ucr);
+}
+
+.side-bar-nav {
+  background-color: white;
+}
+
+.side-bar {
+  padding-right: 20px;
+  background-color: white;
+}
+
+.side-bar hr {
+  margin: 0;
+  margin-left: 20px;
+  z-index: 1;
+}
+
+.side-bar a.active {
+  font-weight: 500;
+}
+
+.side-bar li {
+  margin-left: 20px;
+}
+
+.side-bar li:hover a{
+  font-weight: 500;
+}
+
+.side-bar li:hover{
+  margin-left: 17px;
+}
+
+.side-bar li:has(> a.active) {
+  margin-left: 0px;
+}
+
+.side-bar li:has(> a.active)::before {
+  content: '';
+  display: block;
+  width: 7px;
+  height: 100%; /* Establece la altura inicial en 0 */
+  margin-right: 10px;
+  background-color: var(--celeste-ucr);
+  animation: expandLine 0.7s ease; /* Aplica la animación a ::before */
+}
+
+
+@keyframes expandLine {
+  0% {
+    height: 0;
   }
-  a:hover {
-    color: #747bff;
+  100% {
+    height: 100%;
   }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+.table-button {
+  background-color: var(--celeste-ucr);
+}
+
+.delete-button {
+  background-color: var(--rojo-ucr);
+}
+
+.cancel-button {
+  background-color: var(--gris-oscuro-urc);
+}
+
+.table {
+  width: 83vw !important;
+}
+
+thead {
+  border-radius: 100px 100px 0 0;
+  --bs-table-bg: var(--celeste-ucr);
+  --bs-table-color:
+}
+
+table thead tr {
+  background-color: var(--celeste-ucr);
+  color: white;
+  font-weight: lighter;
+  padding: 1rem;
+}
+
+table thead tr:last-child() {
+  border-radius: 0 5px 0 0;
+}
+
+table thead tr:first-child() {
+  border-radius: 5px 0 0 0;
+}
+
+table tbody td {
+  cursor: pointer;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #E4E4E4;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #e1dbdb;
+}
+
+.page-number {
+  background-color: white;
+  height: 40px;
+  border-radius: 5px;
+  color: black
+}
+
+.page-number.active {
+  background-color: var(--celeste-ucr);
+  color: white;
+}
+
+.modal {
+  backdrop-filter: blur(3px);
+  background-color: rgba(18, 18, 18, 0.355);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.label-personalizado {
+  font-weight: 500;
+}
+
+input.form-control, textarea{
+  background-color: #EAEAEA !important;
+  height: 40px;
+}
+
+select.form-control {
+  background-color: #EAEAEA !important;
+  max-width: 300px;
+}
+select{
+  cursor: pointer;
+}
+
+.form-select.seleccion{
+  background-color: #EAEAEA !important;
+  height: 40px;
+  max-width: 100%;  
+}
+
+.select_arrow::after{
+  content: "";
+  width: 15px;
+  height: 15px;
+  top: calc(50% + 13px);
+  right: 15%;
+  position: absolute;
+  display: inline-block;
+  background-image: url('./assets/select_arrow.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  pointer-events: none;
+}
+.close-icon {
+  font-size: 150%;
+  color: rgb(0, 0, 0);
+  background-color: transparent !important;
+  position: relative;
+  bottom: 25px;
+  left: -12px;
+}
+
+.close{
+  width: 15px;
+  height: 28px;
+}
+
+#boton-personalizado {
+  width: 300px;
+}
+
+#boton-personalizado2 {
+  width: 184px;
+}
+
+.buscar-input {
+  background-color: white;
+}
+
+#selectCol {
+  width: 22vh;
+  display: inherit;
+  background-color: white;
+  color: black;
+  border-top-left-radius: 1;
+  border-bottom-left-radius: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+option {
+  background-color: white;
+  color: black
+}
+
+#content-box {
+  background-color: var(--gris-claro-ucr);
+}
+
+.icono {
+  margin-right: 10px;
+  position: relative;
+  bottom: 2px;
+}
+
+.rounded-table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-header-container{
+  position: sticky;
+}
+
+.modal-dialog-scrollable .modal-content {
+  max-height: 80%!important;
+    border-radius: 10px; 
+    overflow: hidden;
+}
+
+#boton-inicioSesion {
+  width: 100%; 
+  height: 37px;
+  padding: 0!important;
+}
+
+#boton-inicioSesion:hover {
+  background-color: #3e92bf;
+}
+
+/* Estilo base para botones e inputs de tipo submit */
+button,
+input[type="submit"] {
+  padding: 10px 20px;
+  color: #fff; /* Color de texto */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative; /* Añade posicionamiento relativo para aplicar superposición */
+  transition: transform 0.1s ease;
+}
+
+/* Estilo cuando se presiona (pseudo-clase :active) */
+button:active::after,
+input[type="submit"]:active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Sombreado oscuro semitransparente */
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo cuando se enfoca (pseudo-clase :focus) */
+button:focus,
+input[type="submit"]:focus {
+  outline: none; /* Elimina el contorno predeterminado en el enfoque */
+}
+
+.cerrar-sesion:hover{
+  text-decoration: underline;
+}
+
+.img-space{
+  border-radius: 8px 0 30px 0;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: var(--celeste-ucr);
+}
+
+.modal-header{
+  z-index: 2;
+  background-color: white;
+}
+
+.modal-footer{
+  z-index: 2;
+  background-color: white !important;
+}
+
+#asociar_evaluador {
+  max-width: 150% !important;
+}
+
+#asociar_academico {
+  max-width: 150% !important;
+}
+
+.agregarBtn {
+  border-radius: 10px;
+  color: black;
+  padding: 1%;
+  box-shadow: 0px 1px 1px -1px rgba(0,0,0,0.005), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+.agregarBtnMod{
+  border-radius: 0 0 10px 10px;
+  color: black;
+  padding: 1%;
+  box-shadow: 0px 1px 1px -1px rgba(0,0,0,0.005), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+.eliminarBtn {
+  border-radius: 10px;
+  color: black;
+  width: 20% !important;
+  border: 1px solid #670000;
+  padding-left: 0.05%;
+  padding-right: 0.05%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+.MuiInputBase-root, .MuiOutlinedInput-root, .MuiInputBase-colorPrimary, .MuiInputBase-fullWidth, .MuiInputBase-formControl, .MuiInputBase-adornedEnd, .MuiAutocomplete-inputRoot, .css-1h51icj-MuiAutocomplete-root .MuiOutlinedInput-root, .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
+  background-color: var(--gris-claro-ucr);
+  height: 40px;
+  text-align: center;
+  border: none;
+}
+
+.css-1h51icj-MuiAutocomplete-root .MuiOutlinedInput-root, .css-1wuilmg-MuiAutocomplete-root .MuiOutlinedInput-root {
+  font-family: var(--bs-body-font-family)!important;
+  padding: 0px 5px!important;
+}
+
+.css-1wuilmg-MuiAutocomplete-root {
+  width: 100%!important;
+}
+
+/* Estilos para el ícono de ojo y el campo de contraseña */
+.password-input {
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  flex-grow: 1;
+}
+
+.toggle-password {
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: 18px;
+}
+
+.required {
+  color: red;
+}
+
+.disabled-input{
+  color: gray!important;
+}
+
+.ojo{
+  background-color: var(--gris-claro-ucr)!important;
+}
+
+/* Asegura que la tabla se expanda al máximo del contenedor padre */
+.table-resizable {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+}
+
+
+/* Establece un ancho mínimo para las columnas */
+.table-resizable th,
+.table-resizable td {
+  min-width: 100px; /* Ajusta el ancho mínimo según tus necesidades */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Permite el redimensionamiento horizontal de las columnas */
+.table-resizable th {
+  resize: horizontal;
+}
+
+.css-1elwnq4-MuiPaper-root-MuiAccordion-root:last-of-type {
+  border-bottom-left-radius: 0px!important;
+  border-bottom-right-radius: 0px!important;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-style: none!important;
 }
