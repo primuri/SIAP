@@ -55,3 +55,29 @@ Content-Type: application/json
 GET http://127.0.0.1:8000/personas/universidad?nombre=Universidad%20Nacional&pais=Polonia/
 Authorization: token 357cff9eed614b19d1020eeb0208bf124abbff10
 Content-Type: application/json
+
+
+### Obtener version de proyecto
+
+GET http://127.0.0.1:8000/version_proyecto/versionproyecto/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+
+### Obtener informe
+
+GET http://127.0.0.1:8000/informe/informes/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+
+### Obtener Evaluacion CC
+GET http://127.0.0.1:8000/version_proyecto/evaluacionescc/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+
+### Obtener Oficio
+GET http://127.0.0.1:8000/version_proyecto/oficios/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
