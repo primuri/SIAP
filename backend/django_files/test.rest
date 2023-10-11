@@ -81,3 +81,18 @@ Content-Type: application/json
 GET http://127.0.0.1:8000/version_proyecto/oficios/
 Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
 Content-Type: application/json
+
+### Obtener Documento
+GET http://127.0.0.1:8000/version_proyecto/documentos/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener Version Informe
+GET http://127.0.0.1:8000/informe/versioninformes/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener Documento Accion
+GET http://127.0.0.1:8000/version_proyecto/documentos/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json

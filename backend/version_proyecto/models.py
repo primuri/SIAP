@@ -1,6 +1,8 @@
 from django.db import models
 from propuesta_proyecto.models import PropuestaProyecto, Vigencia
 from personas.models import Evaluador, Asistente, Academico
+from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
 
 class Proyecto(models.Model):
     id_codigo_vi = models.CharField(max_length=45, primary_key=True)
@@ -21,10 +23,25 @@ class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
     detalle = models.CharField(max_length=360, null=True)
-    ruta_archivo = models.CharField(max_length=1024)
+    documento = models.FileField(upload_to='media/', unique=True)  
 
     class Meta:
         db_table = 'documento'
+
+def documento_delete(sender, instance, **kwargs):
+    instance.documento.delete(save=False)
+pre_delete.connect(documento_delete, sender=Documento)
+
+def documento_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.documento != instance.documento:
+        obj.documento.delete(save=False)
+
+pre_save.connect(documento_sustituir, sender=Documento)
 
 class EvaluacionCC(models.Model):
     id_evaluacion_cc = models.AutoField(primary_key=True)
@@ -85,8 +102,6 @@ class DesignacionAsistente(models.Model):
     class Meta:
         db_table = 'designacion_asistente'
         unique_together = (('id_version_proyecto_fk', 'id_asistente_carnet_fk'),)
-
-from django.db import models
 
 class ColaboradorSecundario(models.Model):
     id_colaborador_secundario = models.AutoField(primary_key=True)

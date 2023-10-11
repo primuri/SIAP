@@ -33,6 +33,31 @@ import axios from 'axios'
   }
 ]
 
+Formato JSON para agregar documento
+
+  {
+    "id_documento": 1,
+    "tipo": "Prueba",
+    "detalle": "Prueba",
+    "ruta_archivo": "www.google.com"
+  }
+]
+
+
+Formato JSON para agregar version informe
+
+[
+  {
+    "id_version_informe": 1,
+    "id_informe_fk": 1,
+    "id_evaluacion_cc_fk": 1,
+    "id_oficio_fk": 1,
+    "id_documento_informe_fk": 1,
+    "numero_version": "1",
+    "fecha_presentacion": "2023-10-11T20:25:16Z"
+  }
+]
+
 */
 
 const SIAPAPI = axios.create({
@@ -194,36 +219,103 @@ export const eliminarOficio = async (id, token) => {
 };
 
 // Obtener documento informe
-
+export const obtenerDocumentoInforme = async (token) => {
+    return await SIAPAPI.get('version_proyecto/documentos', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
 
 // Agregar documento informe
+export const agregarDocumentoInforme = async (documento, token) => {
+    try {
+        const response_documento = await SIAPAPI.post('version_proyecto/documentos/', documento, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_documento_creado = response_documento.data.documento;
+        return id_documento_creado;
+    } catch (error) {
+        console.error("Error agregando documento de informe: ", error);
+        throw error;
+    }
+};
 
 // Editar documento informe
+export const editarDocumentoInforme = async (id, documento, token) => {
+    return await SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 
 // Eliminar documento informe
+export const eliminarDocumentoInforme = async (id, token) => {
+    return await SIAPAPI.delete(`version_proyecto/documentos/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
 
 
-// 3. ------------------------------------------------------------
 
 // Obtener version de informe
+export const obtenerVersionInforme = async (token) => {
+    return await SIAPAPI.get('informe/versioninformes', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
 
 // Agregar version de informe
+export const agregarVersionInforme = async (versionInforme, token) => {
+    try {
+        const response_version_informe = await SIAPAPI.post('informe/versioninformes/', versionInforme, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_version_informe_creado = response_version_informe.data.id_version_informe;
+        return id_version_informe_creado;
+    } catch (error) {
+        console.error("Error agregando version de informe: ", error);
+        throw error;
+    }
+};
+
 
 // Editar version de informe
+export const editarVersionInforme = async (id, versionInforme, token) => {
+    return await SIAPAPI.put(`informe/versioninformes/${id}/`, versionInforme, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 
 // Eliminar version de informe
-
-
-
-// 4. ------------------------------------------------------------
-
-// Obtener documento accion
-
-// Agregar documento accion
-
-// Editar documento accion
-
-// Eliminar documento accion
+export const eliminarVersionInforme = async (id, token) => {
+    return await SIAPAPI.delete(`informe/versioninformes/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
 
 
 // 5. ------------------------------------------------------------
