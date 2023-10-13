@@ -49,6 +49,21 @@ import {manejarErrores} from './errorHandler'
         "fecha_presentacion": "2023-10-11T20:25:16Z"
     }
 
+    Formato JSON para agregar accion
+
+    [
+        {
+            "id_accion": 1,
+            "id_version_informe_fk": 1,
+            "id_documento_accion_fk": 3,
+            "fecha": "2023-10-13T20:39:07Z",
+            "origen": "A",
+            "destino": "B",
+            "estado": "Aprobado"
+        }
+    ]
+
+
 */
 
 const SIAPAPI = axios.create({
@@ -190,7 +205,7 @@ export const obtenerDocumentoInforme = async (token) => {
     return await manejarErrores(SIAPAPI.get('version_proyecto/documentos', {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };
@@ -200,7 +215,7 @@ export const agregarDocumentoInforme = async (documento, token) => {
     return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };
@@ -210,7 +225,7 @@ export const editarDocumentoInforme = async (id, documento, token) => {
     return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };
@@ -263,16 +278,41 @@ export const eliminarVersionInforme = async (id, token) => {
      }));
 };
 
-
-
-// 5. ------------------------------------------------------------
-
 // Obtener accion
+export const obtenerAccion = async (token) => {
+    return await manejarErrores(SIAPAPI.get('informe/acciones', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
 
 // Agregar accion
+export const agregarAccion = async (accion, token) => {
+    return await manejarErrores(SIAPAPI.post('informe/acciones/', accion, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
 
 // Editar accion
+export const editarAccion = async (id, accion, token) => {
+    return await manejarErrores(SIAPAPI.put(`informe/acciones/${id}/`, accion, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
 
 // Eliminar accion
-
+export const eliminarAccion = async (id, token) => {
+    return await manejarErrores(SIAPAPI.delete(`informe/acciones/${id}`,{
+        headers: {'Authorization': `token ${token}`, 
+                  'Content-Type':'application/json'}
+     }));
+};
 

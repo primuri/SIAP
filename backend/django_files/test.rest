@@ -94,3 +94,8 @@ Content-Type: application/json
 GET http://127.0.0.1:8000/version_proyecto/documentos/
 Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
 Content-Type: application/json
+
+### Obtener Accion
+GET http://127.0.0.1:8000/informe/acciones/
+Authorization: token 5944b34e9a0c3be148c9d6c985c23d91057ffc34
+Content-Type: application/json
