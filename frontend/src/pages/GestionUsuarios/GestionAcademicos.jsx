@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
-import {Modal} from "../../utils/Modal"
+import { Modal } from "../../utils/Modal"
 import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademicos/AcademicosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import {toast, Toaster} from 'react-hot-toast'
+import { toast, Toaster } from 'react-hot-toast'
 import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre} from "../../api/gestionAcademicos"
-import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
+import { editarNombre,editarArea,editarUniversidad } from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
 export const GestionAcademicos = () => {
 
     const user = JSON.parse(localStorage.getItem('user'))
-    const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizr la pagina.
+    const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizar la pagina.
     const [academicos, setAcademicos] = useState([])  
-    const [cargado, setCargado] = useState(false)                    // Académicos que se muestran
+    const [cargado, setCargado] = useState(false)                         // Académicos que se muestran
     const [data, setData] = useState([])                                  // Todos los académicos
     const [academico, setAcademico] = useState(null)                      // Usuario al que se le da click en la tabla para editar
     const [addClick, setAddClick] = useState(false) 

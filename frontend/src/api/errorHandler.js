@@ -1,4 +1,4 @@
-const manejarErrores = async (peticion) => {
+export const manejarErrores = async (peticion) => {
     try {
         const respuesta = await peticion;
         return respuesta;

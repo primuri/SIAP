@@ -4,6 +4,7 @@ import { Header } from './components/Layout/Header'
 import './App.css'
 import GestionUsuarios from "./routes/GestionUsuarios"
 import GestionPropuestas from "./routes/GestionPropuestas"
+import GestionInformes from "./routes/GestionInformes"
 import { useEffect } from 'react'
 import { Home } from './pages/Home'
 import { Sidebar } from './components/Layout/Sidebar'
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           {GestionUsuarios}
           {GestionPropuestas}
+          {GestionInformes}
           <Route path='/' element={<Home></Home>}></Route>
         </Routes>
       </div>
