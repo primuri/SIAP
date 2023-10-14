@@ -66,11 +66,11 @@ import {manejarErrores} from './errorHandler'
 
 */
 
+const token = localStorage.getItem('token')                                      // Token para los request
+
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
-
-
 
 // Obtener version de proyecto
 export const obtenerVersionProyecto = async (token) => {
@@ -123,7 +123,7 @@ export const eliminarInforme = async (id, token) => {
 };
 
 // Obtener evaluacion CC
-export const obtenerEvaluacionCC = async (token) => {
+export const obtenerEvaluacionCC = async () => {
     return await manejarErrores(SIAPAPI.get('version_proyecto/evaluacionescc', {
         headers: {
             'Authorization': `token ${token}`,
@@ -133,7 +133,7 @@ export const obtenerEvaluacionCC = async (token) => {
 };
 
 // Agregar evaluacion CC
-export const agregarEvaluacionCC = async (evaluacionCC, token) => {
+export const agregarEvaluacionCC = async (evaluacionCC) => {
     return await manejarErrores(SIAPAPI.post('version_proyecto/evaluacionescc/', evaluacionCC, {
         headers: {
             'Authorization': `token ${token}`,
@@ -143,7 +143,7 @@ export const agregarEvaluacionCC = async (evaluacionCC, token) => {
 };
 
 // Editar evaluacion CC
-export const editarEvaluacionCC = async (id, evaluacionCC, token) => {
+export const editarEvaluacionCC = async (id, evaluacionCC) => {
     return await manejarErrores(SIAPAPI.put(`version_proyecto/evaluacionescc/${id}/`, evaluacionCC, {
         headers: {
             'Authorization': `token ${token}`,
@@ -153,7 +153,7 @@ export const editarEvaluacionCC = async (id, evaluacionCC, token) => {
 };
 
 // Eliminar evaluacion CC
-export const eliminarEvaluacionCC = async (id, token) => {
+export const eliminarEvaluacionCC = async (id) => {
     return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluacionescc/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
@@ -163,7 +163,7 @@ export const eliminarEvaluacionCC = async (id, token) => {
 };
 
 // Obtener oficio
-export const obtenerOficio = async (token) => {
+export const obtenerOficio = async () => {
     return await manejarErrores(SIAPAPI.get('informe/oficios', {
         headers: {
             'Authorization': `token ${token}`,
@@ -173,7 +173,7 @@ export const obtenerOficio = async (token) => {
 };
 
 // Agregar oficio
-export const agregarOficio = async (oficio, token) => {
+export const agregarOficio = async (oficio) => {
     return await manejarErrores(SIAPAPI.post('informe/oficios/', oficio, {
         headers: {
             'Authorization': `token ${token}`,
@@ -183,7 +183,7 @@ export const agregarOficio = async (oficio, token) => {
 };
 
 // Editar oficio
-export const editarOficio = async (id, oficio, token) => {
+export const editarOficio = async (id, oficio) => {
     return await manejarErrores(SIAPAPI.put(`informe/oficios/${id}/`, oficio, {
         headers: {
             'Authorization': `token ${token}`,
@@ -193,7 +193,7 @@ export const editarOficio = async (id, oficio, token) => {
 };
 
 // Eliminar oficio
-export const eliminarOficio = async (id, token) => {
+export const eliminarOficio = async (id) => {
     return await manejarErrores(SIAPAPI.delete(`informe/oficios/${id}`,{
         headers: {'Authorization': `token ${token}`, 
                   'Content-Type':'application/json'}
@@ -201,7 +201,7 @@ export const eliminarOficio = async (id, token) => {
 };
 
 // Obtener documento informe
-export const obtenerDocumentoInforme = async (token) => {
+export const obtenerDocumentoInforme = async () => {
     return await manejarErrores(SIAPAPI.get('version_proyecto/documentos', {
         headers: {
             'Authorization': `token ${token}`,
@@ -211,7 +211,7 @@ export const obtenerDocumentoInforme = async (token) => {
 };
 
 // Agregar documento informe
-export const agregarDocumentoInforme = async (documento, token) => {
+export const agregarDocumentoInforme = async (documento) => {
     return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
             'Authorization': `token ${token}`,
@@ -221,7 +221,7 @@ export const agregarDocumentoInforme = async (documento, token) => {
 };
 
 // Editar documento informe
-export const editarDocumentoInforme = async (id, documento, token) => {
+export const editarDocumentoInforme = async (id, documento) => {
     return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
@@ -231,7 +231,7 @@ export const editarDocumentoInforme = async (id, documento, token) => {
 };
 
 // Eliminar documento informe
-export const eliminarDocumentoInforme = async (id, token) => {
+export const eliminarDocumentoInforme = async (id) => {
     return await manejarErrores(SIAPAPI.delete(`version_proyecto/documentos/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
@@ -241,8 +241,8 @@ export const eliminarDocumentoInforme = async (id, token) => {
 };
 
 // Obtener version de informe
-export const obtenerVersionInforme = async (token) => {
-    return await manejarErrores(SIAPAPI.get('informe/versioninformes', {
+export const obtenerVersionesInforme = async (id_informe) => {
+    return await manejarErrores(SIAPAPI.get(`informe/versioninformes/?id_informe=${id_informe}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -251,7 +251,7 @@ export const obtenerVersionInforme = async (token) => {
 };
 
 // Agregar version de informe
-export const agregarVersionInforme = async (versionInforme, token) => {
+export const agregarVersionInforme = async (versionInforme) => {
     return await manejarErrores(SIAPAPI.post('informe/versioninformes/', versionInforme, {
         headers: {
             'Authorization': `token ${token}`,
@@ -261,7 +261,7 @@ export const agregarVersionInforme = async (versionInforme, token) => {
 };
 
 // Editar version de informe
-export const editarVersionInforme = async (id, versionInforme, token) => {
+export const editarVersionInforme = async (id, versionInforme) => {
     return await manejarErrores(SIAPAPI.put(`informe/versioninformes/${id}/`, versionInforme, {
         headers: {
             'Authorization': `token ${token}`,
@@ -271,7 +271,7 @@ export const editarVersionInforme = async (id, versionInforme, token) => {
 };
 
 // Eliminar version de informe
-export const eliminarVersionInforme = async (id, token) => {
+export const eliminarVersionInforme = async (id) => {
     return await manejarErrores(SIAPAPI.delete(`informe/versioninformes/${id}`,{
         headers: {'Authorization': `token ${token}`, 
                   'Content-Type':'application/json'}
@@ -279,7 +279,7 @@ export const eliminarVersionInforme = async (id, token) => {
 };
 
 // Obtener accion
-export const obtenerAccion = async (token) => {
+export const obtenerAccion = async () => {
     return await manejarErrores(SIAPAPI.get('informe/acciones', {
         headers: {
             'Authorization': `token ${token}`,
@@ -289,7 +289,7 @@ export const obtenerAccion = async (token) => {
 };
 
 // Agregar accion
-export const agregarAccion = async (accion, token) => {
+export const agregarAccion = async (accion) => {
     return await manejarErrores(SIAPAPI.post('informe/acciones/', accion, {
         headers: {
             'Authorization': `token ${token}`,
@@ -299,7 +299,7 @@ export const agregarAccion = async (accion, token) => {
 };
 
 // Editar accion
-export const editarAccion = async (id, accion, token) => {
+export const editarAccion = async (id, accion) => {
     return await manejarErrores(SIAPAPI.put(`informe/acciones/${id}/`, accion, {
         headers: {
             'Authorization': `token ${token}`,
@@ -309,7 +309,7 @@ export const editarAccion = async (id, accion, token) => {
 };
 
 // Eliminar accion
-export const eliminarAccion = async (id, token) => {
+export const eliminarAccion = async (id) => {
     return await manejarErrores(SIAPAPI.delete(`informe/acciones/${id}`,{
         headers: {'Authorization': `token ${token}`, 
                   'Content-Type':'application/json'}
