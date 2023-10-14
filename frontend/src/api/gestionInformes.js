@@ -72,9 +72,20 @@ const SIAPAPI = axios.create({
 
 
 
-// Obtener version de proyecto
-export const obtenerVersionProyecto = async (token) => {
+// Obtener versiones de proyectos
+export const obtenerVersionesProyectos = async (token) => {
     return await manejarErrores(SIAPAPI.get('version_proyecto/versionproyecto', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+
+// Obtener version de proyecto
+export const buscarVersionProyecto = async (token, id) => {
+    return await manejarErrores(SIAPAPI.get(`version_proyecto/versionproyecto/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
