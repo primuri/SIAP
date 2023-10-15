@@ -4,9 +4,9 @@ export const VIFields = (versionInforme) => {
     return {
         numero_version: versionInforme ? versionInforme.numero_version : "",
         fecha_presentacion: versionInforme ? versionInforme.fecha_presentacion: "",
-        id_evaluacion_fk: versionInforme ? versionInforme.id_evaluacion_fk : null,
+        id_evaluacion_cc_fk: versionInforme ? versionInforme.id_evaluacion_cc_fk : null,
         id_oficio_fk: versionInforme ? versionInforme.id_oficio_fk : {documento: "", detalle: ""},
-        id_documento_informe_fk: versionInforme ? versionInforme.id_documento_informe_fk : {tipo: "", detalle: "", documento: ""}
+        id_documento_informe_fk: versionInforme ? versionInforme.id_documento_informe_fk : {tipo: "Informe", detalle: "", documento: ""}
     }
 }
 
