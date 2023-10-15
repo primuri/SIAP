@@ -1,7 +1,7 @@
 import { FormModal } from "../../utils/FormModal";
 import { VIFields } from "../../pages/GestionInformes/utils";
 import { useState } from "react";
-import { icono } from '../../../assets/person-i.png'
+import icono from '../../assets/person-i.png'
 
 export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, versionInforme }) => {
     const [showConfirmationEdit, setShowConfirmationEdit]     = useState(false)
@@ -78,11 +78,11 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             <div className="col">
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio <span className="required">*</span> </label>
                                 <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={handleFileChange} required={mode == 1} />
-                                {mode == 2 && (
+                                {/*mode == 2 && (
                                     <a href={formData.id_oficio_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_oficio_fk.documento.split('/').pop()}
                                     </a>
-                                )}
+                                )*/}
                             </div>
                         </div>
                         <div className="row mb-4">
@@ -94,13 +94,13 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe <span className="required">*</span> </label>
                                 <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={handleFileChange} required={mode == 1} />
                                 {mode == 2 && (
-                                    <a href={formData.id_evaluacion_cc_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.id_evaluacion_cc_fk.documento.split('/').pop()}
+                                    <a href={formData.id_documento_informe_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.id_documento_informe_fk.documento.split('/').pop()}
                                     </a>
                                 )}
                             </div>
                         </div>
-                        {mode === 2 && formData.id_evaluacion_cc_fk && (
+                        {/*mode === 2 && formData.id_evaluacion_cc_fk && (
                             <div className="row mb-4">
                                 <div className="col">
                                     <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="required">*</span> </label>
@@ -113,7 +113,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                     </a>
                                 </div>
                             </div>
-                        )}
+                        )*/}
                     </div>
                 </div>
             </FormModal>

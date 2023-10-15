@@ -17,7 +17,7 @@ class VersionInforme(models.Model):
     numero_version = models.CharField(max_length=45)
     fecha_presentacion = models.DateTimeField()
     id_informe_fk = models.ForeignKey(Informe, on_delete=models.CASCADE)
-    id_evaluacion_cc_fk = models.ForeignKey(EvaluacionCC, on_delete=models.PROTECT)
+    id_evaluacion_cc_fk = models.ForeignKey(EvaluacionCC, on_delete=models.PROTECT, null=True)
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_documento_informe_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
 

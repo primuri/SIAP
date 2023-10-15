@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Confirmar } from '../../../utils/Confirmar'
+import { Confirmar } from './Confirmar'
 
 export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm, children }) => {
   return (
@@ -33,8 +33,8 @@ export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, 
         </div>
       </div>
       <form onSubmit={sendForm} className='d-flex flex-column'>
-        <div className="modal-body" style={{ padding: '0px' }} > // Se agrega el body
-          {children}
+        <div className="modal-body" style={{ padding: '0px' }} > 
+          {children}  {/*Se agrega el body del form*/}
         </div>
         <div className="modal-footer justify-content-center position-sticky bottom-0">
           <div className="row">
@@ -64,6 +64,6 @@ export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, 
 }
 
 
-Modal.propTypes = {
+FormModal.propTypes = {
   children: PropTypes.object.isRequired,
 };

@@ -5,6 +5,7 @@ import './App.css'
 import GestionUsuarios from "./routes/GestionUsuarios"
 import GestionPropuestas from "./routes/GestionPropuestas"
 import GestionInformes from "./routes/GestionInformes"
+import GestionVersionesInforme from './routes/GestionVersionesInforme'
 import { useEffect } from 'react'
 import { Home } from './pages/Home'
 import { Sidebar } from './components/Layout/Sidebar'
@@ -30,6 +31,7 @@ function App() {
           {GestionUsuarios}
           {GestionPropuestas}
           {GestionInformes}
+          {GestionVersionesInforme}
           <Route path='/' element={<Home></Home>}></Route>
         </Routes>
       </div>

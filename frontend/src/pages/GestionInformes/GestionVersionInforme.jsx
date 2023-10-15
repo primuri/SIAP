@@ -1,4 +1,4 @@
-import { columnsVI, datakeysVI} from "./utils"
+import { columnsVI, dataKeyVI} from "./utils"
 import { useEffect, useState }  from "react"
 import { VersionInformeForm }   from "../../components/GestionInformes/VersionInformeForm"
 import { toast, Toaster }       from 'react-hot-toast'
@@ -87,14 +87,14 @@ export const GestionVersionInforme = (informeID) => {                           
         setVersionesInformeList(filtrar(col, filter, versionesInformeData))
     }
 
-    function addClicked () {
+    function addBtnClicked () {
         setAddClicked(true)
         setEditClicked(false)
     }
 
     function elementClicked (element) {
-        setEdit(true)
-        setAddClick(false)
+        setEditClicked(true)
+        setAddClicked(false)
         setVersionInforme(element)
     }
 
@@ -110,10 +110,10 @@ export const GestionVersionInforme = (informeID) => {                           
                     <h1>Versiones de informe</h1>{(!loaded) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
-                    <Add onClick={addClicked}></Add>
-                    <Search colNames={columnsVI} columns={dataKeysVI} onSearch={filtrarVersionesInfome}></Search>
+                    <Add onClick={addBtnClicked}></Add>
+                    <Search colNames={columnsVI} columns={dataKeyVI} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeysVI} onClick={elementClicked}></Table>
+                <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked}></Table>
                 {addClicked || editClicked && (
                     <Modal>
                         <VersionInformeForm
@@ -121,7 +121,7 @@ export const GestionVersionInforme = (informeID) => {                           
                             onSubmit={editClicked ? editVersionInforme : addVersionInforme}
                             onCancel={onCancel}
                             onDelete={editClicked ? () => deleteVersionInforme(versionInforme.id_version_informe) : undefined}
-                            versionInforme={editClicked ? evaluador : null}
+                            versionInforme={editClicked ? versionInforme : null}
                         />
                     </Modal>
                 )}

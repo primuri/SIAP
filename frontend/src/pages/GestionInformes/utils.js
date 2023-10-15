@@ -1,5 +1,5 @@
 export const columnsVI = ['Versión', 'Fecha', 'Detalle evaluación','Documento oficio', 'Documento informe']
-export const dataKeyVI = ['numero_version', 'fecha_presentacion', 'id_evaluacion_cc.detalle', 'id_oficio_fk.documento', 'id_documento_fk.documento']
+export const dataKeyVI = ['numero_version', 'fecha_presentacion', 'id_evaluacion_cc_fk.detalle', 'id_oficio_fk.documento', 'id_documento_informe_fk.documento']
 export const VIFields = (versionInforme) => {
     return {
         numero_version: versionInforme ? versionInforme.numero_version : "",
