@@ -51,7 +51,7 @@ class Partida(models.Model):
         db_table = 'partida'
 
 class Proveedor(models.Model):
-    id_cedula_proveedor = models.CharField(max_length=11, primary_key=True)
+    id_cedula_proveedor = models.CharField(max_length=11, primary_key=True, unique=True)
     correo = models.CharField(max_length=64)
     nombre = models.CharField(max_length=128)
     telefono = models.CharField(max_length=45)
@@ -92,8 +92,9 @@ class CuentaBancaria(models.Model):
     tipo = models.CharField(max_length=45)
     moneda = models.CharField(max_length=45)
     cuenta_principal = models.BooleanField()
-    id_proveedor_fk = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
+    id_proveedor_fk = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='id_proveedor_fk')
 
     class Meta:
         db_table = 'cuenta_bancaria'
+        unique_together = (('banco','tipo','moneda','cuenta_principal', 'id_proveedor_fk'),) 
 
