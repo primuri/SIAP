@@ -71,8 +71,9 @@ class PreguntaEvaluacionSerializer(serializers.ModelSerializer):
 
 class VersionProyectoSerializer(serializers.ModelSerializer):
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
-    id_vigencia_fk = serializers.PrimaryKeyRelatedField(queryset=Vigencia.objects.all())
-    id_evaluacion_cc_fk = serializers.PrimaryKeyRelatedField(queryset=EvaluacionCC.objects.all())
+    id_vigencia_fk = serializers.PrimaryKeyRelatedField(queryset=Vigencia.objects.all())\
+    # Sprint 2 no trabajamos con esto para evitar conflictos
+   #id_evaluacion_cc_fk = serializers.PrimaryKeyRelatedField(queryset=EvaluacionCC.objects.all())
     id_codigo_vi_fk = serializers.PrimaryKeyRelatedField(queryset=Proyecto.objects.all())
 
     class Meta:
@@ -83,7 +84,8 @@ class VersionProyectoSerializer(serializers.ModelSerializer):
         rep = super(VersionProyectoSerializer, self).to_representation(instance)
         rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
         rep['id_vigencia_fk'] = VigenciaSerializer(instance.id_vigencia_fk).data
-        rep['id_evaluacion_cc_fk'] = EvaluacionCCSerializer(instance.id_evaluacion_cc_fk).data
+        # Sprint 2 no trabajamos con esto para evitar conflictos
+       #rep['id_evaluacion_cc_fk'] = EvaluacionCCSerializer(instance.id_evaluacion_cc_fk).data
         rep['id_codigo_vi_fk'] = ProyectoSerializer(instance.id_codigo_vi_fk).data
         return rep
 

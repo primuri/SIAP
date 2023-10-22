@@ -57,7 +57,7 @@ class PropuestaProyecto(models.Model):
 class DocumentoAsociado(models.Model):
     id_documentos_asociados = models.AutoField(primary_key=True)
     detalle = models.CharField(max_length=255)
-    documento = models.FileField(upload_to='media/')  # Se cambió de char a file
+    documento = models.FileField(upload_to='media/propuestas/')  # Se cambió de char a file
     id_codigo_cimpa_fk = models.ForeignKey(PropuestaProyecto, on_delete=models.PROTECT, db_column='id_codigo_cimpa_fk')
 
     class Meta:

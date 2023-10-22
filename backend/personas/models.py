@@ -49,7 +49,7 @@ def cambiar_nombre_archivo(instance, filename):
 class Academico(models.Model):
     id_academico = models.AutoField(primary_key=True)
     cedula = models.CharField(max_length=20, unique=True)
-    foto = models.FileField(upload_to='media/pfp', blank=True, null=True)
+    foto = models.FileField(upload_to='media/fotos/', blank=True, null=True)
     sitio_web = models.CharField(max_length=255, blank=True, null=True)
     grado_maximo = models.CharField(max_length=128)
     correo = models.CharField(max_length=64)

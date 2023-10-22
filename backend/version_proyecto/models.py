@@ -1,6 +1,9 @@
 from django.db import models
 from propuesta_proyecto.models import PropuestaProyecto, Vigencia
 from personas.models import Evaluador, Asistente, Academico
+from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
+
 
 class Proyecto(models.Model):
     id_codigo_vi = models.CharField(max_length=45, primary_key=True)
@@ -11,20 +14,50 @@ class Proyecto(models.Model):
 
 class Oficio(models.Model):
     id_oficio = models.AutoField(primary_key=True)
-    ruta_archivo = models.CharField(max_length=1024)
+    ruta_archivo = models.FileField(upload_to='media/oficios/')  # Se cambió de char a file
     detalle = models.CharField(max_length=456, null=True)
 
     class Meta:
         db_table = 'oficio'
+def oficio_delete(sender, instance, **kwargs):
+    instance.ruta_archivo.delete(save=False)
+pre_delete.connect(oficio_delete, sender=Oficio)
+
+def oficio_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.ruta_archivo != instance.ruta_archivo:
+        obj.ruta_archivo.delete(save=False)
+
+pre_save.connect(oficio_sustituir, sender=Oficio)
 
 class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
     detalle = models.CharField(max_length=360, null=True)
-    ruta_archivo = models.CharField(max_length=1024)
+    ruta_archivo = models.FileField(upload_to='media/documentos/')  # Se cambió de char a file
 
     class Meta:
         db_table = 'documento'
+
+def documento_delete(sender, instance, **kwargs):
+    instance.ruta_archivo.delete(save=False)
+pre_delete.connect(documento_delete, sender=Documento)
+
+def documento_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.ruta_archivo != instance.ruta_archivo:
+        obj.ruta_archivo.delete(save=False)
+
+pre_save.connect(documento_sustituir, sender=Documento)
+
 
 class EvaluacionCC(models.Model):
     id_evaluacion_cc = models.AutoField(primary_key=True)
@@ -68,7 +101,9 @@ class VersionProyecto(models.Model):
     numero_version = models.IntegerField()
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT)
-    id_evaluacion_cc_fk = models.ForeignKey(EvaluacionCC, on_delete=models.PROTECT)
+    #comentado para evitar problemas al crear una version de proyecto
+    #ya que en este sprint 2 no vamos a tocar evaluaciones
+    #id_evaluacion_cc_fk = models.ForeignKey(EvaluacionCC, on_delete=models.PROTECT)
     id_codigo_vi_fk = models.ForeignKey(Proyecto, on_delete=models.PROTECT)
 
     class Meta:
@@ -85,8 +120,6 @@ class DesignacionAsistente(models.Model):
     class Meta:
         db_table = 'designacion_asistente'
         unique_together = (('id_version_proyecto_fk', 'id_asistente_carnet_fk'),)
-
-from django.db import models
 
 class ColaboradorSecundario(models.Model):
     id_colaborador_secundario = models.AutoField(primary_key=True)
