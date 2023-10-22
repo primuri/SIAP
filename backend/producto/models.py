@@ -3,7 +3,7 @@ from personas.models import Autor, Institucion
 from version_proyecto.models import Documento, Oficio, VersionProyecto
 
 class Producto(models.Model):
-    id_producto = models.IntegerField(primary_key=True)
+    id_producto = models.AutoField(primary_key=True)
     fecha = models.DateTimeField()
     detalle = models.CharField(max_length=255)
     id_version_proyecto = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
@@ -27,11 +27,11 @@ class Articulo(models.Model):
     id_documento_articulo_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
 
 class Area(models.Model):
-    id_area = models.IntegerField(primary_key=True)
+    id_area = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=45)
 
 class Evento(models.Model):
-    id_evento = models.IntegerField(primary_key=True)
+    id_evento = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
     resumen = models.CharField(max_length=255)
     pais = models.CharField(max_length=150)
@@ -43,7 +43,7 @@ class Evento(models.Model):
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
 
 class Software(models.Model):
-    id_software = models.IntegerField(primary_key=True)
+    id_software = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
     version = models.CharField(max_length=45)
     id_producto_fk = models.ForeignKey(Producto, on_delete=models.PROTECT)

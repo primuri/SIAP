@@ -82,12 +82,36 @@ class AsistenteSerializer(serializers.ModelSerializer):#Modificar para el to_rep
     class Meta:
         model = Asistente
         fields = '__all__'
-
-class AutorSerializer(serializers.ModelSerializer):#Modificar para el to_representation
+class AutorSerializer(serializers.ModelSerializer):
     id_nombre_completo_fk = NombreCompletoSerializer()
+
     class Meta:
         model = Autor
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(AutorSerializer, self).to_representation(instance)
+        rep['id_nombre_completo_fk'] = NombreCompletoSerializer(instance.id_nombre_completo_fk).data
+        return rep
+
+    def create(self, validated_data):
+        nombre_completo_data = validated_data.pop('id_nombre_completo_fk')
+        nombre_completo_serializer = NombreCompletoSerializer(data=nombre_completo_data)
+        if nombre_completo_serializer.is_valid(raise_exception=True):
+            nombre_completo = nombre_completo_serializer.save()
+        autor = Autor.objects.create(id_nombre_completo_fk=nombre_completo, **validated_data)
+        return autor
+    
+    def update(self, instance, validated_data):
+        nombre_completo_data = validated_data.pop('id_nombre_completo_fk', None)
+        if nombre_completo_data:
+            nombre_completo_serializer = NombreCompletoSerializer(instance.id_nombre_completo_fk, data=nombre_completo_data, partial=True)
+            if nombre_completo_serializer.is_valid(raise_exception=True):
+                nombre_completo_serializer.save()
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 class InstitucionSerializer(serializers.ModelSerializer):
     class Meta:

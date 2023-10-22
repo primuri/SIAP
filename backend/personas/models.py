@@ -137,7 +137,7 @@ class Autor(models.Model):
         db_table = 'autor'
 
 class Institucion(models.Model):
-    id_institucion = models.IntegerField(primary_key=True)
+    id_institucion = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
 
     class Meta:
