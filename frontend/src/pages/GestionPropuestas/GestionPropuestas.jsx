@@ -191,11 +191,11 @@ export const GestionPropuestas = () => {
     const deletePropuesta = async (propuesta) => {
         try {
 
-            await eliminarDocumento(propuesta.id_documentos_asociados, localStorage.getItem('token'))
-            await eliminarPropuesta(propuesta.id_codigo_cimpa_fk.id_codigo_cimpa, localStorage.getItem('token'))
-            await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
             await eliminarVigencia(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia, localStorage.getItem('token'))
-
+            await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
+            await eliminarPropuesta(propuesta.id_codigo_cimpa_fk.id_codigo_cimpa, localStorage.getItem('token'))
+            await eliminarDocumento(propuesta.id_documentos_asociados, localStorage.getItem('token'))
+          
             toast.success('Propuesta eliminada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
