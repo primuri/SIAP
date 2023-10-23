@@ -59,26 +59,25 @@ export const GestionInformes = () => {
 
             const Data = JSON.parse(formData)
 
+            /*
             // Buscar si esa version de proyecto existe
-            //let response_VersionProyecto = await buscarVersionProyecto(localStorage.getItem("token"), Data.id_version_proyecto);
+            let response_VersionProyecto = await buscarVersionProyecto(localStorage.getItem("token"), Data.id_version_proyecto);
 
             // Crea una variable para almacenar solo el id de la version que ya se verifico existe.
-            //var id_Version = {}
+            var id_Version = {}
 
             // Si la respuesta es diferente de undefined, almacena el id de la version que se obtuvo
-            /*if(response_VersionProyecto !== undefined) {
+            if(response_VersionProyecto !== undefined) {
                 id_Version = response_VersionProyecto.Data.id_version_proyecto;
             } else {
-                id_Version = 1;
-            }*/
+            }
             
-            //response_VersionProyecto = id_Version;
-            //delete Data.id_version_proyecto;
-            //Data.id_version_proyecto = response_VersionProyecto;
-            //Data.id_version_proyecto = 1;
+            response_VersionProyecto = id_Version;
+            delete Data.id_version_proyecto;
+            Data.id_version_proyecto = response_VersionProyecto;
 
-            //formData.append('json', JSON.stringify(Data))
-
+            formData.append('json', JSON.stringify(Data))
+            */
             await agregarInforme(formData, localStorage.getItem("token"))
 
             toast.success('Informe agregado correctamente', {
