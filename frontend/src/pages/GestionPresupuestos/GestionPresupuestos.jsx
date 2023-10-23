@@ -44,10 +44,8 @@ export const GestionPresupuestos = () => {
   // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
-      const Datos = JSON.parse(formData)
-      formData.delete('json')
 
-      await agregarProveedor(Datos, localStorage.getItem('token'))
+      await agregarProveedor(formData, localStorage.getItem('token'))
       toast.success('Proveedor agregado correctamente', {
         duration: 4000,
         position: 'bottom-right',

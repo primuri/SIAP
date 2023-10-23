@@ -11,7 +11,7 @@ const configuracionCuentaBancaria = [
     { campo: 'banco', placeholder: 'Banco', tipo: 'text', required: true },
     { campo: 'tipo', placeholder: 'Tipo de cuenta', tipo: 'select', opciones: ['Ahorros', 'Corriente'], required: true },
     { campo: 'moneda', placeholder: 'Moneda', tipo: 'text', required: true },
-    { campo: 'cuenta_principal', label: 'Seleccionar como cuenta principal', tipo: 'checkbox', required: true }
+    { campo: 'cuenta_principal', label: ' Seleccionar como cuenta principal', tipo: 'checkbox', required: true }
 ]
 
 export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete }) => {
@@ -77,7 +77,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         event.preventDefault()
 
         formData.cuentaBancaria = cuentaBancaria
-        console.log(cuentaBancaria)
         const combinedData = new FormData();
 
         combinedData.append('json', JSON.stringify(formData))
@@ -144,7 +143,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="cedula" className="label-personalizado mb-2">Cédula <span className="required">*</span> </label>
-                                    <input type="text" className="form-control" name="cedula" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} required />
+                                    <input type="text" className="form-control" name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -167,7 +166,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         </div>
 
                         <div className="d-flex flex-column">
-                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria</label>
+                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria <span className="required">*</span> </label>
                             <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria"/>
                         </div>
 
