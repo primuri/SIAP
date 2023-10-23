@@ -5,11 +5,13 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarVersionProyecto } from "../../api/gestionInformes"
+import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarVersionProyecto, obtenerInformesProyecto } from "../../api/gestionInformes"
 import { InformesForm } from "../../components/GestionInformes/InformesForm"
 import { GestionVersionInforme } from "./GestionVersionInforme"
 
-export const GestionInformes = (/*proyectoID = 1*/) => {
+export const GestionInformes = (/* proyectoID */) => {
+
+    var proyectoID = 1;
 
     // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
     const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
@@ -38,10 +40,10 @@ export const GestionInformes = (/*proyectoID = 1*/) => {
 
     async function loadInformes() {
         try {
-            const response = await obtenerInforme(localStorage.getItem('token')) // Se envía el token y se obtienen todos los informes
-            setData(response.data)                                               // Se guardan en data todos los informes
-            setInformes(response.data)                                           // Se guardan todos los informes
-            setCargado(true)                                                     // Como se cargaron, se pone cargado en true
+            const response = await obtenerInformesProyecto(localStorage.getItem('token'), proyectoID) // Se envía el token y se obtienen todos los informes
+            setData(response.data)                                                                    // Se guardan en data todos los informes
+            setInformes(response.data)                                                                // Se guardan todos los informes
+            setCargado(true)                                                                          // Como se cargaron, se pone cargado en true
         } catch (error) {
             toast.error('Error al cargar los datos de informes', {
                 duration: 4000,
@@ -217,7 +219,7 @@ export const GestionInformes = (/*proyectoID = 1*/) => {
                 {!error ? (
                     <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                         <div className="d-flex flex-row">
-                            <h1>Gestión de informes Proyecto</h1>
+                            <h1>Informes del proyecto {proyectoID}</h1>
                             {(!cargado) && (
                                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                             )}

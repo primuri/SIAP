@@ -136,6 +136,7 @@ main {
 
 #acciones-button {
   background-color: var(--celeste-ucr);
+  border-color: var(--celeste-ucr);
 }
 
 .table {

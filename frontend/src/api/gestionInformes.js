@@ -103,6 +103,16 @@ export const obtenerInforme = async (token) => {
     }));
 };
 
+// Obtener informes de un proyecto
+export const obtenerInformesProyecto = async (token, id_version_proyecto) => {
+    return await manejarErrores(SIAPAPI.get(`informe/informes/?id_version_proyecto=${id_version_proyecto}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
 // Agregar informe
 export const agregarInforme = async (informe, token) => {
     return await manejarErrores(SIAPAPI.post('informe/informes/', informe, {

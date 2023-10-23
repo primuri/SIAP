@@ -68,6 +68,12 @@ GET http://127.0.0.1:8000/informe/informes/
 Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
 Content-Type: application/json
 
+### Obtener informes de un proyecto
+
+GET http://127.0.0.1:8000/informe/informes/?id_version_proyecto=1
+Authorization: token 15c37e4c1ad7cb1e1ba78a35475430703451082f
+Content-Type: application/json
+
 
 ### Obtener Evaluacion CC
 GET http://127.0.0.1:8000/version_proyecto/evaluacionescc/

@@ -51,7 +51,7 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
             setAddClicked(false)
             setReload(!reload)
             mostrarExito("Versión informe agregada correctamente")
-        }catch(error){
+        } catch(error){
             mostrarError(error)
         }
     }
@@ -133,7 +133,7 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="d-flex flex-row">
-                    <h1>Versiones del informe</h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
+                    <h1>Versiones del informe {informeID.informeID} </h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
                     <Add onClick={addBtnClicked}></Add>
