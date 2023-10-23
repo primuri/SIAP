@@ -17,51 +17,50 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
 
-    // Si hay informacion en el academico, la almacena en formData, sino queda vacía
+    // Si hay informacion en el informe, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         id: informe ? informe.id_informe : "",
         estado: informe ? informe.estado : "",
         tipo: informe ? informe.tipo : "",
-        fechaPresentacion: informe ? informe.fecha_presentacion : "",
-        fechaDebePresentar: informe ? informe.fecha_debe_presentar : "",
-        idVersionProyecto: informe ? informe.id_version_proyecto_fk: "",
+        fecha_presentacion: informe ? informe.fecha_presentacion : "",
+        fecha_debe_presentar: informe ? informe.fecha_debe_presentar : "",
+        id_version_proyecto_fk: informe ? informe.id_version_proyecto_fk.id_version_proyecto: "",
     })
 
+
+    /* Carga las versiones de proyectos 
+    const versionSeleccionada = versionesProyectos.find(versionesProyectos =>
+        String(versionesProyectos.id_version_proyecto) === String(formData.idVersionProyecto)
+    );
+    const versionProyecto = versionSeleccionada ? versionSeleccionada.id_version_proyecto : "";*/
+
     const handleChange = (event) => {
-        const { name, value } = event.target
-
-        if (name === "pais_procedencia") {
-            setPaisSeleccionado(value);
-            setFormData({
-                ...formData,
-                [name]: value,
-            });
-        }
-
+        const { name, value } = event.target;
+    
         if (name.includes('.')) {
-            const keys = name.split('.')
-            setFormData(prev => ({
+            const keys = name.split('.');
+            setFormData((prev) => ({
                 ...prev,
                 [keys[0]]: {
                     ...prev[keys[0]],
-                    [keys[1]]: value
-                }
-            }))
-
+                    [keys[1]]: value,
+                },
+            }));
         } else {
-            setFormData({
-                ...formData,
+            setFormData((prev) => ({
+                ...prev,
                 [name]: value,
-            })
+            }));
         }
-    }
+    };
 
 
     const sendForm = (event) => {
         event.preventDefault();
+        formData.id_version_proyecto_fk = 1;
         const jsonData = JSON.stringify(formData);
         onSubmit(jsonData);
-      };
+    };
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -85,7 +84,6 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
     };
 
     return (
-        
         <div>
             <div className="modal-header pb-0 position-sticky top-0">
                 <div className="container">
@@ -136,24 +134,23 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Fecha de presentación <span className="required">*</span> </label>
-                                    <input type="date" className="form-control" name="fechaPresentacion" id="fechaPresentacion" value={formData.fechaPresentacion} onChange={handleChange} />
+                                    <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación <span className="required">*</span> </label>
+                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="fechaDebePresentar" className="label-personalizado mb-2">Fecha que se debe presentar <span className="required">*</span></label>
-                                <input type="date" className="form-control" name="fechaDebePresentar" id="fechaDebePresentar" value={formData.fechaDebePresentar} onChange={handleChange} required />
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="idVersionProyecto" className="label-personalizado mb-2">ID versión de proyecto asociado <span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="idVersionProyecto" id="idVersionProyecto" value={formData.idVersionProyecto.id_version_proyecto} onChange={handleChange} />
+                                <label htmlFor="fecha_debe_presentar" className="label-personalizado mb-2">Fecha que se debe presentar <span className="required">*</span></label>
+                                <input type="date" className="form-control" name="fecha_debe_presentar" id="fecha_debe_presentar" value={formData.fecha_debe_presentar ? new Date(formData.fecha_debe_presentar).toISOString().split('T')[0] : ""} onChange={handleChange} required />
                             </div>
                         </div>                  
                     </div>
                 </div>
+
+
+             
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">

@@ -5,7 +5,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarVersionProyecto, obtenerVersionesProyectos } from "../../api/gestionInformes"
+import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarVersionProyecto } from "../../api/gestionInformes"
 import { InformesForm } from "../../components/GestionInformes/InformesForm"
 
 export const GestionInformes = () => {
@@ -14,7 +14,8 @@ export const GestionInformes = () => {
     const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
     const [reload, setReload] = useState(false)                                  // Para controlar cuándo se debe de recargar la página
     const [informes, setInformes] = useState([])                                 // Estado para almacenar todos los informes
-    const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no    
+    const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no  
+    const [cargadoV, setCargadoV] = useState(false)                              // Para controlar si las versiones de proyecto se cargaron o no  
     const [data, setData] = useState([])                                         // Todos los informes.                          
     const [informe, setInforme] = useState(null)                                 // Informe al que se le da click en la tabla.
     const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
@@ -24,7 +25,15 @@ export const GestionInformes = () => {
     const dataKeys = ['id_informe','estado','tipo', 'id_version_proyecto_fk.id_version_proyecto']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true
-    useEffect(() => {loadInformes() }, [reload])                                 // Cuando reload cambia, se llama a loadAcademicos()
+                                  
+    useEffect(() => {                                                            // Cuando reload cambia, se llama a load()
+        async function fetchData() {
+            loadInformes()
+            setCargado(true);
+        }
+
+        fetchData();
+    }, [reload]);
 
     async function loadInformes() {
         try {
@@ -48,27 +57,27 @@ export const GestionInformes = () => {
     const addInforme = async (formData) => {       
         try {
 
-            const Data = JSON.parse(formData.get('json'))
-            formData.delete('json')
+            const Data = JSON.parse(formData)
 
             // Buscar si esa version de proyecto existe
-            let response_VersionProyecto = await buscarVersionProyecto(localStorage.getItem("token"), Data.id_version_proyecto);
+            //let response_VersionProyecto = await buscarVersionProyecto(localStorage.getItem("token"), Data.id_version_proyecto);
 
             // Crea una variable para almacenar solo el id de la version que ya se verifico existe.
-            var id_Version = {}
+            //var id_Version = {}
 
             // Si la respuesta es diferente de undefined, almacena el id de la version que se obtuvo
-            if(response_VersionProyecto !== undefined) {
+            /*if(response_VersionProyecto !== undefined) {
                 id_Version = response_VersionProyecto.Data.id_version_proyecto;
             } else {
-                // No existe una version de proyecto con ese id
-            }
+                id_Version = 1;
+            }*/
+            
+            //response_VersionProyecto = id_Version;
+            //delete Data.id_version_proyecto;
+            //Data.id_version_proyecto = response_VersionProyecto;
+            //Data.id_version_proyecto = 1;
 
-            response_VersionProyecto = id_Version;
-            delete Data.id_version_proyecto;
-            Data.id_version_proyecto = response_VersionProyecto;
-
-            formData.append('json', JSON.stringify(Data))
+            //formData.append('json', JSON.stringify(Data))
 
             await agregarInforme(formData, localStorage.getItem("token"))
 
@@ -96,10 +105,7 @@ export const GestionInformes = () => {
 
    // Manejo de los datos del formulario de editar 
    const editInforme = async (formData) => {       
-        try {
-            const Datos = JSON.parse(formData.get('json'))
-            formData.delete('json')
-
+        try {          
             await editarInforme(informe.id_informe, formData, localStorage.getItem("token"))
             toast.success('Informe editado correctamente', {
                 duration: 4000, 
