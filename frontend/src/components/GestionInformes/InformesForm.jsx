@@ -160,7 +160,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="investigador(a)" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="informe" />)}
                                 </>
                             )}
                         </div>
@@ -168,7 +168,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="investigador(a)" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="informe" />)}
                                 </>
                             )}
                         </div>
