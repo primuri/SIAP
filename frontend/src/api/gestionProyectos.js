@@ -13,6 +13,21 @@ export const obtenerProyectos = async (token) => {
     });
 };
 
+export const agregarProyectos = async (proyecto, token) => {
+    try { 
+        return await SIAPAPI.post('version_proyecto/proyectos/', proyecto, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error agregando proyecto: ", error);
+        throw error;
+    } 
+};
+
 export const obtenerVersionProyectos = async (token) => {
     return await SIAPAPI.get('version_proyecto/versionproyecto/', {
         headers: {
@@ -22,6 +37,55 @@ export const obtenerVersionProyectos = async (token) => {
     });
 };
 
+
+export const agregarVersionProyectos = async (version_proyecto, token) => {
+    try { 
+        return await SIAPAPI.post('version_proyecto/versionproyecto/', version_proyecto, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error agregando version de proyecto: ", error);
+        throw error;
+    } 
+};
+
+
+export const editarVersionProyectos = async (id, version_proyecto, token) => {
+    try { 
+        return await SIAPAPI.put(`version_proyecto/versionproyecto/${id}/`, version_proyecto, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar version de proyecto: ", error);
+        throw error;
+    } 
+};
+
+
+
+export const agregarOficio = async (oficio, token) => {
+    try {
+        const response_oficio =  await SIAPAPI.post('version_proyecto/oficios/', oficio, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        const id_oficio_creada = response_oficio.data.id_oficio;
+        return id_oficio_creada;
+    } catch(error) {
+        console.error("Error agregando oficio: ", error);
+        throw error;
+    } 
+};
 
 export const agregarVigencia = async (vigencia, token) => {
     try {
@@ -62,6 +126,8 @@ export const eliminarVigencia = async (id, token) => {
 };
 
 
+
+
 export const editarOficio = async (id, oficio, token) => {
     const responseOficio = await SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
         headers: {
@@ -75,6 +141,15 @@ export const editarOficio = async (id, oficio, token) => {
 
 export const eliminarOficio = async (id, token) => {
     return await SIAPAPI.delete(`version_proyecto/oficios/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const eliminarVersion = async (id, token) => {
+    return await SIAPAPI.delete(`version_proyecto/versionproyecto/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'

@@ -8,6 +8,7 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, editarVigencia, eliminarColaborador, eliminarDocumento, eliminarPropuesta, eliminarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
+import { agregarProyectos } from "../../api/gestionProyectos"
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -106,7 +107,7 @@ export const GestionPropuestas = () => {
 
             const Datos = JSON.parse(formData.get('json'))
             formData.delete('json');
-            console.log(Datos)
+            
             const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
 
 
@@ -155,11 +156,17 @@ export const GestionPropuestas = () => {
             const fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
             Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
+            if(Datos.id_codigo_cimpa_fk.estado == "Aprobada"){
+                const proyecto = {
+                    id_codigo_vi : Datos.id_codigo_cimpa_fk.id_codigo_cimpa,
+                    id_codigo_cimpa_fk : Datos.id_codigo_cimpa_fk.id_codigo_cimpa
+                }
+                await agregarProyectos(proyecto,localStorage.getItem("token"))
+            }
             await editarPropuesta(id_propu, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
 
 
             const id_doc = Datos.id_documentos_asociados;
-            //await editarPropuesta(Datos.id_codigo_cimpa_fk.id_codigo_cimpa, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
             delete Datos.id_codigo_cimpa_fk;
             Datos.id_codigo_cimpa_fk = id_propu;
             formData.append('detalle', Datos.detalle)
@@ -230,7 +237,7 @@ export const GestionPropuestas = () => {
     }
     // Al hacer click en la tabla
     const elementClicked = (user) => {
-        // console.log(user)
+       
         setPropuesta(user)
         setEdit(true)
         setAddClick(false)

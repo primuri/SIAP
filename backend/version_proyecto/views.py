@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from .models import PreguntaEvaluacion, Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
 from .serializers import PreguntaEvaluacionSerializer, ProyectoSerializer, OficioSerializer, DocumentoSerializer, EvaluacionCCSerializer, PreguntaEvaluacionCCSerializer, EvaluacionSerializer, VersionProyectoSerializer, DesignacionAsistenteSerializer, ColaboradorSecundarioSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from django_files.permisos import PermisoPorRol
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -62,6 +65,7 @@ class VersionProyectoViewSet(viewsets.ModelViewSet):
     view_name = 'versiones_proyectos'
     queryset = VersionProyecto.objects.all()
     serializer_class = VersionProyectoSerializer
+    
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
@@ -76,3 +80,4 @@ class ColaboradorSecundarioViewSet(viewsets.ModelViewSet):
     view_name = 'colaboradores_secundarios'
     queryset = ColaboradorSecundario.objects.all()
     serializer_class = ColaboradorSecundarioSerializer
+
