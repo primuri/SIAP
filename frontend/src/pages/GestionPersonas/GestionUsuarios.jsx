@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
-import { UsuariosForm } from "../../components/GestionUsuarios/GestionUsuarios/UsuariosForm"
+import { UsuariosForm } from "../../components/GestionPersonas/GestionUsuarios/UsuariosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from "react-hot-toast"
