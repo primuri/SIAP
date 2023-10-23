@@ -164,27 +164,27 @@ export const eliminarEvaluacionCC = async (id) => {
 
 // Obtener oficio
 export const obtenerOficio = async () => {
-    return await manejarErrores(SIAPAPI.get('informe/oficios', {
+    return await manejarErrores(SIAPAPI.get('version_proyecto/oficios/', {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };
 
 // Agregar oficio
 export const agregarOficio = async (oficio) => {
-    return await manejarErrores(SIAPAPI.post('informe/oficios/', oficio, {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/oficios/', oficio, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };
 
 // Editar oficio
 export const editarOficio = async (id, oficio) => {
-    return await manejarErrores(SIAPAPI.put(`informe/oficios/${id}/`, oficio, {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -192,9 +192,19 @@ export const editarOficio = async (id, oficio) => {
     }));
 };
 
+// Editar oficio con archivo adjunto
+export const editarOficioAndDocumento = async (id, oficio) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/oficios/${id}/`, oficio, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
 // Eliminar oficio
 export const eliminarOficio = async (id) => {
-    return await manejarErrores(SIAPAPI.delete(`informe/oficios/${id}`,{
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`,{
         headers: {'Authorization': `token ${token}`, 
                   'Content-Type':'application/json'}
      }));
@@ -221,7 +231,17 @@ export const agregarDocumentoInforme = async (documento) => {
 };
 
 // Editar documento informe
-export const editarDocumentoInforme = async (id, documento) => {
+export const editarDocumentoInforme= async (id, documento) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Editar documento informe con archivo adjunto
+export const editarDocumentoInformeAndDocumento = async (id, documento) => {
     return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,

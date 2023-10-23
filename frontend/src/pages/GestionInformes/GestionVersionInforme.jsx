@@ -22,8 +22,10 @@ export const GestionVersionInforme = (informeID) => {                           
     async function loadVersionesInformeData() {
         try{
             var response = await API.obtenerVersionesInforme(informeID)
-            setVersionesInformeData(response.data)
-            setVersionesInformeList(response.data)
+            
+            setVersionesInformeData(formatearFecha(response))
+            setVersionesInformeList(formatearFecha(response))
+
             setLoaded(true)
         } catch (error){
             mostrarError(error)
@@ -32,13 +34,14 @@ export const GestionVersionInforme = (informeID) => {                           
 
     async function addVersionInforme (formData) {
         try{
-            const data = JSON.parse(formData)
+            const data = { ...formData}
 
-            let responseOficio = await API.agregarOficio(data.id_informe_fk)
-            data.id_informe_fk = responseOficio.data.id_informe
+            let responseOficio = await API.agregarOficio(data.id_oficio_fk)
+            data.id_oficio_fk = responseOficio.data.id_oficio
 
             let responseDocumento = await API.agregarDocumentoInforme(data.id_documento_informe_fk)
-            data.id_documento_informe_fk = responseDocumento.data.id_documento_informe
+            data.id_documento_informe_fk = responseDocumento.data.id_documento
+            data.id_informe_fk = informeID.informeID
 
             await API.agregarVersionInforme(data)
 
@@ -50,23 +53,35 @@ export const GestionVersionInforme = (informeID) => {                           
         }
     }
 
-    async function editVersionInforme(formData) {
+    async function editVersionInforme(dataForm) {
         try{
-            const data = JSON.parse(formData)
-
-            let responseOficio = await API.editarOficio(data.id_informe_fk)
-            data.id_informe_fk = responseOficio.data.id_informe
+            var data = { ...dataForm}
+            if (typeof data.id_oficio_fk.ruta_archivo === 'object') {
+                var responseOficio = await API.editarOficioAndDocumento(data.id_oficio_fk.id_oficio, data.id_oficio_fk);
+            } else {
+                delete data.id_oficio_fk.ruta_archivo
+                var responseOficio = await API.editarOficio(data.id_oficio_fk.id_oficio, data.id_oficio_fk);
+            }
+            
+            data.id_oficio_fk = responseOficio.data.id_oficio;
+            
+            if (typeof data.id_documento_informe_fk.documento === 'object') {
+                var responseDocumento = await API.editarDocumentoInformeAndDocumento(data.id_documento_informe_fk.id_documento, data.id_documento_informe_fk);
+            } else {
+                delete data.id_documento_informe_fk.documento
+                var responseDocumento = await API.editarDocumentoInforme(data.id_documento_informe_fk.id_documento, data.id_documento_informe_fk);
+            }
+            
+            data.id_documento_informe_fk = responseDocumento.data.id_documento;
 
             data.id_evaluacion_cc_fk = (data.id_evaluacion_cc_fk.id_evaluacion_cc ? data.id_evaluacion_cc_fk.id_evaluacion_cc : null)
-
-            let responseDocumento = await API.editarDocumentoInforme(data.id_documento_informe_fk)
-            data.id_documento_informe_fk = responseDocumento.data.id_documento_informe
-
-            await API.editarVersionInforme(data)
+            data.id_informe_fk = informeID.informeID
+            await API.editarVersionInforme(versionInforme.id_version_informe, data)
             
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Versión proyecto editado correctamente")
+            console.log(versionInforme)
         }catch(error){
             mostrarError(error)
         }
@@ -107,14 +122,14 @@ export const GestionVersionInforme = (informeID) => {                           
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="d-flex flex-row">
-                    <h1>Versiones de informe</h1>{(!loaded) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
+                    <h1>Versiones de informe</h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsVI} columns={dataKeyVI} onSearch={filtrarVersionesInfome}></Search>
                 </div>
                 <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked}></Table>
-                {addClicked || editClicked && (
+                {(addClicked || editClicked) && (
                     <Modal>
                         <VersionInformeForm
                             mode={editClicked ? 2 : 1}
@@ -163,3 +178,14 @@ function filtrar(col, filter, data) {
         return value && value.toString().includes(filter);
       })
 }
+
+function formatearFecha(response) {
+    return response.data.map((obj) => {
+      const fechaISO = obj.fecha_presentacion;
+      const dateObj = new Date(fechaISO);
+      const fechaFormateada = dateObj.toISOString().split('T')[0];
+      
+      return { ...obj, fecha_presentacion: fechaFormateada };
+    });
+  }
+  

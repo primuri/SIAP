@@ -17,7 +17,7 @@ class InformeSerializer(serializers.ModelSerializer):
 
 class VersionInformeSerializer(serializers.ModelSerializer):
     id_informe_fk = serializers.PrimaryKeyRelatedField(queryset=Informe.objects.all())
-    id_evaluacion_cc_fk = serializers.PrimaryKeyRelatedField(queryset=EvaluacionCC.objects.all())
+    id_evaluacion_cc_fk = serializers.PrimaryKeyRelatedField(queryset=EvaluacionCC.objects.all(), allow_null=True)
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
     id_documento_informe_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())
 

@@ -7,6 +7,8 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const [showConfirmationEdit, setShowConfirmationEdit]     = useState(false)
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false)
     const [formData, setFormData]                             = useState(VIFields(versionInforme))
+    const [fileOficio, setFileOficio]                         = useState(null);
+    const [fileInforme, setFileInforme]                       = useState(null);
 
     const updateNestedField = (formData, fieldPath, value) => {
         const keys = fieldPath.split('.');
@@ -25,8 +27,16 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
 
     const sendForm = (event) => {
         event.preventDefault();
-        const jsonData = JSON.stringify(formData);
-        onSubmit(jsonData);
+        let sendingForm = { ...formData}
+        if(fileOficio){
+            sendingForm.id_oficio_fk.ruta_archivo = fileOficio
+        }
+        if(fileInforme){
+            sendingForm.id_documento_informe_fk.documento = fileInforme
+        }
+
+        onSubmit(sendingForm);
+        sendingForm = { ...formData}
     };
 
     const handleDeleteClick = () => {
@@ -50,9 +60,14 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
         setShowConfirmationEdit(false);
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
-        setFileData(file);
+
+        if (obj === "oficio"){
+            setFileOficio(file);
+        } else if (obj === "informe"){
+            setFileInforme(file)
+        }
     };
 
     return (
@@ -77,12 +92,12 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio <span className="required">*</span> </label>
-                                <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={handleFileChange} required={mode == 1} />
-                                {/*mode == 2 && (
-                                    <a href={formData.id_oficio_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.id_oficio_fk.documento.split('/').pop()}
+                                <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={(event) => handleFileChange(event, 'oficio')} required={mode == 1} />
+                                {mode == 2 && (
+                                    <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.id_oficio_fk.ruta_archivo.split('/').pop()}
                                     </a>
-                                )*/}
+                                )}
                             </div>
                         </div>
                         <div className="row mb-4">
@@ -92,15 +107,15 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe <span className="required">*</span> </label>
-                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={handleFileChange} required={mode == 1} />
+                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event, 'informe')}  required={mode == 1} />
                                 {mode == 2 && (
-                                    <a href={formData.id_documento_informe_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                    <a href={"http://localhost:8000" + formData.id_documento_informe_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_documento_informe_fk.documento.split('/').pop()}
                                     </a>
                                 )}
                             </div>
                         </div>
-                        {/*mode === 2 && formData.id_evaluacion_cc_fk && (
+                        {mode === 2 && typeof formData.id_evaluacion_cc_fk.documento !== 'undefined' && (
                             <div className="row mb-4">
                                 <div className="col">
                                     <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="required">*</span> </label>
@@ -108,12 +123,12 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 </div>
                                 <div className="col">
                                     <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="required">*</span> </label>
-                                    <a href={formData.id_evaluacion_cc_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                    <a href={formData.id_evaluacion_cc_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_evaluacion_cc_fk.documento.split('/').pop()}
                                     </a>
                                 </div>
                             </div>
-                        )*/}
+                        )}
                     </div>
                 </div>
             </FormModal>
