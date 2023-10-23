@@ -159,6 +159,7 @@ export const GestionPropuestas = () => {
 
 
             const id_doc = Datos.id_documentos_asociados;
+            await editarPropuesta(Datos.id_codigo_cimpa_fk.id_codigo_cimpa, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
             delete Datos.id_codigo_cimpa_fk;
             Datos.id_codigo_cimpa_fk = id_propu;
             formData.append('detalle', Datos.detalle)
