@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns, data, onClick, dataKeys }) => {
+export const Table = ({ columns, data, onClick, dataKeys, hasButtonColumn = false, buttonText = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -62,17 +62,24 @@ export const Table = ({ columns, data, onClick, dataKeys }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((row, rowIndex) => (
-              <tr key={rowIndex} onClick={() => onClick(row)}>
-                {dataKeys.map((column, colIndex) => (
-                  <td className="mx-2" key={colIndex}>
-                  {typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
-                    ? getValueByPath(row, column).split('/').pop()
-                    : getValueByPath(row, column) === 'academico'? 'investigador' : getValueByPath(row, column)}
-                </td>
-                ))}
-              </tr>
-            ))}
+          {currentItems.map((row, rowIndex) => (
+          <tr key={rowIndex} onClick={() => onClick(row)}>
+          {dataKeys.map((column, colIndex) => (
+            <td className="mx-2" key={colIndex}>
+              {colIndex === dataKeys.length - 1 ? ( // Comprueba si estás en la última columna
+                // Agrega el botón solo a la última columna
+                hasButtonColumn && <button id="acciones-button" className="btn btn-primary" /*onClick={() => handleButtonClick(row)}*/>{buttonText}</button>
+                
+              ) : (
+                // Renderiza el contenido de las otras columnas
+                typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
+                  ? getValueByPath(row, column).split('/').pop()
+                  : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
+                )}
+            </td>
+          ))}
+        </tr>
+        ))}
           </tbody>
         </table>
       </div>

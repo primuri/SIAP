@@ -7,8 +7,10 @@ import { Modal }                from "../../utils/Modal"
 import { Table }                from "../../utils/Table"
 import { Add }                  from "../../utils/Add"
 import * as API                 from "../../api/gestionInformes"
+import { GestionInformes } from "./GestionInformes"
+import add from '../../assets/plus-i.png'
 
-export const GestionVersionInforme = (informeID) => {                                // Versiones de un infome   
+export const GestionVersionInforme = (informeID, returnToInformes) => {                                // Versiones de un infome   
     const [versionesInformeData, setVersionesInformeData] = useState([])             // Datos completos
     const [versionesInformeList, setVersionesInformeList] = useState([])             // Datos filtrados
     const [versionInforme, setVersionInforme]             = useState(null)           // Version actual
@@ -16,6 +18,7 @@ export const GestionVersionInforme = (informeID) => {                           
     const [reload, setReload]                             = useState(false)          // Para recargar tabla
     const [addClicked, setAddClicked]                     = useState(false)          // Para evento de agregar
     const [editClicked, setEditClicked]                   = useState(false)          // Para evento de editar
+    const [returnInformes, setReturnInformes] = useState(false); 
     
     useEffect(() => { loadVersionesInformeData() }, [reload])                        // Carga los datos tras detectar cambios
     
@@ -47,7 +50,7 @@ export const GestionVersionInforme = (informeID) => {                           
 
             setAddClicked(false)
             setReload(!reload)
-            mostrarExito("Versión proyecto agregado correctamente")
+            mostrarExito("Versión informe agregada correctamente")
         }catch(error){
             mostrarError(error)
         }
@@ -80,7 +83,7 @@ export const GestionVersionInforme = (informeID) => {                           
             
             setEditClicked(false)
             setReload(!reload)
-            mostrarExito("Versión proyecto editado correctamente")
+            mostrarExito("Versión informe editada correctamente")
             console.log(versionInforme)
         }catch(error){
             mostrarError(error)
@@ -92,7 +95,7 @@ export const GestionVersionInforme = (informeID) => {                           
             await API.eliminarVersionInforme(id_version_informe)
             setEditClicked(false)
             setReload(!reload)
-            mostrarExito("Versión proyecto borrado correctamente")
+            mostrarExito("Versión informe borrada correctamente")
         }catch(error){
             mostrarError(error)
         }
@@ -118,17 +121,28 @@ export const GestionVersionInforme = (informeID) => {                           
         setEditClicked(false)
     }
 
+
+    if(returnInformes === true) {
+        return <GestionInformes/>;
+    }
+
     return (
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="d-flex flex-row">
-                    <h1>Versiones de informe</h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
+                    <h1>Versiones del informe</h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsVI} columns={dataKeyVI} onSearch={filtrarVersionesInfome}></Search>
                 </div>
                 <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked}></Table>
+                <div>
+                    <button id="acciones-button" className="btn btn-primary">
+                        <span className='icono'><img width={"20px"} src={add}/></span>
+                        Regresar a Informes
+                    </button>
+                </div>
                 {(addClicked || editClicked) && (
                     <Modal>
                         <VersionInformeForm

@@ -134,6 +134,10 @@ main {
   background-color: var(--gris-oscuro-urc);
 }
 
+#acciones-button {
+  background-color: var(--celeste-ucr);
+}
+
 .table {
   width: 83vw !important;
 }
