@@ -108,7 +108,7 @@ export const GestionProyectos = () => {
             } 
             const id_vigencia_creado = await agregarVigencia(vigencia,localStorage.getItem('token'))
             delete Datos.id_vigencia_fk;
-            const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
+            const id_vi = parseInt(Datos.id_codigo_vi_fk.id_codigo_vi, 10);
             delete Datos.id_codigo_vi_fk;
             Datos.id_codigo_vi_fk = id_vi;
             delete Datos.id_version_proyecto;
