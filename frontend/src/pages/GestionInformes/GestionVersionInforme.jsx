@@ -121,6 +121,9 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
         setEditClicked(false)
     }
 
+    function volverInformes() {
+        setReturnInformes(true);
+    }
 
     if(returnInformes === true) {
         return <GestionInformes/>;
@@ -138,7 +141,7 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
                 </div>
                 <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked}></Table>
                 <div>
-                    <button id="acciones-button" className="btn btn-primary">
+                    <button id="acciones-button" className="btn btn-primary" onClick={volverInformes}>
                         <span className='icono'><img width={"20px"} src={add}/></span>
                         Regresar a Informes
                     </button>
