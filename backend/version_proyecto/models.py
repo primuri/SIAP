@@ -13,11 +13,28 @@ class Proyecto(models.Model):
 
 class Oficio(models.Model):
     id_oficio = models.AutoField(primary_key=True)
-    ruta_archivo = models.CharField(max_length=1024)
+    ruta_archivo = models.FileField(upload_to='media/', unique=True)
     detalle = models.CharField(max_length=456, null=True)
 
     class Meta:
         db_table = 'oficio'
+
+def oficio_delete(sender, instance, **kwargs):
+    instance.ruta_archivo.delete(save=False)
+    
+pre_delete.connect(oficio_delete, sender=Oficio)
+
+def oficio_sustituir(sender, instance, **kwargs):
+    try:
+        obj = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    if obj.ruta_archivo != instance.ruta_archivo:
+        obj.ruta_archivo.delete(save=False)
+
+pre_save.connect(oficio_sustituir, sender=Oficio)
+
 
 class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)

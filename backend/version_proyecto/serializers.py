@@ -22,6 +22,9 @@ class OficioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Oficio
         fields = '__all__'
+    def to_representation(self, instance):
+        rep = super(OficioSerializer, self).to_representation(instance)
+        return rep
 
 class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
