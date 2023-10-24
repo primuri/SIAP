@@ -134,8 +134,8 @@ export const GestionProyectos = () => {
                 },
             })
             setAddClick(false)
-            loadVersionProyectos(Datos.id_codigo_vi_fk )
             setReload(!reload)
+            
         } catch (error) {
             toast.error('Error al agregar la Proyecto', {
                 duration: 4000,

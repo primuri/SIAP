@@ -8,7 +8,7 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
-import { agregarProyectos, agregarVigencia, editarVigencia, eliminarVigencia } from "../../api/gestionProyectos"
+import { agregarProyectos, agregarVigencia, editarVigencia, eliminarVigencia, obtenerProyectos } from "../../api/gestionProyectos"
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -101,6 +101,19 @@ export const GestionPropuestas = () => {
         }
     }
 
+    async function proyectoExiste(id_codigo_vi, token) {
+        try {
+            const response = await obtenerProyectos(token);
+            if (!response.data) return false;
+            console.log("Proyectos:", response.data);
+            console.log("id_codigo_vi a verificar:", id_codigo_vi);
+            return response.data.some(proyecto => proyecto.id_codigo_vi == id_codigo_vi);
+        } catch (error) {
+            console.error("Error al verificar si el proyecto existe:", error);
+            return false;
+        }
+    }
+
     // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try {
@@ -156,12 +169,17 @@ export const GestionPropuestas = () => {
             const fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
             Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
+            
             if(Datos.id_codigo_cimpa_fk.estado == "Aprobada"){
                 const proyecto = {
                     id_codigo_vi : Datos.id_codigo_cimpa_fk.id_codigo_cimpa,
                     id_codigo_cimpa_fk : Datos.id_codigo_cimpa_fk.id_codigo_cimpa
                 }
-                await agregarProyectos(proyecto,localStorage.getItem("token"))
+                const existe = await proyectoExiste(proyecto.id_codigo_vi, localStorage.getItem("token"));
+            
+                if (!existe) {
+                    await agregarProyectos(proyecto, localStorage.getItem("token"));
+                }
             }
             await editarPropuesta(id_propu, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
 

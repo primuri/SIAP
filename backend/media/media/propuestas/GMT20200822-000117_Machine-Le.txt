@@ -1,0 +1,53 @@
+00:13:04	harolddiaz:	si
+00:13:04	Jorge Arturo Adolio Cascante:	si lo escucho bien
+00:13:05	Edgar Herrera:	si todo bien
+00:26:38	Mario Villarroel:	Profesor, ¿las clases “online” quedarán grabadas y disponibles después en el Sitio de PROMIDAT?
+00:30:22	Jorge Arturo Adolio Cascante:	Profesor para programar en Python que IDE se usará??
+00:47:01	Jorge Arturo Adolio Cascante:	los videos de las clases en que formato se guardarán? antes ustedes usaban Webex
+00:47:31	Jorge Arturo Adolio Cascante:	ok gracias
+01:14:23	Gilberth Coto:	Por ahí está surgiendo ML.NET para machine learning, tendrá algún futuro ??
+01:15:25	Jorge Arturo Adolio Cascante:	creo que él quiso decir .NET de Microsoft
+01:15:41	Gilberth Coto:	Es ML.NET
+01:16:07	Jorge Arturo Adolio Cascante:	ahh ok perdón.
+01:17:25	harolddiaz:	Tengo entendido que R fue comprado por MS
+01:17:42	harolddiaz:	https://www.silicon.es/microsoft-compra-la-empresa-revolution-analytics-78694#:~:text=Microsoft%20ha%20desvelado%20hoy%20que,lenguaje%20de%20programaci%C3%B3n%20%E2%80%9CR%E2%80%9D.
+01:28:24	Jorge Arturo Adolio Cascante:	podría decirse que el Jupyter sería como el R markdown donde uno define los textos y los chunks de los códigos en python??
+01:28:30	Roy Araya:	uno baja anaconda y tiene que crear una cuenta para utilizarlo?
+01:31:03	Jorge Arturo Adolio Cascante:	si
+01:34:02	Jorge Arturo Adolio Cascante:	uno desde jupyter no puede cargar los códigos .py que creamos en spyder??
+01:35:09	Omar Bolanos:	Profe, si quiere le  puedo enviar a su correo el archivo Clase 1 -  Introducción a Python. No se si ese es el que no puede desplegar 
+01:35:36	Byron:	Soporta beamer?
+01:35:49	Jorge Arturo Adolio Cascante:	Omar, no es que él quería mostrar el archivo que uno crea en jupyter
+01:35:55	Byron:	excelente gracias
+01:37:06	Roy Araya:	Anaconda cuando ejecute spyder me pregunto que si instalaba kite, yo le dije que si, pero no se si podria tener problemas
+01:45:27	Jorge Arturo Adolio Cascante:	en caso que se requiera instalar un paquete, como sería?
+01:45:46	Jorge Arturo Adolio Cascante:	ok
+02:01:22	Jorge Arturo Adolio Cascante:	Profesor, Anaconda incluye alguna ayuda sobre uso de métodos o funciones como en R?
+02:02:51	harolddiaz:	En py se deben descargar paquetes y luego llamar las librerías?
+02:03:09	Jorge Arturo Adolio Cascante:	no digo que si yo quiero ver como usar un método de Python, Anaconda incluye código de ejemplo?
+02:05:28	Sergio Villegas:	Hola, vamos a usar ambientes?
+02:05:36	harolddiaz:	Gracias!
+02:08:45	harolddiaz:	Se pueden hacer operaciones entre diccionarios y otros tipos de datos?
+02:30:57	Roy Araya:	Enredado es un piropo, es una lógica diferente a la nuestrasi
+02:31:01	Roy Araya:	si
+02:31:01	harolddiaz:	si
+02:31:02	Edgar Herrera:	sep
+02:31:02	Jorge Arturo Adolio Cascante:	si
+02:31:03	Sergio Villegas:	si
+02:31:08	Byron:	Sí señor
+02:31:09	Esteban Fumero:	Comma separated values
+02:31:10	Familia Calvo Díaz:	si señor
+02:31:20	Jorge Arturo Adolio Cascante:	si
+02:31:22	Denisse Montemayor:	No
+02:32:11	anayancysalazar:	Sí señor
+02:37:45	Roy Araya:	Podemos darle una ojeada a la tarea por favor?
+02:39:41	Roy Araya:	Perfecto! Muchísimas gracias!
+02:41:27	Sergio Villegas:	https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html
+02:43:30	Jorge Arturo Adolio Cascante:	muchas gracias
+02:45:32	Roy Araya:	Buenas noches! Feliz fin de semana!
+02:45:33	Esteban Fumero:	Muchas gracias profe y compañeros, feliz fin de semana 
+02:45:37	Jorge Arturo Adolio Cascante:	gracias
+02:45:38	Edgar Herrera:	gracias !
+02:45:38	Byron:	Gracias!
+02:45:39	Jorge Arturo Adolio Cascante:	buenas noches
+02:45:40	Sergio Villegas:	Buenas Noches, Gracias
