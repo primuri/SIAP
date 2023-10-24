@@ -359,11 +359,43 @@ export const editarAccion = async (id, accion) => {
     }));
 };
 
+
+// Editar documento accion con archivo adjunto
+export const editarDocumentoAccionAndDocumento = async (id, documento) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Agregar documento informe
+export const agregarDocumentoAccion = async (documento) => {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Editar documento accion con archivo adjunto
+export const editarDocumentoAccion = async (id, documento) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
 // Eliminar accion
 export const eliminarAccion = async (id) => {
     return await manejarErrores(SIAPAPI.delete(`informe/acciones/${id}`,{
         headers: {'Authorization': `token ${token}`, 
-                  'Content-Type':'application/json'}
+                  'Content-Type':'application/json'
+        }
      }));
 };
 
