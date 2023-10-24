@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
-import { EvaluadoresForm } from "../../components/GestionUsuarios/GestionEvaluadores/EvaluadoresForm"
+import { EvaluadoresForm } from "../../components/GestionPersonas/GestionEvaluadores/EvaluadoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { obtenerEvaluadores, agregarEvaluador, editarEvaluador, eliminarEvaluador } from "../../api/gestionEvaluadores"

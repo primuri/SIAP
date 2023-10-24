@@ -20,6 +20,12 @@ class EnteFinancieroViewSet(viewsets.ModelViewSet):
     view_name = 'entes_financieros'
     queryset = EnteFinanciero.objects.all()
     serializer_class = EnteFinancieroSerializer
+    def get_queryset(self):
+        queryset = EnteFinanciero.objects.all()
+        nombre = self.request.query_params.get('nombre', None)
+        if nombre is not None:
+            queryset = queryset.filter(nombre=nombre)
+        return queryset
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

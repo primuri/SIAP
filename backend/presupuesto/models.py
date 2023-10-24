@@ -11,7 +11,7 @@ class TipoPresupuesto(models.Model):
 
 class EnteFinanciero(models.Model):
     id_ente_financiero = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=150, unique=True)
     
     class Meta:
         db_table = 'ente_financiero'
