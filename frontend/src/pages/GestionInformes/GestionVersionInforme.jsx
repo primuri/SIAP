@@ -149,7 +149,7 @@ export const GestionVersionInforme = (informeID) => {                           
                 </div>
                 <div className="d-flex justify-content-between mt-4">
                     <Add onClick={addBtnClicked}></Add>
-                    <Search colNames={columnsVI} columns={dataKeyVI} onSearch={filtrarVersionesInfome}></Search>
+                    <Search colNames={columnsVI.slice(0, -1)} columns={dataKeyVI.slice(0, -1)} onSearch={filtrarVersionesInfome}></Search>
                 </div>
                 <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar"></Table>
                 <div>

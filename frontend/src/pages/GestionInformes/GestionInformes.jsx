@@ -219,7 +219,7 @@ export const GestionInformes = (/* proyectoID */) => {
                         </div>
                         <div className="d-flex justify-content-between mt-4">
                             <Add onClick={addClicked}></Add>
-                            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                            <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                         </div>
                         <Table columns={columns} data={informes} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar" />
     
