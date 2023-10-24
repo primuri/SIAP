@@ -6,7 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto } from "../../api/gestionPresupuestos"
+import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte } from "../../api/gestionPresupuestos"
 
 
 export const GestionPresupuestos = () => {
@@ -20,7 +20,7 @@ export const GestionPresupuestos = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const columns = ['Proyecto','Año de aprobación','Tipo','Ente financiero','Oficio','Documento','Codigo Financiero']
-    const dataKeys = ['id_codigo_vi.id_codigo_vi','anio_aprobacion','id_ente_financiero_fk.id_ente_financiero','id_tipo_presupuesto_fk.id_tipo_presupuesto','id_oficio_fk.id_oficio','id_oficio_fk.ruta_archivo','codigo_financiero']
+    const dataKeys = ['id_codigo_vi.id_codigo_vi','anio_aprobacion','id_tipo_presupuesto_fk.id_tipo_presupuesto','id_ente_financiero_fk.nombre','id_oficio_fk.id_oficio','id_oficio_fk.ruta_archivo','codigo_financiero']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
      // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
     useEffect(() => {loadPresupuestos()}, [reload])
@@ -44,8 +44,28 @@ export const GestionPresupuestos = () => {
     // Manejo de datos que se van a enviar para agregar
     const addPresupuesto = async (formData) => {
         try{
-            const Datos = JSON.parse(formData)
-            await agregarPresupuesto(Datos,localStorage.getItem('token'))
+
+            const Data = JSON.parse(formData.get('json'))
+            formData.delete('json')
+            //Re estructuracion y creacion del objeto presupuesto
+            delete Data.presupuesto.id_presupuesto
+            Data.presupuesto.id_codigo_vi = Data.proyecto.id_codigo_vi
+            delete Data.proyecto.id_codigo_vi
+            Data.presupuesto.id_tipo_presupuesto_fk = Data.tipoPresupuesto.id_tipo_presupuesto
+            let ente = await buscaEnteFinanciero(Data.ente_financiero_fk.nombre, localStorage.getItem('token'))
+            if(ente){
+              delete Data.ente_financiero_fk
+              Data.presupuesto.id_ente_financiero_fk = ente.id_ente_financiero
+            }else{
+              //Se crea un nuevo ente financiero.
+              console.log('se crea un nuevo ente')
+              delete Data.ente_financiero_fk.id_ente_financiero 
+              ente = await agregarEnte(Data.ente_financiero_fk, localStorage.getItem('token'))
+              Data.presupuesto.id_ente_financiero_fk = ente.data.id_ente_financiero
+            }
+            formData.append('detalle',Data.oficio.detalle)
+            delete Data.oficio
+            await agregarPresupuesto(Data.presupuesto,formData,localStorage.getItem('token'))
             toast.success('Presupuesto agregado correctamente', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
@@ -71,8 +91,27 @@ export const GestionPresupuestos = () => {
     // Manejo de los datos del formulario de editar 
     const editPresupuesto = async (formData) => {
         try{
-            const Datos = JSON.parse(formData)
-            await actualizarPresupuesto(Datos.id,Datos,localStorage.getItem('token'))
+            const Data = JSON.parse(formData.get('json'))
+            formData.delete('json')
+            //Re estructuracion y creacion del objeto presupuesto
+            delete Data.presupuesto.id_presupuesto
+            Data.presupuesto.id_codigo_vi = Data.proyecto.id_codigo_vi
+            delete Data.proyecto.id_codigo_vi
+            Data.presupuesto.id_tipo_presupuesto_fk = Data.tipoPresupuesto.id_tipo_presupuesto
+            let ente = await buscaEnteFinanciero(Data.ente_financiero_fk.nombre, localStorage.getItem('token'))
+            if(ente){
+              delete Data.ente_financiero_fk
+              Data.presupuesto.id_ente_financiero_fk = ente.id_ente_financiero
+            }else{
+              //Se crea un nuevo ente financiero.
+              delete Data.ente_financiero_fk.id_ente_financiero 
+              ente = await agregarEnte(Data.ente_financiero_fk, localStorage.getItem('token'))
+              Data.presupuesto.id_ente_financiero_fk = ente.data.id_ente_financiero
+            }
+            formData.append('detalle',Data.oficio.detalle)
+            formData.append('id_oficio',Data.oficio.id_oficio_fk)
+            delete Data.oficio
+            await actualizarPresupuesto(presupuesto.id_presupuesto,Data.presupuesto,formData,localStorage.getItem('token'))
             toast.success('Presupuesto actualizado correctamente', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
@@ -172,8 +211,8 @@ export const GestionPresupuestos = () => {
                             mode={2}
                             onSubmit={editPresupuesto} 
                             onCancel={onCancel} 
-                            onDelete={() => deletePresupuesto(presupuesto.id)}
-                            Presupuesto={presupuesto}
+                            onDelete={() => deletePresupuesto(presupuesto.id_presupuesto)}
+                            presupuesto={presupuesto}
                         >
                         </PresupuestoForm>
                     </Modal>

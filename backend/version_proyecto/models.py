@@ -13,11 +13,12 @@ class Proyecto(models.Model):
 
 class Oficio(models.Model):
     id_oficio = models.AutoField(primary_key=True)
-    ruta_archivo = models.CharField(max_length=1024)
+    ruta_archivo = models.FileField(upload_to='media/oficios') 
     detalle = models.CharField(max_length=456, null=True)
 
     class Meta:
         db_table = 'oficio'
+        unique_together = (( 'ruta_archivo','id_oficio'),)
 
 class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)

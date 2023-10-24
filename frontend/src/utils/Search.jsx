@@ -13,6 +13,12 @@ export const Search = ({ columns, colNames, onSearch }) => {
             onSearch(selectedColumn, searchText || "");
         }
     };
+    //"Esto es para buscar cuando se le de al enter"
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+          handleSearch();
+        }
+      };
     
     return (
         <div>
@@ -35,6 +41,7 @@ export const Search = ({ columns, colNames, onSearch }) => {
                 placeholder=""
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
+                onKeyDown={handleKeyPress}
                 className="p-2 buscar-input shadow-sm"
                 
             />
