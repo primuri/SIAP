@@ -156,3 +156,12 @@ export const eliminarVersion = async (id, token) => {
         }
     });
 };
+
+export const eliminarProyecto = async (id, token) => {
+    return await SIAPAPI.delete(`version_proyecto/proyectos/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};

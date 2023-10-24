@@ -87,11 +87,15 @@ export const GestionProyectos = () => {
     }
     // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
+        const Datos = JSON.parse(formData.get('json'))
         try {
-            const Datos = JSON.parse(formData.get('json'))
+           
             
             formData.delete('json');
-            
+            const numero = parseInt(Datos.numero_version, 10);
+            delete Datos.numero_version;
+
+            Datos.numero_version = numero;
             let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
             let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
            
@@ -108,7 +112,7 @@ export const GestionProyectos = () => {
             } 
             const id_vigencia_creado = await agregarVigencia(vigencia,localStorage.getItem('token'))
             delete Datos.id_vigencia_fk;
-            const id_vi = parseInt(Datos.id_codigo_vi_fk.id_codigo_vi, 10);
+            const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
             delete Datos.id_codigo_vi_fk;
             Datos.id_codigo_vi_fk = id_vi;
             delete Datos.id_version_proyecto;
@@ -123,8 +127,10 @@ export const GestionProyectos = () => {
             const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
             delete Datos.id_oficio_fk;
             Datos.id_oficio_fk = id_oficio_creado;
-
+            
+           
             await agregarVersionProyectos(Datos, localStorage.getItem('token'))
+            loadVersionProyectos(id_vi)
             toast.success('Proyecto agregada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -134,9 +140,12 @@ export const GestionProyectos = () => {
                 },
             })
             setAddClick(false)
+            loadVersionProyectos(id_vi)
             setReload(!reload)
             
         } catch (error) {
+            await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
+            await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
             toast.error('Error al agregar la Proyecto', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -202,7 +211,7 @@ export const GestionProyectos = () => {
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
             await editarVersionProyectos(id_version_proy,Datos, localStorage.getItem("token"))
-            
+            loadVersionProyectos(Datos.id_codigo_vi_fk)
 
             toast.success('Proyecto actualizada correctamente', {
                 duration: 4000,
@@ -213,7 +222,7 @@ export const GestionProyectos = () => {
                 },
             })
             setEdit(false)
-            loadVersionProyectos(Datos.id_codigo_vi_fk )
+            loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
             toast.error('Error al actualizar la Proyecto', {
@@ -234,7 +243,7 @@ export const GestionProyectos = () => {
             await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
             await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
             await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
-            
+            loadVersionProyectos(id)
 
             toast.success('proyecto eliminada correctamente', {
                 duration: 4000,
@@ -245,8 +254,9 @@ export const GestionProyectos = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
             loadVersionProyectos(id)
+            setReload(!reload)
+           
         } catch (error) {
             toast.error('Error al eliminar la proyecto', {
                 duration: 4000,
@@ -333,6 +343,7 @@ export const GestionProyectos = () => {
                                 )
                             }
                             {}
+                            <Toaster></Toaster>
                             <Back onClick={volver}>Volver</Back>
                         </div>
                     ) : (

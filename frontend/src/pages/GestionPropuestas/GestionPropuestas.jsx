@@ -8,7 +8,7 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
-import { agregarProyectos, agregarVigencia, editarVigencia, eliminarVigencia, obtenerProyectos } from "../../api/gestionProyectos"
+import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -101,12 +101,23 @@ export const GestionPropuestas = () => {
         }
     }
 
+    async function contarVersionesDeProyecto(id_codigo_vi, token) {
+        try {
+            const response = await obtenerVersionProyectos(token);
+            if (!response.data) return 0;
+            const versionesDelProyecto = response.data.filter(version => version.id_codigo_vi_fk.id_codigo_vi == id_codigo_vi);
+            const cantidad =versionesDelProyecto.length;
+            return cantidad;
+        } catch (error) {
+            console.error("Error al contar las versiones del proyecto:", error);
+            return 0;
+        }
+    }
+
     async function proyectoExiste(id_codigo_vi, token) {
         try {
             const response = await obtenerProyectos(token);
             if (!response.data) return false;
-            console.log("Proyectos:", response.data);
-            console.log("id_codigo_vi a verificar:", id_codigo_vi);
             return response.data.some(proyecto => proyecto.id_codigo_vi == id_codigo_vi);
         } catch (error) {
             console.error("Error al verificar si el proyecto existe:", error);
@@ -172,14 +183,23 @@ export const GestionPropuestas = () => {
             
             if(Datos.id_codigo_cimpa_fk.estado == "Aprobada"){
                 const proyecto = {
-                    id_codigo_vi : Datos.id_codigo_cimpa_fk.id_codigo_cimpa,
-                    id_codigo_cimpa_fk : Datos.id_codigo_cimpa_fk.id_codigo_cimpa
+                    id_codigo_vi : id_propu,
+                    id_codigo_cimpa_fk : id_propu
                 }
                 const existe = await proyectoExiste(proyecto.id_codigo_vi, localStorage.getItem("token"));
             
                 if (!existe) {
                     await agregarProyectos(proyecto, localStorage.getItem("token"));
                 }
+                //Para borrar proyectos
+            }else if (Datos.id_codigo_cimpa_fk.estado == "En desarrollo"){
+                
+                const existe = await proyectoExiste(id_propu, localStorage.getItem("token"));
+                const cant_ver = await contarVersionesDeProyecto(id_propu, localStorage.getItem("token"));
+                if(existe && cant_ver == 0){
+                    await eliminarProyecto(id_propu,localStorage.getItem("token"));
+                }
+               
             }
             await editarPropuesta(id_propu, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
 

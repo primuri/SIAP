@@ -14,7 +14,7 @@ class Proyecto(models.Model):
 
 class Oficio(models.Model):
     id_oficio = models.AutoField(primary_key=True)
-    ruta_archivo = models.FileField(upload_to='media/oficios/')  # Se cambió de char a file
+    ruta_archivo = models.FileField(null=False, upload_to='media/oficios/')  # Se cambió de char a file
     detalle = models.CharField(max_length=456, null=True)
 
     class Meta:
@@ -98,7 +98,7 @@ class PreguntaEvaluacion(models.Model):
 class VersionProyecto(models.Model):
     id_version_proyecto = models.AutoField(primary_key=True)
     detalle = models.CharField(max_length=255)
-    numero_version = models.IntegerField()
+    numero_version = models.IntegerField(null=False)
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT)
     #comentado para evitar problemas al crear una version de proyecto
@@ -108,6 +108,7 @@ class VersionProyecto(models.Model):
 
     class Meta:
         db_table = 'version_proyecto'
+        unique_together = (('id_codigo_vi_fk', 'numero_version'),)
 
 class DesignacionAsistente(models.Model):
     id_designacion_asistente = models.AutoField(primary_key=True)

@@ -34,7 +34,15 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
     //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
-
+        
+        if (name === "numero_version") {
+            if (value.includes('e') || value.includes('+') || value.includes('-')) {
+                return; 
+            }
+            if (!/^[0-9]*$/.test(value)) {
+                return;
+            }
+        }
         const keys = name.split('.');
         switch (keys.length) {
             case 1:
@@ -169,7 +177,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="numero_version" className="label-personalizado mb-2">Versión <span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="numero_version" id="numero_version" onChange={handleChange} value={formData.numero_version} required />
+                                <input type="text" className="form-control" name="numero_version" id="numero_version" onChange={handleChange} value={formData.numero_version} min="1" step="1" pattern="^[0-9]+$"  required />
                             </div>
                             <div className="col-md-6">
                             <label htmlFor="detalle" className="label-personalizado mb-2">Detalle <span className="required">*</span> </label>
