@@ -25,7 +25,7 @@ class ColaboradorPrincipal(models.Model):
         db_table = 'colaborador_principal'
 
 class PropuestaProyecto(models.Model):
-    id_codigo_cimpa = models.AutoField(max_length=45, primary_key=True)
+    id_codigo_cimpa = models.CharField(max_length=45, primary_key=True)
     objetivo_general = models.CharField(max_length=255, blank=True)
     estado = models.CharField(max_length=45)
     nombre = models.CharField(max_length=360)
