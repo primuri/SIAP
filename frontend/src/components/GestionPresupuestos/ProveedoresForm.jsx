@@ -4,7 +4,7 @@ import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
-import { obtenerCuentaBancaria } from "../../api/proveedores"
+import { obtenerCuentasBancarias } from "../../api/proveedores"
 
 const configuracionCuentaBancaria = [
     { campo: 'id_numero', placeholder: 'Número', tipo: 'number', required: true },
@@ -37,8 +37,13 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
 
     const loadCuentaBancaria = async () => {
         try {
-            const res = await obtenerCuentaBancaria(localStorage.getItem('token'))
-            setCuentaBancaria(res.data)
+            const res = await obtenerCuentasBancarias(localStorage.getItem('token'))
+            if (res.data && res.data.length > 0) {
+                const cuentasFiltradas = res.data.filter(cuenta => cuenta.id_proveedor_fk.id_cedula_proveedor === proveedor.id_cedula_proveedor)
+                setCuentaBancaria(cuentasFiltradas)
+            } else {
+                setCuentaBancaria([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+            }
 
         } catch (error) {
             toast.error('Error al cargar las cuentas', {

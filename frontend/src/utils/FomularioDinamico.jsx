@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { eliminarTelefonos, eliminarTitulos } from '../api/gestionAcademicos';
-import { eliminarCuentaBancaria } from '../api/proveedores';
+import { eliminarCuentasBancarias } from '../api/proveedores';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -39,7 +39,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
             eliminarTitulos(items[index].id_titulos, localStorage.getItem("token"));
         }
         if (Object.keys(items[0])[0] === "id_numero") {
-            eliminarCuentaBancaria(items[index].id_numero, localStorage.getItem("token"));
+            eliminarCuentasBancarias(items[index].id_numero, localStorage.getItem("token"));
         }
         setItems(nuevosItems);
     };
