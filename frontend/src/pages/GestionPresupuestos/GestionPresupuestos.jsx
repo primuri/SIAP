@@ -20,7 +20,7 @@ export const GestionPresupuestos = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const columns = ['Proyecto','Año de aprobación','Tipo','Ente financiero','Oficio','Documento','Codigo Financiero']
-    const dataKeys = ['id_codigo_vi.id_codigo_vi','anio_aprobacion','id_tipo_presupuesto_fk.id_tipo_presupuesto','id_ente_financiero_fk.nombre','id_oficio_fk.id_oficio','id_oficio_fk.ruta_archivo','codigo_financiero']
+    const dataKeys = ['id_codigo_vi.id_codigo_vi','anio_aprobacion','id_tipo_presupuesto_fk.tipo','id_ente_financiero_fk.nombre','id_oficio_fk.id_oficio','id_oficio_fk.ruta_archivo','codigo_financiero']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
      // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
     useEffect(() => {loadPresupuestos()}, [reload])
