@@ -319,9 +319,19 @@ export const eliminarVersionInforme = async (id) => {
      }));
 };
 
-// Obtener accion
+// Obtener todas las acciones
 export const obtenerAccion = async () => {
     return await manejarErrores(SIAPAPI.get('informe/acciones', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Obtener todas las acciones de una version de informe
+export const obtenerAccionesVersion = async (token, id_version_informe) => {
+    return await manejarErrores(SIAPAPI.get(`informe/acciones/?id_version_informe=${id_version_informe}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'

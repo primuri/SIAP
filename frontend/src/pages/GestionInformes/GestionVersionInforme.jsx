@@ -8,12 +8,14 @@ import { Table }                from "../../utils/Table"
 import { Add }                  from "../../utils/Add"
 import * as API                 from "../../api/gestionInformes"
 import { GestionInformes } from "./GestionInformes"
+import { GestionAcciones } from "./GestionAcciones"
 import add from '../../assets/plus-i.png'
 
-export const GestionVersionInforme = (informeID, returnToInformes) => {                                // Versiones de un infome   
+export const GestionVersionInforme = (informeID) => {                                // Versiones de un infome   
     const [versionesInformeData, setVersionesInformeData] = useState([])             // Datos completos
     const [versionesInformeList, setVersionesInformeList] = useState([])             // Datos filtrados
     const [versionInforme, setVersionInforme]             = useState(null)           // Version actual
+    const [showAcciones, setShowAcciones]                 = useState(false);
     const [loaded, setLoaded]                             = useState(false)          // Data cargada
     const [reload, setReload]                             = useState(false)          // Para recargar tabla
     const [addClicked, setAddClicked]                     = useState(false)          // Para evento de agregar
@@ -110,11 +112,17 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
         setEditClicked(false)
     }
 
-    function elementClicked (element) {
-        setEditClicked(true)
-        setAddClicked(false)
-        setVersionInforme(element)
-    }
+
+    const elementClicked = (selectedVersionInforme) => {
+        if (event.target.tagName.toLowerCase() === 'button') {
+            setShowAcciones(true);
+            setVersionInforme(selectedVersionInforme);
+        } else {
+            setVersionInforme(selectedVersionInforme)
+            setEditClicked(true)
+            setAddClicked(false)
+        }
+    };
 
     function onCancel () {
         setAddClicked(false)
@@ -129,6 +137,10 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
         return <GestionInformes/>;
     }
 
+    else if (versionInforme && showAcciones === true) {
+        return <GestionAcciones versionID={versionInforme.id_version_informe} informeID={informeID}/>;
+    }
+
     return (
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
@@ -139,7 +151,7 @@ export const GestionVersionInforme = (informeID, returnToInformes) => {         
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsVI} columns={dataKeyVI} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked}></Table>
+                <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar"></Table>
                 <div>
                     <button id="acciones-button" className="btn btn-primary" onClick={volverInformes}>
                         <span className='icono'><img width={"20px"} src={add}/></span>
@@ -204,5 +216,5 @@ function formatearFecha(response) {
       
       return { ...obj, fecha_presentacion: fechaFormateada };
     });
-  }
+}
   

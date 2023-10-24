@@ -24,8 +24,8 @@ export const GestionInformes = (/* proyectoID */) => {
     const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
     const [edit, setEdit] = useState(false)                                      // Cuando se da click en editar
     const [error, setError] = useState(false)                                    // Cuando hay un error
-    const columns = ['Identificador', 'Estado','Tipo', 'Acciones']
-    const dataKeys = ['id_informe', 'estado','tipo', 'Acciones']
+    const columns = ['Identificador', 'Estado','Tipo', 'Versiones']
+    const dataKeys = ['id_informe', 'estado','tipo', 'Versiones']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true
                                   
@@ -183,13 +183,6 @@ export const GestionInformes = (/* proyectoID */) => {
           setAddClick(false);
         }
     };
-      
-    // Devolverse de version de informe a informe
-    const returnToInformes = () => {
-        console.log("Return to informes")
-        setShowVersions(false);
-        setInforme(null);
-    };
 
     // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
@@ -210,7 +203,7 @@ export const GestionInformes = (/* proyectoID */) => {
 
 
     if (informe && showVersions === true) {
-        return <GestionVersionInforme informeID={informe.id_informe} returnToInformes={returnToInformes}/>;
+        return <GestionVersionInforme informeID={informe.id_informe}/>;
     }
 
     else {
@@ -228,7 +221,7 @@ export const GestionInformes = (/* proyectoID */) => {
                             <Add onClick={addClicked}></Add>
                             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                         </div>
-                        <Table columns={columns} data={informes} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar versiones" />
+                        <Table columns={columns} data={informes} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar" />
     
                         {addClick && (
                             <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>

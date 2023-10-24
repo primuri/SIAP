@@ -66,12 +66,10 @@ export const Table = ({ columns, data, onClick, dataKeys, hasButtonColumn = fals
           <tr key={rowIndex} onClick={() => onClick(row)}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
-              {colIndex === dataKeys.length - 1 ? ( // Comprueba si estás en la última columna
-                // Agrega el botón solo a la última columna
-                hasButtonColumn && <button id="acciones-button" className="btn btn-primary" /*onClick={() => handleButtonClick(row)}*/>{buttonText}</button>
+              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
+                <button id="acciones-button" className="btn btn-primary">{buttonText}</button>
                 
               ) : (
-                // Renderiza el contenido de las otras columnas
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                   ? getValueByPath(row, column).split('/').pop()
                   : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
