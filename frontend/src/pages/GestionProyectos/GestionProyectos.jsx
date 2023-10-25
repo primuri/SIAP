@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarDocumentacion, agregarProducto, agregarSoftware } from "../../api/gestionProductos"
+import { agregarDocumentacion, agregarProducto, agregarSoftware, obtenerSoftware } from "../../api/gestionProductos"
 
 
 export const GestionProyectos = () => {
@@ -89,6 +89,38 @@ export const GestionProyectos = () => {
             })
         }
     }
+
+    async function loadSoftware(user) {
+        try {
+            const softwares = await obtenerSoftware(localStorage.getItem('token'));
+            //console.log(softwares.data);
+    
+            // Buscar el software que coincide con user.id_version_proyecto
+            const matchedSoftware = softwares.data.find(software => 
+                software.id_producto_fk &&
+                software.id_producto_fk.id_version_proyecto_fk &&
+                software.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
+            );
+    
+            if (matchedSoftware) {
+                setProducto(matchedSoftware);
+            } else {
+                console.warn('No se encontró el software que coincide con user.id_version_proyecto');
+                setProducto(null);
+            }
+    
+        } catch (error) {
+            toast.error('Error al cargar los datos de Software', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            })
+        }
+    }
+    
     const printFileDetailsFromFormData = (formData) => {
         let fileFound = false;
     
@@ -129,13 +161,10 @@ export const GestionProyectos = () => {
 
             const producto = Datos.software;
             delete Datos.software;
-            delete Datos.id_version_proyecto;
-        
+            
+           
 
-            const numero = parseInt(Datos.numero_version, 10);
-            delete Datos.numero_version;
-
-            Datos.numero_version = numero;
+            
             let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
             let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
            
@@ -171,7 +200,7 @@ export const GestionProyectos = () => {
            
             const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
             delete producto.id_producto_fk.id_producto;
-            producto.id_producto_fk.id_version_proyecto = id_version_creada;
+            producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
 
             const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))
 
@@ -179,10 +208,6 @@ export const GestionProyectos = () => {
             producto.id_producto_fk = id_producto_creado;
 
             const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
-
-
-
-
 
             loadVersionProyectos(id_vi)
             toast.success('Proyecto agregada correctamente', {
@@ -209,11 +234,6 @@ export const GestionProyectos = () => {
                 },
             })
         }
-    }
-
-
-    const addProducto = async (formData) => {
-        
     }
 
     // Manejo de los datos del formulario de editar 
@@ -350,12 +370,18 @@ export const GestionProyectos = () => {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    const elementClicked2 = (user) => {
-       
-        setProyecto(user)
-        setEdit(true)
-        setAddClick(false)
+    const elementClicked2 = async (user) => {
+        setProyecto(user);
+        
+        try {
+            loadSoftware(user);
+            setEdit(true);
+            setAddClick(false);
+        } catch (error) {
+            console.error('Error al obtener los softwares:', error);
+        }
     }
+    
     //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {

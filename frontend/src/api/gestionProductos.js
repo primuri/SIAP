@@ -52,3 +52,12 @@ export const agregarSoftware = async (software, token) => {
         throw error;
     } 
 };
+
+export const obtenerSoftware = async (token) => {
+    return await SIAPAPI.get('producto/softwares/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};

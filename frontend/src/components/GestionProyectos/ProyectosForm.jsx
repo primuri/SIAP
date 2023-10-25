@@ -7,7 +7,7 @@ import { ArticuloForm } from "../GestionProductos/ArticuloForm";
 import { EventoForm } from "../GestionProductos/EventoForm";
 import { Boton } from "../../utils/Boton"
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id_codigo }) => {
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo }) => {
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
@@ -259,7 +259,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
                         <div className="row mt-3">
                             <div className="col">
                                 {activeForm === 'evento' && <EventoForm mode={mode}  />}
-                                {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios} />}
+                                {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios}  producto={producto} />}
                                 {activeForm === 'articulo' && <ArticuloForm mode={mode}  />}
                             </div>
                         </div>

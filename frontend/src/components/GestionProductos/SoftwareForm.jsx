@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 
-export const SoftwareForm = ({ mode, software, setCambios }) => {
+export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const [fileData, setFileData] = useState(null);
-    const [formData, setFormData] = useState({
-        nombre: software ? software.nombre : "",
-        version: software ? software.version : "",
-        id_producto_fk: software ? software.id_producto_fk : {
-            id_producto: software && software.id_producto_fk ? software.id_producto_fk.id_producto : "",
-            fecha: software && software.id_producto_fk ? software.id_producto_fk.fecha : "",
-            detalle: software && software.id_producto_fk ? software.id_producto_fk.detalle : ""
+    const defaultFormData = {
+        nombre: "",
+        version: "",
+        id_producto_fk: {
+            id_producto: "",
+            fecha: "",
+            detalle: ""
         },
-            id_documento_documentacion_fk: software ? software.id_documento_documentacion_fk : {
-                id_documento_documentacion: software && software.id_documento_documentacion_fk ? software.id_documento_documentacion_fk.id_documento_documentacion : "",
-                tipo: software && software.id_documento_documentacion_fk ? software.id_documento_documentacion_fk.tipo : "Documentacion",
-                detalle: software && software.id_documento_documentacion_fk ? software.id_documento_documentacion_fk.detalle : "",
-                documento: software && software.id_documento_documentacion_fk ? software.id_documento_documentacion_fk.documento : ""
-            }
-    })
+        id_documento_documentacion_fk: {
+            id_documento_documentacion: "",
+            tipo: "Documentacion",
+            detalle: "",
+            documento: ""
+        }
+    };
+
+    const initialFormData = producto || defaultFormData;
+    const [formData, setFormData] = useState(initialFormData);
+
 
     const updateNestedField = (formData, fieldPath, value) => {
         const keys = fieldPath.split('.');
@@ -91,8 +95,8 @@ export const SoftwareForm = ({ mode, software, setCambios }) => {
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación <span className="required">*</span> </label>
                     <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode == 2 ? (
-                        <a href={formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                            {formData.id_documento_documentacion_fk.documento.split('/').pop()}
+                        <a href={formData.id_documento_documentacion_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                            {formData.id_documento_documentacion_fk.ruta_archivo.split('/').pop()}
                         </a>
                     ): ""}
                 </div>

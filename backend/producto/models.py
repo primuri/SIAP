@@ -6,7 +6,7 @@ class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
     fecha = models.DateTimeField()
     detalle = models.CharField(max_length=255)
-    id_version_proyecto = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
+    id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
 
 class Revista(models.Model):
     id_revista = models.AutoField(primary_key=True)
