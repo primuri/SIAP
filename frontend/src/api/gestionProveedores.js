@@ -76,6 +76,7 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
     try {
         cuentasBancarias.forEach(async cuentaBancaria => {
             cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
+            cuentaBancaria.cuenta_principal === "" ? cuentaBancaria.cuenta_principal = false : cuentaBancaria.cuenta_principal = true
             await SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
                 headers: {
                     'Authorization': `token ${token}`,
@@ -89,20 +90,42 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
     }
 };
 
-export const actualizarCuentasBancarias = (cuentaBancaria, token) => {
+export const agregarCuentaBancaria  = async (cuentaBancaria, id_cedula_proveedor, token) => {
     try {
-        cuentaBancaria.forEach(async cuenta => {
-            let id_numero = cuenta.id_numero;
-            let id_cedula_proveedor = cuenta.id_proveedor_fk.id_cedula_proveedor;
-            delete cuenta.id_proveedor_fk;
-            delete cuenta.id_numero;
-            cuenta.id_proveedor_fk = id_cedula_proveedor;
-            await SIAPAPI.put(`presupuesto/cuentas_bancarias/${id_numero}/`, cuenta, {
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+        cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
+        cuentaBancaria.cuenta_principal === "" ? cuentaBancaria.cuenta_principal = false : cuentaBancaria.cuenta_principal = true
+        await SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+    } catch (error) {
+        console.error(error)
+        throw (error)
+    }
+};
+
+export const actualizarCuentasBancarias = (cuentasBancarias, proveedor_ID, token) => {
+    try {
+        cuentasBancarias.forEach(async cuenta => {
+            try{
+                let id_numero = cuenta.id_numero;
+                let id_cedula_proveedor = cuenta.id_proveedor_fk.id_cedula_proveedor;
+                delete cuenta.id_proveedor_fk;
+                cuenta.id_proveedor_fk = id_cedula_proveedor;
+                cuenta.cuenta_principal === "" ? cuenta.cuenta_principal = false : cuenta.cuenta_principal = true
+
+                await SIAPAPI.put(`presupuesto/cuentas_bancarias/${id_numero}/`, cuenta, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error){
+                await agregarCuentaBancaria(cuenta, proveedor_ID, token)
+            }
         });
     } catch (error) {
         console.error(error)

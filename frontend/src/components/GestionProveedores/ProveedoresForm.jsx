@@ -25,6 +25,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const [formData, setFormData] = useState({
         id_cedula_proveedor: proveedor ? proveedor.id_cedula_proveedor : "",
         correo: proveedor ? proveedor.correo : "",
+        tipo: proveedor ? proveedor.tipo : "",
         nombre: proveedor ? proveedor.nombre : "",
         telefono: proveedor ? proveedor.telefono : ""
     })

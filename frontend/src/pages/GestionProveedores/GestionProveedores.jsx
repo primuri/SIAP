@@ -81,20 +81,10 @@ export const GestionProveedores = () => {
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;
       if(cuentasBancarias){
-        if(typeof cuentasBancarias.id_proveedor_fk === 'undefined'){
-          await agregarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"))
-        }else{
-          await actualizarCuentasBancarias(cuentasBancarias, localStorage.getItem("token"));
-        }
+        await actualizarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"));
       }
 
-      delete Datos.cuentasBancarias
-
-      for (const key in Datos) {
-          if (Object.prototype.hasOwnProperty.call(proveedor, key)) {
-            formData.append(key, Datos[key]);
-          }
-      }
+      delete Datos.cuentaBancaria
 
       await editarProveedor(proveedor.id_cedula_proveedor, Datos, localStorage.getItem('token'))
       toast.success('Proveedor actualizado correctamente', {
@@ -108,6 +98,7 @@ export const GestionProveedores = () => {
       setEdit(false)
       setReload(!reload)
     } catch (error) {
+      console.error(error)
       toast.error('Error al actualizar el proveedor', {
         duration: 4000,
         position: 'bottom-right',
