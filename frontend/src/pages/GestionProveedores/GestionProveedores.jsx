@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
-import { ProveedoresForm } from "../../components/GestionPresupuestos/ProveedoresForm"
+import { ProveedoresForm } from "../../components/GestionProveedores/ProveedoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias} from "../../api/proveedores"
+import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias} from "../../api/gestionProveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
-export const Proveedores = () => {
+export const GestionProveedores = () => {
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
   const [proveedores, setProveedores] = useState([]) // Proveedores que se muestran

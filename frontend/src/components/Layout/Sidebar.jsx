@@ -10,6 +10,7 @@ export const Sidebar = () => {
       { label: 'Gestión de<br/> evaluadores',    link: '/gestion-evaluadores' },
       { label: 'Gestión de<br/> presupuestos',   link: '/gestion-presupuestos' },
       { label: 'Gestión de<br/> informes',       link: '/gestion-informes' },
+      { label: 'Gestión de<br/> proveedores',       link: '/gestion-proveedores' },
     ],
     "evaluador": [
       { label: 'Dashboard', link: '/dashboard' },

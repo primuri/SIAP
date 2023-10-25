@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { eliminarTelefonos, eliminarTitulos } from '../api/gestionAcademicos';
-import { eliminarCuentasBancarias } from '../api/proveedores';
+import { eliminarCuentasBancarias } from '../api/gestionProveedores';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';

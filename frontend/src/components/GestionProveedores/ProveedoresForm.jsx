@@ -4,7 +4,7 @@ import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
-import { obtenerCuentasBancarias } from "../../api/proveedores"
+import { obtenerCuentasBancarias } from "../../api/gestionProveedores"
 
 const configuracionCuentaBancaria = [
     { campo: 'id_numero', placeholder: 'Número', tipo: 'number', required: true },
