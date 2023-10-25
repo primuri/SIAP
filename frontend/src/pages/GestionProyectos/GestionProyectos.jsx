@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarProducto } from "../../api/gestionProductos"
+import { agregarDocumentacion, agregarProducto, agregarSoftware } from "../../api/gestionProductos"
 
 
 export const GestionProyectos = () => {
@@ -89,18 +89,48 @@ export const GestionProyectos = () => {
             })
         }
     }
+    const printFileDetailsFromFormData = (formData) => {
+        let fileFound = false;
+    
+        for (let [name, value] of formData.entries()) {
+            if (value instanceof Blob) {
+                console.log(`Nombre del archivo en formData: ${name}, Nombre real del archivo: ${value.name}, Tamaño: ${value.size} bytes`);
+                fileFound = true;
+            }
+        }
+    
+        return fileFound;
+    }
+   
     // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
         try {
-                       
+            //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
+            const DocumentacionData = new FormData();
+            const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
+            if (documentacionFile) {
+                DocumentacionData.append('ruta_archivo', documentacionFile);
+                DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
+                DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
+                formData.delete('id_documento_documentacion_fk');
+            }
+            //Imprime el documento para saber si existe
+             printFileDetailsFromFormData(DocumentacionData);
+            for (let pair of DocumentacionData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+            
+            const id_documentacion_creada = await agregarDocumentacion(DocumentacionData, localStorage.getItem('token'))
+            delete Datos.software.id_documento_documentacion_fk;
+            Datos.software.id_documento_documentacion_fk = id_documentacion_creada;
+
             formData.delete('json');
 
-            const producto = {
-                fecha: Datos.id_producto_fk.fecha,
-                detalle: Datos.id_producto_fk.detalle
-            }
+            const producto = Datos.software;
+            delete Datos.software;
             delete Datos.id_version_proyecto;
+        
 
             const numero = parseInt(Datos.numero_version, 10);
             delete Datos.numero_version;
@@ -140,10 +170,19 @@ export const GestionProyectos = () => {
             
            
             const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
+            delete producto.id_producto_fk.id_producto;
+            producto.id_producto_fk.id_version_proyecto = id_version_creada;
 
-            producto.id_version_proyecto = id_version_creada;
+            const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))
 
-            const id_producto_creado = await agregarProducto(producto, localStorage.getItem('token'))
+            delete producto.id_producto_fk;
+            producto.id_producto_fk = id_producto_creado;
+
+            const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
+
+
+
+
 
             loadVersionProyectos(id_vi)
             toast.success('Proyecto agregada correctamente', {
@@ -170,6 +209,11 @@ export const GestionProyectos = () => {
                 },
             })
         }
+    }
+
+
+    const addProducto = async (formData) => {
+        
     }
 
     // Manejo de los datos del formulario de editar 

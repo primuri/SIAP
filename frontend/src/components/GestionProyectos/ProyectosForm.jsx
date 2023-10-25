@@ -2,11 +2,17 @@ import { useState } from "react";
 import PropTypes from 'prop-types';
 import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
-
+import { SoftwareForm } from "../GestionProductos/SoftwareForm";
+import { ArticuloForm } from "../GestionProductos/ArticuloForm";
+import { EventoForm } from "../GestionProductos/EventoForm";
+import { Boton } from "../../utils/Boton"
 
 export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id_codigo }) => {
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
+    const [activeForm, setActiveForm] = useState('');
+    const [softwareData, setSoftwareData] = useState(null);
+    const [softwareFile, setSoftwareFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [formData, setFormData] = useState({
@@ -98,8 +104,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
                 console.error("Anidacion fuera de rango");
         }
     };
-
-
     
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -112,8 +116,13 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
         const combinedData = new FormData();
         if (fileData) {
             combinedData.append('ruta_archivo', fileData);
+            
         }
-        combinedData.append('json', JSON.stringify(formData));
+        if (softwareFile) {
+            combinedData.append('id_documento_documentacion_fk.documento', softwareFile);
+        }
+        const totalData = { ...formData, software: softwareData };
+        combinedData.append('json', JSON.stringify(totalData));
         onSubmit(combinedData);
     };
     
@@ -139,7 +148,11 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
         setShowConfirmationEdit(false);
     };
 
-
+    const setCambios = (changes) => {
+        setSoftwareData(changes.softwareData);
+        setSoftwareFile(changes.softwareFile);
+    };
+    
     
     return (
         <>
@@ -230,16 +243,27 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
                                 <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto Asociado</h5>
                             <div className="col"> </div>
                         </div>
-                        <div>
-                           
-                           
-                            <SoftwareForm mode={mode} />
-
-                           
+                        <div className="row mb-4">
+                        <div className="row">
+                            <div className="col d-flex justify-content-center align-items-center">
+                                <Boton onClick={() => setActiveForm('evento')} text="Evento"/>
+                            </div>
+                            <div className="col d-flex justify-content-center align-items-center">
+                                <Boton onClick={() => setActiveForm('software')} text="Software"/>
+                            </div>
+                            <div className="col d-flex justify-content-center align-items-center">
+                                <Boton onClick={() => setActiveForm('articulo')} text="Artículo"/>
+                            </div>
                         </div>
-                        
-                        
 
+                        <div className="row mt-3">
+                            <div className="col">
+                                {activeForm === 'evento' && <EventoForm mode={mode}  />}
+                                {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios} />}
+                                {activeForm === 'articulo' && <ArticuloForm mode={mode}  />}
+                            </div>
+                        </div>
+                    </div>
 
                     </div>
                 </div>

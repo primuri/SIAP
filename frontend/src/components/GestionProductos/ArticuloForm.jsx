@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const FormularioArticulo = ({ mode, datos, setCambios }) => {
+export const ArticuloForm = ({ mode, datos, setCambios }) => {
   const [formData, setFormData] = useState({
     nombre: datos ? datos.nombre : "",
     fecha_publicacion: datos ? datos.fecha_publicacion : "",
@@ -9,7 +9,11 @@ export const FormularioArticulo = ({ mode, datos, setCambios }) => {
     isbn: datos ? datos.isbn : "",
     cant_paginas: datos ? datos.cant_paginas : "",
     id_revista_fk: datos ? datos.id_revista_fk : { nombre: "", pais: "" },
-    id_producto_fk: datos ? datos.id_producto_fk : null,
+    id_producto_fk: datos ? datos.id_producto_fk : {
+      id_producto: datos && datos.id_producto_fk ? datos.id_producto_fk.id_producto : "",
+      fecha: datos && datos.id_producto_fk ? datos.id_producto_fk.fecha : "",
+      detalle: datos && datos.id_producto_fk ? datos.id_producto_fk.detalle : ""
+  },
     id_autor_fk: datos ? datos.id_autor_fk : {
       id_nombre_completo_fk: {
         nombre: "",
@@ -49,6 +53,26 @@ export const FormularioArticulo = ({ mode, datos, setCambios }) => {
 
   return (
     <>
+      <div className="row mb-4">
+          <div className="col-md-6">
+              <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto <span className="required">*</span> </label>
+              <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+          </div>
+          <div className="col">
+              <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto</label>
+              <input type="date" className="form-control"
+                  name="id_producto_fk.fecha"
+                  id="id_producto_fk.fecha"
+                  value={formData.id_producto_fk.fecha
+                      ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
+                  onChange={handleChange} />
+          </div>
+      </div>
+      <div className="row mb-2">
+          <div className="col"> </div>
+              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Articulo</h5>
+          <div className="col"> </div>
+      </div>
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre <span className="required">*</span> </label>
