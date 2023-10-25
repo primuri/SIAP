@@ -61,3 +61,49 @@ export const obtenerSoftware = async (token) => {
         }
     });
 };
+
+export const editarDocumentacion = async (id, documentacion, token) => {
+    try { 
+        return await SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documentacion, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Documentacion Sotware: ", error);
+        throw error;
+    } 
+};
+
+
+export const editarProducto = async (id, producto, token) => {
+    try { 
+        return await SIAPAPI.put(`producto/productos/${id}/`, producto, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Producto: ", error);
+        throw error;
+    } 
+};
+
+export const editarSoftware = async (id, software, token) => {
+    try { 
+        return await SIAPAPI.put(`producto/softwares/${id}/`, software, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Software: ", error);
+        throw error;
+    } 
+};

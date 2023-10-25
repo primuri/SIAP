@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarDocumentacion, agregarProducto, agregarSoftware, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarDocumentacion, agregarProducto, agregarSoftware, editarDocumentacion, editarProducto, editarSoftware, obtenerSoftware } from "../../api/gestionProductos"
 
 
 export const GestionProyectos = () => {
@@ -106,7 +106,7 @@ export const GestionProyectos = () => {
                 setProducto(matchedSoftware);
             } else {
                 console.warn('No se encontró el software que coincide con user.id_version_proyecto');
-                setProducto(null);
+                setProducto(null);  
             }
     
         } catch (error) {
@@ -240,6 +240,27 @@ export const GestionProyectos = () => {
     const editProyecto = async (formData) => {
         try {
             const Datos = JSON.parse(formData.get('json'))
+            const DocumentacionData = new FormData();
+            const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
+            if (documentacionFile) {
+                DocumentacionData.append('ruta_archivo', documentacionFile);
+                DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
+                DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
+                formData.delete('id_documento_documentacion_fk');
+            }
+            printFileDetailsFromFormData(DocumentacionData);
+            for (let pair of DocumentacionData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+
+            await editarDocumentacion(Datos.software.id_documento_documentacion_fk.id_documento, DocumentacionData, localStorage.getItem('token'))
+            const id_docu =Datos.software.id_documento_documentacion_fk.id_documento;
+            delete Datos.software.id_documento_documentacion_fk;
+            Datos.software.id_documento_documentacion_fk = id_docu;
+            
+            const producto = Datos.software;
+            delete Datos.software;
+
             formData.delete('json');
 
             const id_version_proy = Datos.id_version_proyecto;
@@ -290,6 +311,17 @@ export const GestionProyectos = () => {
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
             await editarVersionProyectos(id_version_proy,Datos, localStorage.getItem("token"))
+            producto.id_producto_fk.id_version_proyecto_fk = id_version_proy;
+
+            const id_produ = producto.id_producto_fk.id_producto;
+            await editarProducto(id_produ, producto.id_producto_fk, localStorage.getItem('token'))
+            
+            delete producto.id_producto_fk;
+            producto.id_producto_fk = id_produ;
+
+            await editarSoftware(producto.id_software ,producto, localStorage.getItem('token'))
+
+           
             loadVersionProyectos(Datos.id_codigo_vi_fk)
 
             toast.success('Proyecto actualizada correctamente', {

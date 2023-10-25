@@ -112,6 +112,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const sendForm = (event) => {
         event.preventDefault();
+        console.log("Software Data before sending:", softwareData);
 
         const combinedData = new FormData();
         if (fileData) {
@@ -149,6 +150,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const setCambios = (changes) => {
+        console.log("Received changes:", changes);
         setSoftwareData(changes.softwareData);
         setSoftwareFile(changes.softwareFile);
     };
@@ -225,7 +227,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo" onChange={handleFileChange}
                                     required={mode == 1 ? true : ''} />
                                 {mode == 2 ? (
-                                    <a href={formData.id_oficio_fk.ruta_archivo} target="blank_"
+                                    <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_"
                                         className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_oficio_fk.ruta_archivo.split('/').pop()}
                                     </a>
@@ -283,7 +285,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="propuesta" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="proyecto" />)}
                                 </>
                             )}
                         </div>
