@@ -83,7 +83,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
 
         formData.cuentaBancaria = cuentaBancaria
         const combinedData = new FormData();
-
         combinedData.append('json', JSON.stringify(formData))
         onSubmit(combinedData)
     }
@@ -151,23 +150,35 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                                     <input type="text" className="form-control" name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} required />
                                 </div>
                             </div>
+                            <div className="col-md-6 position-relative">
+                                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula <span className="required">*</span> </label>
+                                <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange}>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="Fisica">Física</option>
+                                    <option value="Juridica">Jurídica</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span className="required">*</span> </label>
                                     <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span className="required">*</span></label>
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
+                        </div>
+
+                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono <span className="required">*</span> </label>
                                 <input type="number" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} required/>
                             </div>
+
                         </div>
 
                         <div className="d-flex flex-column">

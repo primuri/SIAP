@@ -21,6 +21,12 @@ export const agregarProveedor = async (formData, token) => {
         const cuentaBancaria = proveedor?.cuentaBancaria;
         delete proveedor.cuentaBancaria;
 
+        for (const key in proveedor) {
+            if (Object.prototype.hasOwnProperty.call(proveedor, key)) {
+                formData.append(key, proveedor[key]);
+            }
+        }
+        
         const response_proveedor = await SIAPAPI.post('presupuesto/proveedores/', proveedor, {
             headers: {
                 'Authorization': `token ${token}`,
@@ -68,9 +74,9 @@ export const obtenerCuentasBancarias = async (token) => {
 
 export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, token) => {
     try {
-        cuentasBancarias.forEach(async cuenta => {
-            cuenta.id_proveedor_fk = id_cedula_proveedor;
-            await SIAPAPI.post('presupuesto/cuentas_bancarias/', cuenta, {
+        cuentasBancarias.forEach(async cuentaBancaria => {
+            cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
+            await SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
@@ -83,14 +89,14 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
     }
 };
 
-export const actualizarCuentasBancarias = (cuentasBancarias, token) => {
+export const actualizarCuentasBancarias = (cuentaBancaria, token) => {
     try {
-        cuentasBancarias.forEach(async cuenta => {
+        cuentaBancaria.forEach(async cuenta => {
             let id_numero = cuenta.id_numero;
-            let id_proveedor = cuenta.id_proveedor_fk.id_cedula_proveedor;
+            let id_cedula_proveedor = cuenta.id_proveedor_fk.id_cedula_proveedor;
             delete cuenta.id_proveedor_fk;
             delete cuenta.id_numero;
-            cuenta.id_proveedor_fk = id_proveedor;
+            cuenta.id_proveedor_fk = id_cedula_proveedor;
             await SIAPAPI.put(`presupuesto/cuentas_bancarias/${id_numero}/`, cuenta, {
                 headers: {
                     'Authorization': `token ${token}`,

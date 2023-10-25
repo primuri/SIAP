@@ -4,7 +4,7 @@ import { Modal } from "../../utils/Modal"
 import { ProveedoresForm } from "../../components/GestionPresupuestos/ProveedoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor } from "../../api/proveedores"
+import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias} from "../../api/proveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
@@ -18,11 +18,13 @@ export const Proveedores = () => {
   const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
   const [addClick, setAddClick] = useState(false)
   const [edit, setEdit] = useState(false)
-  const columns = ['Cedula', 'Correo', 'Nombre', 'Telefono']
-  const dataKeys = ['id_cedula_proveedor', 'correo', 'nombre', 'telefono']
+  const columns = ['Cédula', 'Tipo', 'Correo', 'Nombre', 'Teléfono']
+  const dataKeys = ['id_cedula_proveedor', 'tipo', 'correo', 'nombre', 'telefono']
+
   user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-  // Detecta cambios y realiza la solicitud nuevamente  
   useEffect(() => { loadProveedores() }, [reload])
+
+  // Detecta cambios y realiza la solicitud nuevamente
   async function loadProveedores() {
     try {
       const res = await obtenerProveedores(localStorage.getItem('token'))
@@ -41,13 +43,12 @@ export const Proveedores = () => {
       })
     }
   }
+
   // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
-      const Datos = JSON.parse(formData)
-      formData.delete('json')
 
-      await agregarProveedor(Datos, localStorage.getItem('token'))
+      await agregarProveedor(formData, localStorage.getItem('token'))
       toast.success('Proveedor agregado correctamente', {
         duration: 4000,
         position: 'bottom-right',
@@ -70,19 +71,27 @@ export const Proveedores = () => {
     }
 
   }
+
   // Manejo de los datos del formulario de editar 
   const editProveedor = async (formData) => {
     try {
-      const Datos = JSON.parse(formData)
+      const Datos = JSON.parse(formData.get('json'))
+      formData.delete('json')
 
-      const cuentaBancaria = Datos?.cuentaBancaria;
-      delete proveedor.cuantaBancaria;
-      await actualizarCuentaBancaria(cuentaBancaria, localStorage.getItem("token"));
-      delete Datos.cuentaBancaria
+      const cuentasBancarias = Datos?.cuentaBancaria;
+      delete proveedor.cuentaBancaria;
+        if(typeof cuentasBancarias.id_proveedor_fk === 'undefined'){
+            await agregarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"))
+        }else{
+            await actualizarCuentasBancarias(cuentasBancarias, localStorage.getItem("token"));
+
+        }
+
+      delete Datos.cuentasBancarias
 
       for (const key in Datos) {
           if (Object.prototype.hasOwnProperty.call(proveedor, key)) {
-             formData.append(key, Datos[key]);
+            formData.append(key, Datos[key]);
           }
       }
 
@@ -108,10 +117,11 @@ export const Proveedores = () => {
       })
     }
   }
+  
   // Manejo del eliminar
-  const deleteProveedor = async (id_cedula_proveedor) => {
+  const deleteProveedor = async (id) => {
     try {
-      await eliminarProveedor(id_cedula_proveedor, localStorage.getItem('token'))
+      await eliminarProveedor(id, localStorage.getItem('token'))
       toast.success('Proveedor eliminado correctamente', {
         duration: 4000,
         position: 'bottom-right',
@@ -186,7 +196,7 @@ export const Proveedores = () => {
                   mode={2}
                   onSubmit={editProveedor}
                   onCancel={onCancel}
-                  onDelete={() => deleteProveedor(proveedor.id_proveedor)}
+                  onDelete={() => deleteProveedor(proveedor.id_cedula_proveedor)}
                   proveedor={proveedor}
                 >
                 </ProveedoresForm>
