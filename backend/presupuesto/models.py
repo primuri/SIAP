@@ -52,6 +52,7 @@ class Partida(models.Model):
 
 class Proveedor(models.Model):
     id_cedula_proveedor = models.CharField(max_length=11, primary_key=True, unique=True)
+    tipo = models.CharField(max_length=45)
     correo = models.CharField(max_length=64)
     nombre = models.CharField(max_length=128)
     telefono = models.CharField(max_length=45)

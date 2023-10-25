@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
@@ -225,3 +226,5 @@ export const GestionPresupuestos = () => {
         )}
     </main>)
 } 
+=======
+>>>>>>> f0a542b33303b1145bf0780dd5acc7c4a03d6050
