@@ -225,6 +225,22 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, onCancel, onDelete, id
                             </div>
                         </div>
 
+                        <div className="row mb-2">
+                            <div className="col"> </div>
+                                <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto Asociado</h5>
+                            <div className="col"> </div>
+                        </div>
+                        <div>
+                           
+                           
+                            <SoftwareForm mode={mode} />
+
+                           
+                        </div>
+                        
+                        
+
+
                     </div>
                 </div>
                 <div className="modal-footer justify-content-center position-sticky bottom-0">

@@ -8,6 +8,9 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
+import { agregarProducto } from "../../api/gestionProductos"
+
+
 export const GestionProyectos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -15,6 +18,7 @@ export const GestionProyectos = () => {
     const [cargado, setCargado] = useState(false)
     const [data, setData] = useState([])//Todas las Proyectos
     const [proyecto, setProyecto] = useState(null) //Proyecto al que se le da click en la tabla para editar
+    const [producto, setProducto] = useState(null)
     const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
@@ -89,9 +93,15 @@ export const GestionProyectos = () => {
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
         try {
-           
-            
+                       
             formData.delete('json');
+
+            const producto = {
+                fecha: Datos.id_producto_fk.fecha,
+                detalle: Datos.id_producto_fk.detalle
+            }
+            delete Datos.id_version_proyecto;
+
             const numero = parseInt(Datos.numero_version, 10);
             delete Datos.numero_version;
 
@@ -129,7 +139,12 @@ export const GestionProyectos = () => {
             Datos.id_oficio_fk = id_oficio_creado;
             
            
-            await agregarVersionProyectos(Datos, localStorage.getItem('token'))
+            const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
+
+            producto.id_version_proyecto = id_version_creada;
+
+            const id_producto_creado = await agregarProducto(producto, localStorage.getItem('token'))
+
             loadVersionProyectos(id_vi)
             toast.success('Proyecto agregada correctamente', {
                 duration: 4000,
@@ -337,6 +352,7 @@ export const GestionProyectos = () => {
                                             onCancel={onCancel}
                                             onDelete={() => deleteProyecto(proyecto)}
                                             proyecto={proyecto}
+                                            producto={producto}
                                         >
                                         </ProyectosForm>
                                     </Modal>

@@ -40,13 +40,14 @@ export const obtenerVersionProyectos = async (token) => {
 
 export const agregarVersionProyectos = async (version_proyecto, token) => {
     try { 
-        return await SIAPAPI.post('version_proyecto/versionproyecto/', version_proyecto, {
+        const response_version =  await SIAPAPI.post('version_proyecto/versionproyecto/', version_proyecto, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-       
+        const id_version_creada = response_version.data.id_version_proyecto;
+        return id_version_creada;
     } catch(error) {
         console.error("Error agregando version de proyecto: ", error);
         throw error;
