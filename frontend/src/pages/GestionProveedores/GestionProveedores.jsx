@@ -80,12 +80,13 @@ export const GestionProveedores = () => {
 
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;
+      if(cuentasBancarias){
         if(typeof cuentasBancarias.id_proveedor_fk === 'undefined'){
-            await agregarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"))
+          await agregarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"))
         }else{
-            await actualizarCuentasBancarias(cuentasBancarias, localStorage.getItem("token"));
-
+          await actualizarCuentasBancarias(cuentasBancarias, localStorage.getItem("token"));
         }
+      }
 
       delete Datos.cuentasBancarias
 
