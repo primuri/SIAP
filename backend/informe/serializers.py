@@ -17,7 +17,7 @@ class InformeSerializer(serializers.ModelSerializer):
 
 class VersionInformeSerializer(serializers.ModelSerializer):
     id_informe_fk = serializers.PrimaryKeyRelatedField(queryset=Informe.objects.all())
-    id_evaluacion_cc_fk = serializers.PrimaryKeyRelatedField(queryset=EvaluacionCC.objects.all())
+    id_evaluacion_cc_fk = serializers.PrimaryKeyRelatedField(queryset=EvaluacionCC.objects.all(), allow_null=True)
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
     id_documento_informe_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())
 
@@ -27,7 +27,7 @@ class VersionInformeSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(VersionInformeSerializer, self).to_representation(instance)
-        rep['id_informe_fk'] = InformeSerializer(instance.id_informe_fk).data
+        rep['id_informe_fk'] = instance.id_informe_fk.id_informe
         rep['id_evaluacion_cc_fk'] = EvaluacionCCSerializer(instance.id_evaluacion_cc_fk).data
         rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
         rep['id_documento_informe_fk'] = DocumentoSerializer(instance.id_documento_informe_fk).data

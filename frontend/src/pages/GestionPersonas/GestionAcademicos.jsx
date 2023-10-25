@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
-import {Modal} from "../../utils/Modal"
-import { AcademicosForm } from "../../components/GestionUsuarios/GestionAcademicos/AcademicosForm"
+import { Modal } from "../../utils/Modal"
+import { AcademicosForm } from "../../components/GestionPersonas/GestionAcademicos/AcademicosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from 'react-hot-toast'
