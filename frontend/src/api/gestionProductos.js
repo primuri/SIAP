@@ -107,3 +107,12 @@ export const editarSoftware = async (id, software, token) => {
         throw error;
     } 
 };
+
+export const eliminarDocumentacion = async (id, token) => {
+    return await SIAPAPI.delete(`version_proyecto/documentos/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};

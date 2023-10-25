@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarDocumentacion, agregarProducto, agregarSoftware, editarDocumentacion, editarProducto, editarSoftware, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarDocumentacion, agregarProducto, agregarSoftware, editarDocumentacion, editarProducto, editarSoftware, eliminarDocumentacion, obtenerSoftware } from "../../api/gestionProductos"
 
 
 export const GestionProyectos = () => {
@@ -350,10 +350,14 @@ export const GestionProyectos = () => {
     // Manejo del eliminar
     const deleteProyecto = async (proyecto) => {
         try {
+            loadSoftware(proyecto);
+            await eliminarDocumentacion(producto.id_documento_documentacion_fk.id_documento, localStorage.getItem("token"));
+            
             const id = proyecto.id_codigo_vi_fk.id_codigo_vi;
             await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
             await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
             await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
+           
             loadVersionProyectos(id)
 
             toast.success('proyecto eliminada correctamente', {

@@ -61,13 +61,13 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                     <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto</label>
+                    <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto <span className="required">*</span></label>
                     <input type="date" className="form-control"
                         name="id_producto_fk.fecha"
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} />
+                        onChange={handleChange} required/>
                 </div>
             </div>
 

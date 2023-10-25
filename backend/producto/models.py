@@ -6,7 +6,7 @@ class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
     fecha = models.DateTimeField()
     detalle = models.CharField(max_length=255)
-    id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
+    id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.CASCADE)
 
 class Revista(models.Model):
     id_revista = models.AutoField(primary_key=True)
@@ -46,5 +46,5 @@ class Software(models.Model):
     id_software = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
     version = models.CharField(max_length=45)
-    id_producto_fk = models.ForeignKey(Producto, on_delete=models.PROTECT)
-    id_documento_documentacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_producto_fk = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    id_documento_documentacion_fk = models.ForeignKey(Documento, on_delete=models.CASCADE)
