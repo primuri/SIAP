@@ -22,6 +22,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       detalle: ""
     },
     id_autor_fk : {
+      id_autor: "",
       id_nombre_completo_fk: {
         id_nombre_completo: "",
         nombre: "",

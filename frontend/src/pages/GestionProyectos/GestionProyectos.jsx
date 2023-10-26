@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarArticulo, agregarAutor, agregarDocumentacion, agregarProducto, agregarRevista, agregarSoftware, editarDocumentacion, editarProducto, editarSoftware, eliminarDocumentacion, obtenerArticulo, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarArticulo, agregarAutor, agregarDocumentacion, agregarProducto, agregarRevista, agregarSoftware, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarDocumentacion, obtenerArticulo, obtenerSoftware } from "../../api/gestionProductos"
 
 
 export const GestionProyectos = () => {
@@ -94,11 +94,6 @@ export const GestionProyectos = () => {
     async function loadArticulo(user) {
         try {
             const articulos = await obtenerArticulo(localStorage.getItem('token'));
-            if(articulos.data.length > 0){
-                setTipo("articulo");
-            }
-            
-            console.log(articulos.data);
     
             // Buscar el software que coincide con user.id_version_proyecto
             const matchedArticulo = articulos.data.find(articulo => 
@@ -109,9 +104,12 @@ export const GestionProyectos = () => {
     
             if (matchedArticulo) {
                 setProducto(matchedArticulo);
+                setTipo("articulo");
+                return true;
             } else {
                 console.warn('No se encontró el articulo que coincide con user.id_version_proyecto');
                 setProducto(null);  
+                return false;
             }
     
         } catch (error) {
@@ -129,11 +127,6 @@ export const GestionProyectos = () => {
     async function loadSoftware(user) {
         try {
             const softwares = await obtenerSoftware(localStorage.getItem('token'));
-            if(softwares.data.length > 0){
-                setTipo("software");
-            }
-            
-            console.log(softwares.data);
     
             // Buscar el software que coincide con user.id_version_proyecto
             const matchedSoftware = softwares.data.find(software => 
@@ -144,9 +137,12 @@ export const GestionProyectos = () => {
     
             if (matchedSoftware) {
                 setProducto(matchedSoftware);
+                setTipo("software");
+                return true;
             } else {
                 console.warn('No se encontró el software que coincide con user.id_version_proyecto');
                 setProducto(null);  
+                return false;
             }
     
         } catch (error) {
@@ -225,6 +221,7 @@ export const GestionProyectos = () => {
                 delete Datos.articulo.id_revista_fk.id_revista;
                 const id_revista_creada = await agregarRevista(Datos.articulo.id_revista_fk, localStorage.getItem('token'))
                 
+                delete Datos.articulo.id_autor_fk.id_autor;
                 delete Datos.articulo.id_autor_fk.id_nombre_completo_fk.id_nombre_completo;
                 const autor = {
                     id_nombre_completo_fk: Datos.articulo.id_autor_fk.id_nombre_completo_fk
@@ -320,6 +317,8 @@ export const GestionProyectos = () => {
     const editProyecto = async (formData) => {
         try {
             const Datos = JSON.parse(formData.get('json'))
+            let soft = null;
+            let artic = null;
 
             let producto = null;
             if ('software' in Datos && Datos.software != null){
@@ -328,18 +327,54 @@ export const GestionProyectos = () => {
                 if (documentacionFile) {
                     DocumentacionData.append('ruta_archivo', documentacionFile);
                 }
-                    DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
-                    DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
-                    formData.delete('id_documento_documentacion_fk');
+                DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
+                DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
+                formData.delete('id_documento_documentacion_fk');
+
                 await editarDocumentacion(Datos.software.id_documento_documentacion_fk.id_documento, DocumentacionData, localStorage.getItem('token'))
-                const id_docu =Datos.software.id_documento_documentacion_fk.id_documento;
+                const id_docu = Datos.software.id_documento_documentacion_fk.id_documento;
                 delete Datos.software.id_documento_documentacion_fk;
                 Datos.software.id_documento_documentacion_fk = id_docu;
-                
-            }
 
-            producto = Datos.software;
-            delete Datos.software;
+                producto = Datos.software;
+                delete Datos.software;
+                artic = true;
+
+            } else if ('articulo' in Datos && Datos.articulo != null){
+                const DocumentoData = new FormData();
+                const documentoFile = formData.get('id_documento_articulo_fk.documento');
+                if (documentoFile) {
+                    DocumentoData.append('ruta_archivo', documentoFile);
+                }
+                DocumentoData.append('detalle', Datos.articulo.id_documento_articulo_fk.detalle);
+                DocumentoData.append('tipo', Datos.articulo.id_documento_articulo_fk.tipo);
+                formData.delete('id_documento_articulo_fk');
+                
+                const id_docu = Datos.articulo.id_documento_articulo_fk.id_documento;
+                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'))
+                delete Datos.articulo.id_documento_articulo_fk;
+                Datos.articulo.id_documento_articulo_fk = id_docu;
+
+                const id_revista = Datos.articulo.id_revista_fk.id_revista;
+                await editarRevista(id_revista, Datos.articulo.id_revista_fk, localStorage.getItem('token'))
+                delete Datos.articulo.id_revista_fk;
+                Datos.articulo.id_revista_fk = id_revista;
+
+
+                const id_autor = Datos.articulo.id_autor_fk.id_autor;
+
+                const autor = {
+                    id_nombre_completo_fk: Datos.articulo.id_autor_fk.id_nombre_completo_fk
+                }
+
+                await editarAutor(id_autor, autor, localStorage.getItem('token'))
+                delete Datos.articulo.id_autor_fk;
+                Datos.articulo.id_autor_fk = id_autor;
+
+                producto = Datos.articulo;
+                delete Datos.articulo;
+                artic = true;
+            }
 
             formData.delete('json');
 
@@ -401,7 +436,12 @@ export const GestionProyectos = () => {
                 await editarProducto(id_produ, producto.id_producto_fk, localStorage.getItem('token'))
                 delete producto.id_producto_fk;
                 producto.id_producto_fk = id_produ;
-                await editarSoftware(producto.id_software ,producto, localStorage.getItem('token'))
+                if(soft == true){
+                    await editarSoftware(producto.id_software ,producto, localStorage.getItem('token'))
+                }else if (artic == true){
+                    await editarArticulo(producto.id_articulo ,producto, localStorage.getItem('token'))
+                }
+                
             }
            
             loadVersionProyectos(Datos.id_codigo_vi_fk)
@@ -492,8 +532,13 @@ export const GestionProyectos = () => {
         setProyecto(user);
         
         try {
-            loadSoftware(user);
-            loadArticulo(user);
+            const isSoftware = await loadSoftware(user);
+            if (!isSoftware) {
+                const isArticulo = await loadArticulo(user);
+                if(!isArticulo){
+
+                }
+            }
             setEdit(true);
             setAddClick(false);
         } catch (error) {

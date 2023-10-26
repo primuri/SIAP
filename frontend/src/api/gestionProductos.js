@@ -175,3 +175,49 @@ export const agregarArticulo = async (articulo, token) => {
         throw error;
     } 
 };
+
+export const editarArticulo = async (id, articulo, token) => {
+    try { 
+        return await SIAPAPI.put(`producto/articulos/${id}/`, articulo, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Articulo: ", error);
+        throw error;
+    } 
+};
+
+export const editarAutor = async (id, autor, token) => {
+    try { 
+        return await SIAPAPI.put(`personas/autor/${id}/`, autor, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Autor: ", error);
+        throw error;
+    } 
+};
+
+
+export const editarRevista = async (id, revista, token) => {
+    try { 
+        return await SIAPAPI.put(`producto/revistas/${id}/`, revista, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Revista: ", error);
+        throw error;
+    } 
+};
