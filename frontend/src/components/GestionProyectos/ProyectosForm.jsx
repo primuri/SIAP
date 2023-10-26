@@ -15,6 +15,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const [softwareFile, setSoftwareFile] = useState(null);
     const [articuloData, setArticuloData] = useState(null);
     const [articuloFile, setArticuloFile] = useState(null);
+    const [eventoData, setEventoData] = useState(null);
+    const [eventoFile, setEventoFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [formData, setFormData] = useState({
@@ -121,7 +123,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         event.preventDefault();
         //console.log("Software Data before sending:", softwareData);
         //console.log("Article Data before sending:", articuloData);
-
+        console.log("Event Data before sending:", eventoData);
         const combinedData = new FormData();
         if (fileData) {
             combinedData.append('ruta_archivo', fileData);
@@ -133,7 +135,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         if (articuloFile) {
             combinedData.append('id_documento_articulo_fk.documento', articuloFile);
         }
-        const totalData = { ...formData, software: softwareData, articulo:articuloData };
+        if(eventoFile){
+            combinedData.append('id_oficio_fk.documento', eventoFile);
+        }
+        const totalData = { ...formData, software: softwareData, articulo:articuloData, evento:eventoData };
         combinedData.append('json', JSON.stringify(totalData));
         onSubmit(combinedData);
     };
@@ -166,6 +171,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setSoftwareFile(changes.softwareFile);
         setArticuloData(changes.articuloData);
         setArticuloFile(changes.articuloFile);
+        setEventoData(changes.eventoData);
+        setEventoFile(changes.eventoFile);
     };
     
     
@@ -276,13 +283,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                             <div className="row mt-3">
                                 <div className="col">
-                                    {activeForm === 'evento' && <EventoForm mode={mode} />}
+                                    {activeForm === 'evento' && <EventoForm mode={mode} setCambios={setCambios} producto={producto} />}
                                     {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios} producto={producto} />}
                                     {activeForm === 'articulo' && <ArticuloForm mode={mode} setCambios={setCambios} producto={producto} />}
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div className="modal-footer justify-content-center position-sticky bottom-0">

@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarArticulo, agregarAutor, agregarDocumentacion, agregarProducto, agregarRevista, agregarSoftware, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarDocumentacion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarDocumentacion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware } from "../../api/gestionProductos"
 import { eliminarNombre } from "../../api/gestionAcademicos"
 
 
@@ -82,6 +82,38 @@ export const GestionProyectos = () => {
 
         } catch (error) {
             toast.error('Error al cargar los datos de Proyectos', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            })
+        }
+    }
+
+    async function loadEvento(user) {
+        try {
+            const eventos = await obtenerEvento(localStorage.getItem('token'));
+    
+            const matchedEvento = eventos.data.find(evento => 
+                evento.id_producto_fk &&
+                evento.id_producto_fk.id_version_proyecto_fk &&
+                evento.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
+            );
+    
+            if (matchedEvento) {
+                setProducto(matchedEvento);
+                setTipo("evento");
+                return true;
+            } else {
+                console.warn('No se encontró el evento que coincide con user.id_version_proyecto');
+                setProducto(null);  
+                return false;
+            }
+    
+        } catch (error) {
+            toast.error('Error al cargar los datos de Evento', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -179,6 +211,8 @@ export const GestionProyectos = () => {
             let producto = null;
             let soft = null;
             let artic = null;
+            let ev = null;
+
             if ('software' in Datos){
                 const DocumentacionData = new FormData();
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
@@ -187,13 +221,7 @@ export const GestionProyectos = () => {
                     DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
                     DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
                     formData.delete('id_documento_documentacion_fk');
-                }
-                //Imprime el documento para saber si existe
-                //printFileDetailsFromFormData(DocumentacionData);
-                //for (let pair of DocumentacionData.entries()) {
-                //    console.log(pair[0] + ', ' + pair[1]);
-                //}
-                
+                }                
                 const id_documentacion_creada = await agregarDocumentacion(DocumentacionData, localStorage.getItem('token'))
                 delete Datos.software.id_documento_documentacion_fk;
                 Datos.software.id_documento_documentacion_fk = id_documentacion_creada;
@@ -209,8 +237,8 @@ export const GestionProyectos = () => {
                     DocumentoData.append('detalle', Datos.articulo.id_documento_articulo_fk.detalle);
                     DocumentoData.append('tipo', Datos.articulo.id_documento_articulo_fk.tipo);
                     formData.delete('id_documento_articulo_fk');
+
                 }
-                
                 const id_documento_creada = await agregarDocumentacion(DocumentoData, localStorage.getItem('token'))
                 delete Datos.articulo.id_documento_articulo_fk;
 
@@ -231,6 +259,38 @@ export const GestionProyectos = () => {
                 producto = Datos.articulo;
                 delete Datos.articulo;
                 artic = true;
+
+            } else if ('evento' in Datos){
+                const DocumentoOficioData = new FormData();
+                const documentoOficioFile = formData.get('id_oficio_fk.documento');
+                if (documentoOficioFile) {
+                    DocumentoOficioData.append('ruta_archivo', documentoOficioFile);
+                    DocumentoOficioData.append('detalle', Datos.evento.id_oficio_fk.detalle);
+                    formData.delete('id_oficio_fk');
+                //Imprime el documento para saber si existe
+                }
+                printFileDetailsFromFormData(DocumentoOficioData);
+                for (let pair of DocumentoOficioData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+
+                const id_documento_oficio_creado = await agregarOficio(DocumentoOficioData, localStorage.getItem('token'))
+                delete Datos.evento.id_oficio_fk;
+
+                delete Datos.evento.id_area_fk.id_area;
+                const id_area_creada = await agregarArea(Datos.evento.id_area_fk, localStorage.getItem('token'))
+                
+                delete Datos.evento.id_institucion_fk.id_institucion;
+                const id_institucion_creada = await agregarInstitucion(Datos.evento.id_institucion_fk, localStorage.getItem('token'))
+                
+                
+                Datos.evento.id_oficio_fk = id_documento_oficio_creado;
+                Datos.evento.id_area_fk = id_area_creada;
+                Datos.evento.id_institucion_fk = id_institucion_creada;
+
+                producto = Datos.evento;
+                delete Datos.evento;
+                ev = true;
             }
 
             formData.delete('json');          
@@ -276,10 +336,12 @@ export const GestionProyectos = () => {
             delete producto.id_producto_fk;
             producto.id_producto_fk = id_producto_creado;
 
-            if (soft == true){
-                const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
-            }else if (artic == true){
-                const id_articulo_creado = await agregarArticulo(producto, localStorage.getItem('token'));
+            if (soft){
+               await agregarSoftware(producto, localStorage.getItem('token'))
+            }else if (artic){
+                await agregarArticulo(producto, localStorage.getItem('token'));
+            }else if (ev) {
+                await agregarevento(producto, localStorage.getItem('token'));
             }
 
             loadVersionProyectos(id_vi)
@@ -467,19 +529,16 @@ export const GestionProyectos = () => {
         try {
             const id = proyecto.id_codigo_vi_fk.id_codigo_vi;
             if(tipo == "software"){
-                //loadSoftware(proyecto);
                 await eliminarDocumentacion(producto.id_documento_documentacion_fk.id_documento, localStorage.getItem("token"));
                 await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
                 await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
                 await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
             }
              if(tipo == "articulo"){
-                //loadArticulo(proyecto);
                 await eliminarDocumentacion(producto.id_documento_articulo_fk.id_documento, localStorage.getItem("token"));
                 await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
                 await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
                 await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
-               
                 await eliminarRevista(producto.id_revista_fk.id_revista,localStorage.getItem("token"));
                 await eliminarNombre(producto.id_autor_fk.id_nombre_completo_fk.id_nombre_completo,localStorage.getItem("token"));
             }
@@ -541,13 +600,13 @@ export const GestionProyectos = () => {
             if (!isSoftware) {
                 const isArticulo = await loadArticulo(user);
                 if(!isArticulo){
-
+                    await loadEvento(user);
                 }
             }
             setEdit(true);
             setAddClick(false);
         } catch (error) {
-            console.error('Error al obtener los softwares:', error);
+            console.error('Error al obtener los datos de la linea:', error);
         }
     }
     

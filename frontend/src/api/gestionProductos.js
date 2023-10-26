@@ -248,3 +248,145 @@ export const eliminarProducto = async (id, token) => {
         }
     });
 };
+
+
+
+export const eliminarArea = async (id, token) => {
+    return await SIAPAPI.delete(`producto/areas/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const editarArea = async (id, area, token) => {
+    try { 
+        return await SIAPAPI.put(`producto/areas/${id}/`, area, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar Area: ", error);
+        throw error;
+    } 
+};
+
+
+export const agregarArea = async (area, token) => {
+    try { 
+        const response_area =  await SIAPAPI.post('producto/areas/', area, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_area_creado = response_area.data.id_area;
+        return id_area_creado;
+    } catch(error) {
+        console.error("Error agregando area: ", error);
+        throw error;
+    } 
+};
+
+
+
+export const eliminarInstitucion = async (id, token) => {
+    return await SIAPAPI.delete(`personas/institucion/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const editarInstitucion = async (id, institucion, token) => {
+    try { 
+        return await SIAPAPI.put(`personas/institucion/${id}/`, institucion, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar institucion: ", error);
+        throw error;
+    } 
+};
+
+
+export const agregarInstitucion = async (institucion, token) => {
+    try { 
+        const response_institucion =  await SIAPAPI.post('personas/institucion/', institucion, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_institucion_creado = response_institucion.data.id_institucion;
+        return id_institucion_creado;
+    } catch(error) {
+        console.error("Error agregando institucion: ", error);
+        throw error;
+    } 
+};
+
+
+export const eliminarEvento = async (id, token) => {
+    return await SIAPAPI.delete(`producto/eventos/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const editarevento = async (id, evento, token) => {
+    try { 
+        return await SIAPAPI.put(`producto/eventos/${id}/`, evento, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+       
+    } catch(error) {
+        console.error("Error editar evento: ", error);
+        throw error;
+    } 
+};
+
+
+export const agregarevento = async (evento, token) => {
+    try { 
+        const response_evento =  await SIAPAPI.post('producto/eventos/', evento, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_evento_creado = response_evento.data.id_evento;
+        return id_evento_creado;
+    } catch(error) {
+        console.error("Error agregando evento: ", error);
+        throw error;
+    } 
+};
+
+export const obtenerEvento = async (token) => {
+    return await SIAPAPI.get('producto/eventos/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+
+
+
+
