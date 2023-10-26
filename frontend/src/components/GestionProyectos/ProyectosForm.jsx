@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
@@ -37,7 +37,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         numero_version: proyecto ? proyecto.numero_version : ""
     });
     
-
+    useEffect(() => {
+        if (mode === 2) {
+            setActiveForm(tipo);
+        }
+    }, [mode, tipo]);
+    
     
     //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
@@ -114,8 +119,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const sendForm = (event) => {
         event.preventDefault();
-        console.log("Software Data before sending:", softwareData);
-        console.log("Article Data before sending:", articuloData);
+        //console.log("Software Data before sending:", softwareData);
+        //console.log("Article Data before sending:", articuloData);
 
         const combinedData = new FormData();
         if (fileData) {
@@ -156,7 +161,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const setCambios = (changes) => {
-        console.log("Received changes:", changes);
+        //console.log("Received changes:", changes);
         setSoftwareData(changes.softwareData);
         setSoftwareFile(changes.softwareFile);
         setArticuloData(changes.articuloData);
@@ -250,41 +255,24 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                         <div className="row mb-2">
                             <div className="col"> </div>
-                                <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto Asociado</h5>
+                            <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto Asociado</h5>
                             <div className="col"> </div>
                         </div>
-                        <div className="row mb-4">
-                            <div className="row">
-                                {mode !== 2 && (
-                                    <>
-                                        <div className="col d-flex justify-content-center align-items-center">
-                                            <Boton onClick={() => setActiveForm('evento')} text="Evento"/>
-                                        </div>
-                                        <div className="col d-flex justify-content-center align-items-center">
-                                            <Boton onClick={() => setActiveForm('software')} text="Software"/>
-                                        </div>
-                                        <div className="col d-flex justify-content-center align-items-center">
-                                            <Boton onClick={() => setActiveForm('articulo')} text="Artículo"/>
-                                        </div>
-                                    </>
-                                )}
 
-                                {mode === 2 && tipo === 'evento' && (
+                        <div className="row mb-4">
+                            {mode !== 2 && (
+                                <div className="row">
                                     <div className="col d-flex justify-content-center align-items-center">
                                         <Boton onClick={() => setActiveForm('evento')} text="Evento"/>
                                     </div>
-                                )}
-                                {mode === 2 && tipo === 'software' && (
                                     <div className="col d-flex justify-content-center align-items-center">
                                         <Boton onClick={() => setActiveForm('software')} text="Software"/>
                                     </div>
-                                )}
-                                {mode === 2 && tipo === 'articulo' && (
                                     <div className="col d-flex justify-content-center align-items-center">
                                         <Boton onClick={() => setActiveForm('articulo')} text="Artículo"/>
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
 
                             <div className="row mt-3">
                                 <div className="col">

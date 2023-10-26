@@ -37,10 +37,10 @@ class Evento(models.Model):
     pais = models.CharField(max_length=150)
     tipo_participacion = models.CharField(max_length=10)
     enlace = models.CharField(max_length=1024, null=True)
-    id_producto_fk = models.ForeignKey(Producto, on_delete=models.PROTECT)
-    id_institucion_fk = models.ForeignKey(Institucion, on_delete=models.PROTECT)  
-    id_area_fk = models.ForeignKey(Area, on_delete=models.PROTECT)
-    id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
+    id_producto_fk = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    id_institucion_fk = models.ForeignKey(Institucion, on_delete=models.CASCADE)  
+    id_area_fk = models.ForeignKey(Area, on_delete=models.CASCADE)
+    id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.CASCADE)
 
 class Software(models.Model):
     id_software = models.AutoField(primary_key=True)

@@ -8,7 +8,8 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarArticulo, agregarAutor, agregarDocumentacion, agregarProducto, agregarRevista, agregarSoftware, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarDocumentacion, obtenerArticulo, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarArticulo, agregarAutor, agregarDocumentacion, agregarProducto, agregarRevista, agregarSoftware, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarDocumentacion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerSoftware } from "../../api/gestionProductos"
+import { eliminarNombre } from "../../api/gestionAcademicos"
 
 
 export const GestionProyectos = () => {
@@ -188,10 +189,10 @@ export const GestionProyectos = () => {
                     formData.delete('id_documento_documentacion_fk');
                 }
                 //Imprime el documento para saber si existe
-                printFileDetailsFromFormData(DocumentacionData);
-                for (let pair of DocumentacionData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
+                //printFileDetailsFromFormData(DocumentacionData);
+                //for (let pair of DocumentacionData.entries()) {
+                //    console.log(pair[0] + ', ' + pair[1]);
+                //}
                 
                 const id_documentacion_creada = await agregarDocumentacion(DocumentacionData, localStorage.getItem('token'))
                 delete Datos.software.id_documento_documentacion_fk;
@@ -208,11 +209,6 @@ export const GestionProyectos = () => {
                     DocumentoData.append('detalle', Datos.articulo.id_documento_articulo_fk.detalle);
                     DocumentoData.append('tipo', Datos.articulo.id_documento_articulo_fk.tipo);
                     formData.delete('id_documento_articulo_fk');
-                }
-                //Imprime el documento para saber si existe
-                printFileDetailsFromFormData(DocumentoData);
-                for (let pair of DocumentoData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
                 }
                 
                 const id_documento_creada = await agregarDocumentacion(DocumentoData, localStorage.getItem('token'))
@@ -426,10 +422,7 @@ export const GestionProyectos = () => {
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
             await editarVersionProyectos(id_version_proy,Datos, localStorage.getItem("token"))
-           
-           
-           
-            
+
             if (producto != null){
                 producto.id_producto_fk.id_version_proyecto_fk = id_version_proy;
                 const id_produ = producto.id_producto_fk.id_producto;
@@ -472,14 +465,25 @@ export const GestionProyectos = () => {
     // Manejo del eliminar
     const deleteProyecto = async (proyecto) => {
         try {
-            loadSoftware(proyecto);
-            await eliminarDocumentacion(producto.id_documento_documentacion_fk.id_documento, localStorage.getItem("token"));
-            
             const id = proyecto.id_codigo_vi_fk.id_codigo_vi;
-            await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
-            await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
-            await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
-           
+            if(tipo == "software"){
+                //loadSoftware(proyecto);
+                await eliminarDocumentacion(producto.id_documento_documentacion_fk.id_documento, localStorage.getItem("token"));
+                await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
+                await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
+                await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
+            }
+             if(tipo == "articulo"){
+                //loadArticulo(proyecto);
+                await eliminarDocumentacion(producto.id_documento_articulo_fk.id_documento, localStorage.getItem("token"));
+                await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
+                await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
+                await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
+               
+                await eliminarRevista(producto.id_revista_fk.id_revista,localStorage.getItem("token"));
+                await eliminarNombre(producto.id_autor_fk.id_nombre_completo_fk.id_nombre_completo,localStorage.getItem("token"));
+            }
+
             loadVersionProyectos(id)
 
             toast.success('proyecto eliminada correctamente', {
@@ -495,6 +499,7 @@ export const GestionProyectos = () => {
             setReload(!reload)
            
         } catch (error) {
+            console.log(error);
             toast.error('Error al eliminar la proyecto', {
                 duration: 4000,
                 position: 'bottom-right',

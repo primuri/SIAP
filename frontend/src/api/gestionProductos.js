@@ -121,7 +121,7 @@ export const eliminarDocumentacion = async (id, token) => {
     return await SIAPAPI.delete(`version_proyecto/documentos/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     });
 };
@@ -220,4 +220,31 @@ export const editarRevista = async (id, revista, token) => {
         console.error("Error editar Revista: ", error);
         throw error;
     } 
+};
+
+export const eliminarRevista = async (id, token) => {
+    return await SIAPAPI.delete(`producto/revistas/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const eliminarSoftware = async (id, token) => {
+    return await SIAPAPI.delete(`producto/softwares/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const eliminarProducto = async (id, token) => {
+    return await SIAPAPI.delete(`producto/productos/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
 };
