@@ -139,32 +139,31 @@ export const GestionProyectos = () => {
         const Datos = JSON.parse(formData.get('json'))
         try {
             //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
-            const DocumentacionData = new FormData();
-            const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
-            if (documentacionFile) {
-                DocumentacionData.append('ruta_archivo', documentacionFile);
-                DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
-                DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
-                formData.delete('id_documento_documentacion_fk');
+            let producto = null;
+            if ('software' in Datos){
+                const DocumentacionData = new FormData();
+                const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
+                if (documentacionFile) {
+                    DocumentacionData.append('ruta_archivo', documentacionFile);
+                    DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
+                    DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
+                    formData.delete('id_documento_documentacion_fk');
+                }
+                //Imprime el documento para saber si existe
+                printFileDetailsFromFormData(DocumentacionData);
+                for (let pair of DocumentacionData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+                
+                const id_documentacion_creada = await agregarDocumentacion(DocumentacionData, localStorage.getItem('token'))
+                delete Datos.software.id_documento_documentacion_fk;
+                Datos.software.id_documento_documentacion_fk = id_documentacion_creada;
+
+                producto = Datos.software;
+                delete Datos.software;
             }
-            //Imprime el documento para saber si existe
-             printFileDetailsFromFormData(DocumentacionData);
-            for (let pair of DocumentacionData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
-            
-            const id_documentacion_creada = await agregarDocumentacion(DocumentacionData, localStorage.getItem('token'))
-            delete Datos.software.id_documento_documentacion_fk;
-            Datos.software.id_documento_documentacion_fk = id_documentacion_creada;
 
-            formData.delete('json');
-
-            const producto = Datos.software;
-            delete Datos.software;
-            
-           
-
-            
+            formData.delete('json');          
             let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
             let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
            
@@ -207,7 +206,9 @@ export const GestionProyectos = () => {
             delete producto.id_producto_fk;
             producto.id_producto_fk = id_producto_creado;
 
-            const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
+            if ('software' in Datos){
+                const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
+            }
 
             loadVersionProyectos(id_vi)
             toast.success('Proyecto agregada correctamente', {
@@ -240,25 +241,29 @@ export const GestionProyectos = () => {
     const editProyecto = async (formData) => {
         try {
             const Datos = JSON.parse(formData.get('json'))
-            const DocumentacionData = new FormData();
-            const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
-            if (documentacionFile) {
-                DocumentacionData.append('ruta_archivo', documentacionFile);
-                DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
-                DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
-                formData.delete('id_documento_documentacion_fk');
-            }
-            printFileDetailsFromFormData(DocumentacionData);
-            for (let pair of DocumentacionData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
 
-            await editarDocumentacion(Datos.software.id_documento_documentacion_fk.id_documento, DocumentacionData, localStorage.getItem('token'))
-            const id_docu =Datos.software.id_documento_documentacion_fk.id_documento;
-            delete Datos.software.id_documento_documentacion_fk;
-            Datos.software.id_documento_documentacion_fk = id_docu;
-            
-            const producto = Datos.software;
+            let producto = null;
+            if ('software' in Datos && Datos.software != null){
+                const DocumentacionData = new FormData();
+                const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
+                if (documentacionFile) {
+                    DocumentacionData.append('ruta_archivo', documentacionFile);
+                    DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
+                    DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
+                    formData.delete('id_documento_documentacion_fk');
+                }
+                printFileDetailsFromFormData(DocumentacionData);
+                for (let pair of DocumentacionData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+
+                await editarDocumentacion(Datos.software.id_documento_documentacion_fk.id_documento, DocumentacionData, localStorage.getItem('token'))
+                const id_docu =Datos.software.id_documento_documentacion_fk.id_documento;
+                delete Datos.software.id_documento_documentacion_fk;
+                Datos.software.id_documento_documentacion_fk = id_docu;
+                
+            }
+            producto = Datos.software;
             delete Datos.software;
 
             formData.delete('json');
@@ -311,16 +316,18 @@ export const GestionProyectos = () => {
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
             await editarVersionProyectos(id_version_proy,Datos, localStorage.getItem("token"))
-            producto.id_producto_fk.id_version_proyecto_fk = id_version_proy;
-
-            const id_produ = producto.id_producto_fk.id_producto;
-            await editarProducto(id_produ, producto.id_producto_fk, localStorage.getItem('token'))
+           
+           
+           
             
-            delete producto.id_producto_fk;
-            producto.id_producto_fk = id_produ;
-
-            await editarSoftware(producto.id_software ,producto, localStorage.getItem('token'))
-
+            if (producto != null){
+                producto.id_producto_fk.id_version_proyecto_fk = id_version_proy;
+                const id_produ = producto.id_producto_fk.id_producto;
+                await editarProducto(id_produ, producto.id_producto_fk, localStorage.getItem('token'))
+                delete producto.id_producto_fk;
+                producto.id_producto_fk = id_produ;
+                await editarSoftware(producto.id_software ,producto, localStorage.getItem('token'))
+            }
            
             loadVersionProyectos(Datos.id_codigo_vi_fk)
 

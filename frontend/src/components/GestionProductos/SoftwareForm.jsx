@@ -43,7 +43,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         }
         const updatedFormData = updateNestedField(formData, name, value);
         setFormData(updatedFormData);
-        setCambios(formData);
+        setCambios({ softwareData: { ...updatedFormData }, softwareFile: fileData });
     };
 
     const handleFileChange = (event) => {
