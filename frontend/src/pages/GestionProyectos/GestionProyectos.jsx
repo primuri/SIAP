@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarDocumentacion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarArea, eliminarDocumentacion, eliminarInstitucion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware } from "../../api/gestionProductos"
 import { eliminarNombre } from "../../api/gestionAcademicos"
 
 
@@ -541,6 +541,15 @@ export const GestionProyectos = () => {
                 await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
                 await eliminarRevista(producto.id_revista_fk.id_revista,localStorage.getItem("token"));
                 await eliminarNombre(producto.id_autor_fk.id_nombre_completo_fk.id_nombre_completo,localStorage.getItem("token"));
+            }
+            if(tipo == "evento"){
+                await eliminarOficio(producto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
+                await eliminarVersion(proyecto.id_version_proyecto, localStorage.getItem("token"));
+                await eliminarOficio(proyecto.id_oficio_fk.id_oficio, localStorage.getItem("token"));
+                await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
+                await eliminarArea(producto.id_area_fk.id_area,localStorage.getItem("token"));
+                await eliminarInstitucion(producto.id_institucion_fk.id_institucion,localStorage.getItem("token"));
+            
             }
 
             loadVersionProyectos(id)
