@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarArea, eliminarDocumentacion, eliminarInstitucion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarArea, eliminarDocumentacion, eliminarInstitucion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware, editarArea, editarInstitucion, editarevento } from "../../api/gestionProductos"
 import { eliminarNombre } from "../../api/gestionAcademicos"
 
 
@@ -377,6 +377,7 @@ export const GestionProyectos = () => {
             const Datos = JSON.parse(formData.get('json'))
             let soft = null;
             let artic = null;
+            let ev = null;
 
             let producto = null;
             if ('software' in Datos && Datos.software != null){
@@ -393,6 +394,7 @@ export const GestionProyectos = () => {
                 const id_docu = Datos.software.id_documento_documentacion_fk.id_documento;
                 delete Datos.software.id_documento_documentacion_fk;
                 Datos.software.id_documento_documentacion_fk = id_docu;
+                
 
                 producto = Datos.software;
                 delete Datos.software;
@@ -432,6 +434,40 @@ export const GestionProyectos = () => {
                 producto = Datos.articulo;
                 delete Datos.articulo;
                 artic = true;
+            } else if ('evento' in Datos && Datos.evento != null){
+
+                const DocumentoOficioData = new FormData();
+                const documentoOficioFile = formData.get('id_oficio_fk.documento');
+                if (documentoOficioFile) {
+                    DocumentoOficioData.append('ruta_archivo', documentoOficioFile);
+                }
+                DocumentoOficioData.append('detalle', Datos.evento.id_oficio_fk.detalle);
+                formData.delete('id_oficio_fk');
+
+                const id_docu = Datos.evento.id_oficio_fk.id_oficio;
+                await editarOficio(id_docu, DocumentoOficioData, localStorage.getItem('token'))
+                
+
+                delete Datos.evento.id_oficio_fk;
+                Datos.evento.id_oficio_fk = id_docu;
+
+                const id_area = Datos.evento.id_area_fk.id_area;
+                delete Datos.evento.id_area_fk.id_area;
+                await editarArea(id_area, Datos.evento.id_area_fk, localStorage.getItem('token'))
+                delete Datos.evento.id_area_fk;
+                Datos.evento.id_area_fk = id_area;
+
+                const id_institucion = Datos.evento.id_institucion_fk.id_institucion;
+                delete Datos.evento.id_institucion_fk.id_institucion;
+                await editarInstitucion(id_institucion, Datos.evento.id_institucion_fk, localStorage.getItem('token'))
+                delete Datos.evento.id_institucion_fk;
+                Datos.evento.id_institucion_fk = id_institucion;
+
+            
+
+                producto = Datos.evento;
+                delete Datos.evento;
+                ev = true;
             }
 
             formData.delete('json');
@@ -491,10 +527,12 @@ export const GestionProyectos = () => {
                 await editarProducto(id_produ, producto.id_producto_fk, localStorage.getItem('token'))
                 delete producto.id_producto_fk;
                 producto.id_producto_fk = id_produ;
-                if(soft == true){
+                if(soft){
                     await editarSoftware(producto.id_software ,producto, localStorage.getItem('token'))
-                }else if (artic == true){
+                }else if (artic){
                     await editarArticulo(producto.id_articulo ,producto, localStorage.getItem('token'))
+                } else if (ev) {
+                    await editarevento(producto.id_evento ,producto, localStorage.getItem('token'))
                 }
                 
             }
