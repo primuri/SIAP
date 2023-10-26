@@ -140,6 +140,7 @@ export const GestionProyectos = () => {
         try {
             //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
             let producto = null;
+            let soft = null;
             if ('software' in Datos){
                 const DocumentacionData = new FormData();
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
@@ -161,6 +162,7 @@ export const GestionProyectos = () => {
 
                 producto = Datos.software;
                 delete Datos.software;
+                soft = true;
             }
 
             formData.delete('json');          
@@ -206,7 +208,7 @@ export const GestionProyectos = () => {
             delete producto.id_producto_fk;
             producto.id_producto_fk = id_producto_creado;
 
-            if ('software' in Datos){
+            if (soft == true){
                 const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
             }
 
@@ -248,21 +250,17 @@ export const GestionProyectos = () => {
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
                 if (documentacionFile) {
                     DocumentacionData.append('ruta_archivo', documentacionFile);
+                }
                     DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
                     DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
                     formData.delete('id_documento_documentacion_fk');
-                }
-                printFileDetailsFromFormData(DocumentacionData);
-                for (let pair of DocumentacionData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
-
                 await editarDocumentacion(Datos.software.id_documento_documentacion_fk.id_documento, DocumentacionData, localStorage.getItem('token'))
                 const id_docu =Datos.software.id_documento_documentacion_fk.id_documento;
                 delete Datos.software.id_documento_documentacion_fk;
                 Datos.software.id_documento_documentacion_fk = id_docu;
                 
             }
+
             producto = Datos.software;
             delete Datos.software;
 

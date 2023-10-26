@@ -31,6 +31,23 @@ class DocumentoViewSet(viewsets.ModelViewSet):
     queryset = Documento.objects.all()
     serializer_class = DocumentoSerializer
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        if partial and 'ruta_archivo' not in request.data:
+            request.data._mutable = True
+            request.data.pop('ruta_archivo', None)
+            request.data._mutable = False
+        
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
 class EvaluacionCCViewSet(viewsets.ModelViewSet):
