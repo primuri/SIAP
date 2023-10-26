@@ -131,7 +131,7 @@ class Asistente(models.Model):
 
 class Autor(models.Model):
     id_autor = models.AutoField(primary_key=True)
-    id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.PROTECT, db_column='id_nombre_completo_fk')
+    id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.CASCADE, db_column='id_nombre_completo_fk')
 
     class Meta:
         db_table = 'autor'

@@ -7,12 +7,14 @@ import { ArticuloForm } from "../GestionProductos/ArticuloForm";
 import { EventoForm } from "../GestionProductos/EventoForm";
 import { Boton } from "../../utils/Boton"
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo }) => {
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo }) => {
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
     const [softwareData, setSoftwareData] = useState(null);
     const [softwareFile, setSoftwareFile] = useState(null);
+    const [articuloData, setArticuloData] = useState(null);
+    const [articuloFile, setArticuloFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [formData, setFormData] = useState({
@@ -113,6 +115,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const sendForm = (event) => {
         event.preventDefault();
         console.log("Software Data before sending:", softwareData);
+        console.log("Article Data before sending:", articuloData);
 
         const combinedData = new FormData();
         if (fileData) {
@@ -122,7 +125,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         if (softwareFile) {
             combinedData.append('id_documento_documentacion_fk.documento', softwareFile);
         }
-        const totalData = { ...formData, software: softwareData };
+        if (articuloFile) {
+            combinedData.append('id_documento_articulo_fk.documento', articuloFile);
+        }
+        const totalData = { ...formData, software: softwareData, articulo:articuloData };
         combinedData.append('json', JSON.stringify(totalData));
         onSubmit(combinedData);
     };
@@ -153,6 +159,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         console.log("Received changes:", changes);
         setSoftwareData(changes.softwareData);
         setSoftwareFile(changes.softwareFile);
+        setArticuloData(changes.articuloData);
+        setArticuloFile(changes.articuloFile);
     };
     
     
@@ -246,26 +254,46 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             <div className="col"> </div>
                         </div>
                         <div className="row mb-4">
-                        <div className="row">
-                            <div className="col d-flex justify-content-center align-items-center">
-                                <Boton onClick={() => setActiveForm('evento')} text="Evento"/>
-                            </div>
-                            <div className="col d-flex justify-content-center align-items-center">
-                                <Boton onClick={() => setActiveForm('software')} text="Software"/>
-                            </div>
-                            <div className="col d-flex justify-content-center align-items-center">
-                                <Boton onClick={() => setActiveForm('articulo')} text="Artículo"/>
-                            </div>
-                        </div>
+                            <div className="row">
+                                {mode !== 2 && (
+                                    <>
+                                        <div className="col d-flex justify-content-center align-items-center">
+                                            <Boton onClick={() => setActiveForm('evento')} text="Evento"/>
+                                        </div>
+                                        <div className="col d-flex justify-content-center align-items-center">
+                                            <Boton onClick={() => setActiveForm('software')} text="Software"/>
+                                        </div>
+                                        <div className="col d-flex justify-content-center align-items-center">
+                                            <Boton onClick={() => setActiveForm('articulo')} text="Artículo"/>
+                                        </div>
+                                    </>
+                                )}
 
-                        <div className="row mt-3">
-                            <div className="col">
-                                {activeForm === 'evento' && <EventoForm mode={mode}  />}
-                                {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios}  producto={producto} />}
-                                {activeForm === 'articulo' && <ArticuloForm mode={mode}  />}
+                                {mode === 2 && tipo === 'evento' && (
+                                    <div className="col d-flex justify-content-center align-items-center">
+                                        <Boton onClick={() => setActiveForm('evento')} text="Evento"/>
+                                    </div>
+                                )}
+                                {mode === 2 && tipo === 'software' && (
+                                    <div className="col d-flex justify-content-center align-items-center">
+                                        <Boton onClick={() => setActiveForm('software')} text="Software"/>
+                                    </div>
+                                )}
+                                {mode === 2 && tipo === 'articulo' && (
+                                    <div className="col d-flex justify-content-center align-items-center">
+                                        <Boton onClick={() => setActiveForm('articulo')} text="Artículo"/>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="row mt-3">
+                                <div className="col">
+                                    {activeForm === 'evento' && <EventoForm mode={mode} />}
+                                    {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios} producto={producto} />}
+                                    {activeForm === 'articulo' && <ArticuloForm mode={mode} setCambios={setCambios} producto={producto} />}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                     </div>
                 </div>
@@ -302,5 +330,7 @@ ProyectosForm.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func,
     proyecto: PropTypes.object,
-    id_codigo: PropTypes.object
+    producto: PropTypes.object,
+    id_codigo: PropTypes.object,
+    tipo: PropTypes.oneOf(['evento', 'software', 'articulo'])
 };

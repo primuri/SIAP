@@ -8,7 +8,7 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
-import { agregarDocumentacion, agregarProducto, agregarSoftware, editarDocumentacion, editarProducto, editarSoftware, eliminarDocumentacion, obtenerSoftware } from "../../api/gestionProductos"
+import { agregarArticulo, agregarAutor, agregarDocumentacion, agregarProducto, agregarRevista, agregarSoftware, editarDocumentacion, editarProducto, editarSoftware, eliminarDocumentacion, obtenerArticulo, obtenerSoftware } from "../../api/gestionProductos"
 
 
 export const GestionProyectos = () => {
@@ -19,6 +19,7 @@ export const GestionProyectos = () => {
     const [data, setData] = useState([])//Todas las Proyectos
     const [proyecto, setProyecto] = useState(null) //Proyecto al que se le da click en la tabla para editar
     const [producto, setProducto] = useState(null)
+    const [tipo, setTipo] = useState(null)
     const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
@@ -90,10 +91,49 @@ export const GestionProyectos = () => {
         }
     }
 
+    async function loadArticulo(user) {
+        try {
+            const articulos = await obtenerArticulo(localStorage.getItem('token'));
+            if(articulos.data.length > 0){
+                setTipo("articulo");
+            }
+            
+            console.log(articulos.data);
+    
+            // Buscar el software que coincide con user.id_version_proyecto
+            const matchedArticulo = articulos.data.find(articulo => 
+                articulo.id_producto_fk &&
+                articulo.id_producto_fk.id_version_proyecto_fk &&
+                articulo.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
+            );
+    
+            if (matchedArticulo) {
+                setProducto(matchedArticulo);
+            } else {
+                console.warn('No se encontró el articulo que coincide con user.id_version_proyecto');
+                setProducto(null);  
+            }
+    
+        } catch (error) {
+            toast.error('Error al cargar los datos de Articulo', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            })
+        }
+    }
+
     async function loadSoftware(user) {
         try {
             const softwares = await obtenerSoftware(localStorage.getItem('token'));
-            //console.log(softwares.data);
+            if(softwares.data.length > 0){
+                setTipo("software");
+            }
+            
+            console.log(softwares.data);
     
             // Buscar el software que coincide con user.id_version_proyecto
             const matchedSoftware = softwares.data.find(software => 
@@ -141,6 +181,7 @@ export const GestionProyectos = () => {
             //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
             let producto = null;
             let soft = null;
+            let artic = null;
             if ('software' in Datos){
                 const DocumentacionData = new FormData();
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
@@ -163,6 +204,40 @@ export const GestionProyectos = () => {
                 producto = Datos.software;
                 delete Datos.software;
                 soft = true;
+            }else if ('articulo' in Datos){
+                const DocumentoData = new FormData();
+                const documentoFile = formData.get('id_documento_articulo_fk.documento');
+                if (documentoFile) {
+                    DocumentoData.append('ruta_archivo', documentoFile);
+                    DocumentoData.append('detalle', Datos.articulo.id_documento_articulo_fk.detalle);
+                    DocumentoData.append('tipo', Datos.articulo.id_documento_articulo_fk.tipo);
+                    formData.delete('id_documento_articulo_fk');
+                }
+                //Imprime el documento para saber si existe
+                printFileDetailsFromFormData(DocumentoData);
+                for (let pair of DocumentoData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+                
+                const id_documento_creada = await agregarDocumentacion(DocumentoData, localStorage.getItem('token'))
+                delete Datos.articulo.id_documento_articulo_fk;
+
+                delete Datos.articulo.id_revista_fk.id_revista;
+                const id_revista_creada = await agregarRevista(Datos.articulo.id_revista_fk, localStorage.getItem('token'))
+                
+                delete Datos.articulo.id_autor_fk.id_nombre_completo_fk.id_nombre_completo;
+                const autor = {
+                    id_nombre_completo_fk: Datos.articulo.id_autor_fk.id_nombre_completo_fk
+                }
+                const id_autor_creado = await agregarAutor(autor, localStorage.getItem('token'))
+                
+                Datos.articulo.id_documento_articulo_fk = id_documento_creada;
+                Datos.articulo.id_autor_fk = id_autor_creado;
+                Datos.articulo.id_revista_fk = id_revista_creada;
+
+                producto = Datos.articulo;
+                delete Datos.articulo;
+                artic = true;
             }
 
             formData.delete('json');          
@@ -210,6 +285,8 @@ export const GestionProyectos = () => {
 
             if (soft == true){
                 const id_software_creado = await agregarSoftware(producto, localStorage.getItem('token'))
+            }else if (artic == true){
+                const id_articulo_creado = await agregarArticulo(producto, localStorage.getItem('token'));
             }
 
             loadVersionProyectos(id_vi)
@@ -416,6 +493,7 @@ export const GestionProyectos = () => {
         
         try {
             loadSoftware(user);
+            loadArticulo(user);
             setEdit(true);
             setAddClick(false);
         } catch (error) {
@@ -464,6 +542,7 @@ export const GestionProyectos = () => {
                                             onDelete={() => deleteProyecto(proyecto)}
                                             proyecto={proyecto}
                                             producto={producto}
+                                            tipo={tipo}
                                         >
                                         </ProyectosForm>
                                     </Modal>

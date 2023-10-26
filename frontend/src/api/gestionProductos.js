@@ -62,6 +62,15 @@ export const obtenerSoftware = async (token) => {
     });
 };
 
+export const obtenerArticulo = async (token) => {
+    return await SIAPAPI.get('producto/articulos/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 export const editarDocumentacion = async (id, documentacion, token) => {
     try { 
         return await SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documentacion, {
@@ -115,4 +124,54 @@ export const eliminarDocumentacion = async (id, token) => {
             'Content-Type': 'application/json'
         }
     });
+};
+
+export const agregarRevista = async (revista, token) => {
+    try { 
+        const response_revista =  await SIAPAPI.post('producto/revistas/', revista, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_revista_creado = response_revista.data.id_revista;
+        return id_revista_creado;
+    } catch(error) {
+        console.error("Error agregando revista: ", error);
+        throw error;
+    } 
+};
+
+
+export const agregarAutor = async (autor, token) => {
+    try { 
+        const response_autor =  await SIAPAPI.post('personas/autor/', autor, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_autor_creado = response_autor.data.id_autor;
+        return id_autor_creado;
+    } catch(error) {
+        console.error("Error agregando autor: ", error);
+        throw error;
+    } 
+};
+
+
+export const agregarArticulo = async (articulo, token) => {
+    try { 
+        const response_articulo =  await SIAPAPI.post('producto/articulos/', articulo, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const id_articulo_creado = response_articulo.data.id_articulo;
+        return id_articulo_creado;
+    } catch(error) {
+        console.error("Error agregando articulo: ", error);
+        throw error;
+    } 
 };

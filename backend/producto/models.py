@@ -21,10 +21,10 @@ class Articulo(models.Model):
     doi = models.CharField(max_length=45)
     isbn = models.CharField(max_length=45)
     cant_paginas = models.IntegerField()
-    id_revista_fk = models.ForeignKey(Revista, on_delete=models.PROTECT)
-    id_producto_fk = models.ForeignKey(Producto, on_delete=models.PROTECT)
-    id_autor_fk = models.ForeignKey(Autor, on_delete=models.PROTECT)
-    id_documento_articulo_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_revista_fk = models.ForeignKey(Revista, on_delete=models.CASCADE)
+    id_producto_fk = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    id_autor_fk = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    id_documento_articulo_fk = models.ForeignKey(Documento, on_delete=models.CASCADE)
 
 class Area(models.Model):
     id_area = models.AutoField(primary_key=True)
