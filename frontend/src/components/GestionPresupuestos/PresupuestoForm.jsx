@@ -282,7 +282,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                         } else {
                                             setFormData({
                                                 ...formData,
-                                                ente_financiero_fk: { nombre: newValue.nombre, id_ente_financiero: formData.ente_financiero_fk.id_ente_financiero },
+                                                ente_financiero_fk: { nombre: newValue?.nombre, id_ente_financiero: formData.ente_financiero_fk.id_ente_financiero },
                                             });
                                         }
                                     }}
@@ -291,7 +291,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
 
                                         const { inputValue } = params;
                                         // Suggest the creation of a new value
-                                        const isExisting = options.some((option) => inputValue === option.nombre);
+                                        const isExisting = options.some((option) => inputValue === option?.nombre);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
                                             filtered.push({
@@ -317,7 +317,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                             return option.inputValue;
                                         }
                                         // Regular option
-                                        return option.nombre;
+                                        return option?.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
@@ -345,7 +345,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                         } else {
                                             setFormData({
                                                 ...formData,
-                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue.codigo},
+                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue?.codigo},
                                             });
                                         }
                                     }}
@@ -354,7 +354,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
 
                                         const { inputValue } = params;
                                         // Suggest the creation of a new value
-                                        const isExisting = options.some((option) => inputValue === option.codigo);
+                                        const isExisting = options.some((option) => inputValue === option?.codigo);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
                                             filtered.push({
@@ -380,7 +380,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                             return option.inputValue;
                                         }
                                         // Regular option
-                                        return option.codigo;
+                                        return option?.codigo;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.codigo}</li>}
                                     freeSolo
