@@ -72,12 +72,12 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
 
     return (
         <>
-            <FormModal {...{ icono, mode, nombreForm: "version informe", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
+            <FormModal {...{ icono, mode, nombreForm: "versión informe", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
                 <div className="modal-body" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
                         <div className="row mb-4">
                             <div className="col">
-                                <label htmlFor="numero_version" className="label-personalizado mb-2"> Num. versión <span className="required">*</span> </label>
+                                <label htmlFor="numero_version" className="label-personalizado mb-2"> Número versión <span className="required">*</span> </label>
                                 <input type="number" className="form-control" name="numero_version" id="numero_version" value={formData.numero_version} onChange={handleChange} required />
                             </div>
                             <div className="col">
