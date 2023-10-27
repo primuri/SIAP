@@ -16,6 +16,13 @@ class EnteFinanciero(models.Model):
     class Meta:
         db_table = 'ente_financiero'
 
+class CodigoFinanciero(models.Model):
+    id_codigo_financiero = models.AutoField(primary_key=True)
+    codigo = models.CharField(max_length=255,unique=True)
+
+    class Meta:
+        db_table = 'codigo_financiero'
+
 class Presupuesto(models.Model):
     id_presupuesto = models.AutoField(primary_key=True)
     anio_aprobacion = models.IntegerField()
@@ -23,7 +30,7 @@ class Presupuesto(models.Model):
     id_ente_financiero_fk = models.ForeignKey(EnteFinanciero, on_delete=models.PROTECT)
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_codigo_vi = models.ForeignKey(Proyecto, on_delete=models.PROTECT)
-    codigo_financiero = models.IntegerField()
+    id_codigo_financiero_fk = models.ForeignKey(CodigoFinanciero, on_delete=models.PROTECT)
     
     class Meta:
         db_table = 'presupuesto'

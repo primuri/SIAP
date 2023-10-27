@@ -6,7 +6,7 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import {toast, Toaster} from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte } from "../../api/gestionPresupuestos"
+import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte, buscaCodigoFinanciero, agregarCodigosFinancieros } from "../../api/gestionPresupuestos"
 
 
 export const GestionPresupuestos = () => {
@@ -44,7 +44,6 @@ export const GestionPresupuestos = () => {
     // Manejo de datos que se van a enviar para agregar
     const addPresupuesto = async (formData) => {
         try{
-
             const Data = JSON.parse(formData.get('json'))
             formData.delete('json')
             //Re estructuracion y creacion del objeto presupuesto
@@ -58,10 +57,19 @@ export const GestionPresupuestos = () => {
               Data.presupuesto.id_ente_financiero_fk = ente.id_ente_financiero
             }else{
               //Se crea un nuevo ente financiero.
-              console.log('se crea un nuevo ente')
               delete Data.ente_financiero_fk.id_ente_financiero 
               ente = await agregarEnte(Data.ente_financiero_fk, localStorage.getItem('token'))
               Data.presupuesto.id_ente_financiero_fk = ente.data.id_ente_financiero
+            }
+            let codigo_financiero = await buscaCodigoFinanciero(Data.id_codigo_financiero_fk.codigo, localStorage.getItem('token'))
+            if(codigo_financiero){
+              delete Data.id_codigo_financiero_fk
+              Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.id_codigo_financiero
+            }else{
+              //Se crea un nuevo ente financiero.
+              delete Data.id_codigo_financiero_fk.id_codigo_financiero 
+              codigo_financiero = await agregarCodigosFinancieros(Data.id_codigo_financiero_fk, localStorage.getItem('token'))
+              Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.data.id_codigo_financiero
             }
             formData.append('detalle',Data.oficio.detalle)
             delete Data.oficio
@@ -107,6 +115,16 @@ export const GestionPresupuestos = () => {
               delete Data.ente_financiero_fk.id_ente_financiero 
               ente = await agregarEnte(Data.ente_financiero_fk, localStorage.getItem('token'))
               Data.presupuesto.id_ente_financiero_fk = ente.data.id_ente_financiero
+            }
+            let codigo_financiero = await buscaCodigoFinanciero(Data.id_codigo_financiero_fk.codigo, localStorage.getItem('token'))
+            if(codigo_financiero){
+              delete Data.id_codigo_financiero_fk
+              Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.id_codigo_financiero
+            }else{
+              //Se crea un nuevo ente financiero.
+              delete Data.id_codigo_financiero_fk.id_codigo_financiero 
+              codigo_financiero = await agregarCodigosFinancieros(Data.id_codigo_financiero_fk, localStorage.getItem('token'))
+              Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.data.id_codigo_financiero
             }
             formData.append('detalle',Data.oficio.detalle)
             formData.append('id_oficio',Data.oficio.id_oficio_fk)
@@ -170,9 +188,8 @@ export const GestionPresupuestos = () => {
     }
     
     // Al hacer click en la tabla
-    const elementClicked = (user) =>{
-        console.log(user)
-        setPresupuesto(user)
+    const elementClicked = (presupuesto) =>{
+        setPresupuesto(presupuesto)
         setEdit(true)
         setAddClick(false)
     }
