@@ -217,7 +217,7 @@ export const GestionProyectos = () => {
                 const DocumentacionData = new FormData();
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
                 if (documentacionFile) {
-                    DocumentacionData.append('ruta_archivo', documentacionFile);
+                    DocumentacionData.append('documento', documentacionFile);
                     DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
                     DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
                     formData.delete('id_documento_documentacion_fk');
@@ -233,7 +233,7 @@ export const GestionProyectos = () => {
                 const DocumentoData = new FormData();
                 const documentoFile = formData.get('id_documento_articulo_fk.documento');
                 if (documentoFile) {
-                    DocumentoData.append('ruta_archivo', documentoFile);
+                    DocumentoData.append('documento', documentoFile);
                     DocumentoData.append('detalle', Datos.articulo.id_documento_articulo_fk.detalle);
                     DocumentoData.append('tipo', Datos.articulo.id_documento_articulo_fk.tipo);
                     formData.delete('id_documento_articulo_fk');
@@ -384,7 +384,7 @@ export const GestionProyectos = () => {
                 const DocumentacionData = new FormData();
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
                 if (documentacionFile) {
-                    DocumentacionData.append('ruta_archivo', documentacionFile);
+                    DocumentacionData.append('documento', documentacionFile);
                 }
                 DocumentacionData.append('detalle', Datos.software.id_documento_documentacion_fk.detalle);
                 DocumentacionData.append('tipo', Datos.software.id_documento_documentacion_fk.tipo);
@@ -404,7 +404,7 @@ export const GestionProyectos = () => {
                 const DocumentoData = new FormData();
                 const documentoFile = formData.get('id_documento_articulo_fk.documento');
                 if (documentoFile) {
-                    DocumentoData.append('ruta_archivo', documentoFile);
+                    DocumentoData.append('documento', documentoFile);
                 }
                 DocumentoData.append('detalle', Datos.articulo.id_documento_articulo_fk.detalle);
                 DocumentoData.append('tipo', Datos.articulo.id_documento_articulo_fk.tipo);

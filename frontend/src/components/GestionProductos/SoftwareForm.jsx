@@ -95,8 +95,8 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación <span className="required">*</span> </label>
                     <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode == 2 ? (
-                        <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                            {formData.id_documento_documentacion_fk.ruta_archivo.split('/').pop()}
+                        <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                            {formData.id_documento_documentacion_fk.documento.split('/').pop()}
                         </a>
                     ): ""}
                 </div>

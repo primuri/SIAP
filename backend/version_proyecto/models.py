@@ -38,13 +38,13 @@ class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
     detalle = models.CharField(max_length=360, null=True)
-    ruta_archivo = models.FileField(upload_to='media/documentos/')  # Se cambió de char a file
+    documento = models.FileField(upload_to='media/documentos/')  # Se cambió de char a file
 
     class Meta:
         db_table = 'documento'
 
 def documento_delete(sender, instance, **kwargs):
-    instance.ruta_archivo.delete(save=False)
+    instance.documento.delete(save=False)
 pre_delete.connect(documento_delete, sender=Documento)
 
 def documento_sustituir(sender, instance, **kwargs):
@@ -53,8 +53,8 @@ def documento_sustituir(sender, instance, **kwargs):
     except sender.DoesNotExist:
         return
 
-    if obj.ruta_archivo != instance.ruta_archivo:
-        obj.ruta_archivo.delete(save=False)
+    if obj.documento != instance.documento:
+        obj.documento.delete(save=False)
 
 pre_save.connect(documento_sustituir, sender=Documento)
 
