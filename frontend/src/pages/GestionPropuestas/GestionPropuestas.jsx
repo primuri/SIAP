@@ -8,7 +8,9 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
+
 import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
+
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)

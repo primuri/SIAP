@@ -11,10 +11,17 @@ class TipoPresupuesto(models.Model):
 
 class EnteFinanciero(models.Model):
     id_ente_financiero = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=150, unique=True)
     
     class Meta:
         db_table = 'ente_financiero'
+
+class CodigoFinanciero(models.Model):
+    id_codigo_financiero = models.AutoField(primary_key=True)
+    codigo = models.CharField(max_length=255,unique=True)
+
+    class Meta:
+        db_table = 'codigo_financiero'
 
 class Presupuesto(models.Model):
     id_presupuesto = models.AutoField(primary_key=True)
@@ -23,7 +30,7 @@ class Presupuesto(models.Model):
     id_ente_financiero_fk = models.ForeignKey(EnteFinanciero, on_delete=models.PROTECT)
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_codigo_vi = models.ForeignKey(Proyecto, on_delete=models.PROTECT)
-    codigo_financiero = models.IntegerField()
+    id_codigo_financiero_fk = models.ForeignKey(CodigoFinanciero, on_delete=models.PROTECT)
     
     class Meta:
         db_table = 'presupuesto'
@@ -51,7 +58,8 @@ class Partida(models.Model):
         db_table = 'partida'
 
 class Proveedor(models.Model):
-    id_cedula_proveedor = models.CharField(max_length=11, primary_key=True)
+    id_cedula_proveedor = models.CharField(max_length=11, primary_key=True, unique=True)
+    tipo = models.CharField(max_length=45)
     correo = models.CharField(max_length=64)
     nombre = models.CharField(max_length=128)
     telefono = models.CharField(max_length=45)
@@ -92,8 +100,9 @@ class CuentaBancaria(models.Model):
     tipo = models.CharField(max_length=45)
     moneda = models.CharField(max_length=45)
     cuenta_principal = models.BooleanField()
-    id_proveedor_fk = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
+    id_proveedor_fk = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'cuenta_bancaria'
+        unique_together = (('banco','tipo','moneda','cuenta_principal', 'id_proveedor_fk'),) 
 

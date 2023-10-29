@@ -22,11 +22,18 @@ class OficioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Oficio
         fields = '__all__'
+    def to_representation(self, instance):
+        rep = super(OficioSerializer, self).to_representation(instance)
+        return rep
 
 class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(DocumentoSerializer, self).to_representation(instance)
+        return rep
 
 class EvaluacionCCSerializer(serializers.ModelSerializer):
     id_documento_evualuacion_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())

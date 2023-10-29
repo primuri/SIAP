@@ -2,15 +2,13 @@
 ### Crear usuario
 
 POST http://127.0.0.1:8000/signup 
-Authorization: token 5ef0645c401bc148f3c0057488af203fa7a3ce8c
+Authorization: token 5944b34e9a0c3be148c9d6c985c23d91057ffc34
 Content-Type: application/json
 
 {
-  "correo": "prueba4@email.com", 
+  "correo": "root@gmail.com", 
   "password": "root", 
-  "groups": ["administrador"],
-  "academico_fk" : "1",
-  "evaluador_fk" : "1"
+  "groups": ["administrador"]
 }
 
 ### Inicio de sesion
@@ -54,4 +52,62 @@ Content-Type: application/json
 
 GET http://127.0.0.1:8000/personas/universidad?nombre=Universidad%20Nacional&pais=Polonia/
 Authorization: token 357cff9eed614b19d1020eeb0208bf124abbff10
+Content-Type: application/json
+
+
+### Obtener version de proyecto
+
+GET http://127.0.0.1:8000/version_proyecto/versionproyecto/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+
+### Obtener informe
+
+GET http://127.0.0.1:8000/informe/informes/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener informes de un proyecto
+
+GET http://127.0.0.1:8000/informe/informes/?id_version_proyecto=1
+Authorization: token 15c37e4c1ad7cb1e1ba78a35475430703451082f
+Content-Type: application/json
+
+
+### Obtener Evaluacion CC
+GET http://127.0.0.1:8000/version_proyecto/evaluacionescc/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+
+### Obtener Oficio
+GET http://127.0.0.1:8000/version_proyecto/oficios/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener Documento
+GET http://127.0.0.1:8000/version_proyecto/documentos/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener Version Informe
+GET http://127.0.0.1:8000/informe/versioninformes/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener Documento Accion
+GET http://127.0.0.1:8000/version_proyecto/documentos/
+Authorization: token a507fe5e9758060fcb56fe59dd30dbb44b6ff6dd
+Content-Type: application/json
+
+### Obtener Accion
+GET http://127.0.0.1:8000/informe/acciones/
+Authorization: token 5944b34e9a0c3be148c9d6c985c23d91057ffc34
+Content-Type: application/json
+
+### Obtener versiones especificas
+
+GET http://127.0.0.1:8000/informe/versioninformes/?id_informe=1
+Authorization: token 5944b34e9a0c3be148c9d6c985c23d91057ffc34
 Content-Type: application/json

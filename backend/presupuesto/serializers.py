@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from version_proyecto.models import Oficio, Proyecto
-from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria
+from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
 from version_proyecto.serializers import OficioSerializer, ProyectoSerializer
 
 class TipoPresupuestoSerializer(serializers.ModelSerializer):
@@ -14,12 +14,17 @@ class EnteFinancieroSerializer(serializers.ModelSerializer):
         model = EnteFinanciero
         fields = '__all__'
 
+class CodigoFinancieroSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CodigoFinanciero
+        fields = '__all__'
+
 class PresupuestoSerializer(serializers.ModelSerializer):
     id_tipo_presupuesto_fk = serializers.PrimaryKeyRelatedField(queryset=TipoPresupuesto.objects.all())
     id_ente_financiero_fk = serializers.PrimaryKeyRelatedField(queryset=EnteFinanciero.objects.all())
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
     id_codigo_vi = serializers.PrimaryKeyRelatedField(queryset=Proyecto.objects.all())
-
+    id_codigo_financiero_fk = serializers.PrimaryKeyRelatedField(queryset=CodigoFinanciero.objects.all())  
     class Meta:
         model = Presupuesto
         fields = '__all__'
@@ -30,6 +35,7 @@ class PresupuestoSerializer(serializers.ModelSerializer):
         rep['id_ente_financiero_fk'] = EnteFinancieroSerializer(instance.id_ente_financiero_fk).data
         rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
         rep['id_codigo_vi'] = ProyectoSerializer(instance.id_codigo_vi).data
+        rep['id_codigo_financiero_fk'] = CodigoFinancieroSerializer(instance.id_codigo_financiero_fk).data
         return rep
 
 class VersionPresupuestoSerializer(serializers.ModelSerializer):

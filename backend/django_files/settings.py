@@ -49,13 +49,14 @@ INSTALLED_APPS = [
     'producto',                    # <- Agreado
     'propuesta_proyecto',          # <- Agreado
     'version_proyecto',            # <- Agreado
-    'usuario_personalizado',            # <- Agreado
+    'usuario_personalizado',       # <- Agreado
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',                 # <- Agregado
+    'django.middleware.locale.LocaleMiddleware',             # <- Agregado
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -120,7 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+
+LANGUAGE_CODE = 'es'
+
+LANGUAGES = [
+    ('es', 'Spanish'),
+]
 
 TIME_ZONE = 'UTC'
 

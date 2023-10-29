@@ -3,13 +3,14 @@ export const Sidebar = () => {
    const usuario = JSON.parse(localStorage.getItem('user'));
    const menu = {
     "administrador": [
-      { label: 'Gestión de<br/>usuarios', link: '/gestion-usuarios' },
-      { label: 'Gestión de<br/> propuestas', link: '/gestion-propuestas' },
-      { label: 'Gestión de<br/> proyectos', link: '/gestion-proyectos' },
+      { label: 'Gestión de<br/>usuarios',        link: '/gestion-usuarios' },
+      { label: 'Gestión de<br/> propuestas',     link: '/gestion-propuestas' },
+      { label: 'Gestión de<br/> proyectos',      link: '' },
       { label: 'Gestión de<br/> investigadores', link: '/gestion-investigadores' },
-      { label: 'Gestión de<br/> evaluadores', link: '/gestion-evaluadores' },
-      { label: 'Gestión de<br/> presupuestos', link: '/gestion-presupuestos' },
-      { label: 'Gestión de<br/> informes', link: '/gestion-informes' },
+      { label: 'Gestión de<br/> evaluadores',    link: '/gestion-evaluadores' },
+      { label: 'Gestión de<br/> presupuestos',   link: '/gestion-presupuestos' },
+      { label: 'Gestión de<br/> informes',       link: '/gestion-informes' },
+      { label: 'Gestión de<br/> proveedores',    link: '/gestion-proveedores' },
     ],
     "evaluador": [
       { label: 'Dashboard', link: '/dashboard' },
@@ -29,9 +30,7 @@ export const Sidebar = () => {
                     return(<>
                             <li key={e.link} className='d-flex align-items-center'>
                                 <NavLink
-                                    to={e.link}
-                                    className='text-decoration-none text-black fs-5'
-                                >
+                                    to={e.link} className='text-decoration-none text-black fs-5'>
                                     {
                                         e.label.split('<br/>').map((text,i)=>(
                                             <>

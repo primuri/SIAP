@@ -4,7 +4,6 @@ from personas.models import Evaluador, Asistente, Academico
 from django.db.models.signals import pre_delete
 from django.db.models.signals import pre_save
 
-
 class Proyecto(models.Model):
     id_codigo_vi = models.CharField(max_length=45, primary_key=True)
     id_codigo_cimpa_fk = models.ForeignKey(PropuestaProyecto, on_delete=models.PROTECT)
@@ -19,8 +18,11 @@ class Oficio(models.Model):
 
     class Meta:
         db_table = 'oficio'
+        unique_together = (( 'ruta_archivo','id_oficio'),)
+
 def oficio_delete(sender, instance, **kwargs):
     instance.ruta_archivo.delete(save=False)
+    
 pre_delete.connect(oficio_delete, sender=Oficio)
 
 def oficio_sustituir(sender, instance, **kwargs):
@@ -40,6 +42,7 @@ class Documento(models.Model):
     detalle = models.CharField(max_length=360, null=True)
     documento = models.FileField(upload_to='media/documentos/')  # Se cambió de char a file
 
+
     class Meta:
         db_table = 'documento'
 
@@ -57,7 +60,6 @@ def documento_sustituir(sender, instance, **kwargs):
         obj.documento.delete(save=False)
 
 pre_save.connect(documento_sustituir, sender=Documento)
-
 
 class EvaluacionCC(models.Model):
     id_evaluacion_cc = models.AutoField(primary_key=True)
