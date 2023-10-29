@@ -10,6 +10,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     tipo: "",
     doi: "",
     isbn: "",
+    observaciones: "",
     cant_paginas: "",
     id_revista_fk: {
       id_revista: "", 
@@ -185,6 +186,12 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
             </a>
           ): ""}
         </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col">
+            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones  </label>
+            <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} required />
+        </div>        
       </div>
     </>
   );

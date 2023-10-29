@@ -189,19 +189,6 @@ export const GestionProyectos = () => {
             })
         }
     }
-    
-    const printFileDetailsFromFormData = (formData) => {
-        let fileFound = false;
-    
-        for (let [name, value] of formData.entries()) {
-            if (value instanceof Blob) {
-                console.log(`Nombre del archivo en formData: ${name}, Nombre real del archivo: ${value.name}, Tamaño: ${value.size} bytes`);
-                fileFound = true;
-            }
-        }
-    
-        return fileFound;
-    }
    
     // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
@@ -267,12 +254,8 @@ export const GestionProyectos = () => {
                     DocumentoOficioData.append('ruta_archivo', documentoOficioFile);
                     DocumentoOficioData.append('detalle', Datos.evento.id_oficio_fk.detalle);
                     formData.delete('id_oficio_fk');
-                //Imprime el documento para saber si existe
                 }
-                printFileDetailsFromFormData(DocumentoOficioData);
-                for (let pair of DocumentoOficioData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
+               
 
                 const id_documento_oficio_creado = await agregarOficio(DocumentoOficioData, localStorage.getItem('token'))
                 delete Datos.evento.id_oficio_fk;

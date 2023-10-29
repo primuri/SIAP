@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name="documento",
-            name="ruta_archivo",
+            name="documento",
             field=models.FileField(upload_to="media/documentos/"),
         ),
         migrations.AlterField(
