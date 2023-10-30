@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
@@ -9,9 +10,9 @@ import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarV
 import { InformesForm } from "../../components/GestionInformes/InformesForm"
 import { GestionVersionInforme } from "./GestionVersionInforme"
 
-export const GestionInformes = (/* proyectoID */) => {
+export const GestionInformes = () => {
 
-    var proyectoID = "1";
+    const { proyectoID } = useParams();
 
     // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
     const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
