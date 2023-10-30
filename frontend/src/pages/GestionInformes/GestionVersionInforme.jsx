@@ -4,7 +4,7 @@ import { VersionInformeForm }   from "../../components/GestionInformes/VersionIn
 import { toast, Toaster }       from 'react-hot-toast'
 import { Search }               from "../../utils/Search"
 import { Modal }                from "../../utils/Modal"
-import { Back } from "../../utils/Back"
+import { Back }                 from "../../utils/Back"
 import { Table }                from "../../utils/Table"
 import { Add }                  from "../../utils/Add"
 import * as API                 from "../../api/gestionInformes"
