@@ -185,7 +185,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                     </div>
                 </div>
                 <div className="text-center" style={{ marginLeft: '3.5vw' }}>
-                    <h2>{mode === 1 ? ("Agregar un proyecto") : ("Editar proyecto")}</h2>
+                    <h2>{mode === 1 ? ("Agregar una versión de proyecto") : ("Editar versión de proyecto")}</h2>
                 </div>
                 <div>
                     <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
