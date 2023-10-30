@@ -266,7 +266,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                             <div className="col-md-6">
                             <label htmlFor="ente_nombre" className="label-personalizado mb-2">Ente Financiero <span className="required">*</span> </label>
                                 <Autocomplete className="universidadAuto"
-                                    value={formData.ente_financiero_fk}
+                                    value={formData.ente_financiero_fk.nombre}
                                     onChange={(event, newValue) => {
                                         if (typeof newValue === 'string') {
                                             setFormData({
@@ -317,7 +317,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                             return option.inputValue;
                                         }
                                         // Regular option
-                                        return option?.nombre;
+                                        return option.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
@@ -329,7 +329,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                             <div className="col-md-6">
                                 <label htmlFor="codigoFinanciero" className="label-personalizado mb-2">Código Financiero<span className="required">*</span> </label>
                                 <Autocomplete className="universidadAuto"
-                                    value={formData.id_codigo_financiero_fk}
+                                    value={formData.id_codigo_financiero_fk.codigo}
                                     onChange={(event, newValue) => {
                                         if (typeof newValue === 'string') {
                                             setFormData({
@@ -354,7 +354,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
 
                                         const { inputValue } = params;
                                         // Suggest the creation of a new value
-                                        const isExisting = options.some((option) => inputValue === option?.codigo);
+                                        const isExisting = options.some((option) => inputValue === option.codigo);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
                                             filtered.push({
@@ -380,7 +380,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                             return option.inputValue;
                                         }
                                         // Regular option
-                                        return option?.codigo;
+                                        return option.codigo;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.codigo}</li>}
                                     freeSolo
@@ -389,7 +389,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                     )}
                                 />
                             </div>
-                        </div>                
+                        </div>               
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="nDeOficio" className="label-personalizado mb-2">Número de Oficio</label>
