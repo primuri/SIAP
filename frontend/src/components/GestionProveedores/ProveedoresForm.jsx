@@ -90,6 +90,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
             sendingForm.id_documento_fk.documento = fileProveedor
         }
         onSubmit(sendingForm);
+        sendingForm = { ...formData}
     }
 
     const handleFileChange = (event) => {
