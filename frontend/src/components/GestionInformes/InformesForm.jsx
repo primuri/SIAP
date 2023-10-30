@@ -122,9 +122,9 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado <span className="required">*</span> </label>
                                     <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
-                                        <option value="desarrollo">En desarrollo</option>
-                                        <option value="evaluacion">En evaluación</option>
-                                        <option value="concluido">Concluido</option>
+                                        <option value="En desarrollo">En desarrollo</option>
+                                        <option value="En evaluacion">En evaluación</option>
+                                        <option value="Concluido">Concluido</option>
                                     </select>
                                 </div>
                             </div>
@@ -136,10 +136,10 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                                     <label htmlFor="tipo" className="label-personalizado mb-2">Tipo <span className="required">*</span> </label>
                                     <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un tipo</option>
-                                        <option value="primer_parcial">Primer parcial</option>
-                                        <option value="segundo_parcial">Segundo parcial</option>
-                                        <option value="tercer_parcial">Tercer parcial</option>
-                                        <option value="final">Final</option>
+                                        <option value="Primer parcial">Primer parcial</option>
+                                        <option value="Segundo parcial">Segundo parcial</option>
+                                        <option value="Tercer parcial">Tercer parcial</option>
+                                        <option value="Final">Final</option>
                                     </select>
                                 </div>
                             </div>
