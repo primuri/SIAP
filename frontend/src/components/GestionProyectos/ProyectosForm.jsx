@@ -168,7 +168,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const handleInformesClick = () => {
-        //window.location.href = `/informe/versioninformes?id_informe=1`;
+        window.location.href = `/gestion-informes/${proyecto.id_version_proyecto}`
     };
 
     const setCambios = (changes) => {
