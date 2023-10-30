@@ -171,6 +171,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         window.location.href = `/gestion-informes/${proyecto.id_version_proyecto}`
     };
 
+    const handlePresupuestoClick = () => {
+        window.location.href = `/gestion-presupuestos/${proyecto.id_version_proyecto}`
+    };
+
     const setCambios = (changes) => {
         //console.log("Received changes:", changes);
         setSoftwareData(changes.softwareData);
@@ -300,7 +304,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     <button id="acciones-button" className="btn btn-primary" onClick={handleInformesClick}>Visualizar Informes</button>
                                 </div>
                                     <div className="col d-flex justify-content-center align-items-center">
-                                        <button id="acciones-button" className="btn btn-primary">Visualizar Presupuesto</button>
+                                        <button id="acciones-button" className="btn btn-primary" onClick={handlePresupuestoClick}>Visualizar Presupuesto</button>
                                     </div>
                                 </div>
                             )}

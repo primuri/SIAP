@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from version_proyecto.models import Oficio, Proyecto
+from version_proyecto.models import Oficio, Proyecto, VersionProyecto
 from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
-from version_proyecto.serializers import OficioSerializer, ProyectoSerializer
+from version_proyecto.serializers import OficioSerializer, ProyectoSerializer, VersionProyectoSerializer
 
 class TipoPresupuestoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +24,9 @@ class PresupuestoSerializer(serializers.ModelSerializer):
     id_ente_financiero_fk = serializers.PrimaryKeyRelatedField(queryset=EnteFinanciero.objects.all())
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
     id_codigo_vi = serializers.PrimaryKeyRelatedField(queryset=Proyecto.objects.all())
-    id_codigo_financiero_fk = serializers.PrimaryKeyRelatedField(queryset=CodigoFinanciero.objects.all())  
+    id_codigo_financiero_fk = serializers.PrimaryKeyRelatedField(queryset=CodigoFinanciero.objects.all())
+    id_version_proyecto_fk = serializers.PrimaryKeyRelatedField(queryset=VersionProyecto.objects.all())
+
     class Meta:
         model = Presupuesto
         fields = '__all__'
@@ -36,6 +38,7 @@ class PresupuestoSerializer(serializers.ModelSerializer):
         rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
         rep['id_codigo_vi'] = ProyectoSerializer(instance.id_codigo_vi).data
         rep['id_codigo_financiero_fk'] = CodigoFinancieroSerializer(instance.id_codigo_financiero_fk).data
+        rep['id_version_proyecto_fk'] = VersionProyectoSerializer(instance.id_version_proyecto_fk).data
         return rep
 
 class VersionPresupuestoSerializer(serializers.ModelSerializer):

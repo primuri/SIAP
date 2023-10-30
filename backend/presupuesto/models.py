@@ -1,5 +1,6 @@
 from django.db import models
-from version_proyecto.models import Oficio, Proyecto
+from version_proyecto.models import Oficio, Proyecto, VersionProyecto
+
 
 class TipoPresupuesto(models.Model):
     id_tipo_presupuesto = models.AutoField(primary_key=True)
@@ -31,6 +32,7 @@ class Presupuesto(models.Model):
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_codigo_vi = models.ForeignKey(Proyecto, on_delete=models.PROTECT)
     id_codigo_financiero_fk = models.ForeignKey(CodigoFinanciero, on_delete=models.PROTECT)
+    id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
     
     class Meta:
         db_table = 'presupuesto'
