@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { agregarProyectos } from './gestionProyectos';
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -39,6 +40,7 @@ export const agregarDocumento = async (combinedData,  token) => {
         
         delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk;
         documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk = id_vigencia_creado;
+
         const id_academi = documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico
         delete documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk
         documento_asociado.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk = id_academi
@@ -54,6 +56,14 @@ export const agregarDocumento = async (combinedData,  token) => {
 
         const id_propuesta_creada = await agregarPropuestas(documento_asociado.id_codigo_cimpa_fk ,token);
         combinedData.append('id_codigo_cimpa_fk',id_propuesta_creada)
+        if(documento_asociado.id_codigo_cimpa_fk.estado == "Aprobada"){
+            const proyecto = {
+                id_codigo_vi : id_propuesta_creada,
+                id_codigo_cimpa_fk : id_propuesta_creada
+            }
+             await agregarProyectos(proyecto, localStorage.getItem("token"));
+            
+        }
         
         const response_documento = await SIAPAPI.post('propuesta_proyecto/documento_asociado/', combinedData, {
             headers: {

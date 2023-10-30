@@ -139,7 +139,23 @@ export const obtenerEntesFinancieros = async (token) => {
     }));
 }
 
+export const agregarCodigosFinancieros = async (ente,token) => {
+    return await manejarErrores(SIAPAPI.post('presupuesto/codigos_financieros/',ente,{
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }))
+}
 
+export const obtenerCodigosFinancieros = async (token) => {
+    return await manejarErrores(SIAPAPI.get('presupuesto/codigos_financieros', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+}
 //Metodos auxiliares
 
 export const buscaEnteFinanciero = async (nombre, token) => {
@@ -150,4 +166,14 @@ export const buscaEnteFinanciero = async (nombre, token) => {
         }
     });
     return response.data.find(entidad => entidad.nombre === nombre);
+}
+
+export const buscaCodigoFinanciero = async (codigo, token) => {
+    const response = await SIAPAPI.get('presupuesto/codigos_financieros', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return response.data.find(entidad => entidad.codigo === codigo);
 }

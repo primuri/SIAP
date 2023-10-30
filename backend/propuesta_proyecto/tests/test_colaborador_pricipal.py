@@ -30,6 +30,10 @@ class ColaboradorPrincipalTests(APITestCase):
             'nombre': 'Física'
         }
 
+        self.area_especialidad2_data = {
+            'nombre': 'Ciencias'
+        }
+
         self.universidad_data = {
             'pais': 'Costa Rica',
             'nombre': 'Universidad de Costa Rica'
@@ -47,6 +51,9 @@ class ColaboradorPrincipalTests(APITestCase):
         response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad_data, format='json')
         self.area_especialidad_id = response.data['id_area_especialidad']
 
+        response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad2_data, format='json')
+        self.area_especialidad2_id = response.data['id_area_especialidad']
+
         response = self.client.post(reverse('universidad-list'), self.universidad_data, format='json')
         self.universidad_id = response.data['id_universidad']
 
@@ -55,13 +62,15 @@ class ColaboradorPrincipalTests(APITestCase):
 
         self.academico_data = {
             'cedula': '118240782',
-            'foto': 'foto',
+            'foto': None,
             'sitio_web': 'http://google.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandon.castillo.badilla@est.una.ac.cr',
-            'area_de_trabajo': 'Circo',
+            'correo_secundario': 'ariel@email.com',
+            'unidad_base': 'Dermatología',
             'categoria_en_regimen': 'Junior',
             'pais_procedencia': 'Costa Rica',
+            'id_area_especialidad_secundaria_fk': self.area_especialidad2_id,
             'id_nombre_completo_fk': self.nombre_completo_id,
             'id_area_especialidad_fk': self.area_especialidad_id,
             'universidad_fk': self.universidad_id
@@ -115,6 +124,9 @@ class ColaboradorPrincipalTests(APITestCase):
         area_especialidad_data2 = {
             'nombre': 'Microbiologia'
         }
+        area_especialidad2_data2 = {
+            'nombre': 'Microbiologia'
+        }
         universidad_data2 = {
             'pais': 'Nicaragua',
             'nombre': 'Universidad Nacional Autónoma de Managua'
@@ -128,16 +140,20 @@ class ColaboradorPrincipalTests(APITestCase):
         response_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad_data2, format='json')
         response_universidad2 = self.client.post(reverse('universidad-list'), universidad_data2, format='json')
         response_vigencia2 = self.client.post(reverse('vigencia-list'), vigencia_data2, format='json')
+        response2_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad2_data2, format='json')
+        
 
         academico_data2 = {
             'cedula': '89654321',
-            'foto': 'foto2',
+            'foto': None,
             'sitio_web': 'http://89654321.com',
             'grado_maximo': 'Doctorado',
             'correo': 'brenda.castillo@email.com',
-            'area_de_trabajo': 'Fisica',
+            'correo_secundario': 'ariel@email.com',
+            'unidad_base': 'Dermatología',
             'categoria_en_regimen': 'Senior',
             'pais_procedencia': 'Nicaragua',
+            'id_area_especialidad_secundaria_fk': response2_area2.data['id_area_especialidad'], 
             'id_nombre_completo_fk': response_nombre2.data['id_nombre_completo'],
             'id_area_especialidad_fk': response_area2.data['id_area_especialidad'], 
             'universidad_fk': response_universidad2.data['id_universidad']  

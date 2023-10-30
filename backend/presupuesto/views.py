@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria
-from .serializers import TipoPresupuestoSerializer, EnteFinancieroSerializer, PresupuestoSerializer, VersionPresupuestoSerializer, PartidaSerializer, ProveedorSerializer, ProductoServicioSerializer, FacturaSerializer, GastoSerializer, CuentaBancariaSerializer
+from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
+from .serializers import TipoPresupuestoSerializer, EnteFinancieroSerializer, PresupuestoSerializer, VersionPresupuestoSerializer, PartidaSerializer, ProveedorSerializer, ProductoServicioSerializer, FacturaSerializer, GastoSerializer, CuentaBancariaSerializer, CodigoFinancieroSerializer
 
 from django_files.permisos import PermisoPorRol
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -26,6 +26,13 @@ class EnteFinancieroViewSet(viewsets.ModelViewSet):
         if nombre is not None:
             queryset = queryset.filter(nombre=nombre)
         return queryset
+
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated, PermisoPorRol])
+class CodigoFinancieroViewSet(viewsets.ModelViewSet):
+    view_name = 'codigo_financieross'
+    queryset = CodigoFinanciero.objects.all()
+    serializer_class = CodigoFinancieroSerializer
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

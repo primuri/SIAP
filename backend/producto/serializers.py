@@ -8,7 +8,7 @@ from version_proyecto.serializers import DocumentoSerializer, OficioSerializer, 
 
 
 class ProductoSerializer(serializers.ModelSerializer):
-    id_version_proyecto = serializers.PrimaryKeyRelatedField(queryset=VersionProyecto.objects.all())
+    id_version_proyecto_fk = serializers.PrimaryKeyRelatedField(queryset=VersionProyecto.objects.all())
 
     class Meta:
         model = Producto
@@ -16,7 +16,7 @@ class ProductoSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(ProductoSerializer, self).to_representation(instance)
-        rep['id_version_proyecto'] = VersionProyectoSerializer(instance.id_version_proyecto).data
+        rep['id_version_proyecto_fk'] = VersionProyectoSerializer(instance.id_version_proyecto_fk).data
         return rep
 
 class RevistaSerializer(serializers.ModelSerializer):

@@ -135,21 +135,11 @@ export const GestionAcademicos = () => {
             delete academico.titulos;
             delete academico.telefonos;
             if(titulos) {
-                if(typeof titulos.id_academico_fk === 'undefined'){
-                    await agregarTitulos(titulos, academico.id_academico, localStorage.getItem("token"))
-                }else{
-                    await actualizarTitulos(titulos, localStorage.getItem("token"));
-
-                }
+                actualizarTitulos(titulos, academico.id_academico,localStorage.getItem("token"));
             }
 
             if(telefonos){
-                if(typeof telefonos.id_academico_fk === 'undefined'){
-                    await agregarTelefonos(telefonos, academico.id_academico, localStorage.getItem("token"))
-                    
-                }else{
-                    await actualizarTelefonos(telefonos, localStorage.getItem("token"));
-                }
+                actualizarTelefonos(telefonos, academico.id_academico,localStorage.getItem("token"));
             }
             delete Datos.foto
             delete Datos.telefonos

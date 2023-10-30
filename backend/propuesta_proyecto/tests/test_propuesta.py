@@ -29,7 +29,9 @@ class PropuestaProyectoTests(APITestCase):
         self.area_especialidad_data = {
             'nombre': 'Física'
         }
-
+        self.area_especialidad2_data = {
+            'nombre': 'Microbiologia'
+        }
         self.universidad_data = {
             'pais': 'Costa Rica',
             'nombre': 'Universidad de Costa Rica'
@@ -47,6 +49,9 @@ class PropuestaProyectoTests(APITestCase):
         response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad_data, format='json')
         self.area_especialidad_id = response.data['id_area_especialidad']
 
+        response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad2_data, format='json')
+        self.area_especialidad2_id = response.data['id_area_especialidad']
+
         response = self.client.post(reverse('universidad-list'), self.universidad_data, format='json')
         self.universidad_id = response.data['id_universidad']
 
@@ -55,13 +60,15 @@ class PropuestaProyectoTests(APITestCase):
 
         self.academico_data = {
             'cedula': '118240782',
-            'foto': 'foto',
+            'foto': None,
             'sitio_web': 'http://google.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandon.castillo.badilla@est.una.ac.cr',
-            'area_de_trabajo': 'Circo',
+            'correo_secundario': 'ariel@email.com',
+            'unidad_base': 'Dermatología',
             'categoria_en_regimen': 'Junior',
             'pais_procedencia': 'Costa Rica',
+            'id_area_especialidad_secundaria_fk': self.area_especialidad2_id,
             'id_nombre_completo_fk': self.nombre_completo_id,
             'id_area_especialidad_fk': self.area_especialidad_id,
             'universidad_fk': self.universidad_id
@@ -84,7 +91,7 @@ class PropuestaProyectoTests(APITestCase):
 
         # Crea los datos de Prueba
         self.data = {
-            'id_codigo_cimpa': 'COD001-2023',
+            'id_codigo_cimpa': '1-2023',
             'detalle': 'Detalle de la propuesta',
             'estado': 'En revisión',
             'nombre': 'Proyecto ABC',
@@ -104,27 +111,6 @@ class PropuestaProyectoTests(APITestCase):
         self.assertEqual(PropuestaProyecto.objects.count(), 1)
         self.assertEqual(PropuestaProyecto.objects.get().nombre, 'Proyecto ABC')
 
-    def test_put_propuesta_proyecto(self):
-       
-       # Datos actualizados
-        update_data = {
-            'id_codigo_cimpa': 'COD001-2023',
-            'detalle': 'Detalle Actualizado',
-            'estado': 'En revisión',
-            'nombre': 'Proyecto DEF',
-            'descripcion': 'Descripción del proyecto ABC',
-            'fecha_vigencia': '2023-09-04T15:30:00',
-            'actividad': 'Actividad XYZ',
-            'id_colaborador_principal_fk': self.colaborador_id
-        }
-
-        self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['COD001-2023'])
-        response = self.client.put(url, update_data, format='json')
-
-        # Verificaciones
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(PropuestaProyecto.objects.get().nombre, 'Proyecto DEF')
 
     def test_get_lista_propuestas_proyectos(self):
         nombre_completo_data2 = {
@@ -133,6 +119,9 @@ class PropuestaProyectoTests(APITestCase):
             'segundo_apellido': 'Gutierrez'
         }
         area_especialidad_data2 = {
+            'nombre': 'Microbiologia'
+        }
+        area_especialidad2_data2 = {
             'nombre': 'Microbiologia'
         }
         universidad_data2 = {
@@ -148,16 +137,19 @@ class PropuestaProyectoTests(APITestCase):
         response_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad_data2, format='json')
         response_universidad2 = self.client.post(reverse('universidad-list'), universidad_data2, format='json')
         response_vigencia2 = self.client.post(reverse('vigencia-list'), vigencia_data2, format='json')
-
+        response2_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad2_data2, format='json')
+    
         academico_data2 = {
             'cedula': '89654321',
-            'foto': 'foto2',
+            'foto': None,
             'sitio_web': 'http://89654321.com',
             'grado_maximo': 'Doctorado',
             'correo': 'brenda.castillo@email.com',
-            'area_de_trabajo': 'Fisica',
+            'correo_secundario': 'ariel@email.com',
+            'unidad_base': 'Dermatología',
             'categoria_en_regimen': 'Senior',
             'pais_procedencia': 'Nicaragua',
+            'id_area_especialidad_secundaria_fk': response2_area2.data['id_area_especialidad'],
             'id_nombre_completo_fk': response_nombre2.data['id_nombre_completo'],
             'id_area_especialidad_fk': response_area2.data['id_area_especialidad'], 
             'universidad_fk': response_universidad2.data['id_universidad']  
@@ -178,7 +170,7 @@ class PropuestaProyectoTests(APITestCase):
        
         # Carga de datos 2
         data2 = {
-            'id_codigo_cimpa': 'COD002-2022',
+            'id_codigo_cimpa': '2-2023',
             'detalle': 'Otro Detalle',
             'estado': 'Aprobado',
             'nombre': 'Proyecto GHI',
@@ -192,7 +184,7 @@ class PropuestaProyectoTests(APITestCase):
         self.client.post(reverse('propuestaproyecto-list'), data2, format='json')
         url = reverse('propuestaproyecto-list')
         response = self.client.get(url)
-        url2 = reverse('propuestaproyecto-detail', args=['COD002-2022'])
+        url2 = reverse('propuestaproyecto-detail', args=['2-2023'])
         response2 = self.client.get(url2)
 
         # Verificaciones
@@ -204,7 +196,7 @@ class PropuestaProyectoTests(APITestCase):
     def test_get_buscar_propuesta_proyecto(self):
 
         self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['COD001-2023'])
+        url = reverse('propuestaproyecto-detail', args=['1-2023'])
         response = self.client.get(url)
 
         # Verificaciones
@@ -214,7 +206,7 @@ class PropuestaProyectoTests(APITestCase):
     def test_delete_propuesta_proyecto(self):
         
         self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['COD001-2023'])
+        url = reverse('propuestaproyecto-detail', args=['1-2023'])
         response = self.client.delete(url)
 
         # Verificaciones

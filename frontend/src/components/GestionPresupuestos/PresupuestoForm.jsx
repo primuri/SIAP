@@ -3,7 +3,7 @@ import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar';
 import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
-import { obtenerEntesFinancieros, obtenerProyectos, obtenerTiposDePresupuestos } from '../../api/gestionPresupuestos';
+import { obtenerCodigosFinancieros, obtenerEntesFinancieros, obtenerProyectos, obtenerTiposDePresupuestos } from '../../api/gestionPresupuestos';
 import { Autocomplete, TextField } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 const filter = createFilterOptions();
@@ -16,6 +16,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
     const [tiposDePresupuesto, setTiposDePresupuesto] = useState([]);
     const [proyectos, setProyectos] = useState([]);
     const [entidades, setEntidades] = useState([]);
+    const [codigoFinancieros, setCodigosFinancieros] = useState([]);
     const [oficioData, setOficioData] = useState(null);
     const [formData, setFormData] = useState({
         tipoPresupuesto: {
@@ -23,11 +24,10 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
             tipo: presupuesto ? presupuesto.id_tipo_presupuesto_fk.tipo : "",
         },
         ente_financiero_fk: presupuesto ? presupuesto.id_ente_financiero_fk : { id_ente_financiero: "", nombre: "" },
+        id_codigo_financiero_fk: presupuesto ? presupuesto.id_codigo_financiero_fk: {id_codigo_financiero: "", codigo: ""},
         presupuesto: {
             id_presupuesto: presupuesto ? presupuesto.id_presupuesto : "",
             anio_aprobacion: presupuesto ? presupuesto.anio_aprobacion : "",
-            codigo_financiero: presupuesto ? presupuesto.codigo_financiero : "",
-            
         },
         oficio: {
             id_oficio_fk: presupuesto ? presupuesto.id_oficio_fk.id_oficio : "",
@@ -44,6 +44,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
         loadTiposDePresupuesto()
         loadEntidades()
         loadProyectos()
+        loadCodigosFinancieros()
     },[])
 
     const loadTiposDePresupuesto = async () => {
@@ -97,6 +98,23 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
         }
     }
 
+    const loadCodigosFinancieros = async () => {
+        try {
+            const res = await obtenerCodigosFinancieros(localStorage.getItem('token'))
+            setCodigosFinancieros(res.data)
+
+        } catch (error) {
+            toast.error('Error al cargar codigos financieros', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            })
+        }
+    }
+
     const handleChange = (event) => {
         const { name, value } = event.target
 
@@ -136,6 +154,11 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
     const obtenerEntidadesPorNombre = (entes) => {
         const nombresUnicos = [...new Set(entes.map(e => e.nombre))];
         return nombresUnicos.map(nombre => entes.find(e => e.nombre === nombre));
+    };
+
+    const obtenerCodigosFinancierosPorCodigo = (codigos) => {
+        const nombresUnicos = [...new Set(codigos.map(c => c.codigo))];
+        return nombresUnicos.map(codigo => codigos.find(c => c.codigo === codigo));
     };
 
     const handleDeleteClick = () => {
@@ -259,7 +282,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                         } else {
                                             setFormData({
                                                 ...formData,
-                                                ente_financiero_fk: { nombre: newValue.nombre, id_ente_financiero: formData.ente_financiero_fk.id_ente_financiero },
+                                                ente_financiero_fk: { nombre: newValue?.nombre, id_ente_financiero: formData.ente_financiero_fk.id_ente_financiero },
                                             });
                                         }
                                     }}
@@ -268,7 +291,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
 
                                         const { inputValue } = params;
                                         // Suggest the creation of a new value
-                                        const isExisting = options.some((option) => inputValue === option.nombre);
+                                        const isExisting = options.some((option) => inputValue === option?.nombre);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
                                             filtered.push({
@@ -294,7 +317,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                                             return option.inputValue;
                                         }
                                         // Regular option
-                                        return option.nombre;
+                                        return option?.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
@@ -305,7 +328,66 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, onCancel, onDelet
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="codigoFinanciero" className="label-personalizado mb-2">Código Financiero<span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="presupuesto.codigo_financiero" id="codigoFinanciero" value={formData.presupuesto.codigo_financiero} onChange={handleChange} required />
+                                <Autocomplete className="universidadAuto"
+                                    value={formData.id_codigo_financiero_fk}
+                                    onChange={(event, newValue) => {
+                                        if (typeof newValue === 'string') {
+                                            setFormData({
+                                                ...formData,
+                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue },
+                                            });
+                                        } else if (newValue && newValue.inputValue) {
+                                            // Create a new value from the user input
+                                            setFormData({
+                                                ...formData,
+                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue.inputValue },
+                                            });
+                                        } else {
+                                            setFormData({
+                                                ...formData,
+                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue?.codigo},
+                                            });
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter(options, params);
+
+                                        const { inputValue } = params;
+                                        // Suggest the creation of a new value
+                                        const isExisting = options.some((option) => inputValue === option?.codigo);
+                                        if (inputValue !== '' && !isExisting) {
+                                            let cadena = `Añadir "${inputValue}"`;
+                                            filtered.push({
+                                                inputValue,
+                                                codigo: cadena.normalize(),
+                                            });
+                                        }
+
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    handleHomeEndKeys
+                                    id="codigoFinanciero"
+                                    options={obtenerCodigosFinancierosPorCodigo(codigoFinancieros)}
+                                    getOptionLabel={(option) => {
+                                        // Value selected with enter, right from the input
+                                        if (typeof option === 'string') {
+                                            return option;
+                                        }
+                                        // Add "xxx" option created dynamically
+                                        if (option.inputValue) {
+                                            return option.inputValue;
+                                        }
+                                        // Regular option
+                                        return option?.codigo;
+                                    }}
+                                    renderOption={(props, option) => <li {...props}>{option.codigo}</li>}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField {...params} className="form-control" />
+                                    )}
+                                />
                             </div>
                         </div>                
                         <div className="row mb-4">
