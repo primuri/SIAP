@@ -4,6 +4,7 @@ import { VersionInformeForm }   from "../../components/GestionInformes/VersionIn
 import { toast, Toaster }       from 'react-hot-toast'
 import { Search }               from "../../utils/Search"
 import { Modal }                from "../../utils/Modal"
+import { Back } from "../../utils/Back"
 import { Table }                from "../../utils/Table"
 import { Add }                  from "../../utils/Add"
 import * as API                 from "../../api/gestionInformes"
@@ -153,10 +154,7 @@ export const GestionVersionInforme = (informeID) => {                           
                 </div>
                 <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar"></Table>
                 <div>
-                    <button id="acciones-button" className="btn btn-primary" onClick={volverInformes}>
-                        <span className='icono'><img width={"20px"} src={add}/></span>
-                        Regresar a Informes
-                    </button>
+                    <Back onClick={volverInformes}>Regresar a informes</Back>
                 </div>
                 {(addClicked || editClicked) && (
                     <Modal>

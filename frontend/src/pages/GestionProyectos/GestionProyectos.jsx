@@ -27,9 +27,9 @@ export const GestionProyectos = () => {
     const [detalleVisible, setDetalleVisible] = useState(false);
     const [selectedIdCodigoVi, setSelectedIdCodigoVi] = useState(null);
     const [selectedProyecto, setSelectedProyecto] = useState(null);
-    const columns = ['Codigo VI', 'Nombre', 'Descripcion', 'Actividad']
+    const columns = ['Codigo VI', 'Nombre', 'Descripción', 'Actividad']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad']
-    const columns2 = ['Codigo VI', 'Nombre', 'Version', 'Detalle']
+    const columns2 = ['Codigo VI', 'Nombre', 'Versión', 'Detalle']
     const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
 
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
@@ -688,7 +688,7 @@ export const GestionProyectos = () => {
                                     )
                                 }
                                 <Toaster></Toaster>
-                                <Back onClick={volver}>Volver</Back>
+                                <Back onClick={volver}>Regresar a proyectos</Back>
                             </div>
 
                         </div>

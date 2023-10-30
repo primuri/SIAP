@@ -8,6 +8,8 @@ import { toast, Toaster } from 'react-hot-toast'
 import { agregarAccion, editarAccion, eliminarAccion, obtenerAccionesVersion, editarDocumentoAccionAndDocumento, editarDocumentoAccion, agregarDocumentoAccion } from "../../api/gestionInformes"
 import { AccionesForm } from "../../components/GestionInformes/AccionesForm"
 import { GestionVersionInforme } from "./GestionVersionInforme"
+import { Back } from "../../utils/Back"
+
 import add from '../../assets/plus-i.png'
 
 export const GestionAcciones = (versionID) => {
@@ -221,10 +223,7 @@ export const GestionAcciones = (versionID) => {
                     </div>
                     <Table columns={columns} data={acciones} dataKeys={dataKeys} onClick={elementClicked}/>
                     <div>
-                        <button id="acciones-button" className="btn btn-primary" onClick={volverVersionInformes}>
-                            <span className='icono'><img width={"20px"} src={add}/></span>
-                            Regresar a versión de informe
-                        </button>
+                        <Back onClick={volverVersionInformes}>Regresar a versiones informe</Back>
                     </div>
                     {addClick && (
                         <Modal><AccionesForm onSubmit={addAccion} onCancel={onCancel} mode={1}></AccionesForm></Modal>
