@@ -98,12 +98,12 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-2">
           <div className="col"> </div>
-              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Articulo</h5>
+              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Artículo</h5>
           <div className="col"> </div>
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del articulo <span className="required">*</span> </label>
+          <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del artículo <span className="required">*</span> </label>
           <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
         </div>
         <div className="col">
@@ -189,7 +189,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones  </label>
+            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="required">*</span> </label>
             <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} required />
         </div>        
       </div>

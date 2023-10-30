@@ -20,7 +20,7 @@ export const GestionAcademicos = () => {
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)                             // Si hay error, se muestra una página para eso
-    const columns = ['Cedula', 'Nombre','Correo','Universidad']
+    const columns = ['Cédula', 'Nombre','Correo','Universidad']
     const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
 
     user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
