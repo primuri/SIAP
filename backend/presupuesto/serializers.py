@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from version_proyecto.models import Oficio, Proyecto
+from version_proyecto.models import Documento, Oficio, Proyecto
 from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria
-from version_proyecto.serializers import OficioSerializer, ProyectoSerializer
+from version_proyecto.serializers import OficioSerializer, ProyectoSerializer, DocumentoSerializer
 
 class TipoPresupuestoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,9 +57,15 @@ class PartidaSerializer(serializers.ModelSerializer):
         return rep
 
 class ProveedorSerializer(serializers.ModelSerializer):
+    id_documento_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all(), allow_null=True)
     class Meta:
         model = Proveedor
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(ProveedorSerializer, self).to_representation(instance)
+        rep['id_documento_fk'] = DocumentoSerializer(instance.id_documento_fk).data
+        return rep
 
 class ProductoServicioSerializer(serializers.ModelSerializer):
     class Meta:

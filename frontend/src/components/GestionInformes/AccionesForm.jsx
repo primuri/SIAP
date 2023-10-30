@@ -155,7 +155,7 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                                         </a>
                                     ) }
 
-                                </div>
+                            </div>
                         </div>                  
                     </div>
                 </div>

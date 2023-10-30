@@ -4,7 +4,7 @@ import { Modal } from "../../utils/Modal"
 import { ProveedoresForm } from "../../components/GestionProveedores/ProveedoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias} from "../../api/gestionProveedores"
+import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta} from "../../api/gestionProveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 
@@ -48,6 +48,14 @@ export const GestionProveedores = () => {
   const addProveedor = async (formData) => {
     try {
 
+      if(formData.id_documento_fk.documento !== ""){
+        var responseDocumento = await agregarDocumentoCuenta(formData.id_documento_fk, localStorage.getItem('token'))
+            formData.id_documento_fk = responseDocumento.data.id_documento;
+      }
+      else{
+        formData.id_documento_fk = null;
+      }
+
       await agregarProveedor(formData, localStorage.getItem('token'))
       toast.success('Proveedor agregado correctamente', {
         duration: 4000,
@@ -75,8 +83,21 @@ export const GestionProveedores = () => {
   // Manejo de los datos del formulario de editar 
   const editProveedor = async (formData) => {
     try {
-      const Datos = JSON.parse(formData.get('json'))
-      formData.delete('json')
+
+      if(formData.id_documento_fk){
+        if(typeof formData.id_documento_fk.documento === 'object') {
+          var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
+        } else {
+          delete formData.id_documento_fk.documento
+          var responseDocumento = await editarDocumentoCuenta(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
+        }
+        formData.id_documento_fk = responseDocumento.data.id_documento;
+      }
+      else{
+        formData.id_documento_fk = null;
+      }
+
+      const Datos = formData
 
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;

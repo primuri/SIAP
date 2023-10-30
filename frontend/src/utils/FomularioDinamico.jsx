@@ -19,6 +19,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
 
     const handleInputChange = (event, index, campo) => {
         const nuevosItems = [...items];
+
         let valor = event.target.value;
 
         if (campo === 'anio' && valor < '1930') {
