@@ -6,9 +6,10 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarVersionProyecto, obtenerInformesProyecto } from "../../api/gestionInformes"
+import { obtenerInforme, agregarInforme, editarInforme, eliminarInforme, buscarVersionProyecto, obtenerInformesProyecto, obtenerInformePorId } from "../../api/gestionInformes"
 import { InformesForm } from "../../components/GestionInformes/InformesForm"
 import { GestionVersionInforme } from "./GestionVersionInforme"
+import { obtenerVersionProyectos } from '../../api/gestionProyectos';
 
 export const GestionInformes = () => {
 
@@ -24,7 +25,9 @@ export const GestionInformes = () => {
     const [informe, setInforme] = useState(null)                                 // Informe al que se le da click en la tabla.
     const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
     const [edit, setEdit] = useState(false)                                      // Cuando se da click en editar
-    const [error, setError] = useState(false)                                    // Cuando hay un error
+    const [error, setError] = useState(false)  
+    const [numVersion, setNumVersion] = useState(null)  
+    const [id_proyecto, setIdProyecto] = useState(null)                                // Cuando hay un error
     const columns = ['Identificador', 'Estado','Tipo', 'Versiones']
     const dataKeys = ['id_informe', 'estado','tipo', 'Versiones']
 
@@ -34,7 +37,11 @@ export const GestionInformes = () => {
         async function fetchData() {
             loadInformes()
             setCargado(true);
+            const id_version_proyecto = await loadInformeById(proyectoID);
+            setIdProyecto(id_version_proyecto[0]);
+            setNumVersion(id_version_proyecto[1]);
         }
+
 
         fetchData();
     }, [reload]);
@@ -201,7 +208,47 @@ export const GestionInformes = () => {
         })
         setInformes(matches)
     }
+    
 
+
+    async function loadInformeById(informeId) {
+        try {
+            const versiones = await obtenerVersionProyectos(localStorage.getItem('token'));
+            let idCodigoVi = null;
+            let numVersion = null;
+    
+            for (let version of versiones.data) {
+                if (version.id_version_proyecto == informeId) {
+                    idCodigoVi = version.id_codigo_vi_fk.id_codigo_vi;
+                    numVersion = version.numero_version;
+                    break;
+                }
+            }
+    
+            if (idCodigoVi && numVersion) {
+                return [idCodigoVi, numVersion];  // Devuelve ambas variables como un array
+            } else {
+                throw new Error('No se encontró una versión de proyecto que coincida con el informe');
+            }
+            
+        } catch (error) {
+            toast.error('Error al cargar el informe', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
+            return null;
+        }
+    }
+    
+    
+    
+  
+
+    
 
     if (informe && showVersions === true) {
         return <GestionVersionInforme informeID={informe.id_informe}/>;
@@ -213,7 +260,7 @@ export const GestionInformes = () => {
                 {!error ? (
                     <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                         <div className="d-flex flex-row">
-                            <h1>Informes del proyecto {proyectoID}</h1>
+                            <h1>Informes del proyecto {id_proyecto} version {numVersion}</h1>
                             {(!cargado) && (
                                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                             )}
