@@ -6,8 +6,10 @@ import { SoftwareForm } from "../GestionProductos/SoftwareForm";
 import { ArticuloForm } from "../GestionProductos/ArticuloForm";
 import { EventoForm } from "../GestionProductos/EventoForm";
 import { Boton } from "../../utils/Boton"
+import { GestionInformes } from "../../pages/GestionInformes/GestionInformes";
 
 export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo }) => {
+    
     // Cargar informacion
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
@@ -165,6 +167,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setShowConfirmationEdit(false);
     };
 
+    const handleInformesClick = () => {
+        //window.location.href = `/informe/versioninformes?id_informe=1`;
+    };
+
     const setCambios = (changes) => {
         //console.log("Received changes:", changes);
         setSoftwareData(changes.softwareData);
@@ -174,8 +180,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setEventoData(changes.eventoData);
         setEventoFile(changes.eventoFile);
     };
-    
-    
+
     return (
         <>
             <div className="modal-header pb-0 position-sticky top-0">
@@ -288,6 +293,17 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     {activeForm === 'articulo' && <ArticuloForm mode={mode} setCambios={setCambios} producto={producto} />}
                                 </div>
                             </div>
+                            
+                            {mode == 2 && (
+                                <div className="row mt-4">
+                                  <div className="col d-flex justify-content-center align-items-center">
+                                    <button id="acciones-button" className="btn btn-primary" onClick={handleInformesClick}>Visualizar Informes</button>
+                                </div>
+                                    <div className="col d-flex justify-content-center align-items-center">
+                                        <button id="acciones-button" className="btn btn-primary">Visualizar Presupuesto</button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
