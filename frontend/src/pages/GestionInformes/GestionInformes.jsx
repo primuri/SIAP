@@ -11,7 +11,7 @@ import { GestionVersionInforme } from "./GestionVersionInforme"
 
 export const GestionInformes = (/* proyectoID */) => {
 
-    var proyectoID = 1;
+    var proyectoID = "1";
 
     // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
     const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
