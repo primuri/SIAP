@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
@@ -18,6 +18,7 @@ export const GestionInformes = () => {
 
     // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
     const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
+    const navigate = useNavigate()
     const [reload, setReload] = useState(false)                                  // Para controlar cuándo se debe de recargar la página
     const [informes, setInformes] = useState([])                                 // Estado para almacenar todos los informes
     const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no  
@@ -46,7 +47,7 @@ export const GestionInformes = () => {
 
         fetchData();
     }, [reload]);
-
+    
     async function loadInformes() {
         try {
             const response = await obtenerInformesProyecto(localStorage.getItem('token'), proyectoID) // Se envía el token y se obtienen todos los informes
@@ -210,9 +211,12 @@ export const GestionInformes = () => {
         setInformes(matches)
     }
     
-    const handleVolverClick = () => {
-        window.location.href = `/gestion-proyectos`
-    };
+
+    const volver = () => {
+        sessionStorage.setItem('isBackNavigation', 'true');
+        navigate(-1);
+    }
+  
 
     async function loadInformeById(informeId) {
         try {
@@ -273,9 +277,9 @@ export const GestionInformes = () => {
                             <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                         </div>
                         <Table columns={columns} data={informes} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar" />
-                        <div>
+                        {/* <div>
                            <Back onClick={handleVolverClick}>Regresar a versiones proyecto</Back>
-                        </div>
+                        </div> */}
                         {addClick && (
                             <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>
                         )}
@@ -292,6 +296,9 @@ export const GestionInformes = () => {
                             </Modal>
                         )}
                         <Toaster></Toaster>
+                        <div className="d-flex justify-content-start">
+                            <Back onClick={volver}>Regresar</Back>
+                        </div>
                     </div>
                 ) : (
                     <PermisoDenegado></PermisoDenegado>

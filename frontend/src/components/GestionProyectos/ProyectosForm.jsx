@@ -7,10 +7,12 @@ import { ArticuloForm } from "../GestionProductos/ArticuloForm";
 import { EventoForm } from "../GestionProductos/EventoForm";
 import { Boton } from "../../utils/Boton"
 import { GestionInformes } from "../../pages/GestionInformes/GestionInformes";
+import { useNavigate } from "react-router-dom";
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo }) => {
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState }) => {
     
     // Cargar informacion
+    const navigate = useNavigate()
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
     const [softwareData, setSoftwareData] = useState(null);
@@ -168,11 +170,13 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const handleInformesClick = () => {
-        window.location.href = `/gestion-informes/${proyecto.id_version_proyecto}`
+        saveState()
+        navigate(`/gestion-informes/${proyecto.id_version_proyecto}`);
     };
 
     const handlePresupuestoClick = () => {
-        window.location.href = `/gestion-presupuestos/${proyecto.id_version_proyecto}`
+        saveState()
+        navigate(`/gestion-presupuestos/${proyecto.id_version_proyecto}`)
     };
 
     const setCambios = (changes) => {

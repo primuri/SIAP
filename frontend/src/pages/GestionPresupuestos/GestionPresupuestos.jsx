@@ -4,16 +4,18 @@ import { Modal } from "../../utils/Modal"
 import { PresupuestoForm } from "../../components/GestionPresupuestos/PresupuestoForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
+import { Back } from "../../utils/Back"
 import {toast, Toaster} from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte, buscaCodigoFinanciero, agregarCodigosFinancieros, obtenerVersionesProyectos } from "../../api/gestionPresupuestos"
-import { useParams } from "react-router-dom"
+import {useNavigate, useParams } from "react-router-dom"
 
 
 export const GestionPresupuestos = () => {
     const { proyectoID } = useParams();
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
+    const navigate = useNavigate();
     const [presupuestos, setPresupuestos] = useState([]) //Presupuestos que se muestran
     const [data,setData] = useState([])//Todos los Presupuestos
     const [presupuesto, setPresupuesto] = useState(null) //Presupuesto al que se le da click en la tabla para editar
@@ -233,6 +235,12 @@ export const GestionPresupuestos = () => {
         })
         setPresupuestos(matches)
       }
+
+    const volver = () => {
+      sessionStorage.setItem('isBackNavigation', 'true');
+      navigate(-1);
+    }
+
     return(
     <main >
         {!error ? (
@@ -260,6 +268,9 @@ export const GestionPresupuestos = () => {
                 )
             }
             <Toaster></Toaster>
+            <div className="d-flex justify-content-start">
+              <Back onClick={volver}>Regresar</Back>
+            </div>
         </div>
         ):(
             <PermisoDenegado></PermisoDenegado>

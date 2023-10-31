@@ -10,10 +10,13 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarArea, eliminarDocumentacion, eliminarInstitucion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware, editarArea, editarInstitucion, editarevento } from "../../api/gestionProductos"
 import { eliminarNombre } from "../../api/gestionAcademicos"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 export const GestionProyectos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
+    const navigate = useNavigate();
+    const location = useLocation();
     const [reload, setReload] = useState(false)
     const [proyectos, setProyectos] = useState([]) // Proyectos que se muestran
     const [cargado, setCargado] = useState(false)
@@ -27,19 +30,25 @@ export const GestionProyectos = () => {
     const [detalleVisible, setDetalleVisible] = useState(false);
     const [selectedIdCodigoVi, setSelectedIdCodigoVi] = useState(null);
     const [selectedProyecto, setSelectedProyecto] = useState(null);
+    const [transformedState, setTransformedState] = useState([]);
     const columns = ['Codigo VI', 'Nombre', 'Descripción', 'Actividad']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad']
     const columns2 = ['Codigo VI', 'Nombre', 'Versión', 'Detalle']
     const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
 
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-    const transformedProyectos = proyectos.map(proyecto => ({
-        ...proyecto,
-        id_codigo_cimpa_fk: {
-            ...proyecto.id_codigo_cimpa_fk
-        }
-    }));
-
+    useEffect(() => {
+        
+        const transformedProyectos = proyectos.map(proyecto => ({
+            ...proyecto,
+            id_codigo_cimpa_fk: {
+                ...proyecto.id_codigo_cimpa_fk
+            }
+        }));
+    
+        setTransformedState(transformedProyectos);
+        
+    }, [proyectos]);
     const volver = () => {
         setDetalleVisible(false)
         loadProyectos()
@@ -54,6 +63,47 @@ export const GestionProyectos = () => {
 
         fetchData();
     }, [reload]);
+
+    useEffect(()=> {
+        async function fetch(){
+            if (sessionStorage.getItem('isBackNavigation') === 'true') {
+                const estado = JSON.parse(localStorage.getItem("estado"))
+                if (estado) {
+                    setProyecto(estado.proyecto);
+                    setProducto(estado.producto);
+                    setTipo(estado.tipo);
+                    setError(estado.error);
+                    setAddClick(estado.addClick);
+                    setEdit(estado.edit);
+                    setDetalleVisible(estado.detalleVisible);
+                    setSelectedIdCodigoVi(estado.selectedIdCodigoVi)
+                    await loadVersionProyectos(estado.selectedIdCodigoVi)
+                }
+                sessionStorage.removeItem('isBackNavigation');
+                localStorage.removeItem('estado');
+            } else {
+                console.log("no lo encontro el estado")
+            }
+        }
+        fetch()
+       
+      }, [location]);
+
+    const saveState = () => {
+        const estado = {
+            proyecto: proyecto,
+            producto: producto,
+            tipo: tipo,
+            error: error,
+            addClick: addClick,
+            edit: edit,
+            detalleVisible: detalleVisible,
+            selectedIdCodigoVi: selectedIdCodigoVi,
+        };
+    
+        localStorage.setItem('estado', JSON.stringify(estado));
+    }
+      
     async function loadProyectos() {
         try {
             const res = await obtenerProyectos(localStorage.getItem('token'))
@@ -72,6 +122,7 @@ export const GestionProyectos = () => {
             })
         }
     }
+
     async function loadVersionProyectos(proyecto) {
         try {
             const res = await obtenerVersionProyectos(localStorage.getItem('token'))
@@ -616,7 +667,8 @@ export const GestionProyectos = () => {
         loadVersionProyectos(proyecto.id_codigo_vi);
         setDetalleVisible(true);
     }
-
+    
+    
     //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
@@ -661,7 +713,7 @@ export const GestionProyectos = () => {
                             <div className="d-flex flex-row">
                                 <h1>Gestión de Version de Proyectos</h1>
                                 {!cargado && (
-                                    <div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
+                                    <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}
                             </div>
                             <div className="d-flex justify-content-between mt-4">
@@ -669,8 +721,8 @@ export const GestionProyectos = () => {
                                 <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                             </div>
                             <div className="mt-3">
-                                <Table columns={columns2} data={transformedProyectos} dataKeys={dataKeys2} onClick={elementClicked2}></Table>
-                                {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1}></ProyectosForm></Modal>)}
+                                <Table columns={columns2} data={transformedState} dataKeys={dataKeys2} onClick={elementClicked2}></Table>
+                                {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1} saveState={saveState}></ProyectosForm></Modal>)}
                                 {edit &&
                                     (
                                         <Modal >
@@ -682,6 +734,7 @@ export const GestionProyectos = () => {
                                                 proyecto={proyecto}
                                                 producto={producto}
                                                 tipo={tipo}
+                                                saveState={saveState}
                                             >
                                             </ProyectosForm>
                                         </Modal>
@@ -697,7 +750,7 @@ export const GestionProyectos = () => {
                             <div className="d-flex flex-row">
                                 <h1>Gestión de Proyectos</h1>
                                 {!cargado && (
-                                    <div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
+                                    <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}
                             </div>
 
@@ -705,7 +758,7 @@ export const GestionProyectos = () => {
                                 <div className="w-50"></div>
                                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                             </div>
-                            <Table columns={columns} data={transformedProyectos} dataKeys={dataKeys} onClick={elementClicked} ></Table>
+                            <Table columns={columns} data={transformedState} dataKeys={dataKeys} onClick={elementClicked} ></Table>
                             <Toaster></Toaster>
                         </>
                     )}
