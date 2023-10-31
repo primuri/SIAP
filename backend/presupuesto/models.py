@@ -93,7 +93,7 @@ class CuentaBancaria(models.Model):
     banco = models.CharField(max_length=255)
     tipo = models.CharField(max_length=45)
     moneda = models.CharField(max_length=45)
-    cuenta_principal = models.BooleanField()
+    cuenta_principal = models.CharField(max_length=45)
     id_proveedor_fk = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='id_proveedor_fk')
 
     class Meta:

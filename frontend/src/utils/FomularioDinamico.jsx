@@ -83,16 +83,6 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                                     <option key={opcionIndex} value={opcion}>{opcion}</option>
                                                 ))}
                                             </select>
-                                        ) : conf.tipo === 'checkbox' ? (
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    name={conf.campo}
-                                                    checked={item[conf.campo]}
-                                                    onChange={e => handleInputChange(e, index, conf.campo)}
-                                                />
-                                                {conf.label}
-                                            </label>
                                         ) : (
                                             <input
                                                 type={conf.tipo}
