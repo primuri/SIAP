@@ -90,7 +90,8 @@ export const GestionInformes = () => {
 
                 formData.append('json', JSON.stringify(Data))
             */
-            await agregarInforme(formData, localStorage.getItem("token"))
+                Data.id_version_proyecto_fk = proyectoID;
+            await agregarInforme(Data, localStorage.getItem("token"))
 
             toast.success('Informe agregado correctamente', {
                 duration: 4000, 
