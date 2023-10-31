@@ -38,9 +38,8 @@ const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
-
-export const obtenerPresupuestos = async (token) => {
-    return await manejarErrores(SIAPAPI.get('presupuesto/presupuestos', {
+export const obtenerPresupuestos = async (id_proyecto,token) => {
+    return await manejarErrores(SIAPAPI.get(`presupuesto/presupuestos/?id_version_proyecto=${id_proyecto}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -121,6 +120,14 @@ export const obtenerProyectos = async (token) => {
     }));
 }
 
+export const obtenerVersionesProyectos = async (id_version, token) => {
+    return await manejarErrores(SIAPAPI.get(`version_proyecto/versionproyecto/?id_version=${id_version}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+}
 
 export const agregarEnte = async (ente,token) => {
     return await manejarErrores(SIAPAPI.post('presupuesto/ente_financieros/',ente,{
@@ -139,7 +146,23 @@ export const obtenerEntesFinancieros = async (token) => {
     }));
 }
 
+export const agregarCodigosFinancieros = async (ente,token) => {
+    return await manejarErrores(SIAPAPI.post('presupuesto/codigos_financieros/',ente,{
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }))
+}
 
+export const obtenerCodigosFinancieros = async (token) => {
+    return await manejarErrores(SIAPAPI.get('presupuesto/codigos_financieros', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+}
 //Metodos auxiliares
 
 export const buscaEnteFinanciero = async (nombre, token) => {
@@ -150,4 +173,14 @@ export const buscaEnteFinanciero = async (nombre, token) => {
         }
     });
     return response.data.find(entidad => entidad.nombre === nombre);
+}
+
+export const buscaCodigoFinanciero = async (codigo, token) => {
+    const response = await SIAPAPI.get('presupuesto/codigos_financieros', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return response.data.find(entidad => entidad.codigo === codigo);
 }

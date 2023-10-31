@@ -29,6 +29,10 @@ class TituloTests(APITestCase):
             'nombre': 'Artes'
         }
 
+        self.area_especialidad2_data = {
+            'nombre': 'Ciencias'
+        }
+
         self.universidad_data = {
             'pais': 'Costa Rica',
             'nombre': 'Universidad Nacional de Costa Rica'
@@ -43,13 +47,19 @@ class TituloTests(APITestCase):
         response = self.client.post(reverse('universidad-list'), self.universidad_data, format='json')
         self.universidad_id = response.data['id_universidad']
 
+        response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad2_data, format='json')
+        self.area_especialidad2_id = response.data['id_area_especialidad'] 
+
+
         self.academico_data = {
             'cedula': '118240782',
-            'foto': 'foto',
+            'foto': None,
             'sitio_web': 'http://google.com',
             'grado_maximo': 'Bachillerato',
             'correo': 'brandon.castillo.badilla@est.una.ac.cr',
-            'area_de_trabajo': 'Circo',
+            'correo_secundario': 'brancon@gmail.com',
+            'unidad_base': 'Circo',
+            'id_area_especialidad_secundaria_fk': self.area_especialidad2_id,
             'categoria_en_regimen': 'Junior',
             'pais_procedencia': 'Costa Rica',
             'id_nombre_completo_fk': self.nombre_completo_id,
@@ -115,6 +125,11 @@ class TituloTests(APITestCase):
         area_especialidad_data2 = {
             'nombre': 'Dermatología'
         }
+        
+        area_especialidad2_data2 = {
+            'nombre': 'Anesteciologia'
+        }
+
         universidad_data2 = {
             'pais': 'Nicaragua',
             'nombre': 'Universidad Nacional Autónoma de Nicaragua'
@@ -123,17 +138,19 @@ class TituloTests(APITestCase):
         response_nombre = self.client.post(reverse('nombrecompleto-list'), nombre_completo_data2, format='json')
         response_area = self.client.post(reverse('areaespecialidad-list'), area_especialidad_data2, format='json')
         response_universidad = self.client.post(reverse('universidad-list'), universidad_data2, format='json')
-
-       
+        response_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad2_data2, format='json')
+        
         academico_data2 = {
             'cedula': '87654321',
-            'foto': 'foto',
+            'foto': None,
             'sitio_web': 'http://87654321.com',
             'grado_maximo': 'Licenciatura',
             'correo': 'brandon.castillo@email.com',
-            'area_de_trabajo': 'Dermatología',
+            'correo_secundario': 'ariel@email.com',
+            'unidad_base': 'Dermatología',
             'categoria_en_regimen': 'Junior',
             'pais_procedencia': 'Nicaragua',
+            'id_area_especialidad_secundaria_fk': response_area2.data['id_area_especialidad'],
             'id_nombre_completo_fk': response_nombre.data['id_nombre_completo'],
             'id_area_especialidad_fk': response_area.data['id_area_especialidad'], 
             'universidad_fk': response_universidad.data['id_universidad']  

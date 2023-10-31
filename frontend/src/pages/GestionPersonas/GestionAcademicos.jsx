@@ -20,7 +20,7 @@ export const GestionAcademicos = () => {
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)                             // Si hay error, se muestra una página para eso
-    const columns = ['Cedula', 'Nombre','Correo','Universidad']
+    const columns = ['Cédula', 'Nombre','Correo','Universidad']
     const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
 
     user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
@@ -135,21 +135,11 @@ export const GestionAcademicos = () => {
             delete academico.titulos;
             delete academico.telefonos;
             if(titulos) {
-                if(typeof titulos.id_academico_fk === 'undefined'){
-                    await agregarTitulos(titulos, academico.id_academico, localStorage.getItem("token"))
-                }else{
-                    await actualizarTitulos(titulos, localStorage.getItem("token"));
-
-                }
+                actualizarTitulos(titulos, academico.id_academico,localStorage.getItem("token"));
             }
 
             if(telefonos){
-                if(typeof telefonos.id_academico_fk === 'undefined'){
-                    await agregarTelefonos(telefonos, academico.id_academico, localStorage.getItem("token"))
-                    
-                }else{
-                    await actualizarTelefonos(telefonos, localStorage.getItem("token"));
-                }
+                actualizarTelefonos(telefonos, academico.id_academico,localStorage.getItem("token"));
             }
             delete Datos.foto
             delete Datos.telefonos

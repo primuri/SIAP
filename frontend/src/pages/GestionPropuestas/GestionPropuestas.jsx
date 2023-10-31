@@ -6,8 +6,10 @@ import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, editarVigencia, eliminarColaborador, eliminarDocumento, eliminarPropuesta, eliminarVigencia, obtenerPropuestas } from "../../api/gestionPropuestas"
+import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
+
+import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 
 export const GestionPropuestas = () => {
     const user = JSON.parse(localStorage.getItem('user'))
@@ -20,7 +22,7 @@ export const GestionPropuestas = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [academicos, setAcademicos] = useState([]);
-    const columns = ['Codigo CIMPA', 'Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
+    const columns = ['Código CIMPA', 'Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
     const dataKeys = ['id_codigo_cimpa_fk.id_codigo_cimpa', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.estado', 'id_codigo_cimpa_fk.fecha_vigencia', 'id_codigo_cimpa_fk.actividad', 'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre', 'documento']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
     const transformedPropuestas = propuestas.map(propuesta => ({
@@ -101,13 +103,37 @@ export const GestionPropuestas = () => {
         }
     }
 
+    async function contarVersionesDeProyecto(id_codigo_vi, token) {
+        try {
+            const response = await obtenerVersionProyectos(token);
+            if (!response.data) return 0;
+            const versionesDelProyecto = response.data.filter(version => version.id_codigo_vi_fk.id_codigo_vi == id_codigo_vi);
+            const cantidad =versionesDelProyecto.length;
+            return cantidad;
+        } catch (error) {
+            console.error("Error al contar las versiones del proyecto:", error);
+            return 0;
+        }
+    }
+
+    async function proyectoExiste(id_codigo_vi, token) {
+        try {
+            const response = await obtenerProyectos(token);
+            if (!response.data) return false;
+            return response.data.some(proyecto => proyecto.id_codigo_vi == id_codigo_vi);
+        } catch (error) {
+            console.error("Error al verificar si el proyecto existe:", error);
+            return false;
+        }
+    }
+
     // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try {
 
             const Datos = JSON.parse(formData.get('json'))
             formData.delete('json');
-            console.log(Datos)
+            
             const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
 
 
@@ -156,6 +182,27 @@ export const GestionPropuestas = () => {
             const fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
             Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
+            
+            if(Datos.id_codigo_cimpa_fk.estado == "Aprobada"){
+                const proyecto = {
+                    id_codigo_vi : id_propu,
+                    id_codigo_cimpa_fk : id_propu
+                }
+                const existe = await proyectoExiste(proyecto.id_codigo_vi, localStorage.getItem("token"));
+            
+                if (!existe) {
+                    await agregarProyectos(proyecto, localStorage.getItem("token"));
+                }
+                //Para borrar proyectos
+            }else if (Datos.id_codigo_cimpa_fk.estado == "En desarrollo"){
+                
+                const existe = await proyectoExiste(id_propu, localStorage.getItem("token"));
+                const cant_ver = await contarVersionesDeProyecto(id_propu, localStorage.getItem("token"));
+                if(existe && cant_ver == 0){
+                    await eliminarProyecto(id_propu,localStorage.getItem("token"));
+                }
+               
+            }
             await editarPropuesta(id_propu, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
 
 
@@ -192,11 +239,11 @@ export const GestionPropuestas = () => {
     const deletePropuesta = async (propuesta) => {
         try {
 
+            
             await eliminarDocumento(propuesta.id_documentos_asociados, localStorage.getItem('token'))
-            await eliminarPropuesta(propuesta.id_codigo_cimpa_fk.id_codigo_cimpa, localStorage.getItem('token'))
             await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
             await eliminarVigencia(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia, localStorage.getItem('token'))
-
+            
             toast.success('Propuesta eliminada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -230,7 +277,7 @@ export const GestionPropuestas = () => {
     }
     // Al hacer click en la tabla
     const elementClicked = (user) => {
-        // console.log(user)
+       
         setPropuesta(user)
         setEdit(true)
         setAddClick(false)

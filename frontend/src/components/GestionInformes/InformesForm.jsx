@@ -120,7 +120,12 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado <span className="required">*</span> </label>
-                                    <input type="text" className="form-control" name="estado" id="estado" value={formData.estado} onChange={handleChange} required />
+                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
+                                        <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
+                                        <option value="En desarrollo">En desarrollo</option>
+                                        <option value="En evaluación">En evaluación</option>
+                                        <option value="Concluido">Concluido</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +134,13 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="tipo" className="label-personalizado mb-2">Tipo <span className="required">*</span> </label>
-                                    <input type="text" className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required />
+                                    <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
+                                        <option value="" disabled defaultValue={""}>Seleccione un tipo</option>
+                                        <option value="Primer parcial">Primer parcial</option>
+                                        <option value="Segundo parcial">Segundo parcial</option>
+                                        <option value="Tercer parcial">Tercer parcial</option>
+                                        <option value="Final">Final</option>
+                                    </select>
                                 </div>
                             </div>
                             <div className="col-md-6">

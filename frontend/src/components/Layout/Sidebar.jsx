@@ -5,11 +5,9 @@ export const Sidebar = () => {
     "administrador": [
       { label: 'Gestión de<br/>usuarios',        link: '/gestion-usuarios' },
       { label: 'Gestión de<br/> propuestas',     link: '/gestion-propuestas' },
-      { label: 'Gestión de<br/> proyectos',      link: '' },
+      { label: 'Gestión de<br/> proyectos',      link: '/gestion-proyectos' },
       { label: 'Gestión de<br/> investigadores', link: '/gestion-investigadores' },
       { label: 'Gestión de<br/> evaluadores',    link: '/gestion-evaluadores' },
-      { label: 'Gestión de<br/> presupuestos',   link: '/gestion-presupuestos' },
-      { label: 'Gestión de<br/> informes',       link: '/gestion-informes' },
       { label: 'Gestión de<br/> proveedores',    link: '/gestion-proveedores' },
     ],
     "evaluador": [
