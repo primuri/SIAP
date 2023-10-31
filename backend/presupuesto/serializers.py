@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from version_proyecto.models import Documento, Oficio, Proyecto
+from version_proyecto.models import Documento, Oficio, Proyecto, VersionProyecto
 from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
 from version_proyecto.serializers import OficioSerializer, ProyectoSerializer, DocumentoSerializer, VersionProyectoSerializer
 
