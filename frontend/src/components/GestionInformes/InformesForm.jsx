@@ -123,7 +123,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                                     <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
                                         <option value="En desarrollo">En desarrollo</option>
-                                        <option value="En evaluacion">En evaluación</option>
+                                        <option value="En evaluación">En evaluación</option>
                                         <option value="Concluido">Concluido</option>
                                     </select>
                                 </div>

@@ -4,13 +4,14 @@ import { VersionInformeForm }   from "../../components/GestionInformes/VersionIn
 import { toast, Toaster }       from 'react-hot-toast'
 import { Search }               from "../../utils/Search"
 import { Modal }                from "../../utils/Modal"
-import { Back } from "../../utils/Back"
+import { Back }                 from "../../utils/Back"
 import { Table }                from "../../utils/Table"
 import { Add }                  from "../../utils/Add"
 import * as API                 from "../../api/gestionInformes"
 import { GestionInformes } from "./GestionInformes"
 import { GestionAcciones } from "./GestionAcciones"
 import add from '../../assets/plus-i.png'
+import { obtenerVersionProyectos } from "../../api/gestionProyectos"
 
 export const GestionVersionInforme = (informeID) => {                                // Versiones de un infome   
     const [versionesInformeData, setVersionesInformeData] = useState([])             // Datos completos
@@ -22,21 +23,71 @@ export const GestionVersionInforme = (informeID) => {                           
     const [addClicked, setAddClicked]                     = useState(false)          // Para evento de agregar
     const [editClicked, setEditClicked]                   = useState(false)          // Para evento de editar
     const [returnInformes, setReturnInformes] = useState(false); 
-    
+    const [numVersionProyecto, setNumVersionProyecto] = useState(null)  
+    const [id_proyecto, setIdProyecto] = useState(null) 
+
     useEffect(() => { loadVersionesInformeData() }, [reload])                        // Carga los datos tras detectar cambios
-    
     async function loadVersionesInformeData() {
         try{
             var response = await API.obtenerVersionesInforme(informeID)
             
             setVersionesInformeData(formatearFecha(response))
             setVersionesInformeList(formatearFecha(response))
+            const id_version_proyecto = await loadInformeById(informeID);
+            setIdProyecto(id_version_proyecto[0]);
+            setNumVersionProyecto(id_version_proyecto[1]);
 
             setLoaded(true)
         } catch (error){
             mostrarError(error)
         }
     }
+
+    
+    async function loadInformeById(versionInformeId) {
+        try {
+            const informe = await API.obtenerInforme(localStorage.getItem('token'));
+            const versionesProyecto = await obtenerVersionProyectos(localStorage.getItem('token'));
+            
+            let idCodigoVi = null;
+            let numVersion = null;
+            let informeId = null;
+            
+            for (let infor of informe.data) {
+                if (infor.id_version_proyecto_fk.id_version_proyecto == versionInformeId.informeID) {
+                    informeId = infor.id_informe;
+                    for (let version of versionesProyecto.data) {
+                        if (version.id_version_proyecto == informeId) {
+                            idCodigoVi = version.id_codigo_vi_fk.id_codigo_vi;
+                            numVersion = version.numero_version;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+           
+    
+            if (idCodigoVi && numVersion) {
+                return [idCodigoVi, numVersion];  // Devuelve ambas variables como un array
+            } else {
+                throw new Error('No se encontró una versión de proyecto que coincida con el informe');
+            }
+            
+        } catch (error) {
+            toast.error('Error al cargar el informe', {
+                duration: 4000,
+                position: 'bottom-right', 
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
+            return null;
+        }
+    }
+    
 
     async function addVersionInforme (formData) {
         try{
@@ -146,7 +197,7 @@ export const GestionVersionInforme = (informeID) => {                           
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="d-flex flex-row">
-                    <h1>Versiones del informe {informeID.informeID} </h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
+                    <h1>Versiones del informe {id_proyecto} version {numVersionProyecto}</h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
                     <Add onClick={addBtnClicked}></Add>

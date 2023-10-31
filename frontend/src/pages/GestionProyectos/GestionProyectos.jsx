@@ -328,7 +328,7 @@ export const GestionProyectos = () => {
             }
 
             loadVersionProyectos(id_vi)
-            toast.success('Proyecto agregada correctamente', {
+            toast.success('Versión de proyecto agregada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -343,7 +343,7 @@ export const GestionProyectos = () => {
         } catch (error) {
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
-            toast.error('Error al agregar la Proyecto', {
+            toast.error('Error al agregar la versión de proyecto', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -522,7 +522,7 @@ export const GestionProyectos = () => {
 
             loadVersionProyectos(Datos.id_codigo_vi_fk)
 
-            toast.success('Proyecto actualizada correctamente', {
+            toast.success('Versión proyecto actualizada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -534,7 +534,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
-            toast.error('Error al actualizar la Proyecto', {
+            toast.error('Error al actualizar la versión de proyecto royecto', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
