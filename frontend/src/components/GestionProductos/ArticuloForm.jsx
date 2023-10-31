@@ -174,7 +174,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo  </label>
+            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo <span className="required">*</span> </label>
             <input type="text" className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
         </div>
         <div className="col">

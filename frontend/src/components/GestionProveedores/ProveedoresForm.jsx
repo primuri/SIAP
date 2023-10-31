@@ -11,7 +11,7 @@ const configuracionCuentaBancaria = [
     { campo: 'banco', placeholder: 'Banco', tipo: 'text', required: true },
     { campo: 'tipo', placeholder: 'Tipo de cuenta', tipo: 'select', opciones: ['Ahorros', 'Corriente'], required: true },
     { campo: 'moneda', placeholder: 'Moneda', tipo: 'text', required: true },
-    { campo: 'cuenta_principal', placeholder: ' Prioridad de la cuenta:', tipo: 'select', opciones: ['Principal', 'Secundaria'], required: true }
+    { campo: 'cuenta_principal', placeholder: ' Prioridad de la cuenta', tipo: 'select', opciones: ['Principal', 'Secundaria'], required: true }
 ]
 
 export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete }) => {

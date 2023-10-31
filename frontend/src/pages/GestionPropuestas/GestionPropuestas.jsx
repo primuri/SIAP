@@ -48,7 +48,7 @@ export const GestionPropuestas = () => {
             const res = await obtenerAcademicos(localStorage.getItem('token'));
             setAcademicos(res.data);
         } catch (error) {
-            toast.error('Error al cargar los datos de académicos', {
+            toast.error('Error al cargar los datos de investigadores', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {

@@ -104,8 +104,12 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                     </select>
                 </div>
                 <div className="col">
-                    <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación <span className="required">*</span> </label>
-                    <input type="text" className="form-control" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange} required />
+                    <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación <span className="required">*</span> </label>                
+                    <select className="form-select seleccion" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange}  required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="Activa">Activa</option>
+                        <option value="Pasiva">Pasiva</option>
+                    </select>
                 </div>
             </div>
             <div className="row mb-4">

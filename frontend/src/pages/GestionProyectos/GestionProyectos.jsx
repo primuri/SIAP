@@ -62,7 +62,7 @@ export const GestionProyectos = () => {
             setProyectos(res.data)
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Proyectos', {
+            toast.error('Error al cargar los datos de proyectos', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -81,7 +81,7 @@ export const GestionProyectos = () => {
 
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Proyectos', {
+            toast.error('Error al cargar los datos de proyectos', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -113,7 +113,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Evento', {
+            toast.error('Error al cargar los datos de evento', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -146,7 +146,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Articulo', {
+            toast.error('Error al cargar los datos de artículo', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -179,7 +179,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Software', {
+            toast.error('Error al cargar los datos de software', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -534,7 +534,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
-            toast.error('Error al actualizar la versión de proyecto royecto', {
+            toast.error('Error al actualizar la versión de proyecto', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -575,7 +575,7 @@ export const GestionProyectos = () => {
 
             loadVersionProyectos(id)
 
-            toast.success('proyecto eliminada correctamente', {
+            toast.success('Proyecto eliminado correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -589,7 +589,7 @@ export const GestionProyectos = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error('Error al eliminar la proyecto', {
+            toast.error('Error al eliminar el proyecto', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -659,7 +659,7 @@ export const GestionProyectos = () => {
                     {detalleVisible ? (
                         <div>
                             <div className="d-flex flex-row">
-                                <h1>Gestión de Versión de Proyectos</h1>
+                                <h1>Gestión de versión de proyectos</h1>
                                 {!cargado && (
                                     <div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}
@@ -695,7 +695,7 @@ export const GestionProyectos = () => {
                     ) : (
                         <>
                             <div className="d-flex flex-row">
-                                <h1>Gestión de Proyectos</h1>
+                                <h1>Gestión de proyectos</h1>
                                 {!cargado && (
                                     <div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}

@@ -264,14 +264,14 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     : ""}
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del Oficio <span className="required">* </span> </label>
+                                <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio <span className="required">* </span> </label>
                                 <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                         </div>
 
                         <div className="row mb-2">
                             <div className="col"> </div>
-                            <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto Asociado</h5>
+                            <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto asociado</h5>
                             <div className="col"> </div>
                         </div>
 
