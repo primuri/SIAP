@@ -70,7 +70,6 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
     try {
         cuentasBancarias.forEach(async cuentaBancaria => {
             cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
-            cuentaBancaria.cuenta_principal === "" ? cuentaBancaria.cuenta_principal = false : cuentaBancaria.cuenta_principal = true
             await SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
                 headers: {
                     'Authorization': `token ${token}`,
@@ -87,7 +86,6 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
 export const agregarCuentaBancaria  = async (cuentaBancaria, id_cedula_proveedor, token) => {
     try {
         cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
-        cuentaBancaria.cuenta_principal === "" ? cuentaBancaria.cuenta_principal = false : cuentaBancaria.cuenta_principal = true
         await SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
             headers: {
                 'Authorization': `token ${token}`,
