@@ -24,7 +24,7 @@ export const GestionPresupuestos = () => {
     const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const columns = ['Proyecto','Año de aprobación','Tipo','Ente financiero','Oficio','Documento','Codigo Financiero']
+    const columns = ['Proyecto','Año de aprobación','Tipo','Ente financiero','Oficio','Documento','Código Financiero']
     const dataKeys = ['id_codigo_vi.id_codigo_vi','anio_aprobacion','id_tipo_presupuesto_fk.tipo','id_ente_financiero_fk.nombre','id_oficio_fk.id_oficio','id_oficio_fk.ruta_archivo','id_codigo_financiero_fk.codigo']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
      // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
@@ -108,6 +108,7 @@ export const GestionPresupuestos = () => {
                 },
               })
             setAddClick(false)
+            document.body.classList.remove('modal-open');
             setReload(!reload)
         }catch(error){
             toast.error('Error al agregar el Presupuesto', {
@@ -164,6 +165,8 @@ export const GestionPresupuestos = () => {
                 },
               })
             setEdit(false)
+            document.body.classList.remove('modal-open');
+
             setReload(!reload)
         }catch(error){
             toast.error('Error al actualizar el Presupuesto', {
@@ -190,6 +193,8 @@ export const GestionPresupuestos = () => {
               })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
+
         }catch(error){
             toast.error('Error al eliminar el Presupuesto', {
                 duration: 4000, // Duración en milisegundos (4 segundos en este caso)
@@ -205,11 +210,14 @@ export const GestionPresupuestos = () => {
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
+        document.body.classList.remove('modal-open');
     }
      // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
+        document.body.classList.add('modal-open');
+
     }
     
     // Al hacer click en la tabla
@@ -217,6 +225,7 @@ export const GestionPresupuestos = () => {
         setPresupuesto(presupuesto)
         setEdit(true)
         setAddClick(false)
+        document.body.classList.add('modal-open');  
     }
     
     //se filtra

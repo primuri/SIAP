@@ -1,24 +1,25 @@
 import { FormModal } from "../../utils/FormModal";
 import { VIFields } from "../../pages/GestionInformes/utils";
 import { useState } from "react";
+import Tooltip from '@mui/material/Tooltip';
 import icono from '../../assets/person-i.png'
 
 export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, versionInforme }) => {
-    const [showConfirmationEdit, setShowConfirmationEdit]     = useState(false)
+    const [showConfirmationEdit, setShowConfirmationEdit] = useState(false)
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false)
-    const [formData, setFormData]                             = useState(VIFields(versionInforme))
-    const [fileOficio, setFileOficio]                         = useState(null);
-    const [fileInforme, setFileInforme]                       = useState(null);
+    const [formData, setFormData] = useState(VIFields(versionInforme))
+    const [fileOficio, setFileOficio] = useState(null);
+    const [fileInforme, setFileInforme] = useState(null);
 
     const updateNestedField = (formData, fieldPath, value) => {
         const keys = fieldPath.split('.');
         const lastKey = keys.pop();
-    
+
         keys.reduce((obj, key) => obj[key] = obj[key] || {}, formData)[lastKey] = value;
-    
+
         return { ...formData };
     };
-    
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         const updatedFormData = updateNestedField(formData, name, value);
@@ -27,16 +28,16 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
 
     const sendForm = (event) => {
         event.preventDefault();
-        let sendingForm = { ...formData}
-        if(fileOficio){
+        let sendingForm = { ...formData }
+        if (fileOficio) {
             sendingForm.id_oficio_fk.ruta_archivo = fileOficio
         }
-        if(fileInforme){
+        if (fileInforme) {
             sendingForm.id_documento_informe_fk.documento = fileInforme
         }
 
         onSubmit(sendingForm);
-        sendingForm = { ...formData}
+        sendingForm = { ...formData }
     };
 
     const handleDeleteClick = () => {
@@ -63,9 +64,9 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
 
-        if (obj === "oficio"){
+        if (obj === "oficio") {
             setFileOficio(file);
-        } else if (obj === "informe"){
+        } else if (obj === "informe") {
             setFileInforme(file)
         }
     };
@@ -107,11 +108,14 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe <span className="required">*</span> </label>
-                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event, 'informe')}  required={mode == 1} />
+                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event, 'informe')} required={mode == 1} />
                                 {mode == 2 && (
-                                    <a href={"http://localhost:8000" + formData.id_documento_informe_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.id_documento_informe_fk.documento.split('/').pop()}
-                                    </a>
+
+                                    <Tooltip title={formData.id_documento_informe_fk.documento.split('/').pop()} placement="right-start">
+                                        <a href={"http://localhost:8000" + formData.id_documento_informe_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                            {"Ver documento"}
+                                        </a>
+                                    </Tooltip>
                                 )}
                             </div>
                         </div>

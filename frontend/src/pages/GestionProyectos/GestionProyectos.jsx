@@ -31,9 +31,9 @@ export const GestionProyectos = () => {
     const [selectedIdCodigoVi, setSelectedIdCodigoVi] = useState(null);
     const [selectedProyecto, setSelectedProyecto] = useState(null);
     const [transformedState, setTransformedState] = useState([]);
-    const columns = ['Codigo VI', 'Nombre', 'Descripción', 'Actividad']
+    const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad']
-    const columns2 = ['Codigo VI', 'Nombre', 'Versión', 'Detalle']
+    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle']
     const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
 
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
@@ -57,7 +57,7 @@ export const GestionProyectos = () => {
     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {
         async function fetchData() {
-            loadProyectos();
+            await loadProyectos();
             setCargado(true);
         }
 
@@ -112,7 +112,7 @@ export const GestionProyectos = () => {
             setProyectos(res.data)
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Proyectos', {
+            toast.error('Error al cargar los datos de proyectos', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -132,7 +132,7 @@ export const GestionProyectos = () => {
 
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Proyectos', {
+            toast.error('Error al cargar los datos de proyectos', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -164,7 +164,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Evento', {
+            toast.error('Error al cargar los datos de evento', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -197,7 +197,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Articulo', {
+            toast.error('Error al cargar los datos de artículo', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -230,7 +230,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de Software', {
+            toast.error('Error al cargar los datos de software', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -585,7 +585,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
-            toast.error('Error al actualizar la versión de proyecto royecto', {
+            toast.error('Error al actualizar la versión de proyecto', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -626,7 +626,7 @@ export const GestionProyectos = () => {
 
             loadVersionProyectos(id)
 
-            toast.success('proyecto eliminada correctamente', {
+            toast.success('Proyecto eliminado correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -640,7 +640,7 @@ export const GestionProyectos = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error('Error al eliminar la proyecto', {
+            toast.error('Error al eliminar el proyecto', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -711,7 +711,7 @@ export const GestionProyectos = () => {
                     {detalleVisible ? (
                         <div>
                             <div className="d-flex flex-row">
-                                <h1>Gestión de Version de Proyectos</h1>
+                                <h1>Gestión de versión de proyectos</h1>
                                 {!cargado && (
                                     <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}
@@ -748,7 +748,7 @@ export const GestionProyectos = () => {
                     ) : (
                         <>
                             <div className="d-flex flex-row">
-                                <h1>Gestión de Proyectos</h1>
+                                <h1>Gestión de proyectos</h1>
                                 {!cargado && (
                                     <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}

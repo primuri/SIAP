@@ -28,7 +28,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             const res = await obtenerAcademicos(localStorage.getItem("token"));
             setAcademicos(res.data);
         } catch (error) {
-            toast.error("Error al cargar los datos de academicos", {
+            toast.error("Error al cargar los datos de investigadores", {
                 duration: 4000,
                 position: "bottom-right",
                 style: {

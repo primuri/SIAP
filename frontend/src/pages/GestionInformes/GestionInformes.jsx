@@ -22,19 +22,19 @@ export const GestionInformes = () => {
     const [reload, setReload] = useState(false)                                  // Para controlar cuándo se debe de recargar la página
     const [informes, setInformes] = useState([])                                 // Estado para almacenar todos los informes
     const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no  
-    const [showVersions, setShowVersions] = useState(false); 
+    const [showVersions, setShowVersions] = useState(false);
     const [data, setData] = useState([])                                         // Todos los informes.                          
     const [informe, setInforme] = useState(null)                                 // Informe al que se le da click en la tabla.
     const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
     const [edit, setEdit] = useState(false)                                      // Cuando se da click en editar
-    const [error, setError] = useState(false)  
-    const [numVersion, setNumVersion] = useState(null)  
+    const [error, setError] = useState(false)
+    const [numVersion, setNumVersion] = useState(null)
     const [id_proyecto, setIdProyecto] = useState(null)                                // Cuando hay un error
-    const columns = ['Identificador', 'Estado','Tipo', 'Versiones']
-    const dataKeys = ['id_informe', 'estado','tipo', 'Versiones']
+    const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones']
+    const dataKeys = ['id_informe', 'estado', 'tipo', 'Versiones']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true
-                                  
+
     useEffect(() => {                                                            // Cuando reload cambia, se llama a load()
         async function fetchData() {
             loadInformes()
@@ -47,7 +47,7 @@ export const GestionInformes = () => {
 
         fetchData();
     }, [reload]);
-    
+
     async function loadInformes() {
         try {
             const response = await obtenerInformesProyecto(localStorage.getItem('token'), proyectoID) // Se envía el token y se obtienen todos los informes
@@ -57,17 +57,17 @@ export const GestionInformes = () => {
         } catch (error) {
             toast.error('Error al cargar los datos de informes', {
                 duration: 4000,
-                position: 'bottom-right', 
+                position: 'bottom-right',
                 style: {
-                  background: '#670000',
-                  color: '#fff',
+                    background: '#670000',
+                    color: '#fff',
                 },
-              })
+            })
         }
     }
 
     // Manejo de datos que se van a enviar para agregar
-    const addInforme = async (formData) => {       
+    const addInforme = async (formData) => {
         try {
 
             const Data = JSON.parse(formData)
@@ -91,78 +91,83 @@ export const GestionInformes = () => {
 
                 formData.append('json', JSON.stringify(Data))
             */
-            await agregarInforme(formData, localStorage.getItem("token"))
+            Data.id_version_proyecto_fk = proyectoID;
+            await agregarInforme(Data, localStorage.getItem("token"))
 
             toast.success('Informe agregado correctamente', {
-                duration: 4000, 
-                position: 'bottom-right', 
-                style: {
-                  background: 'var(--celeste-ucr)',
-                  color: '#fff',
-                },
-              })
-            setAddClick(false)
-            setReload(!reload)
-        } catch (error) {
-            toast.error('Error al agregar el informe', {
-                duration: 4000, 
+                duration: 4000,
                 position: 'bottom-right',
                 style: {
-                  background: '#670000',
-                  color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
-              })
+            })
+            setAddClick(false)
+            setReload(!reload)
+            document.body.classList.remove('modal-open');
+
+        } catch (error) {
+            toast.error('Error al agregar el informe', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            })
         }
     }
 
-   // Manejo de los datos del formulario de editar 
-   const editInforme = async (formData) => {       
-        try {          
+    // Manejo de los datos del formulario de editar 
+    const editInforme = async (formData) => {
+        try {
             await editarInforme(informe.id_informe, formData, localStorage.getItem("token"))
             toast.success('Informe editado correctamente', {
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
             })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
             toast.error('Error al editar el informe', {
-                duration: 4000, 
+                duration: 4000,
                 position: 'bottom-right',
                 style: {
-                background: '#670000',
-                color: '#fff',
+                    background: '#670000',
+                    color: '#fff',
                 },
             })
         }
-    }   
+    }
 
     // Manejo del eliminar
     const deleteInforme = async (informe) => {
         try {
             await eliminarInforme(informe.id_informe, localStorage.getItem('token'))
-            
+
             toast.success('Informe eliminado correctamente', {
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
             })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
             toast.error('Error al eliminar el informe', {
-                duration: 4000, 
+                duration: 4000,
                 position: 'bottom-right',
                 style: {
-                background: '#670000',
-                color: '#fff',
+                    background: '#670000',
+                    color: '#fff',
                 },
             })
         }
@@ -174,12 +179,15 @@ export const GestionInformes = () => {
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
+        document.body.classList.remove('modal-open');
     }
 
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
+        document.body.classList.add('modal-open');
+
     }
 
     // Al hacer click en la tabla
@@ -188,9 +196,10 @@ export const GestionInformes = () => {
             setShowVersions(true);
             setInforme(selectedInforme);
         } else {
-          setInforme(selectedInforme);
-          setEdit(true);
-          setAddClick(false);
+            setInforme(selectedInforme);
+            setEdit(true);
+            setAddClick(false);
+            document.body.classList.add('modal-open');
         }
     };
 
@@ -202,28 +211,28 @@ export const GestionInformes = () => {
     // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
-        if (col.includes('.')) {
-            const value = getValueByPath(e, col)
-            return value && value.toString().includes(filter)
-        }
-        return e[col].toString().includes(filter)
+            if (col.includes('.')) {
+                const value = getValueByPath(e, col)
+                return value && value.toString().includes(filter)
+            }
+            return e[col].toString().includes(filter)
         })
         setInformes(matches)
     }
-    
+
 
     const volver = () => {
         sessionStorage.setItem('isBackNavigation', 'true');
         navigate(-1);
     }
-  
+
 
     async function loadInformeById(informeId) {
         try {
             const versiones = await obtenerVersionProyectos(localStorage.getItem('token'));
             let idCodigoVi = null;
             let numVersion = null;
-    
+
             for (let version of versiones.data) {
                 if (version.id_version_proyecto == informeId) {
                     idCodigoVi = version.id_codigo_vi_fk.id_codigo_vi;
@@ -231,17 +240,17 @@ export const GestionInformes = () => {
                     break;
                 }
             }
-    
+
             if (idCodigoVi && numVersion) {
                 return [idCodigoVi, numVersion];  // Devuelve ambas variables como un array
             } else {
                 throw new Error('No se encontró una versión de proyecto que coincida con el informe');
             }
-            
+
         } catch (error) {
             toast.error('Error al cargar el informe', {
                 duration: 4000,
-                position: 'bottom-right', 
+                position: 'bottom-right',
                 style: {
                     background: '#670000',
                     color: '#fff',
@@ -250,15 +259,15 @@ export const GestionInformes = () => {
             return null;
         }
     }
-    
-    
-    
-  
 
-    
+
+
+
+
+
 
     if (informe && showVersions === true) {
-        return <GestionVersionInforme informeID={informe.id_informe}/>;
+        return <GestionVersionInforme informeID={informe.id_informe} />;
     }
 
     else {

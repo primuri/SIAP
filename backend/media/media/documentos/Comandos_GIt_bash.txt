@@ -1,0 +1,17 @@
+Comandos GIt bash
+
+cd onedrive/desktop
+cd SIAP
+git switch Development   //la rama que quiero jalar
+git pull                 //jalar
+git status
+git switch wendy         //regresar a mi rama
+git status               //revisar que sea wendy
+git merge Development    //unir las ramas
+
+
+//guardar cambios en mi rama solo local
+git stash
+
+ELIMINAR WENDY Y COPIAR DEVELOPMENT
+//git reset --hard origin/Development

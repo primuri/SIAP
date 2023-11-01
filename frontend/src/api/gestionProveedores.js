@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {manejarErrores} from './errorHandler'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -16,16 +17,9 @@ export const obtenerProveedores = async (token) => {
 export const agregarProveedor = async (formData, token) => {
     try {
 
-        const proveedor = JSON.parse(formData.get('json'))
-        formData.delete('json')
+        const proveedor = formData;
         const cuentaBancaria = proveedor?.cuentaBancaria;
         delete proveedor.cuentaBancaria;
-
-        for (const key in proveedor) {
-            if (Object.prototype.hasOwnProperty.call(proveedor, key)) {
-                formData.append(key, proveedor[key]);
-            }
-        }
         
         const response_proveedor = await SIAPAPI.post('presupuesto/proveedores/', proveedor, {
             headers: {
@@ -140,4 +134,34 @@ export const eliminarCuentasBancarias = (id, token) => {
                     'Content-Type': 'application/json'
                 }
     });
+};
+
+// Editar documento cuentas 
+export const editarDocumentoCuentaAndDocumento = async (id, documento, token) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Agregar documento cuentas
+export const agregarDocumentoCuenta = async (documento, token) => {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Editar documento cuentas solo detalle
+export const editarDocumentoCuenta = async (id, documento, token) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
 };

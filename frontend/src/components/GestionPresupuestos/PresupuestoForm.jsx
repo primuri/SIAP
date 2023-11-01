@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { obtenerCodigosFinancieros, obtenerEntesFinancieros, obtenerTiposDePresupuestos } from '../../api/gestionPresupuestos';
 import { Autocomplete, TextField } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import Tooltip from '@mui/material/Tooltip';
+
 const filter = createFilterOptions();
 const currentYear = new Date().getFullYear();
 
@@ -22,7 +24,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
             tipo: presupuesto ? presupuesto.id_tipo_presupuesto_fk.tipo : "",
         },
         ente_financiero_fk: presupuesto ? presupuesto.id_ente_financiero_fk : { id_ente_financiero: "", nombre: "" },
-        id_codigo_financiero_fk: presupuesto ? presupuesto.id_codigo_financiero_fk: {id_codigo_financiero: "", codigo: ""},
+        id_codigo_financiero_fk: presupuesto ? presupuesto.id_codigo_financiero_fk : { id_codigo_financiero: "", codigo: "" },
         presupuesto: {
             id_presupuesto: presupuesto ? presupuesto.id_presupuesto : "",
             anio_aprobacion: presupuesto ? presupuesto.anio_aprobacion : "",
@@ -38,12 +40,12 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
             nombre: version ? version.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre : "",
         }
     });
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         loadTiposDePresupuesto()
         loadEntidades()
         loadCodigosFinancieros()
-    },[])
+    }, [])
 
     const loadTiposDePresupuesto = async () => {
         try {
@@ -133,7 +135,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
             })
         }
     }
-    
+
     const handleFileChange = (event) => {
         const foto = event.target.files[0];
         setOficioData(foto);
@@ -218,12 +220,12 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id" className="label-personalizado mb-2">Identificador <span className="required">*</span> </label>
-                                    <input type="text" className="form-control disabled-input" name="presupuesto.id_presupuesto" id="id" value={mode === 2 ? formData.presupuesto.id_presupuesto : "Auto - generado"} onChange={handleChange} required disabled/>
+                                    <input type="text" className="form-control disabled-input" name="presupuesto.id_presupuesto" id="id" value={mode === 2 ? formData.presupuesto.id_presupuesto : "Auto - generado"} onChange={handleChange} required disabled />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="proyecto" className="label-personalizado mb-2">Proyecto asociado <span className="required">*</span> </label>
-                                <input type="text" className="form-control disabled-input" name="proyecto.id_codigo_vi" id="proyecto" value={version?.id_codigo_vi_fk.id_codigo_vi+"+"+ version?.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} required disabled/>
+                                <input type="text" className="form-control disabled-input" name="proyecto.id_codigo_vi" id="proyecto" value={version?.id_codigo_vi_fk.id_codigo_vi + "/" + version?.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} required disabled />
                             </div>
                         </div>
                         <div className="row mb-4">
@@ -232,8 +234,8 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                 <select className="form-select seleccion" name="tipoPresupuesto.id_tipo_presupuesto" id="tipoDePresupuesto" value={formData.tipoPresupuesto.id_tipo_presupuesto} onChange={handleChange} required>
                                     <option value="" disabled defaultValue>Seleccione el tipo de presupuesto</option>
                                     {tiposDePresupuesto && (
-                                        tiposDePresupuesto.map((tipo, index)=>{
-                                            return(
+                                        tiposDePresupuesto.map((tipo, index) => {
+                                            return (
                                                 <option value={tipo.id_tipo_presupuesto} key={index}>
                                                     {tipo.tipo}
                                                 </option>
@@ -245,13 +247,13 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="version" className="label-personalizado mb-2">Versión del proyecto<span className="required">*</span> </label>
-                                    <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled/>
+                                    <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled />
                                 </div>
                             </div>
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
-                            <label htmlFor="ente_nombre" className="label-personalizado mb-2">Ente Financiero <span className="required">*</span> </label>
+                                <label htmlFor="ente_nombre" className="label-personalizado mb-2">Ente Financiero <span className="required">*</span> </label>
                                 <Autocomplete className="universidadAuto"
                                     value={formData.ente_financiero_fk.nombre}
                                     onChange={(event, newValue) => {
@@ -332,7 +334,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                         } else {
                                             setFormData({
                                                 ...formData,
-                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue?.codigo},
+                                                id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue?.codigo },
                                             });
                                         }
                                     }}
@@ -376,15 +378,26 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     )}
                                 />
                             </div>
-                        </div>               
+                        </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="nDeOficio" className="label-personalizado mb-2">Número de Oficio</label>
-                                <input type="text" className="form-control disabled-input" name="oficio.id_oficio_fk" id="nDeOficio" value={mode === 2 ? formData.oficio.id_oficio_fk : "Auto - generado"} onChange={handleChange} disabled/>
+                                <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio<span className="required">*</span> </label>
+                                <input type="text" className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle documento<span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange}/>
+                                <label htmlFor="documento" className="label-personalizado mb-2">Oficio <span className="required">*</span> </label>
+                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
+                                    required={mode == 1 ? true : ''} />
+                                {mode == 2 ? (
+                                    <Tooltip title={formData.oficio.ruta_archivo.split('/').pop()} placement="right-start">
+                                        <a href={'http://localhost:8000' + formData.oficio.ruta_archivo} target="blank_"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                            {"Ver Oficio"}
+                                        </a>
+                                    </Tooltip>
+
+                                )
+                                    : ""}
                             </div>
                         </div>
                         <div className="row mb-4">
@@ -392,18 +405,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                 <label htmlFor="anioAprobacion" className="label-personalizado mb-2">Año de aprobación<span className="required">*</span> </label>
                                 <input type="number" className="form-control" name="presupuesto.anio_aprobacion" id="anioAprobacion" value={formData.presupuesto.anio_aprobacion} onChange={handleChange} required min={2000} max={currentYear} />
                             </div>
-                            <div className="col-md-6">
-                                <label htmlFor="documento" className="label-personalizado mb-2">Documento <span className="required">*</span> </label>
-                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
-                                {mode == 2 ? (
-                                    <a href={'http://localhost:8000'+formData.oficio.ruta_archivo} target="blank_"
-                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.oficio.ruta_archivo.split('/').pop()}
-                                    </a>
-                                )
-                                    : ""}
-                            </div>
+
                         </div>
                     </div>
                 </div>

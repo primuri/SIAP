@@ -76,6 +76,10 @@ main {
   background-color: white;
 }
 
+.modal .d-block html{
+  overflow: hidden;
+}
+
 .side-bar hr {
   margin: 0;
   margin-left: 20px;
@@ -88,6 +92,10 @@ main {
 
 .side-bar li {
   margin-left: 20px;
+}
+
+.modal-open {
+  overflow: hidden;
 }
 
 .side-bar li:hover a{

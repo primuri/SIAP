@@ -20,7 +20,7 @@ export const GestionAcademicos = () => {
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)                             // Si hay error, se muestra una página para eso
-    const columns = ['Cedula', 'Nombre','Correo','Universidad']
+    const columns = ['Cédula', 'Nombre','Correo','Universidad']
     const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
 
     user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
@@ -34,7 +34,7 @@ export const GestionAcademicos = () => {
             setAcademicos(res.data)
             setCargado(true)
         } catch (error) {
-            toast.error('Error al cargar los datos de academicos', {
+            toast.error('Error al cargar los datos de investigadores', {
                 duration: 4000,
                 position: 'bottom-right', 
                 style: {
@@ -48,7 +48,7 @@ export const GestionAcademicos = () => {
     // Manejo de datos que se van a enviar para agregar
     const addAcademico = async (formData) => {       
         try {
-
+            
             const Datos = JSON.parse(formData.get('json'))
             formData.delete('json')
             let nombre = Datos.universidad_fk.nombre;
@@ -70,7 +70,7 @@ export const GestionAcademicos = () => {
             Datos.universidad_fk = responseUniversidad;
             formData.append('json', JSON.stringify(Datos))
             await agregarAcademico(formData, localStorage.getItem("token"))
-            toast.success('Académico agregado correctamente', {
+            toast.success('Investigador agregado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -80,8 +80,9 @@ export const GestionAcademicos = () => {
               })
             setAddClick(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al agregar el académico', {
+            toast.error('Error al agregar el investigador', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -151,7 +152,7 @@ export const GestionAcademicos = () => {
                 }
             }
             await editarAcademico(academico.id_academico, formData, localStorage.getItem("token"))
-            toast.success('Académico editado correctamente', {
+            toast.success('Investigador editado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -161,8 +162,9 @@ export const GestionAcademicos = () => {
               })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al editar el académico', {
+            toast.error('Error al editar el investigador', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -182,7 +184,7 @@ export const GestionAcademicos = () => {
             await eliminarArea(academico.id_area_especialidad_secundaria_fk.id_area_especialidad, localStorage.getItem('token'))
             await eliminarNombre(academico.id_nombre_completo_fk.id_nombre_completo, localStorage.getItem('token'))
              
-            toast.success('Académico eliminado correctamente', {
+            toast.success('Investigador eliminado correctamente', {
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -192,8 +194,9 @@ export const GestionAcademicos = () => {
               })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al eliminar el académico', {
+            toast.error('Error al eliminar el investigador', {
                 duration: 4000, 
                 position: 'bottom-right',
                 style: {
@@ -210,12 +213,14 @@ export const GestionAcademicos = () => {
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
+        document.body.classList.remove('modal-open');
     }
 
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
+        document.body.classList.add('modal-open');
     }
 
     // Al hacer click en la tabla
@@ -224,6 +229,7 @@ export const GestionAcademicos = () => {
         setAcademico(selectedAcademico)
         setEdit(true)
         setAddClick(false)
+        document.body.classList.add('modal-open');
     }
 
     // Obtener atributo de un objeto 

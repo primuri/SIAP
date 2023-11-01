@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Paises from '../../utils/Paises.json'
+import Tooltip from '@mui/material/Tooltip';
+
 
 export const EventoForm = ({ mode, producto, setCambios }) => {
     const [fileData, setFileData] = useState(null);
@@ -104,8 +106,12 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                     </select>
                 </div>
                 <div className="col">
-                    <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación <span className="required">*</span> </label>
-                    <input type="text" className="form-control" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange} required />
+                    <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación <span className="required">*</span> </label>                
+                    <select className="form-select seleccion" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange}  required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="Activa">Activa</option>
+                        <option value="Pasiva">Pasiva</option>
+                    </select>
                 </div>
             </div>
             <div className="row mb-4">
@@ -121,7 +127,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                     <input type="text" className="form-control" name="id_area_fk.nombre" id="nombreArea" value={formData.id_area_fk.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="nombreInstitucion" className="label-personalizado mb-2"> Nombre de la Institución del Evento <span className="required">*</span> </label>
+                    <label htmlFor="nombreInstitucion" className="label-personalizado mb-2"> Nombre Institución del Evento <span className="required">*</span> </label>
                     <input type="text" className="form-control" name="id_institucion_fk.nombre" id="nombreInstitucion" value={formData.id_institucion_fk.nombre} onChange={handleChange} required />
                 </div>
             </div>
@@ -134,9 +140,11 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Oficio del Evento <span className="required">*</span> </label>
                     <input type="file" className="form-control" name="id_oficio_fk.documento" id="id_oficio_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode === 2 ? (
-                        <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                            {formData.id_oficio_fk.ruta_archivo.split('/').pop()}
-                        </a>
+                        <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
+                            <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
+                                {"Descargar oficio"}
+                            </a>
+                        </Tooltip>
                     ): ""}
                 </div>
             </div>

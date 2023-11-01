@@ -145,7 +145,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                 <input type="text" className="form-control" name="id_nombre_completo_fk.nombre" id="nombre" value={formData.id_nombre_completo_fk.nombre || ""} onChange={handleChange} required />
               </div>
               <div className="col-md-6">
-                <label htmlFor="apellido" className="label-personalizado mb-2">Primer Apellido  <span class="required">*</span> </label>
+                <label htmlFor="apellido" className="label-personalizado mb-2">Primer apellido  <span class="required">*</span> </label>
                 <input type="text" className="form-control" name="id_nombre_completo_fk.apellido" id="apellido" value={formData.id_nombre_completo_fk.apellido || ""} onChange={handleChange} required />
               </div>
             </div>
@@ -156,7 +156,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                 <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
               </div>
               <div className="col-md-6">
-                <label htmlFor="correo" className="label-personalizado mb-2">Correo Electrónico <span class="required">*</span> </label>
+                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span class="required">*</span> </label>
                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
               </div>
             </div>

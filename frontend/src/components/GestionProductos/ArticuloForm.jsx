@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Paises from '../../utils/Paises.json'
+import Tooltip from '@mui/material/Tooltip';
 
 export const ArticuloForm = ({ mode, producto, setCambios }) => {
   const [fileData, setFileData] = useState(null);
@@ -98,12 +99,12 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-2">
           <div className="col"> </div>
-              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Articulo</h5>
+              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Artículo</h5>
           <div className="col"> </div>
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del articulo <span className="required">*</span> </label>
+          <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del artículo <span className="required">*</span> </label>
           <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
         </div>
         <div className="col">
@@ -174,22 +175,25 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo  </label>
+            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo <span className="required">*</span> </label>
             <input type="text" className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
         </div>
         <div className="col">
           <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo <span className="required">*</span> </label>
           <input type="file" className="form-control" name="id_documento_articulo_fk.documento" id="documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
           {mode === 2 ? (
-            <a href={"http://localhost:8000" + formData.id_documento_articulo_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-              {formData.id_documento_articulo_fk.documento.split('/').pop()}
-            </a>
+            <Tooltip title={formData.id_documento_articulo_fk.documento.split('/').pop()} placement="right-start">
+              <a href={"http://localhost:8000" + formData.id_documento_articulo_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
+                {"Descargar documento"}
+              </a>
+            </Tooltip>
+            
           ): ""}
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones  </label>
+            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="required">*</span> </label>
             <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} required />
         </div>        
       </div>

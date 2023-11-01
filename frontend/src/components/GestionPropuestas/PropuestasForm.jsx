@@ -181,7 +181,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="estado" className="label-personalizado mb-2">Estado Propuesta <span className="required">*</span> </label>
+                                <label htmlFor="estado" className="label-personalizado mb-2">Estado de propuesta <span className="required">*</span> </label>
                                 <select className="form-select seleccion " name="id_codigo_cimpa_fk.estado" id="id_codigo_cimpa_fk.estado" value={formData.id_codigo_cimpa_fk.estado} onChange={handleChange} required>
                                     <option value="">Seleccionar estado</option>
                                     <option value="Aprobada">Aprobada</option>
@@ -212,7 +212,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <div className="row mb-4">
                             <div className="col-md-6">
 
-                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo General</label>
+                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general</label>
                                 <textarea className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
@@ -235,7 +235,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                         <div className="row mb-5">
                             <div className="col-md-6">
-                                <label htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado Colaborador(a) <span className="required">*</span> </label>
+                                <label htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado colaborador(a) <span className="required">*</span> </label>
                                 <select className="form-select seleccion" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.estado} onChange={handleChange} required>
                                     <option value="">Seleccionar estado</option>
                                     <option value="Activo">Activo</option>
@@ -262,7 +262,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <div className="row mb-2">
                             <div className="col"> </div>
                             <div className="col">
-                                <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia Colaborador(a)</label>
+                                <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia colaborador(a)</label>
                             </div>
                             <div className="col"> </div>
                         </div>
@@ -301,7 +301,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                     : ""}
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del Documento <span className="required">* </span> </label>
+                                <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento <span className="required">* </span> </label>
                                 <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
                             </div>
                         </div>

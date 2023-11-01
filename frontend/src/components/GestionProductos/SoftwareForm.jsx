@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
 
 export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const [fileData, setFileData] = useState(null);
@@ -88,16 +89,19 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="detalleInforme" className="label-personalizado mb-2"> Detalle informe <span className="required">*</span> </label>
-                    <input type="text" className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleInforme" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required />
+                    <label htmlFor="detalleDocumentación" className="label-personalizado mb-2"> Detalle documentación <span className="required">*</span> </label>
+                    <input type="text" className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required />
                 </div>
                 <div className="col">
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación <span className="required">*</span> </label>
                     <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode == 2 ? (
-                        <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                            {formData.id_documento_documentacion_fk.documento.split('/').pop()}
+                        <Tooltip title={formData.id_documento_documentacion_fk.documento.split('/').pop()} placement="right-start">
+                         <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                            {"Ver documento"}
                         </a>
+                        </Tooltip>
+                       
                     ): ""}
                 </div>
             </div>

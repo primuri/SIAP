@@ -1,6 +1,5 @@
 from django.db import models
-from version_proyecto.models import Oficio, Proyecto, VersionProyecto
-
+from version_proyecto.models import Oficio, Proyecto, Documento, VersionProyecto
 
 class TipoPresupuesto(models.Model):
     id_tipo_presupuesto = models.AutoField(primary_key=True)
@@ -65,6 +64,7 @@ class Proveedor(models.Model):
     correo = models.CharField(max_length=64)
     nombre = models.CharField(max_length=128)
     telefono = models.CharField(max_length=45)
+    id_documento_fk = models.ForeignKey(Documento, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = 'proveedor'
@@ -101,10 +101,10 @@ class CuentaBancaria(models.Model):
     banco = models.CharField(max_length=255)
     tipo = models.CharField(max_length=45)
     moneda = models.CharField(max_length=45)
-    cuenta_principal = models.BooleanField()
+    cuenta_principal = models.CharField(max_length=45)
     id_proveedor_fk = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'cuenta_bancaria'
-        unique_together = (('banco','tipo','moneda','cuenta_principal', 'id_proveedor_fk'),) 
+        unique_together = (('banco','tipo','moneda','cuenta_principal','id_proveedor_fk'),) 
 

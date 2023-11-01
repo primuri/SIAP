@@ -14,7 +14,7 @@ const filter = createFilterOptions();
 export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [addClick, setAddClick] = useState(false) 
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [fileAccion, setFileAccion] = useState(null);
 
@@ -24,13 +24,13 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
         origen: accion ? accion.origen : "",
         destino: accion ? accion.destino : "",
         estado: accion ? accion.estado : "",
-        id_documento_accion_fk: accion ? {...accion.id_documento_accion_fk} : {tipo: "Informe", detalle: "", documento: ""}
+        id_documento_accion_fk: accion ? { ...accion.id_documento_accion_fk } : { tipo: "Informe", detalle: "", documento: "" }
     })
 
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
+
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData((prev) => ({
@@ -50,12 +50,12 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
 
     const sendForm = (event) => {
         event.preventDefault();
-        let sendingForm = { ...formData}
-        if(fileAccion){
+        let sendingForm = { ...formData }
+        if (fileAccion) {
             sendingForm.id_documento_accion_fk.documento = fileAccion
         }
         onSubmit(sendingForm);
-        sendingForm = { ...formData}
+        sendingForm = { ...formData }
     };
 
     const handleFileChange = (event) => {
@@ -115,7 +115,7 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_informe" className="label-personalizado mb-2">Identificador <span className="required">*</span> </label>
-                                    <input type="text" className="form-control" name="id" id="id" value={mode === 2 ? formData.id: "Auto - generado"} onChange={handleChange} disabled />
+                                    <input type="text" className="form-control" name="id" id="id" value={mode === 2 ? formData.id : "Auto - generado"} onChange={handleChange} disabled />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -145,23 +145,27 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                             <div className="col-md-6">
                                 <label htmlFor="estado" className="label-personalizado mb-2">Estado <span className="required">*</span></label>
                                 <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
-                                        <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
-                                        <option value="desarrollo">En desarrollo</option>
-                                        <option value="evaluacion">En evaluación</option>
-                                        <option value="concluido">Concluido</option>
-                                    </select>
+                                    <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
+                                    <option value="aprobado">Aprobado</option>
+                                    <option value="no aprobado">No aprobado</option>
+                                    <option value="cerrado por incumplimiento">Cerrado por incumplimiento</option>
+                                    <option value="cerrado con permiso">Cerrado con permiso</option>
+                                </select>
                             </div>
                             <div className="col-md-6">
-                                    <label htmlFor="id_documento_accion" className="label-personalizado mb-2"> Documento <span className="required">*</span> </label>
-                                    <input type="file" className="form-control" name="id_documento_accion_fk.documento" id="id_documento_accion" onChange={handleFileChange} required={mode == 1} />
-                                    { typeof formData.id_documento_accion_fk.documento === 'string' && (
-                                        <a href={'http://localhost:8000' + formData.id_documento_accion_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {formData.id_documento_accion_fk.documento.split('/').pop()}
-                                        </a>
-                                    ) }
+                                <label htmlFor="id_documento_accion" className="label-personalizado mb-2"> Documento <span className="required">*</span> </label>
+                                <input type="file" className="form-control" name="id_documento_accion_fk.documento" id="id_documento_accion" onChange={handleFileChange} required={mode == 1} />
+                                {typeof formData.id_documento_accion_fk.documento === 'string' && (
 
-                                </div>
-                        </div>                  
+                                    <Tooltip title={formData.id_documento_accion_fk.documento.split('/').pop()} placement="right-start">
+                                        <a href={'http://localhost:8000' + formData.id_documento_accion_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                            {"Ver documento"}
+                                        </a>
+                                    </Tooltip>
+                                )}
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
