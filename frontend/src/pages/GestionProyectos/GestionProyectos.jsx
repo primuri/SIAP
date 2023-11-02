@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react"
+import * as React from 'react';
 import { Add } from "../../utils/Add"
+import { styled } from '@mui/material/styles';
 import { Back } from "../../utils/Back"
 import { Modal } from "../../utils/Modal"
 import { ProyectosForm } from "../../components/GestionProyectos/ProyectosForm"
 import { Table } from "../../utils/Table"
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
@@ -31,23 +35,23 @@ export const GestionProyectos = () => {
     const [selectedIdCodigoVi, setSelectedIdCodigoVi] = useState(null);
     const [selectedProyecto, setSelectedProyecto] = useState(null);
     const [transformedState, setTransformedState] = useState([]);
-    const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad']
-    const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad']
+    const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
+    const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
     const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle']
     const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
 
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
     useEffect(() => {
-        
+
         const transformedProyectos = proyectos.map(proyecto => ({
             ...proyecto,
             id_codigo_cimpa_fk: {
                 ...proyecto.id_codigo_cimpa_fk
             }
         }));
-    
+
         setTransformedState(transformedProyectos);
-        
+
     }, [proyectos]);
     const volver = () => {
         setDetalleVisible(false)
@@ -64,8 +68,8 @@ export const GestionProyectos = () => {
         fetchData();
     }, [reload]);
 
-    useEffect(()=> {
-        async function fetch(){
+    useEffect(() => {
+        async function fetch() {
             if (sessionStorage.getItem('isBackNavigation') === 'true') {
                 const estado = JSON.parse(localStorage.getItem("estado"))
                 if (estado) {
@@ -86,8 +90,8 @@ export const GestionProyectos = () => {
             }
         }
         fetch()
-       
-      }, [location]);
+
+    }, [location]);
 
     const saveState = () => {
         const estado = {
@@ -100,10 +104,10 @@ export const GestionProyectos = () => {
             detalleVisible: detalleVisible,
             selectedIdCodigoVi: selectedIdCodigoVi,
         };
-    
+
         localStorage.setItem('estado', JSON.stringify(estado));
     }
-      
+
     async function loadProyectos() {
         try {
             const res = await obtenerProyectos(localStorage.getItem('token'))
@@ -667,8 +671,8 @@ export const GestionProyectos = () => {
         loadVersionProyectos(proyecto.id_codigo_vi);
         setDetalleVisible(true);
     }
-    
-    
+
+
     //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
@@ -755,10 +759,37 @@ export const GestionProyectos = () => {
                             </div>
 
                             <div className="d-flex justify-content-between mt-4">
-                                <div className="w-50"></div>
+                                <div className="w-50">
+                                    <HtmlTooltip
+                                        title={
+                                            <React.Fragment>
+                                                <b>¿Dónde está el botón de agregar?</b>
+                                                <br />
+                                                    Para agregar un proyecto debe <u>aprobar</u> <br></br>
+                                                    la <u>propuesta</u> de ese proyecto.
+                                            </React.Fragment>
+                                        }
+                                        placement="right-start"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="23"
+                                            height="23"
+                                            fill="currentColor"
+                                            className="mx-2 info"
+                                            style={{ cursor: "pointer" }}
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                        </svg>
+                                    </HtmlTooltip>
+
+
+                                </div>
                                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                             </div>
-                            <Table columns={columns} data={transformedState} dataKeys={dataKeys} onClick={elementClicked} ></Table>
+                            <Table columns={columns} data={transformedState} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar" ></Table>
                             <Toaster></Toaster>
                         </>
                     )}
@@ -770,3 +801,16 @@ export const GestionProyectos = () => {
     );
 
 }
+
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        color: 'rgba(0, 0, 0, 0.77)',
+        maxWidth: 300,
+        fontSize: theme.typography.pxToRem(16),
+        border: '1px solid #dadde9',
+    },
+}));
