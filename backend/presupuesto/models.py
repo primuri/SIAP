@@ -22,7 +22,7 @@ class CodigoFinanciero(models.Model):
 
     class Meta:
         db_table = 'codigo_financiero'
-
+#
 class Presupuesto(models.Model):
     id_presupuesto = models.AutoField(primary_key=True)
     anio_aprobacion = models.IntegerField()
@@ -56,7 +56,7 @@ class Partida(models.Model):
 
     class Meta:
         db_table = 'partida'
-
+#
 class Proveedor(models.Model):
     id_cedula_proveedor = models.CharField(max_length=11, primary_key=True, unique=True)
     tipo = models.CharField(max_length=45)
@@ -93,7 +93,7 @@ class Gasto(models.Model):
 
     class Meta:
         db_table = 'gasto'
-
+#
 class CuentaBancaria(models.Model):
     id_numero = models.IntegerField(primary_key=True)
     banco = models.CharField(max_length=255)

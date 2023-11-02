@@ -3,11 +3,11 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from ..models import PropuestaProyecto
+from ..models import Proyecto
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
 
-class PropuestaProyectoTests(APITestCase):
+class ProyectoTests(APITestCase):
 
     def setUp(self):
 
@@ -90,7 +90,7 @@ class PropuestaProyectoTests(APITestCase):
 
 
         # Crea los datos de Prueba
-        self.data = {
+        self.propuesta = {
             'id_codigo_cimpa': '1-2023',
             'detalle': 'Detalle de la propuesta',
             'estado': 'En revisión',
@@ -100,135 +100,101 @@ class PropuestaProyectoTests(APITestCase):
             'actividad': 'Actividad XYZ',
             'id_colaborador_principal_fk': self.colaborador_id
         }
+        response = self.client.post(reverse('propuestaproyecto-list'), self.propuesta, format='json')
+        self.propuesta_id = response.data['id_codigo_cimpa']
 
-    def test_post_propuesta_proyecto(self):
+        self.data = {
+            'id_codigo_cimpa_fk': self.propuesta_id,
+            'id_codigo_vi': '5-2023'
+        }
 
-        url = reverse('propuestaproyecto-list')
+    def test_post_proyecto(self):
+
+        url = reverse('proyecto-list')
         response = self.client.post(url, self.data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(PropuestaProyecto.objects.count(), 1)
-        self.assertEqual(PropuestaProyecto.objects.get().nombre, 'Proyecto ABC')
+        self.assertEqual(Proyecto.objects.count(), 1)
+        self.assertEqual(Proyecto.objects.get().id_codigo_vi, '5-2023')
 
-    def test_put_propuesta_proyecto(self):
-        update_data = {
-            'id_codigo_cimpa': '1-2023',
-            'detalle': 'Detalle editado',
+    def test_put_proyecto(self):
+        propuesta2 = {
+            'id_codigo_cimpa': '2-2023',
+            'detalle': 'Detalle de la propuesta',
             'estado': 'En revisión',
-            'nombre': 'Proyecto YYY',
-            'descripcion': 'Descripción del proyecto XYZ',
+            'nombre': 'Proyecto ABC',
+            'descripcion': 'Descripción del proyecto ABC',
             'fecha_vigencia': '2023-09-04T15:30:00',
             'actividad': 'Actividad XYZ',
             'id_colaborador_principal_fk': self.colaborador_id
         }
+        response = self.client.post(reverse('propuestaproyecto-list'), propuesta2, format='json')
+        propuesta2_id = response.data['id_codigo_cimpa']
+    
+        update_data = {
+            'id_codigo_cimpa_fk': propuesta2_id,
+            'id_codigo_vi': '5-2023'
+        }
         
-        self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        self.client.post(reverse('proyecto-list'), self.data, format='json')
+        url = reverse('proyecto-detail', args=['5-2023'])
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(PropuestaProyecto.objects.get().nombre, 'Proyecto YYY')
+        self.assertEqual(Proyecto.objects.get().id_codigo_cimpa_fk.id_codigo_cimpa, '2-2023')
 
-
-    def test_get_lista_propuestas_proyectos(self):
-        nombre_completo_data2 = {
-            'nombre': 'Brenda',
-            'apellido': 'Cordero',
-            'segundo_apellido': 'Gutierrez'
-        }
-        area_especialidad_data2 = {
-            'nombre': 'Microbiologia'
-        }
-        area_especialidad2_data2 = {
-            'nombre': 'Microbiologia'
-        }
-        universidad_data2 = {
-            'pais': 'Nicaragua',
-            'nombre': 'Universidad Nacional Autónoma de Managua'
-        }
-        vigencia_data2 = {
-                'fecha_inicio': '2022-12-04T15:30:00',
-                'fecha_fin': '2024-09-04T12:45:00'
-            }
-
-        response_nombre2 = self.client.post(reverse('nombrecompleto-list'), nombre_completo_data2, format='json')
-        response_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad_data2, format='json')
-        response_universidad2 = self.client.post(reverse('universidad-list'), universidad_data2, format='json')
-        response_vigencia2 = self.client.post(reverse('vigencia-list'), vigencia_data2, format='json')
-        response2_area2 = self.client.post(reverse('areaespecialidad-list'), area_especialidad2_data2, format='json')
-    
-        academico_data2 = {
-            'cedula': '89654321',
-            'foto': None,
-            'sitio_web': 'http://89654321.com',
-            'grado_maximo': 'Doctorado',
-            'correo': 'brenda.castillo@email.com',
-            'correo_secundario': 'ariel@email.com',
-            'unidad_base': 'Dermatología',
-            'categoria_en_regimen': 'Senior',
-            'pais_procedencia': 'Nicaragua',
-            'id_area_especialidad_secundaria_fk': response2_area2.data['id_area_especialidad'],
-            'id_nombre_completo_fk': response_nombre2.data['id_nombre_completo'],
-            'id_area_especialidad_fk': response_area2.data['id_area_especialidad'], 
-            'universidad_fk': response_universidad2.data['id_universidad']  
-        }
-
-        response_academico2 = self.client.post(reverse('academico-list'), academico_data2, format='json')
-       
+    def test_get_lista_proyectos(self):
         
-        # Ahora que ya tienes el academico creado, puedes agregarlo al colaborador principal
-        colaborador_principal_data2 = {
-            'tipo': 'Principal',
-            'carga': '90%',
-            'estado': 'Activo',
-            'id_vigencia_fk': response_vigencia2.data['id_vigencia'], 
-            'id_academico_fk': response_academico2.data['id_academico']
-        }
-        response_colaborador2 = self.client.post(reverse('colaboradorprincipal-list'), colaborador_principal_data2, format='json')
-       
         # Carga de datos 2
-        data2 = {
+        propuesta2 = {
             'id_codigo_cimpa': '2-2023',
-            'detalle': 'Otro Detalle',
-            'estado': 'Aprobado',
-            'nombre': 'Proyecto GHI',
-            'descripcion': 'Descripción del proyecto GHI',
-            'fecha_vigencia': '2024-01-01T12:00:00',
-            'actividad': 'Otra Actividad',
-            'id_colaborador_principal_fk': response_colaborador2.data['id_colaborador_principal']
+            'detalle': 'Detalle de la propuesta',
+            'estado': 'En revisión',
+            'nombre': 'Proyecto Pedro',
+            'descripcion': 'Descripción del proyecto ABC',
+            'fecha_vigencia': '2023-09-04T15:30:00',
+            'actividad': 'Actividad XYZ',
+            'id_colaborador_principal_fk': self.colaborador_id
+        }
+        response = self.client.post(reverse('propuestaproyecto-list'), propuesta2, format='json')
+        propuesta2_id = response.data['id_codigo_cimpa']
+
+        data2 = {
+            'id_codigo_cimpa_fk': propuesta2_id,
+            'id_codigo_vi': '3-2023'
         }
 
-        self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        self.client.post(reverse('propuestaproyecto-list'), data2, format='json')
-        url = reverse('propuestaproyecto-list')
+        self.client.post(reverse('proyecto-list'), self.data, format='json')
+        self.client.post(reverse('proyecto-list'), data2, format='json')
+        url = reverse('proyecto-list')
         response = self.client.get(url)
-        url2 = reverse('propuestaproyecto-detail', args=['2-2023'])
+        url2 = reverse('proyecto-detail', args=['3-2023'])
         response2 = self.client.get(url2)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(response2.data['nombre'], 'Proyecto GHI')
+        self.assertEqual(response2.data['id_codigo_cimpa_fk']['nombre'], 'Proyecto Pedro')
+      
+    def test_get_buscar_proyecto(self):
 
-    def test_get_buscar_propuesta_proyecto(self):
-
-        self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        self.client.post(reverse('proyecto-list'), self.data, format='json')
+        url = reverse('proyecto-detail', args=['5-2023'])
         response = self.client.get(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['nombre'], 'Proyecto ABC')
+        self.assertEqual(response.data['id_codigo_cimpa_fk']['nombre'], 'Proyecto ABC')
 
-    def test_delete_propuesta_proyecto(self):
+    def test_delete_proyecto(self):
         
-        self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        self.client.post(reverse('proyecto-list'), self.data, format='json')
+        url = reverse('proyecto-detail', args=['5-2023'])
         response = self.client.delete(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(PropuestaProyecto.objects.count(), 0)
+        self.assertEqual(Proyecto.objects.count(), 0)
