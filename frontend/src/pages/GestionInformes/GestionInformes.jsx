@@ -121,7 +121,10 @@ export const GestionInformes = () => {
     // Manejo de los datos del formulario de editar 
     const editInforme = async (formData) => {
         try {
-            await editarInforme(informe.id_informe, formData, localStorage.getItem("token"))
+            const Data = JSON.parse(formData)
+            Data.id_version_proyecto_fk = proyectoID;
+
+            await editarInforme(informe.id_informe, Data, localStorage.getItem("token"))
             toast.success('Informe editado correctamente', {
                 duration: 4000,
                 position: 'bottom-right',

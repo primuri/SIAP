@@ -95,9 +95,12 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio <span className="required">*</span> </label>
                                 <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={(event) => handleFileChange(event, 'oficio')} required={mode == 1} />
                                 {mode == 2 && (
-                                    <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.id_oficio_fk.ruta_archivo.split('/').pop()}
+                                     <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
+                                     <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {"Ver documento"}
                                     </a>
+                                    </Tooltip>
+                                    
                                 )}
                             </div>
                         </div>
