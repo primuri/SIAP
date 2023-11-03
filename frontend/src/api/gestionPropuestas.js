@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { agregarProyectos } from './gestionProyectos';
+import { toast, Toaster } from 'react-hot-toast'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -62,7 +63,14 @@ export const agregarDocumento = async (combinedData,  token) => {
                 id_codigo_cimpa_fk : id_propuesta_creada
             }
              await agregarProyectos(proyecto, localStorage.getItem("token"));
-            
+             toast.success('Se agregó un proyecto asociado a esa propuesta', {
+                 duration: 4000,
+                 position: 'bottom-right',
+                 style: {
+                     background: '#003DA5',
+                     color: '#fff',
+                 },
+             })
         }
         
         const response_documento = await SIAPAPI.post('propuesta_proyecto/documento_asociado/', combinedData, {

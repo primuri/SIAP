@@ -155,7 +155,7 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                             <div className="col-md-6">
                                 <label htmlFor="id_documento_accion" className="label-personalizado mb-2"> Documento <span className="required">*</span> </label>
                                 <input type="file" className="form-control" name="id_documento_accion_fk.documento" id="id_documento_accion" onChange={handleFileChange} required={mode == 1} />
-                                {typeof formData.id_documento_accion_fk.documento === 'string' && (
+                                {typeof formData.id_documento_accion_fk.documento === 'string' && formData.id_documento_accion_fk.documento !== '' && (
 
                                     <Tooltip title={formData.id_documento_accion_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={'http://localhost:8000' + formData.id_documento_accion_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">

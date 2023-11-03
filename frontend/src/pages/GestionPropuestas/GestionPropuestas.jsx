@@ -194,7 +194,16 @@ export const GestionPropuestas = () => {
 
                 if (!existe) {
                     await agregarProyectos(proyecto, localStorage.getItem("token"));
+                    toast.success('Se agregó un proyecto asociado a esa propuesta', {
+                        duration: 4000,
+                        position: 'bottom-right',
+                        style: {
+                            background: '#003DA5',
+                            color: '#fff',
+                        },
+                    })
                 }
+
                 //Para borrar proyectos
             } else if (Datos.id_codigo_cimpa_fk.estado == "En desarrollo") {
 
