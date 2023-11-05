@@ -218,12 +218,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             {mode === 2 && (
                                 <>
                                     <div className="col-md-6">
-                                        <label htmlFor="id_codigo_vi" className="label-personalizado mb-2 " style={{textDecoration:"underline"}}>Código VI</label>
+                                        <label htmlFor="id_codigo_vi" className="label-personalizado mb-2 ">Código VI</label>
                                         <input type="text" className="form-control disabled-input" name="id_codigo_vi_fk.id_codigo_vi" id="id_codigo_vi_fk.id_codigo_vi" value={mode === 2 ? formData.id_codigo_vi_fk.id_codigo_vi : id_codigo} onChange={handleChange} disabled={true} />
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="numero_version" className="label-personalizado  mb-2" style={{textDecoration:"underline"}}>Versión</label>
+                                        <label htmlFor="numero_version" className="label-personalizado  mb-2">Versión</label>
                                         <input type="text" className="form-control disabled-input " name="numero_version" id="numero_version" onChange={handleChange} value={formData.numero_version} min="1" step="1" pattern="^[0-9]+$" disabled={true} />
                                     </div>
                                 </>
@@ -242,7 +242,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (opcional)</span></label>
+                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
                                 <input type="date" className="form-control"
                                     name="id_vigencia_fk.fecha_fin"
                                     id="id_vigencia_fk.fecha_fin"
@@ -251,7 +251,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     onChange={handleChange} />
                             </div>
                             <div className="col">
-                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (opcional)</span></label>
+                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
                                 <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
@@ -323,10 +323,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                                     <div className="row mt-4">
                                         <div className="col d-flex justify-content-center align-items-center">
-                                            <button id="acciones-button" className="btn btn-primary" onClick={handleInformesClick}>Visualizar Informes</button>
+                                            <button id="acciones-button" className="btn btn-primary" onClick={handleInformesClick}>Gestionar Informes</button>
                                         </div>
                                         <div className="col d-flex justify-content-center align-items-center">
-                                            <button id="acciones-button" className="btn btn-primary" onClick={handlePresupuestoClick}>Visualizar Presupuesto</button>
+                                            <button id="acciones-button" className="btn btn-primary" onClick={handlePresupuestoClick}>Gestionar Presupuesto</button>
                                         </div>
                                     </div>
                                 </>

@@ -246,13 +246,13 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span className="required">*</span> </label>
+                                    <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
                                     <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="rol" className="label-personalizado mb-2">Rol <span className="required">*</span> </label>
+                                    <label htmlFor="rol" className="label-personalizado mb-2">Rol</label>
                                     <select className="form-select seleccion" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un rol</option>
                                         <option value="administrador">Administrador(a)</option>
@@ -269,7 +269,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="contrasena" className="label-personalizado mb-2">Contraseña <span className="required">*</span> </label>
+                                    <label htmlFor="contrasena" className="label-personalizado mb-2">Contraseña</label>
                                     <div style={{position:"relative"}}>
 
                                     <input type={showPassword ? 'text' : 'password'} className="form-control" name="password" id="contrasena" value={formData.password} onChange={handleChange} required={mode !== 2 ? true : undefined} />
@@ -282,7 +282,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="confirmarContrasena" className="label-personalizado mb-2">Confirmar contraseña <span className="required">*</span> </label>
+                                    <label htmlFor="confirmarContrasena" className="label-personalizado mb-2">Confirmar contraseña</label>
                                     <input type={showPassword ? 'text' : 'password'} className="form-control" name="confirmar_contrasena" id="confirmar_contrasena" value={formData.confirmar_contrasena} onChange={handleChange} required={mode !== 2 ? true : undefined} />
                                 </div>
                             </div>

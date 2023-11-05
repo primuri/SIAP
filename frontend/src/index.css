@@ -262,6 +262,11 @@ select{
   width: 184px;
 }
 
+#boton-personalizado3 {
+  width: 300px;
+  background-color: 8dc63f;
+}
+
 .buscar-input {
   background-color: white;
 }

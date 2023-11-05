@@ -23,13 +23,13 @@ export const GestionProyectos = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [reload, setReload] = useState(false)
-    const [proyectos, setProyectos] = useState([]) // Proyectos que se muestran
+    const [proyectos, setProyectos] = useState([]) 
     const [cargado, setCargado] = useState(false)
-    const [data, setData] = useState([])//Todas las Proyectos
-    const [proyecto, setProyecto] = useState(null) //Proyecto al que se le da click en la tabla para editar
+    const [data, setData] = useState([])
+    const [proyecto, setProyecto] = useState(null) 
     const [producto, setProducto] = useState(null)
     const [tipo, setTipo] = useState(null)
-    const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+    const [error, setError] = useState(false) 
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [detalleVisible, setDetalleVisible] = useState(false);
@@ -41,7 +41,7 @@ export const GestionProyectos = () => {
     const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle']
     const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
 
-    user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
+    user.groups[0] !== "administrador" ? setError(true) : null  
     useEffect(() => { 
         const transformedProyectos = proyectos;
 
@@ -53,7 +53,6 @@ export const GestionProyectos = () => {
         loadProyectos()
     };
 
-    // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {
         async function fetchData() {
             await loadProyectos();
@@ -764,10 +763,9 @@ export const GestionProyectos = () => {
                                     <HtmlTooltip
                                         title={
                                             <React.Fragment>
-                                                <b>¿Dónde está el botón de agregar?</b>
+                                                <b>¿Cómo agregar un proyecto?</b>
                                                 <br />
-                                                    Para agregar un proyecto debe <u>aprobar</u> <br></br>
-                                                    la <u>propuesta</u> de ese proyecto.
+                                                    Para hacerlo, la propuesta de ese proyecto debe de estar aprobada. Diríjase a Gesión de propuestas, dele click a la propuesta y apruébela con el botón que lo indica.
                                             </React.Fragment>
                                         }
                                         placement="right-start"
@@ -778,7 +776,7 @@ export const GestionProyectos = () => {
                                             height="23"
                                             fill="currentColor"
                                             className="mx-2 info"
-                                            style={{ cursor: "pointer" }}
+                                            style={{ cursor: "pointer", color: "#670000" }}
                                             viewBox="0 0 16 16"
                                         >
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />

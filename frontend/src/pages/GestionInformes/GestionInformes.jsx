@@ -29,7 +29,7 @@ export const GestionInformes = () => {
     const [edit, setEdit] = useState(false)                                      // Cuando se da click en editar
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
-    const [id_proyecto, setIdProyecto] = useState(null)                                // Cuando hay un error
+    const [id_proyecto, setIdProyecto] = useState(null)                          // Cuando hay un error
     const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones']
     const dataKeys = ['id_informe', 'estado', 'tipo', 'Versiones']
 

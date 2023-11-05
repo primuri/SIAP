@@ -157,12 +157,12 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula <span className="required">*</span> </label>
+                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula</label>
                                     <input type="text" className="form-control" name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6 position-relative">
-                                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula <span className="required">*</span> </label>
+                                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula </label>
                                 <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange}>
                                     <option value="">Seleccionar tipo</option>
                                     <option value="Fisica">Física</option>
@@ -174,19 +174,19 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span className="required">*</span> </label>
+                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
                                     <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span className="required">*</span></label>
+                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono <span className="required">*</span> </label>
+                                <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono </label>
                                 <input type="number" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} required/>
                             </div>
                             <div className="col-md-6">
@@ -208,7 +208,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         </div>
 
                         <div className="d-flex flex-column">
-                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria <span className="required">*</span> </label>
+                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria</label>
                             <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria" />
                         </div>
 

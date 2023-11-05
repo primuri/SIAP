@@ -137,9 +137,9 @@ export const GestionUsuarios = () => {
               style: {
                   background: 'var(--celeste-ucr)',
                   color: '#fff',
-                  fontSize: '18px',
-                  height: '60px', // Aumentar la altura
-                  width: '300px',  // Aumentar el ancho
+                  fontSize: '20px',
+                  height: '68px', // Aumentar la altura
+                  width: '320px%',  // Aumentar el ancho
               },
               })
             setEdit(false)
@@ -151,6 +151,7 @@ export const GestionUsuarios = () => {
                 style: {
                   background: '#670000',
                   color: '#fff',
+                  fontSize: '40px',
                 },
               })
         }
