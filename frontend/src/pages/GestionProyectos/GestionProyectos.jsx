@@ -18,6 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 
 export const GestionProyectos = () => {
+    const [proyectosVersion, setProyectosVersion] = useState([]) 
     const user = JSON.parse(localStorage.getItem('user'))
     const navigate = useNavigate();
     const location = useLocation();
@@ -41,14 +42,8 @@ export const GestionProyectos = () => {
     const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
 
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-    useEffect(() => {
-
-        const transformedProyectos = proyectos.map(proyecto => ({
-            ...proyecto,
-            id_codigo_cimpa_fk: {
-                ...proyecto.id_codigo_cimpa_fk
-            }
-        }));
+    useEffect(() => { 
+        const transformedProyectos = proyectos;
 
         setTransformedState(transformedProyectos);
 
@@ -129,11 +124,12 @@ export const GestionProyectos = () => {
 
     async function loadVersionProyectos(proyecto) {
         try {
+            setCargado(false);
             const res = await obtenerVersionProyectos(localStorage.getItem('token'))
             const filteredData = res.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === proyecto);
             setData(filteredData);
-            setProyectos(filteredData);
-
+            setProyectosVersion(filteredData)
+            setCargado(true);
 
         } catch (error) {
             toast.error('Error al cargar los datos de proyectos', {
@@ -389,6 +385,9 @@ export const GestionProyectos = () => {
                 style: {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
+                    fontSize: '18px',
+                    height: '60px', // Aumentar la altura
+                    width: '300px',  // Aumentar el ancho
                 },
             })
             setAddClick(false)
@@ -436,7 +435,7 @@ export const GestionProyectos = () => {
 
                 producto = Datos.software;
                 delete Datos.software;
-                artic = true;
+                soft = true;
 
             } else if ('articulo' in Datos && Datos.articulo != null) {
                 const DocumentoData = new FormData();
@@ -667,6 +666,7 @@ export const GestionProyectos = () => {
     // Al hacer click en la tabla
     const elementClicked = (proyecto) => {
         setSelectedProyecto(proyecto);
+        setProyectosVersion([])
         setSelectedIdCodigoVi(proyecto.id_codigo_vi);
         loadVersionProyectos(proyecto.id_codigo_vi);
         setDetalleVisible(true);
@@ -725,8 +725,8 @@ export const GestionProyectos = () => {
                                 <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                             </div>
                             <div className="mt-3">
-                                <Table columns={columns2} data={transformedState} dataKeys={dataKeys2} onClick={elementClicked2}></Table>
-                                {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1} saveState={saveState}></ProyectosForm></Modal>)}
+                                <Table columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onClick={elementClicked2}></Table>
+                                {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1} saveState={saveState} canVersiones={proyectosVersion.length}></ProyectosForm></Modal>)}
                                 {edit &&
                                     (
                                         <Modal >
@@ -739,6 +739,7 @@ export const GestionProyectos = () => {
                                                 producto={producto}
                                                 tipo={tipo}
                                                 saveState={saveState}
+                                                canVersiones={proyectosVersion.length}
                                             >
                                             </ProyectosForm>
                                         </Modal>
@@ -789,7 +790,7 @@ export const GestionProyectos = () => {
                                 </div>
                                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                             </div>
-                            <Table columns={columns} data={transformedState} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Visualizar" ></Table>
+                            <Table columns={columns} data={transformedState} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></Table>
                             <Toaster></Toaster>
                         </>
                     )}

@@ -168,11 +168,12 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     <div className="container">
 
                         <div className="row mb-4">
-                            <div className="col-md-6">
+                            {mode === 2 && (<div className="col-md-6">
                                 <label htmlFor="codigoCimpa" className="label-personalizado mb-2">Código CIMPA</label>
                                 <input type="text" className="form-control disabled-input" name="id_codigo_cimpa_fk.id_codigo_cimpa" id="id_codigo_cimpa_fk.id_codigo_cimpa" value={mode === 2 ? formData.id_codigo_cimpa_fk.id_codigo_cimpa : "Auto - generado"} onChange={handleChange} disabled={true} />
-                            </div>
-                            <div className="col-md-6">
+                            </div>)}
+                            
+                            <div className="col">
                                 <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span className="required">*</span> </label>
                                 <input type="text" className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required />
                             </div>
@@ -210,13 +211,35 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         </div>
 
                         <div className="row mb-4">
-                            <div className="col-md-6">
+                            <div className="col">
 
-                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general</label>
+                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general<span className="optional"> (opcional)</span></label>
                                 <textarea className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange} />
                             </div>
+                        </div>
+                        <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" className="label-personalizado mb-2">Colaborador(a) principal <span className="required">*</span> </label>
+                                <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">Documento <span className="required">*</span> </label>
+                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
+                                    required={mode == 1 ? true : ''} />
+                                {mode == 2 ? (
+                                    <a href={formData.documento} target="blank_"
+                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.documento.split('/').pop()}
+                                    </a>
+                                )
+                                    : ""}
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento <span className="required">* </span> </label>
+                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
+                            </div>
+                        </div>
+                        <hr />
+                        <div className="row mb-4">
+                            <h5 className="text-center my-3">Asociar Colaborador Principal</h5>
+                            <div className="col">
+                                <label htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" className="label-personalizado mb-2">Investigador(a) <span className="required">*</span> </label>
                                 <select className="form-select seleccion"
                                     name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
@@ -233,7 +256,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             </div>
                         </div>
 
-                        <div className="row mb-5">
+                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado colaborador(a) <span className="required">*</span> </label>
                                 <select className="form-select seleccion" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.estado} onChange={handleChange} required>
@@ -258,18 +281,9 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 </select>
                             </div>
                         </div>
-
-                        <div className="row mb-2">
-                            <div className="col"> </div>
-                            <div className="col">
-                                <label className="label-personalizado mb-2 col-sm-auto control-label">Vigencia colaborador(a)</label>
-                            </div>
-                            <div className="col"> </div>
-                        </div>
-
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio </label>
+                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio <span className="required">*</span></label>
                                 <input type="date" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio
@@ -277,7 +291,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                     onChange={handleChange} />
                             </div>
                             <div className="col">
-                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización</label>
+                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización <span className="required">*</span></label>
                                 <input type="date" className="form-control"
                                     name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"
@@ -287,24 +301,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             </div>
                         </div>
                         <br />
-                        <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">Documento <span className="required">*</span> </label>
-                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
-                                {mode == 2 ? (
-                                    <a href={formData.documento} target="blank_"
-                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.documento.split('/').pop()}
-                                    </a>
-                                )
-                                    : ""}
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento <span className="required">* </span> </label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -320,14 +317,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 </>
                             )}
                         </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="propuesta" />)}
-                                </>
-                            )}
-                        </div>
+                    
                     </div>
                 </div>
             </form>

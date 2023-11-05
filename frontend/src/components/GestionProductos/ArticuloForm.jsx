@@ -84,11 +84,11 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     <>
       <div className="row mb-4">
           <div className="col-md-6">
-              <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto <span className="required">*</span> </label>
+              <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
               <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
           </div>
           <div className="col">
-              <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto <span className="required">*</span> </label>
+              <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto   </label>
               <input type="date" className="form-control"
                   name="id_producto_fk.fecha"
                   id="id_producto_fk.fecha"
@@ -104,11 +104,11 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del artículo <span className="required">*</span> </label>
+          <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del artículo   </label>
           <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
         </div>
         <div className="col">
-          <label htmlFor="fecha_publicacion" className="label-personalizado mb-2">Fecha de Publicación <span className="required">*</span></label>
+          <label htmlFor="fecha_publicacion" className="label-personalizado mb-2">Fecha de Publicación  </label>
           <input type="date" className="form-control" name="fecha_publicacion" id="fecha_publicacion" 
                   value={formData.fecha_publicacion
                   ? new Date(formData.fecha_publicacion).toISOString().split('T')[0] : ""}
@@ -117,21 +117,21 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="tipo" className="label-personalizado mb-2"> Tipo <span className="required">*</span> </label>
+          <label htmlFor="tipo" className="label-personalizado mb-2"> Tipo   </label>
           <input type="text" className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required />
         </div>
         <div className="col">
-          <label htmlFor="doi" className="label-personalizado mb-2"> DOI <span className="required">*</span> </label>
+          <label htmlFor="doi" className="label-personalizado mb-2"> DOI   </label>
           <input type="text" className="form-control" name="doi" id="doi" value={formData.doi} onChange={handleChange} required />
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="isbn" className="label-personalizado mb-2"> ISBN <span className="required">*</span> </label>
+          <label htmlFor="isbn" className="label-personalizado mb-2"> ISBN   </label>
           <input type="text" className="form-control" name="isbn" id="isbn" value={formData.isbn} onChange={handleChange} required />
         </div>
         <div className="col">
-          <label htmlFor="cant_paginas" className="label-personalizado mb-2"> Cantidad de Páginas <span className="required">*</span> </label>
+          <label htmlFor="cant_paginas" className="label-personalizado mb-2"> Cantidad de Páginas   </label>
           <input type="number" className="form-control" name="cant_paginas" id="cant_paginas" value={formData.cant_paginas} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required />
         </div>
       </div>
@@ -142,11 +142,11 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="nombreRevista" className="label-personalizado mb-2"> Nombre de la Revista <span className="required">*</span> </label>
+          <label htmlFor="nombreRevista" className="label-personalizado mb-2"> Nombre de la Revista   </label>
           <input type="text" className="form-control" name="id_revista_fk.nombre" id="nombreRevista" value={formData.id_revista_fk.nombre} onChange={handleChange} required />
         </div>
         <div className="col-md-6">
-          <label htmlFor="paisRevista" className="label-personalizado mb-2">País de la Revista <span className="required">*</span> </label>
+          <label htmlFor="paisRevista" className="label-personalizado mb-2">País de la Revista   </label>
           <select className="form-control" name="id_revista_fk.pais" id="id_revista_fk.pais" value={formData.id_revista_fk.pais} onChange={handleChange} required>
               <option value="">Seleccione un país</option>
               {Paises.map((pais) => (
@@ -161,25 +161,25 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <label htmlFor="nombreAutor" className="label-personalizado mb-2"> Nombre <span className="required">*</span> </label>
+          <label htmlFor="nombreAutor" className="label-personalizado mb-2"> Nombre   </label>
           <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.nombre" id="nombreAutor" value={formData.id_autor_fk.id_nombre_completo_fk.nombre} onChange={handleChange} required />
         </div>
         <div className="col">
-          <label htmlFor="apellidoAutor" className="label-personalizado mb-2"> Apellido<span className="required">*</span> </label>
+          <label htmlFor="apellidoAutor" className="label-personalizado mb-2"> Apellido  </label>
           <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.apellido" id="apellidoAutor" value={formData.id_autor_fk.id_nombre_completo_fk.apellido} onChange={handleChange} required />
         </div>
         <div className="col">
-          <label htmlFor="segundoApellidoAutor" className="label-personalizado mb-2"> Segundo Apellido </label>
+          <label htmlFor="segundoApellidoAutor" className="label-personalizado mb-2"> Segundo Apellido <span className="optional"> (Opcional)</span> </label>
           <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.segundo_apellido" id="segundoApellidoAutor" value={formData.id_autor_fk.id_nombre_completo_fk.segundo_apellido} onChange={handleChange} />
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo <span className="required">*</span> </label>
+            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo   </label>
             <input type="text" className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
         </div>
         <div className="col">
-          <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo <span className="required">*</span> </label>
+          <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo   </label>
           <input type="file" className="form-control" name="id_documento_articulo_fk.documento" id="documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
           {mode === 2 ? (
             <Tooltip title={formData.id_documento_articulo_fk.documento.split('/').pop()} placement="right-start">
@@ -193,8 +193,8 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="required">*</span> </label>
-            <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} required />
+            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="optional"> (Opcional)</span> </label>
+            <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange}/>
         </div>        
       </div>
     </>

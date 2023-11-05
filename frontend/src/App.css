@@ -13,3 +13,8 @@ footer{
   padding: 30px 200px;
   background-color: #323232;
 }
+
+.optional{
+  color: gray;
+  font-weight: 400;
+}

@@ -113,13 +113,13 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="id_informe" className="label-personalizado mb-2">Identificador <span className="required">*</span> </label>
+                                    <label htmlFor="id_informe" className="label-personalizado mb-2">Identificador   </label>
                                     <input type="text" className="form-control" name="id" id="id" value={mode === 2 ? formData.id: "Auto - generado"} onChange={handleChange} disabled />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado <span className="required">*</span> </label>
+                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado   </label>
                                     <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
                                         <option value="En desarrollo">En desarrollo</option>
@@ -133,7 +133,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="tipo" className="label-personalizado mb-2">Tipo <span className="required">*</span> </label>
+                                    <label htmlFor="tipo" className="label-personalizado mb-2">Tipo   </label>
                                     <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un tipo</option>
                                         <option value="Primer parcial">Primer parcial</option>
@@ -145,7 +145,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación <span className="required">*</span> </label>
+                                    <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación   </label>
                                     <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} />
                                 </div>
                             </div>
@@ -153,7 +153,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="fecha_debe_presentar" className="label-personalizado mb-2">Fecha que se debe presentar <span className="required">*</span></label>
+                                <label htmlFor="fecha_debe_presentar" className="label-personalizado mb-2">Fecha que se debe presentar  </label>
                                 <input type="date" className="form-control" name="fecha_debe_presentar" id="fecha_debe_presentar" value={formData.fecha_debe_presentar ? new Date(formData.fecha_debe_presentar).toISOString().split('T')[0] : ""} onChange={handleChange} required />
                             </div>
                         </div>                  

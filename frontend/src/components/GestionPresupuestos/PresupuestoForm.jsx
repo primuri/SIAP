@@ -217,20 +217,14 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                     <div className="container ">
 
                         <div className="row mb-4">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label htmlFor="id" className="label-personalizado mb-2">Identificador <span className="required">*</span> </label>
-                                    <input type="text" className="form-control disabled-input" name="presupuesto.id_presupuesto" id="id" value={mode === 2 ? formData.presupuesto.id_presupuesto : "Auto - generado"} onChange={handleChange} required disabled />
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="proyecto" className="label-personalizado mb-2">Proyecto asociado <span className="required">*</span> </label>
+                            <div className="col">
+                                <label htmlFor="proyecto" className="label-personalizado mb-2">Proyecto asociado   </label>
                                 <input type="text" className="form-control disabled-input" name="proyecto.id_codigo_vi" id="proyecto" value={version?.id_codigo_vi_fk.id_codigo_vi + "/" + version?.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} required disabled />
                             </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="tipoDePresupuesto" className="label-personalizado mb-2">Tipo <span className="required">*</span> </label>
+                                <label htmlFor="tipoDePresupuesto" className="label-personalizado mb-2">Tipo   </label>
                                 <select className="form-select seleccion" name="tipoPresupuesto.id_tipo_presupuesto" id="tipoDePresupuesto" value={formData.tipoPresupuesto.id_tipo_presupuesto} onChange={handleChange} required>
                                     <option value="" disabled defaultValue>Seleccione el tipo de presupuesto</option>
                                     {tiposDePresupuesto && (
@@ -246,14 +240,14 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="version" className="label-personalizado mb-2">Versión del proyecto<span className="required">*</span> </label>
+                                    <label htmlFor="version" className="label-personalizado mb-2">Versión del proyecto  </label>
                                     <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled />
                                 </div>
                             </div>
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
-                                <label htmlFor="ente_nombre" className="label-personalizado mb-2">Ente Financiero <span className="required">*</span> </label>
+                                <label htmlFor="ente_nombre" className="label-personalizado mb-2">Ente Financiero   </label>
                                 <Autocomplete className="universidadAuto"
                                     value={formData.ente_financiero_fk.nombre}
                                     onChange={(event, newValue) => {
@@ -316,7 +310,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                 />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="codigoFinanciero" className="label-personalizado mb-2">Código Financiero<span className="required">*</span> </label>
+                                <label htmlFor="codigoFinanciero" className="label-personalizado mb-2">Código Financiero  </label>
                                 <Autocomplete className="universidadAuto"
                                     value={formData.id_codigo_financiero_fk.codigo}
                                     onChange={(event, newValue) => {
@@ -381,11 +375,11 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio<span className="required">*</span> </label>
+                                <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio  </label>
                                 <input type="text" className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="documento" className="label-personalizado mb-2">Oficio <span className="required">*</span> </label>
+                                <label htmlFor="documento" className="label-personalizado mb-2">Oficio   </label>
                                 <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
                                     required={mode == 1 ? true : ''} />
                                 {mode == 2 ? (
@@ -402,7 +396,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="anioAprobacion" className="label-personalizado mb-2">Año de aprobación<span className="required">*</span> </label>
+                                <label htmlFor="anioAprobacion" className="label-personalizado mb-2">Año de aprobación  </label>
                                 <input type="number" className="form-control" name="presupuesto.anio_aprobacion" id="anioAprobacion" value={formData.presupuesto.anio_aprobacion} onChange={handleChange} required min={2000} max={currentYear} />
                             </div>
 

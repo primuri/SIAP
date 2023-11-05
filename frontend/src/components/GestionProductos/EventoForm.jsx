@@ -68,7 +68,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
         <>       
            <div className="row mb-4">
                 <div className="col-md-6">
-                    <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto <span className="required">*</span> </label>
+                    <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
                     <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
                 </div>
                 <div className="col">
@@ -88,17 +88,17 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del Evento <span className="required">*</span> </label>
+                    <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del Evento   </label>
                     <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="resumen" className="label-personalizado mb-2"> Resumen del Evento <span className="required">*</span> </label>
+                    <label htmlFor="resumen" className="label-personalizado mb-2"> Resumen del Evento   </label>
                     <input type="text" className="form-control" name="resumen" id="resumen" value={formData.resumen} onChange={handleChange} required />
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col-md-6">
-                    <label htmlFor="pais" className="label-personalizado mb-2">País del Evento <span className="required">*</span> </label>
+                    <label htmlFor="pais" className="label-personalizado mb-2">País del Evento   </label>
                     <select className="form-control" name="pais" id="pais" value={formData.pais} onChange={handleChange} required>
                         <option value="">Seleccione un país</option>
                         {Paises.map((pais) => (
@@ -106,7 +106,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                     </select>
                 </div>
                 <div className="col">
-                    <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación <span className="required">*</span> </label>                
+                    <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación   </label>                
                     <select className="form-select seleccion" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange}  required>
                         <option value="">Seleccionar tipo</option>
                         <option value="Activa">Activa</option>
@@ -116,28 +116,28 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento <span className="required">*</span> </label>
+                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento   </label>
                     <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} required />
                 </div>
                
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="nombreArea" className="label-personalizado mb-2"> Nombre del Área del Evento <span className="required">*</span> </label>
+                    <label htmlFor="nombreArea" className="label-personalizado mb-2"> Nombre del Área del Evento   </label>
                     <input type="text" className="form-control" name="id_area_fk.nombre" id="nombreArea" value={formData.id_area_fk.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="nombreInstitucion" className="label-personalizado mb-2"> Nombre Institución del Evento <span className="required">*</span> </label>
+                    <label htmlFor="nombreInstitucion" className="label-personalizado mb-2"> Nombre Institución del Evento   </label>
                     <input type="text" className="form-control" name="id_institucion_fk.nombre" id="nombreInstitucion" value={formData.id_institucion_fk.nombre} onChange={handleChange} required />
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle del Oficio Del Evento <span className="required">*</span> </label>
+                    <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle del Oficio Del Evento   </label>
                     <input type="text" className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Oficio del Evento <span className="required">*</span> </label>
+                    <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Oficio del Evento   </label>
                     <input type="file" className="form-control" name="id_oficio_fk.documento" id="id_oficio_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode === 2 ? (
                         <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">

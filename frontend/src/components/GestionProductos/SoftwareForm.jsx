@@ -58,11 +58,11 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         <>
         <div className="row mb-4">
                 <div className="col-md-6">
-                    <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto <span className="required">*</span> </label>
+                    <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
                     <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto <span className="required">*</span></label>
+                    <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto  </label>
                     <input type="date" className="form-control"
                         name="id_producto_fk.fecha"
                         id="id_producto_fk.fecha"
@@ -79,21 +79,21 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre <span className="required">*</span> </label>
+                    <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre   </label>
                     <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="numero_version" className="label-personalizado mb-2"> Num. versión <span className="required">*</span> </label>
+                    <label htmlFor="numero_version" className="label-personalizado mb-2"> Num. versión   </label>
                     <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required />
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="detalleDocumentación" className="label-personalizado mb-2"> Detalle documentación <span className="required">*</span> </label>
+                    <label htmlFor="detalleDocumentación" className="label-personalizado mb-2"> Detalle documentación   </label>
                     <input type="text" className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required />
                 </div>
                 <div className="col">
-                    <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación <span className="required">*</span> </label>
+                    <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación   </label>
                     <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode == 2 ? (
                         <Tooltip title={formData.id_documento_documentacion_fk.documento.split('/').pop()} placement="right-start">

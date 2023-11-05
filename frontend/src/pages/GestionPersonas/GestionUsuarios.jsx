@@ -32,7 +32,7 @@ export const GestionUsuarios = () => {
             setCargado(true)
         } catch (error) {
             toast.error('Error al cargar los datos de usuarios', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
                 style: {
                   background: '#670000',
@@ -45,20 +45,32 @@ export const GestionUsuarios = () => {
     const addUsuario = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            await signup(Datos,localStorage.getItem('token'))
-            toast.success('Usuario agregado correctamente', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
+            const toastId = toast.loading('Agregando...', {
+              position: 'bottom-right',
+              style: {
                   background: 'var(--celeste-ucr)',
                   color: '#fff',
+                  fontSize: '18px',
+              },
+          });
+            await signup(Datos,localStorage.getItem('token'))
+            toast.success('Usuario agregado correctamente', {
+                id: toastId,
+                duration: 7000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                    height: '60px', // Aumentar la altura
+                    width: '300px',  // Aumentar el ancho
                 },
               })
             setAddClick(false)
             setReload(!reload)
         }catch(error){
             toast.error('Error al agregar el usuario', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
                 style: {
                   background: '#670000',
@@ -72,20 +84,32 @@ export const GestionUsuarios = () => {
     const editUsuario = async (formData) => {
         try{
             const Datos = JSON.parse(formData)
-            await actualizarUsuario(Datos.id,Datos,localStorage.getItem('token'))
-            toast.success('Usuario actualizado correctamente', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
+            const toastId = toast.loading('Editando...', {
+              position: 'bottom-right',
+              style: {
                   background: 'var(--celeste-ucr)',
                   color: '#fff',
-                },
+                  fontSize: '18px',
+              },
+          });
+            await actualizarUsuario(Datos.id,Datos,localStorage.getItem('token'))
+            toast.success('Usuario actualizado correctamente', {
+              id: toastId,
+              duration: 7000,
+              position: 'bottom-right',
+              style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                  fontSize: '18px',
+                  height: '60px', // Aumentar la altura
+                  width: '300px',  // Aumentar el ancho
+              },
               })
             setEdit(false)
             setReload(!reload)
         }catch(error){
             toast.error('Error al actualizar el usuario', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
                 style: {
                   background: '#670000',
@@ -97,20 +121,32 @@ export const GestionUsuarios = () => {
     // Manejo del eliminar
     const deleteUsuario = async (id) => {
         try{
+          const toastId = toast.loading('Eliminando...', {
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+                fontSize: '18px',
+            },
+        });
             await eliminarUsuario(id,localStorage.getItem('token'))
             toast.success('Usuario eliminado correctamente', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
+              id: toastId,
+              duration: 7000,
+              position: 'bottom-right',
+              style: {
                   background: 'var(--celeste-ucr)',
                   color: '#fff',
-                },
+                  fontSize: '18px',
+                  height: '60px', // Aumentar la altura
+                  width: '300px',  // Aumentar el ancho
+              },
               })
             setEdit(false)
             setReload(!reload)
         }catch(error){
             toast.error('Error al eliminar el usuario', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
                 position: 'bottom-right', // Posición en la pantalla
                 style: {
                   background: '#670000',

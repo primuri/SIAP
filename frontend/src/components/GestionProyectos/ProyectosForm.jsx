@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Tooltip from '@mui/material/Tooltip';
 
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState }) => {
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones }) => {
 
     // Cargar informacion
     const navigate = useNavigate()
@@ -42,8 +42,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             nombre: proyecto && proyecto.nombre ? proyecto.id_codigo_vi_fk.nombre : "",
         },
         detalle: proyecto ? proyecto.detalle : "",
-        numero_version: proyecto ? proyecto.numero_version : ""
+        numero_version: proyecto ? proyecto.numero_version : canVersiones + 1
     });
+    console.log(canVersiones)
 
     useEffect(() => {
         if (mode === 2) {
@@ -214,39 +215,34 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                     <div className="container">
 
                         <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="id_codigo_vi" className="label-personalizado mb-2">Código VI</label>
-                                <input type="text" className="form-control disabled-input" name="id_codigo_vi_fk.id_codigo_vi" id="id_codigo_vi_fk.id_codigo_vi" value={mode === 2 ? formData.id_codigo_vi_fk.id_codigo_vi : id_codigo} onChange={handleChange} disabled={true} />
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
-                                <input type="text" className="form-control disabled-input" name="id_codigo_vi_fk.nombre" id="id_codigo_vi_fk.id_codigo_cimpa_fk.nombre" value={mode === 2 ? formData.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre : "Auto - generado"} onChange={handleChange} disabled={true} />
-                            </div>
+                            {mode === 2 && (
+                                <>
+                                    <div className="col-md-6">
+                                        <label htmlFor="id_codigo_vi" className="label-personalizado mb-2 " style={{textDecoration:"underline"}}>Código VI</label>
+                                        <input type="text" className="form-control disabled-input" name="id_codigo_vi_fk.id_codigo_vi" id="id_codigo_vi_fk.id_codigo_vi" value={mode === 2 ? formData.id_codigo_vi_fk.id_codigo_vi : id_codigo} onChange={handleChange} disabled={true} />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <label htmlFor="numero_version" className="label-personalizado  mb-2" style={{textDecoration:"underline"}}>Versión</label>
+                                        <input type="text" className="form-control disabled-input " name="numero_version" id="numero_version" onChange={handleChange} value={formData.numero_version} min="1" step="1" pattern="^[0-9]+$" disabled={true} />
+                                    </div>
+                                </>
+                            )
+                            }
                         </div>
 
                         <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="numero_version" className="label-personalizado mb-2">Versión <span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="numero_version" id="numero_version" onChange={handleChange} value={formData.numero_version} min="1" step="1" pattern="^[0-9]+$" required />
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="detalle" className="label-personalizado mb-2">Detalle <span className="required">*</span> </label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
-                            </div>
-                        </div>
-
-                        <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio </label>
-                                <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
-                                    id="id_vigencia_fk.fecha_inicio"
-                                    value={formData.id_vigencia_fk.fecha_inicio
-                                        ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} />
-                            </div>
 
                             <div className="col">
-                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización</label>
+                                <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
+                                <input type="text" className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
+                            </div>
+
+                        </div>
+
+                        <div className="row mb-4">
+                            <div className="col-md-6">
+                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (opcional)</span></label>
                                 <input type="date" className="form-control"
                                     name="id_vigencia_fk.fecha_fin"
                                     id="id_vigencia_fk.fecha_fin"
@@ -254,27 +250,36 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                         ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
                             </div>
+                            <div className="col">
+                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (opcional)</span></label>
+                                <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
+                                    id="id_vigencia_fk.fecha_inicio"
+                                    value={formData.id_vigencia_fk.fecha_inicio
+                                        ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
+                                    onChange={handleChange} />
+                            </div>
+
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio <span className="required">*</span> </label>
+                                <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
+                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                            </div>
+                            <div className="col">
+                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
                                 <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo" onChange={handleFileChange}
                                     required={mode == 1 ? true : ''} />
                                 {mode == 2 ? (
                                     <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                    <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_"
-                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {"Ver documento"}
-                                    </a>
-                                 </Tooltip>
-                                    
+                                        <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                            {"Ver documento"}
+                                        </a>
+                                    </Tooltip>
+
                                 )
                                     : ""}
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio <span className="required">* </span> </label>
-                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                         </div>
                         <hr></hr>
@@ -338,14 +343,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
                                     {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />)}
-                                </>
-                            )}
-                        </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="proyecto" />)}
                                 </>
                             )}
                         </div>
