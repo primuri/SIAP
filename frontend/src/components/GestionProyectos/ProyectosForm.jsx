@@ -285,7 +285,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <hr></hr>
                         <div className="row mb-2">
                             <div className="col"> </div>
-                            <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto asociado</h5>
+                            <h5 className="label-personalizado mb-2 col-sm-auto control-label">Agregar un producto asociado</h5>
                             <div className="col"> </div>
                         </div>
 
