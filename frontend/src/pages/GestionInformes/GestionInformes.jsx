@@ -55,14 +55,7 @@ export const GestionInformes = () => {
             setInformes(response.data)                                                                // Se guardan todos los informes
             setCargado(true)                                                                          // Como se cargaron, se pone cargado en true
         } catch (error) {
-            toast.error('Error al cargar los datos de informes', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+        
         }
     }
 
@@ -107,16 +100,10 @@ export const GestionInformes = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al agregar el informe', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
+
 
     // Manejo de los datos del formulario de editar 
     const editInforme = async (formData) => {
@@ -137,14 +124,7 @@ export const GestionInformes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al editar el informe', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -165,14 +145,7 @@ export const GestionInformes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al eliminar el informe', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
         setEdit(false)
     }
@@ -251,23 +224,10 @@ export const GestionInformes = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar el informe', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            });
+        
             return null;
         }
     }
-
-
-
-
-
-
 
     if (informe && showVersions === true) {
         return <GestionVersionInforme informeID={informe.id_informe} />;

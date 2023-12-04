@@ -146,7 +146,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación   </label>
-                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} />
+                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} required />
                                 </div>
                             </div>
                         </div>
