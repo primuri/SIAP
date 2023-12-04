@@ -177,8 +177,9 @@ export const GestionVersionInforme = (informeID) => {                           
 }
 
 function mostrarError (error) {
-    toast.error(`Error: ${error.response.data}`, {
-        duration: 4000,
+    const mensaje = (error.request.response.match(/\["(.*?)"\]/) || ["Ocurrió un error sin identificar."])[1]
+    toast.error(`Error: ${mensaje}`, {
+        duration: 10000,
         position: 'bottom-right',
         style: {
           background: '#670000',
