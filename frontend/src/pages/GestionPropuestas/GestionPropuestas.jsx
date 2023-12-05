@@ -66,14 +66,7 @@ export const GestionPropuestas = () => {
             setPropuestas(res.data)
 
         } catch (error) {
-            toast.error('Error al cargar los datos de propuestas', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
     // Manejo de datos que se van a enviar para agregar
@@ -94,14 +87,7 @@ export const GestionPropuestas = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al agregar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -237,14 +223,7 @@ export const GestionPropuestas = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al actualizar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -270,14 +249,7 @@ export const GestionPropuestas = () => {
         document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al eliminar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
     // Al darle click a cancelar, se cierra el modal

@@ -157,14 +157,7 @@ export const GestionAcademicos = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al editar el investigador', {
-                duration: 4000, 
-                position: 'bottom-right',
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+
         }
     }
 

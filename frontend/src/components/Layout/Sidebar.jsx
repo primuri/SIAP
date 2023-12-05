@@ -9,7 +9,7 @@ export const Sidebar = () => {
       { label: 'Gestión de<br/> propuestas',     link: '/gestion-propuestas' },
       { label: 'Gestión de<br/> proyectos',      link: '/gestion-proyectos' },
       { label: 'Gestión de<br/> investigadores', link: '/gestion-investigadores' },
-      //{ label: 'Gestión de<br/> evaluadores',    link: '/gestion-evaluadores' },
+      { label: 'Gestión de<br/> evaluadores',    link: '/gestion-evaluadores' },
       { label: 'Gestión de<br/> proveedores',    link: '/gestion-proveedores' },
     ],
     "evaluador": [
