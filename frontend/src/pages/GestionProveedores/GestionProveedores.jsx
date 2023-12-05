@@ -47,7 +47,14 @@ export const GestionProveedores = () => {
   // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
-
+      var toastId = toast.loading('Agregando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       if (formData.id_documento_fk.documento !== "") {
         var responseDocumento = await agregarDocumentoCuenta(formData.id_documento_fk, localStorage.getItem('token'))
         formData.id_documento_fk = responseDocumento.data.id_documento;
@@ -58,6 +65,7 @@ export const GestionProveedores = () => {
 
       await agregarProveedor(formData, localStorage.getItem('token'))
       toast.success('Proveedor agregado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -69,6 +77,7 @@ export const GestionProveedores = () => {
       setReload(!reload)
       document.body.classList.remove('modal-open');
     } catch (error) {
+      toast.dismiss(toastId)
      
     }
 
@@ -77,7 +86,14 @@ export const GestionProveedores = () => {
   // Manejo de los datos del formulario de editar 
   const editProveedor = async (formData) => {
     try {
-
+      var toastId = toast.loading('Editando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       if (formData.id_documento_fk) {
         if (typeof formData.id_documento_fk.documento === 'object') {
           var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
@@ -103,6 +119,7 @@ export const GestionProveedores = () => {
 
       await editarProveedor(proveedor.id_cedula_proveedor, Datos, localStorage.getItem('token'))
       toast.success('Proveedor actualizado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -114,6 +131,7 @@ export const GestionProveedores = () => {
       setReload(!reload)
       document.body.classList.remove('modal-open');
     } catch (error) {
+      toast.dismiss(toastId)
      
     }
   }
@@ -121,8 +139,17 @@ export const GestionProveedores = () => {
   // Manejo del eliminar
   const deleteProveedor = async (id) => {
     try {
+      var toastId = toast.loading('Eliminando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       await eliminarProveedor(id, localStorage.getItem('token'))
       toast.success('Proveedor eliminado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -135,6 +162,7 @@ export const GestionProveedores = () => {
       document.body.classList.remove('modal-open');
 
     } catch (error) {
+      toast.dismiss(toastId)
      
     }
   }

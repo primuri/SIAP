@@ -216,6 +216,14 @@ export const GestionProyectos = () => {
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
         try {
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
             let producto = null;
             let soft = null;
@@ -351,6 +359,7 @@ export const GestionProyectos = () => {
 
             loadVersionProyectos(id_vi)
             toast.success('Versión de proyecto agregada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -366,6 +375,7 @@ export const GestionProyectos = () => {
             setReload(!reload)
 
         } catch (error) {
+            toast.dismiss(toastId)
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
             
@@ -375,6 +385,14 @@ export const GestionProyectos = () => {
     // Manejo de los datos del formulario de editar 
     const editProyecto = async (formData) => {
         try {
+            var toastId = toast.loading('Editando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             const Datos = JSON.parse(formData.get('json'))
             let soft = null;
             let artic = null;
@@ -541,6 +559,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
 
             toast.success('Versión proyecto actualizada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -552,6 +571,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
+            toast.dismiss(toastId)
             
         }
     }
@@ -559,6 +579,14 @@ export const GestionProyectos = () => {
     // Manejo del eliminar
     const deleteProyecto = async (proyecto) => {
         try {
+            var toastId = toast.loading('Eliminando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             const id = proyecto.id_codigo_vi_fk.id_codigo_vi;
             if (tipo == "software") {
                 await eliminarDocumentacion(producto.id_documento_documentacion_fk.id_documento, localStorage.getItem("token"));
@@ -587,6 +615,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(id)
 
             toast.success('Proyecto eliminado correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -600,7 +629,7 @@ export const GestionProyectos = () => {
 
         } catch (error) {
             console.log(error);
-           
+            toast.dismiss(toastId)
         }
     }
     // Al darle click a cancelar, se cierra el modal
