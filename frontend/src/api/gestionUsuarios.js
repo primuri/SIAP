@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {manejarErrores} from './errorHandler'
 
 /* Formato JSON usuario (para agregar / editar):
 
@@ -17,42 +18,42 @@ const SIAPAPI = axios.create({
 })
 
 export const login = (user) => {
-    return SIAPAPI.post('login', user);
+    return manejarErrores(SIAPAPI.post('login', user));
 };
 
 export const signup = (user, token) => {
-    return SIAPAPI.post('signup', user, {
+    return manejarErrores(SIAPAPI.post('signup', user, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
 };
 
 export const obtenerUsuarios = (token) => {
-    return SIAPAPI.get('obtener_usuarios',{
+    return manejarErrores(SIAPAPI.get('obtener_usuarios',{
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type':'application/json'
         }
-    });
+    }));
 };
 
 export const eliminarUsuario = (id, token) => {
-    return SIAPAPI.delete(`eliminar_usuario/${id}/`,{
+    return manejarErrores(SIAPAPI.delete(`eliminar_usuario/${id}/`,{
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type':'application/json'
         }
-    });
+    }));
 };
 
 export const actualizarUsuario = (id, usuario, token) => {
-    return SIAPAPI.patch(`actualizar_usuario/${id}/`, usuario, {
+    return manejarErrores(SIAPAPI.patch(`actualizar_usuario/${id}/`, usuario, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type':'application/json'
         }
-    }); 
+    })); 
 };
 

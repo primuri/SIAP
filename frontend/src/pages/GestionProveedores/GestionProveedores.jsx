@@ -69,14 +69,7 @@ export const GestionProveedores = () => {
       setReload(!reload)
       document.body.classList.remove('modal-open');
     } catch (error) {
-      toast.error('Error al agregar el proveedor', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+     
     }
 
   }
@@ -121,15 +114,7 @@ export const GestionProveedores = () => {
       setReload(!reload)
       document.body.classList.remove('modal-open');
     } catch (error) {
-      console.error(error)
-      toast.error('Error al actualizar el proveedor', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+     
     }
   }
 
@@ -150,14 +135,7 @@ export const GestionProveedores = () => {
       document.body.classList.remove('modal-open');
 
     } catch (error) {
-      toast.error('Error al eliminar el Proveedor', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+     
     }
   }
   // Al darle click a cancelar, se cierra el modal

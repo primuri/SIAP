@@ -131,14 +131,7 @@ export const GestionProyectos = () => {
             setCargado(true);
 
         } catch (error) {
-            toast.error('Error al cargar los datos de proyectos', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -163,14 +156,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de evento', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
 
@@ -196,14 +182,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de artículo', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
 
@@ -229,14 +208,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de software', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
 
@@ -396,14 +368,7 @@ export const GestionProyectos = () => {
         } catch (error) {
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
-            toast.error('Error al agregar la versión de proyecto', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -587,14 +552,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
-            toast.error('Error al actualizar la versión de proyecto', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -642,14 +600,7 @@ export const GestionProyectos = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error('Error al eliminar el proyecto', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
     // Al darle click a cancelar, se cierra el modal

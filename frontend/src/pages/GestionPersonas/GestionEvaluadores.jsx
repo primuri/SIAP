@@ -75,14 +75,7 @@ export const GestionEvaluadores = () => {
       setAddClick(false)
       setReload(!reload)
     } catch (error) {
-      toast.error('Error al agregar el evaluador', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      
     }
 
   }
@@ -102,14 +95,7 @@ export const GestionEvaluadores = () => {
       setEdit(false)
       setReload(!reload)
     } catch (error) {
-      toast.error('Error al actualizar el evaluador', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      
     }
   }
   // Manejo del eliminar
@@ -127,14 +113,7 @@ export const GestionEvaluadores = () => {
       setEdit(false)
       setReload(!reload)
     } catch (error) {
-      toast.error('Error al eliminar el evaluador', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      
     }
   }
   // Al darle click a cancelar, se cierra el modal

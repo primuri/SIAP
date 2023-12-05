@@ -31,14 +31,7 @@ export const GestionUsuarios = () => {
             setUsuarios(res.data)
             setCargado(true)
         } catch (error) {
-            toast.error('Error al cargar los datos de usuarios', {
-                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+            
         }
     }
     // Manejo de datos que se van a enviar para agregar
@@ -69,14 +62,7 @@ export const GestionUsuarios = () => {
             setAddClick(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al agregar el usuario', {
-                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+           
         }
         
     }
@@ -108,14 +94,7 @@ export const GestionUsuarios = () => {
             setEdit(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al actualizar el usuario', {
-                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+           
         }
     }
     // Manejo del eliminar
@@ -145,15 +124,7 @@ export const GestionUsuarios = () => {
             setEdit(false)
             setReload(!reload)
         }catch(error){
-            toast.error('Error al eliminar el usuario', {
-                duration: 7000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                  fontSize: '40px',
-                },
-              })
+            
         }
     }
     // Al darle click a cancelar, se cierra el modal

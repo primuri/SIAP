@@ -55,14 +55,7 @@ export const GestionPresupuestos = () => {
           const res = await obtenerVersionesProyectos(proyectoID, localStorage.getItem('token'))
           setVersion(res.data)
       } catch (error) {
-          toast.error('Error al cargar los datos de versiones del proyecto', {
-              duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-              position: 'bottom-right', // Posición en la pantalla
-              style: {
-                background: '#670000',
-                color: '#fff',
-              },
-            })
+          
       }
   }
     
@@ -111,14 +104,7 @@ export const GestionPresupuestos = () => {
             document.body.classList.remove('modal-open');
             setReload(!reload)
         }catch(error){
-            toast.error('Error al agregar el Presupuesto', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+           
         }
         
     }
@@ -169,14 +155,7 @@ export const GestionPresupuestos = () => {
 
             setReload(!reload)
         }catch(error){
-            toast.error('Error al actualizar el Presupuesto', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+            
         }
     }
     // Manejo del eliminar
@@ -196,14 +175,7 @@ export const GestionPresupuestos = () => {
             document.body.classList.remove('modal-open');
 
         }catch(error){
-            toast.error('Error al eliminar el Presupuesto', {
-                duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-                position: 'bottom-right', // Posición en la pantalla
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+           
         }
     }
     // Al darle click a cancelar, se cierra el modal
