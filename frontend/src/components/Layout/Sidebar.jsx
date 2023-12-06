@@ -5,6 +5,7 @@ export const Sidebar = () => {
    const usuario = JSON.parse(localStorage.getItem('user'));
    const menu = {
     "administrador": [
+      { label: 'Inicio',        link: '/inicio-administrador' },
       { label: 'Gestión de<br/>usuarios',        link: '/gestion-usuarios' },
       { label: 'Gestión de<br/> propuestas',     link: '/gestion-propuestas' },
       { label: 'Gestión de<br/> proyectos',      link: '/gestion-proyectos' },
@@ -13,11 +14,12 @@ export const Sidebar = () => {
       { label: 'Gestión de<br/> proveedores',    link: '/gestion-proveedores' },
     ],
     "evaluador": [
-      { label: 'Dashboard', link: '/dashboard' },
+      { label: 'Inicio',        link: '/inicio-evaluador' },
+
       { label: 'Evaluaciones', link: '/evaluaciones' },
     ],
     "academico": [
-      { label: 'Dashboard', link: '/dasdas' },
+      { label: 'Inicio',        link: '/inicio-investigador' },
       { label: 'Perfil', link: '/perfil' },
     ],
   };

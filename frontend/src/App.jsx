@@ -5,11 +5,13 @@ import './App.css'
 import GestionUsuarios from "./routes/GestionUsuarios"
 import GestionPropuestas from "./routes/GestionPropuestas"
 import GestionInformes from "./routes/GestionInformes"
-import  GestionPresupuestos from './routes/GestionPresupuestos'
-import  GestionProveedores from './routes/GestionProveedores'
+import GestionPresupuestos from './routes/GestionPresupuestos'
+import GestionProveedores from './routes/GestionProveedores'
 import GestionProyectos from "./routes/GestionProyectos"
 import { useEffect } from 'react'
-import { Home } from './pages/Home'
+import { InicioAdministrador } from './pages/Inicio/InicioAdministrador'
+import { InicioInvestigador } from './pages/Inicio/InicioInvestigador'
+import { InicioEvaluador } from './pages/Inicio/InicioEvaluador'
 import { Sidebar } from './components/Layout/Sidebar'
 import { Footer } from './components/Layout/Footer'
 
@@ -37,7 +39,9 @@ function App() {
           {GestionProveedores}
           {GestionProyectos}
 
-          <Route path='/' element={<Home></Home>}></Route>
+          <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
+          <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
+          <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
         </Routes>
       </div>
       <Footer/>
