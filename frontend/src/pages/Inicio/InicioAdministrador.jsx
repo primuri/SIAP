@@ -54,7 +54,6 @@ export const InicioAdministrador = ({ usuario }) => {
                 <p className="fs-5 text-justify m-5 mt-0 mb-4">     
                   Cada administrador por medio de la barra de navegación ubicada a la izquierda va a tener la posibilidad de gestionar diferentes <strong>módulos</strong> dentro del sistema. Lo anterior incluyendo la gestión de: usuarios, propuestas, proyectos, investigadores, evaluadores y proveedores. Cada módulo presenta tablas de datos específicas, permitiendo realizar acciones como <strong>visualizar, agregar, editar y eliminar los registros </strong>correspondientes a ese módulo en particular.   
                 </p>
-
                 </div>
                 <div className="col-6 mt-5 text-center">
                 <img class="img-fluid" src={inicio} alt="Imagen de inicio" style={{ width: '75%', height: 'auto' }} />
@@ -65,29 +64,72 @@ export const InicioAdministrador = ({ usuario }) => {
                 <div className="col-6 m-5">   
                     <h4 className="pb-3">Preguntas frecuentes</h4>
                     <div className="accordion">
-                        <div className="accordion-item">
+
+                      <div className="accordion-item">
+                              <h2 className="accordion-header" id="headingTwo">
+                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    ¿Cómo se agrega un nuevo registro?
+                                </button>
+                              </h2>
+                              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                <div className="accordion-body">
+                                Haga click en el botón "Agregar" ubicado en la esquina superior izquierda. Esto abrirá un formulario para ingresar la información necesaria. Complete el formulario proporcionando la información solicitada. Una vez que haya ingresado todos los detalles, haga clic en el botón "Agregar" dentro del formulario para guardar el nuevo registro. En caso de ya no querer agregarlo, dele click a la "x" en la esquina superior derecha.
+                                </div>
+                              </div>
+                      </div>
+
+
+                      <div className="accordion-item">
                             <h2 className="accordion-header" id="headingTwo">
-                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                ¿Cómo se agrega un proyecto?
-                            </button>
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  ¿Cómo se edita un registro?
+                              </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                            <div className="accordion-body">
-                            Para que un proyecto adquiera existencia formal, es necesario que previamente exista una propuesta correspondiente. La transición de una propuesta a proyecto se materializa únicamente mediante la aprobación de dicha propuesta. Por lo tanto, para agregar un nuevo proyecto, el proceso implica dirigirse a la sección de "Propuestas de Proyectos", donde la aprobación de la propuesta es el paso clave. Una vez aprobada, la propuesta se transformará en un proyecto, visible y gestionable en la sección designada para "Proyectos". Este flujo asegura un proceso estructurado y controlado en la evolución de las ideas propuestas hacia la ejecución efectiva de proyectos.
+                              <div className="accordion-body">
+                               Haga clic en el registro que desea, esto abrirá un formulario con los datos del registros. Haga las modificaciones necesarias y de click en el botón "Guardar" ubicado en la parte inferior del formulario. En caso de ya no querer guardarlo, dele click a la "x" en la esquina superior derecha.
+                              </div>
                             </div>
+                      </div>
+
+
+                      
+                      <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingTwo">
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  ¿Cómo se elimina un registro?
+                              </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
+                               Haga clic en el registro que desea, esto abrirá un formulario. De click en el botón "Eliminar" ubicado en la parte inferior del formulario. En caso de ya no querer eliminarlo, dele click a la "x" en la esquina superior derecha.
+                              </div>
+                            </div>
+                    </div>
+
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingTwo">
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  ¿Cómo se agrega un proyecto?
+                              </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
+                              Para que un proyecto adquiera existencia formal, es necesario que previamente exista una propuesta correspondiente. La transición de una propuesta a proyecto se materializa únicamente mediante la aprobación de dicha propuesta. Por lo tanto, para agregar un nuevo proyecto, el proceso implica dirigirse a la sección de "Propuestas de Proyectos", donde la aprobación de la propuesta es el paso clave. Una vez aprobada, la propuesta se transformará en un proyecto, visible y gestionable en la sección designada para "Proyectos". Este flujo asegura un proceso estructurado y controlado en la evolución de las ideas propuestas hacia la ejecución efectiva de proyectos.
+                              </div>
                             </div>
                         </div>
 
                         <div className="accordion-item">
                             <h2 className="accordion-header" id="headingThree">
-                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                ¿Por qué no se puede editar o borrar un proyecto?
-                            </button>
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                  ¿Por qué no se puede editar o borrar un proyecto?
+                              </button>
                             </h2>
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                            Cada proyecto tiene una o varias versiones. Es por esto que si se desea editar, debe de ser directamente en una de las versiones y no en un proyecto en general como tal. Por otro lado, por seguridad, estos datos no pueden ser eliminados ya que es informacion sensible. 
-                            </div>
+                              <div class="accordion-body">
+                              Cada proyecto tiene una o varias versiones. Es por esto que si se desea editar, debe de ser directamente en una de las versiones y no en un proyecto en general como tal. Por otro lado, por seguridad, estos datos no pueden ser eliminados ya que es informacion sensible. 
+                              </div>
                             </div>
                         </div>
 
@@ -98,9 +140,9 @@ export const InicioAdministrador = ({ usuario }) => {
                             </button>
                             </h2>
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                            En cada formulario, ya sea para agregar o editar un registro, si hay algún dato que no es requerido se detalla explícitamente que es opcional al lado de su nombre. 
-                            </div>
+                              <div class="accordion-body">
+                              En cada formulario, ya sea para agregar o editar un registro, si hay algún dato que no es requerido se detalla explícitamente que es opcional al lado de su nombre. 
+                              </div>
                             </div>
                         </div>
                     </div>
