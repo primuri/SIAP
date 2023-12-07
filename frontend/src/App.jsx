@@ -24,7 +24,9 @@ function App() {
     if (!user && currentPath !== '/login') {
       window.location.href = '/login';
     }
+
   }, []);
+
   
   return (
     <BrowserRouter>
