@@ -56,7 +56,7 @@ input[type="submit"] {
 }
 
 nav {
-  height: calc(105vh);
+  height: calc(125vh);
   margin-top: 108px;
   padding-left: 10px;
   background-color: white;

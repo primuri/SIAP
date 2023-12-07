@@ -40,7 +40,8 @@ export const GestionInformes = () => {
             loadInformes()
             setCargado(true);
             const id_version_proyecto = await loadInformeById(proyectoID);
-            setIdProyecto(id_version_proyecto[0]);
+
+            setIdProyecto(id_version_proyecto[2]);
             setNumVersion(id_version_proyecto[1]);
         }
 
@@ -208,17 +209,19 @@ export const GestionInformes = () => {
             const versiones = await obtenerVersionProyectos(localStorage.getItem('token'));
             let idCodigoVi = null;
             let numVersion = null;
+            let descripcion = null;
 
             for (let version of versiones.data) {
                 if (version.id_version_proyecto == informeId) {
                     idCodigoVi = version.id_codigo_vi_fk.id_codigo_vi;
-                    numVersion = version.numero_version;
+                    numVersion = version.numero_version;                 
+                    descripcion = version.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion;                
                     break;
                 }
             }
 
-            if (idCodigoVi && numVersion) {
-                return [idCodigoVi, numVersion];  // Devuelve ambas variables como un array
+            if (idCodigoVi && numVersion && descripcion) {
+                return [idCodigoVi, numVersion, descripcion];  // Devuelve las variables como un array
             } else {
                 throw new Error('No se encontró una versión de proyecto que coincida con el informe');
             }
@@ -238,12 +241,16 @@ export const GestionInformes = () => {
             <main>
                 {!error ? (
                     <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                        <div className="d-flex flex-row">
-                            <h1>Informes del proyecto {id_proyecto} version {numVersion}</h1>
-                            {(!cargado) && (
-                                <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
-                            )}
+                        <div className=" flex-row">
+                            <h1>Gestión de informes de la versión {numVersion} de: </h1>
+                            <br></br>
+                            <h3>{id_proyecto}</h3>
                         </div>
+
+                        {(!cargado) && (
+                            <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
+                        )}             
+
                         <div className="d-flex justify-content-between mt-4">
                             <Add onClick={addClicked}></Add>
                             <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>

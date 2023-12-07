@@ -253,7 +253,10 @@ export const GestionPresupuestos = () => {
     <main >
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-          <div className="d-flex flex-row"><h1>Gestión de presupuesto del proyecto {version ? version[0].id_codigo_vi_fk.id_codigo_vi : ""} versión {version ? version[0].numero_version : ""}</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+          <div className="flex-row">
+            <h1>Gestión de presupuesto de la versión {version ? version[0].numero_version : ""} de: </h1>
+            <h3>{version ? version[0].id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion : ""} </h3>
+            {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className={`d-flex ${data.length < 1 ? "justify-content-between" : "justify-content-end"} mt-4`}>
             {data.length < 1 ? <Add onClick={addClicked}></Add> : ''}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>

@@ -694,7 +694,7 @@ export const GestionProyectos = () => {
                     {detalleVisible ? (
                         <div>
                             <div className="d-flex flex-row">
-                                <h1>Gestión de versión de proyectos</h1>
+                                <h1>Gestión de versiones del proyecto {selectedIdCodigoVi}</h1>
                                 {!cargado && (
                                     <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}
