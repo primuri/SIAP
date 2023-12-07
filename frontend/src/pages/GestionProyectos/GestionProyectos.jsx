@@ -6,6 +6,7 @@ import { Back } from "../../utils/Back"
 import { Modal } from "../../utils/Modal"
 import { ProyectosForm } from "../../components/GestionProyectos/ProyectosForm"
 import { Table } from "../../utils/Table"
+import { TableWithButtons } from "../../utils/TableWithButtons";
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Search } from "../../utils/Search"
@@ -38,8 +39,8 @@ export const GestionProyectos = () => {
     const [transformedState, setTransformedState] = useState([]);
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
-    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle']
-    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
+    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle', 'Informes', 'Presupuesto']
+    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle', '', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null  
     useEffect(() => { 
@@ -704,7 +705,7 @@ export const GestionProyectos = () => {
                                 <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                             </div>
                             <div className="mt-3">
-                                <Table columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onClick={elementClicked2}></Table>
+                                <TableWithButtons columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onClick={elementClicked2} hasButtonColumn={true} navigate={navigate} saveState={saveState}></TableWithButtons>
                                 {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1} saveState={saveState} canVersiones={proyectosVersion.length}></ProyectosForm></Modal>)}
                                 {edit &&
                                     (
