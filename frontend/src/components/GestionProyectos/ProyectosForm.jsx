@@ -312,25 +312,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 </div>
                             </div>
 
-                            {mode == 2 && (
-                                <>
-                                    <hr></hr>
-                                    <div className="row mb-2">
-                                        <div className="col"> </div>
-                                        <h5 className="label-personalizado mb-2 col-sm-auto control-label">Acciones extras</h5>
-                                        <div className="col"> </div>
-                                    </div>
-
-                                    <div className="row mt-4">
-                                        <div className="col d-flex justify-content-center align-items-center">
-                                            <button id="acciones-button" className="btn btn-primary" onClick={handleInformesClick}>Gestionar Informes</button>
-                                        </div>
-                                        <div className="col d-flex justify-content-center align-items-center">
-                                            <button id="acciones-button" className="btn btn-primary" onClick={handlePresupuestoClick}>Gestionar Presupuesto</button>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
+                    
                         </div>
                     </div>
                 </div>

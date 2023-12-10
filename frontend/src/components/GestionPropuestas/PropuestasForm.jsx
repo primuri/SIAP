@@ -136,6 +136,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
         console.log(formData.id_codigo_cimpa_fk.estado);
     };
 
+    const isPropuestaAprobada = formData.id_codigo_cimpa_fk.estado === "Aprobada";
 
     return (
         <>
@@ -300,22 +301,44 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={aprobarPropuesta} className='table-button border-0 p-2 rounded text-white' style={{backgroundColor:"#005da4"}}>Aprobar propuesta</button>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white m-2'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />)}
-                                    {showConfirmationAprobar && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="aprobar" objeto="propuesta" />)}
-                                </>
-                            )}
-                        </div>
-                    
-                    </div>
-                </div>
+  <div className="row">
+    <div className="col">
+      {mode === 1 ? (
+        <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
+          Agregar
+        </button>
+      ) : (
+        <>
+          {!isPropuestaAprobada && (
+            <button
+              id="boton-personalizado"
+              type="button"
+              onClick={aprobarPropuesta}
+              className='table-button border-0 p-2 rounded text-white'
+              style={{ backgroundColor: "#005da4" }}
+            >
+              Aprobar propuesta
+            </button>
+          )}
+          <button
+            id="boton-personalizado"
+            type="button"
+            onClick={handleEditClick}
+            className='table-button border-0 p-2 rounded text-white m-2'
+          >
+            Guardar
+          </button>
+          {showConfirmationEdit && (
+            <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
+          )}
+          {showConfirmationAprobar && (
+            <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="aprobar" objeto="propuesta" />
+          )}
+        </>
+      )}
+    </div>
+  </div>
+</div>
             </form>
         </>)
 }

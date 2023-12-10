@@ -66,22 +66,23 @@ export const GestionPropuestas = () => {
             setPropuestas(res.data)
 
         } catch (error) {
-            toast.error('Error al cargar los datos de propuestas', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
     // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {
         try {
-
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             await agregarDocumento(formData, localStorage.getItem('token'))
             toast.success('Propuesta agregada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -94,14 +95,7 @@ export const GestionPropuestas = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al agregar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
 
@@ -132,7 +126,14 @@ export const GestionPropuestas = () => {
     // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try {
-
+            var toastId = toast.loading('Editando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             const Datos = JSON.parse(formData.get('json'))
             formData.delete('json');
 
@@ -225,6 +226,7 @@ export const GestionPropuestas = () => {
             await editarDocumento(id_doc, formData, localStorage.getItem("token"))
 
             toast.success('Propuesta actualizada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -237,14 +239,7 @@ export const GestionPropuestas = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al actualizar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
 
@@ -252,12 +247,20 @@ export const GestionPropuestas = () => {
     const deletePropuesta = async (propuesta) => {
         try {
 
-
+            var toastId = toast.loading('Eliminando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             await eliminarDocumento(propuesta.id_documentos_asociados, localStorage.getItem('token'))
             await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
             await eliminarVigencia(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia, localStorage.getItem('token'))
 
             toast.success('Propuesta eliminada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -270,14 +273,7 @@ export const GestionPropuestas = () => {
         document.body.classList.remove('modal-open');
 
         } catch (error) {
-            toast.error('Error al eliminar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
     // Al darle click a cancelar, se cierra el modal

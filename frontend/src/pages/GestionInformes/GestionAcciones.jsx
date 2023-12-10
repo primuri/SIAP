@@ -46,14 +46,7 @@ export const GestionAcciones = (versionID) => {
             setAcciones(formatearFecha(response))
             setCargado(true)
         } catch (error) {
-            toast.error('Error al cargar los datos de acciones', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+
         }
     }
 
@@ -78,14 +71,6 @@ export const GestionAcciones = (versionID) => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al agregar la acción', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
         }
     }
 
@@ -115,14 +100,7 @@ export const GestionAcciones = (versionID) => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al editar la acción', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -143,14 +121,7 @@ export const GestionAcciones = (versionID) => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al eliminar la acción', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
         setEdit(false)
     }

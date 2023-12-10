@@ -37,7 +37,7 @@ export const GestionVersionInforme = (informeID) => {                           
 
             setLoaded(true)
         } catch (error){
-            mostrarError(error)
+
         }
     }
 
@@ -58,7 +58,6 @@ export const GestionVersionInforme = (informeID) => {                           
             setReload(!reload)
             mostrarExito("Versión informe agregada correctamente")
         } catch(error){
-            mostrarError(error)
         }
     }
 
@@ -92,7 +91,6 @@ export const GestionVersionInforme = (informeID) => {                           
             mostrarExito("Versión informe editada correctamente")
             console.log(versionInforme)
         }catch(error){
-            mostrarError(error)
         }
     }
 
@@ -103,7 +101,6 @@ export const GestionVersionInforme = (informeID) => {                           
             setReload(!reload)
             mostrarExito("Versión informe borrada correctamente")
         }catch(error){
-            mostrarError(error)
         }
     }
 
@@ -174,17 +171,6 @@ export const GestionVersionInforme = (informeID) => {                           
             </div>
         </main>
     );
-}
-
-function mostrarError (error) {
-    toast.error(`Error: ${error.response.data}`, {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
 }
 
 function mostrarExito (mensaje) {

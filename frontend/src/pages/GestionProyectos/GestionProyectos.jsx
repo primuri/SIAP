@@ -6,6 +6,7 @@ import { Back } from "../../utils/Back"
 import { Modal } from "../../utils/Modal"
 import { ProyectosForm } from "../../components/GestionProyectos/ProyectosForm"
 import { Table } from "../../utils/Table"
+import { TableWithButtons } from "../../utils/TableWithButtons";
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Search } from "../../utils/Search"
@@ -38,8 +39,8 @@ export const GestionProyectos = () => {
     const [transformedState, setTransformedState] = useState([]);
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
-    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle']
-    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle']
+    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle', 'Informes', 'Presupuesto']
+    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle', '', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null  
     useEffect(() => { 
@@ -131,14 +132,7 @@ export const GestionProyectos = () => {
             setCargado(true);
 
         } catch (error) {
-            toast.error('Error al cargar los datos de proyectos', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
@@ -163,14 +157,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de evento', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
 
@@ -196,14 +183,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de artículo', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
 
@@ -229,14 +209,7 @@ export const GestionProyectos = () => {
             }
 
         } catch (error) {
-            toast.error('Error al cargar los datos de software', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
 
@@ -244,6 +217,14 @@ export const GestionProyectos = () => {
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
         try {
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
             let producto = null;
             let soft = null;
@@ -379,6 +360,7 @@ export const GestionProyectos = () => {
 
             loadVersionProyectos(id_vi)
             toast.success('Versión de proyecto agregada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -394,22 +376,24 @@ export const GestionProyectos = () => {
             setReload(!reload)
 
         } catch (error) {
+            toast.dismiss(toastId)
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
-            toast.error('Error al agregar la versión de proyecto', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            
         }
     }
 
     // Manejo de los datos del formulario de editar 
     const editProyecto = async (formData) => {
         try {
+            var toastId = toast.loading('Editando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             const Datos = JSON.parse(formData.get('json'))
             let soft = null;
             let artic = null;
@@ -576,6 +560,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
 
             toast.success('Versión proyecto actualizada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -587,20 +572,22 @@ export const GestionProyectos = () => {
             loadVersionProyectos(Datos.id_codigo_vi_fk)
             setReload(!reload)
         } catch (error) {
-            toast.error('Error al actualizar la versión de proyecto', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
+            
         }
     }
 
     // Manejo del eliminar
     const deleteProyecto = async (proyecto) => {
         try {
+            var toastId = toast.loading('Eliminando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             const id = proyecto.id_codigo_vi_fk.id_codigo_vi;
             if (tipo == "software") {
                 await eliminarDocumentacion(producto.id_documento_documentacion_fk.id_documento, localStorage.getItem("token"));
@@ -629,6 +616,7 @@ export const GestionProyectos = () => {
             loadVersionProyectos(id)
 
             toast.success('Proyecto eliminado correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -642,14 +630,7 @@ export const GestionProyectos = () => {
 
         } catch (error) {
             console.log(error);
-            toast.error('Error al eliminar el proyecto', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
     // Al darle click a cancelar, se cierra el modal
@@ -714,7 +695,7 @@ export const GestionProyectos = () => {
                     {detalleVisible ? (
                         <div>
                             <div className="d-flex flex-row">
-                                <h1>Gestión de versión de proyectos</h1>
+                                <h1>Gestión de versiones del proyecto {selectedIdCodigoVi}</h1>
                                 {!cargado && (
                                     <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                                 )}
@@ -724,7 +705,7 @@ export const GestionProyectos = () => {
                                 <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                             </div>
                             <div className="mt-3">
-                                <Table columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onClick={elementClicked2}></Table>
+                                <TableWithButtons columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onClick={elementClicked2} hasButtonColumn={true} navigate={navigate} saveState={saveState}></TableWithButtons>
                                 {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1} saveState={saveState} canVersiones={proyectosVersion.length}></ProyectosForm></Modal>)}
                                 {edit &&
                                     (

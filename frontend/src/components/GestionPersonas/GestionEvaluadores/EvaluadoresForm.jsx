@@ -141,35 +141,35 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
 
             <div className="row mb-4">
               <div className="col">
-                <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span class="required">*</span> </label>
+                <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
                 <input type="text" className="form-control" name="id_nombre_completo_fk.nombre" id="nombre" value={formData.id_nombre_completo_fk.nombre || ""} onChange={handleChange} required />
               </div>
               <div className="col-md-6">
-                <label htmlFor="apellido" className="label-personalizado mb-2">Primer apellido  <span class="required">*</span> </label>
+                <label htmlFor="apellido" className="label-personalizado mb-2">Primer apellido   </label>
                 <input type="text" className="form-control" name="id_nombre_completo_fk.apellido" id="apellido" value={formData.id_nombre_completo_fk.apellido || ""} onChange={handleChange} required />
               </div>
             </div>
 
             <div className="row mb-4">
               <div className="col-md-6">
-                <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label>
+                <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido <span class="optional">(Opcional)</span></label>
                 <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
               </div>
               <div className="col-md-6">
-                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span class="required">*</span> </label>
+                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico </label>
                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
               </div>
             </div>
 
             <div className="row mb-4">
               <div className="col-md-6">
-                <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de especialidad <span class="required">*</span></label>
+                <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de especialidad</label>
                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required />
               </div>
               <div className="col-md-6">
-                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo <span class="required">*</span> </label>
-                <select className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
-                  <option value="">Seleccionar tipo</option>
+                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo </label>
+                <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
+                <option value="" disabled selected>Selecciona una opción</option>
                   <option value="Interno">Interno</option>
                   <option value="Externo">Externo</option>
                 </select>
@@ -177,7 +177,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
             </div>
             <div className="row mb-4">
               <div className="col-md-6">
-                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad <span class="required">*</span></label>
+                <label htmlFor="universidadNombre" className="label-personalizado mb-2">Universidad</label>
                 <Autocomplete className="universidadAuto"
                   value={formData.universidad_fk}
                   onChange={(event, newValue) => {
@@ -239,7 +239,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                 />
               </div >
               <div className="col-md-6">
-                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad <span class="required">*</span> </label>
+                <label htmlFor="universidadPais" className="label-personalizado mb-2">País de la Universidad </label>
                 <Autocomplete
                   value={formData.universidad_fk}
                   onChange={(event, newValue) => {

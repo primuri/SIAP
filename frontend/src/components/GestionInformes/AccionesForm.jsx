@@ -113,31 +113,26 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                     <div className="container ">
                         <div className="row mb-4">
                             <div className="col-md-6">
-                            </div>
-                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha" className="label-personalizado mb-2">Fecha   </label>
                                     <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} required />
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="origen" className="label-personalizado mb-2">Origen   </label>
                                     <input type="text" className="form-control" name="origen" id="origen" value={formData.origen} onChange={handleChange} required />
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Destino   </label>
                                     <input type="text" className="form-control" name="destino" id="destino" value={formData.destino} onChange={handleChange} />
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="estado" className="label-personalizado mb-2">Estado  </label>
                                 <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
@@ -148,7 +143,10 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                                     <option value="cerrado con permiso">Cerrado con permiso</option>
                                 </select>
                             </div>
-                            <div className="col-md-6">
+                        </div>
+
+                        <div className="row mb-4">
+                            <div className="">
                                 <label htmlFor="id_documento_accion" className="label-personalizado mb-2"> Documento   </label>
                                 <input type="file" className="form-control" name="id_documento_accion_fk.documento" id="id_documento_accion" onChange={handleFileChange} required={mode == 1} />
                                 {typeof formData.id_documento_accion_fk.documento === 'string' && formData.id_documento_accion_fk.documento !== '' && (
@@ -159,8 +157,8 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                                         </a>
                                     </Tooltip>
                                 )}
-
                             </div>
+
                         </div>
                     </div>
                 </div>

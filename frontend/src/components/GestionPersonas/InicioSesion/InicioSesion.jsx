@@ -32,7 +32,15 @@ export const InicioSesion = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
       // Redirigir a la página principal o realizar otras acciones necesarias
-      window.location.href = '/';
+      
+      var user = JSON.parse(localStorage.getItem("user"));
+      var tipoUsuario = user.groups[0]
+      console.log(tipoUsuario)
+      if(tipoUsuario === 'administrador') {
+        window.location.href = '/inicio-administrador';
+      }
+      
+      
     } catch (error) {
       toast.error('Usuario o contraseña incorrectos', {
         duration: 4000,                                         // Duración en milisegundos (4 segundos en este caso)
