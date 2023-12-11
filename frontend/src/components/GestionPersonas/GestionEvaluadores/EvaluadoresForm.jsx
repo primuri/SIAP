@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { toast, Toaster } from 'react-hot-toast'
 import { obtenerUniversidades } from "../../../api/gestionAcademicos";
-import icono from '../../../assets/person-i.png';
+import icono from '../../../assets/add_person.svg';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import * as React from 'react';

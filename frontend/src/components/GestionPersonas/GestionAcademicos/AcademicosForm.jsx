@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../../utils/FomularioDinamico"
 import { obtenerTelefonos, obtenerTitulos, obtenerUniversidades } from "../../../api/gestionAcademicos"
 import { toast, Toaster } from 'react-hot-toast'
-import icono from '../../../assets/person-i.png';
+import icono from '../../../assets/add_person.svg';
+import icono2 from '../../../assets/upload_image.svg';
+import Upload from '../../../utils/UploadImage';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../../utils/Confirmar'
@@ -460,20 +462,17 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de especialidad </label>
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required />
                             </div>
-                            <div className="col-md-6 mt-4">
+                        </div>
+
+                        <div className="row mb-4 mt-4">
+                            <div className="col-md-6">
                                 <Tooltip title="Separar areas secundarias con coma" placement="right-start">
                                     <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
                                 <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
-                            <div className="col-md-6 mt-4">
-                                <label className="label-personalizado mb-2" htmlFor="foto">{mode == 1 ? "Subir foto" : "Cambiar foto"}</label>
-                                <input type="file" className="form-control" name="foto" id="foto" onChange={handleFileChange} />
-                                {mode == 2 ? (
-                                <div className="col-md-6 mt-4" style={{margin:'auto'}}>
-                                    <img src={formData.foto} alt="" maxWidth={180} maxHeight={100} className="container rounded-circle" />
-                                </div>
-                            ) : ""}
+                            <div className="col-md-6">
+                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />
                             </div>
                         </div>
                         <hr></hr>

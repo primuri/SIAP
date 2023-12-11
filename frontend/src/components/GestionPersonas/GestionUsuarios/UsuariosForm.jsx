@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Toaster, toast } from "react-hot-toast";
 import { obtenerAcademicos } from "../../../api/gestionAcademicos";
 import { obtenerEvaluadores } from "../../../api/gestionEvaluadores";
-import icono from '../../../assets/person-i.png';
+import icono from '../../../assets/add_person.svg';
 import { Confirmar } from '../../../utils/Confirmar'
 
 export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) => {
