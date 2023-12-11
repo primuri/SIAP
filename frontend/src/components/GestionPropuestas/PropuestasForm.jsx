@@ -126,8 +126,10 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
         setShowConfirmationEdit(true);
     };
 
+    // CAMBIO WENDY
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
+        setShowConfirmationAprobar(false);
     };
 
     const aprobarPropuesta = () => {
