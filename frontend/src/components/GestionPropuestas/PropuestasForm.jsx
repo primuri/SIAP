@@ -128,6 +128,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
+        setShowConfirmationAprobar(false);
     };
 
     const aprobarPropuesta = () => {

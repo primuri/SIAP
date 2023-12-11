@@ -25,6 +25,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const [eventoFile, setEventoFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
+    const [showProductContent, setShowProductContent] = useState(false);
     const [formData, setFormData] = useState({
         id_version_proyecto: proyecto ? proyecto.id_version_proyecto : "",
         id_oficio_fk: proyecto ? proyecto.id_oficio_fk : {
@@ -284,38 +285,52 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         </div>
                         <hr></hr>
                         <div className="row mb-2">
-                            <div className="col"> </div>
-                            <h5 className="label-personalizado mb-2 col-sm-auto control-label">Agregar un producto asociado</h5>
-                            <div className="col"> </div>
+                            <div className="col d-flex justify-content-center align-items-center">
+                                <h5 className="label-personalizado mb-2 col-sm-auto control-label">Producto asociado</h5>
+                            </div>
                         </div>
-
-                        <div className="row mb-4">
-                            {mode !== 2 && (
-                                <div className="row">
-                                    <div className="col d-flex justify-content-center align-items-center">
-                                        <Boton onClick={() => setActiveForm('evento')} text="Evento" />
-                                    </div>
-                                    <div className="col d-flex justify-content-center align-items-center">
-                                        <Boton onClick={() => setActiveForm('software')} text="Software" />
-                                    </div>
-                                    <div className="col d-flex justify-content-center align-items-center">
-                                        <Boton onClick={() => setActiveForm('articulo')} text="Artículo" />
-                                    </div>
-                                </div>
+                        <div className="row mb-2">
+                            <div className="col d-flex justify-content-center align-items-center">
+                            {!showProductContent && (
+                                <button
+                                    id="toggleContentButton"
+                                    type="button"
+                                    className="table-button border-0 p-2 rounded text-white"
+                                    onClick={() => setShowProductContent(true)}
+                                >
+                                    {mode === 1 ? "Agregar un producto" : "Ver producto"}
+                                </button>
                             )}
+                            </div>
+                        </div>
+                        {showProductContent && (
+                            <div className="row mb-4">
+                                {mode !== 2 && (
+                                    <div className="row">
+                                        <div className="col d-flex justify-content-center align-items-center">
+                                            <Boton onClick={() => setActiveForm('evento')} text="Evento" />
+                                        </div>
+                                        <div className="col d-flex justify-content-center align-items-center">
+                                            <Boton onClick={() => setActiveForm('software')} text="Software" />
+                                        </div>
+                                        <div className="col d-flex justify-content-center align-items-center">
+                                            <Boton onClick={() => setActiveForm('articulo')} text="Artículo" />
+                                        </div>
+                                    </div>
+                                )}
 
-                            <div className="row mt-3">
-                                <div className="col">
-                                    {activeForm === 'evento' && <EventoForm mode={mode} setCambios={setCambios} producto={producto} />}
-                                    {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios} producto={producto} />}
-                                    {activeForm === 'articulo' && <ArticuloForm mode={mode} setCambios={setCambios} producto={producto} />}
+                                <div className="row mt-3">
+                                    <div className="col">
+                                        {activeForm === 'evento' && <EventoForm mode={mode} setCambios={setCambios} producto={producto} />}
+                                        {activeForm === 'software' && <SoftwareForm mode={mode} setCambios={setCambios} producto={producto} />}
+                                        {activeForm === 'articulo' && <ArticuloForm mode={mode} setCambios={setCambios} producto={producto} />}
+                                    </div>
                                 </div>
                             </div>
-
-                    
-                        </div>
+                        )}
                     </div>
                 </div>
+
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
