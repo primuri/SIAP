@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
+import { useLocation } from "react-router-dom";
 
 export const TableWithButtons = ({ columns, data, onClick, dataKeys, hasButtonColumn = false, buttonText = "" , navigate=null , saveState=null}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-
+  const location = useLocation()
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
@@ -63,19 +64,25 @@ export const TableWithButtons = ({ columns, data, onClick, dataKeys, hasButtonCo
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex} onClick={() => onClick(row)}>
+          <tr key={rowIndex} onDoubleClick={() => onClick(row)}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
               {(colIndex === dataKeys.length - 2 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
                  <button id="acciones-button" className="btn btn-primary" onClick={() => {
-                    saveState();
-                    navigate(`/gestion-informes/${row.id_version_proyecto}`);
+                    if(saveState){
+                      saveState()
+                    }
+                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-informes`;
+                    navigate(nuevaRuta);
                  }}>Gestionar</button>
 
               ) : (colIndex === dataKeys.length -   1) ? (
                 <button id="acciones-button" className="btn btn-primary" onClick={() => {
-                    saveState();
-                    navigate(`/gestion-presupuestos/${row.id_version_proyecto}`);
+                    if(saveState){
+                      saveState()
+                    }
+                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-presupuestos`;
+                    navigate(nuevaRuta);
                  }}>Gestionar</button>
               ): (
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')

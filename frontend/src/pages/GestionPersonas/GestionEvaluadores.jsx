@@ -8,8 +8,11 @@ import { obtenerEvaluadores, agregarEvaluador, editarEvaluador, eliminarEvaluado
 import { toast, Toaster } from 'react-hot-toast'
 import { buscarUniversidad, obtenerUniversidadCompleta } from "../../api/gestionAcademicos"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionEvaluadores = () => {
+  let {id_evaluador} = useParams()
+  const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
   const [evaluadores, setEvaluadores] = useState([]) // Evaluadores que se muestran
@@ -42,6 +45,22 @@ export const GestionEvaluadores = () => {
       })
     }
   }
+
+  //Uso de id_evaluador para urls
+  useEffect(()=>{
+    if(id_evaluador && data.length > 0){
+        const idNum = parseInt(id_evaluador, 10);
+        const elemento = data.find(e => e.id_evaluador === idNum);
+        if(elemento){
+            setEvaluador(elemento)
+            setEdit(true)
+            setAddClick(false)
+        }else{
+            navigate('/gestion-evaluadores')
+        }
+    }
+  },[data,id_evaluador])
+
   // Manejo de datos que se van a enviar para agregar
   const addEvaluador = async (formData) => {
     try {
@@ -147,6 +166,7 @@ export const GestionEvaluadores = () => {
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
+    navigate('/gestion-evaluadores')
   }
   // Al darle click a agregar, muestra el modal
   const addClicked = () => {
@@ -156,10 +176,7 @@ export const GestionEvaluadores = () => {
 
   // Al hacer click en la tabla
   const elementClicked = (user) => {
-    console.log(user)
-    setEvaluador(user)
-    setEdit(true)
-    setAddClick(false)
+    navigate(`/gestion-evaluadores/${user.id_evaluador}`)
   }
 
   //se filtra
