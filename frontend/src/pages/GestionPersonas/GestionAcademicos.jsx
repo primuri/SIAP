@@ -8,9 +8,11 @@ import {toast, Toaster} from 'react-hot-toast'
 import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionAcademicos = () => {
-
+    let {id_academico} = useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizr la pagina.
     const [academicos, setAcademicos] = useState([])  
@@ -44,6 +46,21 @@ export const GestionAcademicos = () => {
               })
         }
     }
+
+    //Uso de id_academico para url
+    useEffect(()=>{
+        if(id_academico && data.length > 0){
+            const idNum = parseInt(id_academico, 10);
+            const elemento = data.find(e => e.id_academico === idNum);
+            if(elemento){
+                setAcademico(elemento)
+                setEdit(true)
+                setAddClick(false)
+            }else{
+                navigate('/gestion-investigadores')
+            }
+        }
+    },[data,id_academico])
 
     // Manejo de datos que se van a enviar para agregar
     const addAcademico = async (formData) => {       
@@ -220,6 +237,8 @@ export const GestionAcademicos = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
+        navigate('/gestion-investigadores')
+        
     }
 
     // Al darle click a agregar, muestra el modal
@@ -231,11 +250,7 @@ export const GestionAcademicos = () => {
 
     // Al hacer click en la tabla
     const elementClicked = (selectedAcademico) =>{
-        console.log(selectedAcademico)
-        setAcademico(selectedAcademico)
-        setEdit(true)
-        setAddClick(false)
-        document.body.classList.add('modal-open');
+        navigate(`/gestion-investigadores/${selectedAcademico.id_academico}`)
     }
 
     // Obtener atributo de un objeto 

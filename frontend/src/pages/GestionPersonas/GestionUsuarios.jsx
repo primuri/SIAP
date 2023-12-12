@@ -7,9 +7,12 @@ import { Search } from "../../utils/Search"
 import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { obtenerUsuarios, signup, actualizarUsuario, eliminarUsuario } from "../../api/gestionUsuarios"
+import { useNavigate, useParams } from "react-router-dom"
 
 
 export const GestionUsuarios = () => {
+    let {id} = useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
     const [usuarios, setUsuarios] = useState([]) //Usuarios que se muestran
@@ -34,6 +37,23 @@ export const GestionUsuarios = () => {
 
         }
     }
+    
+    //Uso de id en url
+    useEffect(()=>{
+        if(id && data.length > 0){
+            const idNum = parseInt(id, 10);
+            const elemento = data.find(e => e.id === idNum);
+            if(elemento){
+                setUsuario(elemento)
+                setEdit(true)
+                setAddClick(false)
+            }else{
+                navigate('/gestion-usuarios')
+            }
+        }
+    },[data,id])
+    
+    
     // Manejo de datos que se van a enviar para agregar
     const addUsuario = async (formData) => {
         try {
@@ -131,6 +151,7 @@ export const GestionUsuarios = () => {
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
+        navigate('/gestion-usuarios')
     }
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
@@ -141,9 +162,7 @@ export const GestionUsuarios = () => {
     // Al hacer click en la tabla
     const elementClicked = (user) => {
         console.log(user)
-        setUsuario(user)
-        setEdit(true)
-        setAddClick(false)
+        navigate(`/gestion-usuarios/${user.id}`)
     }
 
     //se filtra

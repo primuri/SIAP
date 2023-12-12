@@ -63,8 +63,12 @@ nav {
 }
 
 main {
-  margin-top: 108px;
   background-color: var(--gris-claro-ucr);
+}
+
+.bread_custom{
+  margin-top: 108px !important;
+  height: 20px;
 }
 
 .side-bar-nav {
