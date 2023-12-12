@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { agregarProyectos } from './gestionProyectos';
+import { toast, Toaster } from 'react-hot-toast'
+import {manejarErrores} from './errorHandler'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -7,12 +9,12 @@ const SIAPAPI = axios.create({
 
 
 export const obtenerPropuestas = async (token) => {
-    return await SIAPAPI.get('propuesta_proyecto/documento_asociado/', {
+    return await manejarErrores( SIAPAPI.get('propuesta_proyecto/documento_asociado/', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
 };
 
 
@@ -62,15 +64,22 @@ export const agregarDocumento = async (combinedData,  token) => {
                 id_codigo_cimpa_fk : id_propuesta_creada
             }
              await agregarProyectos(proyecto, localStorage.getItem("token"));
-            
+             toast.success('Se agregó un proyecto asociado a esa propuesta', {
+                 duration: 4000,
+                 position: 'bottom-right',
+                 style: {
+                     background: '#003DA5',
+                     color: '#fff',
+                 },
+             })
         }
         
-        const response_documento = await SIAPAPI.post('propuesta_proyecto/documento_asociado/', combinedData, {
+        const response_documento = await manejarErrores( SIAPAPI.post('propuesta_proyecto/documento_asociado/', combinedData, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'multipart/form-data'
             }
-        });
+        }));
 
         return response_documento;
     } catch(error) {
@@ -82,12 +91,12 @@ export const agregarDocumento = async (combinedData,  token) => {
 
 export const agregarVigencia = async (vigencia, token) => {
     try {
-        const response_vigencia = await SIAPAPI.post('propuesta_proyecto/vigencia/', vigencia, {
+        const response_vigencia = await manejarErrores( SIAPAPI.post('propuesta_proyecto/vigencia/', vigencia, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
-        });
+        }));
         const id_vigencia_creada = response_vigencia.data.id_vigencia;
         return id_vigencia_creada;
     } catch(error) {
@@ -98,12 +107,12 @@ export const agregarVigencia = async (vigencia, token) => {
 
 export const agregarColaborador = async (colaborador, token) => {
     try {
-        const response_colaborador = await SIAPAPI.post('propuesta_proyecto/colaborador_principal/', colaborador, {
+        const response_colaborador = await manejarErrores( SIAPAPI.post('propuesta_proyecto/colaborador_principal/', colaborador, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
-        });
+        }));
         const id_colaborador_creado = response_colaborador.data.id_colaborador_principal;
         return id_colaborador_creado;
     } catch(error) {
@@ -115,12 +124,12 @@ export const agregarColaborador = async (colaborador, token) => {
 export const agregarPropuestas = async (propuesta, token) => {
     try {
         console.log("propuesta:", propuesta)
-        const response_propuesta = await SIAPAPI.post('propuesta_proyecto/propuesta_proyecto/', propuesta, {
+        const response_propuesta = await manejarErrores( SIAPAPI.post('propuesta_proyecto/propuesta_proyecto/', propuesta, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
-        });
+        }));
         const id_propuesta_creada = response_propuesta.data.id_codigo_cimpa;
         return id_propuesta_creada;
     } catch(error) {
@@ -130,83 +139,83 @@ export const agregarPropuestas = async (propuesta, token) => {
 };
 
 export const editarVigencia = async (id, vigencia, token) => {
-    const responseVigencia = await SIAPAPI.put(`propuesta_proyecto/vigencia/${id}/`, vigencia, {
+    const responseVigencia = await manejarErrores( SIAPAPI.put(`propuesta_proyecto/vigencia/${id}/`, vigencia, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
     return responseVigencia;
 };
 
 export const editarColaborador = async (id, colaborador, token) => {
-    const responseColaborador = await SIAPAPI.put(`propuesta_proyecto/colaborador_principal/${id}/`, colaborador, {
+    const responseColaborador = await manejarErrores( SIAPAPI.put(`propuesta_proyecto/colaborador_principal/${id}/`, colaborador, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
     return responseColaborador;
 };
 
 export const editarPropuesta = async (id, propuesta, token) => {
-    const responseColaborador = await SIAPAPI.put(`propuesta_proyecto/propuesta_proyecto/${id}/`, propuesta, {
+    const responseColaborador = await manejarErrores( SIAPAPI.put(`propuesta_proyecto/propuesta_proyecto/${id}/`, propuesta, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
     return responseColaborador;
 };
 
 export const editarDocumento = async (id, documento, token) => {
-    const responseDocumento = await SIAPAPI.patch(`propuesta_proyecto/documento_asociado/${id}/`, documento, {
+    const responseDocumento = await manejarErrores( SIAPAPI.patch(`propuesta_proyecto/documento_asociado/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
         }
-    });
+    }));
     return responseDocumento;
 };
 
 
 export const eliminarDocumento = async (id, token) => {
-    return await SIAPAPI.delete(`propuesta_proyecto/documento_asociado/${id}/`, {
+    return await manejarErrores( SIAPAPI.delete(`propuesta_proyecto/documento_asociado/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
 };
 
 
 export const eliminarPropuesta = async (id, token) => {
-    return await SIAPAPI.delete(`propuesta_proyecto/propuesta_proyecto/${id}/`, {
+    return await manejarErrores( SIAPAPI.delete(`propuesta_proyecto/propuesta_proyecto/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
 };
 
 
 export const eliminarColaborador = async (id, token) => {
-    return await SIAPAPI.delete(`propuesta_proyecto/colaborador_principal/${id}/`, {
+    return await manejarErrores( SIAPAPI.delete(`propuesta_proyecto/colaborador_principal/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
 };
 
 
 export const eliminarVigencia = async (id, token) => {
-    return await SIAPAPI.delete(`propuesta_proyecto/vigencia/${id}/`, {
+    return await manejarErrores( SIAPAPI.delete(`propuesta_proyecto/vigencia/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
+    }));
 };
 
 

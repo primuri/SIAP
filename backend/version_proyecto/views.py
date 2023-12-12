@@ -65,7 +65,13 @@ class VersionProyectoViewSet(viewsets.ModelViewSet):
     view_name = 'versiones_proyectos'
     queryset = VersionProyecto.objects.all()
     serializer_class = VersionProyectoSerializer
-    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        id_version = self.request.query_params.get('id_version', None)
+        if id_version is not None:
+            queryset = queryset.filter(id_version_proyecto=id_version)
+
+        return queryset
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

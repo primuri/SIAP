@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;700;800&display=swap');
 
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --celeste-ucr: #4AACE1;
   --gris-claro-ucr: #EAEAEA;
   --gris-oscuro-urc: #323232;
   --rojo-ucr: #670000;
+  
 }
 
 html{
@@ -56,15 +56,19 @@ input[type="submit"] {
 }
 
 nav {
-  height: calc(100vh - 108px);
+  height: calc(125vh);
   margin-top: 108px;
   padding-left: 10px;
   background-color: white;
 }
 
 main {
-  margin-top: 108px;
   background-color: var(--gris-claro-ucr);
+}
+
+.bread_custom{
+  margin-top: 108px !important;
+  height: 20px;
 }
 
 .side-bar-nav {
@@ -74,6 +78,10 @@ main {
 .side-bar {
   padding-right: 20px;
   background-color: white;
+}
+
+.modal .d-block html{
+  overflow: hidden;
 }
 
 .side-bar hr {
@@ -88,6 +96,10 @@ main {
 
 .side-bar li {
   margin-left: 20px;
+}
+
+.modal-open {
+  overflow: hidden;
 }
 
 .side-bar li:hover a{
@@ -253,6 +265,16 @@ select{
 
 #boton-personalizado2 {
   width: 184px;
+}
+
+#boton-personalizado3 {
+  width: 300px;
+  background-color: 8dc63f;
+}
+
+#boton-personalizado4 {
+  width: 130px;
+  background-color: 8dc63f;
 }
 
 .buscar-input {
@@ -471,3 +493,35 @@ input[type="submit"]:focus {
 .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
   border-style: none!important;
 }
+
+
+.input-container {
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+}
+
+#input {
+  flex: 1; /* El campo de entrada ocupará todo el espacio restante */
+  padding: 5px;
+  margin-right: 5px;
+}
+
+#btn {
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

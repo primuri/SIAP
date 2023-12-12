@@ -8,9 +8,11 @@ import {toast, Toaster} from 'react-hot-toast'
 import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionAcademicos = () => {
-
+    let {id_academico} = useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizr la pagina.
     const [academicos, setAcademicos] = useState([])  
@@ -20,7 +22,7 @@ export const GestionAcademicos = () => {
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)                             // Si hay error, se muestra una página para eso
-    const columns = ['Cedula', 'Nombre','Correo','Universidad']
+    const columns = ['Cédula', 'Nombre','Correo','Universidad']
     const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
 
     user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
@@ -34,7 +36,7 @@ export const GestionAcademicos = () => {
             setAcademicos(res.data)
             setCargado(true)
         } catch (error) {
-            toast.error('Error al cargar los datos de academicos', {
+            toast.error('Error al cargar los datos de investigadores', {
                 duration: 4000,
                 position: 'bottom-right', 
                 style: {
@@ -45,11 +47,34 @@ export const GestionAcademicos = () => {
         }
     }
 
+    //Uso de id_academico para url
+    useEffect(()=>{
+        if(id_academico && data.length > 0){
+            const idNum = parseInt(id_academico, 10);
+            const elemento = data.find(e => e.id_academico === idNum);
+            if(elemento){
+                setAcademico(elemento)
+                setEdit(true)
+                setAddClick(false)
+            }else{
+                navigate('/gestion-investigadores')
+            }
+        }
+    },[data,id_academico])
+
     // Manejo de datos que se van a enviar para agregar
     const addAcademico = async (formData) => {       
         try {
-
+            
             const Datos = JSON.parse(formData.get('json'))
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             formData.delete('json')
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
@@ -70,7 +95,8 @@ export const GestionAcademicos = () => {
             Datos.universidad_fk = responseUniversidad;
             formData.append('json', JSON.stringify(Datos))
             await agregarAcademico(formData, localStorage.getItem("token"))
-            toast.success('Académico agregado correctamente', {
+            toast.success('Investigador agregado correctamente', {
+                id: toastId,
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -80,15 +106,9 @@ export const GestionAcademicos = () => {
               })
             setAddClick(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al agregar el académico', {
-                duration: 4000, 
-                position: 'bottom-right',
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+            toast.dismiss(toastId)
         }
     }
 
@@ -96,6 +116,14 @@ export const GestionAcademicos = () => {
     const editAcademico = async (formData) => {       
         try {
             const Datos = JSON.parse(formData.get('json'))
+            var toastId = toast.loading('Editando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             formData.delete('json')
             const id_nom = Datos.id_nombre_completo_fk.id_nombre_completo
             await editarNombre(id_nom,Datos.id_nombre_completo_fk, localStorage.getItem("token"))
@@ -151,7 +179,8 @@ export const GestionAcademicos = () => {
                 }
             }
             await editarAcademico(academico.id_academico, formData, localStorage.getItem("token"))
-            toast.success('Académico editado correctamente', {
+            toast.success('Investigador editado correctamente', {
+                id: toastId,
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -161,15 +190,9 @@ export const GestionAcademicos = () => {
               })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al editar el académico', {
-                duration: 4000, 
-                position: 'bottom-right',
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+            toast.dismiss(toastId)
         }
     }
 
@@ -178,11 +201,20 @@ export const GestionAcademicos = () => {
     // Manejo del eliminar
     const deleteAcademicos = async (academico) => {
         try {
+            var toastId = toast.loading('Eliminando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             await eliminarArea(academico.id_area_especialidad_fk.id_area_especialidad, localStorage.getItem('token'))
             await eliminarArea(academico.id_area_especialidad_secundaria_fk.id_area_especialidad, localStorage.getItem('token'))
             await eliminarNombre(academico.id_nombre_completo_fk.id_nombre_completo, localStorage.getItem('token'))
              
-            toast.success('Académico eliminado correctamente', {
+            toast.success('Investigador eliminado correctamente', {
+                id: toastId,
                 duration: 4000, 
                 position: 'bottom-right', 
                 style: {
@@ -192,15 +224,9 @@ export const GestionAcademicos = () => {
               })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
         } catch (error) {
-            toast.error('Error al eliminar el académico', {
-                duration: 4000, 
-                position: 'bottom-right',
-                style: {
-                  background: '#670000',
-                  color: '#fff',
-                },
-              })
+            toast.dismiss(toastId)
         }
 
         setEdit(false)
@@ -210,20 +236,21 @@ export const GestionAcademicos = () => {
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
+        document.body.classList.remove('modal-open');
+        navigate('/gestion-investigadores')
+        
     }
 
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
+        document.body.classList.add('modal-open');
     }
 
     // Al hacer click en la tabla
     const elementClicked = (selectedAcademico) =>{
-        console.log(selectedAcademico)
-        setAcademico(selectedAcademico)
-        setEdit(true)
-        setAddClick(false)
+        navigate(`/gestion-investigadores/${selectedAcademico.id_academico}`)
     }
 
     // Obtener atributo de un objeto 

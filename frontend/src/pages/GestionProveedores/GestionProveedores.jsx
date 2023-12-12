@@ -4,11 +4,14 @@ import { Modal } from "../../utils/Modal"
 import { ProveedoresForm } from "../../components/GestionProveedores/ProveedoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias} from "../../api/gestionProveedores"
+import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta } from "../../api/gestionProveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionProveedores = () => {
+  let {id_cedula_proveedor} = useParams()
+  const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
   const [proveedores, setProveedores] = useState([]) // Proveedores que se muestran
@@ -44,12 +47,42 @@ export const GestionProveedores = () => {
     }
   }
 
+  //Uso de id_cedula_proveedor en url
+  useEffect(()=>{
+    if(id_cedula_proveedor && data.length > 0){
+        const elemento = data.find(e => e.id_cedula_proveedor === id_cedula_proveedor);
+        if(elemento){
+            setProveedor(elemento)
+            setEdit(true)
+            setAddClick(false)
+        }else{
+            navigate('/gestion-proveedores')
+        }
+    }
+  },[data,id_cedula_proveedor])
+
   // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
+      var toastId = toast.loading('Agregando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
+      if (formData.id_documento_fk.documento !== "") {
+        var responseDocumento = await agregarDocumentoCuenta(formData.id_documento_fk, localStorage.getItem('token'))
+        formData.id_documento_fk = responseDocumento.data.id_documento;
+      }
+      else {
+        formData.id_documento_fk = null;
+      }
 
       await agregarProveedor(formData, localStorage.getItem('token'))
       toast.success('Proveedor agregado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -59,15 +92,10 @@ export const GestionProveedores = () => {
       })
       setAddClick(false)
       setReload(!reload)
+      document.body.classList.remove('modal-open');
     } catch (error) {
-      toast.error('Error al agregar el proveedor', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      toast.dismiss(toastId)
+     
     }
 
   }
@@ -75,12 +103,32 @@ export const GestionProveedores = () => {
   // Manejo de los datos del formulario de editar 
   const editProveedor = async (formData) => {
     try {
-      const Datos = JSON.parse(formData.get('json'))
-      formData.delete('json')
+      var toastId = toast.loading('Editando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
+      if (formData.id_documento_fk) {
+        if (typeof formData.id_documento_fk.documento === 'object') {
+          var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
+        } else {
+          delete formData.id_documento_fk.documento
+          var responseDocumento = await editarDocumentoCuenta(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
+        }
+        formData.id_documento_fk = responseDocumento.data.id_documento;
+      }
+      else {
+        formData.id_documento_fk = null;
+      }
+
+      const Datos = formData
 
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;
-      if(cuentasBancarias){
+      if (cuentasBancarias) {
         await actualizarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"));
       }
 
@@ -88,6 +136,7 @@ export const GestionProveedores = () => {
 
       await editarProveedor(proveedor.id_cedula_proveedor, Datos, localStorage.getItem('token'))
       toast.success('Proveedor actualizado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -97,24 +146,27 @@ export const GestionProveedores = () => {
       })
       setEdit(false)
       setReload(!reload)
+      document.body.classList.remove('modal-open');
     } catch (error) {
-      console.error(error)
-      toast.error('Error al actualizar el proveedor', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      toast.dismiss(toastId)
+     
     }
   }
-  
+
   // Manejo del eliminar
   const deleteProveedor = async (id) => {
     try {
+      var toastId = toast.loading('Eliminando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       await eliminarProveedor(id, localStorage.getItem('token'))
       toast.success('Proveedor eliminado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -124,34 +176,31 @@ export const GestionProveedores = () => {
       })
       setEdit(false)
       setReload(!reload)
+      document.body.classList.remove('modal-open');
+
     } catch (error) {
-      toast.error('Error al eliminar el Proveedor', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      toast.dismiss(toastId)
+     
     }
   }
   // Al darle click a cancelar, se cierra el modal
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
+    document.body.classList.remove('modal-open');
+    navigate('/gestion-proveedores')
   }
   // Al darle click a agregar, muestra el modal
   const addClicked = () => {
     setAddClick(true)
     setEdit(false)
+    document.body.classList.add('modal-open');
+
   }
 
   // Al hacer click en la tabla
   const elementClicked = (user) => {
-    console.log(user)
-    setProveedor(user)
-    setEdit(true)
-    setAddClick(false)
+    navigate(`/gestion-proveedores/${user.id_cedula_proveedor}`)
   }
 
   //se filtra
@@ -174,7 +223,7 @@ export const GestionProveedores = () => {
     <main >
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-          <div className="d-flex flex-row"><h1>Proveedores</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+          <div className="d-flex flex-row"><h1>Gestión de proveedores</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className="d-flex justify-content-between mt-4">
             <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>

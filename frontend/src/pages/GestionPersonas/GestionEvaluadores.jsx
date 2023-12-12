@@ -8,8 +8,11 @@ import { obtenerEvaluadores, agregarEvaluador, editarEvaluador, eliminarEvaluado
 import { toast, Toaster } from 'react-hot-toast'
 import { buscarUniversidad, obtenerUniversidadCompleta } from "../../api/gestionAcademicos"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionEvaluadores = () => {
+  let {id_evaluador} = useParams()
+  const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
   const [evaluadores, setEvaluadores] = useState([]) // Evaluadores que se muestran
@@ -42,10 +45,34 @@ export const GestionEvaluadores = () => {
       })
     }
   }
+
+  //Uso de id_evaluador para urls
+  useEffect(()=>{
+    if(id_evaluador && data.length > 0){
+        const idNum = parseInt(id_evaluador, 10);
+        const elemento = data.find(e => e.id_evaluador === idNum);
+        if(elemento){
+            setEvaluador(elemento)
+            setEdit(true)
+            setAddClick(false)
+        }else{
+            navigate('/gestion-evaluadores')
+        }
+    }
+  },[data,id_evaluador])
+
   // Manejo de datos que se van a enviar para agregar
   const addEvaluador = async (formData) => {
     try {
       const Datos = JSON.parse(formData)
+      var toastId = toast.loading('Agregando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       let nombre = Datos.universidad_fk.nombre;
       let pais = Datos.universidad_fk.pais;
 
@@ -65,6 +92,7 @@ export const GestionEvaluadores = () => {
       Datos.universidad_fk = responseUniversidad;
       await agregarEvaluador(Datos, localStorage.getItem('token'))
       toast.success('Evaluador agregado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -75,14 +103,7 @@ export const GestionEvaluadores = () => {
       setAddClick(false)
       setReload(!reload)
     } catch (error) {
-      toast.error('Error al agregar el evaluador', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      toast.dismiss(toastId)
     }
 
   }
@@ -90,8 +111,17 @@ export const GestionEvaluadores = () => {
   const editEvaluador = async (formData) => {
     try {
       const Datos = JSON.parse(formData)
+      var toastId = toast.loading('Editando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       await editarEvaluador(evaluador.id_evaluador, Datos, localStorage.getItem('token'))
       toast.success('Evaluador actualizado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -102,21 +132,23 @@ export const GestionEvaluadores = () => {
       setEdit(false)
       setReload(!reload)
     } catch (error) {
-      toast.error('Error al actualizar el evaluador', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      toast.dismiss(toastId)
     }
   }
   // Manejo del eliminar
   const deleteEvaluador = async (correo) => {
     try {
+      var toastId = toast.loading('Eliminando...', {
+        position: 'bottom-right',
+        style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+        },
+    });
       await eliminarEvaluador(correo, localStorage.getItem('token'))
       toast.success('Evaluador eliminado correctamente', {
+        id: toastId,
         duration: 4000,
         position: 'bottom-right',
         style: {
@@ -127,20 +159,14 @@ export const GestionEvaluadores = () => {
       setEdit(false)
       setReload(!reload)
     } catch (error) {
-      toast.error('Error al eliminar el evaluador', {
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: '#670000',
-          color: '#fff',
-        },
-      })
+      toast.dismiss(toastId)
     }
   }
   // Al darle click a cancelar, se cierra el modal
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
+    navigate('/gestion-evaluadores')
   }
   // Al darle click a agregar, muestra el modal
   const addClicked = () => {
@@ -150,10 +176,7 @@ export const GestionEvaluadores = () => {
 
   // Al hacer click en la tabla
   const elementClicked = (user) => {
-    console.log(user)
-    setEvaluador(user)
-    setEdit(true)
-    setAddClick(false)
+    navigate(`/gestion-evaluadores/${user.id_evaluador}`)
   }
 
   //se filtra

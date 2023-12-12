@@ -11,7 +11,7 @@ const configuracionCuentaBancaria = [
     { campo: 'banco', placeholder: 'Banco', tipo: 'text', required: true },
     { campo: 'tipo', placeholder: 'Tipo de cuenta', tipo: 'select', opciones: ['Ahorros', 'Corriente'], required: true },
     { campo: 'moneda', placeholder: 'Moneda', tipo: 'text', required: true },
-    { campo: 'cuenta_principal', label: ' Seleccionar como cuenta principal', tipo: 'checkbox', required: true }
+    { campo: 'cuenta_principal', placeholder: ' Prioridad de la cuenta', tipo: 'select', opciones: ['Principal', 'Secundaria'], required: true }
 ]
 
 export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete }) => {
@@ -20,6 +20,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
+    const [fileProveedor, setFileProveedor] = useState(null);
 
     // Si hay informacion en el proveedor, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
@@ -27,7 +28,8 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         correo: proveedor ? proveedor.correo : "",
         tipo: proveedor ? proveedor.tipo : "",
         nombre: proveedor ? proveedor.nombre : "",
-        telefono: proveedor ? proveedor.telefono : ""
+        telefono: proveedor ? proveedor.telefono : "",
+        id_documento_fk: proveedor ? {...proveedor.id_documento_fk} : {tipo: "Documento cuentas", detalle: "", documento: ""}
     })
 
     useEffect(() => {
@@ -81,12 +83,20 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
 
     const sendForm = (event) => {
         event.preventDefault()
-
         formData.cuentaBancaria = cuentaBancaria
-        const combinedData = new FormData();
-        combinedData.append('json', JSON.stringify(formData))
-        onSubmit(combinedData)
+
+        let sendingForm = { ...formData}
+        if(fileProveedor){
+            sendingForm.id_documento_fk.documento = fileProveedor
+        }
+        onSubmit(sendingForm);
+        sendingForm = { ...formData}
     }
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setFileProveedor(file);
+    };
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -140,19 +150,19 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                 </div>
             </div>
 
-            <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center'>
+            <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center' encType="multipart/form-data">
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container ">
 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula <span className="required">*</span> </label>
+                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula</label>
                                     <input type="text" className="form-control" name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6 position-relative">
-                                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula <span className="required">*</span> </label>
+                                <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula </label>
                                 <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange}>
                                     <option value="">Seleccionar tipo</option>
                                     <option value="Fisica">Física</option>
@@ -164,27 +174,42 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre <span className="required">*</span> </label>
+                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
                                     <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico <span className="required">*</span></label>
+                                <label htmlFor="correo" className="label-personalizado mb-2">Correo electrónico</label>
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono <span className="required">*</span> </label>
+                                <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono </label>
                                 <input type="number" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} required/>
                             </div>
+                            <div className="col-md-6">
+                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2"> Documento </label>
+                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
+                                { typeof formData.id_documento_fk.documento === 'string' && (
+                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.id_documento_fk.documento.split('/').pop()}
+                                    </a>
+                                ) }
+                            </div>
+                        </div>
 
+                        <div className="row mb-4">
+                            <div className="col">
+                                <label htmlFor="detalleDocumento" className="label-personalizado mb-2"> Detalle Documento </label>
+                                <input type="text" className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} />
+                            </div>
                         </div>
 
                         <div className="d-flex flex-column">
-                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria <span className="required">*</span> </label>
-                            <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria"/>
+                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria</label>
+                            <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria" />
                         </div>
 
                     </div>

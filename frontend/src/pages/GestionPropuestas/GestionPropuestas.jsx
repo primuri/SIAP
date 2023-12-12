@@ -8,10 +8,13 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 
 export const GestionPropuestas = () => {
+    let {id_codigo_cimpa} =  useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
     const [propuestas, setPropuestas] = useState([]) // Propuestas que se muestran
@@ -22,7 +25,7 @@ export const GestionPropuestas = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [academicos, setAcademicos] = useState([]);
-    const columns = ['Codigo CIMPA', 'Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
+    const columns = ['Código CIMPA', 'Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
     const dataKeys = ['id_codigo_cimpa_fk.id_codigo_cimpa', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.estado', 'id_codigo_cimpa_fk.fecha_vigencia', 'id_codigo_cimpa_fk.actividad', 'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre', 'documento']
     user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
     const transformedPropuestas = propuestas.map(propuesta => ({
@@ -35,8 +38,8 @@ export const GestionPropuestas = () => {
     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {
         async function fetchData() {
-            loadPropuestas();
-            loadAcademicos();
+            await loadPropuestas();
+            await loadAcademicos();
             setCargado(true);
         }
 
@@ -48,7 +51,7 @@ export const GestionPropuestas = () => {
             const res = await obtenerAcademicos(localStorage.getItem('token'));
             setAcademicos(res.data);
         } catch (error) {
-            toast.error('Error al cargar los datos de académicos', {
+            toast.error('Error al cargar los datos de investigadores', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -66,22 +69,38 @@ export const GestionPropuestas = () => {
             setPropuestas(res.data)
 
         } catch (error) {
-            toast.error('Error al cargar los datos de propuestas', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+           
         }
     }
+
+    //Uso de id en url
+    useEffect(()=>{
+        if(id_codigo_cimpa && data.length > 0){
+            const elemento = data.find(e => e.id_codigo_cimpa_fk.id_codigo_cimpa === id_codigo_cimpa);
+            if(elemento){
+                setPropuesta(elemento)
+                setEdit(true)
+                setAddClick(false)
+            }else{
+                navigate('/gestion-propuestas')
+            }
+        }
+    },[data,id_codigo_cimpa])
+
     // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {
         try {
-
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             await agregarDocumento(formData, localStorage.getItem('token'))
             toast.success('Propuesta agregada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -91,15 +110,10 @@ export const GestionPropuestas = () => {
             })
             setAddClick(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
+
         } catch (error) {
-            toast.error('Error al agregar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
 
@@ -108,7 +122,7 @@ export const GestionPropuestas = () => {
             const response = await obtenerVersionProyectos(token);
             if (!response.data) return 0;
             const versionesDelProyecto = response.data.filter(version => version.id_codigo_vi_fk.id_codigo_vi == id_codigo_vi);
-            const cantidad =versionesDelProyecto.length;
+            const cantidad = versionesDelProyecto.length;
             return cantidad;
         } catch (error) {
             console.error("Error al contar las versiones del proyecto:", error);
@@ -130,10 +144,17 @@ export const GestionPropuestas = () => {
     // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try {
-
+            var toastId = toast.loading('Editando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             const Datos = JSON.parse(formData.get('json'))
             formData.delete('json');
-            
+
             const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
 
 
@@ -182,26 +203,35 @@ export const GestionPropuestas = () => {
             const fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
             Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
-            
-            if(Datos.id_codigo_cimpa_fk.estado == "Aprobada"){
+
+            if (Datos.id_codigo_cimpa_fk.estado == "Aprobada") {
                 const proyecto = {
-                    id_codigo_vi : id_propu,
-                    id_codigo_cimpa_fk : id_propu
+                    id_codigo_vi: id_propu,
+                    id_codigo_cimpa_fk: id_propu
                 }
                 const existe = await proyectoExiste(proyecto.id_codigo_vi, localStorage.getItem("token"));
-            
+
                 if (!existe) {
                     await agregarProyectos(proyecto, localStorage.getItem("token"));
+                    toast.success('Se agregó un proyecto asociado a esa propuesta', {
+                        duration: 4000,
+                        position: 'bottom-right',
+                        style: {
+                            background: '#003DA5',
+                            color: '#fff',
+                        },
+                    })
                 }
+
                 //Para borrar proyectos
-            }else if (Datos.id_codigo_cimpa_fk.estado == "En desarrollo"){
-                
+            } else if (Datos.id_codigo_cimpa_fk.estado == "En desarrollo") {
+
                 const existe = await proyectoExiste(id_propu, localStorage.getItem("token"));
                 const cant_ver = await contarVersionesDeProyecto(id_propu, localStorage.getItem("token"));
-                if(existe && cant_ver == 0){
-                    await eliminarProyecto(id_propu,localStorage.getItem("token"));
+                if (existe && cant_ver == 0) {
+                    await eliminarProyecto(id_propu, localStorage.getItem("token"));
                 }
-               
+
             }
             await editarPropuesta(id_propu, Datos.id_codigo_cimpa_fk, localStorage.getItem("token"))
 
@@ -214,6 +244,7 @@ export const GestionPropuestas = () => {
             await editarDocumento(id_doc, formData, localStorage.getItem("token"))
 
             toast.success('Propuesta actualizada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -223,15 +254,10 @@ export const GestionPropuestas = () => {
             })
             setEdit(false)
             setReload(!reload)
+            document.body.classList.remove('modal-open');
+
         } catch (error) {
-            toast.error('Error al actualizar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
 
@@ -239,12 +265,20 @@ export const GestionPropuestas = () => {
     const deletePropuesta = async (propuesta) => {
         try {
 
-            
+            var toastId = toast.loading('Eliminando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             await eliminarDocumento(propuesta.id_documentos_asociados, localStorage.getItem('token'))
             await eliminarColaborador(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal, localStorage.getItem('token'))
             await eliminarVigencia(propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia, localStorage.getItem('token'))
-            
+
             toast.success('Propuesta eliminada correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -254,33 +288,28 @@ export const GestionPropuestas = () => {
             })
             setEdit(false)
             setReload(!reload)
+        document.body.classList.remove('modal-open');
+
         } catch (error) {
-            toast.error('Error al eliminar la propuesta', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
+            toast.dismiss(toastId)
         }
     }
     // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
+        document.body.classList.remove('modal-open');
+        navigate('/gestion-propuestas')
     }
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
+        document.body.classList.add('modal-open');
     }
     // Al hacer click en la tabla
     const elementClicked = (user) => {
-       
-        setPropuesta(user)
-        setEdit(true)
-        setAddClick(false)
+        navigate(`/gestion-propuestas/${user.id_codigo_cimpa_fk.id_codigo_cimpa}`)
     }
     //se filtra
     function getValueByPath(obj, path) {
