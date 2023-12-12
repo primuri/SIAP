@@ -53,6 +53,11 @@ export const GestionUsuarios = () => {
         }
     },[data,id])
     
+    const success = () => {
+        const timer = setTimeout(() => {
+          navigate(-1);
+        }, 1000);
+    }
     
     // Manejo de datos que se van a enviar para agregar
     const addUsuario = async (formData) => {
@@ -80,7 +85,7 @@ export const GestionUsuarios = () => {
                 },
             })
             setAddClick(false)
-            setReload(!reload)
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -112,7 +117,7 @@ export const GestionUsuarios = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -142,7 +147,7 @@ export const GestionUsuarios = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }

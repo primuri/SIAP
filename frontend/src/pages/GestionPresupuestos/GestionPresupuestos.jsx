@@ -59,6 +59,11 @@ export const GestionPresupuestos = () => {
     }
   }
 
+  const success = () => {
+    const timer = setTimeout(() => {
+      navigate(-1);
+    }, 1000);
+  }
   // Manejo de datos que se van a enviar para agregar
   const addPresupuesto = async (formData) => {
     try {
@@ -111,7 +116,7 @@ export const GestionPresupuestos = () => {
       })
       setAddClick(false)
       document.body.classList.remove('modal-open');
-      setReload(!reload)
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -170,8 +175,7 @@ export const GestionPresupuestos = () => {
       })
       setEdit(false)
       document.body.classList.remove('modal-open');
-
-      setReload(!reload)
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -198,9 +202,8 @@ export const GestionPresupuestos = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
-
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }

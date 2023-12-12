@@ -61,6 +61,12 @@ export const GestionProveedores = () => {
     }
   },[data,id_cedula_proveedor])
 
+  const success = () => {
+    const timer = setTimeout(() => {
+      navigate(-1);
+    }, 1000);
+  }
+
   // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
@@ -91,8 +97,8 @@ export const GestionProveedores = () => {
         },
       })
       setAddClick(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
+      success()
     } catch (error) {
       toast.dismiss(toastId)
      
@@ -145,8 +151,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
+      success()
     } catch (error) {
       toast.dismiss(toastId)
      
@@ -175,9 +181,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
-
+      success()
     } catch (error) {
       toast.dismiss(toastId)
      

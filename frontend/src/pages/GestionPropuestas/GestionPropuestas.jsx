@@ -87,6 +87,11 @@ export const GestionPropuestas = () => {
         }
     },[data,id_codigo_cimpa])
 
+    const success = () => {
+        const timer = setTimeout(() => {
+          navigate(-1);
+        }, 1000);
+    }
     // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {
         try {
@@ -109,9 +114,8 @@ export const GestionPropuestas = () => {
                 },
             })
             setAddClick(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
-
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -253,9 +257,8 @@ export const GestionPropuestas = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
-
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -287,9 +290,8 @@ export const GestionPropuestas = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
-        document.body.classList.remove('modal-open');
-
+            document.body.classList.remove('modal-open');
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }

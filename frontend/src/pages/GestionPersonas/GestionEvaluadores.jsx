@@ -61,6 +61,12 @@ export const GestionEvaluadores = () => {
     }
   },[data,id_evaluador])
 
+  const success = () => {
+    const timer = setTimeout(() => {
+      navigate(-1);
+    }, 1000);
+  }
+
   // Manejo de datos que se van a enviar para agregar
   const addEvaluador = async (formData) => {
     try {
@@ -101,7 +107,7 @@ export const GestionEvaluadores = () => {
         },
       })
       setAddClick(false)
-      setReload(!reload)
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -130,7 +136,7 @@ export const GestionEvaluadores = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -157,7 +163,7 @@ export const GestionEvaluadores = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }

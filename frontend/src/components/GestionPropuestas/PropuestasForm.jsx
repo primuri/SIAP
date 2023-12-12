@@ -9,6 +9,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     const [fileData, setFileData] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationAprobar, setShowConfirmationAprobar] = useState(false);
+    const [academicosFilter, setAcademicosFilter] = useState([]);
 
     const [formData, setFormData] = useState({
         id_documentos_asociados: propuesta ? propuesta.id_documentos_asociados : "",
@@ -34,7 +35,8 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     id_academico: propuesta && propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico : ""
                 }
             }
-        }
+        },
+        asociar_academico: propuesta ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk?.correo : "",
     });
 
     //Carga los academicos para cargarlos en el Editar
@@ -48,61 +50,73 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
-
-        const keys = name.split('.');
-        switch (keys.length) {
-            case 1:
-                setFormData(prev => ({ ...prev, [keys[0]]: value }));
-                break;
-            case 2:
-                setFormData(prev => ({
-                    ...prev,
-                    [keys[0]]: {
-                        ...prev[keys[0]],
-                        [keys[1]]: value
-                    }
-                }));
-                break;
-            case 3:
-                setFormData(prev => ({
-                    ...prev,
-                    [keys[0]]: {
-                        ...prev[keys[0]],
-                        [keys[1]]: {
-                            ...prev[keys[0]][keys[1]],
-                            [keys[2]]: value
+        if (name === "id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico") {
+            formData.asociar_academico = value;
+            if (value === "") {
+                setAcademicosFilter([]);
+            } else {
+                const filteredAcademicos = academicos.filter((academico) =>
+                    academico.correo.toLowerCase().includes(value.toLowerCase())
+                );
+                setAcademicosFilter(filteredAcademicos);
+            }
+        }else{
+            const keys = name.split('.');
+            switch (keys.length) {
+                case 1:
+                    setFormData(prev => ({ ...prev, [keys[0]]: value }));
+                    break;
+                case 2:
+                    setFormData(prev => ({
+                        ...prev,
+                        [keys[0]]: {
+                            ...prev[keys[0]],
+                            [keys[1]]: value
                         }
-                    }
-                }));
-                break;
-            case 4:
-                // Verificación de la fecha (Solución de IA)
-                if (keys[3] === 'fecha_inicio' || keys[3] === 'fecha_fin') {
-                    const startDate = keys[3] === 'fecha_inicio' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_inicio;
-                    const endDate = keys[3] === 'fecha_fin' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_fin;
-
-                    if (new Date(endDate) < new Date(startDate)) {
-                        return;
-                    }
-                }
-
-                setFormData(prev => ({
-                    ...prev,
-                    [keys[0]]: {
-                        ...prev[keys[0]],
-                        [keys[1]]: {
-                            ...prev[keys[0]][keys[1]],
-                            [keys[2]]: {
-                                ...prev[keys[0]][keys[1]][keys[2]],
-                                [keys[3]]: value
+                    }));
+                    break;
+                case 3:
+                    setFormData(prev => ({
+                        ...prev,
+                        [keys[0]]: {
+                            ...prev[keys[0]],
+                            [keys[1]]: {
+                                ...prev[keys[0]][keys[1]],
+                                [keys[2]]: value
                             }
                         }
+                    }));
+                    break;
+                case 4:
+                    // Verificación de la fecha (Solución de IA)
+                    if (keys[3] === 'fecha_inicio' || keys[3] === 'fecha_fin') {
+                        const startDate = keys[3] === 'fecha_inicio' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_inicio;
+                        const endDate = keys[3] === 'fecha_fin' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_fin;
+
+                        if (new Date(endDate) < new Date(startDate)) {
+                            return;
+                        }
                     }
-                }));
-                break;
-            default:
-                console.error("Anidacion fuera de rango");
+
+                    setFormData(prev => ({
+                        ...prev,
+                        [keys[0]]: {
+                            ...prev[keys[0]],
+                            [keys[1]]: {
+                                ...prev[keys[0]][keys[1]],
+                                [keys[2]]: {
+                                    ...prev[keys[0]][keys[1]][keys[2]],
+                                    [keys[3]]: value
+                                }
+                            }
+                        }
+                    }));
+                    break;
+                default:
+                    console.error("Anidacion fuera de rango");
+            }
         }
+        
     };
 
 
@@ -113,7 +127,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
     const sendForm = (event) => {
         event.preventDefault();
-
+        delete formData.asociar_academico
         const combinedData = new FormData();
         if (fileData) {
             combinedData.append('documento', fileData);
@@ -138,6 +152,25 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     };
 
     const isPropuestaAprobada = formData.id_codigo_cimpa_fk.estado === "Aprobada";
+
+    const handleSelectAcademico = (e, academico) => {
+        setFormData(prev => ({
+            ...prev,
+            id_codigo_cimpa_fk: {
+                ...prev.id_codigo_cimpa_fk,
+                id_colaborador_principal_fk: {
+                    ...prev.id_codigo_cimpa_fk.id_colaborador_principal_fk,
+                    id_academico_fk: {
+                        ...prev.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk,
+                        id_academico: academico.id_academico // Actualiza esta propiedad
+                    }
+                }
+            },
+            asociar_academico: academico.correo
+        }));
+        setAcademicosFilter([]); // Limpiar la lista desplegable
+    };
+    
 
     return (
         <>
@@ -236,19 +269,32 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             <h5 className="text-center my-3">Asociar Colaborador Principal</h5>
                             <div className="col">
                                 <label htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" className="label-personalizado mb-2">Investigador(a) </label>
-                                <select className="form-select seleccion"
-                                    name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                    id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                    value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk} onChange={handleChange}>
-                                    <option value="">
-                                        {mode === 1 && nombreAcademico.length === 0 ? "Seleccionar colaborador" : nombreAcademico + " " + apellidoAcademico + " " + segundo_apellidoAcademico}
-                                    </option>
-                                    {academicos && academicos.length > 0 && academicos.map(academico => (
-                                        <option key={academico.id_academico} value={academico.id_academico}>
-                                            {academico.id_nombre_completo_fk.nombre + " " + academico.id_nombre_completo_fk.apellido + " " + academico.id_nombre_completo_fk.segundo_apellido}
-                                        </option>
-                                    ))}
-                                </select>
+                                
+                                <div className="position-relative">
+                                                <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
+                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                                {(academicosFilter.length > 0) && (
+                                                    <div
+                                                        className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                                        style={{ maxHeight: "40px" }}
+                                                    >
+                                                        {academicosFilter.map((academico) => {
+                                                            return (
+                                                                <div
+                                                                    key={academico.id_academico}
+                                                                    className=" pointer-event ms-1"
+                                                                    style={{ cursor: "pointer" }}
+                                                                    onClick={(e) => {
+                                                                        handleSelectAcademico(e, academico);
+                                                                    }}
+                                                                >
+                                                                    {academico.correo}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                            </div>
                             </div>
                         </div>
 

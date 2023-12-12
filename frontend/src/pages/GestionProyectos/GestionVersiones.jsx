@@ -173,7 +173,11 @@ export const GestionVersiones = () => {
         fetchData(); // Call the async function immediately
       }, [data, id_version]);
       
-
+    const success = () => {
+        const timer = setTimeout(() => {
+            navigate(-1);
+        }, 1000);
+    }
     // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
@@ -334,8 +338,7 @@ export const GestionVersiones = () => {
             })
             setAddClick(false)
             loadVersionProyectos(id_vi)
-            setReload(!reload)
-            navigate(-1);
+            success()
 
         } catch (error) {
             toast.dismiss(toastId)
@@ -532,8 +535,7 @@ export const GestionVersiones = () => {
             })
             setEdit(false)
             loadVersionProyectos(Datos.id_codigo_vi_fk)
-            setReload(!reload)
-            navigate(-1)
+            success()
         } catch (error) {
             toast.dismiss(toastId)
             
@@ -589,8 +591,7 @@ export const GestionVersiones = () => {
             })
             setEdit(false)
             loadVersionProyectos(id)
-            setReload(!reload)
-
+            success()
         } catch (error) {
             console.log(error);
             toast.dismiss(toastId)

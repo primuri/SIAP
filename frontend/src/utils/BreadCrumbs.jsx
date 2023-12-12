@@ -1,7 +1,6 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 const BreadcrumbsCustom = () => {
@@ -31,7 +30,7 @@ const BreadcrumbsCustom = () => {
                         {breadcrumb.name}
                     </Typography>
                 ) : (
-                    <Link underline="hover" color="inherit" href={to} key={to}>
+                    <Link to={to} key={to} style={{ textDecoration: 'none', color: 'inherit' }} >
                         {breadcrumb.name}
                     </Link>
                 );
