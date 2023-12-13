@@ -261,7 +261,7 @@ export const GestionPresupuestos = () => {
             {data.length < 1 ? <Add onClick={addClicked}></Add> : ''}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onClick={elementClicked}></Table>
+          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
           {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1}></PresupuestoForm></Modal>)}
           {edit &&
             (

@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
-import { useLocation } from "react-router-dom";
 
-export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasButtonColumn = false, buttonText = "" , navigate=null , saveState=null}) => {
+export const TableNoHover = ({ columns, data, onDoubleClick , dataKeys, hasButtonColumn = false, buttonText = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const location = useLocation()
+
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
@@ -54,7 +53,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
   return (
     <div className="w-100">
       <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
-        <table className="table table-striped table-hover rounded-table table-resizable fs-5">
+        <table className="table table-striped rounded-table table-resizable fs-5" >
           <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
@@ -64,27 +63,12 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
+          <tr key={rowIndex}>
           {dataKeys.map((column, colIndex) => (
-            <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 2 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
-                 <button id="acciones-button" className="btn btn-primary" onClick={() => {
-                    if(saveState){
-                      saveState()
-                    }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-informes`;
-                    navigate(nuevaRuta);
-                 }}>Gestionar</button>
-
-              ) : (colIndex === dataKeys.length -   1) ? (
-                <button id="acciones-button" className="btn btn-primary" onClick={() => {
-                    if(saveState){
-                      saveState()
-                    }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-presupuestos`;
-                    navigate(nuevaRuta);
-                 }}>Gestionar</button>
-              ): (
+            <td className="mx-2" key={colIndex}  style={{ pointerEvents: "none" }}>
+              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
+                <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick (row)} style={{ pointerEvents: 'all' }}>{buttonText}</button>
+              ) : (
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                   ? getValueByPath(row, column).split('/').pop()
                   : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
@@ -123,7 +107,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
   );
 };
 
-TableWithButtons.propTypes = {
+TableNoHover.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   onDoubleClick : PropTypes.func.isRequired,

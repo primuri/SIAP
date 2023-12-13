@@ -228,7 +228,7 @@ export const GestionProveedores = () => {
             <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={proveedores} dataKeys={dataKeys} onClick={elementClicked}></Table>
+          <Table columns={columns} data={proveedores} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
           {addClick && (<Modal ><ProveedoresForm onSubmit={addProveedor} onCancel={onCancel} mode={1}></ProveedoresForm></Modal>)}
           {edit &&
             (

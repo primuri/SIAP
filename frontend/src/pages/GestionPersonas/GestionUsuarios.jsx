@@ -190,7 +190,7 @@ export const GestionUsuarios = () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={usuarios} dataKeys={dataKeys} onClick={elementClicked}></Table>
+                    <Table columns={columns} data={usuarios} dataKeys={dataKeys} onDoubleClick ={elementClicked}></Table>
                     {addClick && (<Modal ><UsuariosForm onSubmit={addUsuario} onCancel={onCancel} mode={1}></UsuariosForm></Modal>)}
                     {edit &&
                         (

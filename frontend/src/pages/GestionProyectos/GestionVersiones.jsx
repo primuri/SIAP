@@ -647,7 +647,7 @@ export const GestionVersiones = () => {
                             <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                         </div>
                         <div className="mt-3">
-                            <TableWithButtons columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onClick={elementClicked2} hasButtonColumn={true} navigate={navigate} saveState={null}></TableWithButtons>
+                            <TableWithButtons columns={columns2} data={proyectosVersion} dataKeys={dataKeys2} onDoubleClick={elementClicked2} hasButtonColumn={true} navigate={navigate} saveState={null}></TableWithButtons>
                             {addClick && (<Modal ><ProyectosForm id_codigo={selectedIdCodigoVi} onSubmit={addProyecto} onCancel={onCancel} mode={1} saveState={null} canVersiones={proyectosVersion.length}></ProyectosForm></Modal>)}
                             {edit &&
                                 (
