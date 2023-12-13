@@ -255,7 +255,7 @@ export const GestionInformes = () => {
                             <Add onClick={addClicked}></Add>
                             <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                         </div>
-                        <Table columns={columns} data={informes} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
+                        <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
                         {/* <div>
                            <Back onClick={handleVolverClick}>Regresar a versiones proyecto</Back>
                         </div> */}

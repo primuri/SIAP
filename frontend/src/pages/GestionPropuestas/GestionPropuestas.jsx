@@ -337,7 +337,7 @@ export const GestionPropuestas = () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onClick={elementClicked}></Table>
+                    <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
                     {addClick && (<Modal ><PropuestasForm academicos={academicos} onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}
                     {edit &&
                         (

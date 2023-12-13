@@ -8,6 +8,7 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import {obtenerProyectos } from "../../api/gestionProyectos"
 import { useNavigate } from "react-router-dom"
+import { TableNoHover } from "../../utils/TableNoHover";
 
 
 export const GestionProyectos = () => {
@@ -130,7 +131,7 @@ export const GestionProyectos = () => {
                             </div>
                             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                         </div>
-                        <Table columns={columns} data={transformedState} dataKeys={dataKeys} onClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></Table>
+                        <TableNoHover style={{ cursor: 'default' }} columns={columns} data={transformedState} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></TableNoHover>
                         <Toaster></Toaster>
                     </>
                 </div>

@@ -210,7 +210,7 @@ export const GestionEvaluadores = () => {
             <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={evaluadores} dataKeys={dataKeys} onClick={elementClicked}></Table>
+          <Table columns={columns} data={evaluadores} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
           {addClick && (<Modal ><EvaluadoresForm onSubmit={addEvaluador} onCancel={onCancel} mode={1}></EvaluadoresForm></Modal>)}
           {edit &&
             (

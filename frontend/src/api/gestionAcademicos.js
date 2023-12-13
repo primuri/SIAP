@@ -94,6 +94,15 @@ export const obtenerTitulos = async (token) => {
     }))
 };
 
+export const obtenerPropuestas = async (token) => {
+    return await manejarErrores(SIAPAPI.get('propuesta_proyecto/propuesta_proyecto/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }))
+};
+
 export const obtenerTelefonos = async (token) => {
     return await manejarErrores(SIAPAPI.get('personas/telefono', {
         headers: {

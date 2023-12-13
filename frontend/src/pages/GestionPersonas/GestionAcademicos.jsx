@@ -286,7 +286,7 @@ export const GestionAcademicos = () => {
                 <Add onClick={addClicked}></Add>
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
-            <Table columns={columns} data={academicos} dataKeys={dataKeys} onClick={elementClicked}></Table>
+            <Table columns={columns} data={academicos} dataKeys={dataKeys} onDoubleClick ={elementClicked}></Table>
                 {addClick && (<Modal ><AcademicosForm onSubmit={addAcademico} onCancel={onCancel} mode={1}></AcademicosForm></Modal>)}
                 { edit && 
                     (

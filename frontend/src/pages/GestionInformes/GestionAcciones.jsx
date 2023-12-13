@@ -200,7 +200,7 @@ export const GestionAcciones = (versionID) => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={acciones} dataKeys={dataKeys} onClick={elementClicked} />
+                    <Table columns={columns} data={acciones} dataKeys={dataKeys} onDoubleClick ={elementClicked} />
                     <div>
                         <Back onClick={volverVersionInformes}>Regresar a versiones informe</Back>
                     </div>
