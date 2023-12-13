@@ -64,7 +64,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             loadTelefonos()
         }
         loadUniversidades()
-        loadPropuestas()
+        if(mode === 2){
+            loadPropuestas()
+        }
+        
     }, [academico]) 
 
     const loadPropuestas = async () => {
@@ -513,6 +516,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                         </div>
                         <hr></hr>
+                        {mode === 2 && (
+                            <>
                         <div>
                         {togglePropuestas && propuestas.length > 0 && (
                             <div>
@@ -531,6 +536,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                         </div>
                         <hr></hr>
+                        </>
+                        )}
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Titulo"/>
