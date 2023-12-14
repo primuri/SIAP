@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { toast, Toaster } from 'react-hot-toast'
-import icono from '../../assets/person-i.png';
+import icono from '../../assets/add_person.svg';
 import { Confirmar } from '../../utils/Confirmar'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { obtenerCuentasBancarias } from "../../api/gestionProveedores"

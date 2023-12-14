@@ -300,7 +300,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     className="table-button border-0 p-2 rounded text-white"
                                     onClick={() => setShowProductContent(true)}
                                 >
-                                    Agregar un producto
+                                    {mode === 1 ? "Agregar un producto" : "Ver producto"}
                                 </button>
                             )}
                             </div>
