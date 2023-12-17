@@ -1,6 +1,8 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
 import icono from '../../assets/person-i.png';
+import Upload from '../../utils/UploadDoc';
+import icono2 from '../../assets/upload_doc.svg';
 import { Confirmar } from '../../utils/Confirmar'
 
 
@@ -140,9 +142,13 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
         setShowConfirmationEdit(true);
     };
 
+    const handleEditCancelAp = () => {
+        formData.id_codigo_cimpa_fk.estado = "En desarrrollo";
+        setShowConfirmationAprobar(false);
+    };
+
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
-        setShowConfirmationAprobar(false);
     };
 
     const aprobarPropuesta = () => {
@@ -248,17 +254,9 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">Documento </label>
-                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
-                                {mode == 2 ? (
-                                    <a href={formData.documento} target="blank_"
-                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.documento.split('/').pop()}
-                                    </a>
-                                )
-                                    : ""}
+                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />
                             </div>
+
                             <div className="col-md-6">
                                 <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento </label>
                                 <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
@@ -379,7 +377,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
             <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
           )}
           {showConfirmationAprobar && (
-            <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="aprobar" objeto="propuesta" />
+            <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
           )}
         </>
       )}

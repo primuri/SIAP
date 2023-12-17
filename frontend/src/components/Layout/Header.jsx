@@ -1,5 +1,5 @@
 import logo from '../../assets/logo.png';
-import user from '../../assets/user_placeholder.png';
+import user from '../../assets/user_placeholder.svg';
 import { Link } from 'react-router-dom'
 
 function obtenerNombreDeUsuario(correoElectronico) {
@@ -35,7 +35,7 @@ export const Header = () => {
             ) :  <p className='mb-0'>{obtenerNombreDeUsuario(usuarioGuardado.correo)}</p>}
             <p onClick={handleLogout} style={{ color: "var(--celeste-ucr)", cursor: "pointer" }} className='mb-0 cerrar-sesion'>Cerrar sesión</p>
           </div>
-          <img src={user} alt="Imagen de perfil" />
+          <img src={user} alt="Imagen de perfil" className="container rounded-circle" />
         </div>
       )}
     </header>

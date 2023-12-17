@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
-import search from '../assets/search-i.png'
+import search from '../assets/search.svg'
 
 export const Search = ({ columns, colNames, onSearch }) => {
     const [selectedColumn, setSelectedColumn] = useState(""); // Estado para almacenar la columna seleccionada
