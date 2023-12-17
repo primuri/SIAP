@@ -24,7 +24,6 @@ export const Confirmar = ({ onConfirm, onCancel, accion, objeto }) => {
             <p className='text-center'>¿Está seguro(a) de {accionMi} {objeto}? {reversibleMessage}</p>
           </div>
           <div className="modal-footer">
-
               <button type="button" className={accion === 'eliminar' ? 'delete-button w-100 p-2 rounded text-white': 'table-button w-100 p-2 rounded text-white'} onClick={onConfirm}> {accionMa} </button>
           </div>
         </div>

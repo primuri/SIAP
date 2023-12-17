@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
+  const [selectedFileName, setSelectedFileName] = useState('');
+
   const noFileSelected = !formData.foto;
+
+  const updateSelectedFileName = (event) => {
+    const fileName = event.target.files[0].name;
+    setSelectedFileName(fileName);
+    handleFileChange(event); 
+  };
 
   return (
     <div className="row">
@@ -12,13 +20,17 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
               <>
                 Subir foto
                 <br />
-                <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                <input type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
+                {selectedFileName ? (
+                  <span>Nombre del archivo: {selectedFileName}</span>
+                ) : (
+                  <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                )}
               </>
             ) : (
               "Cambiar foto"
             )}
           </label>
-          <input type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={handleFileChange} style={{ display: 'none' }} />
         </>
       )}
       {mode === 2 && (
@@ -26,18 +38,28 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
           <label className="label-personalizado mb-2" htmlFor="foto">
             {noFileSelected ? (
               <>
-                <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                <input type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
+                {selectedFileName ? (
+                  <span>Nombre del archivo: {selectedFileName}</span>
+                ) : (
+                  <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                )}
               </>
             ) : (
               <>
                 Cambiar foto
                 <br />
                 <img src={formData.foto} alt="" maxWidth={180} maxHeight={100} className="container rounded-circle" />
+                <br />
+                {!selectedFileName && (
+                  <input type="file" className="form-control" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
+                )}
+                {selectedFileName && (
+                  <span>Nombre del nuevo archivo: {selectedFileName}</span>
+                )}
               </>
             )}
           </label>
-          <br />
-          <input type="file" className="form-control" name="foto" id="foto" onChange={handleFileChange} style={{ display: 'none' }} />
         </div>
       )}
     </div>

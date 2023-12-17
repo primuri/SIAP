@@ -129,9 +129,13 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     };
 
     // CAMBIO WENDY
+    const handleEditCancelAp = () => {
+        formData.id_codigo_cimpa_fk.estado = "En desarrrollo";
+        setShowConfirmationAprobar(false);
+    };
+
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
-        setShowConfirmationAprobar(false);
     };
 
     const aprobarPropuesta = () => {
@@ -327,7 +331,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
             <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
           )}
           {showConfirmationAprobar && (
-            <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="aprobar" objeto="propuesta" />
+            <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
           )}
         </>
       )}
