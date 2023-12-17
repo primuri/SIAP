@@ -68,7 +68,7 @@ export const GestionProyectos = () => {
         // setSelectedIdCodigoVi(proyecto.id_codigo_vi);
         // loadVersionProyectos(proyecto.id_codigo_vi);
         // setDetalleVisible(true);
-        navigate(`/gestion-proyectos/${proyecto.id_codigo_vi}/gestion-versiones`)
+        navigate(`/gestion-proyectos/p_id=${proyecto.id_codigo_vi}/gestion-versiones`)
     }
 
 

@@ -12,8 +12,12 @@ import { GestionInformes } from "./GestionInformes"
 import { GestionAcciones } from "./GestionAcciones"
 import add from '../../assets/plus-i.png'
 import { obtenerVersionProyectos } from "../../api/gestionProyectos"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
-export const GestionVersionInforme = (informeID) => {                                // Versiones de un infome   
+export const GestionVersionInforme = () => {   
+    let {informeID} = useParams()      
+    const navigate = useNavigate()
+    const location = useLocation()                      // Versiones de un infome   
     const [versionesInformeData, setVersionesInformeData] = useState([])             // Datos completos
     const [versionesInformeList, setVersionesInformeList] = useState([])             // Datos filtrados
     const [versionInforme, setVersionInforme]             = useState(null)           // Version actual
@@ -118,6 +122,8 @@ export const GestionVersionInforme = (informeID) => {                           
         if (event.target.tagName.toLowerCase() === 'button') {
             setShowAcciones(true);
             setVersionInforme(selectedVersionInforme);
+            navigate(`${location.pathname}/${selectedVersionInforme.id_version_informe}/gestion-acciones/`)
+            
         } else {
             setVersionInforme(selectedVersionInforme)
             setEditClicked(true)
@@ -131,22 +137,25 @@ export const GestionVersionInforme = (informeID) => {                           
     }
 
     function volverInformes() {
-        setReturnInformes(true);
+        const pathParts = location.pathname.split('/').filter(part => part !== '');
+        const newPathParts = pathParts.slice(0, -2);
+        const newPath = `/${newPathParts.join('/')}`;
+        navigate(newPath);
     }
 
-    if(returnInformes === true) {
-        return <GestionInformes/>;
-    }
+    // if(returnInformes === true) {
+    //     return <GestionInformes/>;
+    // }
 
-    else if (versionInforme && showAcciones === true) {
-        return <GestionAcciones versionID={versionInforme.id_version_informe} informeID={informeID}/>;
-    }
+    // else if (versionInforme && showAcciones === true) {
+    //     return <GestionAcciones versionID={versionInforme.id_version_informe} informeID={informeID}/>;
+    // }
 
     return (
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="d-flex flex-row">
-                    <h1>Versiones del informe {informeID.informeID} </h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
+                    <h1>Versiones del informe {informeID} </h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
                     <Add onClick={addBtnClicked}></Add>

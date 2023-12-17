@@ -11,9 +11,11 @@ import { GestionVersionInforme } from "./GestionVersionInforme"
 import { Back } from "../../utils/Back"
 
 import add from '../../assets/plus-i.png'
+import { useNavigate, useParams } from "react-router-dom"
 
-export const GestionAcciones = (versionID) => {
-
+export const GestionAcciones = () => {
+    let {versionID,informeID} = useParams() 
+    const navigate = useNavigate()
     // Estados                                                                  
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -41,7 +43,7 @@ export const GestionAcciones = (versionID) => {
 
     async function loadAcciones() {
         try {
-            const response = await obtenerAccionesVersion(localStorage.getItem('token'), versionID.versionID)
+            const response = await obtenerAccionesVersion(localStorage.getItem('token'), versionID)
             setData(response.data)
             setAcciones(formatearFecha(response))
             setCargado(true)
@@ -56,7 +58,7 @@ export const GestionAcciones = (versionID) => {
 
             var responseDocumento = await agregarDocumentoAccion(formData.id_documento_accion_fk)
             formData.id_documento_accion_fk = responseDocumento.data.id_documento;
-            formData.id_version_informe_fk = versionID.versionID;
+            formData.id_version_informe_fk = versionID;
             await agregarAccion(formData, localStorage.getItem("token"))
 
             toast.success('Acción agregada correctamente', {
@@ -77,7 +79,7 @@ export const GestionAcciones = (versionID) => {
     // Manejo de los datos del formulario de editar 
     const editAccion = async (formData) => {
         try {
-            formData.id_version_informe_fk = versionID.versionID;
+            formData.id_version_informe_fk = versionID;
 
             if (typeof formData.id_documento_accion_fk.documento === 'object') {
                 var responseDocumento = await editarDocumentoAccionAndDocumento(formData.id_documento_accion_fk.id_documento, formData.id_documento_accion_fk)
@@ -179,19 +181,22 @@ export const GestionAcciones = (versionID) => {
     }
 
     function volverVersionInformes() {
-        setReturnVersionInformes(true);
+        const pathParts = location.pathname.split('/').filter(part => part !== '');
+        const newPathParts = pathParts.slice(0, -2);
+        const newPath = `/${newPathParts.join('/')}`;
+        navigate(newPath);
     }
 
-    if (returnVersionInformes === true) {
-        return <GestionVersionInforme informeID={versionID.informeID.informeID} />;
-    }
+    // if (returnVersionInformes === true) {
+    //     return <GestionVersionInforme informeID={versionID.informeID.informeID} />;
+    // }
 
     return (
         <main>
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className="d-flex flex-row">
-                        <h1>Acciones de la versión {versionID.versionID} del informe {versionID.informeID.informeID} </h1>
+                        <h1>Acciones de la versión {versionID} del informe {informeID} </h1>
                         {(!cargado) && (
                             <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                         )}

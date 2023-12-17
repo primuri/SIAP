@@ -68,7 +68,21 @@ main {
 
 .bread_custom{
   margin-top: 108px !important;
-  height: 20px;
+  height: auto;
+  width: 100vw;
+  padding: 12px 0px;
+}
+
+.bread_custom ol li p, .bread_custom ol li a{
+  font-size: 1.5rem !important;
+}
+
+.last_bread{
+  color: var(--celeste-ucr) !important;
+}
+
+.no_link{
+  opacity: 0.3;
 }
 
 .side-bar-nav {
