@@ -1,36 +1,56 @@
-import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 
+
+//Estos son los links que no se deberian de poder dar click
+const noLinks = ['p_id=', 'inf_id='];
+//Esto es como se van a mostrar las distintas rutas en los breadcrumbs
+const routeNames = {
+    'gestion-proyectos': 'Proyectos',
+    'gestion-informes': 'Informes',
+    'gestion-versiones': 'Versiones',
+    'gestion-propuestas': 'Propuestas',
+    'gestion-usuarios': 'Usuarios',
+    'gestion-investigadores': 'Investigadores',
+    'gestion-evaluadores': 'Evaluadores',
+    'gestion-proveedores': 'Proveedores',
+    'gestion-presupuestos': 'Presupuesto',
+    'gestion-acciones': 'Acciones',
+};
+//Esto es para las rutas que no deberian de mostrar la url.
+const excludedRoutes = new Set(['/inicio-administrador', '/login', '/']);
+
 const BreadcrumbsCustom = () => {
     const location = useLocation();
-    
-    // Verificar si la ruta actual es '/inicio-administrador'
-    if (location.pathname === '/inicio-administrador') {
-        return null; // No renderizar nada si estamos en '/inicio-administrador'
+
+    if (excludedRoutes.has(location.pathname)) {
+        return null;
     }
 
     let pathnames = location.pathname.split('/').filter(x => x);
 
-    // Definimos el breadcrumb "Home"
-    const homeBreadcrumb = { name: 'Home', path: '/inicio-administrador' };
+    const homeBreadcrumb = { name: 'Inicio', path: '/inicio-administrador' };
+    pathnames = [homeBreadcrumb, ...pathnames.map((value, index, array) => {
+        const isNoLink = noLinks.some(noLink => value.includes(noLink));
+        const displayName = isNoLink ? value.split('=')[1] : (routeNames[value] || value);
 
-    // Insertamos el breadcrumb "Home" al principio del array
-    pathnames = [homeBreadcrumb, ...pathnames.map(value => ({ name: value, path: '' }))];
+        const path = `/${array.slice(0, index + 1).join('/')}`;
+
+        return { name: displayName, path, isNoLink };
+    })];
 
     return (
         <Breadcrumbs aria-label="breadcrumb" className='bread_custom'>
             {pathnames.map((breadcrumb, index) => {
                 const last = index === pathnames.length - 1;
-                const to = index === 0 ? breadcrumb.path : `/${pathnames.slice(1, index + 1).map(b => b.name).join('/')}`;
 
-                return last ? (
-                    <Typography color="text.primary" key={to}>
+                return breadcrumb.isNoLink || last ? (
+                    <Typography color="text.primary" key={breadcrumb.path}  className={`${breadcrumb.isNoLink? 'no_link': 'last_bread'}`}>
                         {breadcrumb.name}
                     </Typography>
                 ) : (
-                    <Link to={to} key={to} style={{ textDecoration: 'none', color: 'inherit' }} >
+                    <Link to={breadcrumb.path} key={breadcrumb.path} style={{ textDecoration: 'none', color: 'black' }}  >
                         {breadcrumb.name}
                     </Link>
                 );

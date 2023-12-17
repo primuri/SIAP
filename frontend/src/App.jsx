@@ -34,7 +34,7 @@ function App() {
       <Header/>
       <div className='d-flex' id='content-box'>
         <Sidebar></Sidebar>
-        <div>
+        <div className=' overflow-hidden'>
           <BreadcrumbsCustom></BreadcrumbsCustom>
           <Routes>
             {GestionUsuarios}

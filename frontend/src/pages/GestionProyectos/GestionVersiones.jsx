@@ -29,6 +29,7 @@ export const GestionVersiones = () => {
     const [data, setData] = useState([])
     const [proyecto, setProyecto] = useState(null) 
     const [producto, setProducto] = useState(null)
+    const [clean_id, setClean_id] = useState(id.startsWith('p_id=') ? id.split('p_id=')[1] : '')
     const [tipo, setTipo] = useState(null)
     const [error, setError] = useState(false) 
     const [addClick, setAddClick] = useState(false)
@@ -44,12 +45,14 @@ export const GestionVersiones = () => {
 
     useEffect(() => {
         async function fetchData() {
-            await loadVersionProyectos(id);
+            
+            await loadVersionProyectos(clean_id);
             setCargado(true);
         }
 
         fetchData();
-    }, [reload]);
+    }, [reload, clean_id]);
+
 
     async function loadVersionProyectos(proyecto) {
         try {
@@ -601,7 +604,7 @@ export const GestionVersiones = () => {
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
-        navigate(`/gestion-proyectos/1-2023/gestion-versiones`)
+        navigate(`/gestion-proyectos/${id}/gestion-versiones`)
     }
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
@@ -611,7 +614,7 @@ export const GestionVersiones = () => {
 
 
     const elementClicked2 = async (user) => {
-        navigate(`/gestion-proyectos/1-2023/gestion-versiones/${user.id_version_proyecto}`)
+        navigate(`/gestion-proyectos/${id}/gestion-versiones/${user.id_version_proyecto}`)
     }
 
     //se filtra
@@ -638,7 +641,7 @@ export const GestionVersiones = () => {
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div>
                         <div className="d-flex flex-row">
-                            <h1>Gestión de versiones del proyecto {id}</h1>
+                            <h1>Gestión de versiones del proyecto {clean_id}</h1>
                             {!cargado && (
                                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                             )}

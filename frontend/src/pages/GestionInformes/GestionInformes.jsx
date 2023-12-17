@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
@@ -18,11 +18,12 @@ export const GestionInformes = () => {
 
     // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
     const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
+    const location = useLocation()
     const navigate = useNavigate()
     const [reload, setReload] = useState(false)                                  // Para controlar cuándo se debe de recargar la página
     const [informes, setInformes] = useState([])                                 // Estado para almacenar todos los informes
     const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no  
-    const [showVersions, setShowVersions] = useState(false);
+    //const [showVersions, setShowVersions] = useState(false);
     const [data, setData] = useState([])                                         // Todos los informes.                          
     const [informe, setInforme] = useState(null)                                 // Informe al que se le da click en la tabla.
     const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
@@ -170,8 +171,7 @@ export const GestionInformes = () => {
     // Al hacer click en la tabla
     const elementClicked = (selectedInforme) => {
         if (event.target.tagName.toLowerCase() === 'button') {
-            setShowVersions(true);
-            setInforme(selectedInforme);
+            navigate(`${location.pathname}/${selectedInforme.id_informe}/gestion-versiones`)
         } else {
             setInforme(selectedInforme);
             setEdit(true);
@@ -199,8 +199,10 @@ export const GestionInformes = () => {
 
 
     const volver = () => {
-        sessionStorage.setItem('isBackNavigation', 'true');
-        navigate(-1);
+        const pathParts = location.pathname.split('/').filter(part => part !== '');
+        const newPathParts = pathParts.slice(0, -2);
+        const newPath = `/${newPathParts.join('/')}`;
+        navigate(newPath);
     }
 
 
@@ -232,57 +234,56 @@ export const GestionInformes = () => {
         }
     }
 
-    if (informe && showVersions === true) {
-        return <GestionVersionInforme informeID={informe.id_informe} />;
-    }
+    // if (informe && showVersions === true) {
+    //     return <GestionVersionInforme informeID={informe.id_informe} />;
+    // }
 
-    else {
-        return (
-            <main>
-                {!error ? (
-                    <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                        <div className=" flex-row">
-                            <h1>Gestión de informes de la versión {numVersion} de: </h1>
-                            <br></br>
-                            <h3>{id_proyecto}</h3>
-                        </div>
-
-                        {(!cargado) && (
-                            <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
-                        )}             
-
-                        <div className="d-flex justify-content-between mt-4">
-                            <Add onClick={addClicked}></Add>
-                            <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
-                        </div>
-                        <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
-                        {/* <div>
-                           <Back onClick={handleVolverClick}>Regresar a versiones proyecto</Back>
-                        </div> */}
-                        {addClick && (
-                            <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>
-                        )}
-                        {edit && (
-                            <Modal>
-                                <InformesForm
-                                    mode={2}
-                                    onSubmit={editInforme}
-                                    onCancel={onCancel}
-                                    onDelete={() => deleteInforme(informe)}
-                                    informe={informe}
-                                >
-                                </InformesForm>
-                            </Modal>
-                        )}
-                        <Toaster></Toaster>
-                        <div className="d-flex justify-content-start">
-                            <Back onClick={volver}>Regresar</Back>
-                        </div>
+    return (
+        <main>
+            {!error ? (
+                <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
+                    <div className=" flex-row">
+                        <h1>Gestión de informes de la versión {numVersion} de: </h1>
+                        <br></br>
+                        <h3>{id_proyecto}</h3>
                     </div>
-                ) : (
-                    <PermisoDenegado></PermisoDenegado>
-                )}
-            </main>
-        );
-    }
+
+                    {(!cargado) && (
+                        <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
+                    )}             
+
+                    <div className="d-flex justify-content-between mt-4">
+                        <Add onClick={addClicked}></Add>
+                        <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
+                    </div>
+                    <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
+                    {/* <div>
+                        <Back onClick={handleVolverClick}>Regresar a versiones proyecto</Back>
+                    </div> */}
+                    {addClick && (
+                        <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>
+                    )}
+                    {edit && (
+                        <Modal>
+                            <InformesForm
+                                mode={2}
+                                onSubmit={editInforme}
+                                onCancel={onCancel}
+                                onDelete={() => deleteInforme(informe)}
+                                informe={informe}
+                            >
+                            </InformesForm>
+                        </Modal>
+                    )}
+                    <Toaster></Toaster>
+                    <div className="d-flex justify-content-start">
+                        <Back onClick={volver}>Regresar</Back>
+                    </div>
+                </div>
+            ) : (
+                <PermisoDenegado></PermisoDenegado>
+            )}
+        </main>
+    );
+    
 }    

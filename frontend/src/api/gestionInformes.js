@@ -293,7 +293,7 @@ export const eliminarDocumentoInforme = async (id) => {
 
 // Obtener version de informe
 export const obtenerVersionesInforme = async (id_informe) => {
-    return await manejarErrores(SIAPAPI.get(`informe/versioninformes/?id_informe=${id_informe.informeID}`, {
+    return await manejarErrores(SIAPAPI.get(`informe/versioninformes/?id_informe=${id_informe}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
