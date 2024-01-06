@@ -4,7 +4,7 @@ from personas.models import Academico, Asistente
 from propuesta_proyecto.models import PropuestaProyecto, Vigencia
 from .models import PreguntaEvaluacion, Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
 from propuesta_proyecto.serializers import PropuestaProyectoSerializer, VigenciaSerializer
-from personas.serializers import AsistenteSerializer, AcademicoSerializer
+from personas.serializers import AsistenteSerializer, AcademicoSerializer, EvaluadorSerializer
 
 class ProyectoSerializer(serializers.ModelSerializer):
     id_codigo_cimpa_fk = serializers.PrimaryKeyRelatedField(queryset=PropuestaProyecto.objects.all())
@@ -63,6 +63,12 @@ class EvaluacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluacion
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(EvaluacionSerializer, self).to_representation(instance)
+        evaluador_data = EvaluadorSerializer(instance.id_evaluador_fk).data
+        rep['id_evaluador_fk'] = evaluador_data
+        return rep
 
 class PreguntaEvaluacionSerializer(serializers.ModelSerializer):
     id_evaluacion_fk = serializers.PrimaryKeyRelatedField(queryset=Evaluacion.objects.all())

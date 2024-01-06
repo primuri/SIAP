@@ -16,7 +16,7 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "correo": "root@root.com", "password": "root" }
+{ "correo": "evaluador@evaluador.com", "password": "Evaluador!123*" }
 
 ### Obtener usuarios
 
@@ -109,5 +109,28 @@ Content-Type: application/json
 ### Obtener versiones especificas
 
 GET http://127.0.0.1:8000/informe/versioninformes/?id_informe=1
-Authorization: token 5944b34e9a0c3be148c9d6c985c23d91057ffc34
+Authorization: token 3c9fe87e3b29f9b028528a5bb34d8dc88cb906c5
 Content-Type: application/json
+
+### Obtener Evaluaciones
+GET http://127.0.0.1:8000/version_proyecto/evaluaciones/
+Authorization: token 3c9fe87e3b29f9b028528a5bb34d8dc88cb906c5
+Content-Type: application/json
+
+### Obtener Evaluaciones por id de evaluador
+GET http://127.0.0.1:8000/version_proyecto/evaluaciones/?id_evaluador=2
+Authorization: token 3c9fe87e3b29f9b028528a5bb34d8dc88cb906c5
+Content-Type: application/json
+
+### Obtener preguntas de evaluaciones
+GET http://127.0.0.1:8000/version_proyecto/preguntasevaluaciones
+Authorization: token 3c9fe87e3b29f9b028528a5bb34d8dc88cb906c5
+Content-Type: application/json
+
+### Obtener preguntas de evaluacion especifica
+GET http://127.0.0.1:8000/version_proyecto/preguntasevaluaciones?id_evaluacion=1
+Authorization: token 3c9fe87e3b29f9b028528a5bb34d8dc88cb906c5
+Content-Type: application/json
+
+
+universidad?nombre=Universidad%20Nacional&pais=Polonia/

@@ -52,12 +52,29 @@ class PreguntaEvaluacionViewSet(viewsets.ModelViewSet):
     queryset = PreguntaEvaluacion.objects.all()
     serializer_class = PreguntaEvaluacionSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        id_evaluacion = self.request.query_params.get('id_evaluacion', None)
+        if id_evaluacion is not None:
+            queryset = queryset.filter(id_evaluacion_fk=id_evaluacion)
+
+        return queryset
+
+
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
 class EvaluacionViewSet(viewsets.ModelViewSet):
     view_name = 'evaluaciones'
     queryset = Evaluacion.objects.all()
     serializer_class = EvaluacionSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        id_evaluador = self.request.query_params.get('id_evaluador', None)
+        if id_evaluador is not None:
+            queryset = queryset.filter(id_evaluador_fk=id_evaluador)
+
+        return queryset
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

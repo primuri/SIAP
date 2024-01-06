@@ -83,7 +83,7 @@ class Evaluacion(models.Model):
     detalle = models.CharField(max_length=128)
     id_version_proyecto_fk = models.IntegerField()
     id_evaluador_fk = models.ForeignKey(Evaluador, on_delete=models.PROTECT)
-    id_documento_evualuacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_documento_evaluacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'evaluacion'
