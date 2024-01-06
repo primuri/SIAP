@@ -67,7 +67,9 @@ class EvaluacionSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         rep = super(EvaluacionSerializer, self).to_representation(instance)
         evaluador_data = EvaluadorSerializer(instance.id_evaluador_fk).data
+        #proyecto_data = VersionProyectoSerializer(instance.id_version_proyecto_fk).data
         rep['id_evaluador_fk'] = evaluador_data
+        #rep['id_version_proyecto_fk'] = proyecto_data
         return rep
 
 class PreguntaEvaluacionSerializer(serializers.ModelSerializer):

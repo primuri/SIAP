@@ -15,6 +15,7 @@ import { InicioEvaluador } from './pages/Inicio/InicioEvaluador'
 import { Sidebar } from './components/Layout/Sidebar'
 import { Footer } from './components/Layout/Footer'
 import BreadcrumbsCustom from './utils/BreadCrumbs'
+import EvaluacionProyectos from './routes/EvaluacionProyectos'
 
 function App() {
   useEffect(() => {
@@ -43,6 +44,7 @@ function App() {
             {GestionPresupuestos}
             {GestionProveedores}
             {GestionProyectos}
+            {EvaluacionProyectos}
 
             <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
             <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
