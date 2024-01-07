@@ -15,7 +15,7 @@ export const EvaluacionProyectos = () => {
     const navigate = useNavigate()
     const [reload, setReload] = useState(false)    
     const [cargado, setCargado] = useState(false)                                     
-    const [evaluacion, setEvaluacion] = useState([])      
+    const [evaluacion, setEvaluacion] = useState(null)           
     const [evaluaciones, setEvaluaciones] = useState([])                                       
     const [data, setData] = useState([])                                                                                                         
     const [error, setError] = useState(false)                                                  
@@ -30,7 +30,6 @@ export const EvaluacionProyectos = () => {
     useEffect(() => {                                                                           
         async function fetchData() {
             loadEvaluaciones()
-            setCargado(true);
         }
         fetchData();
     }, [reload]);
@@ -43,8 +42,6 @@ export const EvaluacionProyectos = () => {
             setCargado(true)                                                                       
         } catch (error) {
         }
-
-        console.log(evaluaciones);
     }
 
     // Al darle click a cancelar, se cierra el modal
@@ -77,6 +74,11 @@ export const EvaluacionProyectos = () => {
         setEvaluaciones(matches)
     }
 
+    console.log("data");
+    console.log(data);
+    console.log("evaluaciones");
+    console.log(evaluaciones);
+
     return (
         <main>
             {!error ? (
@@ -92,7 +94,6 @@ export const EvaluacionProyectos = () => {
                     <div className="d-flex justify-content-between mt-4">
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
-    
                     <TableEvaluaciones columns={columns} data={data} dataKeys={dataKeys}/>
                     <Toaster></Toaster>
                 </div>

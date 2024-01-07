@@ -45,8 +45,6 @@ export const GestionInformes = () => {
             setIdProyecto(id_version_proyecto[2]);
             setNumVersion(id_version_proyecto[1]);
         }
-
-
         fetchData();
     }, [reload]);
 
@@ -67,25 +65,6 @@ export const GestionInformes = () => {
 
             const Data = JSON.parse(formData)
 
-            /*
-                // Buscar si esa version de proyecto existe
-                let response_VersionProyecto = await buscarVersionProyecto(localStorage.getItem("token"), Data.id_version_proyecto);
-
-                // Crea una variable para almacenar solo el id de la version que ya se verifico existe.
-                var id_Version = {}
-
-                // Si la respuesta es diferente de undefined, almacena el id de la version que se obtuvo
-                if(response_VersionProyecto !== undefined) {
-                    id_Version = response_VersionProyecto.Data.id_version_proyecto;
-                } else {
-                }
-                
-                response_VersionProyecto = id_Version;
-                delete Data.id_version_proyecto;
-                Data.id_version_proyecto = response_VersionProyecto;
-
-                formData.append('json', JSON.stringify(Data))
-            */
             Data.id_version_proyecto_fk = proyectoID;
             await agregarInforme(Data, localStorage.getItem("token"))
 
@@ -102,7 +81,6 @@ export const GestionInformes = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-           
         }
     }
 
