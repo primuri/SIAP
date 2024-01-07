@@ -119,7 +119,7 @@ Content-Type: application/json
 
 ### Obtener Evaluaciones por id de evaluador
 GET http://127.0.0.1:8000/version_proyecto/evaluaciones/?id_evaluador=1
-Authorization: token 3c9fe87e3b29f9b028528a5bb34d8dc88cb906c5
+Authorization: token cc24474441234f5e24f0770b00c8e131f42e5a08
 Content-Type: application/json
 
 ### Obtener preguntas de evaluaciones

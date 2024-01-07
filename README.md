@@ -8,7 +8,7 @@
 ## Back:
 
  cd backend
- docker build -t djangoimage -f DockerBack .         	<- Solo la primera vez
+ docker build -t djangoimage -f DockerBack .        	<- Solo la primera vez
  docker run -p 8000:8000 -v "${PWD}:/app" djangoimage
 
  ----------------------------------------------------------------
