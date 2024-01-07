@@ -22,7 +22,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const totalPages = getTotalPages();
-z
+
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
