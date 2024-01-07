@@ -31,7 +31,7 @@ export const GestionInformes = () => {
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
     const [id_proyecto, setIdProyecto] = useState(null)                          // Cuando hay un error
-    const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones']
+    const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones', 'Acciones']
     const dataKeys = ['id_informe', 'estado', 'tipo', 'Versiones']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true

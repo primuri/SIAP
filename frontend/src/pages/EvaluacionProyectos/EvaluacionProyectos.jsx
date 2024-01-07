@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
 import { Modal } from "../../utils/Modal"
 import { TableEvaluaciones } from "../../utils/TableEvaluaciones"
@@ -11,8 +11,8 @@ import { EvaluacionForm } from "../../components/EvaluacionProyectos/EvaluacionF
 
 export const EvaluacionProyectos = () => {
 
-    const user = JSON.parse(localStorage.getItem('user'))                                  
-    const navigate = useNavigate()
+    const user = JSON.parse(localStorage.getItem('user'))         
+    const navigate = useNavigate()                         
     const [reload, setReload] = useState(false)    
     const [cargado, setCargado] = useState(false)                                     
     const [evaluacion, setEvaluacion] = useState(null)           
@@ -36,11 +36,13 @@ export const EvaluacionProyectos = () => {
 
     async function loadEvaluaciones() {
         try {
-            const response = await obtenerEvaluacionesPorEvaluador(localStorage.getItem('token'), evaluadorID) 
-            setData(response.data)                                                           
-            setEvaluaciones(response.data)                                                               
-            setCargado(true)                                                                       
+            const response = await obtenerEvaluacionesPorEvaluador(localStorage.getItem('token'), evaluadorID);
+            const responseData = Array.isArray(response.data) ? response.data : [response.data];
+            setData(responseData);
+            setEvaluaciones(responseData);
+            setCargado(true);
         } catch (error) {
+            console.error("Error al cargar evaluaciones:", error);
         }
     }
 
@@ -54,8 +56,14 @@ export const EvaluacionProyectos = () => {
     const addClicked = () => {
         //setAddClick(true)
         //document.body.classList.add('modal-open');
-
     }
+
+    const elementClicked = (selectedInforme) => {
+        if (event.target.tagName.toLowerCase() === 'button') {
+            //navigate(`${location.pathname}/${selectedInforme.id_informe}/gestion-versiones`)
+        } else {
+        }
+    };
 
     // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
@@ -74,11 +82,6 @@ export const EvaluacionProyectos = () => {
         setEvaluaciones(matches)
     }
 
-    console.log("data");
-    console.log(data);
-    console.log("evaluaciones");
-    console.log(evaluaciones);
-
     return (
         <main>
             {!error ? (
@@ -94,7 +97,7 @@ export const EvaluacionProyectos = () => {
                     <div className="d-flex justify-content-between mt-4">
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
-                    <TableEvaluaciones columns={columns} data={data} dataKeys={dataKeys}/>
+                    <TableEvaluaciones columns={columns} data={evaluaciones} dataKeys={dataKeys}/>
                     <Toaster></Toaster>
                 </div>
             ) : (
@@ -103,5 +106,3 @@ export const EvaluacionProyectos = () => {
         </main>
     );
 }    
-
-// 

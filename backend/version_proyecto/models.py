@@ -42,7 +42,6 @@ class Documento(models.Model):
     detalle = models.CharField(max_length=360, null=True)
     documento = models.FileField(upload_to='media/documentos/',  max_length=500)  # Se cambió de char a file
 
-
     class Meta:
         db_table = 'documento'
 

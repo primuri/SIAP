@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
-import { useLocation } from "react-router-dom";
 
-export const TableEvaluaciones = ({ columns, data, dataKeys, hasButtonColumn = false, buttonText = ""}) => {
+export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const location = useLocation()
+
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
@@ -54,7 +53,7 @@ export const TableEvaluaciones = ({ columns, data, dataKeys, hasButtonColumn = f
   return (
     <div className="w-100">
       <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
-        <table className="table table-striped table-hover rounded-table table-resizable fs-5">
+        <table className="table table-striped table-hover rounded-table table-resizable fs-5" >
           <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
@@ -64,27 +63,13 @@ export const TableEvaluaciones = ({ columns, data, dataKeys, hasButtonColumn = f
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex}>
+          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 2 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
-                 <button id="acciones-button" className="btn btn-primary" onClick={() => {
-                    if(saveState){
-                      saveState()
-                    }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-informes`;
-                    navigate(nuevaRuta);
-                 }}>Gestionar</button>
-
-              ) : (colIndex === dataKeys.length -   1) ? (
-                <button id="acciones-button" className="btn btn-primary" onClick={() => {
-                    if(saveState){
-                      saveState()
-                    }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-presupuestos`;
-                    navigate(nuevaRuta);
-                 }}>Gestionar</button>
-              ): (
+              {(colIndex === dataKeys.length - 1 && dataKeys.length - 2 === "Pendiente") ? ( // Si se necesita en la última columna y el estado es
+                <button id="acciones-button" className="btn btn-primary" >{Evaluar}</button>
+                
+              ) : (
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                   ? getValueByPath(row, column).split('/').pop()
                   : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
