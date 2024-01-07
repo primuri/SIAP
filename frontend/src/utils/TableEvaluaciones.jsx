@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
+  const [hoveredButtonIndex, setHoveredButtonIndex] = useState(null);
 
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
@@ -53,7 +53,7 @@ export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
   return (
     <div className="w-100">
       <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
-        <table className="table table-striped table-hover rounded-table table-resizable fs-5" >
+        <table className="table table-striped table-hover rounded-table table-resizable fs-5">
           <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
@@ -63,20 +63,27 @@ export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
-{dataKeys.map((column, colIndex) => (
-  <td className="mx-2" key={colIndex}>
-    {colIndex === dataKeys.length - 1 && row["estado"] === "Pendiente" ? (
-      <button id="evaluacion-button" className="btn btn-primary">Realizar evaluación</button>
-    ) : colIndex === dataKeys.length - 1 ? (
-      <button id="otras-acciones-button" className="btn btn-secondary" disabled>No disponible</button>
-    ) : (
-      typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
-        ? getValueByPath(row, column).split('/').pop()
-        : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
-    )}
-  </td>
-))}
+          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)} >
+        {dataKeys.map((column, colIndex) => (
+        <td className="mx-2" key={colIndex}>
+            {colIndex === dataKeys.length - 1 && row["estado"] === "Pendiente" ? (
+            <button
+            id="evaluacion-button"
+            className={`btn btn-primary ${hoveredButtonIndex === colIndex ? "hovered" : ""}`}
+            onMouseEnter={() => setHoveredButtonIndex(colIndex)}
+            onMouseLeave={() => setHoveredButtonIndex(null)}
+            >
+            Realizar evaluación
+            </button>
+            ) : colIndex === dataKeys.length - 1 ? (
+            <button id="otras-acciones-button" className="btn btn-secondary" disabled>No disponible</button>
+            ) : (
+            typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
+                ? getValueByPath(row, column).split('/').pop()
+                : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
+            )}
+        </td>
+        ))}
         </tr>
         ))}
           </tbody>
