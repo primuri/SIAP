@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns, data, onDoubleClick , dataKeys, hasButtonColumn = false, buttonText = "" }) => {
+export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasButtonColumn = false, buttonText = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 

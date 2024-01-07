@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 import { useLocation } from "react-router-dom";
 
-export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasButtonColumn = false, buttonText = "" , navigate=null , saveState=null}) => {
+export const TableEvaluaciones = ({ columns, data, dataKeys, hasButtonColumn = false, buttonText = ""}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -22,7 +22,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const totalPages = getTotalPages();
-z
+
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
@@ -64,7 +64,7 @@ z
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
+          <tr key={rowIndex}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
               {(colIndex === dataKeys.length - 2 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
@@ -123,9 +123,8 @@ z
   );
 };
 
-TableWithButtons.propTypes = {
+TableEvaluaciones.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
-  onDoubleClick : PropTypes.func.isRequired,
   dataKeys: PropTypes.array.isRequired,
 };
