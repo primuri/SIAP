@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
+export const TableEvaluaciones = ({ columns = [], data = [], dataKeys, onClick}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [hoveredButtonIndex, setHoveredButtonIndex] = useState(null);
@@ -63,18 +63,11 @@ export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)} >
+            <tr key={rowIndex} onClick={() => onClick (row)}>
         {dataKeys.map((column, colIndex) => (
         <td className="mx-2" key={colIndex}>
             {colIndex === dataKeys.length - 1 && row["estado"] === "Pendiente" ? (
-            <button
-            id="evaluacion-button"
-            className={`btn btn-primary ${hoveredButtonIndex === colIndex ? "hovered" : ""}`}
-            onMouseEnter={() => setHoveredButtonIndex(colIndex)}
-            onMouseLeave={() => setHoveredButtonIndex(null)}
-            >
-            Realizar evaluación
-            </button>
+            <button id="evaluacion-button" className={`btn btn-primary`}> Realizar evaluación </button>
             ) : colIndex === dataKeys.length - 1 ? (
             <button id="otras-acciones-button" className="btn btn-secondary" disabled>No disponible</button>
             ) : (

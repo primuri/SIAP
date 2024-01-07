@@ -18,7 +18,8 @@ export const EvaluacionProyectos = () => {
     const [evaluacion, setEvaluacion] = useState(null)           
     const [evaluaciones, setEvaluaciones] = useState([])                                       
     const [data, setData] = useState([])                                                                                                         
-    const [error, setError] = useState(false)                                                  
+    const [error, setError] = useState(false)                               
+    const [evaluarClick, setEvaluarClick] = useState(false)                    
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Estado evaluación', 'Acciones']
     const dataKeys = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.actividad', 'estado', '']
 
@@ -45,24 +46,44 @@ export const EvaluacionProyectos = () => {
         }
     }
 
-    // Al darle click a cancelar, se cierra el modal
-    const onCancel = () => {
-        //setAddClick(false)
-        //document.body.classList.remove('modal-open');
-    }
-
-    // Al darle click a agregar, muestra el modal
-    const addClicked = () => {
-        //setAddClick(true)
-        //document.body.classList.add('modal-open');
-    }
-
-    const elementClicked = (selectedInforme) => {
+    const elementClicked = (selectedEvaluacion) => {
         if (event.target.tagName.toLowerCase() === 'button') {
-            //navigate(`${location.pathname}/${selectedInforme.id_informe}/gestion-versiones`)
+            setEvaluacion(selectedEvaluacion);
+            setEvaluarClick(true)
+            console.log(evaluacion)
         } else {
         }
     };
+
+    // Al darle click a cancelar, se cierra el modal
+    const onCancel = () => {
+        setEvaluarClick(false)
+        document.body.classList.remove('modal-open');
+    }
+
+    const sendAnswers = async (/*formData*/) => {
+        try {
+
+            /*const Data = JSON.parse(formData)
+
+            Data.id_version_proyecto_fk = proyectoID;
+            await agregarInforme(Data, localStorage.getItem("token"))
+
+            toast.success('Informe agregado correctamente', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                },
+            })*/
+            setEvaluarClick(false)
+            setReload(!reload)
+            document.body.classList.remove('modal-open');
+
+        } catch (error) {
+        }
+    }
 
     // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
@@ -91,14 +112,10 @@ export const EvaluacionProyectos = () => {
       
               {!cargado && (
                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
-              )}
-      
-                
-                
+              )}                
               <div className="d-flex justify-content-between mt-4">
                 <div className="row w-100">
-                  <div className="col">
-                    
+                  <div className="col">                
                   </div>
                   <div className="col-auto">
                     <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
@@ -106,7 +123,10 @@ export const EvaluacionProyectos = () => {
                 </div>
               </div>
       
-              <TableEvaluaciones columns={columns} data={evaluaciones} dataKeys={dataKeys} />
+              <TableEvaluaciones columns={columns} data={evaluaciones} dataKeys={dataKeys} onClick ={elementClicked}/>
+              {evaluarClick && (
+                        <Modal><EvaluacionForm onCancel={onCancel} onSubmit={sendAnswers} evaluacion={evaluacion} mode={1}></EvaluacionForm></Modal>
+               )}
               <Toaster></Toaster>
             </div>
           ) : (
