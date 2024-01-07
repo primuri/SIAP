@@ -19,9 +19,8 @@ export const EvaluacionProyectos = () => {
     const [evaluaciones, setEvaluaciones] = useState([])                                       
     const [data, setData] = useState([])                                                                                                         
     const [error, setError] = useState(false)                                                  
-    //const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Estado', 'Acciones']
-    const columns = ['id_evaluacion', 'detalle', 'id_version_proyecto_fk']
-    const dataKeys = ['id_evaluacion', 'detalle', 'id_version_proyecto_fk']
+    const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Estado evaluación', 'Acciones']
+    const dataKeys = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.actividad', 'estado', '']
 
     const evaluadorID = user.evaluador_fk.id_evaluador;
 

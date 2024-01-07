@@ -526,9 +526,15 @@ input[type="submit"]:focus {
   cursor: pointer;
 }
 
+#otras-acciones-button{
+  background-color:var(--gris-oscuro-urc);
+  border-color: var(--gris-oscuro-urc);
+}
 
-
-
+#evaluacion-button {
+  background-color:#005da4;
+  border-color: #005da4;
+}
 
 
 

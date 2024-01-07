@@ -64,18 +64,19 @@ export const TableEvaluaciones = ({ columns = [], data = [], dataKeys}) => {
           <tbody>
           {currentItems.map((row, rowIndex) => (
           <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
-          {dataKeys.map((column, colIndex) => (
-            <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 1 && dataKeys.length - 2 === "Pendiente") ? ( // Si se necesita en la última columna y el estado es
-                <button id="acciones-button" className="btn btn-primary" >{Evaluar}</button>
-                
-              ) : (
-                typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
-                  ? getValueByPath(row, column).split('/').pop()
-                  : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
-                )}
-            </td>
-          ))}
+{dataKeys.map((column, colIndex) => (
+  <td className="mx-2" key={colIndex}>
+    {colIndex === dataKeys.length - 1 && row["estado"] === "Pendiente" ? (
+      <button id="evaluacion-button" className="btn btn-primary">Realizar evaluación</button>
+    ) : colIndex === dataKeys.length - 1 ? (
+      <button id="otras-acciones-button" className="btn btn-secondary" disabled>No disponible</button>
+    ) : (
+      typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
+        ? getValueByPath(row, column).split('/').pop()
+        : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
+    )}
+  </td>
+))}
         </tr>
         ))}
           </tbody>
