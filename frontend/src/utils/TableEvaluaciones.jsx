@@ -67,7 +67,7 @@ export const TableEvaluaciones = ({ columns = [], data = [], dataKeys, onClick})
         {dataKeys.map((column, colIndex) => (
         <td className="mx-2" key={colIndex}>
             {colIndex === dataKeys.length - 1 && row["estado"] === "Pendiente" ? (
-            <button id="evaluacion-button" className={`btn btn-primary`}> Realizar evaluación </button>
+            <button id="evaluacion-button" className={`btn btn-primary`}> Completar evaluación </button>
             ) : colIndex === dataKeys.length - 1 ? (
             <button id="otras-acciones-button" className="btn btn-secondary" disabled>No disponible</button>
             ) : (

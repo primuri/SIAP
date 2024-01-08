@@ -106,28 +106,31 @@ export const EvaluacionProyectos = () => {
         <main>
           {!error ? (
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-              <div className="flex-row">
-                <h1>Evaluaciones</h1>
-              </div>
-      
-              {!cargado && (
-                <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
-              )}                
-              <div className="d-flex justify-content-between mt-4">
-                <div className="row w-100">
-                  <div className="col">                
-                  </div>
-                  <div className="col-auto">
-                    <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
-                  </div>
+                <div className="row">
+                    <div className="col">
+                        <h1>Evaluaciones</h1>
+                    </div>
+                    <div className="col-10">
+                    {!cargado && (
+                        <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
+                    )}      
+                    </div>      
+                </div>     
+                <div className="d-flex justify-content-between mt-4">
+                    <div className="row w-100">
+                        <div className="col">                
+                        </div>
+                        <div className="col-auto">
+                        <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
+                    </div>
                 </div>
-              </div>
+            </div>
       
-              <TableEvaluaciones columns={columns} data={evaluaciones} dataKeys={dataKeys} onClick ={elementClicked}/>
-              {evaluarClick && (
-                        <Modal><EvaluacionForm onCancel={onCancel} onSubmit={sendAnswers} evaluacion={evaluacion} mode={1}></EvaluacionForm></Modal>
-               )}
-              <Toaster></Toaster>
+            <TableEvaluaciones columns={columns} data={evaluaciones} dataKeys={dataKeys} onClick ={elementClicked}/>
+            {evaluarClick && (
+                    <Modal><EvaluacionForm onCancel={onCancel} onSubmit={sendAnswers} evaluacion={evaluacion} mode={1}></EvaluacionForm></Modal>
+            )}
+            <Toaster></Toaster>
             </div>
           ) : (
             <PermisoDenegado></PermisoDenegado>

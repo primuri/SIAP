@@ -73,16 +73,32 @@ export const EvaluacionForm = ({ onSubmit, onCancel, evaluacion, mode  }) => {
                             </div>
                         </div>
                         <div className="col mb-0 ">
-                            <h2 className="headerForm text-center"> {mode === 1 ? "Evaluación de proyecto" : formData.nombre }</h2>                                 
+                            <h2 className="headerForm text-center mt-4 mb-2"> {mode === 1 ? "Evaluación de proyecto" : formData.nombre }</h2>                                 
                             <div className="form-group">
-                                <p htmlFor="id_informe" className="label-personalizado mb-2 " style={{ fontWeight: 'normal', textAlign: 'justify' }}>
+                                <p htmlFor="intro" className="label-personalizado mb-2 mt-3" style={{ fontWeight: 'normal', textAlign: 'justify' }}>
                                  A continuación, se presenta una lista de indicadores para evaluar la propuesta de investigación asignada a su juicio experto. Después de leer cada uno de ellos, otorgue una calificación del 1 al 5, donde 1 corresponde a Muy insatisfactorio, 3 Satisfactorio y 5 Muy Satisfactorio. A mayor calificación, mayor satisfacción con la calidad y excelencia en el rubro indicado. Debe aportarse, sin excepción, una breve justificación de la calificación asignada a cada rubro. Puede optarse por completar “No aplica” cuando parezca que el indicador no es pertinente para la propuesta evaluada y se deben adicionar las observaciones respectivas, así como los comentarios cualitativos.
                                 </p>
-
-                                <br></br><br></br>
+                                <div className="row mb-4">
+                            <div className="col mt-2 text-center">
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"></input>
+                                <label class="form-check-label" for="inlineRadio1">1: Muy insactisfactorio</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"></input>
+                                <label class="form-check-label" for="inlineRadio3">3: Satisfactorio</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5"></input>
+                                <label class="form-check-label" for="inlineRadio4">5: Muy Satisfactorio</label>
+                                </div>
+                            </div>
+                        </div>
+                                <div className="mb-2" >
                                  Para todos los casos: <br></br>
-                                    a) Brindar el argumento correspondiente para justificar el puntaje asignado;<br></br>
+                                    a) Brindar el argumento correspondiente para justificar el puntaje asignado <br></br>
                                     b) Explicitar la oportunidad de mejora: ¿cómo puede mejorar la propuesta en este rubro?
+                                </div>
                             </div>
                         </div>
 
@@ -97,36 +113,32 @@ export const EvaluacionForm = ({ onSubmit, onCancel, evaluacion, mode  }) => {
 
             <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center' encType="multipart/form-data">
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
-
-                <div className="container ">
-                        <div className="row mb-4">
-                            <div className="col">
-                              
-                            <div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"></input>
-  <label class="form-check-label" for="inlineRadio1">1</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"></input>
-  <label class="form-check-label" for="inlineRadio2">2</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"></input>
-  <label class="form-check-label" for="inlineRadio3">3</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4"></input>
-  <label class="form-check-label" for="inlineRadio4">4</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5"></input>
-  <label class="form-check-label" for="inlineRadio4">5</label>
-</div>
-
-
+                    <div className="container" style={{ fontWeight: 'normal', textAlign: 'justify' }}>
+                        
+                        <div className='form-group'>
+                            <label htmlFor="pregunta1" className="label-personalizado mb-2">1. El proyecto describe de forma detallada la actualidad, o los vacíos, o nuevos aportes en el estado del conocimiento.   </label>
+                            <div className="col mt-2 text-center">
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"></input>
+                                <label class="form-check-label" for="inlineRadio1">1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"></input>
+                                <label class="form-check-label" for="inlineRadio3">3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5"></input>
+                                <label class="form-check-label" for="inlineRadio4">5</label>
+                                </div>
                             </div>
                         </div>
+                    
+                    
                     </div>
+
+
+
+
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
