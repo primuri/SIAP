@@ -16,7 +16,7 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "correo": "root@root.com", "password": "Root!123*" }
+{ "correo": "evaluador@evaluador.com", "password": "Evaluador!123*" }
 
 ### Obtener usuarios
 
@@ -124,12 +124,12 @@ Content-Type: application/json
 
 ### Obtener respuestas de evaluaciones
 GET http://127.0.0.1:8000/version_proyecto/respuestasevaluaciones/
-Authorization: token 6aac34e9de7a94820c04f657814ef2633809c25c
+Authorization: token cc24474441234f5e24f0770b00c8e131f42e5a08
 Content-Type: application/json
 
 ### Enviar respuestas de evaluaciones
 POST http://127.0.0.1:8000/version_proyecto/respuestasevaluaciones/
-Authorization: token 6aac34e9de7a94820c04f657814ef2633809c25c
+Authorization: token cc24474441234f5e24f0770b00c8e131f42e5a08
 Content-Type: application/json
 
 {

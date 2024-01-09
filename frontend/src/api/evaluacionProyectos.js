@@ -17,6 +17,27 @@ export const obtenerEvaluacionesProyectos = async (token) => {
     }));
 };
 
+// Obtener evaluaciones por id
+export const obtenerEvaluacionPorID = async (token, id) => {
+    return await manejarErrores(SIAPAPI.get(`version_proyecto/evaluaciones/?id_evaluacion=${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+
+// Editar evaluacion
+export const editarEvaluacion = async (id, evaluacion, token) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/evaluaciones/${id}/`, evaluacion, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
 // Obtener evaluaciones por id de evaluador
 export const obtenerEvaluacionesPorEvaluador = async (token, id) => {
     return await manejarErrores(SIAPAPI.get(`version_proyecto/evaluaciones/?id_evaluador=${id}`, {

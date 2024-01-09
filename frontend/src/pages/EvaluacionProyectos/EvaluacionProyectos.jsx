@@ -5,7 +5,7 @@ import { TableEvaluaciones } from "../../utils/TableEvaluaciones"
 import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerEvaluacionesPorEvaluador, enviarRespuesta} from "../../api/evaluacionProyectos"
+import { obtenerEvaluacionesPorEvaluador, obtenerEvaluacionPorID, enviarRespuesta, editarEvaluacion} from "../../api/evaluacionProyectos"
 import { EvaluacionForm } from "../../components/EvaluacionProyectos/EvaluacionForm"
 
 export const EvaluacionProyectos = () => {
@@ -61,16 +61,20 @@ export const EvaluacionProyectos = () => {
 
     const sendAnswers = async (formData, evaluacionID) => {
         try {
-
-            const Data = JSON.parse(formData)
-
-            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta1, Data.respuesta1, evaluacionID)
-            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta2, Data.respuesta2, evaluacionID)
-            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta3, Data.respuesta3, evaluacionID)
-            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta4, Data.respuesta4, evaluacionID)
-            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta5, Data.respuesta5, evaluacionID)
-            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta6, Data.respuesta6, evaluacionID)
-
+            const Data = JSON.parse(formData);
+    
+            const promises = [
+                enviarRespuesta(localStorage.getItem("token"), Data.pregunta1, Data.respuesta1, evaluacionID),
+                enviarRespuesta(localStorage.getItem("token"), Data.pregunta2, Data.respuesta2, evaluacionID),
+                enviarRespuesta(localStorage.getItem("token"), Data.pregunta3, Data.respuesta3, evaluacionID),
+                enviarRespuesta(localStorage.getItem("token"), Data.pregunta4, Data.respuesta4, evaluacionID),
+                enviarRespuesta(localStorage.getItem("token"), Data.pregunta5, Data.respuesta5, evaluacionID),
+                enviarRespuesta(localStorage.getItem("token"), Data.pregunta6, Data.respuesta6, evaluacionID),
+            ];
+    
+            // Ejecuta todas las promesas concurrentemente
+            await Promise.all(promises);
+    
             toast.success('Evaluación completada con éxito', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -78,22 +82,31 @@ export const EvaluacionProyectos = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                 },
-            })
-            setEvaluarClick(false)
-            setReload(!reload)
+            });
+    
+            setEvaluarClick(false);
+            setReload(!reload);
             document.body.classList.remove('modal-open');
 
+            // obtener evaluacion
+            try {
+                const response = await obtenerEvaluacionPorID(localStorage.getItem('token'), evaluacionID);
+
+            // cambiar estado
+
+                response.estado = "Completa"
+                
+            // enviarla en editar
+
+            await editarEvaluacion(evaluacionID, response, localStorage.getItem('token'), );
+
+            } catch (error) {
+            }
+
         } catch (error) {
-            toast.error(`Error: No se pudo enviar la evaluación.`, {
-                duration: 10000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-                })
         }
-    }
+    };
+    
 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
