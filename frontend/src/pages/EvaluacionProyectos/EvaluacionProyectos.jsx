@@ -115,7 +115,7 @@ export const EvaluacionProyectos = () => {
           {!error ? (
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="row">
-                    <div className="col">
+                    <div className="col-10">
                         <h1>Evaluación de proyectos</h1>
                     </div>
                     <div className="col-10">
