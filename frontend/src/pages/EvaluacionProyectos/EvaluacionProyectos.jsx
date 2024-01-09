@@ -4,7 +4,6 @@ import { Modal } from "../../utils/Modal"
 import { TableEvaluaciones } from "../../utils/TableEvaluaciones"
 import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { Back } from "../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
 import { obtenerEvaluacionesPorEvaluador, obtenerPreguntasPorEvaluación} from "../../api/evaluacionProyectos"
 import { EvaluacionForm } from "../../components/EvaluacionProyectos/EvaluacionForm"
@@ -55,7 +54,6 @@ export const EvaluacionProyectos = () => {
         }
     };
 
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setEvaluarClick(false)
         document.body.classList.remove('modal-open');
@@ -85,12 +83,10 @@ export const EvaluacionProyectos = () => {
         }
     }
 
-    // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -108,7 +104,7 @@ export const EvaluacionProyectos = () => {
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                 <div className="row">
                     <div className="col">
-                        <h1>Evaluaciones</h1>
+                        <h1>Evaluación de proyectos</h1>
                     </div>
                     <div className="col-10">
                     {!cargado && (
@@ -128,7 +124,7 @@ export const EvaluacionProyectos = () => {
       
             <TableEvaluaciones columns={columns} data={evaluaciones} dataKeys={dataKeys} onClick ={elementClicked}/>
             {evaluarClick && (
-                    <Modal><EvaluacionForm onCancel={onCancel} onSubmit={sendAnswers} evaluacion={evaluacion} mode={1}></EvaluacionForm></Modal>
+                    <Modal><EvaluacionForm onCancel={onCancel} onSubmit={sendAnswers} evaluacion={evaluacion}></EvaluacionForm></Modal>
             )}
             <Toaster></Toaster>
             </div>

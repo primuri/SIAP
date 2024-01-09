@@ -530,6 +530,7 @@ input[type="submit"]:focus {
   background-color:var(--gris-oscuro-urc);
   border-color: var(--gris-oscuro-urc);
   width: 72%;
+  cursor: not-allowed !important;
 }
 
 #evaluacion-button {
@@ -537,9 +538,11 @@ input[type="submit"]:focus {
   border-color: #005da4;
 }
 
-
-
-
+#boton-evaluacion {
+  width: 300px;
+  background-color:#005da4;
+  border-color: #005da4;
+}
 
 
 
