@@ -49,7 +49,6 @@ export const EvaluacionProyectos = () => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setEvaluacion(selectedEvaluacion);
             setEvaluarClick(true)
-            console.log(evaluacion)
         } else {
         }
     };
@@ -72,39 +71,27 @@ export const EvaluacionProyectos = () => {
                 enviarRespuesta(localStorage.getItem("token"), Data.pregunta6, Data.respuesta6, evaluacionID),
             ];
     
-            // Ejecuta todas las promesas concurrentemente
             await Promise.all(promises);
-    
-            toast.success('Evaluación completada con éxito', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: 'var(--celeste-ucr)',
-                    color: '#fff',
-                },
-            });
-    
-            setEvaluarClick(false);
-            setReload(!reload);
+                
             document.body.classList.remove('modal-open');
 
-            // obtener evaluacion
             try {
-                const response = await obtenerEvaluacionPorID(localStorage.getItem('token'), evaluacionID);
-
-            // cambiar estado
-
-                response.estado = "Completa"
-                
-            // enviarla en editar
-
-            await editarEvaluacion(evaluacionID, response, localStorage.getItem('token'), );
-
+                await editarEvaluacion(evaluacionID, {estado:"Completa"}, localStorage.getItem('token'));
+                setReload(!reload)
+                setEvaluarClick(false);
             } catch (error) {
             }
-
         } catch (error) {
         }
+
+        toast.success('Evaluación completada con éxito', {
+            duration: 4000,
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+            },
+        });
     };
     
 

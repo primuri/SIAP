@@ -13,11 +13,7 @@ const filter = createFilterOptions();
 
 export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
-    const [addClick, setAddClick] = useState(false) 
-    const [edit, setEdit] = useState(false)
     const [seccion, setSeccion] = useState(0);
-
-
 
     const [data, setData] = useState({
         nombreEvaluador: evaluacion ? evaluacion.id_evaluador_fk.id_nombre_completo_fk.nombre : "",
@@ -85,7 +81,6 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
     const handleEvaluarClick = () => {
         setShowConfirmationEdit(true);
     };
-
 
     const handleEvaluarCancel = () => {
         setShowConfirmationEdit(false);

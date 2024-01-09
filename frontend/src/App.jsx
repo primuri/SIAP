@@ -29,7 +29,6 @@ function App() {
 
   }, []);
 
-  
   return (
     <BrowserRouter>
       <Header/>
@@ -45,7 +44,6 @@ function App() {
             {GestionProveedores}
             {GestionProyectos}
             {EvaluacionProyectos}
-
             <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
             <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
             <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>

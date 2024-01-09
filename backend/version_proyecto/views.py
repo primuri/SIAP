@@ -70,9 +70,14 @@ class EvaluacionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
         id_evaluador = self.request.query_params.get('id_evaluador', None)
+        id_evaluacion = self.request.query_params.get('id_evaluacion', None)
+
         if id_evaluador is not None:
             queryset = queryset.filter(id_evaluador_fk=id_evaluador)
+        elif id_evaluacion is not None:
+            queryset = queryset.filter(id_evaluacion=id_evaluacion)
 
         return queryset
 

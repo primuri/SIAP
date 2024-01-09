@@ -3,5 +3,4 @@ import { EvaluacionProyectos } from "../pages/EvaluacionProyectos/EvaluacionProy
 
 export default[
     <Route path="evaluacion-proyectos/" Component={EvaluacionProyectos} key="evaluacion-proyectos"></Route>,
-    
 ]

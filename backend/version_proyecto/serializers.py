@@ -79,7 +79,7 @@ class RespuestaEvaluacionSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(RespuestaEvaluacionSerializer, self).to_representation(instance)
-        evaluacion_data = EvaluacionSerializer(instance.id_evalucion_fk).data
+        evaluacion_data = EvaluacionSerializer(instance.id_evaluacion_fk).data
         rep['id_evaluacion_fk'] = evaluacion_data
         return rep
 

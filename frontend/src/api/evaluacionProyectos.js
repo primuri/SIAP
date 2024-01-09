@@ -30,7 +30,7 @@ export const obtenerEvaluacionPorID = async (token, id) => {
 
 // Editar evaluacion
 export const editarEvaluacion = async (id, evaluacion, token) => {
-    return await manejarErrores(SIAPAPI.put(`version_proyecto/evaluaciones/${id}/`, evaluacion, {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/evaluaciones/${id}/`, evaluacion, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
