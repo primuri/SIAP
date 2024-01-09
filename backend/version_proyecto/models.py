@@ -104,14 +104,14 @@ class Evaluacion(models.Model):
     class Meta:
         db_table = 'evaluacion'
 
-class PreguntaEvaluacion(models.Model):
-    id_pregunta_evaluacion = models.AutoField(primary_key=True)
-    pregunta = models.CharField(max_length=556)
-    respuesta = models.CharField(max_length=128)
+class RespuestaEvaluacion(models.Model):
+    id_respuesta_evaluacion = models.AutoField(primary_key=True)
     id_evaluacion_fk = models.ForeignKey(Evaluacion, on_delete=models.PROTECT)
+    pregunta = models.CharField(max_length=556)  
+    respuesta = models.CharField(max_length=556)
 
     class Meta:
-        db_table = 'pregunta_evaluacion'
+        db_table = 'respuesta_evaluacion'
 
 class DesignacionAsistente(models.Model):
     id_designacion_asistente = models.AutoField(primary_key=True)
@@ -139,3 +139,4 @@ class ColaboradorSecundario(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['id_academico_fk', 'id_version_proyecto_fk'], name='unique_academico_proyecto')
         ]
+

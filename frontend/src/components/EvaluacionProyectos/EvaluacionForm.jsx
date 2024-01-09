@@ -29,15 +29,19 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
     })
 
     const [formData, setFormData] = useState({
-        pregunta1: "",
-        pregunta2: "",
-        pregunta3: "",
-        pregunta4: "",
-        pregunta5: "",
-        pregunta6: "",
+        pregunta1: "El proyecto describe de forma detallada la actualidad, o los vacíos, o nuevos aportes en el estado del conocimiento.",
+        respuesta1: "",
+        pregunta2: "El planteamiento de la investigación responde a los vacíos o nuevos aportes identificados en el estado del conocimiento.",
+        respuesta2: "",
+        pregunta3: "La pregunta de investigación puede responderse con los objetivos, hipótesis o metas planteadas de forma adecuada.",
+        respuesta3: "",
+        pregunta4: "La metodología por implementar responde, de forma adecuada, a la pregunta, los objetivos, hipótesis o metas que se quieren contestar, y aporta al desarrollo del proyecto.",
+        respuesta4: "",
+        pregunta5: "La estrategia de análisis de datos o de información permite resolver el problema o preguntas planteadas.",
+        respuesta5: "",
+        pregunta6: "La ejecución de la propuesta contribuye a ampliar el acervo de conocimiento actual sobre el problema o a la solución del problema.",
+        respuesta6: "",
     })
-
-
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -65,8 +69,7 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
         const allFieldsFilled = Object.values(formData).every(value => value !== "");
         if (allFieldsFilled) {
             const jsonData = JSON.stringify(formData);
-            console.log(jsonData)
-            onSubmit(jsonData);
+            onSubmit(jsonData, evaluacion.id_evaluacion);
         } else {
             toast.error(`Error: Debe completar todos los campos antes de enviar la evaluación.`, {
                 duration: 10000,
@@ -148,36 +151,35 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
                     <h2 className="headerForm text-center mt-2 mb-2"> Evaluación del proyecto {data.nombre}</h2>   
                     
                     <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center m-5 mt-4' encType="multipart/form-data">
-                        <div class="form-group m-2">
-                            <label for="pregunta1">1. El proyecto describe de forma detallada la actualidad, o los vacíos, o nuevos aportes en el estado del conocimiento.</label>
-                            <textarea class="form-control mt-2" rows="10" required value={formData.pregunta1} onChange={(e) => handleChange({ target: { name: 'pregunta1', value: e.target.value } })}></textarea>
+                        <div className="form-group m-2">
+                            <label>1. {formData.pregunta1}</label>
+                            <textarea className="form-control mt-2" rows="10" required value={formData.respuesta1} onChange={(e) => handleChange({ target: { name: 'respuesta1', value: e.target.value } })}></textarea>
                         </div>
-                        <div class="form-group m-2 mt-4">
-                            <label for="pregunta2">2. El planteamiento de la investigación responde a los vacíos o nuevos aportes identificados en el estado del conocimiento.</label>
-                            <textarea class="form-control mt-2" rows="10" required value={formData.pregunta2} onChange={(e) => handleChange({ target: { name: 'pregunta2', value: e.target.value } })}></textarea>
+                        <div className="form-group m-2 mt-4">
+                            <label>2. {formData.pregunta2} </label>
+                            <textarea className="form-control mt-2" rows="10" required value={formData.respuesta2} onChange={(e) => handleChange({ target: { name: 'respuesta2', value: e.target.value } })}></textarea>
                         </div>
-                        <div class="form-group m-2 mt-4">
-                            <label for="pregunta3">3. La pregunta de investigación puede responderse con los objetivos, hipótesis o metas planteadas de forma adecuada.</label>
-                            <textarea class="form-control mt-2" rows="10" required value={formData.pregunta3} onChange={(e) => handleChange({ target: { name: 'pregunta3', value: e.target.value } })}></textarea>
+                        <div className="form-group m-2 mt-4">
+                            <label >3. {formData.pregunta3} </label>
+                            <textarea className="form-control mt-2" rows="10" required value={formData.respuesta3} onChange={(e) => handleChange({ target: { name: 'respuesta3', value: e.target.value } })}></textarea>
                         </div>
-                        <div class="form-group m-2 mt-4">
-                            <label for="pregunta4">4. La metodología por implementar responde, de forma adecuada, a la pregunta, los objetivos, hipótesis o metas que se quieren contestar, y aporta al desarrollo del proyecto.</label>
-                            <textarea class="form-control mt-2" rows="10" required value={formData.pregunta4} onChange={(e) => handleChange({ target: { name: 'pregunta4', value: e.target.value } })}></textarea>
+                        <div className="form-group m-2 mt-4">
+                            <label>4. {formData.pregunta4} </label>
+                            <textarea className="form-control mt-2" rows="10" required value={formData.respuesta4} onChange={(e) => handleChange({ target: { name: 'respuesta4', value: e.target.value } })}></textarea>
                         </div>
-                        <div class="form-group m-2 mt-4">
-                            <label for="pregunta5">5. La estrategia de análisis de datos o de información permite resolver el problema o preguntas planteadas.</label>
-                            <textarea class="form-control mt-2" rows="10" required value={formData.pregunta5} onChange={(e) => handleChange({ target: { name: 'pregunta5', value: e.target.value } })}></textarea>
+                        <div className="form-group m-2 mt-4">
+                            <label>5. {formData.pregunta5} </label>
+                            <textarea className="form-control mt-2" rows="10" required value={formData.respuesta5} onChange={(e) => handleChange({ target: { name: 'respuesta5', value: e.target.value } })}></textarea>
                         </div>
-                        <div class="form-group m-2 mt-4">
-                            <label for="pregunta6">6. La ejecución de la propuesta contribuye a ampliar el acervo de conocimiento actual sobre el problema o a la solución del problema.</label>
-                            <textarea class="form-control mt-2" rows="10" required value={formData.pregunta6} onChange={(e) => handleChange({ target: { name: 'pregunta6', value: e.target.value } })}></textarea>
+                        <div className="form-group m-2 mt-4">
+                            <label>6. {formData.pregunta6} </label>
+                            <textarea className="form-control mt-2" rows="10" required value={formData.respuesta6} onChange={(e) => handleChange({ target: { name: 'respuesta6', value: e.target.value } })}></textarea>
                         </div>
                     </form>
                 </div>        
             )}
      
 
-            
             <div className="modal-footer justify-content-center position-sticky bottom-0">
                 <div className="row">
                     <div className="col">

@@ -5,7 +5,7 @@ import { TableEvaluaciones } from "../../utils/TableEvaluaciones"
 import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerEvaluacionesPorEvaluador, obtenerPreguntasPorEvaluación} from "../../api/evaluacionProyectos"
+import { obtenerEvaluacionesPorEvaluador, enviarRespuesta} from "../../api/evaluacionProyectos"
 import { EvaluacionForm } from "../../components/EvaluacionProyectos/EvaluacionForm"
 
 export const EvaluacionProyectos = () => {
@@ -59,27 +59,39 @@ export const EvaluacionProyectos = () => {
         document.body.classList.remove('modal-open');
     }
 
-    const sendAnswers = async (/*formData*/) => {
+    const sendAnswers = async (formData, evaluacionID) => {
         try {
 
-            /*const Data = JSON.parse(formData)
+            const Data = JSON.parse(formData)
 
-            Data.id_version_proyecto_fk = proyectoID;
-            await agregarInforme(Data, localStorage.getItem("token"))
+            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta1, Data.respuesta1, evaluacionID)
+            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta2, Data.respuesta2, evaluacionID)
+            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta3, Data.respuesta3, evaluacionID)
+            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta4, Data.respuesta4, evaluacionID)
+            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta5, Data.respuesta5, evaluacionID)
+            await enviarRespuesta(localStorage.getItem("token"), Data.pregunta6, Data.respuesta6, evaluacionID)
 
-            toast.success('Informe agregado correctamente', {
+            toast.success('Evaluación completada con éxito', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                 },
-            })*/
+            })
             setEvaluarClick(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
         } catch (error) {
+            toast.error(`Error: No se pudo enviar la evaluación.`, {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+                })
         }
     }
 

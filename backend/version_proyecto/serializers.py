@@ -2,7 +2,7 @@ from rest_framework import serializers
 from personas.models import Academico, Asistente
 
 from propuesta_proyecto.models import PropuestaProyecto, Vigencia
-from .models import PreguntaEvaluacion, Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
+from .models import Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, RespuestaEvaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
 from propuesta_proyecto.serializers import PropuestaProyectoSerializer, VigenciaSerializer
 from personas.serializers import AsistenteSerializer, AcademicoSerializer, EvaluadorSerializer
 
@@ -72,17 +72,17 @@ class EvaluacionSerializer(serializers.ModelSerializer):
         rep['id_version_proyecto_fk'] = proyecto_data
         return rep
 
-class PreguntaEvaluacionSerializer(serializers.ModelSerializer):
-    id_evaluacion_fk = serializers.PrimaryKeyRelatedField(queryset=Evaluacion.objects.all())
-
+class RespuestaEvaluacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PreguntaEvaluacion
+        model = RespuestaEvaluacion
         fields = '__all__'
 
     def to_representation(self, instance):
-        rep = super(PreguntaEvaluacionSerializer, self).to_representation(instance)
-        rep['id_evaluacion_fk'] = EvaluacionSerializer(instance.id_evaluacion_fk).data
+        rep = super(RespuestaEvaluacionSerializer, self).to_representation(instance)
+        evaluacion_data = EvaluacionSerializer(instance.id_evalucion_fk).data
+        rep['id_evaluacion_fk'] = evaluacion_data
         return rep
+
 
 class VersionProyectoSerializer(serializers.ModelSerializer):
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())

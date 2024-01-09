@@ -27,9 +27,15 @@ export const obtenerEvaluacionesPorEvaluador = async (token, id) => {
     }));
 };
 
-// Obtener preguntas de una evaluación específica
-export const obtenerPreguntasPorEvaluación = async (token, id) => {
-    return await manejarErrores(SIAPAPI.get(`version_proyecto/preguntasevaluaciones/${id}/`, {
+export const enviarRespuesta = async (token, pregunta, respuesta, evaluacionID) => {
+
+    const respuestaData = {
+        pregunta: pregunta,
+        respuesta: respuesta,
+        id_evaluacion_fk: evaluacionID
+    };
+
+    return await manejarErrores(SIAPAPI.post('version_proyecto/respuestasevaluaciones/', respuestaData, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
