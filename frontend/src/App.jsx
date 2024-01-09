@@ -8,6 +8,7 @@ import GestionInformes from "./routes/GestionInformes"
 import GestionPresupuestos from './routes/GestionPresupuestos'
 import GestionProveedores from './routes/GestionProveedores'
 import GestionProyectos from "./routes/GestionProyectos"
+import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import { useEffect } from 'react'
 import { InicioAdministrador } from './pages/Inicio/InicioAdministrador'
 import { InicioInvestigador } from './pages/Inicio/InicioInvestigador'
@@ -45,7 +46,7 @@ function App() {
             {GestionProveedores}
             {GestionProyectos}
             {EvaluacionProyectos}
-
+            {GestionEvaluaciones}
             <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
             <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
             <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>

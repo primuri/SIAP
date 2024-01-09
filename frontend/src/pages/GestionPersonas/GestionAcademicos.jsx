@@ -103,7 +103,7 @@ export const GestionAcademicos = () => {
             await agregarAcademico(formData, localStorage.getItem("token"))
             toast.success('Investigador agregado correctamente', {
                 id: toastId,
-                duration: 4000, 
+                duration: 1000, 
                 position: 'bottom-right', 
                 style: {
                   background: 'var(--celeste-ucr)',
