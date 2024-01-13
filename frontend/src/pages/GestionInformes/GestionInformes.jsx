@@ -227,7 +227,7 @@ export const GestionInformes = () => {
                     </div>
 
                     {(!cargado) && (
-                        <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
+                        <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw', width: '5px' }} role="status"></div>
                     )}             
 
                     <div className="d-flex justify-content-between mt-4">

@@ -5,6 +5,7 @@ import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
 import * as API from "../../api/gestionEvaluaciones"
+import { EvaluacionForm } from "../../components/GestionEvaluaciones/EvaluacionForm"
 
 export const GestionEvaluaciones = () => {
     const [evaluacionesData, setEvaluacionesData] = useState([])
@@ -40,6 +41,7 @@ export const GestionEvaluaciones = () => {
 
             var responseDocumento = await API.agregarDocumento(data.id_documento_fk)
             data.id_documento_fk = responseDocumento.data.id_documento
+
             await API.agregarEvaluacion(data)
 
             toastExito("Evaluación agregada correctamente", toastId)
@@ -126,6 +128,17 @@ export const GestionEvaluaciones = () => {
                     <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={filtrarEvaluaciones}></Search>
                 </div>
                 <Table columns={columns} data={evaluacionesList} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Ver formulario"></Table>
+                {(addClicked || editClicked) && (
+                    <Modal>
+                        <EvaluacionForm
+                            mode={editClicked ? 2 : 1}
+                            onSubmit={editClicked ? editEvaluacion : addEvaluacion}
+                            onCancel={onCancel}
+                            onDelete={editClicked ? () => deleteEvaluacion(evaluacionActual.id_evaluacion_fk) : undefined}
+                            evaluacion={editClicked ? evaluacionActual : null}
+                        />
+                    </Modal>
+                )}
                 <Toaster></Toaster>
             </div>
         </main>
