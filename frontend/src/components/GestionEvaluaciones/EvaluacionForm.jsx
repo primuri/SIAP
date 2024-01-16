@@ -2,6 +2,8 @@ import { FormModal } from "../../utils/FormModal";
 import { VIFields } from "../../pages/GestionInformes/utils";
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import icono from '../../assets/person-i.png'
 import * as API from '../../api/gestionEvaluaciones'
@@ -15,11 +17,14 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     const [proyectoSeleccionado, setProyectoSeleccionado] = useState('')
     const [loadedLista, setLoadedLista] = useState(false)
     const [loadedVersiones, setLoadedVersiones] = useState(true)
-
+    const [evaluadores, setEvaluadores] = useState([])
+    const [evaluadorSeleccionado, setEvaluadorSeleccionado] = useState('')
+    const [loadedEvaluadores, setLoadedEvaluadores] = useState(true)
 
     useEffect(() => {
         obtenerProyectos()
-    })
+        obtenerEvaluadores()
+    }, [])
 
     useEffect(() => {
         cargarVersiones()
@@ -30,10 +35,10 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     const [formData, setFormData] = useState({
         detalle: evaluacion ? evaluacion.detalle : "",
-        estado: evaluacion ? evaluacion.estado : "",
-        id_version_proyecto_fk: evaluacion ? evaluacion.id_version_proyecto_fk : null,
-        id_evaluador_fk: evaluacion ? evaluacion.id_evaluador_fk : null,
-        id_documento_evaluacion_fk: evaluacion ? { ...evaluacion.id_documento_evaluacion_fk } : { tipo: "Evaluacion", detalle: "", documento: "" }
+        estado: evaluacion ? evaluacion.estado : "Pendiente",
+        id_version_proyecto_fk: evaluacion ? evaluacion.id_version_proyecto_fk.id_version_proyecto: null,
+        id_evaluador_fk: evaluacion ? evaluacion.id_evaluador_fk.id_evaluador : null,
+        id_documento_evaluacion_fk: evaluacion ? { ...evaluacion.id_documento_evaluacion_fk } : { tipo: "Evaluacion", detalle: "", documento: null }
     })
 
     // => Funciones para el autoComplete
@@ -52,10 +57,6 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         }
         setProyectos(listaProyectos)
         setLoadedLista(true)
-    };
-
-    const handleProyectoSeleccionadoChange = (event, newValue) => {
-        proyectoSeleccionado = newValue; // Actualiza la variable directamente
     };
 
     const cargarVersiones = async () => {
@@ -81,6 +82,23 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    var obtenerEvaluadores = async () =>{
+        var listaEvaluadores = []
+
+        try {
+            var response = await API.obtenerEvaluadores();
+
+            for (const evaluador of response.data) {
+                let stringEvaluador = `${evaluador.id_evaluador} | ${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido}`;
+                listaEvaluadores.push(stringEvaluador);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        setEvaluadores(listaEvaluadores)
+        setLoadedEvaluadores(true)
     }
 
     // => Funciones de manejo de cambios
@@ -124,11 +142,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
 
-        if (obj === "oficio") {
-            setFileOficio(file);
-        } else if (obj === "informe") {
-            setFileInforme(file)
-        }
+        setDocumento(file)
     };
 
     // => Recoleccion y envio de formulario
@@ -153,14 +167,14 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             <div className="col">
                                 <label htmlFor="proyecto" className="label-personalizado mb-2">Proyecto a evaluar</label>
                                 {(!loadedLista) && (
-                                    <div className="spinner-border text-info" style={{marginLeft: '1vw', width: '15px', height: '15px'}} role="status"></div>
+                                    <div className="spinner-border text-info" style={{ marginLeft: '1vw', width: '15px', height: '15px' }} role="status"></div>
                                 )}
                                 <Autocomplete
                                     value={proyectoSeleccionado}
                                     id="free-solo-demo"
                                     freeSolo
                                     options={proyectos}
-                                    renderInput={(params) => <TextField {...params} />}
+                                    renderInput={(params) => <TextField {...params} required/>}
                                     onChange={(event, newValue) => {
                                         if (newValue) {
                                             setProyectoSeleccionado(newValue)
@@ -173,7 +187,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             <div className="col">
                                 <label htmlFor="numero_version" className="label-personalizado mb-2">Versión a evaluar</label>
                                 {(!loadedVersiones) && (
-                                    <div className="spinner-border text-info" style={{marginLeft: '1vw', width: '15px', height: '15px'}} role="status"></div>
+                                    <div className="spinner-border text-info" style={{ marginLeft: '1vw', width: '15px', height: '15px' }} role="status"></div>
                                 )}
                                 {proyectoSeleccionado !== '' ? (<>
                                     <select
@@ -183,8 +197,9 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                         value={formData.id_version_proyecto_fk}
                                         onChange={handleChange}
                                         disabled={proyectoSeleccionado !== '' ? false : true}
+                                        required
                                     >
-                                        <option value="" disabled defaultValue={""}>Seleccione una version</option>
+                                        <option value="" defaultValue={""}>Seleccione una version</option>
                                         {versionesProyecto.map((version) => (
                                             <option value={version.id_version_proyecto}>
                                                 {version.numero_version}
@@ -192,6 +207,65 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                         ))}
                                     </select>
                                 </>) : (<><input type="text" className="form-control disabled-input" disabled={true} value={'Primero seleccione un proyecto'} /></>)}
+                            </div>
+                        </div>
+                        <div className="row mb-4">
+                            <div className="col">
+                        <label htmlFor="numero_version" className="label-personalizado mb-2">Evaluador asignado</label>
+
+                            {(!loadedEvaluadores) && (
+                                    <div className="spinner-border text-info" style={{ marginLeft: '1vw', width: '15px', height: '15px' }} role="status"></div>
+                                )}
+                                <Autocomplete
+                                    value={evaluadorSeleccionado}
+                                    id="free-solo-demo"
+                                    freeSolo
+                                    options={evaluadores}
+                                    renderInput={(params) => <TextField {...params} required/>}
+                                    onChange={(event, newValue) => {
+                                        if (newValue) {
+                                            setEvaluadorSeleccionado(newValue)
+                                            const regex = /^\d+/;
+
+                                            try {
+                                                const match = newValue.match(regex);
+                                    
+                                                if (match && match[0]) {
+                                                    const idEvaluador = match[0];
+                                                    formData.id_evaluador_fk = idEvaluador
+                                                }
+                                                console.log(formData.id_evaluador_fk)
+                                            } catch (error) {
+                                                console.log(error);
+                                            }
+                                        } else {
+                                            setEvaluadorSeleccionado('')
+                                        }
+                                    }}
+                                />
+                            </div>
+                            {mode == 2 && (
+                            <div className="col">
+                                <label htmlFor="numero_version" className="label-personalizado mb-2">Estado <span className="disabled-input">(Solo ver)</span></label>
+                                <input type="text" className="form-control disabled-input" name="detalle" id="detalle" value={formData.estado} disabled/>
+                            </div>)}
+                        </div>
+                        <div className="row mb-4">
+
+                            <div className="col">
+                                <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación <span className="disabled-input">(Opcional)</span></label>
+                                <input type="file" className="form-control" name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} />
+                                {mode == 2 && formData.id_documento_evaluacion_fk && (
+                                    <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
+                                        <a href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                            {"Ver documento"}
+                                        </a>
+                                    </Tooltip>
+                                )}
+                            </div>
+                            <div className="col">
+                                <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación <span className="disabled-input">(Opcional)</span></label>
+                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
                             </div>
                         </div>
                     </div>

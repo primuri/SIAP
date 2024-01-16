@@ -38,14 +38,14 @@ export const GestionEvaluaciones = () => {
             var toastId = toastProcesando("Agregando...")
 
             const data = {...formData}
-
-            var responseDocumento = await API.agregarDocumento(data.id_documento_fk)
-            data.id_documento_fk = responseDocumento.data.id_documento
+            var responseDocumento = await API.agregarDocumento(data.id_documento_evaluacion_fk)
+            data.id_documento_evaluacion_fk = responseDocumento.data.id_documento
 
             await API.agregarEvaluacion(data)
 
             toastExito("Evaluación agregada correctamente", toastId)
-
+            setReload(!reload)
+            setAddClicked(false)
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
@@ -69,8 +69,7 @@ export const GestionEvaluaciones = () => {
             await API.agregarEvaluacion(data)
 
             toastExito("Evaluación editada correctamente", toastId)
-
-
+            setReload(!reload)
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
@@ -85,6 +84,7 @@ export const GestionEvaluaciones = () => {
             await API.eliminarEvaluacion(formData.id_evaluacion)
 
             toastExito("Evaluación eliminada correctamente", toastId)
+            setReload(!reload)
 
         }catch(error){
             console.error("Error: \n" + error)
