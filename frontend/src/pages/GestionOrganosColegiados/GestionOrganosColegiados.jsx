@@ -51,9 +51,10 @@ export const GestionOrganosColegiados = () => {
     }
 
     const addOrganoColegiado = async (formData) => {
+        
+        var toastId = toastProcesando("Agregando...")
+        
         try {
-
-            var toastId = toastProcesando("Agregando...")
 
             const Data = JSON.parse(formData)
 
@@ -66,39 +67,37 @@ export const GestionOrganosColegiados = () => {
             toastExito("Órgano colegiado agregado correctamente", toastId)
 
         } catch (error) {
+            console.error("Error: \n" + error)
+            toast.dismiss(toastId)
         }
     }
 
 
-    const editarOrganoColegiado = async (formData) => {
+    const editOrganoColegiado = async (formData) => {
+    
+        var toastId = toastProcesando("Editando...")
+
         try {
-
-            var toastId = toastProcesando("Editando...")
-
+    
             const Data = JSON.parse(formData)
-            await editarOrganoColegiado(OrganoColegiado.id_organo_colegiado, Data, localStorage.getItem("token"))
+            await editarOrganoColegiado(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
 
             setEdit(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toast.success('Órgano colegiado editado correctamente', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: 'var(--celeste-ucr)',
-                    color: '#fff',
-                },
-            })
-
             toastExito("Evaluación editada correctamente", toastId)
 
         } catch (error) {
-            console.log("Error editar")
+            console.error("Error: \n" + error)
+            toast.dismiss(toastId)
         }
     }
 
     const deleteOrganoColegiado = async (organo_colegiado) => {
+
+        var toastId = toastProcesando("Eliminando...")
+
         try {
             await eliminarOrganoColegiado(organo_colegiado.id_organo_colegiado, localStorage.getItem('token'))
 
@@ -116,6 +115,8 @@ export const GestionOrganosColegiados = () => {
             })
 
         } catch (error) {
+            console.error("Error: \n" + error)
+            toast.dismiss(toastId)
         }
         setEdit(false)
     }
@@ -207,7 +208,7 @@ export const GestionOrganosColegiados = () => {
                         <Modal>
                             <OrganosColegiadosForm
                                 mode={2}
-                                onSubmit={editarOrganoColegiado}
+                                onSubmit={editOrganoColegiado}
                                 onCancel={onCancel}
                                 onDelete={() => deleteOrganoColegiado(OrganoColegiado)}
                                 organo_colegiado={OrganoColegiado}

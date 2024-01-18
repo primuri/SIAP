@@ -59,9 +59,10 @@ export const EvaluacionProyectos = () => {
     }
 
     const sendAnswers = async (formData, evaluacionID) => {
-        try {
+        
+        var toastId = toastProcesando("Enviando respuestas...")
 
-            var toastId = toastProcesando("Enviando respuestas...")
+        try {
 
             const Data = JSON.parse(formData);
     
@@ -88,6 +89,8 @@ export const EvaluacionProyectos = () => {
             toastExito("Evaluación completada con éxito", toastId)
 
         } catch (error) {
+            console.error("Error: \n" + error)
+            toast.dismiss(toastId)
         }
     };
     

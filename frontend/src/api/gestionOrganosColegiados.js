@@ -38,7 +38,7 @@ export const agregarOrganoColegiado = async (organo_colegiado) => {
 }*/
 
 export const editarOrganoColegiado = async (id_organo_colegiado, organo_colegiado, token) => {
-    return await manejarErrores(SIAPAPI.put(`organo_colegiado/organo_colegiado/${id_organo_colegiado}/`, organo_colegiado, {
+    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/organo_colegiado/${id_organo_colegiado}/`, organo_colegiado, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'

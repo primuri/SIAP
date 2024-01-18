@@ -18,7 +18,7 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
     const [edit, setEdit] = useState(false)
 
     const [formData, setFormData] = useState({
-        id: organo_colegiado ? organo_colegiado.id_organo_colegiado : "",
+        id_organo_colegiado: organo_colegiado ? organo_colegiado.id_organo_colegiado : "",
         nombre: organo_colegiado ? organo_colegiado.nombre : "",
         numero_miembros: organo_colegiado ? organo_colegiado.numero_miembros : "",
         quorum: organo_colegiado ? organo_colegiado.quorum : "",
@@ -58,7 +58,6 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
 
     const sendForm = (event) => {
         event.preventDefault();
-        formData.id_version_proyecto_fk = 1;
         const jsonData = JSON.stringify(formData);
         onSubmit(jsonData);
     };
