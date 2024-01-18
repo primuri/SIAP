@@ -27,8 +27,8 @@ export const GestionOrganosColegiados = () => {
     const [edit, setEdit] = useState(false)                                      
     const [error, setError] = useState(false)
 
-    const columns = ['Identificador', 'Nombre', 'Quorum', 'Cantidad de integrantes', 'Acuerdo en firme', 'Integrantes', 'Sesiones']
-    const dataKeys = ['id_organo_colegiado', 'nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
+    const columns = ['Nombre', 'Quorum', 'Cantidad de integrantes', 'Acuerdo en firme', 'Integrantes', 'Sesiones']
+    const dataKeys = ['nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   
 
@@ -53,21 +53,17 @@ export const GestionOrganosColegiados = () => {
     const addOrganoColegiado = async (formData) => {
         try {
 
+            var toastId = toastProcesando("Agregando...")
+
             const Data = JSON.parse(formData)
 
             await agregarOrganoColegiado(Data, localStorage.getItem("token"))
 
-            toast.success('Órgano colegiado agregado correctamente', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: 'var(--celeste-ucr)',
-                    color: '#fff',
-                },
-            })
             setAddClick(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
+
+            toastExito("Evaluación agregada correctamente", toastId)
 
         } catch (error) {
         }
@@ -76,8 +72,16 @@ export const GestionOrganosColegiados = () => {
 
     const editarOrganoColegiado = async (formData) => {
         try {
+
+            var toastId = toastProcesando("Editando...")
+
             const Data = JSON.parse(formData)
             await editarOrganoColegiado(OrganoColegiado.id_organo_colegiado, Data, localStorage.getItem("token"))
+
+            setEdit(false)
+            setReload(!reload)
+            document.body.classList.remove('modal-open');
+
             toast.success('Órgano colegiado editado correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -86,9 +90,9 @@ export const GestionOrganosColegiados = () => {
                     color: '#fff',
                 },
             })
-            setEdit(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
+
+            toastExito("Evaluación editada correctamente", toastId)
+
         } catch (error) {
             console.log("Error editar")
         }
@@ -98,6 +102,10 @@ export const GestionOrganosColegiados = () => {
         try {
             await eliminarOrganoColegiado(organo_colegiado.id_organo_colegiado, localStorage.getItem('token'))
 
+            setEdit(false)
+            setReload(!reload)
+            document.body.classList.remove('modal-open');
+
             toast.success('Órgano colegiado eliminado correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
@@ -106,31 +114,24 @@ export const GestionOrganosColegiados = () => {
                     color: '#fff',
                 },
             })
-            setEdit(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
+
         } catch (error) {
         }
         setEdit(false)
     }
 
-
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
     }
 
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
         document.body.classList.add('modal-open');
-
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (selectedOrganoColegiado) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             // Aqui hay que poner uno para sesiones y otro para integrantes
@@ -143,12 +144,9 @@ export const GestionOrganosColegiados = () => {
         }
     };
 
-    // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
-
-    // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -158,6 +156,31 @@ export const GestionOrganosColegiados = () => {
             return e[col].toString().includes(filter)
         })
         setOrganosColegiados(matches)
+    }
+
+    function toastProcesando(mensaje) {
+        var toastId = toast.loading(mensaje, {
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+                fontSize: '18px',
+            },
+        });
+    
+        return toastId
+    }
+    
+    function toastExito(mensaje, toastId) {
+        toast.success(mensaje, {
+            id: toastId,
+            duration: 1000,
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+              color: '#fff',
+            },
+          })
     }
 
     return (

@@ -28,7 +28,16 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
     const handleChange = (event) => {
         const { name, value } = event.target;
     
-        if (name.includes('.')) {
+        if (name === 'numero_miembros' || name === 'quorum' || name === 'acuerdo_firme') {
+            // Verifica si es un número válido y positivo
+            const numericValue = Number(value);
+            if (!isNaN(numericValue) && numericValue >= 0) {
+                setFormData((prev) => ({
+                    ...prev,
+                    [name]: numericValue,
+                }));
+            }
+        } else if (name.includes('.')) {
             const keys = name.split('.');
             setFormData((prev) => ({
                 ...prev,
@@ -44,6 +53,7 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
             }));
         }
     };
+    
 
 
     const sendForm = (event) => {
