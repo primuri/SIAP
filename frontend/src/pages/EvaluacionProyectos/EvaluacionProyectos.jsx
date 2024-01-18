@@ -60,6 +60,9 @@ export const EvaluacionProyectos = () => {
 
     const sendAnswers = async (formData, evaluacionID) => {
         try {
+
+            var toastId = toastProcesando("Enviando respuestas...")
+
             const Data = JSON.parse(formData);
     
             const promises = [
@@ -81,17 +84,11 @@ export const EvaluacionProyectos = () => {
                 setEvaluarClick(false);
             } catch (error) {
             }
+
+            toastExito("Evaluación completada con éxito", toastId)
+
         } catch (error) {
         }
-
-        toast.success('Evaluación completada con éxito', {
-            duration: 4000,
-            position: 'bottom-right',
-            style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-            },
-        });
     };
     
 
@@ -108,6 +105,31 @@ export const EvaluacionProyectos = () => {
             return e[col].toString().includes(filter)
         })
         setEvaluaciones(matches)
+    }
+
+    function toastProcesando(mensaje) {
+        var toastId = toast.loading(mensaje, {
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+                fontSize: '18px',
+            },
+        });
+    
+        return toastId
+    }
+    
+    function toastExito(mensaje, toastId) {
+        toast.success(mensaje, {
+            id: toastId,
+            duration: 1000,
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+              color: '#fff',
+            },
+          })
     }
 
     return (
