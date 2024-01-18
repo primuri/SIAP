@@ -6,13 +6,14 @@ export const Sidebar = () => {
    const menu = {
     "administrador": [
       { label: 'Inicio',        link: '/inicio-administrador' },
-      { label: 'Gestión de<br/>usuarios',        link: '/gestion-usuarios' },
-      { label: 'Gestión de<br/> propuestas',     link: '/gestion-propuestas' },
-      { label: 'Gestión de<br/> proyectos',      link: '/gestion-proyectos' },
-      { label: 'Gestión de<br/> investigadores', link: '/gestion-investigadores' },
-      { label: 'Gestión de<br/> evaluadores',    link: '/gestion-evaluadores' },
-      { label: 'Gestión de<br/> proveedores',    link: '/gestion-proveedores' },
-      { label: 'Gestión de<br/> Evaluaciones',    link: '/gestion-evaluaciones' },
+      { label: 'Gestión usuarios',        link: '/gestion-usuarios' },
+      { label: 'Gestión <br/> investigadores', link: '/gestion-investigadores' },
+      { label: 'Gestión <br/> evaluadores',    link: '/gestion-evaluadores' },
+      { label: 'Gestión <br/> propuestas',     link: '/gestion-propuestas' },
+      { label: 'Gestión <br/> proyectos',      link: '/gestion-proyectos' },
+      { label: 'Gestión <br/> evaluaciones',    link: '/gestion-evaluaciones' },
+      { label: 'Gestión proveedores',    link: '/gestion-proveedores' },
+      { label: 'Gestión órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
 
     ],
     "evaluador": [

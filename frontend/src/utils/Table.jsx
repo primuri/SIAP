@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasButtonColumn = false, buttonText = "" }) => {
+export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasButtonColumn = false, hasButtonColumn2 = false, buttonText = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -66,14 +66,21 @@ export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasBut
           <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
-                <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick (row)}>{buttonText}</button>
-                
+              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( 
+                <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick(row)}>
+                  {buttonText}
+                </button>
               ) : (
-                typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
-                  ? getValueByPath(row, column).split('/').pop()
-                  : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
-                )}
+                colIndex === dataKeys.length - 2 && hasButtonColumn2 ? (
+                  <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick(row)}>
+                  {buttonText}
+                </button>
+                ) : (
+                  typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
+                    ? getValueByPath(row, column).split('/').pop()
+                    : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
+                )
+              )}
             </td>
           ))}
         </tr>

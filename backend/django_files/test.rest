@@ -16,7 +16,7 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
-{ "correo": "evaluador@evaluador.com", "password": "Evaluador!123*" }
+{ "correo": "root@root.com", "password": "Root!123*" }
 
 ### Obtener usuarios
 
@@ -137,3 +137,8 @@ Content-Type: application/json
   "pregunta": "Contenido de la pregunta",
   "respuesta": "Contenido de la respuesta"
 }
+
+### Obtener organos colegiados
+GET http://127.0.0.1:8000/organo_colegiado/organo_colegiado/
+Authorization: token 6aac34e9de7a94820c04f657814ef2633809c25c
+Content-Type: application/json
