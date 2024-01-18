@@ -63,7 +63,7 @@ export const GestionOrganosColegiados = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toastExito("Evaluación agregada correctamente", toastId)
+            toastExito("Órgano colegiado agregado correctamente", toastId)
 
         } catch (error) {
         }
@@ -197,7 +197,7 @@ export const GestionOrganosColegiados = () => {
 
                     <div className="d-flex justify-content-between mt-4">
                         <Add onClick={addClicked}></Add>
-                        <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
+                        <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
                     <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} buttonText="Gestionar" />
                     {addClick && (
