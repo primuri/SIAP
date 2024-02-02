@@ -28,7 +28,7 @@ export const agregarEvaluacion = async (evaluacion) => {
 }
 
 export const editarEvaluacion = async (evaluacion) => {
-    return await manejarErrores(SIAPAPI.patch(`version_proyecto/evaluaciones/${evaluacion.id_evaluacion}`, evaluacion, {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/evaluaciones/${evaluacion.id_evaluacion}/`, evaluacion, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ export const editarEvaluacion = async (evaluacion) => {
 }
 
 export const eliminarEvaluacion = async (id_evaluacion) => {
-    return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluaciones/${id_evaluacion}`, {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluaciones/${id_evaluacion}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ export const eliminarEvaluacion = async (id_evaluacion) => {
 }
 
 export const agregarDocumento = async (documento) => {
-    return await manejarErrores(SIAPAPI.put(`propuesta_proyecto/documento_asociado/`, documento, {
+    return await manejarErrores(SIAPAPI.post(`version_proyecto/documentos/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -58,7 +58,7 @@ export const agregarDocumento = async (documento) => {
 
 
 export const editarDocumento = async (documento) => {
-    return await manejarErrores(SIAPAPI.patch(`propuesta_proyecto/documento_asociado/${documento.id_documento}/`, documento, {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${documento.id_documento}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'

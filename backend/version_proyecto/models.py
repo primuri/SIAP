@@ -40,7 +40,7 @@ class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
     detalle = models.CharField(max_length=360, null=True)
-    documento = models.FileField(upload_to='media/documentos/',  max_length=500)  # Se cambió de char a file
+    documento = models.FileField(upload_to='media/documentos/',  max_length=500, null=True)  # Se cambió de char a file
 
     class Meta:
         db_table = 'documento'
@@ -95,11 +95,11 @@ class VersionProyecto(models.Model):
 
 class Evaluacion(models.Model):
     id_evaluacion = models.AutoField(primary_key=True)
-    detalle = models.CharField(max_length=128)
+    detalle = models.CharField(max_length=128, blank=True)
     estado = models.CharField(max_length=128)
     id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
     id_evaluador_fk = models.ForeignKey(Evaluador, on_delete=models.PROTECT)
-    id_documento_evaluacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_documento_evaluacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT, null=True)
 
     class Meta:
         db_table = 'evaluacion'
