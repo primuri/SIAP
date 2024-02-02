@@ -24,6 +24,10 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     useEffect(() => {
         obtenerProyectos()
         obtenerEvaluadores()
+        if(mode === 2 && evaluacion){
+            setProyectoSeleccionado(`${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | ${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}`)
+            setEvaluadorSeleccionado(`${evaluacion.id_evaluador_fk.id_evaluador} | ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.nombre} ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.apellido}`)
+        }
     }, [])
 
     useEffect(() => {
@@ -34,6 +38,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     // => Campos del formulario 
 
     const [formData, setFormData] = useState({
+        id_evaluacion: evaluacion ? evaluacion.id_evaluacion : '',
         detalle: evaluacion ? evaluacion.detalle : "",
         estado: evaluacion ? evaluacion.estado : "Pendiente",
         id_version_proyecto_fk: evaluacion ? evaluacion.id_version_proyecto_fk.id_version_proyecto: null,
@@ -51,6 +56,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
             for (const proyecto of response.data) {
                 let stringProyecto = `${proyecto.id_codigo_vi} | ${proyecto.id_codigo_cimpa_fk.nombre}`;
                 listaProyectos.push(stringProyecto);
+                
             }
         } catch (error) {
             console.log(error);
@@ -255,7 +261,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             <div className="col">
                                 <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación <span className="disabled-input">(Opcional)</span></label>
                                 <input type="file" className="form-control" name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} />
-                                {mode == 2 && formData.id_documento_evaluacion_fk && (
+                                {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                             {"Ver documento"}

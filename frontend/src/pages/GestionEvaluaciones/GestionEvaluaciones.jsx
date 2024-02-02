@@ -4,8 +4,8 @@ import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import * as API from "../../api/gestionEvaluaciones"
 import { EvaluacionForm } from "../../components/GestionEvaluaciones/EvaluacionForm"
+import * as API from "../../api/gestionEvaluaciones"
 
 export const GestionEvaluaciones = () => {
     const [evaluacionesData, setEvaluacionesData] = useState([])
@@ -57,19 +57,20 @@ export const GestionEvaluaciones = () => {
         try {
             var toastId = toastProcesando("Editando...")
 
-            const data = {...formData}
+            var data = {... formData}
             
-            if(typeof data.id_documento_fk === 'object'){
-                var responseDocumento = await API.editarDocumento(data.id_documento_fk)
-                data.id_documento_fk = responseDocumento.data.id_documento
+            if(typeof data.id_documento_evaluacion_fk.documento === 'object'){
+                var responseDocumento = await API.editarDocumento(data.id_documento_evaluacion_fk)
+                data.id_documento_evaluacion_fk = responseDocumento.data.id_documento
             }else{
-                delete data.id_documento_fk
+                delete data.id_documento_evaluacion_fk
             }
 
-            await API.agregarEvaluacion(data)
+            await API.editarEvaluacion(data)
 
             toastExito("Evaluación editada correctamente", toastId)
             setReload(!reload)
+            setEditClicked(!editClicked)
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
@@ -109,6 +110,11 @@ export const GestionEvaluaciones = () => {
         setEditClicked(true)
         setAddClicked(false)
     };
+
+    const buttonClicked = (evaluacion)=>{
+        setEvaluacionActual(evaluacion)
+        //obtener preguntas y respuestas de esa evaluacion para luego mostrarlas abajo en el modal
+    }
     
     function onCancel() {
         setAddClicked(false)

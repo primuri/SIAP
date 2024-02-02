@@ -28,7 +28,7 @@ export const agregarEvaluacion = async (evaluacion) => {
 }
 
 export const editarEvaluacion = async (evaluacion) => {
-    return await manejarErrores(SIAPAPI.patch(`version_proyecto/evaluaciones/${evaluacion.id_evaluacion}`, evaluacion, {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/evaluaciones/${evaluacion.id_evaluacion}/`, evaluacion, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ export const editarEvaluacion = async (evaluacion) => {
 }
 
 export const eliminarEvaluacion = async (id_evaluacion) => {
-    return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluaciones/${id_evaluacion}`, {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluaciones/${id_evaluacion}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
