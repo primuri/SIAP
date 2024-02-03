@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns = [], data = [], onDoubleClick, onButtonClick, dataKeys, hasButtonColumn = false, buttonText = "" }) => {
+export const TableOneButtom = ({ columns = [], data = [], onDoubleClick, onButtonClick, dataKeys, hasButtonColumn = false, buttonText = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -67,7 +67,7 @@ export const Table = ({ columns = [], data = [], onDoubleClick, onButtonClick, d
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
               {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
-                <button id="acciones-button" className="btn btn-primary" onClick={() => onButtonClick (row)}>{buttonText}</button>
+                (row.estado === 'Completa' ? (<button id="acciones-button" className="btn btn-primary" onClick={() => onButtonClick (row)}>{buttonText}</button>):<button className="btn btn-primary" style={{backgroundColor:'gray', borderColor:'gray', cursor:'default'}} disabled>{buttonText}</button>)
                 
               ) : (
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
@@ -108,7 +108,7 @@ export const Table = ({ columns = [], data = [], onDoubleClick, onButtonClick, d
   );
 };
 
-Table.propTypes = {
+TableOneButtom.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   onDoubleClick : PropTypes.func.isRequired,

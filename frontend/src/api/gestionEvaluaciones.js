@@ -95,3 +95,13 @@ export const obtenerVersionesProyecto = async (idProyecto) => {
     })
     )
 }
+
+export const obtenerPreguntasEvaluacion = async (id_evaluacion) => {
+    return await manejarErrores(SIAPAPI.get(`version_proyecto/respuestasevaluaciones/?id_evaluacion=${id_evaluacion}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
+}

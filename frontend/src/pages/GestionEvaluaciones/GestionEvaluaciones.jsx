@@ -2,9 +2,10 @@ import { useEffect, useState } from "react"
 import {toast, Toaster} from 'react-hot-toast'
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
-import { Table } from "../../utils/Table"
+import { TableOneButtom} from "../../utils/TableOneButtom"
 import { Search } from "../../utils/Search"
 import { EvaluacionForm } from "../../components/GestionEvaluaciones/EvaluacionForm"
+import { EvaluacionListaForm } from "../../components/GestionEvaluaciones/EvaluacionListaForm"
 import * as API from "../../api/gestionEvaluaciones"
 
 export const GestionEvaluaciones = () => {
@@ -15,6 +16,8 @@ export const GestionEvaluaciones = () => {
     const [reload, setReload]                     = useState(false)          // Para recargar tabla
     const [addClicked, setAddClicked]             = useState(false)          // Para evento de agregar
     const [editClicked, setEditClicked]           = useState(false)          // Para evento de editar
+    const [btnClicked, setBtnClicked]          = useState(false)
+    const [preguntas, setPreguntas]               = useState([])
 
     useEffect(() => {
         loadEvaluaciones()
@@ -77,16 +80,15 @@ export const GestionEvaluaciones = () => {
         }
     }
 
-    async function deleteEvaluacion(formData) {
+    async function deleteEvaluacion() {
         try{
             var toastId = toastProcesando("Editando...")
 
-            const data = {...formData}
-            await API.eliminarEvaluacion(formData.id_evaluacion)
+            await API.eliminarEvaluacion(evaluacionActual.id_evaluacion)
 
             toastExito("Evaluación eliminada correctamente", toastId)
             setReload(!reload)
-
+            setEditClicked(false)
         }catch(error){
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
@@ -111,14 +113,21 @@ export const GestionEvaluaciones = () => {
         setAddClicked(false)
     };
 
-    const buttonClicked = (evaluacion)=>{
-        setEvaluacionActual(evaluacion)
-        //obtener preguntas y respuestas de esa evaluacion para luego mostrarlas abajo en el modal
+    const buttonClicked = async (evaluacion)=>{
+        setBtnClicked(true)
+        var response = await API.obtenerPreguntasEvaluacion(evaluacion.id_evaluacion)
+        setPreguntas(response.data)
+        console.log(preguntas)
     }
     
     function onCancel() {
         setAddClicked(false)
         setEditClicked(false)
+    }
+
+    function onCloseFormulario() {
+        setBtnClicked(false)
+        setPreguntas([])
     }
 
     // ========== Componente react ================ //
@@ -133,7 +142,7 @@ export const GestionEvaluaciones = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={filtrarEvaluaciones}></Search>
                 </div>
-                <Table columns={columns} data={evaluacionesList} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Ver formulario"></Table>
+                <TableOneButtom columns={columns} data={evaluacionesList} dataKeys={dataKeys} onDoubleClick={elementClicked} onButtonClick={buttonClicked} hasButtonColumn={true} buttonText="Ver formulario"></TableOneButtom>
                 {(addClicked || editClicked) && (
                     <Modal>
                         <EvaluacionForm
@@ -142,6 +151,14 @@ export const GestionEvaluaciones = () => {
                             onCancel={onCancel}
                             onDelete={editClicked ? () => deleteEvaluacion(evaluacionActual.id_evaluacion_fk) : undefined}
                             evaluacion={editClicked ? evaluacionActual : null}
+                        />
+                    </Modal>
+                )}
+                {(btnClicked) && (
+                    <Modal>
+                        <EvaluacionListaForm
+                            onCancel={onCloseFormulario}
+                            preguntas={preguntas}
                         />
                     </Modal>
                 )}
