@@ -17,7 +17,6 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
 
-    // Si hay informacion en el informe, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         id: informe ? informe.id_informe : "",
         estado: informe ? informe.estado : "",
@@ -26,13 +25,6 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
         fecha_debe_presentar: informe ? informe.fecha_debe_presentar : "",
         id_version_proyecto_fk: informe ? informe.id_version_proyecto_fk.id_version_proyecto: "",
     })
-
-
-    /* Carga las versiones de proyectos 
-    const versionSeleccionada = versionesProyectos.find(versionesProyectos =>
-        String(versionesProyectos.id_version_proyecto) === String(formData.idVersionProyecto)
-    );
-    const versionProyecto = versionSeleccionada ? versionSeleccionada.id_version_proyecto : "";*/
 
     const handleChange = (event) => {
         const { name, value } = event.target;

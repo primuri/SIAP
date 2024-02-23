@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import PreguntaEvaluacion, Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
-from .serializers import PreguntaEvaluacionSerializer, ProyectoSerializer, OficioSerializer, DocumentoSerializer, EvaluacionCCSerializer, PreguntaEvaluacionCCSerializer, EvaluacionSerializer, VersionProyectoSerializer, DesignacionAsistenteSerializer, ColaboradorSecundarioSerializer
+from .models import Proyecto, Oficio, Documento, EvaluacionCC, PreguntaEvaluacionCC, Evaluacion, RespuestaEvaluacion, VersionProyecto, DesignacionAsistente, ColaboradorSecundario
+from .serializers import RespuestaEvaluacionSerializer, EvaluacionSerializer, ProyectoSerializer, OficioSerializer, DocumentoSerializer, EvaluacionCCSerializer, PreguntaEvaluacionCCSerializer, EvaluacionSerializer, VersionProyectoSerializer, DesignacionAsistenteSerializer, ColaboradorSecundarioSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -47,10 +47,19 @@ class PreguntaEvaluacionCCViewSet(viewsets.ModelViewSet):
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
-class PreguntaEvaluacionViewSet(viewsets.ModelViewSet):
-    view_name = 'preguntas_evaluaciones'
-    queryset = PreguntaEvaluacion.objects.all()
-    serializer_class = PreguntaEvaluacionSerializer
+class RespuestaEvaluacionViewSet(viewsets.ModelViewSet):
+    view_name = 'respuestas_evaluaciones'
+    queryset = RespuestaEvaluacion.objects.all()
+    serializer_class = RespuestaEvaluacionSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        id_evaluacion = self.request.query_params.get('id_evaluacion', None)
+        if id_evaluacion is not None:
+            queryset = queryset.filter(id_evaluacion_fk=id_evaluacion)
+
+        return queryset
+
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
@@ -59,19 +68,38 @@ class EvaluacionViewSet(viewsets.ModelViewSet):
     queryset = Evaluacion.objects.all()
     serializer_class = EvaluacionSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        id_evaluador = self.request.query_params.get('id_evaluador', None)
+        id_evaluacion = self.request.query_params.get('id_evaluacion', None)
+
+        if id_evaluador is not None:
+            queryset = queryset.filter(id_evaluador_fk=id_evaluador)
+        elif id_evaluacion is not None:
+            queryset = queryset.filter(id_evaluacion=id_evaluacion)
+
+        return queryset
+
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
 class VersionProyectoViewSet(viewsets.ModelViewSet):
     view_name = 'versiones_proyectos'
     queryset = VersionProyecto.objects.all()
     serializer_class = VersionProyectoSerializer
+    
     def get_queryset(self):
         queryset = super().get_queryset()
         id_version = self.request.query_params.get('id_version', None)
-        if id_version is not None:
+        id_codigo_vi_fk = self.request.query_params.get('id_codigo_vi_fk', None)
+
+        if id_version:
             queryset = queryset.filter(id_version_proyecto=id_version)
+        elif id_codigo_vi_fk:
+            queryset = queryset.filter(id_codigo_vi_fk=id_codigo_vi_fk)
 
         return queryset
+
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

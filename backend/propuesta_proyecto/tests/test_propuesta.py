@@ -111,6 +111,26 @@ class PropuestaProyectoTests(APITestCase):
         self.assertEqual(PropuestaProyecto.objects.count(), 1)
         self.assertEqual(PropuestaProyecto.objects.get().nombre, 'Proyecto ABC')
 
+    def test_put_propuesta_proyecto(self):
+        update_data = {
+            'id_codigo_cimpa': '1-2023',
+            'detalle': 'Detalle editado',
+            'estado': 'En revisión',
+            'nombre': 'Proyecto YYY',
+            'descripcion': 'Descripción del proyecto XYZ',
+            'fecha_vigencia': '2023-09-04T15:30:00',
+            'actividad': 'Actividad XYZ',
+            'id_colaborador_principal_fk': self.colaborador_id
+        }
+        
+        self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
+        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        response = self.client.put(url, update_data, format='json')
+
+        # Verificaciones
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(PropuestaProyecto.objects.get().nombre, 'Proyecto YYY')
+
 
     def test_get_lista_propuestas_proyectos(self):
         nombre_completo_data2 = {

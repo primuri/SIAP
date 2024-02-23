@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns, data, onClick, dataKeys, hasButtonColumn = false, buttonText = "" }) => {
+export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasButtonColumn = false, hasButtonColumn2 = false, buttonText = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -53,7 +53,7 @@ export const Table = ({ columns, data, onClick, dataKeys, hasButtonColumn = fals
   return (
     <div className="w-100">
       <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
-        <table className="table table-striped table-hover rounded-table table-resizable fs-5">
+        <table className="table table-striped table-hover rounded-table table-resizable fs-5" >
           <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
@@ -63,17 +63,24 @@ export const Table = ({ columns, data, onClick, dataKeys, hasButtonColumn = fals
           </thead>
           <tbody>
           {currentItems.map((row, rowIndex) => (
-          <tr key={rowIndex} onClick={() => onClick(row)}>
+          <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
-                <button id="acciones-button" className="btn btn-primary">{buttonText}</button>
-                
+              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( 
+                <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick(row)}>
+                  {buttonText}
+                </button>
               ) : (
-                typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
-                  ? getValueByPath(row, column).split('/').pop()
-                  : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
-                )}
+                colIndex === dataKeys.length - 2 && hasButtonColumn2 ? (
+                  <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick(row)}>
+                  {buttonText}
+                </button>
+                ) : (
+                  typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
+                    ? getValueByPath(row, column).split('/').pop()
+                    : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
+                )
+              )}
             </td>
           ))}
         </tr>
@@ -111,6 +118,6 @@ export const Table = ({ columns, data, onClick, dataKeys, hasButtonColumn = fals
 Table.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onDoubleClick : PropTypes.func.isRequired,
   dataKeys: PropTypes.array.isRequired,
 };

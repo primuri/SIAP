@@ -8,10 +8,13 @@ import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 
 export const GestionPropuestas = () => {
+    let {id_codigo_cimpa} =  useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
     const [propuestas, setPropuestas] = useState([]) // Propuestas que se muestran
@@ -69,6 +72,26 @@ export const GestionPropuestas = () => {
            
         }
     }
+
+    //Uso de id en url
+    useEffect(()=>{
+        if(id_codigo_cimpa && data.length > 0){
+            const elemento = data.find(e => e.id_codigo_cimpa_fk.id_codigo_cimpa === id_codigo_cimpa);
+            if(elemento){
+                setPropuesta(elemento)
+                setEdit(true)
+                setAddClick(false)
+            }else{
+                navigate('/gestion-propuestas')
+            }
+        }
+    },[data,id_codigo_cimpa])
+
+    const success = () => {
+        const timer = setTimeout(() => {
+          navigate(-1);
+        }, 1000);
+    }
     // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {
         try {
@@ -91,9 +114,8 @@ export const GestionPropuestas = () => {
                 },
             })
             setAddClick(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
-
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -235,9 +257,8 @@ export const GestionPropuestas = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
-
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -269,9 +290,8 @@ export const GestionPropuestas = () => {
                 },
             })
             setEdit(false)
-            setReload(!reload)
-        document.body.classList.remove('modal-open');
-
+            document.body.classList.remove('modal-open');
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -281,6 +301,7 @@ export const GestionPropuestas = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
+        navigate('/gestion-propuestas')
     }
     // Al darle click a agregar, muestra el modal
     const addClicked = () => {
@@ -290,11 +311,7 @@ export const GestionPropuestas = () => {
     }
     // Al hacer click en la tabla
     const elementClicked = (user) => {
-
-        setPropuesta(user)
-        setEdit(true)
-        setAddClick(false)
-        document.body.classList.add('modal-open');
+        navigate(`/gestion-propuestas/${user.id_codigo_cimpa_fk.id_codigo_cimpa}`)
     }
     //se filtra
     function getValueByPath(obj, path) {
@@ -320,7 +337,7 @@ export const GestionPropuestas = () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onClick={elementClicked}></Table>
+                    <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
                     {addClick && (<Modal ><PropuestasForm academicos={academicos} onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}
                     {edit &&
                         (

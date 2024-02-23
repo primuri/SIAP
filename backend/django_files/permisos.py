@@ -5,7 +5,7 @@ class PermisoPorRol(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.groups.filter(name='evaluador').exists():
             return ((request.method in ['GET'] and view.view_name in ['proyectos', 'versiones_proyectos', 'informes']) or 
-                    (request.method in ['GET', 'POST'] and view.view_name in ['evaluaciones', 'preguntas_evaluaciones']))
+                    (request.method in ['GET', 'POST', 'PATCH'] and view.view_name in ['evaluaciones', 'respuestas_evaluaciones']))
         else:
             if request.user.groups.filter(name='investigador').exists():
                 return (request.method in ['GET'] and (view.view_name in ['propuestas_proyectos', 'proyectos', 'versiones_proyectos', 'informes']))
@@ -17,7 +17,7 @@ class PermisoPorRol(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.groups.filter(name='evaluador').exists():
             return ((request.method in ['GET'] and view.view_name in ['proyectos', 'versiones_proyectos', 'informes']) or 
-                    (request.method in ['GET', 'POST'] and view.view_name in ['evaluaciones', 'preguntas_evaluaciones']))
+                    (request.method in ['GET', 'POST', 'PATCH'] and view.view_name in ['evaluaciones', 'respuestas_evaluaciones']))
         else:
             if request.user.groups.filter(name='investigador').exists():
                 return (request.method in ['GET'] and (view.view_name in ['propuestas_proyectos', 'proyectos', 'version_proyecto', 'informes']))

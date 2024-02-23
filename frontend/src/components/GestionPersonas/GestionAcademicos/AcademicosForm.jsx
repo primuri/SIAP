@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../../utils/FomularioDinamico"
-import { obtenerTelefonos, obtenerTitulos, obtenerUniversidades } from "../../../api/gestionAcademicos"
+import { obtenerTelefonos, obtenerTitulos, obtenerUniversidades, obtenerPropuestas } from "../../../api/gestionAcademicos"
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../../assets/add_person.svg';
 import icono2 from '../../../assets/upload_image.svg';
@@ -40,6 +40,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const [fotoData, setFotoData] = useState(null);
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
+    const [propuestas, setPropuestas] = useState([]);
+    const [togglePropuestas, setTogglePropuestas] = useState(false);
 
     // Si hay informacion en el academico, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
@@ -64,7 +66,40 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             loadTelefonos()
         }
         loadUniversidades()
+        if(mode === 2){
+            loadPropuestas()
+        }
+        
     }, [academico]) 
+
+    const loadPropuestas = async () => {
+        try {
+            const resultados = [];
+            const res = await obtenerPropuestas(localStorage.getItem('token'))
+            if (res.data && res.data.length > 0) {
+                res.data.map((prop) => {
+                    const colaboradorPrincipal = prop.id_colaborador_principal_fk;
+                    if (colaboradorPrincipal && colaboradorPrincipal.id_academico_fk.cedula === academico.cedula) {
+                        const resultado = prop.nombre;
+                        resultados.push(resultado);
+                       
+                        console.log(prop.nombre);
+                    }
+                  });
+               
+            }
+            setPropuestas(resultados);
+        } catch (error) {
+            toast.error('Error al cargar los propuestas', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            })
+        }
+    }
 
     const loadTitulos = async () => {
         try {
@@ -77,7 +112,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             }
 
         } catch (error) {
-            toast.error('Error al cargar los telefonos', {
+            toast.error('Error al cargar los titulos', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -207,6 +242,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
     };
+
+    const handleToggleClick = () => {
+        setTogglePropuestas(!togglePropuestas);
+      };
 
     return (
         <div>
@@ -476,7 +515,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                         </div>
                         <hr></hr>
-
+                        </>
+                        )}
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Titulo"/>

@@ -39,6 +39,9 @@ export const InicioSesion = () => {
       if(tipoUsuario === 'administrador') {
         window.location.href = '/inicio-administrador';
       }
+      if(tipoUsuario === 'evaluador') {
+        window.location.href = '/inicio-evaluador';
+      }
       
       
     } catch (error) {

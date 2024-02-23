@@ -63,8 +63,26 @@ nav {
 }
 
 main {
-  margin-top: 108px;
   background-color: var(--gris-claro-ucr);
+}
+
+.bread_custom{
+  margin-top: 108px !important;
+  height: auto;
+  width: 100vw;
+  padding: 12px 0px;
+}
+
+.bread_custom ol li p, .bread_custom ol li a{
+  font-size: 1.5rem !important;
+}
+
+.last_bread{
+  color: var(--celeste-ucr) !important;
+}
+
+.no_link{
+  opacity: 0.3;
 }
 
 .side-bar-nav {
@@ -508,13 +526,23 @@ input[type="submit"]:focus {
   cursor: pointer;
 }
 
+#otras-acciones-button{
+  background-color:var(--gris-oscuro-urc);
+  border-color: var(--gris-oscuro-urc);
+  width: 72%;
+  cursor: not-allowed !important;
+}
 
+#evaluacion-button {
+  background-color:#005da4;
+  border-color: #005da4;
+}
 
-
-
-
-
-
+#boton-evaluacion {
+  width: 300px;
+  background-color:#005da4;
+  border-color: #005da4;
+}
 
 
 

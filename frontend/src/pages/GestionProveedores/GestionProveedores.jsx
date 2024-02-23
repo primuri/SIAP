@@ -7,8 +7,11 @@ import { Search } from "../../utils/Search"
 import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta } from "../../api/gestionProveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionProveedores = () => {
+  let {id_cedula_proveedor} = useParams()
+  const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
   const [proveedores, setProveedores] = useState([]) // Proveedores que se muestran
@@ -44,6 +47,26 @@ export const GestionProveedores = () => {
     }
   }
 
+  //Uso de id_cedula_proveedor en url
+  useEffect(()=>{
+    if(id_cedula_proveedor && data.length > 0){
+        const elemento = data.find(e => e.id_cedula_proveedor === id_cedula_proveedor);
+        if(elemento){
+            setProveedor(elemento)
+            setEdit(true)
+            setAddClick(false)
+        }else{
+            navigate('/gestion-proveedores')
+        }
+    }
+  },[data,id_cedula_proveedor])
+
+  const success = () => {
+    const timer = setTimeout(() => {
+      navigate(-1);
+    }, 1000);
+  }
+
   // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
@@ -74,8 +97,8 @@ export const GestionProveedores = () => {
         },
       })
       setAddClick(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
+      success()
     } catch (error) {
       toast.dismiss(toastId)
      
@@ -128,8 +151,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
+      success()
     } catch (error) {
       toast.dismiss(toastId)
      
@@ -158,9 +181,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
-      setReload(!reload)
       document.body.classList.remove('modal-open');
-
+      success()
     } catch (error) {
       toast.dismiss(toastId)
      
@@ -171,7 +193,7 @@ export const GestionProveedores = () => {
     setAddClick(false)
     setEdit(false)
     document.body.classList.remove('modal-open');
-
+    navigate('/gestion-proveedores')
   }
   // Al darle click a agregar, muestra el modal
   const addClicked = () => {
@@ -183,12 +205,7 @@ export const GestionProveedores = () => {
 
   // Al hacer click en la tabla
   const elementClicked = (user) => {
-    console.log(user)
-    setProveedor(user)
-    setEdit(true)
-    setAddClick(false)
-    document.body.classList.add('modal-open');
-
+    navigate(`/gestion-proveedores/${user.id_cedula_proveedor}`)
   }
 
   //se filtra
@@ -216,7 +233,7 @@ export const GestionProveedores = () => {
             <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={proveedores} dataKeys={dataKeys} onClick={elementClicked}></Table>
+          <Table columns={columns} data={proveedores} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
           {addClick && (<Modal ><ProveedoresForm onSubmit={addProveedor} onCancel={onCancel} mode={1}></ProveedoresForm></Modal>)}
           {edit &&
             (

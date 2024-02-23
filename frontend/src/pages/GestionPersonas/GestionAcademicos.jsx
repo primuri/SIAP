@@ -8,9 +8,11 @@ import {toast, Toaster} from 'react-hot-toast'
 import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre} from "../../api/gestionAcademicos"
 import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionAcademicos = () => {
-
+    let {id_academico} = useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizr la pagina.
     const [academicos, setAcademicos] = useState([])  
@@ -43,6 +45,27 @@ export const GestionAcademicos = () => {
                 },
               })
         }
+    }
+
+    //Uso de id_academico para url
+    useEffect(()=>{
+        if(id_academico && data.length > 0){
+            const idNum = parseInt(id_academico, 10);
+            const elemento = data.find(e => e.id_academico === idNum);
+            if(elemento){
+                setAcademico(elemento)
+                setEdit(true)
+                setAddClick(false)
+            }else{
+                navigate('/gestion-investigadores')
+            }
+        }
+    },[data,id_academico])
+
+    const success = () => {
+        const timer = setTimeout(() => {
+          navigate(-1);
+        }, 1000);
     }
 
     // Manejo de datos que se van a enviar para agregar
@@ -80,7 +103,7 @@ export const GestionAcademicos = () => {
             await agregarAcademico(formData, localStorage.getItem("token"))
             toast.success('Investigador agregado correctamente', {
                 id: toastId,
-                duration: 4000, 
+                duration: 1000, 
                 position: 'bottom-right', 
                 style: {
                   background: 'var(--celeste-ucr)',
@@ -88,8 +111,9 @@ export const GestionAcademicos = () => {
                 },
               })
             setAddClick(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
+            success()
+
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -172,8 +196,8 @@ export const GestionAcademicos = () => {
                 },
               })
             setEdit(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -206,8 +230,8 @@ export const GestionAcademicos = () => {
                 },
               })
             setEdit(false)
-            setReload(!reload)
             document.body.classList.remove('modal-open');
+            success()
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -220,6 +244,8 @@ export const GestionAcademicos = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
+        navigate('/gestion-investigadores')
+        
     }
 
     // Al darle click a agregar, muestra el modal
@@ -231,11 +257,7 @@ export const GestionAcademicos = () => {
 
     // Al hacer click en la tabla
     const elementClicked = (selectedAcademico) =>{
-        console.log(selectedAcademico)
-        setAcademico(selectedAcademico)
-        setEdit(true)
-        setAddClick(false)
-        document.body.classList.add('modal-open');
+        navigate(`/gestion-investigadores/${selectedAcademico.id_academico}`)
     }
 
     // Obtener atributo de un objeto 
@@ -264,7 +286,7 @@ export const GestionAcademicos = () => {
                 <Add onClick={addClicked}></Add>
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
-            <Table columns={columns} data={academicos} dataKeys={dataKeys} onClick={elementClicked}></Table>
+            <Table columns={columns} data={academicos} dataKeys={dataKeys} onDoubleClick ={elementClicked}></Table>
                 {addClick && (<Modal ><AcademicosForm onSubmit={addAcademico} onCancel={onCancel} mode={1}></AcademicosForm></Modal>)}
                 { edit && 
                     (
