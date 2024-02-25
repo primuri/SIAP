@@ -2,8 +2,22 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 import os
 import datetime
+import logging
 from django.db.models.signals import pre_delete
 from django.db.models.signals import pre_save
+from django.core.mail import send_mail
+from threading import Thread
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.forms.models import model_to_dict
+from django.core.mail import EmailMessage
+
+
+
+
 
 class NombreCompleto(models.Model):
     id_nombre_completo = models.AutoField(primary_key=True)
@@ -85,6 +99,84 @@ def imagen_asociada_sustituir(sender, instance, **kwargs):
         obj.foto.delete(save=False)
 
 pre_save.connect(imagen_asociada_sustituir, sender=Academico)
+
+logger = logging.getLogger(__name__) # Ayuda a ver los errores en los logs del back
+
+def enviar_correo_asincrono(asunto, instance, destinatario):
+    def enviar():
+        try:
+            context = {
+                'nombre_completo': f"{instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}",
+                'cedula': instance.cedula,
+                'correo': instance.correo,
+                'correo_secundario': instance.correo_secundario or 'No proporcionado',
+                'sitio_web': instance.sitio_web,
+                'pais_procedencia': instance.pais_procedencia,
+                'grado_maximo': instance.grado_maximo,
+                'categoria_en_regimen': instance.categoria_en_regimen,
+                'unidad_base': instance.unidad_base,
+                'area_especialidad': instance.id_area_especialidad_fk.nombre,
+                'areas_especialidad_secundarias': instance.id_area_especialidad_secundaria_fk.nombre or 'No proporcionado',
+                'universidad': f"{instance.universidad_fk.nombre} - {instance.universidad_fk.pais}",
+                'telefonos': [telefono.numero_tel for telefono in instance.telefono_set.all()] if instance.telefono_set.exists() else ['No hay teléfonos registrados'],
+                'titulos': [f"{titulo.grado}, {titulo.detalle}, {titulo.institución} ({titulo.anio})" for titulo in instance.titulos_set.all()],
+            }
+
+            mensaje_html = render_to_string('email_academicos.html', context)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html'
+            correo.send()
+        except Exception as e:
+            print("error")
+            logger.error(f"Error al enviar el correo: {e}")
+
+    Thread(target=enviar).start()
+
+
+"""def obtener_info_academico(instance):
+    # Información básica del académico
+    info_basica = f"Nombre Completo: {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido or ''}\n" \
+                  f"Cédula: {instance.cedula}\n" \
+                  f"Correo: {instance.correo}\n" \
+                  f"Correo Secundario: {instance.correo_secundario or 'No proporcionado'}\n" \
+                  f"Sitio Web: {instance.sitio_web}\n" \
+                  f"País de Procedencia: {instance.pais_procedencia}\n" \
+                  f"Grado Máximo: {instance.grado_maximo}\n" \
+                  f"Categoría en régimen: {instance.categoria_en_regimen}\n" \
+                  f"Unidad base: {instance.unidad_base}\n" \
+                  f"Area de especialidad: {instance.id_area_especialidad_fk.nombre}\n" \
+                  f"Areas de especialidad secundarias: {instance.id_area_especialidad_secundaria_fk.nombre or 'No proporcionado'}\n" \
+                  f"Universidad: {instance.universidad_fk.nombre} - {instance.universidad_fk.pais}\n"
+
+    # Teléfonos del académico (opcional)
+    telefonos = ', '.join([telefono.numero_tel for telefono in instance.telefono_set.all()]) or 'No hay teléfonos registrados'
+    info_telefonos = f"Teléfonos: {telefonos}\n"
+
+    # Títulos del académico (opcional)
+    titulos = instance.titulos_set.all()
+    info_titulos = "Títulos:\n" + '\n'.join([f"Titulos:  - {titulo.grado}, {titulo.detalle}, {titulo.institución} ({titulo.anio})" for titulo in titulos]) if titulos else 'No hay títulos registrados\n'
+
+    # Combinar toda la información
+    mensaje_completo = info_basica + info_telefonos + info_titulos
+
+    return mensaje_completo
+"""
+
+@receiver(post_save, sender=Academico)
+def academico_post_save(sender, instance, created, **kwargs):
+    asunto = f"Creación de Académico {instance.cedula}" if created else f"Actualización de Académico {instance.cedula}"
+    enviar_correo_asincrono(asunto, instance, "brandonbadilla143@gmail.com") #Cambiar por correo final
+
+@receiver(pre_delete, sender=Academico)
+def academico_pre_delete(sender, instance, **kwargs):
+    asunto = f"Eliminación de Académico {instance.cedula}"
+    enviar_correo_asincrono(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
 
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)
