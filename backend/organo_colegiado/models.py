@@ -7,7 +7,7 @@ class OrganoColegiado(models.Model):
     nombre = models.CharField(max_length=128)
     numero_miembros = models.IntegerField()
     quorum = models.IntegerField()
-    acuerdo_firme = models.CharField(max_length=50)
+    acuerdo_firme = models.IntegerField()
 
     class Meta:
         db_table = 'organo_colegiado'

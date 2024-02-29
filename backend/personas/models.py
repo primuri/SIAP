@@ -153,3 +153,7 @@ class PersonaExterna(models.Model):
 
     class Meta:
         db_table = 'persona_externa'
+
+
+
+

@@ -42,7 +42,6 @@ class Documento(models.Model):
     detalle = models.CharField(max_length=360, null=True)
     documento = models.FileField(upload_to='media/documentos/',  max_length=500)  # Se cambió de char a file
 
-
     class Meta:
         db_table = 'documento'
 
@@ -78,24 +77,6 @@ class PreguntaEvaluacionCC(models.Model):
     class Meta:
         db_table = 'pregunta_evaluacion_cc'
 
-class Evaluacion(models.Model):
-    id_evaluacion = models.AutoField(primary_key=True)
-    detalle = models.CharField(max_length=128)
-    id_version_proyecto_fk = models.IntegerField()
-    id_evaluador_fk = models.ForeignKey(Evaluador, on_delete=models.PROTECT)
-    id_documento_evualuacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
-
-    class Meta:
-        db_table = 'evaluacion'
-
-class PreguntaEvaluacion(models.Model):
-    id_pregunta_evaluacion = models.AutoField(primary_key=True)
-    pregunta = models.CharField(max_length=556)
-    respuesta = models.CharField(max_length=128)
-    id_evaluacion_fk = models.ForeignKey(Evaluacion, on_delete=models.PROTECT)
-
-    class Meta:
-        db_table = 'pregunta_evaluacion'
 
 class VersionProyecto(models.Model):
     id_version_proyecto = models.AutoField(primary_key=True)
@@ -111,6 +92,26 @@ class VersionProyecto(models.Model):
     class Meta:
         db_table = 'version_proyecto'
         unique_together = (('id_codigo_vi_fk', 'numero_version'),)
+
+class Evaluacion(models.Model):
+    id_evaluacion = models.AutoField(primary_key=True)
+    detalle = models.CharField(max_length=128)
+    estado = models.CharField(max_length=128)
+    id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT)
+    id_evaluador_fk = models.ForeignKey(Evaluador, on_delete=models.PROTECT)
+    id_documento_evaluacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = 'evaluacion'
+
+class RespuestaEvaluacion(models.Model):
+    id_respuesta_evaluacion = models.AutoField(primary_key=True)
+    id_evaluacion_fk = models.ForeignKey(Evaluacion, on_delete=models.PROTECT)
+    pregunta = models.CharField(max_length=556)  
+    respuesta = models.CharField(max_length=556)
+
+    class Meta:
+        db_table = 'respuesta_evaluacion'
 
 class DesignacionAsistente(models.Model):
     id_designacion_asistente = models.AutoField(primary_key=True)
@@ -138,3 +139,4 @@ class ColaboradorSecundario(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['id_academico_fk', 'id_version_proyecto_fk'], name='unique_academico_proyecto')
         ]
+

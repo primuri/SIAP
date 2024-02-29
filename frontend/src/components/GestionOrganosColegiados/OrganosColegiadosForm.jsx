@@ -11,25 +11,33 @@ import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
 
-export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) => {
+export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
 
     const [formData, setFormData] = useState({
-        id: informe ? informe.id_informe : "",
-        estado: informe ? informe.estado : "",
-        tipo: informe ? informe.tipo : "",
-        fecha_presentacion: informe ? informe.fecha_presentacion : "",
-        fecha_debe_presentar: informe ? informe.fecha_debe_presentar : "",
-        id_version_proyecto_fk: informe ? informe.id_version_proyecto_fk.id_version_proyecto: "",
+        id_organo_colegiado: organo_colegiado ? organo_colegiado.id_organo_colegiado : "",
+        nombre: organo_colegiado ? organo_colegiado.nombre : "",
+        numero_miembros: organo_colegiado ? organo_colegiado.numero_miembros : "",
+        quorum: organo_colegiado ? organo_colegiado.quorum : "",
+        acuerdo_firme: organo_colegiado ? organo_colegiado.acuerdo_firme : "",
     })
 
     const handleChange = (event) => {
         const { name, value } = event.target;
     
-        if (name.includes('.')) {
+        if (name === 'numero_miembros' || name === 'quorum' || name === 'acuerdo_firme') {
+            // Verifica si es un número válido y positivo
+            const numericValue = Number(value);
+            if (!isNaN(numericValue) && numericValue >= 0) {
+                setFormData((prev) => ({
+                    ...prev,
+                    [name]: numericValue,
+                }));
+            }
+        } else if (name.includes('.')) {
             const keys = name.split('.');
             setFormData((prev) => ({
                 ...prev,
@@ -45,11 +53,11 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
             }));
         }
     };
+    
 
 
     const sendForm = (event) => {
         event.preventDefault();
-        formData.id_version_proyecto_fk = 1;
         const jsonData = JSON.stringify(formData);
         onSubmit(jsonData);
     };
@@ -87,7 +95,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar informe" : "Editar informe"}
+                                {mode === 1 ? "Agregar órgano colegiado" : "Editar órgano colegiado"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -105,65 +113,42 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="id_informe" className="label-personalizado mb-2">Identificador   </label>
-                                    <input type="text" className="form-control" name="id" id="id" value={mode === 2 ? formData.id: "Auto - generado"} onChange={handleChange} disabled />
+                                    <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
+                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <div className="form-group">
-                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado   </label>
-                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
-                                        <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
-                                        <option value="En desarrollo">En desarrollo</option>
-                                        <option value="En evaluación">En evaluación</option>
-                                        <option value="Concluido">Concluido</option>
-                                    </select>
-                                </div>
+                                    <div className="form-group">
+                                        <label htmlFor="quorum" className="label-personalizado mb-2">Quorum</label>
+                                        <input type="number" className="form-control" name="quorum" id="quorum" value={formData.quorum} onChange={handleChange} />
+                                    </div>
                             </div>
                         </div>
-
+          
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="tipo" className="label-personalizado mb-2">Tipo   </label>
-                                    <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
-                                        <option value="" disabled defaultValue={""}>Seleccione un tipo</option>
-                                        <option value="Primer parcial">Primer parcial</option>
-                                        <option value="Segundo parcial">Segundo parcial</option>
-                                        <option value="Tercer parcial">Tercer parcial</option>
-                                        <option value="Final">Final</option>
-                                    </select>
+                                    <label htmlFor="numero_miembros" className="label-personalizado mb-2">Cantidad de integrantes</label>
+                                    <input type="number" className="form-control" name="numero_miembros" id="numero_miembros"  value={formData.numero_miembros} onChange={handleChange}/>
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <div className="form-group">
-                                    <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación   </label>
-                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} required />
-                                </div>
+                                <label htmlFor="acuerdo_firme" className="label-personalizado mb-2">Acuerdo en firme</label>
+                                <input type="number" className="form-control" name="acuerdo_firme" id="acuerdo_firme" value={formData.acuerdo_firme} onChange={handleChange} required />
                             </div>
-                        </div>
-
-                        <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="fecha_debe_presentar" className="label-personalizado mb-2">Fecha que se debe presentar  </label>
-                                <input type="date" className="form-control" name="fecha_debe_presentar" id="fecha_debe_presentar" value={formData.fecha_debe_presentar ? new Date(formData.fecha_debe_presentar).toISOString().split('T')[0] : ""} onChange={handleChange} required />
-                            </div>
-                        </div>                  
+                        </div>                
                     </div>
                 </div>
-
-
-             
-
+       
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
                             {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-20 rounded text-white'>Agregar</button>
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="informe" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="órgano colegiado" />)}
                                 </>
                             )}
                         </div>
@@ -171,7 +156,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="informe" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="órgano colegiado" />)}
                                 </>
                             )}
                         </div>
@@ -183,10 +168,10 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
     )
 }
 
-InformesForm.propTypes = {
+OrganosColegiadosForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     mode: PropTypes.number.isRequired,
     onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func,
-    academico: PropTypes.object,
+    organo_colegiado: PropTypes.object,
 }

@@ -31,7 +31,7 @@ export const GestionInformes = () => {
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
     const [id_proyecto, setIdProyecto] = useState(null)                          // Cuando hay un error
-    const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones']
+    const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones', 'Acciones']
     const dataKeys = ['id_informe', 'estado', 'tipo', 'Versiones']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true
@@ -45,8 +45,6 @@ export const GestionInformes = () => {
             setIdProyecto(id_version_proyecto[2]);
             setNumVersion(id_version_proyecto[1]);
         }
-
-
         fetchData();
     }, [reload]);
 
@@ -67,25 +65,6 @@ export const GestionInformes = () => {
 
             const Data = JSON.parse(formData)
 
-            /*
-                // Buscar si esa version de proyecto existe
-                let response_VersionProyecto = await buscarVersionProyecto(localStorage.getItem("token"), Data.id_version_proyecto);
-
-                // Crea una variable para almacenar solo el id de la version que ya se verifico existe.
-                var id_Version = {}
-
-                // Si la respuesta es diferente de undefined, almacena el id de la version que se obtuvo
-                if(response_VersionProyecto !== undefined) {
-                    id_Version = response_VersionProyecto.Data.id_version_proyecto;
-                } else {
-                }
-                
-                response_VersionProyecto = id_Version;
-                delete Data.id_version_proyecto;
-                Data.id_version_proyecto = response_VersionProyecto;
-
-                formData.append('json', JSON.stringify(Data))
-            */
             Data.id_version_proyecto_fk = proyectoID;
             await agregarInforme(Data, localStorage.getItem("token"))
 
@@ -102,7 +81,6 @@ export const GestionInformes = () => {
             document.body.classList.remove('modal-open');
 
         } catch (error) {
-           
         }
     }
 
@@ -257,9 +235,6 @@ export const GestionInformes = () => {
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
                     <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
-                    {/* <div>
-                        <Back onClick={handleVolverClick}>Regresar a versiones proyecto</Back>
-                    </div> */}
                     {addClick && (
                         <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>
                     )}

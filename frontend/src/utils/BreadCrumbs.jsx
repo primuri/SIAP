@@ -17,9 +17,11 @@ const routeNames = {
     'gestion-proveedores': 'Proveedores',
     'gestion-presupuestos': 'Presupuesto',
     'gestion-acciones': 'Acciones',
+    'evaluacion-proyectos': 'Evaluaciones',
+    'gestion-organos-colegiados': 'Órganos Colegiados',
 };
 //Esto es para las rutas que no deberian de mostrar la url.
-const excludedRoutes = new Set(['/inicio-administrador', '/login', '/']);
+const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/login', '/']);
 
 const BreadcrumbsCustom = () => {
     const location = useLocation();
