@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import {toast, Toaster} from 'react-hot-toast'
 import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
-import { Table } from "../../utils/Table"
+import { TableOneButtom} from "../../utils/TableOneButtom"
 import { Search } from "../../utils/Search"
+import { EvaluacionForm } from "../../components/GestionEvaluaciones/EvaluacionForm"
+import { EvaluacionListaForm } from "../../components/GestionEvaluaciones/EvaluacionListaForm"
 import * as API from "../../api/gestionEvaluaciones"
 
 export const GestionEvaluaciones = () => {
@@ -14,6 +16,8 @@ export const GestionEvaluaciones = () => {
     const [reload, setReload]                     = useState(false)          // Para recargar tabla
     const [addClicked, setAddClicked]             = useState(false)          // Para evento de agregar
     const [editClicked, setEditClicked]           = useState(false)          // Para evento de editar
+    const [btnClicked, setBtnClicked]          = useState(false)
+    const [preguntas, setPreguntas]               = useState([])
 
     useEffect(() => {
         loadEvaluaciones()
@@ -37,13 +41,14 @@ export const GestionEvaluaciones = () => {
             var toastId = toastProcesando("Agregando...")
 
             const data = {...formData}
+            var responseDocumento = await API.agregarDocumento(data.id_documento_evaluacion_fk)
+            data.id_documento_evaluacion_fk = responseDocumento.data.id_documento
 
-            var responseDocumento = await API.agregarDocumento(data.id_documento_fk)
-            data.id_documento_fk = responseDocumento.data.id_documento
             await API.agregarEvaluacion(data)
 
             toastExito("Evaluación agregada correctamente", toastId)
-
+            setReload(!reload)
+            setAddClicked(false)
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
@@ -55,35 +60,35 @@ export const GestionEvaluaciones = () => {
         try {
             var toastId = toastProcesando("Editando...")
 
-            const data = {...formData}
+            var data = {... formData}
             
-            if(typeof data.id_documento_fk === 'object'){
-                var responseDocumento = await API.editarDocumento(data.id_documento_fk)
-                data.id_documento_fk = responseDocumento.data.id_documento
+            if(typeof data.id_documento_evaluacion_fk.documento === 'object'){
+                var responseDocumento = await API.editarDocumento(data.id_documento_evaluacion_fk)
+                data.id_documento_evaluacion_fk = responseDocumento.data.id_documento
             }else{
-                delete data.id_documento_fk
+                delete data.id_documento_evaluacion_fk
             }
 
-            await API.agregarEvaluacion(data)
+            await API.editarEvaluacion(data)
 
             toastExito("Evaluación editada correctamente", toastId)
-
-
+            setReload(!reload)
+            setEditClicked(!editClicked)
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
         }
     }
 
-    async function deleteEvaluacion(formData) {
+    async function deleteEvaluacion() {
         try{
             var toastId = toastProcesando("Editando...")
 
-            const data = {...formData}
-            await API.eliminarEvaluacion(formData.id_evaluacion)
+            await API.eliminarEvaluacion(evaluacionActual.id_evaluacion)
 
             toastExito("Evaluación eliminada correctamente", toastId)
-
+            setReload(!reload)
+            setEditClicked(false)
         }catch(error){
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
@@ -107,10 +112,22 @@ export const GestionEvaluaciones = () => {
         setEditClicked(true)
         setAddClicked(false)
     };
+
+    const buttonClicked = async (evaluacion)=>{
+        setBtnClicked(true)
+        var response = await API.obtenerPreguntasEvaluacion(evaluacion.id_evaluacion)
+        setPreguntas(response.data)
+        console.log(preguntas)
+    }
     
     function onCancel() {
         setAddClicked(false)
         setEditClicked(false)
+    }
+
+    function onCloseFormulario() {
+        setBtnClicked(false)
+        setPreguntas([])
     }
 
     // ========== Componente react ================ //
@@ -125,7 +142,26 @@ export const GestionEvaluaciones = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={filtrarEvaluaciones}></Search>
                 </div>
-                <Table columns={columns} data={evaluacionesList} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Ver formulario"></Table>
+                <TableOneButtom columns={columns} data={evaluacionesList} dataKeys={dataKeys} onDoubleClick={elementClicked} onButtonClick={buttonClicked} hasButtonColumn={true} buttonText="Ver formulario"></TableOneButtom>
+                {(addClicked || editClicked) && (
+                    <Modal>
+                        <EvaluacionForm
+                            mode={editClicked ? 2 : 1}
+                            onSubmit={editClicked ? editEvaluacion : addEvaluacion}
+                            onCancel={onCancel}
+                            onDelete={editClicked ? () => deleteEvaluacion(evaluacionActual.id_evaluacion_fk) : undefined}
+                            evaluacion={editClicked ? evaluacionActual : null}
+                        />
+                    </Modal>
+                )}
+                {(btnClicked) && (
+                    <Modal>
+                        <EvaluacionListaForm
+                            onCancel={onCloseFormulario}
+                            preguntas={preguntas}
+                        />
+                    </Modal>
+                )}
                 <Toaster></Toaster>
             </div>
         </main>

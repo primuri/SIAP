@@ -126,7 +126,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             <div className="row mb-4">
                                 <div className="col">
                                     <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC   </label>
-                                    <input type="text" className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange} disabled />
+                                    <input type="text" className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
                                 </div>
                                 <div className="col">
                                     <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC   </label>
