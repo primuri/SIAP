@@ -3,21 +3,17 @@ import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar';
 import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
-import { obtenerCodigosFinancieros, obtenerEntesFinancieros, obtenerTiposDePresupuestos } from '../../api/gestionPresupuestos';
+import { obtenerProveedores } from '../../api/gestionGastos';
 import { Autocomplete, TextField } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Tooltip from '@mui/material/Tooltip';
 
 const filter = createFilterOptions();
-const currentYear = new Date().getFullYear();
 
 export const GastoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [tiposDePresupuesto, setTiposDePresupuesto] = useState([]);
-    const [entidades, setEntidades] = useState([]);
-    const [codigoFinancieros, setCodigosFinancieros] = useState([]);
-    const [oficioData, setOficioData] = useState(null);
+    const [proveedores, setProveedores] = useState([]);
     const [formData, setFormData] = useState({
         tipoPresupuesto: {
             id_tipo_presupuesto: presupuesto ? presupuesto.id_tipo_presupuesto_fk.id_tipo_presupuesto : "",
@@ -29,11 +25,6 @@ export const GastoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDe
             id_presupuesto: presupuesto ? presupuesto.id_presupuesto : "",
             anio_aprobacion: presupuesto ? presupuesto.anio_aprobacion : "",
             id_version_proyecto_fk: version?.id_version_proyecto,
-        },
-        oficio: {
-            id_oficio_fk: presupuesto ? presupuesto.id_oficio_fk.id_oficio : "",
-            ruta_archivo: presupuesto ? presupuesto.id_oficio_fk.ruta_archivo : "",
-            detalle: presupuesto ? presupuesto.id_oficio_fk.detalle : "",
         },
         proyecto: {
             id_codigo_vi: version ? version.id_codigo_vi_fk.id_codigo_vi : "",
@@ -176,7 +167,7 @@ export const GastoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDe
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar presupuesto" : "Editar presupuesto"}
+                                {mode === 1 ? "Agregar gasto" : "Editar gasto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -395,7 +386,7 @@ export const GastoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDe
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="presupuesto" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="gasto" />)}
                                 </>
                             )}
                         </div>
@@ -403,7 +394,7 @@ export const GastoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDe
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="gasto" />)}
                                 </>
                             )}
                         </div>
@@ -416,11 +407,10 @@ export const GastoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDe
 }
 
 
-PresupuestoForm.propTypes = {
+GastoForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     mode: PropTypes.number.isRequired,
     onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func,
-    presupuesto: PropTypes.object,
-    version: PropTypes.object,
+    gasto: PropTypes.object,
 }

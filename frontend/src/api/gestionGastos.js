@@ -21,12 +21,15 @@ import {manejarErrores} from './errorHandler'
 
 */
 
+const token = localStorage.getItem('token')                                      // Token para los request
+
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
-export const obtenerGastos = async (id_partida,token) => {
-    return await manejarErrores(SIAPAPI.get(`presupuesto/gastos/?id_version_presupuesto=${id_partida}`, {
+// Obtener versiones de proyectos
+export const obtenerVersionesProyectos = async (token) => {
+    return await manejarErrores(SIAPAPI.get('version_proyecto/versionproyecto', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -34,140 +37,332 @@ export const obtenerGastos = async (id_partida,token) => {
     }));
 };
 
-export const agregarGasto = async (gasto, factura, token) => {
-    //Separamos los datos ya que hay que subir un documento
-    let ofk = await agregarFactura(factura,token);
-    gasto.id_factura_fk = ofk.data.id_factura
-    return await manejarErrores(SIAPAPI.post('presupuesto/gastos/',gasto,{
+
+// Obtener version de proyecto
+export const buscarVersionProyecto = async (token, id) => {
+    return await manejarErrores(SIAPAPI.get(`version_proyecto/versionproyecto/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    }))
-}
+    }));
+};
 
-export const actualizarGasto= async (id,gasto,factura, token) => {
-    const id_factura = factura.get('id_factura')
-    gasto.id_factura_fk = id_factura
-    factura.delete('id_factura')
-    await actualizarFactura(id_factura, factura,token)
-    return await manejarErrores(SIAPAPI.put(`presupuesto/gastos/${id}/`,gasto,{
+// Obtener informe
+export const obtenerInforme = async (token) => {
+    return await manejarErrores(SIAPAPI.get('informe/informes', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    }))
-}
+    }));
+};
 
-export const eliminarGasto = async (id, token) => {
-    return await manejarErrores(SIAPAPI.delete(`presupuesto/gastos/${id}/`,{
+//Obtener informe por id
+export const obtenerInformePorId = async (token, informeId) => {
+    return await manejarErrores(SIAPAPI.get(`informe/informes/${informeId}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    }))
-}
+    }));
+};
 
 
-//Metodos para los objetos relacionados que se crean en el form.
-export const agregarOficio = async (oficio,token) => {
-    return await manejarErrores(SIAPAPI.post('version_proyecto/oficios/',oficio,{
+// Obtener informes de un proyecto
+export const obtenerInformesProyecto = async (token, id_version_proyecto) => {
+    return await manejarErrores(SIAPAPI.get(`informe/informes/?id_version_proyecto=${id_version_proyecto}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Agregar informe
+export const agregarInforme = async (informe, token) => {
+    return await manejarErrores(SIAPAPI.post('informe/informes/', informe, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Editar informe
+export const editarInforme = async (id, informe, token) => {
+    return await manejarErrores(SIAPAPI.put(`informe/informes/${id}/`, informe, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Eliminar informe
+export const eliminarInforme = async (id, token) => {
+    return await manejarErrores(SIAPAPI.delete(`informe/informes/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Obtener evaluacion CC
+export const obtenerEvaluacionCC = async () => {
+    return await manejarErrores(SIAPAPI.get('version_proyecto/evaluacionescc', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Agregar evaluacion CC
+export const agregarEvaluacionCC = async (evaluacionCC) => {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/evaluacionescc/', evaluacionCC, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Editar evaluacion CC
+export const editarEvaluacionCC = async (id, evaluacionCC) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/evaluacionescc/${id}/`, evaluacionCC, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Eliminar evaluacion CC
+export const eliminarEvaluacionCC = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluacionescc/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Obtener oficio
+export const obtenerOficio = async () => {
+    return await manejarErrores(SIAPAPI.get('version_proyecto/oficios/', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
         }
-    }))
-}
+    }));
+};
 
-const actualizarOficio = async (id,oficio,token) => {
-    return await manejarErrores(SIAPAPI.patch(`version_proyecto/oficios/${id}/`,oficio,{
+// Agregar oficio
+export const agregarOficio = async (oficio) => {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/oficios/', oficio, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
         }
-    }))
-}
-//Metodos para los objetos relacionados para los selects.
+    }));
+};
 
-export const obtenerTiposDePresupuestos = async (token) => {
-    return await manejarErrores(SIAPAPI.get('presupuesto/tipo_presupuestos', {
+// Editar oficio
+export const editarOficio = async (id, oficio) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     }));
-}
+};
 
-export const obtenerProyectos = async (token) => {
-    return await manejarErrores(SIAPAPI.get('version_proyecto/proyectos', {
+// Editar oficio con archivo adjunto
+export const editarOficioAndDocumento = async (id, oficio) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/oficios/${id}/`, oficio, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Eliminar oficio
+export const eliminarOficio = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`,{
+        headers: {'Authorization': `token ${token}`, 
+                  'Content-Type':'application/json'}
+     }));
+};
+
+// Obtener documento informe
+export const obtenerDocumentoInforme = async () => {
+    return await manejarErrores(SIAPAPI.get('version_proyecto/documentos', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Agregar documento informe
+export const agregarDocumentoInforme = async (documento) => {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Editar documento informe
+export const editarDocumentoInforme= async (id, documento) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     }));
-}
+};
 
-export const obtenerVersionesProyectos = async (id_version, token) => {
-    return await manejarErrores(SIAPAPI.get(`version_proyecto/versionproyecto/?id_version=${id_version}`, {
+// Editar documento informe con archivo adjunto
+export const editarDocumentoInformeAndDocumento = async (id, documento) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Eliminar documento informe
+export const eliminarDocumentoInforme = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/documentos/${id}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     }));
-}
+};
 
-export const agregarEnte = async (ente,token) => {
-    return await manejarErrores(SIAPAPI.post('presupuesto/ente_financieros/',ente,{
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    }))
-}
-export const obtenerEntesFinancieros = async (token) => {
-    return await manejarErrores(SIAPAPI.get('presupuesto/ente_financieros', {
+// Obtener version de informe
+export const obtenerVersionesInforme = async (id_informe) => {
+    return await manejarErrores(SIAPAPI.get(`informe/versioninformes/?id_informe=${id_informe}`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     }));
-}
+};
 
-export const agregarCodigosFinancieros = async (ente,token) => {
-    return await manejarErrores(SIAPAPI.post('presupuesto/codigos_financieros/',ente,{
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    }))
-}
-
-export const obtenerCodigosFinancieros = async (token) => {
-    return await manejarErrores(SIAPAPI.get('presupuesto/codigos_financieros', {
+// Agregar version de informe
+export const agregarVersionInforme = async (versionInforme) => {
+    return await manejarErrores(SIAPAPI.post('informe/versioninformes/', versionInforme, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     }));
-}
-//Metodos auxiliares
+};
 
-export const buscaEnteFinanciero = async (nombre, token) => {
-    const response = await SIAPAPI.get('presupuesto/ente_financieros', {
+// Editar version de informe
+export const editarVersionInforme = async (id, versionInforme) => {
+    return await manejarErrores(SIAPAPI.put(`informe/versioninformes/${id}/`, versionInforme, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
-    return response.data.find(entidad => entidad.nombre === nombre);
-}
+    }));
+};
 
-export const buscaCodigoFinanciero = async (codigo, token) => {
-    const response = await SIAPAPI.get('presupuesto/codigos_financieros', {
+// Eliminar version de informe
+export const eliminarVersionInforme = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`informe/versioninformes/${id}`,{
+        headers: {'Authorization': `token ${token}`, 
+                  'Content-Type':'application/json'}
+     }));
+};
+
+// Obtener todas las acciones
+export const obtenerAccion = async () => {
+    return await manejarErrores(SIAPAPI.get('informe/acciones', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
-    });
-    return response.data.find(entidad => entidad.codigo === codigo);
-}
+    }));
+};
+
+// Obtener todas las acciones de una version de informe
+export const obtenerAccionesVersion = async (token, id_version_informe) => {
+    return await manejarErrores(SIAPAPI.get(`informe/acciones/?id_version_informe=${id_version_informe}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Agregar accion
+export const agregarAccion = async (accion) => {
+    return await manejarErrores(SIAPAPI.post('informe/acciones/', accion, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Editar accion
+export const editarAccion = async (id, accion) => {
+    return await manejarErrores(SIAPAPI.put(`informe/acciones/${id}/`, accion, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+
+// Editar documento accion con archivo adjunto
+export const editarDocumentoAccionAndDocumento = async (id, documento) => {
+    return await manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Agregar documento informe
+export const agregarDocumentoAccion = async (documento) => {
+    return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+// Editar documento accion con archivo adjunto
+export const editarDocumentoAccion = async (id, documento) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+// Eliminar accion
+export const eliminarAccion = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`informe/acciones/${id}`,{
+        headers: {'Authorization': `token ${token}`, 
+                  'Content-Type':'application/json'
+        }
+     }));
+};
+
+
