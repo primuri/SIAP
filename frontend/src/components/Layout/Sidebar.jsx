@@ -14,6 +14,7 @@ export const Sidebar = () => {
       { label: 'Gestión <br/> evaluaciones',    link: '/gestion-evaluaciones' },
       { label: 'Gestión proveedores',    link: '/gestion-proveedores' },
       { label: 'Gestión órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
+      { label: 'Gastos partida',    link: '/gestion-gastos' },
 
     ],
     "evaluador": [

@@ -25,7 +25,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const [eventoFile, setEventoFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    // CAMBIO WENDY
     const [showProductContent, setShowProductContent] = useState(false);
     const [formData, setFormData] = useState({
         id_version_proyecto: proyecto ? proyecto.id_version_proyecto : "",

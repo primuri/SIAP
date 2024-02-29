@@ -501,10 +501,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <label htmlFor="areaEspecialidad" className="label-personalizado mb-2">Área de especialidad </label>
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required />
                             </div>
-                        </div>
-
-                        <div className="row mb-4 mt-4">
-                            <div className="col-md-6">
+                            <div className="col-md-6 mt-4">
                                 <Tooltip title="Separar areas secundarias con coma" placement="right-start">
                                     <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
@@ -512,6 +509,26 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />
+                            </div>
+                        </div>
+                        <hr></hr>
+                        {mode === 2 && (
+                            <>
+                        <div>
+                        {togglePropuestas && propuestas.length > 0 && (
+                            <div>
+                            <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
+                            <ul>
+                                {propuestas.map((propuesta, index) => (
+                                <li key={index}>{propuesta}</li>
+                                ))}
+                            </ul>
+                            </div>
+                        )}
+                            <div className="d-flex justify-content-center align-items-center">
+                                <button id="boton-personalizado" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
+                                {togglePropuestas ? 'Ocultar Propuestas' : 'Mostrar Propuestas'}
+                                </button>
                             </div>
                         </div>
                         <hr></hr>

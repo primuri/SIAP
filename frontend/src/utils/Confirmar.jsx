@@ -7,7 +7,6 @@ export const Confirmar = ({ onConfirm, onCancel, accion, objeto }) => {
   const accionMi = accion.toLowerCase();
 
   const isAprobarAction = accion === 'aprobar';
-  // CAMBIO WENDY -- {reversibleMessage}
   const reversibleMessage = isAprobarAction ? <p className="text-center"><strong>Esta acción no es reversible y creará un proyecto que no podrá ser eliminado.</strong><br /></p> : '';
 
   return (
