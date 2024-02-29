@@ -24,8 +24,8 @@ export const GestionPresupuestos = () => {
   const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
   const [addClick, setAddClick] = useState(false)
   const [edit, setEdit] = useState(false)
-  const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero']
-  const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo']
+  const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero','Versiones']
+  const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo','Versiones']
   user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
   // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
   useEffect(() => {
@@ -224,10 +224,14 @@ export const GestionPresupuestos = () => {
 
   // Al hacer click en la tabla
   const elementClicked = (presupuesto) => {
-    setPresupuesto(presupuesto)
-    setEdit(true)
-    setAddClick(false)
-    document.body.classList.add('modal-open');
+    if (event.target.tagName.toLowerCase() === 'button') {
+      navigate(`${location.pathname}/${presupuesto.id_presupuesto}/gestion-versiones`)
+    }else{
+      setPresupuesto(presupuesto)
+      setEdit(true)
+      setAddClick(false)
+      document.body.classList.add('modal-open');
+    }
   }
 
   //se filtra
@@ -248,10 +252,11 @@ export const GestionPresupuestos = () => {
   }
 
   const volver = () => {
-    sessionStorage.setItem('isBackNavigation', 'true');
-    navigate(-1);
+    const pathParts = location.pathname.split('/').filter(part => part !== '');
+    const newPathParts = pathParts.slice(0, -2);
+    const newPath = `/${newPathParts.join('/')}`;
+    navigate(newPath);
   }
-
   return (
     <main >
       {!error ? (
@@ -264,7 +269,7 @@ export const GestionPresupuestos = () => {
             {data.length < 1 ? <Add onClick={addClicked}></Add> : ''}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
+          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
           {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1}></PresupuestoForm></Modal>)}
           {edit &&
             (
