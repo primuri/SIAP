@@ -306,7 +306,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label>
+                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido <span className="optional"> (Opcional)</span></label>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>
@@ -318,7 +318,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label>
+                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario <span className="optional"> (Opcional)</span></label>
                                 <input type="email" className="form-control" name="correo_secundario" id="correo" value={formData.correo_secundario} onChange={handleChange} />
                             </div>
                         </div>
@@ -332,7 +332,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal</label>
+                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal <span className="optional"> (Opcional)</span></label>
                                 <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
 
@@ -503,7 +503,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6 mt-4">
                                 <Tooltip title="Separar areas secundarias con coma" placement="right-start">
-                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
+                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundaria <span className="optional"> (Opcional)</span></label>
                                 </Tooltip>
                                 <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
