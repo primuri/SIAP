@@ -93,64 +93,33 @@ export const GestionPropuestas = () => {
         }, 1000);
     }
     // Manejo de datos que se van a enviar para agregar
-    const addAsistente = async (formData) => {
+    const addPropuesta = async (formData) => {
         try {
-          var toastId = toast.loading('Agregando...', {
-            position: 'bottom-right',
-            style: {
-              background: 'var(--celeste-ucr)',
-              color: '#fff',
-              fontSize: '18px',
-            },
-          });
-      
-          // Asumiendo que agregarDocumentacion puede manejar FormData y devuelve el ID del documento creado
-          const responseDoc = await agregarDocumentacion(formData, localStorage.getItem('token'));
-          const id_documento_creada = responseDoc.id; // Ajusta esta línea según cómo tu API devuelve el ID
-      
-          // Extrae los demás datos de formData que necesitas convertir de JSON a objeto
-          const Datos = JSON.parse(formData.get('otrosDatos')); // Asegúrate de que 'otrosDatos' se establezca correctamente en el estado y se incluya en formData
-      
-          // Elimina las claves no necesarias o realiza las llamadas a la API correspondientes como lo hiciste anteriormente
-          const nombre_asistente = Datos.id_asistente_carnet_fk.id_nombre_completo_fk;
-          const id_nombre_creado = await obtenerNombre(nombre_asistente, localStorage.getItem('token'));
-      
-          Datos.id_asistente_carnet_fk.id_nombre_completo_fk = id_nombre_creado;
-      
-          const id_asistente_creado = await agregarAsistente(Datos.id_asistente_carnet_fk, localStorage.getItem('token'));
-      
-          const designacion_asistente = {                
-            id_asistente_carnet_fk: id_asistente_creado,
-            id_documento_inopia_fk: id_documento_creada,
-            cantidad_horas: Datos.cantidad_horas,
-            consecutivo: Datos.consecutivo
-          };
-          
-          await agregarDesinacionAsistente(designacion_asistente, localStorage.getItem('token'));
-      
-          toast.success('Asistente agregado correctamente', {
-            id: toastId,
-            duration: 4000,
-            position: 'bottom-right',
-            style: {
-              background: 'var(--celeste-ucr)',
-              color: '#fff',
-            },
-          });
-      
-          setAddClick(false);
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
+            await agregarDocumento(formData, localStorage.getItem('token'))
+            toast.success('Propuesta agregada correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                },
+            })
+            setAddClick(false)
+            document.body.classList.remove('modal-open');
+            success()
         } catch (error) {
-          console.error(error);
-          toast.dismiss(toastId);
-          toast.error('Error al agregar el asistente', {
-            position: 'bottom-right',
-            style: {
-              background: 'var(--error-color)',
-              color: '#fff',
-            },
-          });
+            toast.dismiss(toastId)
         }
-      };
+    }
 
     async function contarVersionesDeProyecto(id_codigo_vi, token) {
         try {

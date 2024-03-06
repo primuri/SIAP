@@ -1,6 +1,6 @@
 import { AsistenteForm } from "../../components/GestionPersonas/GestionAsistentes/AsistenteForm"
 import { agregarAsistente, editarAsistente, obtenerAsistente, eliminarAsistente, eliminarDesinacionAsistente, editarDesinacionAsistente, agregarDesinacionAsistente, obtenerDesinacionAsistente } from "../../api/gestionAsistentes"
-import { obtenerNombre } from "../../api/gestionAcademicos"
+import { editarNombre, obtenerNombre } from "../../api/gestionAcademicos"
 import { agregarDocumentacion,editarDocumentacion, eliminarDocumentacion } from "../../api/gestionProductos"
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
@@ -12,7 +12,6 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { Back } from "../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
 import { obtenerVersionProyectos } from '../../api/gestionProyectos';
-
 export const GestionAsistentes = () => {
     let { proyectoID } = useParams();
 
@@ -67,25 +66,46 @@ export const GestionAsistentes = () => {
           });
       }
   }
-
-    // Manejo de datos que se van a enviar para agregar
     
 
   // Manejo de datos que se van a enviar para agregar
   const addAsistente = async (formData) => {
     try {
-      const Datos = JSON.parse(formData)
-      var toastId = toast.loading('Agregando...', {
-        position: 'bottom-right',
-        style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
-        },
-    });
-       
-        const id_documento_creada = await agregarDocumentacion(Datos.id_documento_inopia_fk, localStorage.getItem('token'))
+        let id_documento_creada = ""
+        var toastId = toast.loading('Agregando...', {
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+                fontSize: '18px',
+            },
+        });
+
+        const documentoFile = formData.get('id_documento_inopia_fk');
+        formData.delete('id_documento_inopia_fk'); // Eliminamos el archivo del FormData original
+    
+
+        const Datos = JSON.parse(formData.get('json'));
+        formData.delete('json'); // Limpiamos formData
+
+    // Si existe el archivo, procedemos a manejarlo según sea necesario
+    if (documentoFile) {
+        const DocumentoData = new FormData();
+        DocumentoData.append('documento', documentoFile);
+        DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+        DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+        // Aquí deberías tener el ID del documento si es necesario para editarDocumentacion
+        // Supongamos que lo obtenemos de alguna manera, por ejemplo:
+
+        id_documento_creada = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+        formData.delete('json')
         delete Datos.id_documento_inopia_fk;
+        // Aquí deberías ajustar según cómo necesitas manejar la respuesta de editarDocumentacion
+      }
+
+  
+        
+        
 
         
         delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
@@ -127,10 +147,62 @@ export const GestionAsistentes = () => {
     // Manejo de los datos del formulario de editar 
     const editAsistente = async (formData) => {
         try {
-            const Data = JSON.parse(formData)
-            Data.id_version_proyecto_fk = proyectoID;
+            const Datos = JSON.parse(formData)
+           
+            
+            const id_nombre_compl = Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
 
-            //Falta
+            const nombre_completo = {
+                nombre: Datos.id_asistente_carnet_fk.id_nombre_completo_fk.nombre,
+                apellido: Datos.id_asistente_carnet_fk.id_nombre_completo_fk.apellido,
+                segundo_apellido: Datos.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido
+            }
+
+            await editarNombre(id_nombre_compl, nombre_completo, localStorage.getItem("token"))
+            const id_nombre_editada = Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo
+            delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk
+            Datos.id_asistente_carnet_fk.id_nombre_completo_fk = id_nombre_editada
+
+            const id_asistente = Datos.id_asistente_carnet_fk.id_asistente_carnet;
+
+            const asistente_carne = {
+                condicion_estudiante: Datos.id_asistente_carnet_fk.condicion_estudiante,
+                cedula: Datos.id_asistente_carnet_fk.cedula,
+                carrera: Datos.id_asistente_carnet_fk.carrera,
+                promedio_ponderado: Datos.id_asistente_carnet_fk.promedio_ponderado,
+                id_nombre_completo_fk: id_nombre_editada
+            }
+
+            await editarAsistente(id_asistente, asistente_carne, localStorage.getItem("token"))
+            const id_asistente_editado = Datos.id_asistente_carnet_fk.id_asistente_carnet
+            delete Datos.id_asistente_carnet_fk
+            Datos.id_asistente_carnet_fk = id_asistente_editado
+
+
+            const id_doc = Datos.id_documento_inopia_fk.id_documento;
+            delete Datos.id_documento_inopia_fk.id_documento;
+
+            //falta hacer lo de documento que funcione
+            //formData.append('detalle', Datos.id_documento_inopia_fk.detalle)
+            //await editarDocumento(id_doc, formData, localStorage.getItem("token"))
+
+            
+            Datos.id_documento_inopia_fk = id_doc
+
+
+            const id_designacion = Datos.id_designacion_asistente;
+
+            const designacion = {
+                cantidad_horas: Datos.cantidad_horas,
+                consecutivo: Datos.consecutivo,
+                id_asistente_carnet_fk: Datos.id_asistente_carnet_fk,
+                id_documento_inopia_fk: Datos.id_documento_inopia_fk,
+                id_version_proyecto_fk: proyectoID
+            }
+            await editarDesinacionAsistente(id_designacion, designacion, localStorage.getItem("token"))
+
+            
+            
 
             toast.success('Asistente editado correctamente', {
                 duration: 4000,
@@ -144,7 +216,7 @@ export const GestionAsistentes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            
+            console.log(error)
         }
     }
 

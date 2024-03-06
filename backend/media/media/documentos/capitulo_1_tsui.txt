@@ -1,0 +1,609 @@
+1.1 Un problema sencillo
+En este capítulo analizaremos las tareas que implica escribir un programa relativamente sencillo.
+Esto servirá de contraste con lo que implica el desarrollo de un gran sistema, que se describe en el Capítulo 2.
+que se describe en el Capítulo 2.
+Supongamos que se le ha planteado el siguiente problema sencillo: "Dada una colección de
+líneas de texto (cadenas) almacenadas en un archivo, ordénelas en orden alfabético y escríbalas en otro archivo". Este es probablemente uno de los problemas más sencillos con los que se encontrará. Probablemente
+Probablemente haya realizado tareas similares en algunas de sus clases de introducción a la programación.
+1.1.1 Decisiones, decisiones
+Un enunciado de problema como el mencionado en el problema simple anterior no
+no especifica completamente el problema. Es necesario aclarar los requisitos para producir
+un programa que satisfaga mejor el problema real. Es necesario comprender todos los
+los requisitos del programa y las restricciones de diseño impuestas por el cliente, así como
+tomar decisiones técnicas importantes. Un planteamiento
+problema completo incluiría los requisitos, que establecen y califican
+lo que hace el programa, y las restricciones de diseño, que describen
+las formas en que puede diseñarlo e implementarlo.
+Lo más importante que hay que tener en cuenta es que la palabra requisitos
+no se utiliza tal cual en el inglés coloquial. En muchas transacciones comerciales,
+un requisito es algo que debe ocurrir absolutamente. Sin embargo,
+en ingeniería de software, muchos elementos son negociables. Dado que cada requisito
+tiene un coste, los clientes pueden decidir que realmente no lo necesitan una vez que entienden
+el coste asociado. Los requisitos suelen agruparse en "necesarios" y "agradables de tener".
+que son "agradables de tener".
+También es útil distinguir entre requisitos funcionales -lo que hace el programa
+y no funcionales, es decir, la manera en que debe comportarse el programa. En cierto modo, una función es similar a la de un objeto directo e indirecto en gramática. Así, en
+los requisitos funcionales de nuestro problema describirán lo que hace: clasificar un archivo (con todos los detalles necesarios).
+todos los detalles necesarios); los requisitos no funcionales describirán aspectos como el rendimiento, la facilidad de uso y el mantenimiento. Los requisitos funcionales suelen tener una medida booleana
+booleana en la que el requisito se cumple o no se cumple, pero los requisitos no funcionales
+tienden a aplicarse a cosas que se miden en una escala lineal
+en la que las mediciones pueden variar mucho más. Los requisitos de rendimiento y
+Los requisitos de rendimiento y mantenimiento, por ejemplo, pueden medirse en grados de satisfacción.
+grados de satisfacción.
+Los requisitos no funcionales se denominan informalmente "ilidades"
+porque las palabras que describen la mayoría de ellos terminan en -ility. En
+Algunas de las características típicas definidas como requisitos no funcionales son el rendimiento,
+modificabilidad, usabilidad, configurabilidad, fiabilidad, disponibilidad, seguridad y escalabilidad.
+Además de los requisitos, también se le darán restricciones de diseño, como la elección de
+lenguaje de programación, las plataformas en las que se ejecuta el sistema y otros sistemas con los que interactúa.
+Estas restricciones de diseño a veces se consideran requisitos no funcionales. No se trata
+No se trata de una distinción muy clara o fácil de definir (similar a cuando termina el análisis de requisitos).
+y se inicia el diseño); y en casos límite, se define principalmente por consenso. La mayoría de los desarrolladores incluirán la usabilidad como requisito no funcional, y la elección de una interfaz de usuario específica, como la interfaz gráfica de usuario (GUI) o la basada en web, como restricción de diseño.
+interfaz gráfica de usuario (GUI) o basada en web.
+Sin embargo, también puede definirse como un requisito funcional de la siguiente manera: "el programa muestra un cuadro de diálogo de 60 por 80 píxeles, y luego...".
+Los requisitos los establece el cliente, con ayuda del ingeniero de software, mientras que
+las decisiones técnicas las suele tomar el ingeniero de software sin mucha aportación del cliente. A menudo, algunas de las decisiones técnicas, como qué lenguajes de programación
+lenguajes de programación o las herramientas que se utilizarán, porque el programa necesita interoperar
+con otros programas o la organización cliente tiene experiencia o inversiones estratégicas en
+tecnologías concretas.
+En las páginas siguientes ilustraremos los diversos problemas a los que se enfrentan los ingenieros de software, incluso en programas sencillos.
+de software, incluso para programas sencillos. Clasificaremos estas decisiones en funcionales y no funcionales
+funcionales y no funcionales, restricciones de diseño y decisiones de diseño. Pero tenga en cuenta
+que otros ingenieros de software pueden clasificar algunas de estas cuestiones en una categoría diferente. En
+utilizaremos como ejemplo el sencillo problema de clasificación presentado anteriormente.
+1.1.2 Requisitos funcionales
+Tendremos que considerar varios aspectos del problema y plantearnos muchas preguntas antes de
+diseñar y programar la solución. A continuación se presenta un resumen informal del
+proceso de reflexión que conllevan los requisitos funcionales:
+Formatos de entrada: ¿Cuál es el formato de los datos de entrada? ¿Cómo deben almacenarse los datos? ¿Qué es un carácter?
+es un carácter? En nuestro caso, tenemos que definir qué separa las líneas del fichero. Esto es
+especialmente crítico porque varias plataformas diferentes pueden utilizar distintos caracteres separadores.
+Normalmente se puede considerar alguna combinación de nueva línea y retorno de carro. Para
+saber exactamente dónde están los límites, también necesitamos conocer el conjunto de caracteres de entrada.
+de entrada. La representación más común utiliza 1 byte por carácter, lo que es suficiente para
+inglés y la mayoría de las lenguas derivadas del latín. Pero algunas representaciones, como el chino
+chino o el árabe, requieren 2 bytes por carácter porque hay más de 256 caracteres
+caracteres. Otras requieren una combinación de ambos tipos. Con la combinación de
+representaciones de caracteres de uno y dos bytes, suele ser necesario un carácter de escape que permita el cambio de modo de un byte a otro.
+para permitir el cambio de modo de un byte a doble byte o viceversa.
+Para nuestro problema de ordenación, supondremos la situación simple de 1 byte por carácter.
+Ordenación: Aunque parece ser un problema bien definido, hay muchos significados ligeramente y no tan ligeramente diferentes para la ordenación.
+y no tan diferentes significados de la ordenación. Para empezar -y, por supuesto, suponiendo
+que sólo tenemos caracteres ingleses, ¿ordenamos de forma ascendente o descendente?
+¿Qué hacemos con los caracteres no alfabéticos? ¿Los números van antes o después de las letras
+en el orden? ¿Qué pasa con las minúsculas y las mayúsculas? Para simplificar el problema
+definimos la ordenación entre caracteres como en orden numérico, y la ordenación del
+en orden ascendente.
+Casos especiales, límites y condiciones de error: ¿Existen casos especiales? ¿Cómo
+¿Cómo tratar los casos límite, como líneas y ficheros vacíos? ¿Cómo
+condiciones de error? Es habitual, aunque no es una buena práctica, no tener
+todos estos requisitos completamente especificados hasta el diseño detallado o incluso el fases de ejecución. Para nuestro programa, no tratamos las líneas vacías de ninguna manera especial, excepto para especificar que cuando el archivo de entrada está vacío, el archivo de salida debe estar vacío.
+especial, excepto especificar que cuando el archivo de entrada está vacío, el archivo de
+creado pero vacío. No especificamos ningún mecanismo especial de tratamiento de errores siempre que
+todos los errores se señalen al usuario y el fichero de entrada no se corrompa de ninguna manera.
+1.1.3 Requisitos no funcionales
+El proceso de reflexión que conllevan los requisitos no funcionales puede resumirse informalmente del siguiente modo:
+Requisitos de rendimiento: Aunque no es tan importante como la mayoría de la gente puede pensar,
+el rendimiento siempre es un problema. El programa debe finalizar la mayoría o todas las entradas en un tiempo determinado.
+cierta cantidad de tiempo. Para nuestro problema de ordenación, definimos los requisitos de rendimiento
+menos de 1 minuto para ordenar un archivo de 100 líneas de 100 caracteres cada una.
+Requisitos en tiempo real: Cuando un programa debe funcionar en tiempo real, es decir
+debe completar el procesamiento en un tiempo determinado, el rendimiento es un problema.
+La variabilidad del tiempo de ejecución también es un gran problema. Puede que tengamos que elegir un algoritmo con un rendimiento inferior a la media, si tiene un mejor rendimiento en el peor de los casos.
+Por ejemplo, Quick Sort está considerado como uno de los algoritmos de ordenación más rápidos; sin embargo,
+para algunas entradas, puede tener un rendimiento pobre. En términos algorítmicos, su tiempo de ejecución esperado es del orden de n log(n), pero su rendimiento en el peor de los casos es del orden de
+n al cuadrado. Si tienes requisitos de tiempo real en los que el caso medio es aceptable
+pero el peor caso no lo es, entonces es posible que desee elegir un algoritmo con menos variabilidad,
+como Heap Sort o Merge Sort. El análisis del rendimiento en tiempo de ejecución se trata con más detalle
+en Main y Savitch (2010).
+Requisitos de modificabilidad: Antes de escribir un programa, es importante conocer la esperanza de vida
+del programa y si existe algún plan para modificarlo. Si el
+programa se va a utilizar una sola vez, la modificabilidad no es un gran problema. En cambio
+si se va a utilizar durante 10 años o más, entonces tenemos que preocuparnos de hacerlo
+fácil de mantener y modificar. Seguramente, los requisitos cambiarán durante ese periodo de 10 años.
+años. Si sabemos que hay planes para ampliar el programa de determinadas maneras, o que
+o que los requisitos cambiarán de forma específica, debemos preparar el programa para esas
+modificaciones a medida que el programa se diseñe e implemente. Obsérvese que aunque
+los requisitos de modificabilidad son bajos, esto no es una licencia para escribir mal código, porque
+todavía necesitamos ser capaces de entender el programa para propósitos de depuración. Para nuestro
+ejemplo de clasificación, pensemos en cómo podríamos diseñar e implementar la solución si sabemos
+que más adelante el requisito puede cambiar de orden descendente a ascendente
+o puede cambiar para incluir órdenes ascendentes y descendentes.
+Requisitos de seguridad: La organización cliente y los desarrolladores del software deben
+acordar definiciones de seguridad derivadas de los objetivos de la aplicación empresarial del cliente,
+las amenazas potenciales a los activos del proyecto y los controles de gestión para protegerlos de pérdidas,
+inexactitud, alteración, indisponibilidad o uso indebido de los datos y recursos. Seguridad
+puede ser funcional o no funcional. Por ejemplo, un desarrollador de software puede argumentar
+que un sistema debe protegerse contra ataques de denegación de servicio para cumplir su misión. La ingeniería de requisitos de calidad de la seguridad (SQUARE) se analiza en Mead y
+Stehney (2005).
+Requisitos de usabilidad: Los usuarios finales del programa tienen una formación, una experiencia, unas necesidades y unos estilos de interacción específicos que se tienen en cuenta en el desarrollo
+del software. Las características del usuario, el producto y el entorno del programa
+para el diseño de la interfaz de usuario. Este requisito
+Este requisito no funcional se centra en la interacción entre el programa y el usuario final.
+Esta interacción es valorada por el usuario final en cuanto a su eficacia, eficiencia
+y éxito. La evaluación de los requisitos de usabilidad no se puede medir directamente, ya que
+atributos de usabilidad comunicados por los usuarios finales en pruebas específicas de usabilidad.
+pruebas de usabilidad específicas.
+1.1.4 Limitaciones del diseño
+El proceso de reflexión relacionado con las restricciones de diseño puede resumirse del siguiente modo:
+Interfaz de usuario: ¿Qué tipo de interfaz de usuario debe tener el programa? ¿Debería ser
+una interfaz de línea de comandos (CLI) o una interfaz gráfica de usuario (GUI)? ¿Deberíamos utilizar una
+interfaz web? Para el problema de clasificación, una interfaz
+web no parece apropiada porque los usuarios tendrían que
+cargar el archivo y descargar el clasificado. Aunque las GUI
+se han convertido en la norma en la última década, una CLI puede ser
+adecuada para nuestro problema de clasificación, sobre todo porque sería más fácil invocarla
+invocar dentro de un script, permitiendo la automatización de procesos manuales y la reutilización de
+este programa como módulo para otros futuros. Esta es una de esas consideraciones de diseño
+que también implica la interfaz de usuario. En la Sección 1.4, crearemos varias implementaciones,
+algunas basadas en CLI y otras en GUI. El Capítulo 7 también discute el diseño de la interfaz de usuario
+con más detalle.
+Tamaños de entrada típicos y máximos: Dependiendo de los tamaños de entrada típicos, es posible que queramos
+dedicar diferentes cantidades de tiempo a algoritmos y optimizaciones de rendimiento. Además
+ciertos tipos de entradas son particularmente buenas o malas para ciertos algoritmos; por ejemplo,
+las entradas que están casi ordenadas hacen que las implementaciones ingenuas de Quick Sort tarden más tiempo.
+más tiempo. Tenga en cuenta que a veces le darán estimaciones inexactas, pero incluso las cifras aproximadas pueden ayudarle a anticipar problemas o guiarle.
+pueden ayudar a anticipar problemas o guiarle hacia un algoritmo apropiado. En
+este ejemplo, si tiene tamaños de entrada pequeños, puede utilizar casi cualquier algoritmo de ordenación.
+Por tanto, debería elegir el más sencillo de implementar. Si tiene entradas más grandes pero
+pero pueden caber en la memoria de acceso aleatorio (RAM), necesita usar un algoritmo eficiente.
+eficiente. Si la entrada no cabe en la RAM, entonces necesita elegir un algoritmo especializado para la ordenación en disco.
+especializado para la ordenación en disco.
+Plataformas: ¿En qué plataformas debe ejecutarse el programa? Se trata de una decisión empresarial importante que puede incluir la arquitectura, el sistema operativo y las bibliotecas disponibles.
+y casi siempre se expresará en los requisitos. Tenga en cuenta que, aunque
+el desarrollo multiplataforma se ha vuelto más fácil y hay muchos lenguajes diseñados
+para ser portables entre plataformas, no todas las librerías estarán disponibles en todas las plataformas.
+Siempre hay un coste adicional en dar soporte explícito a una nueva plataforma. Por otro lado
+Por otro lado, las buenas prácticas de programación ayudan a lograr la portabilidad, incluso cuando no es necesario.
+Un poco de consideración extra al diseñar e implementar un programa puede minimizar
+un programa puede minimizar el trabajo potencialmente extenso necesario para portarlo a una nueva plataforma. Una buena práctica es
+realizar un rápido análisis coste-beneficio sobre la conveniencia de dar soporte a plataformas adicionales y
+utilizar tecnologías y prácticas de programación que minimicen los problemas de portabilidad, incluso
+cuando no se prevea la necesidad de dar soporte a nuevas plataformas.
+Requisitos de calendario: El plazo final para completar un proyecto viene dado por el cliente,
+con la aportación de la parte técnica en cuanto a viabilidad y coste. Por ejemplo, un diálogo sobre
+puede ser el siguiente: El cliente puede pedir algo como "Lo necesito para el mes que viene".
+para el mes que viene". Usted responde: "Bueno, le costará el doble que si espera dos meses" o "Eso es lo que necesito".
+dos meses" o "Eso no se puede hacer. Suele tardar tres meses. Podemos
+Podemos reducirlo a dos, pero no menos". El cliente puede aceptarlo, o también puede decir: "Si no está hecho
+para el mes que viene, entonces no sirve para nada", y cancelar el proyecto.
+1.1.5 Decisiones de diseño
+Los pasos y pensamientos relacionados con las decisiones de diseño para el problema de clasificación pueden resumirse como sigue:
+Lenguaje de programación: Normalmente, ésta será una decisión de diseño técnico, aunque no es raro que se tome como una decisión de diseño técnico.
+aunque no es raro que se dé como una restricción de diseño. El tipo de programación necesario, los
+requisitos de rendimiento y portabilidad, y los conocimientos técnicos de los desarrolladores.
+suelen influir mucho en la elección del lenguaje de programación.
+Algoritmos: Cuando se implementan sistemas, suele haber varias piezas que pueden verse
+en la elección de los algoritmos. En nuestro ejemplo, por supuesto, hay una variedad de
+algoritmos que podemos elegir para ordenar una colección de objetos. El lenguaje utilizado y las
+bibliotecas disponibles influirán en la elección de los algoritmos. Por ejemplo, para ordenar, la solución más
+solución sería utilizar una función estándar proporcionada por el lenguaje de programación
+en lugar de implementar una propia. Por lo tanto, utilice cualquier algoritmo que la implementación
+elija. El rendimiento suele ser el factor que más influye en la elección de un algoritmo, pero hay que sopesarlo.
+algoritmo, pero debe equilibrarse con el esfuerzo necesario para implementarlo, y
+y la familiaridad de los desarrolladores con él. Los algoritmos suelen ser decisiones de diseño, pero
+pueden darse como restricciones de diseño o incluso considerarse requisitos funcionales.
+En muchos entornos empresariales hay normas que obligan a utilizar algoritmos o fórmulas matemáticas específicas.
+o fórmulas matemáticas, y en muchas aplicaciones científicas el objetivo es probar varios algoritmos.
+probar varios algoritmos, lo que significa que hay que utilizar determinados algoritmos.
+1.2 Pruebas
+Siempre es una buena idea probar un programa, mientras se está definiendo, desarrollando y después de
+de que esté terminado. Puede parecer un consejo obvio, pero no siempre se sigue. En
+Hay varios tipos de pruebas, como las de aceptación, que son las realizadas por los clientes o alguien en su nombre.
+clientes, o alguien en su nombre, para asegurarse de que el programa funciona según lo especificado. Si
+Si estas pruebas fallan, el cliente puede rechazar el programa. Una sencilla prueba de validación al principio
+del proyecto puede realizarse mostrando pantallas dibujadas a mano de la "solución del problema" al cliente.
+al cliente. Esta práctica consolida su percepción del problema y las expectativas de solución del cliente.
+expectativas. Los desarrolladores realizan sus propias pruebas internas para determinar si el programa
+funciona y es correcto. Estas pruebas se denominan pruebas de verificación. Las pruebas de validación determinan
+si los desarrolladores están construyendo el sistema correcto para el cliente, y las pruebas de verificación
+determinan si la construcción del sistema es correcta.Aunque hay muchos tipos de pruebas realizadas por la organización de desarrollo, el tipo más importante de pruebas de verificación para el programador individual son las pruebas unitarias.
+un proceso seguido por un programador para probar cada pieza o unidad de software. Cuando
+código, también debe escribir pruebas para comprobar cada módulo, función o método que haya escrito.
+que haya escrito. Algunas metodologías, sobre todo Extreme Programming, llegan a decir
+que los programadores deben escribir los casos de prueba antes de escribir el código.
+sobre Extreme Programming en Beck y Andres (2004). Los programadores inexpertos
+no se dan cuenta de la importancia de las pruebas. Escriben funciones o métodos que dependen
+de otras funciones o métodos que no se han probado adecuadamente. Cuando falla un método
+no saben qué función o método está fallando realmente.
+Otra distinción útil es la que existe entre las pruebas de caja negra y de caja blanca. En las pruebas
+los casos de prueba se basan únicamente en las especificaciones de los requisitos, no en el código de implementación. En las pruebas de caja blanca, los casos de prueba pueden diseñarse teniendo en cuenta el diseño y la implementación del código.
+diseño y la implementación del código. Al realizar pruebas unitarias, el programador tiene acceso a
+a la implementación, pero aún así debe realizar una mezcla de pruebas de caja negra y de caja blanca.
+Cuando hablemos de las implementaciones de nuestro sencillo programa, realizaremos pruebas unitarias sobre él.
+en él. Las pruebas se tratarán con más detalle en el capítulo 10.
+1.3 Estimación del esfuerzo
+Uno de los aspectos más importantes de un proyecto de software es estimar el esfuerzo que supone.
+implica. La estimación del esfuerzo es necesaria para producir una estimación de costes y un calendario. Antes de
+Antes de realizar una estimación completa del esfuerzo, hay que conocer los requisitos. Un ejercicio interesante ilustra este punto.
+Haga el siguiente ejercicio:
+Calcule cuánto tiempo, en minutos, le llevará, utilizando su lenguaje y tecnología favoritos
+lenguaje y tecnología favoritos, escribir un programa que lea líneas de un archivo
+y escriba las líneas ordenadas en otro archivo. Suponga que va a escribir la rutina de
+rutina de ordenación e implementará una GUI sencilla como la que se muestra en la
+Figura 1.21, con dos cuadros de texto para proporcionar dos nombres de archivo, y dos botones
+junto a cada caja de texto. Al pulsar uno de los dos botones se muestra un cuadro de diálogo Abrir archivo
+como el que se muestra en la Figura 1.22, donde el usuario puede navegar por el sistema de archivos del ordenador y elegir un archivo.
+sistema de archivos del ordenador y elegir un archivo. Suponga que sólo puede trabajar en esta
+sin interrupciones. Proporcione una estimación en 1 minuto (en el Paso 1).
+Paso 1.
+Tiempo total ideal estimado: _________________
+¿Es realista la suposición de que podrá trabajar todo el tiempo en esta tarea sin interrupciones? ¿No necesitarás ir al baño o beber agua? ¿Cuándo
+dedicar tiempo a esta tarea? Si te pidieran que hicieras esta tarea tan pronto como fuera razonablemente
+posible, empezando ahora mismo, ¿puedes estimar cuándo terminarías? Si
+que empieces ahora, calcula cuándo crees que tendrás este programa terminado para entregárselo al
+al cliente. Indique también una estimación del tiempo que no dedicará a la tarea (por ejemplo, a comer, dormir,
+otros cursos, etc.) en el Paso 2.Paso 2.
+Hora estimada de inicio del calendario: _________ ended:___________breaks:_____
+Ahora, vamos a crear una nueva estimación en la que dividir todo el programa en distintas
+tareas de desarrollo, que podrían dividirse en varias subtareas, en su caso.
+Su tarea actual es una tarea de planificación, que incluye una subtarea: ESTIMACIÓN. Cuando piense
+en los requisitos del proyecto, suponga que creará una clase, llamada StringSorter
+con tres métodos públicos: Leer, Escribir y Ordenar. Para la rutina de ordenación, suponga que
+su algoritmo consiste en encontrar el elemento más grande, ponerlo al final de la matriz,
+y luego ordenar el resto del array usando el mismo mecanismo. Asume que crearás un método llamado IndexOfBiggest que devuelve el índice del elemento más grande del array.
+la matriz. Usando la siguiente tabla, estima cuánto tiempo te llevará hacer cada
+tarea (y la GUI) en el Paso 3.
+Paso 3. Tiempo total ideal
+Tiempo total ideal Tiempo de calendario
+Planificación
+ÍndiceDeMayores
+Ordenar
+Leer
+Escribir
+GUI
+Pruebas
+Total
+¿Qué diferencia hay entre esta estimación y la anterior? ¿Qué tipo de fórmula has utilizado
+para convertir la hora ideal en hora de calendario? ¿Qué fecha le darías al cliente como
+fecha de entrega?
+Ahora, diseña e implementa tu solución sin perder de vista el tiempo en el Paso 4.
+Paso 4.
+Llevar un registro del tiempo que realmente dedica a cada tarea, así como de las interrupciones que experimenta, es una actividad de recopilación de datos que merece la pena.
+es una actividad de recopilación de datos que merece la pena. Compare estos tiempos con sus
+estimaciones. ¿Hasta dónde has llegado? ¿Existe algún patrón? ¿Es exacto el total con
+respecto a tu estimación original?
+Si ha realizado las actividades de este ejercicio, lo más probable es que haya comprobado que la estimación era más precisa después de dividirla en subtareas. También descubrirá que las estimaciones
+en general tienden a ser algo imprecisas, incluso para tareas bien definidas. La estimación de proyectos
+y estimación del esfuerzo es uno de los problemas más difíciles en la gestión de proyectos de software
+e ingeniería de software. Este tema se volverá a tratar en detalle en el capítulo 13. Para más
+sobre por qué las personas deben llevar un registro de su tiempo de desarrollo, consulte la sección Personal
+Software Process (PSP) en Humphrey (1996). Es muy difícil conseguir una estimación precisa.
+Dividir las tareas en otras más pequeñas y conservar datos sobre tareas y estimaciones anteriores suelen ser
+suelen ser comienzos útiles.
+Es importante que la estimación la realicen las personas que hacen el trabajo, que suele ser
+el programador. El cliente también debe comprobar que las estimaciones son razonables. Un gran
+problema de la estimación es que se realiza conceptualmente durante la licitación del trabajo,
+es decir, antes de empezar el proyecto. En realidad, se necesitan muchas tareas de desarrollo e información, posiblemente hasta el diseño, para poder ofrecer una buena estimación. En
+hablaremos más sobre la estimación en el Capítulo 13.
+1.4 Implementaciones
+En esta sección hablaremos de varias implementaciones de nuestro programa de ordenación, incluyendo
+dos formas de implementar la funcionalidad de ordenación y varias variaciones de la interfaz de usuario.
+También hablaremos de las pruebas unitarias para nuestras implementaciones. Se proporcionará código de ejemplo
+en Java, utilizando JUnit para ayudar en las pruebas unitarias.
+1.4.1 Algunas indicaciones sobre la implementación
+Aunque la ingeniería de software tiende a centrarse más en el análisis de requisitos, el diseño
+en el análisis de requisitos, el diseño y los procesos más que en la implementación.
+un mal programa incluso si todas las demás piezas son perfectas. Aunque para programas sencillos
+Aunque para programas sencillos casi todo vale, seguir unas cuantas reglas sencillas
+programación. Aquí discutiremos sólo unas pocas reglas independientes del lenguaje, y le indicaremos otros libros en Referencias y Sugerencias.
+en la sección de Referencias y Lecturas Sugeridas al final de este capítulo.
+La regla más importante es ser consistente, especialmente en la elección de nombres, mayúsculas y convenciones de programación. Si está programando solo, la elección
+Si está programando solo, la elección particular de las convenciones no es importante, siempre y cuando sea coherente. También debe
+intentar seguir las convenciones establecidas del lenguaje de programación que esté utilizando,
+incluso si no fuera su elección. Así se asegurará de no introducir
+dos convenciones. Por ejemplo, en Java está establecido que los nombres de las clases empiecen con mayúsculas y los nombres de las variables con minúsculas.
+mayúsculas y los nombres de variables con minúsculas. Si su nombre tiene más de
+Si su nombre tiene más de una palabra, utilice mayúsculas para señalar los límites de las palabras. Esto da lugar a nombres
+como FileClass y fileVariable. En C, la convención es usar minúsculas casi
+y separarlas con un guión bajo. Por lo tanto, cuando programamos en C, seguimos las convenciones de C. La elección de palabras para operaciones comunes también viene dictada por
+convención. Por ejemplo, imprimir, mostrar, mostrar o hacer eco de una variable son algunas
+de las terminologías que significan acciones similares. Las convenciones del lenguaje también proporcionan pistas
+en cuanto a los nombres por defecto de las variables, la preferencia por nombres más cortos o más largos, y otras
+cuestiones. Intente ser lo más coherente posible en su elección y siga las convenciones de su idioma.
+su idioma.
+Elija los nombres con cuidado. Además de ser coherente en la asignación de nombres, asegúrese de que los nombres de las funciones y variables sean descriptivos.
+de las funciones y variables sean descriptivos. Si los nombres son demasiado engorrosos o si no se encuentra
+nombre no se puede encontrar fácilmente, eso suele ser una señal de que puede haber un problema en el
+diseño. Una buena regla general es elegir nombres largos y descriptivos para las cosas que tendrán
+ámbito global, como clases y métodos públicos. Utilice nombres cortos para las referencias locales,
+que se utilizan en un ámbito muy limitado, como variables locales, nombres privados, etc.
+Pruebe antes de utilizar una función o un método. Asegúrate de que funciona. De este modo, si
+errores, sabrás que están en el módulo que estás escribiendo. Pruebas unitarias
+con casos de prueba escritos antes o después de la unidad, le ayudará a ganar confianza en el uso de esa unidad.
+en el uso de esa unidad.
+Conozca su biblioteca estándar. En la mayoría de los lenguajes de programación modernos, la biblioteca estándar
+implementará muchas funciones comunes, que suelen incluir ordenación y
+de datos, acceso a bases de datos, utilidades para el desarrollo web, redes y mucho más. No
+reinventar o reimplementar la rueda. El uso de las bibliotecas estándar le ahorrará trabajo extra, hará
+el código más comprensible, y por lo general se ejecutan más rápido y con menos errores, porque el
+bibliotecas estándar están bien depuradas y optimizadas. Tenga en cuenta que muchos ejercicios
+en las clases de introducción a la programación implican la resolución de problemas clásicos y la implementación de estructuras de datos y algoritmos bien conocidos. Aunque son un valioso ejercicio
+de aprendizaje, eso no significa que deba utilizar sus propias implementaciones en la vida real. Para
+nuestro problema de programación de ejemplo, Java tiene una rutina de ordenación que es robusta y rápida.
+Utilizarla en lugar de escribir una propia ahorraría tiempo y esfuerzo y produciría una mejor implementación.
+implementación. Implementaremos la nuestra propia para ilustrar el problema, pero también
+la rutina de ordenación de Java.
+Si es posible, revise su código. Las revisiones de software son uno de los métodos más eficaces para reducir los defectos en el software. Mostrar su código a otras personas
+ayudará a detectar no sólo errores de funcionalidad, sino también incoherencias y mala nomenclatura. Además
+También te ayudará a aprender de la experiencia de los demás. Este es otro hábito que
+con los proyectos escolares. En la mayoría de estos proyectos, pedir ayuda a otro
+estudiante puede considerarse hacer trampas. Tal vez el código pueda revisarse después de
+después de entregarlo. Las revisiones son buenas tanto para las tareas escolares como para los programas del mundo real.
+1.4.2 Diseño básico
+Dado que vamos a implementar diferentes interfaces de usuario, nuestro diseño básico separa
+la funcionalidad de clasificación de la interfaz de usuario, lo cual es una buena práctica de todos modos, porque
+las interfaces de usuario tienden a cambiar mucho más rápido que la funcionalidad. Tenemos una clase, llamada
+StringSorter, que tiene cuatro métodos: (1) leer las cadenas desde un fichero, (2) ordenar la
+colección de cadenas, (3) escribir las cadenas en un fichero, y (4) combinar los tres, tomando los nombres de los ficheros de entrada y salida. Las diferentes interfaces de usuario se implementarán en
+clases separadas. Dado que StringSorter no sabría qué hacer con condiciones excepcionales
+condiciones excepcionales, como errores al leer o escribir flujos, las excepciones pasan por
+en los métodos apropiados, con las clases de interfaz de usuario decidiendo qué hacer con
+con ellas. También tenemos una clase con todas nuestras pruebas unitarias, aprovechando el framework JUnit.
+1.4.3 Pruebas unitarias con JUnit
+JUnit pertenece a una familia de frameworks de pruebas unitarias, la J significa Java. Hay variaciones para muchos otros lenguajes, por ejemplo, cppUnit para C++; la biblioteca original se desarrolló en Smalltalk.
+desarrollada en Smalltalk. Aquí discutimos JUnit de forma muy básica; JUnit se discute más a fondo en el Capítulo 10.
+en el capítulo 10. Sólo necesitamos crear una clase que herede de junit.framework.
+TestCase, que define métodos públicos cuyos nombres empiezan por test. JUnit utiliza el método
+para ejecutar todos esos métodos. Dentro de cada método de prueba, assertEquals
+se puede utilizar para verificar si dos valores que deberían ser iguales son realmente iguales.
+1.4.4 Implementación de StringSorter
+Presentaremos nuestra implementación seguida de los casos de prueba. Asumimos
+conocimientos básicos de programación en Java, aunque la familiaridad con otro lenguaje de
+orientado a objetos debería ser suficiente para entender esta sección.
+Aunque los métodos podrían haberse desarrollado en un orden diferente, los presentamos en
+los presentamos en el orden en que los desarrollamos, que es Leer, luego Ordenar, luego Escribir. Este es también el orden
+en el que se ejecutará el programa final, lo que facilita las pruebas.
+Importamos varios namespaces, y declaramos la clase StringSorter. La única variable
+es un ArrayList de líneas. ArrayList es un contenedor que puede crecer dinámicamente,
+y soporta el acceso indexado a sus elementos. Se corresponde aproximadamente con un vector en otros lenguajes de programación.
+lenguajes de programación. Forma parte de la biblioteca estándar de colecciones de Java y es otro
+ejemplo de cómo el uso de la biblioteca estándar ahorra tiempo. Observe que en la figura 1.1 no declaramos la variable
+como privada en la Figura 1.1, porque la clase de prueba necesita acceder a ella. Al dejarla
+con protección por defecto, todas las clases del mismo paquete pueden acceder a ella porque Java no tiene
+Java no tiene el concepto de clases amigas en C++. Esto proporciona un compromiso decente. Otras opciones de
+en el capítulo 10. Nuestro primer método consiste en leer líneas de un
+como se muestra en la Figura 1.2. Para hacer el método más general, tomamos un Reader,
+que es una clase para leer flujos basados en texto. Un flujo es una generalización de un fichero. En
+utilizando un Reader en lugar de una clase explícitamente basada en Files, podríamos utilizar este mismo
+para leer desde la entrada estándar o incluso desde la red. Además, como no sabemos
+excepciones aquí, dejaremos pasar la IOException.
+
+
+import java.io.*; // para Reader(s), Writer(s),
+import java.util.*; // para List, ArrayList, Iterator
+public class StringSorter {
+ Líneas ArrayList;
+Declaración de clase y sentencias Import.
+import java.io.*; // para Lector(es), Escritor(es),
+import java.util.*; // para List, ArrayList, Iterator
+public class StringSorter {
+ Líneas ArrayList;
+Figura 1.2 El método readFromStream.
+public void readFromStream(Reader r) throws
+IOException
+{
+ BufferedReader br=nuevo BufferedReader(r);
+ lines=nueva ArrayList();
+ while(true) {
+ String input=br.readLine();
+ if(input==null)
+ break;
+ lines.add(entrada);
+
+
+Para probar este método con JUnit, creamos una clase que extiende TestCase. También definimos
+un método de utilidad, llamado make123, que crea un ArrayList con tres cadenas-una, dos,
+y tres-insertadas en ese orden en la Figura 1.3.
+A continuación, definimos nuestro primer método, testReadFromStream, en la Figura 1.4. En este método
+creamos un ArrayList y un StringSorter. Abrimos un fichero conocido y hacemos que el StringSorter
+lea desde él. Dado que sabemos lo que hay en el fichero, sabemos cuál debe ser la ArrayList interna
+de nuestro StringSorter. Simplemente afirmamos que debe ser igual a ese valor conocido.
+Podemos ejecutar JUnit después de establecer el classpath y compilar ambas clases, escribiendo
+java junit.swingui.TestRunner. Esto nos presentará una lista de clases para elegir
+elegir. Al elegir nuestra clase TestStringSorter, nos encontramos con una interfaz de usuario como la que
+mostrada en la Figura 1.5, que indica que todas las pruebas se han implementado y ejecutado correctamente.
+Al pulsar el botón de ejecución se volverán a ejecutar todas las pruebas, mostrando cuántas pruebas han tenido éxito.
+Si alguna prueba no tiene éxito, la barra será roja en lugar de verde. Las clases se recargan por
+por defecto, así que puedes dejar esa ventana abierta, modificar, recompilar, y simplemente pulsar ejecutar de nuevo.
+Después de verificar que nuestra prueba tiene éxito, podemos comenzar el siguiente método-construir
+la funcionalidad de clasificación. Nos decidimos por un algoritmo simple: encontrar el elemento más grande en
+la matriz, luego intercambiarlo con el último elemento, colocando el elemento más grande al final de la
+matriz, y luego repetir con el resto de la matriz. Necesitamos dos funciones de apoyo, una para
+intercambiar los dos elementos de la matriz y otra para hallar el índice del elemento mayor.
+mayor. En la Figura 1.6 se muestra el código de un intercambio.
+
+
+public clase TestStringSorter extends TestCase {
+ private ArrayList hacer123() {
+ ArrayList l = new ArrayList();
+ l.add("uno");
+ l.add("dos");
+ l.add("tres");
+ return l;
+}
+Figura 1.4 testReadFromStream.
+public void testReadFromStream() lanza una
+IOException{
+ Lector in=nuevo
+FileReader("in.txt");
+ StringSorter ss=nuevo
+StringSorter();
+ ArrayList l=hacer123();
+ ss.readFromStream(in);
+ assertEquals(l,ss.lines);
+
+
+Figura 1.5 Interfaz gráfica de JUnit.
+Figura 1.6 El código para intercambiar dos enteros.
+static void swap(List l, int i1, int i2) {
+ Objeto tmp=l.get(i1);
+ l.set(i1, l.get(i2));
+ l.set(i2, tmp);
+
+
+Dado que swap es una función genérica que podría ser reutilizada en muchas situaciones, decidimos
+construirla sin ningún conocimiento de la clase StringSorter. Dado que, tiene sentido
+que sea un método estático. En C++ u otros lenguajes, sería una función definida
+fuera de la clase y no asociada a ninguna clase. Los métodos estáticos son la técnica más parecida
+en Java. Obtenemos como parámetros una Lista, donde Lista es la interfaz genérica que implementa ArrayList
+y los índices de los dos elementos. La prueba de este método se muestra en el método
+testSwap de la clase TestStringSorter de la Figura 1.7.
+El siguiente método es el que devuelve el índice del elemento más grande de la lista.
+Su nombre es findIdxBiggest, como se muestra en la Figura 1.8. Idx como abreviatura de índice está
+está arraigada en nuestras mentes. Debatimos si utilizar largest, biggest o max/maximum
+para el nombre (nos parecen igual de apropiados). Después de decantarnos por mayor,
+nos aseguramos de no utilizar los otros dos para nombrar las variables.
+
+public void testSwap() {
+ ArrayList l1= make123();
+ ArrayList l2=new ArrayList();
+ l2.add(“one”);
+ l2.add(“three”);
+ l2.add(“two”);
+ StringSorter.swap(l1,1,2);
+ assertEquals(l1,l2);
+}
+Figure 1.8 The findIdxBiggest method.
+static int findIdxBiggest(List l, int from, int to) {
+ String biggest=(String) l.get(0);
+ int idxBiggest=from;
+ for(int i=from+1; i<=to; ++i) {
+ if(biggest.compareTo((String)l.get(i))<0) {// it is bigger
+ biggest=(String)l.get(i);
+ idxBiggest=i;
+ }
+ }
+ return idxBiggest;
+
+
+Utilizamos el método compareTo de Strings, que devuelve -1 si el primer elemento es menor que el segundo, 0 si son iguales y 1 si el primero es mayor que el segundo.
+que el segundo, 0 si son iguales y 1 si el primero es mayor. En este método utilizamos el
+hecho de que los elementos de la ArrayList son cadenas. Tenga en cuenta que Java (a partir de la versión 1.4) no
+no tiene soporte para genéricos (plantillas en C++), por lo que los elementos tienen que ser explícitamente
+a cadenas. La prueba se muestra en la Figura 1.9.
+Con swap y findIdxBiggest en su lugar, el método sort, mostrado en la Figura 1.10, es relativamente fácil de implementar. La prueba se muestra en la Figura 1.11. Tenga en cuenta que si
+nuestra biblioteca estándar, podríamos haber utilizado una implementación mucho más sencilla, utilizando la función
+de la biblioteca estándar de Java, como se muestra en la Figura 1.12. También habríamos
+habríamos evitado escribir swap y findIdxBiggest. Definitivamente, merece la pena conocer la biblioteca estándar
+
+public void testFindIdxBiggest() {
+ ArrayList l = make123();
+ int i=StringSorter.findIdxBiggest(l,0,l.size()-
+ 1);
+ assertEquals(i,1);
+
+
+
+Ahora pasamos a escribir en el fichero, como se muestra en la Figura 1.13. Lo probaremos escribiendo un
+valor conocido en el fichero, luego lo volveremos a leer y realizaremos la comparación de la Figura 1.14.
+Ahora todo lo que se necesita es el método de ordenación que toma los nombres de los ficheros como se muestra en la Figura 1.15.
+Dado que ya hemos visto cómo hacerlo para los casos de prueba, es muy fácil de hacer. La prueba
+prueba para este método se muestra en la Figura 1.16
+
+1.4.5 Interfaces de usuario
+Ahora tenemos una implementación de StringSorter y una creencia razonable de que funciona
+según lo previsto. Somos conscientes de que nuestras pruebas no han sido tan exhaustivas; sin embargo, podemos pasar a
+construir una interfaz de usuario, que es un programa real que nos permite acceder a la funcionalidad de
+StringSorter. Nuestra primera implementación es una versión de línea de comandos, no GUI, como se muestra en la
+Figura 1.17. Toma los nombres de los ficheros de entrada y salida como parámetros de comando. Su implementación en
+es como se muestra en la figura.
+Lo utilizaríamos tecleando el siguiente comando:
+java StringSorterCommandLine abc.txt abc_sorted.txt
+
+
+
+Figura 1.17 La clase StringSorter-CommandLine, que implementa una interfaz de línea de comandos para la funcionalidad StringSorter.
+para la funcionalidad StringSorter.
+
+¿Crees que es una interfaz de usuario útil? En realidad, para mucha gente lo es. Si tiene una ventana de
+ventana de línea de comandos abierta todo el tiempo o si está trabajando sin una GUI, entonces no es tan difícil escribir el comando.
+tan difícil escribir el comando. Además, es muy fácil utilizar este comando dentro de un script, para
+ordenar muchos archivos. De hecho, podrías usar un script para probar más a fondo tu implementación.
+Otra ventaja importante, además de la posibilidad de crear scripts, es lo fácil que es construir la interfaz.
+Esto significa menos esfuerzo, menos costes y menos errores.
+Sin embargo, para algunas personas ésta no sería una interfaz útil. Si está acostumbrado a
+a utilizar sólo GUIs o si no suele tener una ventana de comandos abierta y no va a
+Figura 1.16 El método testSort2.
+public void testSort2() throws IOException{
+// escribe un valor conocido
+StringSorter ss1=new StringSorter();
+ss1.sort("in.txt", "test2.out");
+ArrayList l=new ArrayList();
+l.add("uno");
+l.add("tres");
+l.add("dos");
+// luego leerlo y comparar
+Reader in=nuevo FileReader("prueba2.out");
+StringSorter ss2=nuevo StringSorter();
+ss2.readFromStream(in);
+assertEquals(l,ss2.lines);
+}
+para clasificar muchos archivos, entonces sería mejor una GUI. Sin embargo, GUI no es necesariamente
+una interfaz mejor que una CLI. Depende del uso y del usuario. Además, es extremadamente fácil
+diseñar malas GUIs, como la implementación mostrada en la Figura 1.18. El código de esta
+figura mostraría el cuadro de diálogo mostrado en la Figura 1.19. Después de que el usuario pulse OK, el
+cuadro de diálogo de la Figura 1.20. Observe el título "Entrada" en la parte superior del cuadro de diálogo y el mensaje "Por favor, introduzca la salida".
+del cuadro de diálogo y el mensaje "Por favor, introduzca el nombre del archivo de salida" en la Figura 1.20. Esto podría suponer una contradicción de comunicación para el usuario.
+Esto no implica mucho más esfuerzo que la versión de línea de comandos, pero es muy
+ineficiente de utilizar. Aunque es una GUI, es peor que la CLI para casi todos los usuarios. Una interfaz
+interfaz se muestra en la Figura 1.21. Aunque no es mucho mejor, al menos ambas entradas están en
+en el mismo sitio. Lo que la hace más útil es que los botones de la derecha abren un cuadro de diálogo
+como se muestra en la Figura 1.22 para elegir un archivo.
+
+
+Al menos sería una interfaz decente para la mayoría de los usuarios de GUI. No es muy bonita, pero
+simple y funcional. El código de esta GUI está disponible en el sitio web de este libro.
+No lo vamos a imprimir porque requiere conocimientos de Java y Swing para ser entendido. Observaremos que el código tiene 75 líneas en Java, un lenguaje para el que la construcción de GUI es uno de sus puntos fuertes.
+GUI es uno de sus puntos fuertes, y nos llevó más tiempo producirlo que la clase StringSorter
+. A veces las interfaces gráficas tienen un coste elevado. Discutiremos el diseño de la interfaz de usuario
+en el capítulo 7.
+1.5 Resumen
+En este capítulo hemos discutido algunas de las muchas cuestiones involucradas en la escritura de un programa simple.
+sencillo. A estas alturas, debería haberse dado cuenta de que incluso para los programas simples hay mucho más que escribir el código.
+mucho más que escribir el código. Uno tiene que considerar muchos de los siguientes puntos:
+Requisitos
+Diseño
+Implementación del código
+Pruebas unitarias
+Estimación del esfuerzo personal
+Interfaz de usuario
+Gran parte de ese material pertenece a la ingeniería de software, y en este texto ofreceremos
+una visión general del mismo.
+1.6 Preguntas de repaso
+1. Qué son las declaraciones que definen y califican lo que el programa necesita hacer?
+2. 2. ¿Cuáles son las afirmaciones que limitan las formas en que puede diseñarse e
+diseñarse e implementarse?
+3. ¿Qué tipo de declaración de requisitos define lo que debe hacer el programa?
+4. ¿Qué requisitos pueden considerarse funcionales? Especifique de qué manera
+se deben cumplir.
+5. ¿Qué decisiones son las que toma el ingeniero de software sobre las mejores formas
+(procesos, técnicas y tecnologías) para alcanzar los requisitos?
+6. ¿Qué tipo de pruebas son las que realizan los clientes (o alguien en su nombre) para asegurarse de que el programa funciona según lo especificado?
+en su nombre) para asegurarse de que el programa funciona según lo especificado?
+7. ¿Qué es GUI? ¿Qué es CLI?
+8. Enumera tres de los tipos típicos de requisitos no funcionales.
+1.7 Ejercicios
+1. Para sus dos próximos proyectos de software (suponiendo que se le asignen tareas de programación
+de programación; de lo contrario, considere un programa para hallar el máximo y el mínimo de un conjunto de variables.números racionales) calcule el esfuerzo que le supondrán antes de realizarlas,
+y luego anota el tiempo real empleado. Cómo de precisas fueron tus estimaciones?
+2. ¿Qué secuencia de actividades observó al considerar el esfuerzo de programación
+de programación analizados en este capítulo?
+3. 3. Comente si cree que una restricción del lenguaje de programación puede considerarse un requisito.
+un requisito. Explique por qué piensa así.
+4. Descarga los programas de este capítulo y añade al menos un caso de prueba más para cada método de la clase StringSorter.
+cada método de la clase StringSorter.
+5. En la discusión del programa simple de este capítulo, ¿cuáles fueron los elementos considerados para un diseño "básico"? ¿Habría escrito estas consideraciones y
+quizás revisado con una persona de confianza antes de la codificación real?
+6. Considere una CLI que, en lugar de tomar los nombres de archivo como parámetros, los pida
+del teclado (por ejemplo, que muestre "Input file name:" y luego lo lea del teclado).
+¿Sería ésta una interfaz de usuario mejor? ¿Por qué sí o por qué no?
+7. 7. Piense en una nueva interfaz de usuario para nuestro programa de clasificación que combine la CLI y la GUI.
+la GUI. Si recibe parámetros en la línea de comandos, realiza la ordenación. Si no los recibe,
+muestra el diálogo. ¿Sería ésta una interfaz mejor? ¿Cuáles serían sus ventajas
+y desventajas en comparación con otras interfaces?
+
+
+
+
+
