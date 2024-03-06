@@ -84,9 +84,7 @@ class VersionProyecto(models.Model):
     numero_version = models.IntegerField(null=False)
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT)
-    #comentado para evitar problemas al crear una version de proyecto
-    #ya que en este sprint 2 no vamos a tocar evaluaciones
-    #id_evaluacion_cc_fk = models.ForeignKey(EvaluacionCC, on_delete=models.PROTECT)
+    #id_evaluacion_cc_fk = models.ForeignKey(EvaluacionCC, blank=True, null=True, on_delete=models.PROTECT)
     id_codigo_vi_fk = models.ForeignKey(Proyecto, on_delete=models.PROTECT)
 
     class Meta:

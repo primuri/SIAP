@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Tooltip from '@mui/material/Tooltip';
 
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones }) => {
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, asistente }) => {
 
     // Cargar informacion
     const navigate = useNavigate()
@@ -45,8 +45,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         detalle: proyecto ? proyecto.detalle : "",
         numero_version: proyecto ? proyecto.numero_version : canVersiones + 1
     });
-    console.log(canVersiones)
-
+  
     useEffect(() => {
         if (mode === 2) {
             setActiveForm(tipo);
@@ -129,13 +128,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const sendForm = (event) => {
         event.preventDefault();
-        //console.log("Software Data before sending:", softwareData);
-        //console.log("Article Data before sending:", articuloData);
-        console.log("Event Data before sending:", eventoData);
         const combinedData = new FormData();
         if (fileData) {
             combinedData.append('ruta_archivo', fileData);
-
         }
         if (softwareFile) {
             combinedData.append('id_documento_documentacion_fk.documento', softwareFile);
@@ -184,7 +179,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const setCambios = (changes) => {
-        //console.log("Received changes:", changes);
         setSoftwareData(changes.softwareData);
         setSoftwareFile(changes.softwareFile);
         setArticuloData(changes.articuloData);
@@ -303,6 +297,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             )}
                             </div>
                         </div>
+                        
+                       
                         {showProductContent && (
                             <div className="row mb-4">
                                 {mode !== 2 && (

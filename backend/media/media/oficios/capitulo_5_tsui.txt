@@ -1,0 +1,784 @@
+Nuevas y emergentes
+Metodologías de procesos
+Comprender las limitaciones de las metodologías de procesos tradicionales y la aplicabilidad de los procesos Agile.
+Comprender los principios básicos de los procesos de software ágiles.
+Familiarizarse con varios procesos ágiles de uso común: Programación Extrema, La Familia Crystal, Proceso Unificado como Ágil, Scrum, Open Source
+y el Método Kanban.
+5.1 ¿Qué son los procesos ágiles?
+Los procesos ágiles son una familia de metodologías de desarrollo de software que producen software en iteraciones cortas y permiten mayores cambios en el diseño. Hay que señalar
+principio que no todas las características de los procesos Ágiles son nuevas y revolucionarias. Muchas
+muchos se derivan de años de experiencia y son similares al proceso iterativo e incremental
+tratado en el capítulo 4. Dado que el desarrollo de software sigue siendo muy intensivo en mano de obra, las
+Las metodologías ágiles también se centran en los aspectos humanos y de equipo del desarrollo de software.
+Se ha formado un fuerte consenso entre muchos defensores de las metodologías Ágiles
+en torno al Manifiesto Ágil, que se presenta en la Figura 5.1. Para más información
+en http://www.agilemanifesto.org.
+Aunque no existe una definición absoluta sobre lo que constituye un método Ágil,
+existen varias características compartidas por la mayoría de los métodos Ágiles. Lamentablemente, un proceso
+a veces se etiqueta como Ágil simplemente porque el autor así lo afirma. A continuación se presenta una
+lista de características y métodos que representan a los métodos Ágiles:
+Ediciones e iteraciones cortas: Dividir el trabajo en pequeñas partes. Entregar el software
+al cliente con la mayor frecuencia posible.
+Diseño incremental: No intente completar el diseño desde el principio porque, de todos modos, no se sabe lo suficiente sobre el sistema.
+porque, en cualquier caso, no se sabe lo suficiente sobre el sistema. Retrasar las decisiones de diseño tanto como sea posible y
+mejorar el diseño existente cuando se adquieran más conocimientos.
+Participación del usuario: En lugar de intentar producir normas formales, completas e inmutables
+al principio, pida a los usuarios que participan en el proyecto que le proporcionen información constante.
+Esto suele dar lugar a un sistema mejor adaptado.
+Documentación mínima: Realice sólo la documentación necesaria, que no es más que
+un medio para alcanzar un fin. El código fuente es una gran parte de la documentación real.
+Comunicación informal: Mantener una comunicación constante, pero no necesariamente a través de
+documentos formales. La gente se comunica mejor de manera informal. Este enfoque funciona siempre
+siempre que se logre el entendimiento.
+Cambiar: Asuma que los requisitos y el entorno cambiarán, e intente encontrar
+buenas formas de abordar este hecho.
+Figura 5.1 El Manifiesto Ágil.
+Fuente: "The Agile Manifesto", http://www.agilemanifesto.org, consultado en junio de 2016.
+Estamos descubriendo mejores formas de desarrollar software haciéndolo y ayudando a otros a
+hacerlo. A través de este trabajo hemos llegado a valorar
+Las personas y las interacciones por encima de los procesos y las herramientas
+El software de trabajo por encima de la documentación exhaustiva
+La colaboración con el cliente frente a la negociación de contratos
+La respuesta al cambio frente al seguimiento de un plan
+Es decir, aunque los elementos de la derecha tienen valor, valoramos más los de la izquierda.
+más.
+Al seguir este planteamiento interesante y flexible, es importante asegurarse de que nadie
+nadie abuse de la metodología, sobre todo de la asociada a la documentación. Es evidente que
+debe disponerse de documentación suficiente si el software liberado debe ser mantenido
+por un grupo distinto al de los desarrolladores originales.
+5.2 ¿Por qué procesos ágiles?
+Aunque los procesos de software tradicionales se han aplicado con mucho éxito a algunos
+proyectos, suelen tener alguno o varios de los siguientes problemas:
+Tiempos de desarrollo prolongados: Con los métodos de desarrollo tradicionales, no es raro que los proyectos duren entre uno y cinco años. Para muchas empresas, sobre todo
+Para muchas empresas, especialmente las pequeñas y medianas, esto es demasiado tiempo y no es apropiado. Un gran número de
+pequeñas empresas pueden existir sólo un año o menos. En tres años, muchas más empresas habrán cambiado su enfoque principal o sus productos. Incluso si el proyecto tiene éxito
+tradicionales, puede que sea demasiado tarde.
+Incapacidad para hacer frente a requisitos cambiantes: En la mayoría de los campos, el entorno cambia
+muy rápidamente, lo que obliga a la empresa a adaptarse y cambiar. La mayoría de los proyectos de
+la mayoría de los proyectos de desarrollo de software. Los métodos tradicionales de desarrollo de software no gestionan bien los requisitos cambiantes. Suponen que cuanto más tarde
+más tarde se haga un cambio, más caro será.
+Suponer que los requisitos se comprenden completamente antes de que comience el proyecto: Esta
+Este es un supuesto que no se suele plantear en muchos métodos tradicionales. Aunque para algunos proyectos es realista, para muchos más no lo es. La mayoría de los usuarios no son capaces de expresar sus
+requisitos en un lenguaje claro e inequívoco. En muchos casos, ni siquiera están seguros
+de lo que quieren. A pesar de los valientes esfuerzos de muchos analistas de sistemas, los requisitos serán incompletos y muchas veces incorrectos.
+Demasiada confianza en el esfuerzo heroico de los desarrolladores: Por desgracia, demasiados proyectos de software
+dependen de un esfuerzo de desarrollo extra para terminar a tiempo. A menos que el equipo esté extremadamente
+motivado, los miembros del grupo no pueden mantener estos esfuerzos durante mucho tiempo. A partir de cierto
+Después de un cierto punto, la productividad disminuye, lo que conduce a horas aún más largas.
+Metodología compleja: La mayoría de las metodologías tradicionales proporcionan especificaciones detalladas de
+actividades y productos de trabajo. Estas especificaciones pueden resultar desalentadoras. Por ejemplo, Rational
+Unified Process (RUP) contiene más de 100 productos de trabajo y 30 roles. Comprender
+la metodología requiere mucho tiempo, y la mayoría de los profesionales no pueden
+expertos en metodología.
+Despilfarro/duplicación de esfuerzos: Se exige mucha documentación, que puede ser necesaria o no. Mucha información se mantiene en varias formas,
+y hay que tener mucho cuidado para mantenerla sincronizada. Por ejemplo, el diseño detallado puede
+detallado puede conservarse como diagramas de Lenguaje Unificado de Modelado (UML) y como código fuente. Los cambios en
+código fuente. Los cambios en el código pueden implicar la necesidad de realizar también cambios en los diagramas UML, lo que significa que el trabajo debe realizarse dos veces.
+trabajo tiene que hacerse dos veces. Existe el riesgo de que la información no esté sincronizada
+(por ejemplo, que el diagrama UML tenga clases diferentes a las del código). Mantener todos los artefactos
+requiere un sofisticado sistema de gestión de la configuración. El soporte de herramientas
+puede minimizar esta duplicación, permitiéndole conservar y modificar la información una vez
+y generar las distintas vistas.
+Los métodos de desarrollo ágil prometen desarrollar software en iteraciones más pequeñas, garantizando que haya un producto acabado en todo momento y exigiendo solo el esfuerzo normal de sus desarrolladores.
+esfuerzo normal de sus desarrolladores. Los métodos ágiles son extremadamente buenos a la hora de afrontar cambios,
+lo que significa que no es necesario especificar completamente los requisitos desde el principio.
+Aunque la mayoría de las historias de éxito proceden de proyectos de software de tamaño pequeño o mediano,
+creemos que muchas partes de las metodologías y procesos ágiles tienen un gran potencial
+también para grandes proyectos.
+5.3 Algunas metodologías de proceso
+Esta sección proporcionará una mejor idea de cómo son las metodologías de desarrollo de procesos Ágiles.
+de desarrollo de procesos Ágiles. Creemos que ninguna metodología en particular será aplicable a todos los proyectos y a todas las organizaciones.
+organizaciones, por lo que el proceso de decisión debe tener en cuenta las características del proyecto y la cultura de la organización.
+No apoyamos ninguna metodología en particular y creemos que hay muchas más metodologías Agile
+que merecen ser estudiadas. Por razones de espacio, el número de
+de metodologías en las que podíamos centrarnos aquí, elegimos una muestra representativa. De las
+Entre las metodologías Ágiles tradicionales hemos elegido Extreme Programming (XP), que en su día
+fue la más popular y constituye la base de muchas de las metodologías ágiles más recientes, la familia de metodologías Crystal, Scrum y Kanban. El Proceso Unificado es
+uno de los marcos de trabajo más populares e importantes de la ingeniería de software actual.
+discutimos cómo puede utilizarse en un contexto ágil. Hablamos brevemente del desarrollo de software
+de código abierto y destacamos las similitudes con el desarrollo ágil. Los lectores interesados
+pueden obtener más información sobre estos y otros métodos de desarrollo ágil a través de
+la sección Referencias y lecturas sugeridas al final de este capítulo.
+5.3.1 Programación Extrema (XP)
+La Programación Extrema, normalmente abreviada como XP, es una de las primeras y más conocidas metodologías de desarrollo Ágil.
+más conocidas. Fue utilizada por primera vez por Kent Beck para el proyecto C3 en la (antes conocida) Chrysler Corporation.
+Chrysler Corporation. Utilizando equipos pequeños que trabajan en la misma sala para fomentar
+comunicación, XP propone que sólo se cree la documentación estrictamente necesaria,
+sirviendo de documentación el código y las pruebas unitarias. Esta sección utilizará muchos de los
+terminología de XP, algunas de las cuales pueden parecer un poco incómodas al principio. Los valores centrales
+de XP pueden resumirse como sigue:
+Comunicación frecuente entre los miembros del equipo y con el cliente.
+Simplicidad en el diseño y el código.
+Retroalimentación a muchos niveles diferentes. Las pruebas unitarias y la integración continua proporcionan retroalimentación al desarrollador individual, o al par de desarrolladores. Además, las iteraciones pequeñas proporcionan
+al cliente.
+Valentía para tomar decisiones difíciles pero necesarias. Una posible decisión es no utilizar
+XP, si no parece apropiado para el proyecto.
+Además, XP sigue cinco principios fundamentales que encarnan los valores centrales:
+1. Retroalimentación rápida: Usar programación en parejas, pruebas unitarias, integración e iteraciones y lanzamientos cortos.
+y lanzamientos.
+Simplicidad: Intente el enfoque más sencillo posible. No se preocupe demasiado por considerar casos que pueden darse o no en el futuro.
+3. Cambio incremental: No intentes hacer grandes cambios; prueba con pequeños cambios que se vayan sumando.
+Esto se aplica al diseño a través de la refactorización, la planificación, y la composición del equipo, así como
+la adopción de XP en sí. La refactorización del código es una forma de modificación del código para mejorar
+la estructura del código.
+4. Aceptar el cambio: Trate de preservar las opciones para el futuro, mientras que en realidad la solución de su
+problemas más acuciantes. Retrase las decisiones que le comprometan a seguir un camino hasta el último momento posible.
+momento posible.
+5. Trabajo de calidad: Intenta crear un producto lo mejor posible. Haz siempre el mejor trabajo
+todo el tiempo. Se supone que ésta es una tendencia natural de la mayoría de los programadores, y muchas de las prácticas la fomentan (Beck y Andres, 2004).
+XP también propone varios principios menos centrales: (1) aprendizaje continuo; (2) inversión inicial pequeña
+inversión inicial; (3) jugar para ganar; (4) experimentos concretos; (5) comunicación abierta y honesta;
+(6) trabajar con los instintos de la gente, no contra ellos; (7) aceptar la responsabilidad; (8) adaptación
+adaptación local; (9) viajar ligero; y (10) medición honesta.
+La mayoría de las veces, la introducción inicial a XP se realiza a través de las doce prácticas clave de la metodología XP.
+metodología XP. Cada una de ellas puede ampliarse en un extenso debate, pero sólo una de las
+prácticas, la planificación, se tratará en detalle más adelante en esta sección a modo de ilustración.
+Sin embargo, pueden resumirse brevemente como sigue:
+1. 1. Planificación: Determinar rápidamente las características que se incluirán en la próxima versión, utilizando una combinación de prioridades empresariales y estimaciones técnicas.
+combinación de prioridades empresariales y estimaciones técnicas. Discutiremos más sobre
+XP más adelante en esta sección.
+2. Versiones cortas: Intente obtener un sistema que funcione rápidamente y, a continuación, publique nuevas versiones en un ciclo muy corto.
+ciclo muy corto. Los tiempos típicos de lanzamiento de XP son de dos a cuatro semanas. Después de una versión, el cliente
+Después de un lanzamiento, el cliente realiza sus pruebas para ver si las nuevas características funcionan realmente y proporciona
+feedback inmediato al equipo. Se elaboran nuevos planes detallados para la siguiente versión.
+3. Metáfora: En lugar de una arquitectura formal, utilice una metáfora como visión común y sencilla de cómo funciona todo el sistema. Es sencilla, por lo que todo el mundo la entiende y
+puede utilizarla para guiar su diseño. Sin embargo, es más fácil decirlo que hacerlo. Los estilos de diseño
+y metáforas son difíciles de idear.
+4. Diseño sencillo: Intente que el diseño del sistema sea lo más sencillo posible. Elimine
+la complejidad innecesaria en cuanto la descubra. No complique el diseño
+basado en cosas que puedan ser necesarias en el futuro, sino que elija la solución más sencilla
+que funcione ahora. El diseño puede cambiarse en el futuro, si es necesario.
+5. Desarrollo basado en pruebas: Asegúrese de que las pruebas se realizan de forma continua y se automatizan
+en la medida de lo posible. Escriba pruebas unitarias para todo el código. En determinadas situaciones, se lleva a cabo un desarrollo basado primero en las pruebas. Escriba las pruebas antes de escribir el código real.
+Ejecute las pruebas continuamente. Pida a los clientes que escriban pruebas de
+pruebas de aceptación funcionales para comprobar que las funciones están terminadas. Siga ejecutando estas pruebas
+después de que se ejecuten la primera vez.
+6. Mejora del diseño (refactorización): Practicar la refactorización, que implica una reestructuración
+del sistema sin cambiar su comportamiento, con el objetivo de eliminar duplicaciones, mejorar la comunicación y simplificar o añadir la flexibilidad necesaria.
+la comunicación y simplificar o añadir la flexibilidad necesaria. Dado que los desarrolladores tienen unidad
+pruebas y se practica la integración continua, puede haber una relativa confianza en que
+el comportamiento del sistema no ha cambiado. El diseño no se completa de una sola vez al
+principio, sino que se modifica cuando es necesario y se mejora con el tiempo.
+7. Programación en parejas: Garantizar que todo el código de producción se escribe con dos programadores
+trabajando en la misma máquina o instalación. Este es el paso de revisión llevado al extremo.
+Todo el código siempre es revisado por al menos otra persona. Aunque la programación por parejas
+no siempre suena atractiva al principio (porque se necesitan dos personas para hacer el
+mismo trabajo), las mejoras en la calidad suelen compensar con creces la pequeña
+productividad. Imagínese escribir un programa con otra persona. Es bastante
+Es bastante embarazoso escribir código "feo", holgazanear o evitar las pruebas, porque un compañero siempre está presente.
+siempre presente. Además, el diseño y el código tienen que ser comprensibles, o el compañero
+puede no seguir fácilmente el diseño y el código y se quejará.
+8. Propiedad colectiva: Establezca la propiedad del código por parte de todo el equipo. Cualquiera puede
+cambiar cualquier fragmento de código del sistema en cualquier momento. Como se hace hincapié en las pruebas unitarias
+junto con la integración continua, puedes estar relativamente seguro de que los cambios
+no desestabilizan otras piezas del sistema.
+9. Integración continua: Integre el sistema y constrúyalo muchas veces al día, cada vez que
+cada vez que se complete una tarea. De este modo, la organización de desarrollo siempre dispone de un sistema
+y puede detectar errores de integración inmediatamente. Se supone que las
+sistema no es como los grandes proyectos de software, que pueden tardar entre medio día y un día entero en completarse.
+día entero en completarse.
+10. Ritmo sostenible: Trabaja sólo a un ritmo que puedas mantener; 40 horas a la semana es razonable.
+Como norma, nunca trabajes horas extra dos semanas seguidas. Si un desarrollador necesita constantemente
+horas extra, la estimación original no es correcta y puede que haya que ajustar el plan.
+el plan. Además, ten en cuenta que la programación es una actividad intelectual difícil. Si
+una persona trabaja constantemente horas extras, su productividad disminuye, lo que se traduce en
+menos trabajo en menos tiempo. Una mente fatigada también crea más errores.
+11. Cliente in situ: Incluya un cliente real en el equipo, siempre disponible para responder a
+preguntas. Esto permite que el desarrollo funcione sin un conjunto completamente preespecificado
+de requisitos. Las posibilidades de éxito del proyecto aumentan drásticamente para aquellos
+proyectos afortunados que cuentan con el pleno compromiso de los consumidores.
+12. Normas de codificación: Pida a todos los programadores que escriban todo el código siguiendo el mismo conjunto de
+reglas, creadas para facilitar la comunicación a través del código. Los programadores deben trabajar
+en parejas con otros programadores del equipo, y los miembros del equipo van a estar
+modificando el código de otros. Tiene que haber una norma de codificación que sea acatada por
+por todos. La norma concreta no es tan importante; la mayoría de las opciones son igual de buenas.
+Lo importante es que todos utilicen las mismas normas (Beck y Andres, 2004).
+Estas prácticas no son todas igual de fáciles de seguir. Por ejemplo, es muy difícil tener
+un usuario o cliente a tiempo completo que se comprometa a estar in situ para responder a preguntas relacionadas con los requisitos.
+requisitos. Estos clientes o usuarios suelen tener sus propias responsabilidades laborales y pueden
+y no siempre están disponibles. Trabajar no más de 40 horas a la semana es otra práctica difícil
+difícil de seguir sin una gestión muy inteligente.
+La planificación, la primera de las doce prácticas, se tratará con cierto detalle a continuación como
+ejemplo.
+
+Planificación La planificación es claramente importante en cualquier proceso. En XP, los programadores sólo planifican
+la iteración inmediatamente siguiente en detalle, y los cambios en el plan se puede hacer durante la
+iteración si es necesario. El supuesto básico en XP es que hay cuatro variables que pueden
+ajustarse en un proyecto: (1) alcance, (2) coste, (3) calidad y (4) tiempo. A menudo, la más fácil
+de ajustar es el alcance, y con frecuencia es la que se cambia.
+Durante el periodo de planificación hay que tomar muchas decisiones sobre el proyecto.
+Hay que sopesar compensaciones y hacer ajustes. La metodología XP
+diferencia las decisiones que deben tomar los empresarios y los técnicos.
+Los empresarios y los clientes deciden sobre lo siguiente
+Alcance: ¿Qué hay que hacer para que el sistema sea útil?
+Prioridades: ¿Cuáles son las características de determinadas funciones y cómo deben priorizarse?
+Alcance de las versiones: ¿Qué hay que incluir en cada versión?
+Fechas de publicación: ¿Cuáles son las fechas importantes para lanzar el software o componentes específicos del mismo?
+El personal técnico debe tomar decisiones sobre lo siguiente:
+Estimaciones: ¿Cuánto tiempo llevará cada función?
+Consecuencias: ¿Cuáles son las mejores opciones en cuanto a tecnología y lenguaje de programación?
+programación? Tenga en cuenta que aquí las decisiones pueden tomarse conjuntamente con los empresarios, tras
+de que se hayan hecho ciertas concesiones y se conozcan las consecuencias económicas.
+Proceso: ¿Cómo se realizan las actividades de trabajo? ¿Cómo se organiza el equipo?
+En XP, las sesiones de planificación tradicionales se denominan juego de planificación. Dentro de este proceso
+la planificación de versiones es una actividad vital que se realiza antes de cada versión de software para decidir lo que se incluirá en dicha versión.
+se incluirá en dicha versión. También hay una actividad llamada planificación de iteración, que se realiza dentro de la iteración.
+iteración. Normalmente hay varias iteraciones por versión.
+Los requisitos de funcionalidad se definen a través de historias, que desempeñan un papel similar al de las características o los casos de uso en otras metodologías.
+características o casos de uso en otras metodologías. Las historias suelen escribirse en
+de papel o tarjetas de historia. Los defensores de XP creen que el uso de tarjetas físicas ayuda de varias maneras.
+maneras, aunque las historias se pueden poner en un ordenador más tarde. Las tarjetas pueden
+y reorganizarlas según sea necesario.
+El objetivo del juego de planificación es maximizar el valor del software producido. Los jugadores de
+El objetivo del juego de planificación es maximizar el valor del software producido.
+La estrategia consiste en invertir lo menos posible para obtener la funcionalidad más valiosa lo antes posible.
+lo antes posible. El juego de planificación consta de tres fases:
+1. 1. Exploración: Averiguar qué puede hacer el sistema con varios movimientos denominados. En
+movimientos incluyen la redacción de una historia, que realiza el personal de la empresa. Otro movimiento
+Otro movimiento es estimar una historia, lo que hace el personal de desarrollo que elabora
+una estimación ideal del tiempo de ingeniería. La estimación no tiene en cuenta muchos
+muchos elementos y supone que no hay interrupciones, reuniones, vacaciones, etc. Un tercer paso
+es dividir una historia si el personal de desarrollo no puede proporcionar una estimación o si la empresa decide que una parte específica es más importante que otras.
+una pieza específica es más importante que otras.
+2. Compromiso: La empresa elige el alcance y la fecha de la próxima versión y el departamento de desarrollo se compromete a entregarla. Aquí los movimientos incluyen la clasificación de las historias por parte de la empresa
+
+por valor en tres categorías: requisitos o historias funcionales esenciales, importantes y
+o historias. El departamento de desarrollo clasifica las historias por riesgo, de nuevo
+en tres categorías: las que pueden estimarse con precisión, las que pueden estimarse razonablemente bien y las que no pueden estimarse. Desarrollo también establece
+lo que se denomina la velocidad, que es la relación entre el tiempo ideal y el tiempo de calendario. Por último,
+la empresa elige el alcance, que son los requisitos de la empresa expresados en tarjetas de
+story cards. Esto se hace fijando una fecha de lanzamiento y eligiendo sólo las story cards
+que encajen, o eligiendo las story cards y recalculando las fechas.
+3. Dirección: El plan se actualiza en la fase de dirección, que consta de varios movimientos
+o actividades. El primer movimiento se realiza a nivel de iteración, en el que la empresa elige las fichas de una iteración.
+iteración de tarjetas de historia. La finalización de la primera iteración debe dar como resultado
+en un sistema de software que realice una cierta cantidad de funciones. La recuperación es otro
+movimiento. Durante esta fase, si el departamento de desarrollo se da cuenta de que ha calculado mal la velocidad del cronograma, puede pedir a la empresa que vuelva a establecer las prioridades de la planificación.
+puede pedir a la empresa que vuelva a priorizar los requisitos de las tarjetas de historia. Se puede
+puede introducirse una nueva historia si la empresa se da cuenta de que la necesita en mitad de un lanzamiento.
+de un lanzamiento. Una nueva historia puede sustituir a una historia o historias existentes con un esfuerzo equivalente.
+equivalente. Reestimar es un movimiento, o una actividad, en la que el desarrollo puede reestimar
+todas las historias restantes y establecer la velocidad de nuevo, si siente que el plan necesita ser modificado.
+modificarse.
+Dentro de cada una de las iteraciones, que forman parte de un lanzamiento, el equipo de desarrollo internamente
+subdivide las historias en tareas y lleva a cabo una planificación similar con las tareas. La planificación
+se divide en las siguientes tareas:
+Exploración: Los movimientos consisten en escribir una tarea y dividir/combinar tareas.
+Compromiso: Los movimientos son aceptar una tarea para la que un desarrollador acepta la responsabilidad, estimar una tarea y establecer un factor de carga en el que cada desarrollador estima su productividad en comparación con el tiempo de ingeniería ideal, y equilibrar las tareas.
+su productividad en comparación con el tiempo de ingeniería ideal, y equilibrar las tareas
+para las que los programadores suman sus tareas y asegurarse de que no están sobrecomprometidos.
+Dirección: Esta fase incluye los siguientes movimientos: (1) implementar una tarea, (2) registrar el progreso
+Cada dos días se pregunta a los programadores por el estado de su tarea y la carga de trabajo restante.
+carga de trabajo restante, (3) recuperación, en la que los programadores sobrecomprometidos pueden pedir ayuda,
+y (4) verificar la historia, que consiste básicamente en ejecutar las pruebas funcionales de la historia. La fase de dirección de la iteración
+fase de dirección de la iteración contiene algunos movimientos que son más que planificación. En realidad, incluye la realización de las tareas y el reajuste del plan para la iteración, si es necesario.
+Las descripciones de la metodología XP son ciertamente más granulares a nivel de programación.
+programación. Parece claro que algunas de las prácticas de XP requerirían un conjunto muy cooperativo y maduro de miembros del equipo y también pueden presentar algunos desafíos para la gestión de proyectos.
+Por ejemplo, la programación en equipos emparejados plantea un problema a muchos gestores que tienen que
+que tienen que evaluar el rendimiento individual. La ponderación del esfuerzo del equipo frente
+La ponderación del esfuerzo del equipo frente a los logros individuales en una evaluación puede resultar complicada.
+5.3.2 La familia de metodologías Crystal
+La familia de metodologías Crystal fue desarrollada por Alistair Cockburn, que propuso la idea de que una metodología no puede ser adecuada para todos los casos.
+idea de que una metodología no puede ser adecuada para todos los proyectos, y que la metodología debe adaptarse al proyecto. Ofreció orientación sobre qué adaptar y qué tipo de prácticas utilizar en función del proyecto.
+tipo de prácticas en función del proyecto.
+Cockburn clasifica los proyectos en función de tres factores: (1) su tamaño, que se mide
+en número máximo de desarrolladores; (2) su criticidad, que se calibra por las pérdidas que
+que causaría un mal funcionamiento; y (3) su prioridad, que se mide por la presión de tiempo
+sobre el proyecto. Tenga en cuenta que el tamaño del proyecto no se mide en líneas de código o puntos de función.
+aquí. Los proyectos con mucha presión necesitan metodologías optimizadas para la productividad, mientras que
+otros proyectos pueden preferir optimizar la trazabilidad a expensas de la productividad. Además, se describen los siguientes cuatro niveles de criticidad en relación con la calidad y complejidad de
+proyectos: (1) vida, que son disfunciones que pueden causar daño físico a una
+persona, o posiblemente la pérdida de la vida; (2) dinero esencial, que son disfunciones que pueden causar
+pérdida de dinero esencial para la supervivencia de la organización; (3) dinero discrecional, que son
+(3) dinero discrecional, que son averías que pueden causar la pérdida de dinero
+para la supervivencia de la organización; y (4) confort, que son disfunciones que no causan pérdidas monetarias
+y que, sin embargo, reducen la comodidad y el placer de los usuarios.
+Cockburn define algunos principios básicos para las metodologías de software y describe cómo
+adaptar la metodología a los proyectos. Hay tres metodologías definidas: Crystal
+Clear, Crystal Orange y Crystal Orange Web. Básicamente, cuanto más oscuro es el color, más
+la metodología. Pero estas metodologías no cubren toda la gama de proyectos, ya que se quedan cortas para proyectos vitales o de gran envergadura.
+Crystal Clear se considera adecuada para proyectos no críticos con un nivel de dinero discrecional, y para proyectos que requieren equipos de trabajo.
+y para proyectos que requieren equipos de hasta seis u ocho personas. Crystal Orange se considera
+para proyectos críticos, pero no vitales, que requieren equipos de hasta cuarenta personas.
+cuarenta personas.
+Al diseñar metodologías para la familia Crystal, los siguientes métodos subyacentes
+deben formar parte del proceso:
+Utilizar metodologías más amplias para equipos más grandes.
+Utilizar metodologías más pesadas para proyectos más críticos.
+Dar preferencia a metodologías más ligeras, porque el peso es costoso.
+Dar preferencia a la comunicación interactiva, cara a cara, en lugar de la documentación formal y escrita.
+escrita.
+Comprenda que las personas varían dentro de un equipo y con el tiempo. Las personas tienden a ser incoherentes. Los procesos muy disciplinados son más difíciles de adoptar y es más probable que se abandonen.
+Asuma que las personas quieren ser buenos ciudadanos; pueden tomar la iniciativa y comunicarse
+informalmente. Utilice estas características en su proyecto (Cockburn, 2006).
+Además, hay siete propiedades que amplían estos principios y proporcionan
+orientación adicional, de las cuales las tres primeras se consideran extremadamente importantes:
+1. Entrega frecuente: Entregar el código en ejecución y probado a usuarios reales con la mayor frecuencia posible, al menos cada pocos meses.
+posible, al menos cada pocos meses. La entrega puede significar varias cosas. En el
+En el extremo superior, el sistema se entrega a todos los usuarios. Un término medio es
+un grupo limitado de usuarios que se limiten a probar el sistema. El extremo
+El extremo más bajo consiste en permitir únicamente la visualización del sistema por parte de los usuarios o su demostración. En este nivel
+En este nivel más bajo, los usuarios también pueden utilizar el software durante un pequeño periodo de tiempo en un entorno controlado.
+controlado.
+
+La funcionalidad suele entregarse en iteraciones, que suelen estar sujetas a plazos,
+lo que significa que la fecha de lanzamiento se fija con las características de alcance incluidas y cambiando
+si es necesario. Este concepto de iteraciones y versiones frecuentes es muy parecido al concepto propuesto en XP.
+concepto propuesto en XP.
+2. Mejora reflexiva: Antes, durante y después del proyecto, párate a pensar sobre el
+proceso y sobre lo que se puede mejorar. Las mejoras pueden intentarse, incluso
+mitad de un proyecto. Aunque a menudo se mencionan ideas similares, Crystal es una de
+las pocas metodologías que lo incluyen explícitamente.
+Cambiar o modificar un proceso en mitad del proyecto debe realizarse
+con cuidado. El equipo del proyecto debe estar informado y preparado para alterar el proceso. El lado positivo de
+El lado positivo es, obviamente, que el proyecto actual, y no los proyectos futuros, se beneficiará inmediatamente del movimiento reflexivo.
+se beneficiará inmediatamente del movimiento reflexivo.
+3. Comunicación estrecha: Fomente una comunicación estrecha entre los miembros del equipo. Esta
+comunicación puede ser informal y, preferiblemente, cara a cara. En Crystal Clear, esta
+propiedad se amplía a la comunicación osmótica, lo que significa que la información
+fluye en la audición de fondo de los miembros del equipo. Así, captan la información
+información relevante sin esfuerzo consciente, como por ósmosis. Afortunadamente, esto también significa que
+que las preguntas se responden casi de inmediato sin tener que esforzarse mucho
+en buscar la respuesta. La comunicación osmótica requiere básicamente que todos los
+miembros del equipo se encuentren en la misma sala, aunque podría funcionar si los grupos pequeños
+en lugares separados pero muy próximos.
+Los cuatro principios restantes no se consideran requisitos absolutos.
+Sin embargo, para obtener aún mayores beneficios, deben
+deben incluirse.
+4. Seguridad personal: Anime a los miembros del equipo a hablar sin miedo a represalias. Esta
+Esto incluye expresar el descontento con alguna práctica o admitir la propia ignorancia,
+error o incluso incapacidad para completar una tarea. Esto proporciona
+seguridad psicológica a los miembros del equipo y permite a los individuos dar retroalimentación honesta.
+5. Enfoque: Trata de minimizar las interrupciones y permite concentrarse en la tarea. Esto permite a los miembros del equipo saber exactamente
+prioridades de las tareas y centrarse en las más prioritarias. A veces
+miembros del equipo no pueden concentrarse porque les interrumpen constantemente otros
+miembros del equipo que quieren aprovechar sus conocimientos especiales sobre la metodología, el ámbito o la tecnología. Por lo general, los equipos se autoajustan.
+problema estableciendo un cono de silencio, un tiempo especial reservado para que los
+para que los expertos se centren en sus propias tareas. Aunque esto pueda parecer elemental
+el mejor diseñador, programador o depurador es también la persona más accesible del equipo.
+persona más accesible del equipo. A menudo se ven inundados por los problemas de los demás y
+por tanto, son incapaces de realizar su propio trabajo.
+6. Fácil acceso a usuarios expertos: Haga posible que el equipo reciba rápidamente comentarios de
+usuarios expertos sobre el producto, el diseño, los requisitos y cualquier cambio. Crystal Clear
+permite que transcurran unos días entre la pregunta y la respuesta. Tenga en cuenta que
+una propiedad similar en XP, donde los usuarios están ubicados junto a los desarrolladores para facilitar el acceso rápido a las respuestas.
+acceso fácil y rápido a las respuestas.
+7. Buen entorno técnico: Establecer un entorno que incluya pruebas automatizadas
+gestión de la configuración e integración frecuente (Cockburn, 2006).
+
+
+
+Los elementos fundamentales que caracterizan a Crystal Clear y Crystal Orange se resumen en la Figura 5.2.
+Hay muchas características comunes a ambas metodologías Crystal:
+El progreso se controla mediante entregas de software o mediante decisiones importantes en lugar de mediante documentos escritos.
+escritos.
+Se realizan pruebas de regresión automatizadas.
+Los usuarios participan directamente.
+Hay dos visitas de usuarios por versión.
+Se celebran talleres de puesta a punto de la metodología al principio y a mitad de cada versión.
+Las normas son obligatorias, pero pueden sustituirse por técnicas equivalentes.
+El estilo de codificación, las plantillas, las normas de interfaz de usuario, etc., se dejan como normas locales
+que debe mantener el equipo.
+Las técnicas relacionadas con las funciones individuales se dejan en manos de cada uno.
+Cristalino Cristalino Naranja
+Equipos
+Roles/
+separar
+personas
+Trabajo
+productos
+Máximo
+duración máxima
+Un equipo, misma sala.
+Al menos cuatro personas
+los papeles de patrocinador
+diseñador, programador y
+programador y usuario.
+Pueden desempeñar otros papeles
+por las mismas personas, como
+gestor de proyectos, experto
+o recopilador de requisitos.
+requisitos.
+Nueve elementos
+calendario, casos de uso
+bocetos de diseño, casos
+de prueba y manuales de usuario.
+2 meses.
+Diferentes equipos para
+planificación, seguimiento del proyecto,
+arquitectura, tecnología,
+funciones, infraestructura y
+pruebas externas.
+Catorce funciones desempeñadas por
+diferentes personas, entre ellas
+(además de los de Crystal
+Clear), director de proyecto
+patrocinador, experto empresarial,
+arquitecto, mentor de diseño,
+probador y diseñador de interfaz de usuario.
+Trece elementos, incluidos
+los de Crystal Clear más
+documentos de requisitos,
+informes de estado, documentos
+de interfaz de usuario y
+entre equipos.
+Los productos de trabajo se desarrollan
+hasta que sean comprensibles,
+precisos y suficientemente estables
+para la revisión por pares.
+De 2 a 4 meses, dos visitas
+por versión.
+
+
+Crystal Clear y XP comparten muchas características, siendo la principal diferencia entre ambas la disciplina.
+dos es la disciplina. XP requiere una adhesión estricta a las normas de diseño y codificación, la programación en parejas, la refactorización y la ejecución del 100% de las pruebas.
+programación en parejas, refactorización y pruebas ejecutadas al 100%. También depende lo menos posible de
+documentación escrita. Crystal Clear está diseñado para tolerar variaciones entre las personas,
+requiriendo un conjunto de reglas mucho menor.
+5.3.3 El Proceso Unificado como Agile
+Aunque el Proceso Unificado no especifica técnicas concretas para todas las fases, se suele considerar
+suele considerarse una metodología pesada que a menudo requiere que la mayoría, si no todos, los
+requisitos se obtengan al principio, durante la fase inicial. También requiere
+que la arquitectura y el gran diseño se especifiquen completamente por adelantado, y sus instancias populares, incluido el Proceso Unificado Racional, exigen muchos productos o artefactos de trabajo.
+Por otro lado, se trata de un proceso iterativo e incremental, que es uno de los puntos principales de las metodologías ágiles.
+principales de las metodologías ágiles, y está diseñado como un marco que permite la
+condiciones locales. Además, el propio marco no requiere todos los productos de trabajo. RUP
+es la primera y más conocida instanciación del Proceso Unificado, que requiere todos los artefactos.
+Una forma obvia de hacer que RUP esté más en línea con las metodologías ágiles es restringir los
+productos de trabajo requeridos, eliminar o fusionar algunos de los roles y añadir más participación del cliente a través de las iteraciones.
+participación del cliente a través de las iteraciones. RUP también puede modificarse añadiendo un nivel más de
+iteraciones, repitiendo todas las fases en cada iteración. Por supuesto, el diablo está en los detalles.
+¿Qué podemos eliminar exactamente de RUP para hacerlo más ágil?
+Varias personas están trabajando activamente en cómo combinar las mejores características
+de RUP y los proyectos Ágiles, ya sea haciendo RUP Ágil o añadiendo características RUP a los procesos Ágiles.
+procesos ágiles. IBM Rational ha publicado varios libros blancos e incluso un plug-in especial de RUP
+especial para XP.
+5.3.4 Scrum
+Scrum es otra metodología de desarrollo Ágil que ha demostrado buenos resultados.
+Es más ligera en prescripciones que XP, por lo que suele asociarse con algunas de las prácticas de XP. Esta metodología fue introducida por primera vez por Takeuchi y Nonaka (1986) basándose en su exitoso uso en la industria manufacturera.
+su uso exitoso en las industrias manufactureras. Muchas de las terminologías utilizadas en
+Scrum se adoptan del juego del rugby. Ken Schwaber utilizó esta metodología y
+más tarde fue coautor con Mike Beedle de un libro titulado Agile Software Development with Scrum.
+El marco de Scrum consiste en roles de equipo, eventos, artefactos y reglas. Usted debe utilizar
+todos estos componentes, pero puede añadir otras técnicas o componentes también.
+Scrum es un método iterativo, y se basa en iteraciones cortas llamadas sprints. Los sprints son
+unidades básicas de desarrollo para unidades de funcionalidades del producto software total. Se
+son cortos en duración (un mes o menos) y time-boxed (su duración se mantiene constante,
+pero su alcance puede ajustarse si es necesario). Idealmente, al final de cada sprint se obtiene un producto
+al final de cada sprint.
+Un proyecto Scrum define tres funciones básicas (y puede tener otras funciones de apoyo) de las partes que son vitales para el éxito del proyecto:
+1. El propietario del producto, que representa la voz del cliente y asegura que el
+equipo aporte valor al negocio 
+2. El equipo de desarrollo, normalmente de tres a diez desarrolladores, que realmente produce el
+software
+3. Un Scrum Master, que mantiene al equipo en el buen camino y se asegura de que se sigue Scrum, como un
+Scrum, como entrenador pero no como jefe de proyecto.
+También hay dos funciones auxiliares adicionales: las partes interesadas y los gestores.
+Scrum se basa en tres conceptos "pilares" para su éxito: (1) transparencia (hacer el
+proceso visible), (2) inspección (de los artefactos y el progreso), y (3) adaptación (siempre que se detecte una desviación significativa, corregirla).
+desviación significativa, corregirla). Un aspecto importante de la transparencia es tener
+una definición común de cuando un elemento se ha completado por lo que los desarrolladores, el propietario del producto, y
+el Scrum Master puedan ponerse de acuerdo sobre si un elemento está terminado.
+Eventos Scrum El proceso Scrum se puede resumir como un conjunto de actividades secuenciales o
+eventos. Scrum define cuatro eventos (el sprint en sí no se considera un evento):
+La reunión de planificación del sprint, en la que el propietario del producto y el equipo deciden lo que
+se implementará durante ese sprint.
+El Scrum diario, una breve reunión en la que los miembros del equipo se sincronizan, se aseguran de que
+que van por buen camino y piden ayuda si la necesitan. Un principio básico es que estas reuniones sean muy breves (15 minutos o menos).
+breves (15 minutos o menos). A menudo todos los participantes están de pie en lugar de sentados, para
+para que las reuniones sean breves.
+La revisión del sprint, celebrada al final del sprint, para inspeccionar sus productos y adaptar el
+el backlog del producto si es necesario. Durante esta revisión, el propietario del producto identifica lo que se ha
+Durante esta revisión, el propietario del producto identifica lo que se ha hecho y analiza el backlog del producto. El equipo de desarrollo demuestra
+El equipo de desarrollo demuestra el trabajo que ha realizado, responde a las preguntas y comenta lo que ha ido bien, los problemas a los que se han enfrentado y cómo los han resuelto.
+a los que se han enfrentado y cómo los han resuelto. Por último, todo el equipo colabora en
+hacer a continuación (que es la entrada para la planificación del siguiente sprint).
+La retrospectiva del sprint se realiza después de la revisión del sprint y el último día del sprint.
+en la que los miembros del equipo discuten los resultados del sprint, aprenden de ellos y utilizan esas
+lecciones como insumo para la planificación del siguiente sprint.
+Artefactos Scrum En cualquier proyecto de software, es importante definir los artefactos producidos y utilizados para gestionar ese proyecto.
+y utilizados para gestionar ese proyecto. Scrum define los siguientes artefactos que se utilizarán para
+controlar el proyecto:
+El backlog del producto, una lista ordenada de todos los requisitos restantes o historias de usuario
+para un producto. El propietario del producto prioriza y ordena los requisitos. Todo el mundo
+Todo el mundo puede ver lo que queda por hacer en general (aunque los desarrolladores se centran sobre todo en el sprint backlog).
+sprint backlog).
+El backlog del sprint es la lista ordenada de tareas que deben realizarse en el sprint actual.
+Aquí las tareas se desglosan para que sean pequeñas (de 4 a 16 horas normalmente), para que los desarrolladores sepan
+exactamente lo que tienen que hacer. En lugar de asignar tareas, los desarrolladores eligen su siguiente tarea
+basándose en el backlog del sprint y en sus habilidades particulares.
+El incremento es el proyecto actual. Es decir, la suma de todos los requisitos implementados en este
+sprint y todos los sprints anteriores. Debe ser un proyecto que se pueda entregar (aunque no esté completo).
+El gráfico de desgaste, que se actualiza con frecuencia (a diario o más a menudo) y se muestra públicamente, muestra el registro restante en el backlog del sprint actual.
+
+Scrum es una metodología ágil que ha demostrado buenos resultados en muchos proyectos.
+Actualmente son muchas las organizaciones que la utilizan, la mejoran y adaptan, y la combinan con otras técnicas, como Kanban.
+con otras técnicas, como Kanban. Kanban es una metodología lean y just-in-time
+utilizada inicialmente en la industria del automóvil en Japón. Muchas organizaciones están ampliando
+Scrum a proyectos de mayor envergadura, con varios equipos y celebrando reuniones "Scrum of Scrums".
+5.3.5 Método Kanban: Una nueva adición a Agile
+Los procesos y metodologías ágiles se prueban y mejoran constantemente. Una de las
+Una de las recientes incorporaciones a los procesos ágiles es la metodología Kanban.
+Kanban significa "cartel" o "pizarra visual" en japonés. La metodología Kanban en
+La metodología Kanban en el desarrollo de software se deriva del Sistema de Producción Toyota para la Fabricación Ajustada. Los interesados en leer el libro original pueden consultar la versión traducida de Taichi Ohno (1988).
+de Taichi Ohno (1988). El concepto central en este tipo de fabricación es minimizar el trabajo
+en curso (WIP) "extrayendo" los componentes necesarios de los procesos anteriores de forma
+justo a tiempo utilizando una tarjeta (un Kanban) para especificar qué piezas se necesitan para completar la tarea posterior.
+la tarea posterior.
+Uno de los defensores del método Kanban en el desarrollo de software ha sido David J.
+Anderson (2010). No se trata de un nuevo enfoque para el desarrollo de software, sino de una adaptación de
+Kanban en la fabricación para el desarrollo de software mediante el uso del enfoque "pull" para mejorar
+la productividad general del desarrollo de software. La idea es mantener el proceso actual y
+sólo hacer una pequeña modificación.
+Consideremos el siguiente ejemplo de la figura 5.3, en el que desarrollamos varios módulos interrelacionados de X, Y y Z. En la figura 5.3, el módulo 1 de A puede equipararse a
+módulo X, y el módulo 2 de A puede equipararse a Y, y el módulo 3 de B puede equipararse a Z.
+Considere que el módulo X ya está en pruebas unitarias. Para completar las pruebas y
+Para completar las pruebas y la entrega del módulo X al usuario, todos los módulos directamente relacionados, Y y Z, deben integrarse y probarse junto con X. En tal caso, el módulo A puede equipararse a Y y el módulo B a Z.
+Z, deben integrarse y probarse junto con X. En tal situación, la productividad global puede mejorar
+si se notifica a los desarrolladores de Y y Z que X ya está en fase de pruebas unitarias y que pronto estará en fase de pruebas unitarias.
+
+listos para las pruebas de integración. La organización debe centrarse más en completar Y y
+Z se completen y se pongan a prueba para la prueba de integración conjunta. En otras palabras, tenemos que "tirar" de
+Y y Z en lugar de esperar pacientemente a que Y y Z se completen a su propio ritmo;
+De este modo, limitamos el trabajo en curso o acortamos el tiempo de espera para Y y Z. Este método no requiere ningún cambio drástico en la estructura de la empresa.
+Este método no requiere ningún cambio drástico en el proceso actual. Incluye pequeños
+cambios graduales en el proceso actual. Las prácticas "básicas" son las siguientes
+Hacer visibles el estado del proyecto y el flujo de trabajo. El flujo de trabajo está representado por
+tarjetas Kanban.
+Minimizar el WIP global en el proceso. Utilizar la técnica pull para completar las tareas
+las tareas anteriores.
+Gestionar el flujo de trabajo global midiendo las tareas y los elementos en desarrollo.
+Hacer que el proceso sea explícito y claro, por ejemplo definiendo claramente los criterios de salida de cada paso.
+Asegúrese de que existe un circuito de retroalimentación para supervisar y controlar adecuadamente el flujo
+del proyecto.
+Garantizar y mejorar la colaboración; esto no es más que una extensión del Manifiesto Ágil.
+En el desarrollo de software, cuando solicitamos un elemento, pedimos el artefacto a una tarea anterior.
+una tarea anterior. Para más información, véase Anderson (2010) en la sección Referencias y lecturas recomendadas.
+5.3.6 Desarrollo de software de código abierto
+En los últimos años, el desarrollo de software de código abierto ha surgido como un modelo de éxito.
+éxito. Este tipo de software está disponible, normalmente de forma gratuita, en formato ejecutable, pero también se proporciona acceso al código fuente.
+fuente. Además del acceso al código fuente, se concede permiso para redistribuirlo y modificarlo.
+y modificar el código fuente. Esto da lugar a una situación en la que muchos desarrolladores
+pueden modificar y mejorar el programa.
+Hay muchos programas de código abierto que han tenido éxito, como el servidor web Apache,
+el programa de servidor web más utilizado, los sistemas operativos Linux y BSD, y
+Mozilla, un navegador web integrado con otros programas relacionados. Mozilla incluye un programa de correo
+y un diseñador de páginas que ahora también se distribuyen como componentes individuales, con
+Firefox, el popular navegador web. Varios servidores de bases de datos populares, como PostgreSQL
+y MySQL, y muchos programas de infraestructura de Internet como Bind, Sendmail o Postfix
+también son programas de código abierto.
+Los programas de código abierto y su desarrollo varían enormemente.
+algunos de ellos, como MySQL, han sido desarrollados esencialmente por una empresa. Otros, como Linux, tienen un fuerte respaldo corporativo, y algunos son desarrollados por
+individuos sin ninguna compensación económica. Otras variables son el tamaño de los equipos
+el número de personas implicadas y el tiempo que el programa lleva siendo de código abierto.
+Muchos programas empezaron como empresas comerciales y se convirtieron en código abierto cuando se presentaron los
+de negocio.
+A pesar de esas diferencias, hay algunas similitudes en el proceso de desarrollo
+de muchos programas de código abierto y muchas similitudes con los métodos ágiles:
+Lanzamientos pequeños: En el mundo del código abierto, la frase es "libera pronto, libera a menudo". La mayoría
+La mayoría de las veces las versiones son muy frecuentes, desde unas pocas semanas a unos pocos meses, y el código fuente está disponible en Internet incluso en las versiones más recientes.
+el código fuente está disponible en Internet incluso entre versiones.
+
+Comunicación informal y escrita que utiliza herramientas de Internet: La comunicación se realiza de manera informal,
+principalmente a través de tablones de anuncios y listas de correo. Aunque no es comunicación cara a cara, tampoco es documentación formal. Una de sus ventajas es que las comunicaciones
+se archivan y difunden fácilmente.
+Disponibilidad del cliente: En la mayoría de los proyectos de código abierto de éxito, los desarrolladores son los
+clientes iniciales. La mayoría de los programas empiezan con la necesidad de alguien de "rascarse un picor". Ese
+por eso la mayoría de los éxitos se dan en áreas de herramientas de programación e infraestructura de sistemas.
+Una causa común de fracaso es la falta de comentarios de los clientes.
+Integración continua: Los sistemas se integran a menudo, normalmente a través de Internet
+Internet.
+Visión compartida: Los proyectos de código abierto de éxito suelen tener un liderazgo fuerte que
+que promueve una visión compartida. Por ejemplo, Linus Torvalds, el creador de Linux y la
+entidad más cercana a una máxima autoridad, ha sido descrito como un dictador benevolente
+que toma la mayoría de las decisiones arquitectónicas. Si esta visión no se comparte, los desarrolladores
+abandonan el proyecto, o a veces lo "bifurcan" e inician una nueva rama a partir del código fuente original.
+original.
+Hay muchas diferencias entre los proyectos de código abierto y la mayoría de las metodologías ágiles:
+Equipos más grandes: Aunque el equipo central de la mayoría de los proyectos de código abierto es bastante pequeño,
+Aunque el equipo central de la mayoría de los proyectos de código abierto es bastante pequeño, desde una o dos personas hasta varias docenas, suele ser mayor que el de la mayoría de los equipos ágiles.
+Además, muchos más usuarios y desarrolladores aportan comentarios y añaden pequeños cambios y
+características.
+Equipos distribuidos: En muchos casos, los miembros del equipo implicados proceden de varios países
+o regiones, lo que significa que las comunicaciones no suelen ser sincrónicas. La mayoría de las metodologías
+metodologías ágiles sitúan al equipo en la misma sala.
+Escalado: Algunos proyectos de código abierto de éxito han alcanzado una escala masiva. El kernel
+Linux, por ejemplo, contiene varios millones de líneas de código C. La mayoría de los proyectos ágiles son de
+escala mucho menor.
+Hay otros factores que influyen en el éxito de los proyectos de código abierto, como la experiencia de los programadores.
+programadores. La mayoría de estos proyectos de éxito incluyen programadores excepcionalmente cualificados y motivados.
+y motivados. Muchos de estos programadores trabajan gratis, obteniendo satisfacción
+de intangibles. Sorprendentemente, esto aumenta su motivación.
+Aún queda mucho por aprender sobre los métodos de desarrollo de código abierto, como por ejemplo
+una amplia evaluación de lo que los haría exitosos. Podemos ver que los que tienen éxito
+comparten ciertas características, pero no sabemos cuántos proyectos con las mismas características han fracasado.
+mismas características no han tenido éxito. Parece que los métodos de desarrollo de código abierto
+de código abierto serán más importantes en el futuro, sobre todo porque muchas de sus técnicas
+se entiendan mejor y se adapten a metodologías más convencionales.
+5.3.7 Resumen de procesos
+Este capítulo se ha centrado en varios procesos, la mayoría relacionados con las metodologías ágiles. La tabla 5.1 resume los procesos tratados en este capítulo.
+A continuación, discutiremos cómo elegir un proceso para un proyecto, y proporcionaremos algunas orientaciones
+en la elección de metodologías y procesos.
+En la tabla 5.2 se comparan las principales características de cada tipo de proceso.
+
+
+Cuadro 5.1 Resumen de las metodologías y procesos más recientes
+Método Puntos principales Agilidad Disciplina
+XP Una vez el proceso Ágil más popular. Requiere una gran disciplina y
+adherencia a principios y prácticas. Se basa en cuatro valores fundamentales
+(comunicación, simplicidad, retroalimentación, valentía), cinco principios fundamentales (retroalimentación rápida, simplicidad, cambio incremental
+aceptar el cambio, trabajo de calidad) y doce prácticas.
+Alto Alto
+Crystal Clear Extremadamente ligero en metodologías. No requiere la adhesión a
+todos los principios. Basado en siete principios: entrega frecuente, mejora reflexiva, comunicación estrecha, seguridad personal, enfoque
+fácil acceso a usuarios expertos y un buen entorno técnico.
+Sólo funcionará en proyectos y equipos pequeños.
+Alto Bajo
+Crystal Orange Una metodología más pesada que Crystal Clear y adecuada para proyectos
+proyectos más grandes. Cuenta con diferentes equipos para diferentes funciones. Sigue sin ser
+adecuada para proyectos grandes o de vida crítica.
+Medio Medio
+Scrum Actualmente es el proceso ágil más popular. Una metodología disciplinada que puede adaptarse y combinarse con otras técnicas. En
+proporciona una visibilidad clara del estado del proyecto y, a largo plazo
+reduce el esfuerzo dedicado a la gestión del proyecto.
+Alto Alto
+Marco RUP, normalmente instanciado como un proceso muy pesado. Puede
+reducirse a un proceso relativamente ágil. Se trata en profundidad en
+el capítulo 4.
+Bajo a
+medio
+Alto
+Kanban Minimizar el trabajo en curso. Utilizar tarjetas visuales para cada tarea. Tire de
+actividades cuando sea necesario, concentrando los recursos en ellas.
+Alto Bajo
+Tabla 5.2 Características de los procesos ágiles frente a los tradicionales
+Ágil Tradicional/Pesado
+Requisitos Asume que cambiarán; los requisitos se recopilan de manera informal al principio del proyecto,
+y luego al principio de cada iteración.
+Utiliza la interacción constante con el usuario
+formales.
+Asume que no cambiarán durante el proyecto. A
+documento de requisitos formales completo y detallado
+necesario para el éxito. Cualquier cambio en los requisitos
+una vez iniciado el diseño o la implementación
+será costoso.
+Planificación No hay mucha planificación previa. La planificación se
+pequeños incrementos a lo largo del desarrollo.
+La mayoría de las actividades se planifican por adelantado.
+Programación Sólo se programan las actividades siguientes.
+El calendario puede cambiar si es necesario
+ajustarse.
+Los calendarios son relativamente inflexibles y deben respetarse.
+respetar.
+Diseño Informal e iterativo. Formal y se realiza por adelantado, una vez conocidos todos los requisitos.
+requisitos.
+Participación del usuario
+Crucial, frecuente, a lo largo de todo el proceso. Requerida sólo al principio (solicitud y
+y análisis) y al final (pruebas de aceptación).
+aceptación).
+Documentación Mínima, sólo la necesaria.
+fuente como documentación definitiva.
+Suele requerir una documentación exhaustiva y formal de
+cada fase del proyecto.
+
+
+5.4 Elegir un proceso
+Creemos firmemente que no existe un proceso que sirva para todos los proyectos. El proceso debe
+ajustarse al proyecto, a la cultura de la organización y a las personas que participan en él. Tanto
+Tanto los procesos ágiles como los tradicionales pueden utilizarse con éxito en muchos proyectos.
+Un problema que se plantea con frecuencia a la hora de decidir qué tipo de proceso utilizar es que
+hay muchas variaciones dentro de cada clase e incluso dentro de las metodologías. El Proceso
+Unificado (UP) es en realidad un marco que puede, y debe, ser adaptado para ajustarse mejor al proyecto.
+proyecto. El Proceso Unificado Racional, descrito en el capítulo 4, es una instanciación del UP
+que también reconoce la necesidad de adaptar el proyecto. XP y la mayoría de las metodologías ágiles también reconocen esta necesidad. La adaptación local es uno de los principios de XP. Cuando un éxito
+Cuando se informa de un éxito o fracaso en proyectos que usan XP u otros métodos Ágiles, es necesario verificar
+qué partes de los métodos ágiles se utilizaron.
+5.4.1 Proyectos y ambientes más adecuados para cada tipo de proceso
+En la tabla 5.3 se comparan los tipos de proyectos y entornos más adecuados para cada tipo de metodología, utilizando XP como ejemplo.
+metodología, utilizando XP como ejemplo de proceso ágil y RUP como ejemplo de proceso tradicional.
+tradicional. Se supone que las metodologías se utilizarán sin cambios y no de forma fragmentada.
+y no de forma fragmentada.
+Tabla 5.3 Proyectos para procesos ágiles frente a tradicionales
+Ágil (XP) Tradicional (RUP)
+Alcance/tamaño Pequeño; limitado a un equipo de hasta diez personas.
+personas.
+Más adecuado para proyectos de mayor envergadura. Se adapta a los proyectos
+proyectos más grandes y puede reducirse para proyectos más pequeños.
+Criticidad Relativamente baja; no apta para sistemas vitales
+críticos para la vida sin adaptación.
+Puede utilizarse para sistemas de misión crítica (quizá con
+modificaciones mínimas).
+Personas Más adecuado para jugadores de equipo, "buenos ciudadanos" que pueden hacer diseño y programación
+adecuadamente. XP requiere una adhesión estricta a
+determinadas prácticas.
+Define muchos roles, que pueden ser apropiados para la mayoría de
+tipos de personas; no requiere un estrecho trabajo en equipo;
+casi cualquier personalidad funcionará, siempre y cuando el miembro del equipo
+siempre que los miembros del equipo se atengan a las normas.
+Cultura de empresa Más adecuado para pequeñas empresas con culturas relajadas.
+Más adecuado para grandes empresas con sedes geográficamente remotas y culturas más formales.
+Estabilidad Se adapta fácilmente a los cambios
+o del entorno.
+Menos adecuado para hacer frente a los cambios. Supone un entorno
+relativamente estable en el que los requisitos no
+mucho. Puede adaptarse.
+Ágil Tradicional/Pesada
+Comunicación Se realiza de manera informal, a lo largo de todo el proyecto. Se basa principalmente en documentos, notas formales y reuniones.
+reuniones.
+Complejidad del proceso
+Relativamente baja; la descripción inicial contiene menos
+menos de 200 páginas.
+Alta. RUP (en 2002) describe más de 100 artefactos, 9 disciplinas, 30 roles y 4 fases.
+Sobrecarga Baja. Relativamente alta, aunque puede reducirse para
+proyectos más pequeños.
+
+5.4.2 Principales riesgos y desventajas de los procesos ágiles
+Anteriormente en este capítulo hemos tratado algunos de los problemas de las metodologías tradicionales de desarrollo.
+tradicionales. Hemos descrito varias metodologías ágiles y cómo abordan
+estas deficiencias. Las siguientes desventajas están relacionadas con los procesos Ágiles:
+Posiblemente no escalables: Los procesos ágiles han sido utilizados por equipos relativamente pequeños y
+no son capaces de escalar sin perder parte, o mucha, de su agilidad. Muchos proyectos son demasiado
+grandes o demasiado críticos para desarrollarse con métodos ágiles. No obstante, muchas de las
+pueden incorporarse a las metodologías tradicionales.
+Gran dependencia del trabajo en equipo: No todas las personas son capaces de trabajar bien en equipo. A menudo, un
+mal miembro puede destruir la cohesión de todo el equipo. Los métodos ágiles se basan en
+comunicación informal y la dinámica de equipo mucho más que los tradicionales.
+Dependencia del acceso frecuente al cliente: Los métodos ágiles necesitan información
+el cliente, el cliente in situ en XP, y los pequeños lanzamientos con feedback de
+clientes. Este nivel de retroalimentación constante del cliente simplemente no funcionará cuando un equipo se
+se dispone a desarrollar una gran aplicación empresarial como PeopleSoft o SAP. En estas grandes
+En estas aplicaciones de gran envergadura, participan en el proceso de requisitos varios expertos del sector de entre diez y veinte empresas.
+empresas participan en el proceso de requisitos. Dado que estas interacciones con
+con los clientes no son gratuitas, deben planificarse y coordinarse con antelación.
+No todos los clientes están dispuestos o son capaces de ofrecer este nivel de cooperación y retroalimentación.
+Sin el feedback del cliente, los métodos ágiles no pueden validar los requisitos ni
+adaptarse a los cambios. Las metodologías tradicionales concentran el feedback al principio
+del proceso durante la fase de requisitos y al final del proceso durante la fase de pruebas de aceptación.
+fase de pruebas de aceptación.
+Choque cultural: Muchas prácticas de XP chocan con la sabiduría aceptada de la ingeniería de software,
+o con las técnicas de gestión habituales. Las evaluaciones de rendimiento, por ejemplo, son
+más difíciles de realizar en XP porque el trabajo se hace en parejas y el código es propiedad de todo el equipo.
+todo el equipo.
+5.4.3 Principales ventajas de los procesos ágiles
+Adoptar procesos ágiles tiene algunas ventajas claras. Las más
+comúnmente mencionadas son las siguientes:
+Baja complejidad de los procesos: Los procesos en sí son sencillos, lo que permite que sean
+comprender e implantar fácilmente.
+Bajo coste y gastos generales: Los procesos exigen muy pocas actividades que no produzcan directamente
+directamente el software.
+Gestión eficaz de los cambios: Los procesos se diseñan asumiendo que los requisitos cambiarán, y la metodología está preparada para estos cambios.
+Resultados rápidos: La mayoría de los procesos ágiles tienen iteraciones rápidas y producen un sistema básico que puede
+utilizarse en un plazo relativamente corto. Después, el sistema se mejorará y se añadirán más funcionalidades a medida que avance el proyecto. Dado que los procesos tienen poca sobrecarga, también tienden a producir resultados finales más rápido.
+también tienden a producir resultados finales más rápidamente. Está hecho para la integración continua.
+Sistemas utilizables: Como el cliente participa y el proceso gestiona bien los cambios,
+lo más probable es que el producto final sea lo que el cliente quiere cuando el proyecto
+y no lo que se planificó originalmente como requisitos.
+
+5.5 Resumen
+En este capítulo hemos tratado algunos de los principios subyacentes a las metodologías ágiles, así como varias metodologías específicas.
+así como varias metodologías específicas. También hemos comparado los métodos
+tradicionales, en concreto RUP.
+Creemos que los procesos y las metodologías deben ajustarse a cada proyecto y
+hemos presentado algunas de las ideas de Cockburn sobre cómo hacerlo. Un ingeniero de software debe
+conocer muchas metodologías diferentes para poder adoptar técnicas específicas que
+pueden ser útiles para su proyecto en particular.

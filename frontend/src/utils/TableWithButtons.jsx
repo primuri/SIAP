@@ -66,8 +66,8 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
           {currentItems.map((row, rowIndex) => (
           <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
           {dataKeys.map((column, colIndex) => (
-            <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 2 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
+            <td className="mx-3" key={colIndex}>
+              {(colIndex === dataKeys.length - 3 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
                  <button id="acciones-button" className="btn btn-primary" onClick={() => {
                     if(saveState){
                       saveState()
@@ -76,7 +76,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
                     navigate(nuevaRuta);
                  }}>Gestionar</button>
 
-              ) : (colIndex === dataKeys.length -   1) ? (
+              ) : (colIndex === dataKeys.length -   2) ? (
                 <button id="acciones-button" className="btn btn-primary" onClick={() => {
                     if(saveState){
                       saveState()
@@ -84,6 +84,18 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
                     const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-presupuestos`;
                     navigate(nuevaRuta);
                  }}>Gestionar</button>
+                 
+              ): (colIndex === dataKeys.length -   1) ? (
+                <button id="acciones-button" className="btn btn-primary" onClick={() => {
+                    if(saveState){
+                      saveState()
+                    }
+                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-asistentes`;
+                    navigate(nuevaRuta);
+                 }}>Gestionar</button>
+
+                  
+
               ): (
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                   ? getValueByPath(row, column).split('/').pop()

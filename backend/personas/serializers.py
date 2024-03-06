@@ -78,10 +78,17 @@ class EvaluadorSerializer(serializers.ModelSerializer):
         return rep
 
 class AsistenteSerializer(serializers.ModelSerializer):#Modificar para el to_representation
-    id_nombre_completo_fk = NombreCompletoSerializer()
+    id_nombre_completo_fk = serializers.PrimaryKeyRelatedField(queryset=NombreCompleto.objects.all())
     class Meta:
         model = Asistente
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(AsistenteSerializer, self).to_representation(instance)
+        rep['id_nombre_completo_fk'] = NombreCompletoSerializer(instance.id_nombre_completo_fk).data
+        return rep
+    
+
 class AutorSerializer(serializers.ModelSerializer):
     id_nombre_completo_fk = NombreCompletoSerializer()
 

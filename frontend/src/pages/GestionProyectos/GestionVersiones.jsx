@@ -16,8 +16,7 @@ import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, 
 import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarArea, eliminarDocumentacion, eliminarInstitucion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware, editarArea, editarInstitucion, editarevento } from "../../api/gestionProductos"
 import { eliminarNombre } from "../../api/gestionAcademicos"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-
-
+import { obtenerNombre } from "../../api/gestionAcademicos"
 export const GestionVersiones = () => {
 
     let {id_version,id} = useParams()
@@ -35,8 +34,8 @@ export const GestionVersiones = () => {
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [selectedIdCodigoVi, setSelectedIdCodigoVi] = useState(null);
-    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle', 'Informes', 'Presupuesto']
-    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle', '', '']
+    const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle', 'Informes', 'Presupuesto', 'Asistentes']
+    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle', '', '', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null  
     const volver = () => {
@@ -145,6 +144,7 @@ export const GestionVersiones = () => {
         }
     }
 
+
     useEffect(() => {
         const fetchData = async () => {
           if (id_version && data.length > 0) {
@@ -157,10 +157,10 @@ export const GestionVersiones = () => {
               try {
                 const isSoftware = await loadSoftware(elemento);
                 if (!isSoftware) {
-                  const isArticulo = await loadArticulo(elemento);
-                  if (!isArticulo) {
-                    await loadEvento(elemento);
-                  }
+                    const isArticulo = await loadArticulo(elemento);
+                    if (!isArticulo) {
+                        await loadEvento(elemento);
+                    }
                 }
                 setEdit(true);
                 setAddClick(false);
@@ -294,7 +294,7 @@ export const GestionVersiones = () => {
             delete Datos.id_vigencia_fk;
             const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
             delete Datos.id_codigo_vi_fk;
-            Datos.id_codigo_vi_fk = id_vi;
+            Datos.id_codigo_vi_fk = clean_id;
             delete Datos.id_version_proyecto;
             Datos.id_vigencia_fk = id_vigencia_creado;
 
@@ -310,7 +310,6 @@ export const GestionVersiones = () => {
 
 
             const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
-            delete producto.id_producto_fk.id_producto;
             producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
 
             const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))

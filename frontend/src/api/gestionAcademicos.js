@@ -230,7 +230,7 @@ export const eliminarTitulos = (id, token) => {
 };
 
 
-const obtenerNombre = async (nombre, token) => {
+export const obtenerNombre = async (nombre, token) => {
     try {
         const response_nombre = await manejarErrores(SIAPAPI.post('personas/nombre_completo/', nombre, {
             headers: {

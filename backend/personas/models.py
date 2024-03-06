@@ -211,10 +211,10 @@ class Evaluador(models.Model):
         unique_together = (('tipo', 'correo','universidad_fk','id_area_especialidad_fk','id_nombre_completo_fk'),) # Para evitar que un mismo evaluador este 2 veces
 
 class Asistente(models.Model):
-    id_asistente_carnet = models.CharField(max_length=10, primary_key=True)
+    id_asistente_carnet = models.AutoField(primary_key=True)
     cedula = models.CharField(max_length=45)
     condicion_estudiante = models.CharField(max_length=45)
-    id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.PROTECT, db_column='id_nombre_completo_fk')
+    id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.CASCADE, db_column='id_nombre_completo_fk')
     carrera = models.CharField(max_length=128)
     promedio_ponderado = models.DecimalField(max_digits=5, decimal_places=2)
 

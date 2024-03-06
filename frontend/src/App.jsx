@@ -19,6 +19,8 @@ import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
 
+import GestionAsistentes from "./routes/GestionAsistentes"
+
 function App() {
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -48,6 +50,7 @@ function App() {
             {EvaluacionProyectos}
             {GestionEvaluaciones}
             {GestionOrganosColegiados}
+            {GestionAsistentes}
             
             <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
             <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
