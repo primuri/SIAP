@@ -152,7 +152,10 @@ export const GestionAsistentes = () => {
     const deleteAsistente = async (asistente) => {
         try {
           
-            //Falta
+            
+            await eliminarDesinacionAsistente(asistente.id_designacion_asistente, localStorage.getItem('token'))
+            await eliminarDocumentacion(asistente.id_documento_inopia_fk.id_documento, localStorage.getItem('token'))
+            await eliminarAsistente(asistente.id_asistente_carnet_fk.id_asistente_carnet, localStorage.getItem('token'))
 
             toast.success('Asistente eliminado correctamente', {
                 duration: 4000,
