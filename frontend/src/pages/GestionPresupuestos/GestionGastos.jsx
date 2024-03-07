@@ -53,33 +53,35 @@ export const GestionGastos = () => {
             var toastId = toast.loading('Agregando...', {
                 position: 'bottom-right',
                 style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                fontSize: '18px',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
                 },
             });
             formData.delete('json')
-            //Re estructuracion y creacion del objeto gasto
+    
+            // Reestructuración y creación del objeto gasto
             delete Data.gasto.id_gasto
             Data.gasto.id_partida = Data.partida.id_partida
             delete Data.partida.id_partida
-
-            await API.obtenerProveedores(localStorage.getItem('token'));
-            Data.gasto.id_cedula_proveedor_fk = Data.id_factura_fk;
-
-            let prod = await API.obtenerProductosServicios(localStorage.getItem('token'));
-            if (prod) {
-                // Si el producto existe, asignamos su ID al gasto
-                Data.gasto.id_producto_servicio_fk = Data.id_factura_fk;
-            } else {
-                // Si el producto no existe, agregamos el nuevo producto y asignamos su ID al gasto
-                let producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, localStorage.getItem('token'));
-                Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
+    
+            // Accediendo correctamente a id_cedula_proveedor_fk y id_producto_servicio_fk
+            Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
+            Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
+    
+            // Eliminamos el campo factura del objeto Data
+            delete Data.factura;
+    
+            // Verificar si hay documento adjunto
+            if (!formData.has('documento')) {
+                throw new Error('Debe adjuntar un documento para agregar el gasto.');
             }
-            // Eliminamos el campo id_factura_fk ya que no es necesario
-            delete Data.id_factura_fk;
-
-            await API.agregarFactura(Data.gasto, formData, localStorage.getItem('token'))
+    
+            // Agregar factura y gasto
+            const facturaResponse = await API.agregarFactura(Data.factura, localStorage.getItem('token'));
+            Data.gasto.id_factura_fk = facturaResponse.data.id_factura;
+            await API.agregarGasto(Data.gasto, formData, localStorage.getItem('token'));
+    
             toast.success('Gasto agregado correctamente', {
                 id: toastId,
                 duration: 4000, 
@@ -109,29 +111,39 @@ export const GestionGastos = () => {
                 },
             });
             formData.delete('json')
-            //Re estructuracion y creacion del objeto gasto
-            delete Data.gasto.id_gasto
-            Data.gasto.id_partida = Data.partida.id_partida
-            delete Data.partida.id_partida
 
-            await API.obtenerProveedores(localStorage.getItem('token'));
-            Data.gasto.id_cedula_proveedor_fk = Data.id_factura_fk;
+        // Reestructuración y creación del objeto gasto
+        delete Data.gasto.id_gasto
+        Data.gasto.id_partida = Data.partida.id_partida
+        delete Data.partida.id_partida
 
-            let prod = await API.obtenerProductosServicios(localStorage.getItem('token'));
-            if (prod) {
-                // Si el producto existe, asignamos su ID al gasto
-                Data.gasto.id_producto_servicio_fk = Data.id_factura_fk;
-            } else {
-                // Si el producto no existe, agregamos el nuevo producto y asignamos su ID al gasto
-                let producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, localStorage.getItem('token'));
-                Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
-            }
-            // Eliminamos el campo id_factura_fk ya que no es necesario
-            delete Data.id_factura_fk;
+        // Accediendo correctamente a id_cedula_proveedor_fk y id_producto_servicio_fk
+        Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
+        Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
 
-            formData.append('id_factura_fk', Data.documento.id_factura)
-            delete Data.documento
-            await API.actualizarGasto(gasto.id_gasto, Data.gasto, formData, localStorage.getItem('token'))
+        // Eliminamos el campo id_factura_fk ya que ya se asignó a Data.gasto
+        delete Data.id_factura_fk;
+
+        // Adjuntar el ID de la factura al formulario formData
+        formData.append('id_factura_fk', Data.factura.id_factura);
+        delete Data.factura;
+
+        await API.obtenerProveedores(localStorage.getItem('token'));
+
+        let prod = await API.obtenerProductosServicios(localStorage.getItem('token'));
+        if (prod) {
+            // Si el producto existe, asignamos su ID al gasto
+            Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
+        } else {
+            // Si el producto no existe, agregamos el nuevo producto y asignamos su ID al gasto
+            let producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, localStorage.getItem('token'));
+            Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
+        }
+
+        // Eliminamos el campo documento ya que no es necesario
+        delete Data.documento;
+
+        await API.actualizarGasto(gasto.id_gasto, Data.gasto, formData, localStorage.getItem('token'));
             toast.success('Gasto editado correctamente', {
                 id: toastId,
                 duration: 4000, 

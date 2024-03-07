@@ -10,23 +10,21 @@ import { obtenerProveedores, obtenerProductosServicios, obtenerFactura } from '.
 const filter = createFilterOptions();
 const currentYear = new Date().getFullYear();
 
-export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelete }) => {  //id_partida esta extra
+export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelete }) => { 
     const [showConfirmationEdit, setShowConfirmationEdit]           = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete]       = useState(false);
-    const [proveedor, setProveedor]                                  = useState([]); //extra
+    const [proveedor, setProveedor]                                 = useState([]); //extra
     const [producto, setProductoServicio]                           = useState([]); //extra
     const [factura, setFactura]                                     = useState([]);
     const [documentoData, setDocumentoData]                         = useState(null);
     const [selectedFactura, setSelectedFactura]                     = useState("");
     const [formData, setFormData]                                   = useState({
-        "id_partida_fk": gasto? gasto.id_partida_fk.id_partida : id_partida,
-        "id_gasto": gasto ? gasto.id_gasto : "",
-        "monto": gasto ? gasto.monto : "",
-        "fecha": gasto ? gasto.fecha.split('T')[0] : "",
-        "detalle": gasto ? gasto.detalle : "",
-        factura: {
-            id_factura_fk: gasto ? gasto.id_factura_fk : "",
-        },
+        id_partida_fk: gasto? gasto.id_partida_fk.id_partida : id_partida,
+        id_gasto: gasto ? gasto.id_gasto : "",
+        monto: gasto ? gasto.monto : "",
+        fecha: gasto ? gasto.fecha.split('T')[0] : "",
+        detalle: gasto ? gasto.detalle : "",
+        id_factura_fk: gasto ? gasto.id_factura_fk : "",
         documento: {
             id_documento_fk: gasto ? gasto.id_documento_fk.id_documento : "",
             ruta_archivo: gasto ? gasto.id_documento_fk.ruta_archivo : "",
@@ -232,14 +230,14 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     id="id_cedula_proveedor_fk"
                                     name="id_cedula_proveedor_fk"
                                     className="form-control"
-                                    value={selectedFactura ? selectedFactura.id_cedula_proveedor_fk.nombre : ''}
                                     onChange={(event) => {
-                                        setSelectedFactura(factura.find(f => f.id_factura === event.target.value));
-                                    }}>
+
+                                    }}
+                                    defaultValue={mode === 2 ? factura.id_cedula_proveedor_fk : ""}>
                                     <option value="">Seleccione un proveedor</option>
-                                    {factura.map((factura) => (
-                                        <option key={factura.id_factura} value={factura.id_factura}>
-                                            {factura.id_cedula_proveedor_fk.nombre}
+                                    {proveedor.map((proveedor) => (
+                                        <option key={proveedor.id_cedula_proveedor} value={proveedor.id_cedula_proveedor}>
+                                            {proveedor.nombre}
                                         </option>
                                     ))}
                                 </select>
@@ -252,7 +250,8 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     className="form-control"
                                     onChange={(event) => {
                                         
-                                    }}>
+                                    }}
+                                    defaultValue={mode === 2 ? factura.id_producto_servicio_fk : ""}>
                                     <option value="">Seleccione un producto o servicio</option>
                                     {producto.map((producto) => (
                                         <option key={producto.id_producto_servicio} value={producto.id_producto_servicio}>
