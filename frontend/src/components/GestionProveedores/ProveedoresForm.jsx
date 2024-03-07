@@ -197,7 +197,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono </label>
-                                <input type="number" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} pattern="^\d+(\.\d{1,2})?$" required/>
+                                <input type="text" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} pattern="^\d+(\.\d{1,2})?$" required/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2"> Documento </label>
