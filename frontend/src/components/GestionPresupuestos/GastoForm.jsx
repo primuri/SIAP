@@ -24,11 +24,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         monto: gasto ? gasto.monto : "",
         fecha: gasto ? gasto.fecha.split('T')[0] : "",
         detalle: gasto ? gasto.detalle : "",
-        id_factura_fk: gasto ? gasto.id_factura_fk : "",
-        documento: {
-            id_documento_fk: gasto ? gasto.id_documento_fk.id_documento : "",
-            ruta_archivo: gasto ? gasto.id_documento_fk.ruta_archivo : "",
-        },    
+        id_factura_fk: gasto ? gasto.id_factura_fk : {
+            id_cedula_proveedor_fk: gasto && gasto.id_cedula_proveedor_fk ? gasto.id_cedula_proveedor_fk.id_cedula_proveedor : "",
+            id_producto_servicio_fk: gasto && gasto.id_producto_servicio_fk ? gasto.id_producto_servicio_fk.id_producto_servicio : ""
+        },
+        id_documento_fk: gasto ? {...gasto.id_documento_fk} : {tipo: "Documento factura", detalle: "", documento: ""}   
     });
 
     useEffect(() => {
@@ -209,18 +209,12 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                             </div>)}
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura   </label>
-                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
-                                {mode == 2 ? (
-                                    <Tooltip title={formData.documento?.ruta_archivo?.split('/')?.pop()} placement="right-start">
-                                        <a href={'http://localhost:8000' + formData.documento.ruta_archivo} target="blank_"
-                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver Factura"}
-                                        </a>
-                                    </Tooltip>
-
-                                )
-                                    : ""} 
+                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} required={mode == 1 ? true : ''} />
+                                { typeof formData.id_documento_fk.documento === 'string' && (
+                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.id_documento_fk.documento.split('/').pop()}
+                                    </a>
+                                ) }
                             </div>
                         </div>
                         <div className='row mb-4'>
@@ -292,7 +286,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     )
 }
 
-
 GastoForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     mode: PropTypes.number.isRequired,
@@ -300,4 +293,3 @@ GastoForm.propTypes = {
     onDelete: PropTypes.func,
     gasto: PropTypes.object,
 }
-

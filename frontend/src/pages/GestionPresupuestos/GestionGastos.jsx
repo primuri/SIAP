@@ -65,11 +65,9 @@ export const GestionGastos = () => {
             Data.gasto.id_partida = Data.partida.id_partida
             delete Data.partida.id_partida
     
-            // Accediendo correctamente a id_cedula_proveedor_fk y id_producto_servicio_fk
             Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
             Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
     
-            // Eliminamos el campo factura del objeto Data
             delete Data.factura;
     
             // Verificar si hay documento adjunto
@@ -113,15 +111,13 @@ export const GestionGastos = () => {
             formData.delete('json')
 
         // Reestructuración y creación del objeto gasto
-        delete Data.gasto.id_gasto
-        Data.gasto.id_partida = Data.partida.id_partida
-        delete Data.partida.id_partida
+        delete Data.gasto.id_gasto;
+        Data.gasto.id_partida = Data.partida.id_partida;
+        delete Data.partida.id_partida;
 
-        // Accediendo correctamente a id_cedula_proveedor_fk y id_producto_servicio_fk
         Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
         Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
 
-        // Eliminamos el campo id_factura_fk ya que ya se asignó a Data.gasto
         delete Data.id_factura_fk;
 
         // Adjuntar el ID de la factura al formulario formData
@@ -140,10 +136,12 @@ export const GestionGastos = () => {
             Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
         }
 
-        // Eliminamos el campo documento ya que no es necesario
         delete Data.documento;
 
+        await API.actualizarFactura(Data.gasto.id_factura_fk, Data.factura, localStorage.getItem('token'));
+        
         await API.actualizarGasto(gasto.id_gasto, Data.gasto, formData, localStorage.getItem('token'));
+
             toast.success('Gasto editado correctamente', {
                 id: toastId,
                 duration: 4000, 
@@ -274,3 +272,4 @@ export const GestionGastos = () => {
         </main>
     )
 }
+
