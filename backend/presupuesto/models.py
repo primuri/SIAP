@@ -91,7 +91,7 @@ class Gasto(models.Model):
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     id_partida_fk = models.ForeignKey(Partida, on_delete=models.PROTECT)
     id_factura_fk = models.ForeignKey(Factura, on_delete=models.PROTECT)
-    tipo = models.CharField(max_length=64)
+    id_documento_fk = models.ForeignKey(Documento, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = 'gasto'

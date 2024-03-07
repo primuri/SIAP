@@ -219,7 +219,6 @@ export const GestionPresupuestos = () => {
     setAddClick(true)
     setEdit(false)
     document.body.classList.add('modal-open');
-
   }
 
   // Al hacer click en la tabla

@@ -181,6 +181,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
     };
+    
     return (
         <div>
             <div className="modal-header pb-0 position-sticky top-0">

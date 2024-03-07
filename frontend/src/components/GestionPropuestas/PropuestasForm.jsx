@@ -211,8 +211,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 <input type="text" className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required />
                             </div>
                         </div>
-
-               
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 {mode === 1 && (
