@@ -89,7 +89,7 @@ export const GestionPropuestas = () => {
 
     const success = () => {
         const timer = setTimeout(() => {
-          navigate(-1);
+          navigate(0);
         }, 1000);
     }
     // Manejo de datos que se van a enviar para agregar

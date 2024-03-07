@@ -64,7 +64,7 @@ export const GestionAcademicos = () => {
 
     const success = () => {
         const timer = setTimeout(() => {
-          navigate(-1);
+          navigate(0);
         }, 1000);
     }
 
