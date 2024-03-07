@@ -294,7 +294,7 @@ export const GestionVersiones = () => {
             delete Datos.id_vigencia_fk;
             const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
             delete Datos.id_codigo_vi_fk;
-            Datos.id_codigo_vi_fk = id_vi;
+            Datos.id_codigo_vi_fk = clean_id;
             delete Datos.id_version_proyecto;
             Datos.id_vigencia_fk = id_vigencia_creado;
 
