@@ -168,7 +168,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             if (dataToSend.academico_fk) {
                 dataToSend.academico_fk = null
             }
-        } else if (dataToSend.rol === 'academico') {
+        } else if (dataToSend.rol === 'investigador') {
             if (dataToSend.evaluador_fk) {
                 dataToSend.evaluador_fk = null
             }
@@ -255,7 +255,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                     <label htmlFor="rol" className="label-personalizado mb-2">Rol</label>
                                     <select className="form-select seleccion" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un rol</option>
-                                        <option value="academico">Investigador(a)</option>
+                                        <option value="investigador">Investigador(a)</option>
                                         <option value="evaluador">Evaluador(a)</option>
                                         <option value="investigador-evaluador">Investigador(a) y Evaluador(a)</option>
                                         <option value="invitado">Invitado(a)</option>
