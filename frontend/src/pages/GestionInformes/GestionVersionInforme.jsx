@@ -54,7 +54,7 @@ export const GestionVersionInforme = () => {
 
             let responseDocumento = await API.agregarDocumentoInforme(data.id_documento_informe_fk)
             data.id_documento_informe_fk = responseDocumento.data.id_documento
-            data.id_informe_fk = informeID
+            data.id_informe_fk = informeID.informeID
 
             await API.agregarVersionInforme(data)
 
@@ -87,7 +87,7 @@ export const GestionVersionInforme = () => {
             data.id_documento_informe_fk = responseDocumento.data.id_documento;
 
             data.id_evaluacion_cc_fk = (data.id_evaluacion_cc_fk.id_evaluacion_cc ? data.id_evaluacion_cc_fk.id_evaluacion_cc : null)
-            data.id_informe_fk = informeID
+            data.id_informe_fk = informeID.informeID
             await API.editarVersionInforme(versionInforme.id_version_informe, data)
             
             setEditClicked(false)

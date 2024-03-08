@@ -63,16 +63,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const handleChange = (event) => {
         const { name, value } = event.target
 
-         if (name === "telefono") {
-            if (/^\d*$/.test(value)) {
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    [name]: value,
-                }));
-            }
-            return;
-        }
-        
         if (name.includes('.')) {
             const keys = name.split('.')
             setFormData(prev => ({
@@ -197,7 +187,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono </label>
-                                <input type="text" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} pattern="^\d+(\.\d{1,2})?$" required/>
+                                <input type="number" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} required/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2"> Documento </label>

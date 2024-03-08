@@ -161,7 +161,7 @@ export const GestionPropuestas = () => {
 
             const id_vig = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.id_vigencia;
 
-            let fecha_vigencia;
+
             let fecha_inicio_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio;
             let fecha_fin_adaptada = Datos.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin;
 
@@ -204,12 +204,7 @@ export const GestionPropuestas = () => {
 
             const id_propu = Datos.id_codigo_cimpa_fk.id_codigo_cimpa;
             const fecha_vigencia_adaptada = Datos.id_codigo_cimpa_fk.fecha_vigencia;
-            if (!fecha_vigencia_adaptada.endsWith("Z")) {
-                fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
-            }else{
-                fecha_vigencia = fecha_vigencia_adaptada;
-            }
-           
+            const fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
             Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
 
