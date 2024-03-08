@@ -147,7 +147,30 @@ export const GestionAsistentes = () => {
     // Manejo de los datos del formulario de editar 
     const editAsistente = async (formData) => {
         try {
-            const Datos = JSON.parse(formData)
+
+
+              //falta hacer lo de documento que funcione
+            //formData.append('detalle', Datos.id_documento_inopia_fk.detalle)
+            //await editarDocumento(id_doc, formData, localStorage.getItem("token"))
+            const documentoFile = formData.get('id_documento_inopia_fk');
+            formData.delete('id_documento_inopia_fk'); // Eliminamos el archivo del FormData original
+
+            // Ahora extraemos y parseamos los datos JSON del FormData
+            const Datos = JSON.parse(formData.get('json'));
+            formData.delete('json'); // Limpiamos formData
+
+            // Si existe el archivo, procedemos a manejarlo según sea necesario
+            if (documentoFile) {
+            const DocumentoData = new FormData();
+            DocumentoData.append('documento', documentoFile);
+            DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+            // Aquí deberías tener el ID del documento si es necesario para editarDocumentacion
+            // Supongamos que lo obtenemos de alguna manera, por ejemplo:
+            const id_docu = Datos.id_documento_inopia_fk.id_documento;
+            await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            // Aquí deberías ajustar según cómo necesitas manejar la respuesta de editarDocumentacion
+            }
+
            
             
             const id_nombre_compl = Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
@@ -182,9 +205,6 @@ export const GestionAsistentes = () => {
             const id_doc = Datos.id_documento_inopia_fk.id_documento;
             delete Datos.id_documento_inopia_fk.id_documento;
 
-            //falta hacer lo de documento que funcione
-            //formData.append('detalle', Datos.id_documento_inopia_fk.detalle)
-            //await editarDocumento(id_doc, formData, localStorage.getItem("token"))
 
             
             Datos.id_documento_inopia_fk = id_doc
