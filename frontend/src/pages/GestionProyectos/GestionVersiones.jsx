@@ -177,9 +177,7 @@ export const GestionVersiones = () => {
       }, [data, id_version]);
       
     const success = () => {
-        const timer = setTimeout(() => {
-            navigate(-1);
-        }, 1000);
+        window.location.href = `/gestion-proyectos/${id}/gestion-versiones`
     }
     // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
@@ -294,7 +292,7 @@ export const GestionVersiones = () => {
             delete Datos.id_vigencia_fk;
             const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
             delete Datos.id_codigo_vi_fk;
-            Datos.id_codigo_vi_fk = id_vi;
+            Datos.id_codigo_vi_fk = clean_id;
             delete Datos.id_version_proyecto;
             Datos.id_vigencia_fk = id_vigencia_creado;
 

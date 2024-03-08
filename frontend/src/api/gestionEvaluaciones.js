@@ -37,6 +37,19 @@ export const editarEvaluacion = async (evaluacion) => {
     )
 }
 
+
+export const canDelete = async (id_evaluacion) => {
+    const response = await manejarErrores(SIAPAPI.get('version_proyecto/respuestasevaluaciones/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
+    console.log(response)
+    const elementosFiltrados = response.data.filter(elemento => elemento.id_evaluacion_fk.id_evaluacion == id_evaluacion)
+    return elementosFiltrados.length === 0
+}
 export const eliminarEvaluacion = async (id_evaluacion) => {
     return await manejarErrores(SIAPAPI.delete(`version_proyecto/evaluaciones/${id_evaluacion}/`, {
         headers: {
