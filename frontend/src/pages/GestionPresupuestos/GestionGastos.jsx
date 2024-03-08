@@ -105,7 +105,7 @@ export const GestionGastos = () => {
             delete Data.id_cedula_proveedor_fk;
             delete Data.id_producto_servicio_fk;
             Data.monto = parseInt(Data.monto);
-            Data.fecha = '2024-03-07T10:14:40Z';
+            Data.fecha = '2024-03-08T15:20:40Z';
             await API.agregarGasto(Data, token);
     
             toast.success('Gasto agregado correctamente', {
