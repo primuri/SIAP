@@ -88,9 +88,7 @@ export const GestionPropuestas = () => {
     },[data,id_codigo_cimpa])
 
     const success = () => {
-        const timer = setTimeout(() => {
-          navigate(0);
-        }, 1000);
+        window.location.href = '/gestion-propuestas'
     }
     // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {

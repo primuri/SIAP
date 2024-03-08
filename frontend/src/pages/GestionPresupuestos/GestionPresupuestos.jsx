@@ -62,7 +62,7 @@ export const GestionPresupuestos = () => {
   const success = () => {
     const timer = setTimeout(() => {
       navigate(0);
-    }, 1000);
+    }, 100);
 }
   // Manejo de datos que se van a enviar para agregar
   const addPresupuesto = async (formData) => {

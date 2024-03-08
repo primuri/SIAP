@@ -62,9 +62,7 @@ export const GestionProveedores = () => {
   },[data,id_cedula_proveedor])
 
   const success = () => {
-    const timer = setTimeout(() => {
-      navigate(0);
-    }, 1000);
+    window.location.href = '/gestion-proveedores'
 }
 
   // Manejo de datos que se van a enviar para agregar

@@ -62,9 +62,7 @@ export const GestionEvaluadores = () => {
   },[data,id_evaluador])
 
   const success = () => {
-    const timer = setTimeout(() => {
-      navigate(0);
-    }, 1000);
+    window.location.href = '/gestion-evaluadores'
   }
   // Manejo de datos que se van a enviar para agregar
   const addEvaluador = async (formData) => {

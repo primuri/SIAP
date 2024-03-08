@@ -54,11 +54,9 @@ export const GestionUsuarios = () => {
     },[data,id])
     
     const success = () => {
-        const timer = setTimeout(() => {
-          navigate(0);
-        }, 1000);
+        window.location.href = '/gestion-usuarios'
     }
-    
+
     // Manejo de datos que se van a enviar para agregar
     const addUsuario = async (formData) => {
         try {
