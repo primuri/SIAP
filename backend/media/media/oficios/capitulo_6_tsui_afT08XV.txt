@@ -1,0 +1,729 @@
+Requisitos
+Ingeniería
+Defina la ingeniería de requisitos.
+Discutir los pasos de la ingeniería de requisitos.
+Describir los detalles de qué hacer y cómo realizar las tareas dentro de
+cada paso de la ingeniería de requisitos.
+Analizar varios lenguajes gráficos que se utilizan durante la ingeniería de
+de requisitos, como diagramas de flujo de datos, casos de uso y diagramas entidad-relación.
+entidad-relación.
+Definir la documentación de especificación de requisitos de software (SRS).
+6.1 Procesamiento de requisitos
+Los requisitos forman un conjunto de declaraciones que describen las necesidades y deseos del usuario. En el desarrollo de un sistema de software, estos requisitos deben ser clara y plenamente comprendidos por
+los ingenieros que desarrollan el sistema. Sin embargo, a menudo nos encontramos con requisitos que invaden la parte del "cómo" y entran en el ámbito del
+diseño de soluciones. Aunque deberíamos intentar limitar los requisitos
+al "qué", no siempre está tan claro.
+Una de las principales razones del fracaso de los proyectos de software son las especificaciones de requisitos incompletas.
+incompletas, como se explica en el capítulo 3. Al mismo
+Al mismo tiempo, una de las razones importantes del éxito de un proyecto puede atribuirse a la claridad de los requisitos. La importancia de los requisitos
+de los requisitos del usuario. La gestión de los requisitos y
+participación de los usuarios se está convirtiendo en una tarea clave en el desarrollo de software, independientemente del modelo de proceso de desarrollo de software.
+independientemente del modelo de proceso de desarrollo de software.
+En un proyecto de software intervienen las siguientes actividades de ingeniería de requisitos:
+Elicitación
+Documentación y definición
+Especificación
+Creación de prototipos
+Análisis
+Revisión y validación
+Acuerdo y aceptación
+No todas estas actividades relacionadas con los requisitos son necesarias en la misma medida para todos los proyectos de software.
+proyectos de software. Cuánto y cuándo se practican estas actividades y en qué secuencia
+es el tema central de este capítulo.
+6.1.1 Preparación para el procesamiento de requisitos
+El primer paso para la recopilación de requisitos y la ingeniería de requisitos es asegurarse de que se realizan todos los
+los preparativos y que se planifican las actividades de ingeniería de requisitos.
+Tanto los solicitantes de requisitos como los proveedores deben comprender y acordar un proceso, tanto si la estructura subyacente sigue un enfoque ágil y flexible como uno más tradicional y riguroso.
+tradicional y riguroso. Debe realizarse un conjunto de preparativos, como los que se muestran en la figura 6.1,
+deben llevarse a cabo.
+En primer lugar, hay que elaborar un plan de ingeniería de requisitos. El plan debe
+incluir lo siguiente:
+Proceso (para la ingeniería de requisitos) que se utilizará
+Recursos necesarios
+Calendario para completar las actividades de requisitos
+En función del tamaño y la complejidad del proyecto, la elaboración del plan puede llevar desde varias horas hasta varios días o semanas.
+horas o varios días o semanas.
+Una vez elaborado el plan, debe ser revisado y acordado por todas las partes implicadas. Este
+Este acuerdo y compromiso con el plan es extremadamente importante porque los requisitos son no sólo una imaginación del diseñador o desarrollador del software. Los usuarios y clientes
+porque los requisitos representan sus necesidades y deseos. La dirección
+también debe participar porque se necesitan recursos para llevar a cabo las actividades. La dirección, tanto del lado de los usuarios como del lado del desarrollo de software, debe estar dispuesta a comprometer los recursos.
+a comprometer los recursos. Por último, todos los participantes deben revisar y acordar el calendario de las actividades de ingeniería de requisitos. Ha habido situaciones
+en las que el desarrollo de prototipos, las revisiones y los cambios en los requisitos de la interfaz de usuario
+de la interfaz de usuario han ocupado una parte tan importante de los recursos y el
+que el proyecto se ha visto abocado a un retraso y a un sobrecoste. En
+A veces es aconsejable que la ingeniería de requisitos mantenga un calendario bastante abierto y flexible.
+flexible. La mayoría de las grandes empresas de hoy en día tienen la experiencia suficiente para entender que
+los proyectos complejos deben tener buenos requisitos y, por tanto, la ingeniería de requisitos
+puede ser un esfuerzo largo y costoso que debe abordarse por separado del resto del proyecto de software.
+del proyecto de software.
+Una vez acordado el plan, deben adquirirse los recursos, desde analistas experimentados hasta las herramientas de prototipado necesarias.
+herramientas de prototipado necesarias. Encontrar analistas de requisitos cualificados
+cualificados puede llevar mucho tiempo, ya que un buen analista de requisitos debe poseer
+un buen analista de requisitos debe poseer múltiples aptitudes, como capacidad de comunicación, conocimientos específicos del sector y conocimientos técnicos.
+Las personas implicadas también deben recibir una formación adecuada sobre las herramientas y el proceso que se utilizarán en las actividades de ingeniería de requisitos.
+que se utilizarán en las actividades de ingeniería de requisitos.
+Para la mayoría de los grandes proyectos de software, el esfuerzo de preparación, que puede considerarse como la satisfacción de los criterios de entrada para las actividades de ingeniería de requisitos, es importante y vital para
+el éxito del resto del proyecto de software.
+6.1.2 Proceso de ingeniería de requisitos
+Una vez completada la preparacio
+desarrollo de requisitos. Hay muchos pasos diferentes dentro de la ingeniería de requisitos. Es esencial asegurarse de que el proceso de ingeniería de requisitos planificado y acordado esté claro para todos los participantes.
+planificado y acordado sea claro para todos los participantes. La figura 6.2 es un ejemplo de un proceso común de ingeniería de requisitos.
+común de ingeniería de requisitos.
+El proceso comienza con los analistas de requisitos que eligen y recopilan los requisitos de los usuarios y clientes. A continuación, se analiza la información recopilada.
+analizada. Durante la fase de análisis, se comprueba si las distintas declaraciones de requisitos precisión y conflicto, categorizados y priorizados. Aunque hay una flecha desde
+del análisis de requisitos a la obtención de requisitos, suele haber muy pocas oportunidades de seguir retrocediendo debido a la escasa disponibilidad de los usuarios que proporcionan la información sobre los requisitos.
+información sobre los requisitos. A continuación, el material analizado se procesa a través de tres
+subactividades centrales potenciales:
+1. 1. Definición y documentación de requisitos
+2. Prototipado de requisitos
+3. Revisión de requisitos
+Es evidente que los requisitos analizados deben definirse y documentarse adecuadamente. Si
+Si es necesario, algunos de los requisitos, especialmente los aspectos relacionados con la interfaz de usuario, deben prototiparse.
+prototipos. En sistemas de gran tamaño, este esfuerzo puede parecerse a un miniproyecto de desarrollo.
+Las declaraciones de requisitos definidas y documentadas y los prototipos de interfaces de usuario
+deben ser revisados por los usuarios. Los usuarios deben comprometer su tiempo y su personal durante los periodos de obtención y revisión de requisitos.
+durante los periodos de obtención y revisión de requisitos. Estas tres subetapas pueden iterarse entre sí y también con la etapa de análisis.
+entre sí y con la fase de análisis. Las iteraciones deben gestionarse adecuadamente, o
+o se convertirán en un círculo vicioso de consumo de tiempo y recursos.
+Los dos últimos pasos de la ingeniería de requisitos de la figura 6.2 implican la finalización de la especificación de requisitos de software (SRS) y las negociaciones para finalizar el documento de acuerdo de requisitos.
+el documento de acuerdo de requisitos. La SRS puede ser un documento interno de ingeniería de software
+interno del equipo de software. El documento de acuerdo de requisitos debe acordarse
+y servirá como contrato entre el cliente y la organización de desarrollo de software.
+de software. La revisión del documento de acuerdo de requisitos
+con el cliente sirve como prueba de validación inicial (confirmación de que el equipo de software está construyendo el sistema correcto). Una vez que
+Una vez acordadas las especificaciones de los requisitos, se convierten en el contrato entre el cliente y la organización de desarrollo de software.
+
+línea de base. A partir de ahí, cualquier modificación o solicitud de cambio debe controlarse y gestionarse mediante un proceso de control de cambios para evitar el tristemente célebre problema de la ampliación del alcance del proyecto, en el que el proyecto crece lentamente sin que nadie lo detecte.
+en el que el proyecto crece lentamente sin que nadie lo detecte. Requisitos
+puede producirse en cualquier momento del ciclo de desarrollo del software y es una de las
+de las peores causas de sobrecostes y retrasos.
+El número de actividades que deben realizarse, como se muestra en la figura 6.2, depende del proyecto de software específico.
+proyecto de software específico. Recientemente, algunos de los desarrolladores de software ágil han abandonado erróneamente una gran parte de la ingeniería de requisitos.
+abandonado erróneamente un amplio segmento de la ingeniería de requisitos. Por el contrario, los procesos ágiles
+en realidad reconocen la dificultad con los cambios de requisitos y la recopilación de requisitos
+y abogan por interacciones constantes con los usuarios para garantizar que los requisitos se interpretan correctamente. El error de no dedicar tiempo y esfuerzo a recopilar y comprender
+los requisitos puede ser costoso, y no es aconsejable por muchas buenas razones. Los siguientes
+ejemplos de consecuencias negativas que se producen si no se realiza la ingeniería de requisitos
+ilustran las razones positivas para llevar a cabo la ingeniería de requisitos:
+No hay requisitos documentados en los que basar las pruebas.
+No hay requisitos acordados para controlar la ampliación del alcance.
+No hay requisitos documentados en los que basar las actividades de formación o
+o de soporte al cliente.
+Es muy difícil gestionar el calendario y los costes del proyecto sin requisitos claros y documentados.
+requisitos claros y documentados.
+Por lo tanto, está claro que es muy poco aconsejable basar el desarrollo de software sin actividades de ingeniería de requisitos.
+actividades de ingeniería de requisitos.
+En el otro extremo del espectro están los costes excesivos de los esfuerzos dedicados a prototipos, revisiones, la creación de documentos voluminosos y otras actividades burocráticas y despilfarradoras.
+burocráticas y derrochadoras. Sin embargo, hay ocasiones en las que se pide al analista de requisitos que desarrolle una
+especificación de requisitos con el fin de elaborar un documento llamado solicitud de
+propuesta (RFP) para solicitar ofertas de desarrollo de software a muchos proveedores de software diferentes. En el caso de la creación de una RFP, los analistas de requisitos suelen pecar de exceso de ingeniería.
+sobreingeniería. La mayoría de las veces, debemos actuar en algún punto entre
+estos dos extremos del espectro.
+6.2 Obtención y recopilación de requisitos
+Muchos ingenieros de software comienzan su carrera codificando, diseñando o probando un sistema de software.
+software. Sólo unos pocos se convierten en analistas de requisitos después de haber adquirido
+algún conocimiento del negocio y de la industria. La mayoría de los analistas de requisitos
+proceden de la empresa, tienen buenos conocimientos del sector y buenas dotes de comunicación. Algunos usuarios o personal de atención al cliente con experiencia también han progresado
+hasta alcanzar el puesto de analista de requisitos. Tanto la capacidad de comunicación como el
+son importantes para obtener los requisitos de los usuarios. La capacidad de comunicación
+porque los usuarios/clientes no siempre saben cómo expresar sus necesidades (Tsui,
+2004). El analista de requisitos debe saber escuchar e interpretar. También es esencial
+que el analista posea conocimientos del sector, ya que cada sector suele tener su propia terminología.
+terminología propia. Por ejemplo, la industria médica y sanitaria tiene un vocabulario que difiere claramente de la de la industria aeroespacial o la industria financiera.
+Para que los analistas de requisitos funcionen con éxito y puedan solicitar correctamente los requisitos, deben tener mucha experiencia en el sector específico.
+requisitos, deben tener mucha experiencia en el sector específico.
+Los usuarios y clientes suelen estar íntimamente implicados en el desarrollo de software y
+aclaran continuamente los requisitos, como vimos en el capítulo 5, donde se trataron los procesos ágiles.
+ágiles. Este modo de funcionamiento ha funcionado bien en pequeños proyectos de software. Sin embargo, es poco práctico esperar que los usuarios y clientes estén en constante comunicación
+con los desarrolladores en proyectos de software grandes, complejos y largos. Siempre necesitaremos
+los analistas de requisitos experimentados y expertos en la materia para los grandes proyectos, ya que
+la limitada disponibilidad de los usuarios expertos.
+Hay dos niveles de obtención de requisitos. En el nivel superior, el analista
+requisitos debe sondear y comprender la lógica empresarial y la justificación del software o del proyecto de software.
+o el proyecto de software. A bajo nivel, el analista de requisitos debe obtener y recopilar
+los detalles de las necesidades y deseos de los usuarios. En ambos casos, los analistas de requisitos deben
+estar preparados para llevar a cabo la obtención y recopilación. Deben disponer de un conjunto de
+preguntas organizadas a los usuarios. La obtención real puede realizarse de varias formas:
+Verbal
+Escrita (formulario preformateado)
+Formulario en línea
+Tanto los formularios escritos como en línea obligan al analista de requisitos a haber pensado
+las preguntas e imponen cierta disciplina en la preparación. Sin embargo, pedir a los usuarios que rellenen
+formularios preformateados puede ser demasiado rígido. Por eso es muy recomendable un seguimiento verbal.
+El contacto personal y directo con los usuarios suele suscitar buenas preguntas de seguimiento
+y también permitirá a los usuarios ampliar sus aportaciones. A lo largo de todo el proceso de obtención y recopilación, el analista de requisitos debe ser paciente, escuchar atentamente y pedir más información cuando sea necesario.
+información cuando sea necesario, aptitudes esenciales durante esta fase. Escuchar es especialmente difícil
+para algunos analistas de requisitos, que tienden a ser más extrovertidos y asertivos.
+El analista de requisitos también debe recopilar la información disponible en
+el documento del proceso empresarial, el documento de la política empresarial y técnica, los manuales
+anteriores, etc. Los requisitos para el nuevo software o proyecto de software a menudo se pueden
+aclararse y explicarse mediante la información recopilada en el pasado. Leer y analizar la documentación existente es otra habilidad necesaria que deben poseer los analistas de requisitos.
+6.2.1 Obtención de requisitos de alto nivel
+A alto nivel, el analista de requisitos tendrá que buscar a los directivos y
+ejecutivos que patrocinaron el proyecto de software para comprender la lógica empresarial que lo sustenta. El razonamiento empresarial se traduce en requisitos en forma de restricciones sobre
+el producto de software y el proyecto de software. La categoría de información que contribuye
+a este perfil empresarial de alto nivel incluye lo siguiente:
+Oportunidad/necesidad
+Justificación
+Alcance
+Principales limitaciones 
+Funciones principales
+Factor de éxito
+Características del usuario
+La oportunidad y las necesidades exponen los problemas de alto nivel que los proveedores de software han
+software. Suele tratarse de un problema orientado a la empresa más que de un problema
+problema puramente técnico. Por ejemplo, el cliente puede tener un inventario demasiado alto o
+puede estar perdiendo el 50% de los pedidos de clientes debido a una mala gestión de los documentos en papel. Para resolver
+el problema, el cliente necesita una solución que puede incluir o no software, pero que
+software, pero que suele conllevar un coste. Para justificar la solución y el coste, debe haber algún tipo de rentabilidad empresarial.
+tipo de rentabilidad empresarial. El analista de requisitos de nuestro ejemplo de problema de inventario
+necesita averiguar el nivel de inventario. El cliente puede afirmar que hay 2 millones de
+de inventario extra, y eso es demasiado para ellos. El cliente también puede afirmar que sus
+pedidos de clientes deben aumentar un 30% por encima de la cifra actual. Todo esto se traduce en
+justificaciones para el proyecto de software que el cliente está a punto de encargar.
+El cliente puede tener otras cuestiones y problemas, pero afirma que los mencionados
+inventario y los pedidos de los clientes son los dos problemas principales que deben resolverse lo antes posible.
+cuanto antes. Estas afirmaciones establecen los límites y el alcance del proyecto de software. En
+En este caso, el control de inventario y el procesamiento de pedidos son el alcance y se convierten en las áreas de
+requisitos principales.
+El analista de requisitos también debe conocer las principales limitaciones. Una de las
+Una de las principales será probablemente el presupuesto asignado al proyecto de software. El presupuesto del proyecto
+El presupuesto del proyecto suele ser proporcional al problema empresarial -en nuestro ejemplo, el exceso de inventario de 2 millones de dólares.
+de inventario. La información sobre las limitaciones presupuestarias es importante a la hora de priorizar los requisitos detallados, y contribuye a mejorar la eficacia del proyecto.
+Cuando se priorizan los requisitos detallados, la información sobre las limitaciones presupuestarias es importante y contribuye al proceso de decisión entre lo que se necesita y lo que está bien tener.
+lo que es bueno tener. Otra restricción empresarial importante es el calendario. Aunque los
+Aunque los ejecutivos entienden que los sistemas no pueden construirse de la noche a la mañana, sus necesidades son siempre inmediatas. El analista de requisitos debe tener claras las implicaciones de las limitaciones del calendario y del calendario real.
+para el analista de requisitos.
+Es vital disponer de una lista de lo que el cliente y los ejecutivos perciben como
+la funcionalidad principal que ofrecerá el nuevo software. En el ejemplo del
+En el ejemplo del procesamiento de pedidos e inventarios, la funcionalidad principal que se debe ofrecer puede ser la siguiente:
+Mejora del control del inventario mediante la automatización del procesamiento de pedidos y envíos.
+Pedidos de clientes en línea
+Control de entregas/envíos en línea
+Aunque hay que obtener requisitos funcionales más detallados, estas afirmaciones de alto nivel
+de alto nivel establecen las expectativas del cliente. También facilitan
+de alto nivel del proyecto de software y dirigen la atención de la recopilación de requisitos al área de negocio adecuada.
+de la empresa.
+El factor de éxito del proyecto de software se remonta a la oportunidad y las necesidades que
+que se han expuesto anteriormente. El proyecto de software, una vez finalizado, debe resolver los problemas
+problemas planteados en la oportunidad y las necesidades. En este ejemplo, debe ser capaz de reducir el inventario a menos que antes. Tampoco debe perder los pedidos de los clientes. Además, si estos
+Además, si estos objetivos deben alcanzarse en el próximo año, el sistema de software deberá estar terminado mucho antes de que finalice el año.
+
+antes del año que viene para dar tiempo a formar a los usuarios y a que el cliente utilice el sistema.
+el cliente, que debe tener tiempo para utilizar el sistema el tiempo suficiente para experimentar cualquiera
+alguna de las ventajas. El analista de requisitos debe ser capaz de traducir esto en un calendario
+de que el sistema debe estar en funcionamiento en una fecha determinada.
+A menudo, los ejecutivos y los clientes que pagan no son necesariamente los usuarios cotidianos del sistema.
+usuarios diarios del sistema. El éxito del sistema depende en gran medida de lo bien que se forme a estos usuarios.
+usuarios. Por lo tanto, es imperativo reunir y analizar un perfil de usuario, que debe incluir
+el cargo y las responsabilidades formales de la persona, las actividades laborales, los niveles de formación y experiencia y la competencia técnica.
+experiencia y competencia técnica.
+Estos requisitos de alto nivel relacionados con la empresa son esenciales para el éxito global del proyecto de software, y pueden utilizarse para determinar el nivel de formación de los usuarios.
+proyecto de software y pueden utilizarse como fuente para formular los objetivos de alto nivel del proyecto.
+del proyecto. El analista de requisitos debe convertir estos requisitos de alto nivel en objetivos de alto nivel
+en objetivos de alto nivel durante la fase de análisis posterior y, a continuación, revisarlos y acordarlos con todos los participantes.
+todos los participantes. Aun cuando algunos requisitos detallados puedan estar fuera de lugar, el proyecto suele considerarse un éxito si los objetivos de alto nivel se cumplen.
+éxito si se cumplen los objetivos empresariales de alto nivel.
+6.2.2 Obtención de requisitos detallados
+Una vez reunidos los requisitos de alto nivel, hay que obtener los requisitos detallados.
+Durante esta actividad, deben participar algunos de los analistas de requisitos con más conocimientos técnicos.
+técnicos. Aunque, en principio, los debates sobre los requisitos no deben centrarse en la
+Aunque, en principio, las discusiones sobre los requisitos deben mantenerse por encima de la implementación real y abordar únicamente lo que se necesita, a menudo los usuarios se aventurarán a discutir cómo resolver un problema concreto. Si ya existe un sistema informático, los usuarios
+Si ya existe un sistema de software, los usuarios suelen basar su debate sobre los requisitos en ese sistema existente. A menudo
+de requisitos, tanto el analista de requisitos como los usuarios pueden entrar en
+los usuarios pueden entablar conversaciones imaginativas y técnicas.
+Una vez más, al igual que en la solicitud de requisitos de alto nivel, es necesario planificar previamente la información que debe obtenerse. En el nivel detallado, es muy fácil enzarzarse en una larga discusión sobre un tema concreto y perder el control.
+largo sobre un tema concreto y perder el control. Hay seis categorías principales de información
+que deben abordarse, mostradas en la Figura 6.3, como dimensiones de los requisitos.
+La funcionalidad individual es el grupo más obvio y suele ser el punto de partida natural
+de la obtención de requisitos. El analista de requisitos pregunta a los usuarios y clientes
+cuáles son sus problemas en términos de las funciones que deben realizarse. Por ejemplo, una
+Por ejemplo, una necesidad de funcionalidad para un área de nóminas puede plantearse inicialmente como "existe la necesidad de proporcionar
+nómina de depósito directo a la institución financiera que elija el usuario". En este caso, el
+directo es un requisito funcional.
+La funcionalidad por sí sola no es suficiente; debe explicarse en el contexto del flujo
+o en el contexto de cómo los usuarios realizan sus tareas. Por ejemplo, una funcionalidad como
+debe describirse en el contexto de productos específicos, como billetes de avión.
+billetes de avión. Esta misma funcionalidad de compra en línea en el contexto del flujo de negocio de
+la compra de acciones de una empresa puede requerir una serie de pasos ligeramente diferentes. Así pues, el flujo comercial
+es una categoría importante de información que debe recopilarse en el nivel de información
+de información. Esto es similar a la noción de desarrollo de casos de uso en la metodología orientada a objetos, en la que el flujo de negocio es una categoría importante de información que debe recopilarse a nivel de información de requisitos detallados.
+en la metodología orientada a objetos, en la que las funcionalidades son
+realizadas por actores dentro de un contexto empresarial denominado escenario;
+Véase Schneider y Winters (2003) para más detalles sobre los casos de uso.
+
+Otra categoría de requisitos que debe recogerse a nivel de detalle es la información relativa a los datos y sus formatos. Como mínimo, debe hablarse
+de los datos de entrada y salida de la aplicación. ¿Cuál es la información que hay que introducir
+en el sistema y con qué fin? Si los datos introducidos siguen algún flujo
+también debe describirse ese flujo. Si hay datos que sirven de entrada para algún
+procesamiento, éstos también deben describirse. Por ejemplo, en el procesamiento de nóminas, las
+federales y estatales pueden comprarse en forma de archivo. Estas reglas fiscales, como archivo de entrada comprado,
+deben describirse. Los datos de salida proporcionan información adicional y
+varias formas. Una de ellas es el resultado de una consulta. Hay que definir el formato de la respuesta a la consulta.
+La otra es un informe. Cada formato de informe debe definirse claramente. Además de estos
+información del sistema de aplicación, como mensajes de error o de advertencia.
+mensajes de advertencia. En esta última categoría de información del sistema de aplicación se incluye el
+texto de ayuda. Debe haber una descripción de la cantidad de texto de ayuda que se necesita. Esta descripción
+de datos afecta a la siguiente categoría, las interfaces de usuario.
+La forma en que se presenta la entrada y salida de un sistema de software entra en el ámbito de las interfaces de usuario.
+de usuario. Las interfaces de software actuales son, en su mayoría, gráficas. Sin embargo, cada usuario
+tienen sus propias preferencias. Por ejemplo, tanto un botón de opción como una ventana desplegable
+pueden utilizarse para opciones lógicas "excluyentes", y las preferencias personales o comerciales
+personales o empresariales de los usuarios. Por tanto, los requisitos deben
+ser claros en cuanto a los iconos utilizados para las interfaces. El flujo de la aplicación de software también es una
+interfaz de usuario y suele imitar el flujo de la empresa. Sin embargo, a veces
+software debe diferir a propósito del flujo empresarial existente porque el sistema de software
+software está destinado a mejorar el proceso empresarial actual. Los requisitos de la interfaz de usuario,
+tanto el aspecto como el flujo, suelen captarse mediante la creación de prototipos de la interfaz. A continuación
+A continuación, se pide a los usuarios que revisen y comenten las interfaces prototipadas.
+Además de las interfaces con los usuarios, existen otras interfaces, como las interfaces con una aplicación existente o con un sistema de red.
+existente o con un sistema de red. Estas interfaces deben estar claramente identificadas. En muchas
+En muchas situaciones, la interfaz del sistema existente ya tiene muchos clientes vinculados a ella. En tales casos, las declaraciones de requisitos no sólo deben describir la interfaz, sino también indicar la
+la probabilidad de cambios futuros. La interfaz tiene varias dimensiones:
+Transferencia de control (evocación de la interfaz).
+Transferencia de datos (directamente o a través de una base de datos).
+Recepción de respuestas (éxito o fracaso, tipos de error y mensajes)
+Capacidad de reintento
+La parte de la interfaz que más a menudo se olvida es la descripción de los errores y los mensajes de error, junto con las respectivas posibilidades de recuperación y reintento.
+junto con las respectivas metodologías de recuperación y reintento.
+El último grupo de requisitos aborda cuestiones como la fiabilidad, el rendimiento, la seguridad y la adaptabilidad. Esta categoría sirve de cajón de sastre y actúa como apuntador para
+todos los requisitos no funcionales que son importantes para el proyecto de software. En aplicaciones
+aplicaciones orientadas a transacciones, es imperativo que se especifique un requisito de rendimiento sobre
+la tasa de transacciones. En las aplicaciones que ponen en peligro la vida, los parámetros de fiabilidad y disponibilidad deben definirse en las declaraciones de requisitos. La disponibilidad se refiere a
+La disponibilidad se refiere a que el sistema funcione, mientras que la fiabilidad se refiere a que funcione correctamente, sin defectos y según las especificaciones.
+defecto y de acuerdo con las especificaciones. En las grandes aplicaciones financieras o de comunicaciones
+comunicaciones, la protección de los datos y la protección de la transmisión de los datos
+son de vital importancia. Para estas aplicaciones, las declaraciones de requisitos deben
+abordar la cuestión de la seguridad. Cada uno de estos requisitos o restricciones sobre el software
+puede aplicarse a un nivel más profundo y específico. Por ejemplo, la declaración de requisitos puede especificar un tiempo de respuesta aceptable de una consulta del usuario sobre opciones de productos en una aplicación minorista basada en web.
+en una aplicación web de venta al por menor. Puede haber otras restricciones como la transportabilidad o la
+o la mantenibilidad, que deben describirse en esta categoría. Además, puede haber
+requisitos relacionados con el proyecto de software más que con el producto. El cliente
+El cliente puede solicitar que el software se escriba en un determinado lenguaje de programación o con una determinada herramienta porque el cliente está pensando en utilizarlo en el futuro.
+determinado lenguaje de programación o con una herramienta concreta porque el cliente está considerando
+del producto de software.
+6.3 Análisis de requisitos
+Incluso después de haber obtenido y recopilado los requisitos, siguen siendo un conjunto de datos sin organizar.
+conjunto de datos. Es necesario analizarlos. El análisis de los requisitos consta de dos
+tareas principales:
+1. 1. Categorización o agrupación de los requisitos
+2. 2. Priorizar los requisitos
+Hay muchas formas de clasificar los requisitos. Al agrupar los requisitos, es importante buscar la coherencia y la exhaustividad. Analizaremos varios
+enfoques de análisis y categorización de requisitos. Todas las metodologías evolucionan
+en torno al negocio y el flujo de uso.
+6.3.1 Análisis de requisitos y agrupación por flujo de negocio
+Los requisitos pueden agruparse de muchas maneras. Una de ellas es, de hecho, categorizarlos
+por prioridad, que se tratará más adelante. Una agrupación natural de requisitos puede seguir
+las seis dimensiones de los requisitos que se trataron anteriormente: 
+1. Funcionalidad individual
+2. Flujo empresarial
+3. Datos, formatos y necesidades de información
+4. Interfaces de usuario
+5. Interfaces con otros sistemas
+6. Limitaciones como el rendimiento, la fiabilidad y la seguridad.
+Estas categorías no siempre se excluyen mutuamente. A veces pueden solaparse.
+Por ejemplo, en la categoría de restricciones, puede haber un requisito que aborde la
+fiabilidad en forma de velocidad de recuperación de copias de seguridad. En el grupo de funcionalidades individuales
+puede haber un requisito que describa la necesidad de la función de recuperación de copias de seguridad. Durante el análisis, un solapamiento como el de este ejemplo debe aclararse para que no haya duplicaciones.
+Cada requisito debe etiquetarse para que sea identificable y rastreable de forma única. Se puede
+Un sencillo esquema de categorización puede concebirse para las seis dimensiones utilizando un prefijo y un número, como se muestra en el cuadro 6.1.
+un número, como se muestra en la Tabla 6.1.
+El prefijo identifica la categoría o dimensión de los requisitos. Al analizar los requisitos, lo mejor es empezar por la categoría de flujo de negocio. Elija
+flujo de negocio. Asígnele el primer número, por ejemplo BF-1, y luego asocie todos los requisitos de funcionalidad y numérelos IF-1.x.
+funcionalidad y numérelos IF-1.x. La x adicional puede utilizarse si hay más de una funcionalidad relacionada con el flujo de trabajo.
+funcionalidad relacionada con el flujo de trabajo. En la Tabla 6.1, hay tres requisitos de funcionalidad
+IF-1.1, IF-1.2 y IF-1.3, relacionados con el flujo de trabajo BF-1. Los datos y sus
+respectivos formatos de datos relacionados con BF-1 están numerados de la misma manera que DF-1.x. Hay dos requisitos de datos relacionados con BF-1.x.
+hay dos requisitos de datos relacionados con BF-1 en la tabla, y hay dos requisitos de interfaz de usuario relacionados con BF-1.
+de usuario relacionados con BF-1. Hay un requisito de interfaz del sistema y un requisito de
+adicional relacionados con BF-1. El esquema de numeración de todas las categorías está vinculado a
+flujo de negocio.
+Dado un flujo de negocio, BF-n, puede que no haya ningún requisito en las otras cinco categorías relacionadas con este flujo de negocio. Por ejemplo, puede que no haya ninguna otra restricción.
+En ese caso, no habrá FC-n. Un requisito concreto de una categoría
+como, por ejemplo, un requisito de datos, puede pertenecer a más de un requisito de flujo de negocio.
+flujo de negocio. Es decir, puede haber un DF que esté relacionado con dos flujos de negocio, BF-x y
+BF-y. La cuestión es si este DF debe etiquetarse como DF-x o como DF-y. Durante el
+análisis de los requisitos, debemos determinar cuál de los dos flujos de negocio utiliza
+los datos para su propósito principal. El DF adoptará el número del BF que lo utiliza
+para su propósito principal. En caso de que el DF sea igualmente importante para ambos flujos de negocio,
+Tabla 6.1 Esquema de categorización de requisitos
+Prefijo del área de requisitos Numeración de la declaración de requisitos
+Funcionalidad individual IF IF-1.1, IF-1.2, IF-1.3, IF-2.1
+Flujo de negocio BF BF-1, BF-2
+Datos y formato de datos DF DF-1.1, DF-1.2, DF-2.1
+Interfaz de usuario UI UI-1.1, UI-1.2, UI-2.1
+Interfaz con los sistemas IS IS-1
+Otras restricciones FC FC-1
+
+entonces adoptará el número del flujo comercial que lo utilice en primer lugar. La metodología de
+de análisis de requisitos se basa en agrupar las cinco categorías de requisitos
+en torno a los requisitos del flujo de negocio. La pregunta obvia es qué debemos hacer si
+tenemos un requisito que no encaja fácilmente en ningún flujo de negocio. Una forma es tener un
+flujo de negocio nulo y agrupar todos los requisitos "inadaptados" con el flujo de negocio nulo.
+flujo de negocio nulo. El esquema de numeración es sólo una forma de asociar cinco categorías de requisitos a cada flujo de negocio.
+categorías de requisitos a cada flujo de negocio. Así pues, el flujo de negocio debe incluirse
+en el debate durante la fase de obtención de requisitos. De lo contrario, estas cinco categorías de requisitos se agruparán por algún flujo de negocio artificial o conjeturado.
+Esta metodología de centrarse en el flujo de negocio como requisito principal es similar a la metodología de casos de uso orientada a objetos.
+la metodología de casos de uso orientada a objetos.
+6.3.2 Análisis de requisitos y agrupación con casos de uso orientados a objetos
+Los casos de uso orientados a objetos (OO) se utilizan para describir los requisitos de un sistema. En
+También se utilizan para el análisis de requisitos y contribuyen al diseño y prueba del sistema.
+del sistema. Un caso de uso es fundamentalmente una representación de la siguiente información de requisitos:
+Funcionalidad básica
+Cualquier condición previa para la funcionalidad
+Flujo de eventos, denominado escenario, para la funcionalidad.
+Cualquier postcondición para la funcionalidad
+Cualquier condición de error y flujo alternativo
+En el desarrollo de casos de uso OO, la obtención y el análisis de requisitos se mezclan
+y el análisis. Una vez recopilada la información, la parte de análisis de requisitos consta de varios pasos.
+pasos, empezando por la identificación de los límites del sistema.
+El término sistema significa que el producto que se va a desarrollar puede incluir tanto hardware como software.
+tanto hardware como software. La identificación de los límites del sistema comienza con la delimitación
+de lo que se incluye y excluye del sistema, pero que puede ser necesario para la interfaz con el sistema.
+con el sistema.
+OO utiliza la palabra actores, un término poco habitual que se refiere a todas las interfaces externas con el sistema.
+con el sistema. La figura 6.4 presenta una representación gráfica de dos actores, un empleado de envíos
+y un sistema de pedidos de clientes, ambos externos al sistema. El lenguaje de modelado
+utilizado por OO, como se indica en el capítulo 4, es el Lenguaje Unificado de Modelado (UML). El símbolo de actor
+de una figura humana es sólo una parte de la notación UML. Se puede obtener una copia de UML
+en el Object Management Group, un consorcio informático sin ánimo de lucro.
+(consulte la sección Referencias y lecturas recomendadas al final de este capítulo).
+Ejemplos de actores: usuarios del sistema, otros sistemas, hardware, red y operadores.
+operadores. Cada actor asume un papel determinado en la interacción con el sistema. Para
+identificar a estos actores, que son externos al sistema pero interactúan con él, el analista de requisitos debe plantearse las siguientes preguntas:
+¿Quién utiliza el sistema?
+¿Quién opera y mantiene el sistema?
+¿Qué otros sistemas utilizan este sistema?
+¿Qué otros sistemas utiliza este sistema?
+Algunos ejemplos de actores pueden ser el usuario de un sistema de envío de pedidos y un sistema externo
+externo que interactúa con él. Podrían describirse de la siguiente manera
+Encargado de envíos: Un usuario del sistema que empaqueta los artículos pedidos por el cliente, coloca
+etiquetas de dirección de envío, envía los artículos pedidos y realiza el seguimiento de la entrega de los mismos.
+Sistema de pedidos de clientes: Un sistema externo que procesa los pedidos de los clientes y proporciona
+información de los pedidos de los clientes al sistema de envío de pedidos.
+Tras identificar el sistema externo, el siguiente paso en el análisis de casos de uso es identificar
+todas las actividades relacionadas con cada uno de los actores. Estas actividades son las cosas que los actores quieren que el sistema realice y se convierten en los casos de uso. Así, cada actor está relacionado con
+un conjunto de casos de uso. La enumeración de los casos de uso es el proceso de identificación de lo que hay dentro del sistema.
+dentro del sistema. Es decir, los casos de uso definirán los requisitos que debe cumplir el sistema.
+realizar. Un ejemplo del caso de uso del sistema de envío de pedidos descrito a alto nivel
+sería el siguiente:
+Procesamiento de etiquetas de envío: A petición del empleado de envíos, procesa la dirección de envío de la base de datos del sistema de pedidos del cliente e imprime la etiqueta de envío.
+de la base de datos del sistema de pedidos del cliente e imprimir la dirección de entrega en
+la etiqueta especial.
+Tratamiento de la lista de artículos de envío: A petición del encargado de envíos, se procesa la lista de artículos pedidos
+se procesa desde la base de datos del sistema de pedidos del cliente y se imprimen copias por duplicado,
+una para incluirla en el paquete del cliente y la otra para guardarla como registro.
+Podemos agrupar los requisitos del sistema de envío de pedidos con sus casos de uso y actores utilizando la notación UML, como se muestra en la Figura 6.4. Obsérvese que los dos actores, el empleado de envíos y
+y el sistema de pedidos de los clientes, se representan con figuras humanas y están fuera de la caja rectangular.
+de la caja rectangular. Los dos requisitos descritos anteriormente como enunciados de casos de uso,
+procesamiento de etiquetas de envío y procesamiento de listas de artículos de envío, se representan como figuras ovaladas dentro del rectángulo.
+ovaladas dentro del rectángulo. El rectángulo representa el sistema. En este caso, el rectángulo
+representa el sistema de envío. Los límites del rectángulo representan los límites del sistema de expedición.
+del sistema de transporte. Aunque los casos de uso se representan en la Figura 6.4 en un formato de alto nivel, los
+Figura 6.4, los detalles de cada caso de uso se pueden especificar en un formulario separado con UML notaciones. No entraremos aquí en los detalles de las notaciones UML. Hemos demostrado
+cómo se pueden plantear los requisitos en forma de caso de uso, agruparlos y relacionarlos con los actores.
+Durante la fase de análisis de requisitos, es posible que nos hagamos más preguntas sobre los límites del sistema.
+del sistema. Por ejemplo, al procesar las etiquetas de envío, ¿debería el empleado de envíos preocuparse también por el peso y los gastos de envío resultantes?
+del peso y los gastos de envío resultantes? En caso afirmativo, ¿pesar los artículos es un paso
+manual que debe realizar el empleado fuera del sistema de envío de pedidos, o debería el sistema de envío de pedidos incluir un sistema automático de peso?
+el sistema de envío de pedidos debe incluir una función automática de cálculo del peso y de los costes?
+de costes? Realizar un análisis de los límites del sistema como parte del análisis de requisitos
+puede mejorar y afianzar aún más la exhaustividad de los requisitos.
+En la metodología OO de casos de uso, los pasos para identificar los siguientes factores sirven como una
+una buena metodología de análisis de requisitos:
+Actores
+Casos de uso relacionados
+Condiciones límite
+Aunque los casos de uso se amplían más adelante con detalles sobre precondiciones
+postcondiciones, flujos de actividad, rutas alternativas y procesamiento de errores para ayudar al diseño
+del sistema, los casos de uso especificados durante la fase de requisitos sólo describen lo que el sistema necesita.
+que necesita el sistema.
+6.3.3 Análisis de requisitos y agrupación por puntos de vista
+Definición de requisitos orientada a puntos de vista
+La definición de requisitos orientada al punto de vista (VORD) es un método de análisis de requisitos
+basado en el entendimiento de que los requisitos no son vistos de la misma manera por todas las partes interesadas.
+partes interesadas. Los clientes que pagan por el sistema suelen tener una
+que los que interactúan con el sistema a diario.
+con el sistema a diario. En un sistema grande y complejo
+tiene muchos subcomponentes, los distintos usuarios articularán los
+articularán los requisitos con énfasis y especificidades diferentes. En
+ejemplo, en los grandes sistemas actuales de planificación de recursos empresariales (ERP), hay varios
+componentes principales, como los financieros, los de recursos humanos, los de planificación y los de inventario. El
+La persona de finanzas que utilice el sistema proporcionará los requisitos con la jerga financiera y
+énfasis en las finanzas. La persona encargada de los recursos humanos tendrá otra perspectiva, utilizará la terminología de recursos humanos y hará hincapié en las finanzas.
+La persona de recursos humanos tendrá otra perspectiva, utilizará la terminología de recursos humanos y se inclinará por los recursos humanos.
+A veces, el mismo requisito se enuncia de formas y en contextos tan diferentes que parecen requisitos distintos.
+que parecen requisitos diferentes. Otras veces, los requisitos se solapan tanto
+tanto que deben reorganizarse y combinarse de forma totalmente distinta. La
+clave es que hay muchos puntos de vista de las partes interesadas sobre los requisitos. Los puntos de vista
+Los puntos de vista dispares a menudo dan lugar a perspectivas distintas del mismo problema y se utilizan para ayudar a categorizar y combinar los requisitos.
+se utilizan para ayudar a categorizar y estructurar los requisitos. La metodología VORD
+divide en cuatro pasos:
+1. 1. Identificar a las partes interesadas y los puntos de vista.
+2. 2. Estructurar y categorizar los puntos de vista, eliminando duplicidades y agrupando los comunes.
+3. Afinar los puntos de vista identificados.
+4. Asignar los puntos de vista al sistema y a los servicios que el sistema debe proporcionar.
+Para descripciones más amplias y detalles sobre VORD, véanse Sommerville (2010) y
+Sommerville y Sawyer (1997).
+6.3.4 Análisis y priorización de requisitos
+Categorizar y agrupar los requisitos es sólo una parte de un análisis que nos permite
+identificar incoherencias entre grupos de requisitos y posibles requisitos incompletos.
+requisitos. Un problema adicional es que muchas veces todos los requisitos identificados
+no pueden desarrollarse y entregarse debido a limitaciones como las siguientes:
+Recursos limitados
+Tiempo limitado
+Capacidades técnicas limitadas
+Como parte de las tareas de análisis de requisitos, tenemos que priorizar los requisitos
+para que los más prioritarios se desarrollen y entreguen primero a los clientes. A menudo
+un producto de software de varios lanzamientos se planifica a lo largo de varios trimestres o incluso años por
+requisitos prioritarios. El establecimiento de la prioridad de los requisitos puede basarse en
+muchos criterios, incluidos los siguientes:
+Demandas actuales de los clientes
+Competencia y situación actual del mercado
+Necesidades futuras de los clientes
+Ventaja de ventas inmediata
+Problemas críticos en el producto existente
+Los analistas de requisitos suelen realizar la tarea de priorización con la ayuda de muchas
+otras personas de la organización. A veces, los clientes y los expertos del sector
+y expertos del sector. Gran parte de la priorización de requisitos de software
+se realiza con personas experimentadas y clientes mediante un enfoque informal en el que
+las personas más persuasivas o ruidosas pueden sesgar las prioridades de sus requisitos favoritos.
+Aunque este enfoque no es perfecto, es mucho mejor que no priorizar e intentar incluirlo todo.
+incluirlo todo. En la figura 6.5 se muestra una lista típica de priorización de requisitos.
+Una lista de priorización de requisitos se parece más a una tabla e incluye varias columnas de información. Comienza con un número de requisito y, a continuación, se ofrece una breve descripción del propio requisito.
+del requisito. La fuente del requisito es importante para los planificadores. La prioridad
+junto con la fuente del requisito, contribuyen a la decisión de si un requisito concreto se incluye en la versión actual, en la siguiente o en una versión futura,
+o en una versión futura. Este enfoque informal se utiliza con frecuencia, pero a menudo produce resultados subóptimos.
+resultados subóptimos.
+Un enfoque más metódico consiste en emparejar los requisitos y comparar sus valores en
+pares, como proponen Karlsson y Ryan (1997). Este enfoque, denominado proceso jerárquico analítico (AHP), aporta más rigor al proceso de priorización de requisitos y a menudo es obviado por los enfoques más comerciales.
+a menudo obviado por las personas más orientadas al marketing. Cada requisito se compara
+con cada uno de los demás requisitos por pares. Se asigna un "valor de intensidad" a esta relación. El requisito con los valores de intensidad global más altos será esencialmente
+será el requisito de mayor prioridad. El requisito con el siguiente valor más alto de intensidad relativa global será el siguiente requisito más prioritario, y así sucesivamente. Un ejemplo
+de AHP aclarará este enfoque.
+Consideremos la situación en la que hay tres requisitos, R1, R2 y R3. La escala
+o valor de intensidad, para comparar los pares de requisitos se establece de 1 a 9. Dada
+(x, y), se considera que el valor de intensidad es 1 si se considera que x tiene el mismo valor que y.
+Es 2 si x es un poco más valiosa que y, y así sucesivamente hasta 9, donde x se considera extremadamente más valiosa que y.
+Para nuestro ejemplo, consideremos la matriz que se muestra en la Tabla 6.2 como la representación de la intensidad.
+en la tabla 6.2 como representación del valor por pares.
+En este ejemplo, el requisito 1 tiene el mismo valor que sí mismo, por lo que el valor de intensidad es 1 para (R1, R1).
+el par (R1, R1). El requisito 1 se considera tres veces más valioso que el requisito
+2, y el valor de intensidad para el par (R1, R2) en la fila 1 columna 2 es 3. El requisito 1 se valora
+valorado cinco veces más que el requisito 3, como muestra la tabla. Cuando visitamos el par (R2,
+R1), el valor es justo el recíproco del del par (R1, R2) como se muestra en la fila 2 columna 1.
+El valor de intensidad es 1/3, que es el recíproco de 3.
+A continuación, calculamos la suma de cada columna de la Tabla 6.2 y luego dividimos cada elemento
+de la columna de la Tabla 6.2 por la suma de esa columna. La matriz normalizada resultante se
+representada en la Tabla 6.3
+
+Ahora sumamos cada una de las filas. La suma de la fila 1, que representa el requisito 1, en la
+tabla normalizada es 1,92. La suma de la fila 2 es 0,47, y la suma de la fila 3 es 0,61. Como
+hay tres requisitos en total, cada una de las sumas de las filas se dividirá por 3. Los resultados
+son 1,92/3 = 0,64 para el requisito 1, 0,46/3 = 0,15 para el requisito 2 y 0,61/3 = 0,20 para el requisito 3.
+requisito 3. Estos tres valores para los tres requisitos representan ahora los valores relativos de los requisitos.
+relativos de los requisitos. Es decir, el requisito 1 representa el 64% del valor total de los requisitos, el requisito 2 representa el 15% del valor total de los requisitos.
+valor total de los requisitos, el requisito 2 conlleva el 15% del valor total de los requisitos, y el requisito 3 vale el
+el 20% del valor total de los requisitos. Esto nos proporciona un esquema de priorización
+de requisitos con las siguientes ponderaciones:
+Requisito 1: 64
+Requisito 3: 20
+Requisito 2: 15
+El requisito 1 tiene la máxima prioridad y el mayor peso, seguido del requisito
+3 y, a continuación, el requisito 2. El esquema de priorización de valores por pares basado en AHP nos obliga a
+requisitos por pares y puede no ser práctico cuando se trata de decenas de miles de requisitos.
+con decenas de miles de requisitos. Sin embargo, es un esquema razonable para priorizar
+un número reducido de requisitos.
+La priorización de requisitos también puede considerarse a veces un esquema de clasificación.
+clasificación. Nos ayuda a clasificar o priorizar qué requisitos se implementarán
+y cuándo se publicarán.
+6.3.5 Trazabilidad de los requisitos
+Aunque hemos mencionado la necesidad de la trazabilidad de los requisitos, no hemos explicado
+la razón. Hay varias razones para garantizar la trazabilidad de los requisitos. La más
+La más importante es la capacidad de realizar un seguimiento tras el desarrollo y verificar que todos los requisitos
+han sido desarrollados, probados, empaquetados y entregados. También es importante poder
+También es importante poder dar cuenta de cualquier cosa extra que no se pueda rastrear hasta los requisitos. No debe haber
+funcionalidades o propiedades que no se puedan justificar. Kotonya y Sommerville
+(1998) enumeran cuatro tipos de trazabilidad:
+1. Trazabilidad hacia atrás: Vincula el requisito a la fuente del documento o a la
+persona que lo creó.
+2. 2. Hacia adelante desde la trazabilidad: Vincula el requisito con el diseño y la implementación.
+3. Hacia atrás de la trazabilidad: Relaciona el diseño y la aplicación con los
+requisitos.
+4. Hacia delante hasta la trazabilidad: Vincula los documentos anteriores a los requisitos
+requisitos.
+Además, puede ser necesario conservar información que vincule requisitos relacionados. Es decir,
+Es decir, algunos requisitos pueden tener requisitos básicos o relaciones anteriores o posteriores al requisito.
+Pueden desarrollarse matrices de relaciones de requisitos para hacer un seguimiento de las relaciones
+entre requisitos o relaciones con el diseño, etc.
+La discusión anterior sobre la organización y priorización de los requisitos implica que cada requisito debe ser identificable de forma única.
+requisito debe ser identificable de forma única. Esta identificación única de los requisitos
+También es importante si se quiere que los requisitos sean rastreables.
+
+6.4 Definición de requisitos, creación de prototipos y revisiones
+La definición de requisitos, la creación de prototipos y la revisión se representan como tres actividades centrales
+en la figura 6.2, un proceso de ingeniería de requisitos. Estas tres actividades centrales
+después del análisis de requisitos. En la práctica, estas actividades se solapan con el análisis de
+y deben considerarse como un conjunto de actividades iterativas en el contexto más amplio del análisis.
+contexto más amplio del análisis.
+La definición de los requisitos consiste en enunciarlos formalmente. La notación
+La notación utilizada suele ser el inglés o el inglés acompañado de otras notaciones. Una de las notaciones más sencillas
+Una de las notaciones más sencillas para definir requisitos en inglés es el enfoque entrada-proceso-salida que se muestra en la Figura 6.6.
+En el momento de escribir este texto, la notación más popular en el sector es UML, que se
+introducido anteriormente. Otra notación popular para representar gráficamente el flujo de datos de un sistema es el diagrama de flujo de datos (DFD). Esta notación se introdujo como parte de las
+técnicas de análisis de sistemas estructurados a finales de los 70 por pioneros de la ingeniería de software
+como DeMarco, Gane y Sarsen. El diagrama entidad-relación (ER) es otra notación popular
+notación utilizada para mostrar la relación entre entidades. Se introdujo por primera vez como parte del
+modelo entidad-relación por Peter Chen en 1976. Todas estas notaciones o lenguajes
+pueden utilizarse para la definición y el análisis de requisitos, así como para el diseño. En
+De hecho, el enfoque preferido es utilizar la misma notación desde el análisis de requisitos hasta el diseño del software.
+y continuando con el diseño del software.
+Como se ilustra en la Figura 6.7, un DFD se compone de cuatro elementos: (1) origen o destino de los datos, (2) flujo de datos, (3) proceso y (4) almacén de datos. La figura 6.8 muestra un ejemplo
+de alto nivel para representar un sistema de pedidos de clientes. En este ejemplo, el cliente
+introduce y recibe datos. El encargado de los envíos sólo recibe datos del sistema. Los pedidos
+El proceso de pedidos procesa los pedidos y las instrucciones de envío se envían al proceso de embalaje.
+embalaje. Existen tres almacenes de datos, que pueden estar actualmente en forma de archivos en papel y convertirse posteriormente en bases de datos durante la fase de diseño.
+en bases de datos durante la fase de diseño. Los flujos de datos se representan con flechas y van acompañados de una descripción de la información que fluye.
+Aunque el diagrama ER no se utiliza para mostrar el flujo de información, sí se utiliza para
+la relación entre entidades. También se utiliza para mostrar los atributos de la entidad.
+De nuevo, como en el caso de un DFD, se utiliza inicialmente durante la fase de análisis de requisitos y se mantiene durante la fase de diseño.
+y se mantiene durante la fase de diseño. En la figura 6.9 se muestra un ejemplo que ilustra
+la relación entre los objetos o entidades autor y libro. La relación es que los autores escriben libros. Esa relación se muestra con una línea que une los dos
+objetos y con la palabra escribe encima de la línea. La relación puede tener dos
+restricciones:
+Cardinalidad
+Modalidad
+La cardinalidad especifica el número de participantes. Obsérvese que en el requisito mostrado
+en esta figura un autor puede escribir varios libros, pero un libro no puede tener varios autores.
+Por tanto, es algo restrictivo. Una ventaja de utilizar un lenguaje bien definido, como el diagrama
+ER, es que es más preciso. La relación restrictiva entre los autores y
+los libros, como se indica en la figura 6.9, debería hacer que alguien se preguntara si es correcta en el momento de revisar la especificación de requisitos.
+momento de revisar la especificación de requisitos. La pata de gallo representa múltiples ocurrencias.
+Puede haber varias formas de cardinalidad:
+Uno a uno
+De uno a muchos
+De muchos a muchos
+Un ejemplo de relación uno a uno puede ser un diagrama que muestra personas sentadas
+en sillas. Cada persona se sienta en una sola silla, y cada silla puede estar ocupada por una sola persona.
+persona. En la Figura 6.9 se muestra un ejemplo de relación uno a muchos. Una relación
+cambiando el ejemplo de la Figura 6.9 para que muestre una relación en la que un autor puede escribir varios libros y un libro puede ser escrito por varios coautores.
+coautores.
+La modalidad de la relación especifica si la existencia de una entidad depende
+de que esté relacionada con otra entidad a través de esta relación. En la figura 6.9, un círculo muestra que
+libro es opcional porque hay autores que no han completado ningún libro. Sin embargo, la
+Sin embargo, la barra vertical indica que autor es obligatorio porque no hay libro sin autor.
+Por tanto, el requisito de la figura 6.9 establece que los libros son opcionales y los autores son
+obligatorios en esta relación.
+Cada una de las entidades que aparecen en la relación puede tener varios atributos. Durante la fase de
+Durante la fase de requisitos, estos atributos también se definen y analizan. La figura 6.10 muestra
+un ejemplo pictórico de una entidad y sus atributos. La entidad, empleado, y sus atributos
+se muestran en forma gráfica y tabular. La forma tabular puede añadir más columnas
+para registrar, como parte de los requisitos. A medida que el proyecto avanza hacia la fase de diseño,
+el formulario tabular puede convertirse en un diccionario de datos.
+El uso de varios lenguajes de modelado, como UML, DFD o ERD, para definir los requisitos
+es una forma de creación de prototipos. En este caso, estamos prototipando el flujo funcional, el flujo de datos o los atributos de datos.
+o los atributos de los datos. Como parte de la recopilación y el análisis de requisitos, la interfaz de usuario es un componente vital que no puede pasarse por alto.
+interfaz de usuario es un componente vital que no podemos olvidar. Aquí no nos interesan
+internos del sistema y los algoritmos. En su lugar, nos centramos en los usuarios y su interacción con el sistema.
+con el sistema. Nos centramos en los principales casos de uso y sus interfaces con los usuarios. Dos
+dos aspectos principales de la interfaz de usuario:
+Aspecto visual y visualización.
+Interacción con las personas y flujo En los primeros tiempos, las interfaces de usuario se modelaban con pizarras de papel y rotafolios
+y se conocían como prototipos de baja fidelidad. Hoy en día, la interfaz de usuario se prototipa con
+código ejecutable por máquina durante la fase de análisis y recopilación de requisitos. Estos prototipos
+y se convierten en el código de la versión final. Una de las primeras herramientas
+para la creación rápida de prototipos de la interfaz de usuario fue HyperCard, que funciona en ordenadores Apple.
+Hoy en día, una de las herramientas más populares para la creación rápida de prototipos de interfaz de usuario es Visual
+Basic de Microsoft. Además, con la creciente popularidad de los métodos ágiles, los requisitos de la interfaz de usuario
+se suelen prototipar con una gran participación de los usuarios (véase Ambler, 2004). Además de las interfaces visuales
+interfaces visuales, existe una pequeña pero creciente demanda de interfaces de audio y vídeo. Para
+Para una introducción al vídeo en Internet, véase Stolarz (2005) y para más detalles sobre el desarrollo y prototipado de buenas interfaces de usuario, véase Ambler (2004).
+Hix y Hartson (1993) y Shneiderman y Plaisant (2009).
+Plaisant (2009).
+La revisión de los requisitos con los usuarios y clientes está estrechamente relacionada con el análisis de requisitos y la creación de prototipos de interfaces de usuario.
+requisitos con los usuarios y clientes. Estas revisiones pueden realizarse de manera informal
+y con mucha frecuencia, como proponen los métodos ágiles, o pueden tener un carácter más formal. La metodología de revisiones e inspecciones formales fue introducida por primera vez por Michael Fagan
+de IBM a principios de la década de 1970. Aunque el objetivo de todas esas primeras inspecciones formales era
+reducir los errores de diseño y programación, el mismo proceso de inspección puede utilizarse para
+revisión de requisitos para reducir errores y malentendidos de requisitos lo antes posible.
+lo antes posible. La mayoría de los profesionales optan por un híbrido entre las inspecciones formales y las revisiones informales.
+revisiones informales. Sea cual sea la técnica de revisión elegida, es importante tener en cuenta que
+revisar los requisitos con los usuarios y clientes es una parte esencial del análisis de requisitos y la creación de prototipos.
+y la creación de prototipos. La detección temprana de errores en los requisitos es de suma importancia, ya que
+ya que un solo error de requisitos a menudo se expande en múltiples errores de diseño, cada uno de los cuales
+a su vez puede convertirse en fuente de varios errores de programación. Evitar que un error
+es una actividad que merece la pena desde el punto de vista económico.
+Una vez realizadas las revisiones, hay que introducir modificaciones y correcciones en las definiciones de los requisitos. A veces, una revisión de seguimiento sobre las modificaciones y cambios
+
+es necesario si la extensión de las correcciones es muy grande. Aunque es mejor no
+Aunque es mejor no volverse demasiado burocrático, estos cambios deben documentarse claramente para que un error en los requisitos, como se ha mencionado antes, no se escape a través de actividades posteriores como el diseño,
+codificación y pruebas, y acabe en la versión para el cliente.
+6.5 Especificación y acuerdo de requisitos
+Una vez analizados y revisados los requisitos, es prudente incluirlos en
+el documento de especificación de requisitos de software (SRS). La cantidad y el grado de detalle
+que debe incluirse depende de varios parámetros:
+Tamaño y complejidad del proyecto
+Las múltiples versiones posteriores que se hayan planificado.
+Número estimado y previsto de actividades de asistencia al cliente
+Conocimientos y experiencia de los desarrolladores en la materia
+Cuanto mayor sea la complejidad y el número de requisitos, más necesario será especificarlos formal y completamente.
+especificar los requisitos de manera formal y completa. Cuantas más versiones posteriores
+planificadas, más claras y ordenadas deben ser las especificaciones de requisitos para permitir
+estas actividades futuras. Si el número estimado de clientes es elevado, tal vez millones,
+la especificación de requisitos debe ser detallada y completa para que las actividades de
+para que las actividades de mantenimiento y soporte puedan realizarse de forma ordenada. Si los probadores, diseñadores y
+Si los probadores, diseñadores y desarrolladores de código tienen muy poco conocimiento de la materia o experiencia en el área de dominio de la aplicación para la que se está desarrollando el software, entonces es imperativo tener un documento SRS detallado.
+un documento SRS detallado.
+El IEEE tiene una norma recomendada, la directriz 830, para el documento de Especificación de Requisitos de Software (SRS).
+que cumple con la norma IEEE/EIA 12207.1-1997. Esencialmente, la directriz especifica que el siguiente material debe ser incluido en un software
+especificación de requisitos de software (SRS):
+Introducción: Proporciona una visión general describiendo el propósito, alcance, referencias y
+referencias y definiciones de términos.
+Descripción de alto nivel: Proporciona una descripción general del producto de software, sus principales funciones, características del usuario, principales limitaciones y dependencias.
+funciones, características del usuario, principales limitaciones y dependencias.
+Requisitos detallados: Aquí se proporciona lo siguiente (1) descripción detallada de cada
+requisito funcional por entrada, proceso y salida; (2) descripciones de interfaces que
+incluyen interfaces de usuario, interfaces de sistema, interfaces de red e interfaces de hardware;
+(3) una descripción detallada de los requisitos de rendimiento; (4) una lista de restricciones de diseño
+(5) descripciones adicionales de atributos como seguridad, disponibilidad y recuperabilidad.
+como seguridad, disponibilidad y recuperabilidad; y (6) cualquier otro requisito adicional exclusivo.
+Se puede adquirir una copia de esta directriz del IEEE en el sitio web del IEEE que aparece en la sección Referencias y lecturas sugeridas.
+Como último paso de la ingeniería de requisitos, se debe "aprobar" el documento de especificaciones de requisitos.
+debe ser "firmado". Puede tratarse de un documento formal, como un contrato, o de una comunicación informal, como un correo electrónico.
+una comunicación informal como un correo electrónico. Independientemente de la forma final de aprobación, esta
+esta actividad cierra la fase de requisitos y proporciona una línea de base formal para los requisitos.
+
+especificaciones. Cualquier cambio futuro debe controlarse o, al menos, supervisarse de cerca para
+evitar el crecimiento incontrolado y los cambios de requisitos en el futuro. Sin control
+Los cambios incontrolados de requisitos representan un gran problema y son una causa crítica de muchos fracasos de proyectos de software.
+software, como se explica en el capítulo 3.
+6.6 Resumen
+En este capítulo se han tratado los siguientes pasos principales de la ingeniería de requisitos:
+Obtención
+Documentación y definición
+Especificación
+Creación de prototipos
+Análisis
+Revisión y validación
+Acuerdo y aceptación
+Para la obtención de requisitos, se analizaron tanto la recopilación de información de alto nivel como la detallada.
+detallada. En concreto, se identificaron las siguientes categorías de información detallada
+como parte del proceso de obtención:
+Funcionalidad individual
+Flujo empresarial
+Datos, formatos y necesidades de información
+Interfaces de usuario
+Interfaces con otros sistemas
+Limitaciones como el rendimiento, la fiabilidad y la seguridad.
+Los requisitos recopilados deben analizarse mediante categorización y agrupación.
+Para agrupar los requisitos se introducen varias metodologías, entre ellas técnicas de priorización.
+los requisitos. Además, los requisitos deben ser trazables.
+Aunque el inglés sigue siendo el idioma predominante para documentar los requisitos,
+hoy en día se utilizan varios lenguajes de modelado. Entre ellos se encuentran UML, DFD y
+ERD. Como parte del ciclo de análisis de requisitos, también se crean prototipos de los requisitos utilizando
+estos lenguajes de modelado. Los prototipos ejecutables son más populares hoy en día, especialmente con
+interfaces de usuario. Las revisiones del usuario y de la calidad de estos prototipos y requisitos categorizados son esenciales para evitar que los errores se escapen a las actividades posteriores de ingeniería de software y a la entrega al cliente.
+posteriores de ingeniería de software y en la entrega al cliente. Por lo tanto, deben revisarse tantos requisitos
+posibles.
+Por último, debe elaborarse un documento de especificación de requisitos de software que el cliente
+como base para cualquier modificación futura.
