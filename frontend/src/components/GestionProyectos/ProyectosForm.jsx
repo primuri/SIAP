@@ -56,70 +56,49 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
-
+    
         if (name === "numero_version") {
-            if (value.includes('e') || value.includes('+') || value.includes('-')) {
-                return;
-            }
-            if (!/^[0-9]*$/.test(value)) {
+            if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
+                // Previene la actualización del estado para entradas no numéricas o con caracteres especiales
                 return;
             }
         }
+    
         const keys = name.split('.');
-        switch (keys.length) {
-            case 1:
-                setFormData(prev => ({ ...prev, [keys[0]]: value }));
-                break;
-            case 2:
-                setFormData(prev => ({
-                    ...prev,
-                    [keys[0]]: {
-                        ...prev[keys[0]],
-                        [keys[1]]: value
-                    }
-                }));
-                break;
-            case 3:
-                setFormData(prev => ({
-                    ...prev,
-                    [keys[0]]: {
-                        ...prev[keys[0]],
-                        [keys[1]]: {
-                            ...prev[keys[0]][keys[1]],
-                            [keys[2]]: value
-                        }
-                    }
-                }));
-                break;
-            case 4:
-                // Verificación de la fecha (Solución de IA)
-                if (keys[3] === 'fecha_inicio' || keys[3] === 'fecha_fin') {
-                    const startDate = keys[3] === 'fecha_inicio' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_inicio;
-                    const endDate = keys[3] === 'fecha_fin' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_fin;
-
-                    if (new Date(endDate) < new Date(startDate)) {
+        let path = formData; // Referencia al estado actual para navegar por la estructura anidada
+    
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+    
+            if (i === keys.length - 1) { // Llegamos al último nivel, donde actualizamos el valor
+                if (key === 'fecha_inicio' || key === 'fecha_fin') {
+                    const startDateKey = keys.slice(0, keys.length - 1).join('.') + '.fecha_inicio';
+                    const endDateKey = keys.slice(0, keys.length - 1).join('.') + '.fecha_fin';
+                    const startDate = key === 'fecha_inicio' ? new Date(value) : new Date(getValueByPath(formData, startDateKey));
+                    const endDate = key === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
+    
+                    if (startDate > endDate) {
+                        // Si la fecha de inicio es mayor que la fecha de fin, no actualiza el estado y podría mostrar un mensaje de error si es necesario
+                        console.log("La fecha de inicio no puede ser posterior a la fecha de fin.");
                         return;
                     }
                 }
-
-                setFormData(prev => ({
-                    ...prev,
-                    [keys[0]]: {
-                        ...prev[keys[0]],
-                        [keys[1]]: {
-                            ...prev[keys[0]][keys[1]],
-                            [keys[2]]: {
-                                ...prev[keys[0]][keys[1]][keys[2]],
-                                [keys[3]]: value
-                            }
-                        }
-                    }
-                }));
-                break;
-            default:
-                console.error("Anidacion fuera de rango");
+                // Actualización del estado para el último nivel
+                path[key] = value;
+            } else {
+                // Navegación por la estructura anidada del estado
+                path = path[key] || {};
+            }
         }
+    
+        // Establecer el nuevo estado
+        setFormData({ ...formData });
     };
+    
+    // Función auxiliar para obtener valor por ruta de acceso en objeto anidado
+    function getValueByPath(object, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], object);
+    }
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -236,6 +215,14 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         </div>
 
                         <div className="row mb-4">
+                        <div className="col">
+                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
+                                    id="id_vigencia_fk.fecha_inicio"
+                                    value={formData.id_vigencia_fk.fecha_inicio
+                                        ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
+                                    onChange={handleChange} />
+                            </div>
                             <div className="col-md-6">
                                 <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
                                 <input type="date" className="form-control"
@@ -245,14 +232,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                         ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
                             </div>
-                            <div className="col">
-                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
-                                <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
-                                    id="id_vigencia_fk.fecha_inicio"
-                                    value={formData.id_vigencia_fk.fecha_inicio
-                                        ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} />
-                            </div>
+                           
 
                         </div>
 

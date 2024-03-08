@@ -51,28 +51,81 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     return { ...formData };
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name === "pais_procedencia") {
-      setPaisSeleccionado(value);
-      setFormData({
-          ...formData,
-          [name]: value,
-      });
-  }
+  
+    const check = (value) => {
+      // Esta expresión regular permite solo letras y espacios.
+      const regex = /^[A-Za-z\s]*$/;
+      return regex.test(value) || value === "";
+    };
 
-  if (name === "cant_paginas") {
-    if (value.includes('e') || value.includes('+') || value.includes('-')) {
-        return; 
-    }
-    if (!/^[0-9]*$/.test(value)) {
-        return;
-    }
-}
-    const updatedFormData = updateNestedField(formData, name, value);
-    setFormData(updatedFormData);
-    setCambios({ articuloData: { ...updatedFormData }, articuloFile: fileData });
-  };
+    const checkLetraNum = (value) => {
+      // Esta expresión regular permite solo letras y espacios.
+      const regex = /^[A-Za-z0-9\s]*$/;
+      return regex.test(value);
+    };
+
+
+    const checkCedula = (value) => {
+        // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
+        const regex = /^[A-Za-z0-9]*$/;
+        return regex.test(value);
+    };
+
+    const camposSoloLetras = [
+        "id_autor_fk.id_nombre_completo_fk.nombre",
+        "id_autor_fk.id_nombre_completo_fk.apellido",
+        "id_autor_fk.id_nombre_completo_fk.segundo_apellido",
+        "tipo"
+    ];
+
+
+    const camposLetrasNum = [
+      "id_revista_fk.nombre",
+      "nombre"
+  ];
+   
+      const handleChange = (event) => {
+        const { name, value } = event.target;
+    
+        // Primero, verifica campos que necesitan validación específica.
+        if (name === "pais_procedencia") {
+            setPaisRevista(value); // Asegúrate de que esta función actualice correctamente el estado.
+        } else if (name === "cant_paginas") {
+            // Solo permite dígitos.
+            if (/^[0-9]*$/.test(value) || value === "") {
+                setFormData(prev => ({ ...prev, [name]: value }));
+            }
+            return; // Termina la ejecución si es cant_paginas para no ejecutar updateNestedField
+        } else if (camposSoloLetras.includes(name) && !check(value)) {
+            return; // Termina si la validación de campos específicos falla.
+        } else if (name === "cedula" && !checkCedula(value)) {
+            return; // Evita actualizar el estado si la cédula no es válida.
+        } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
+            return;
+        }
+    
+        // Actualiza el estado para todos los demás casos, incluidos campos anidados.
+        const keys = name.split('.');
+        setFormData(prevFormData => {
+            const updatedFormData = { ...prevFormData };
+            let current = updatedFormData;
+    
+            keys.forEach((key, index) => {
+                if (index === keys.length - 1) {
+                    current[key] = value; // Establece el valor en el último nivel.
+                } else {
+                    current[key] = current[key] || {}; // Crea un objeto si no existe.
+                    current = current[key]; // Avanza al siguiente nivel.
+                }
+            });
+    
+            return updatedFormData;
+        });
+    
+        // No olvides actualizar setCambios para reflejar los cambios en el estado.
+        setCambios({ articuloData: formData, articuloFile: fileData });
+      };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

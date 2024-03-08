@@ -161,33 +161,71 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     }
 
     const handleChange = (event) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
+    
+        const check = (value) => {
+            // Esta expresión regular permite solo letras y espacios.
+            const regex = /^[A-Za-z\s]*$/;
+            return regex.test(value) || value === "";
+        };
 
+        const checkCedula = (value) => {
+            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
+            const regex = /^[A-Za-z0-9]*$/;
+            return regex.test(value);
+        };
+
+        const camposAValidar = [
+            "id_nombre_completo_fk.nombre",
+            "id_nombre_completo_fk.apellido",
+            "id_nombre_completo_fk.segundo_apellido",
+            "id_area_especialidad_fk.nombre",
+            "id_area_especialidad_secundaria_fk.nombre"
+        ];
+    
+        if (camposAValidar.includes(name)) {
+            if (check(value)) {
+                const [objectName, attributeName] = name.split('.');
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    [objectName]: {
+                        ...prevFormData[objectName],
+                        [attributeName]: value, // Actualiza solo el atributo relevante
+                    },
+                }));
+            }
+            return;
+        } else if (name === "cedula" && !checkCedula(value)) {
+            return;
+        }
+    
         if (name === "pais_procedencia") {
             setPaisSeleccionado(value);
-            setFormData({
-                ...formData,
+            setFormData(prevFormData => ({
+                ...prevFormData,
                 [name]: value,
-            });
+            }));
+            // Continúa la ejecución para permitir la actualización de otros campos.
         }
-
+    
+        // Este bloque maneja todos los demás campos, incluyendo aquellos con puntos en sus nombres.
+        // Se ejecutará si el nombre del campo no es "id_nombre_completo_fk.nombre".
         if (name.includes('.')) {
-            const keys = name.split('.')
+            const keys = name.split('.');
             setFormData(prev => ({
                 ...prev,
                 [keys[0]]: {
                     ...prev[keys[0]],
                     [keys[1]]: value
                 }
-            }))
-
-        } else {
-            setFormData({
-                ...formData,
+            }));
+        } else if (name !== "pais_procedencia") { // Asegúrate de que este caso no se aplique al campo "pais_procedencia" ya manejado.
+            setFormData(prevFormData => ({
+                ...prevFormData,
                 [name]: value,
-            })
+            }));
         }
-    }
+    };
 
     const handleFileChange = (event) => {
         const foto = event.target.files[0];

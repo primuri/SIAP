@@ -19,32 +19,56 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         }
     };
 
+    const checkLetraNum = (value) => {
+        // Esta expresión regular permite solo letras y espacios.
+        const regex = /^[A-Za-z0-9\s]*$/;
+        return regex.test(value);
+      };
+
+      
+      const camposAValidar = [
+        "id_producto_fk.detalle",
+        "id_documento_documentacion_fk.detalle",
+        "nombre"
+    ];
+
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
 
-    const updateNestedField = (formData, fieldPath, value) => {
-        const keys = fieldPath.split('.');
-        const lastKey = keys.pop();
-
-        keys.reduce((obj, key) => obj[key] = obj[key] || {}, formData)[lastKey] = value;
-
-        return { ...formData };
-    };
-
+  
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        // Mover esta línea al inicio de la función para asegurar que la validación se realice correctamente.
+        if (camposAValidar.includes(name) && !checkLetraNum(value)) {
+            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
+        }
+
         if (name === "numero_version") {
-            if (value.includes('e') || value.includes('+') || value.includes('-')) {
-                return; 
-            }
-            if (!/^[0-9]*$/.test(value)) {
-                return;
+            if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
+                return; // Evita la actualización del estado para valores no permitidos.
             }
         }
-        const updatedFormData = updateNestedField(formData, name, value);
-        setFormData(updatedFormData);
-        setCambios({ softwareData: { ...updatedFormData }, softwareFile: fileData });
+
+        setFormData(prevFormData => updateNestedField(prevFormData, name, value));
+        setCambios({ softwareData: { ...formData, [name]: value }, softwareFile: fileData });
+    };
+
+    const updateNestedField = (prevFormData, fieldPath, value) => {
+        const keys = fieldPath.split('.');
+        let data = { ...prevFormData }; // Crea una copia superficial del objeto prevFormData para evitar mutaciones.
+
+        keys.reduce((current, key, index) => {
+            if (index === keys.length - 1) {
+                current[key] = value;
+            } else {
+                current[key] = current[key] ? { ...current[key] } : {}; // Asegura la creación de un nuevo objeto si no existe, evitando mutaciones.
+            }
+            return current[key];
+        }, data);
+
+        return data;
     };
 
     const handleFileChange = (event) => {
