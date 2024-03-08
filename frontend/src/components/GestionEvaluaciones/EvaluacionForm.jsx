@@ -20,10 +20,11 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     const [evaluadores, setEvaluadores] = useState([])
     const [evaluadorSeleccionado, setEvaluadorSeleccionado] = useState('')
     const [loadedEvaluadores, setLoadedEvaluadores] = useState(true)
-
+    const [canDelete, setCanDelete] = useState(true)
     useEffect(() => {
         obtenerProyectos()
         obtenerEvaluadores()
+        checkCanDelete()
         if(mode === 2 && evaluacion){
             setProyectoSeleccionado(`${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | ${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}`)
             setEvaluadorSeleccionado(`${evaluacion.id_evaluador_fk.id_evaluador} | ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.nombre} ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.apellido}`)
@@ -47,7 +48,16 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     })
 
     // => Funciones para el autoComplete
-
+    const checkCanDelete = async () => {
+        if(evaluacion){
+            var canDelete = await API.canDelete(evaluacion.id_evaluacion)
+            if (!canDelete) {
+                setCanDelete(false)
+            }
+            setCanDelete(true)
+        }
+        
+    }
     var obtenerProyectos = async () => {
         var listaProyectos = [];
         try {

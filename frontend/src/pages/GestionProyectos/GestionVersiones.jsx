@@ -177,9 +177,7 @@ export const GestionVersiones = () => {
       }, [data, id_version]);
       
     const success = () => {
-        const timer = setTimeout(() => {
-            navigate(-1);
-        }, 1000);
+        window.location.href = `/gestion-proyectos/${id}/gestion-versiones`
     }
     // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {

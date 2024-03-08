@@ -19,6 +19,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     useEffect(() => {
         loadAcademicos();
         loadEvaluadores();
+        console.log(usuario)
     }, []);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -57,7 +58,11 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const [formData, setFormData] = useState({
         id: usuario ? usuario.id : "",
         correo: usuario ? usuario.correo : "",
-        rol: usuario ? usuario.groups[0] : "",
+        rol: usuario ? 
+                usuario.groups.length > 1? 
+                    "investigador-evaluador"
+                :   usuario.groups[0]
+            : "",
         password: "",
         confirmar_contrasena: "",
         academico_fk: usuario
@@ -164,17 +169,32 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
         delete dataToSend.confirmar_contrasena;
         delete dataToSend.asociar_academico;
         delete dataToSend.asociar_evaluador;
-        if (dataToSend.rol === 'evaluador') {
-            if (dataToSend.academico_fk) {
+        if (dataToSend.rol === 'investigador' || dataToSend.rol ==="investigador-evaluador") {
+            if (!dataToSend.academico_fk) {
                 dataToSend.academico_fk = null
             }
-        } else if (dataToSend.rol === 'academico') {
-            if (dataToSend.evaluador_fk) {
+            //Cubre el caso en el que haya pasado de ser evaluador a academico.
+            if(dataToSend.rol !=="investigador-evaluador"){
                 dataToSend.evaluador_fk = null
+            }
+
+        } 
+        if (dataToSend.rol === 'evaluador' || dataToSend.rol ==="investigador-evaluador") {
+            if (!dataToSend.evaluador_fk) {
+                dataToSend.evaluador_fk = null
+            }
+
+            if(dataToSend.rol !=="investigador-evaluador"){
+                dataToSend.academico_fk = null
             }
         }
         // Asignar el rol al array de grupos
-        dataToSend.groups = [dataToSend.rol];
+        if (dataToSend.rol === "investigador-evaluador"){
+            dataToSend.groups = ['investigador', 'evaluador']
+        }else{
+           dataToSend.groups = [dataToSend.rol]; 
+        }
+        
         delete dataToSend.rol;
 
         // Si estamos en modo de edición y la contraseña está vacía, la eliminamos
@@ -183,7 +203,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
         }
 
         const jsonData = JSON.stringify(dataToSend);
-        console.log(dataToSend);
         onSubmit(jsonData);
     };
 
@@ -255,7 +274,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                     <label htmlFor="rol" className="label-personalizado mb-2">Rol</label>
                                     <select className="form-select seleccion" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un rol</option>
-                                        <option value="academico">Investigador(a)</option>
+                                        <option value="investigador">Investigador(a)</option>
                                         <option value="evaluador">Evaluador(a)</option>
                                         <option value="investigador-evaluador">Investigador(a) y Evaluador(a)</option>
                                         <option value="invitado">Invitado(a)</option>
@@ -289,7 +308,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
 
                         <div className="row mb-4">
-                            {(formData.rol === "academico" || formData.rol === "investigador-evaluador") && (
+                            {(formData.rol === "investigador" || formData.rol === "investigador-evaluador") && (
                                 <>
 
                                     <div className="col-md-6">

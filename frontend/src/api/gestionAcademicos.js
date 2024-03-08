@@ -366,6 +366,5 @@ export const buscarUniversidad = async (nombre, pais, token) => {
             'Content-Type': 'application/json'
         }
     }))
-    console.log(response);
     return response.data.find(universidad => universidad.nombre === nombre && universidad.pais === pais);
 }
