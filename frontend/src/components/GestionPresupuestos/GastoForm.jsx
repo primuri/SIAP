@@ -4,8 +4,13 @@ import { Confirmar } from '../../utils/Confirmar';
 import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import Tooltip from '@mui/material/Tooltip';
-import { obtenerProveedores, obtenerProductosServicios, obtenerFactura } from '../../api/gestionGastos';
+import { obtenerProveedores, obtenerProductosServicios, obtenerFactura, agregarProductoServicio } from '../../api/gestionGastos';
+import { FormularioDinamico } from "../../utils/FomularioDinamico"
+
+const configuracionProductoServicio = [
+    { campo: 'id_producto_servicio', placeholder: 'Identificador', tipo: 'number', required: true },
+    { campo: 'detalle', placeholder: 'Detalle', tipo: 'text', required: true }
+]
 
 const filter = createFilterOptions();
 const currentYear = new Date().getFullYear();
@@ -15,6 +20,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const [showConfirmationDelete, setShowConfirmationDelete]       = useState(false);
     const [proveedor, setProveedor]                                 = useState([]); //extra
     const [producto, setProductoServicio]                           = useState([]); //extra
+    const [productoNuevo, setProductoServicioNuevo]                           = useState([]); //extra
     const [factura, setFactura]                                     = useState([]);
     const [documentoData, setDocumentoData]                         = useState(null);
     const [selectedFactura, setSelectedFactura]                     = useState("");
@@ -24,10 +30,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         monto: gasto ? gasto.monto : "",
         fecha: gasto ? gasto.fecha.split('T')[0] : "",
         detalle: gasto ? gasto.detalle : "",
-        id_factura_fk: gasto ? gasto.id_factura_fk : {
-            id_cedula_proveedor_fk: gasto && gasto.id_cedula_proveedor_fk ? gasto.id_cedula_proveedor_fk.id_cedula_proveedor : "",
-            id_producto_servicio_fk: gasto && gasto.id_producto_servicio_fk ? gasto.id_producto_servicio_fk.id_producto_servicio : ""
-        },
+        id_factura_fk: gasto ? gasto.id_factura_fk : "",
         id_documento_fk: gasto ? {...gasto.id_documento_fk} : {tipo: "Documento factura", detalle: "", documento: ""}   
     });
 
@@ -58,7 +61,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         try {
             const res = await obtenerProductosServicios(localStorage.getItem('token'))
             setProductoServicio(res.data)
-
         } catch (error) {
             toast.error('Error al cargar productos y servicios', {
                 duration: 4000,
@@ -120,7 +122,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         event.preventDefault()
         const combinedData = new FormData();
         if (documentoData) {
-            combinedData.append('ruta_archivo', documentoData);
+            combinedData.append('documento', documentoData);
         }
         combinedData.append('json', JSON.stringify(formData))
         onSubmit(combinedData)
@@ -177,19 +179,15 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                     </div>
                 </div>
             </div>
-
+    
             <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center' encType="multipart/form-data">
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
-                    <div className="container ">
+                    <div className="container">
                         <div className="row mb-4">
-                            {mode === 2 && (<div className="col-md-6">
-                                <label htmlFor="id_gasto" className="label-personalizado mb-2">Código   </label>
-                                <input type="number" className="form-control disabled-input" name="id_gasto" id="id_gasto" value={mode === 2 ? formData.id_gasto : "Auto - generado"} onChange={handleChange} disabled={true} />
-                            </div>)}
                             <div className="col">
-                            <label htmlFor="fecha" className="label-personalizado mb-2"> Fecha   </label>
+                                <label htmlFor="fecha" className="label-personalizado mb-2"> Fecha   </label>
                                 <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required />
-                            </div> 
+                            </div>
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
@@ -199,14 +197,70 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto   </label>
                                 <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
-                                
                             </div>
                         </div>
+                        <div className="row mb-4">
+                            <div className="col">
+                                <h5>Información de factura</h5>
+                            </div>
+                        </div>
+                        <div className="row mb-4">
+                            <div className="col-md-6">
+                                <label htmlFor="id_cedula_proveedor_fk" className="label-personalizado mb-2">Identificación del Proveedor</label>
+                                <select
+                                    id="id_cedula_proveedor_fk"
+                                    name="id_cedula_proveedor_fk"
+                                    className="form-control"
+                                    onChange={(event) => {
+                                        setFormData({
+                                            ...formData,
+                                            id_factura_fk: {
+                                                ...formData.id_factura_fk,
+                                                id_cedula_proveedor_fk: event.target.value
+                                            }
+                                        });
+                                    }}
+                                    value={formData.id_factura_fk.id_cedula_proveedor_fk}>
+                                    <option value="">Seleccione un proveedor</option>
+                                    {proveedor.map((proveedor) => (
+                                        <option key={proveedor.id_cedula_proveedor} value={proveedor.id_cedula_proveedor}>
+                                            {proveedor.nombre}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="id_producto_servicio_fk" className="label-personalizado mb-2 mr-2">Producto o Servicio</label>
+                                <select
+                                    id="id_producto_servicio_fk"
+                                    name="id_producto_servicio_fk"
+                                    className="form-control"
+                                    onChange={(event) => {
+                                        setFormData({
+                                            ...formData,
+                                            id_factura_fk: {
+                                                ...formData.id_factura_fk,
+                                                id_producto_servicio_fk: event.target.value
+                                            }
+                                        });
+                                    }}
+                                    value={formData.id_factura_fk.id_producto_servicio_fk}>
+                                    <option value="">Seleccione un producto o servicio</option>
+                                    {producto.map((producto) => (
+                                        <option key={producto.id_producto_servicio} value={producto.id_producto_servicio}>
+                                            {producto.detalle}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row mb-4">
+                            <h5>Agregar nuevo Producto-Servicio</h5>
+                        </div>
+                        <div className="row mb-4">
+                            <FormularioDinamico configuracion={configuracionProductoServicio} items={productoNuevo} setItems={setProductoServicioNuevo}  itemName="Producto Servicio" />
+                        </div>
                         <div className='row mb-4'>
-                            {mode === 2 && (<div className="col-md-6">
-                                <label htmlFor="id_factura_fk" className="label-personalizado mb-2">Número de factura   </label>
-                                <input type="number" className="form-control disabled-input" name="id_factura_fk.id_factura" id="id_factura_fk.id_factura" value={mode === 2 ? formData.id_gasto : "Auto - generado"} onChange={handleChange} disabled={true} />
-                            </div>)}
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura   </label>
                                 <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} required={mode == 1 ? true : ''} />
@@ -217,47 +271,9 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                 ) }
                             </div>
                         </div>
-                        <div className='row mb-4'>
-                            <div className="col-md-6">
-                                <label htmlFor="id_cedula_proveedor_fk" className="label-personalizado mb-2">ID del proveedor   </label>
-                                <select
-                                    id="id_cedula_proveedor_fk"
-                                    name="id_cedula_proveedor_fk"
-                                    className="form-control"
-                                    onChange={(event) => {
-
-                                    }}
-                                    defaultValue={mode === 2 ? factura.id_cedula_proveedor_fk : ""}>
-                                    <option value="">Seleccione un proveedor</option>
-                                    {proveedor.map((proveedor) => (
-                                        <option key={proveedor.id_cedula_proveedor} value={proveedor.id_cedula_proveedor}>
-                                            {proveedor.nombre}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="id_producto_servicio_fk" className="label-personalizado mb-2">Identificador del producto   </label>
-                                <select
-                                    id="id_producto_servicio_fk"
-                                    name="id_producto_servicio_fk"
-                                    className="form-control"
-                                    onChange={(event) => {
-                                        
-                                    }}
-                                    defaultValue={mode === 2 ? factura.id_producto_servicio_fk : ""}>
-                                    <option value="">Seleccione un producto o servicio</option>
-                                    {producto.map((producto) => (
-                                        <option key={producto.id_producto_servicio} value={producto.id_producto_servicio}>
-                                            {producto.detalle}
-                                        </option>
-                                    ))}
-                                </select> 
-                            </div>
-                        </div>
                     </div>
                 </div>
-
+    
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -283,7 +299,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
             </form>
             <Toaster></Toaster>
         </div>
-    )
+    );
 }
 
 GastoForm.propTypes = {

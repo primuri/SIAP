@@ -44,28 +44,39 @@ export const obtenerGastos = async (id_partida, token) => {
     }));
 };
 
-export const agregarGasto = async (gasto, documento, token) => {
-    let facturaResponse = await agregarFacturaDocumento(documento, token);
-    gasto.id_factura_fk = facturaResponse.data.id_factura;
-    return await manejarErrores(SIAPAPI.post('presupuesto/gastos/', gasto, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    }));
+export const agregarGasto = async (gasto, token) => {
+    try {
+        return await manejarErrores(SIAPAPI.post('presupuesto/gastos/', gasto, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }));
+    } catch (error) {
+        console.error("Error agregando gasto: ", error);
+        throw error;
+    }
 };
 
-export const actualizarGasto = async (id, gasto, documento, token) => {
-    const id_factura = factura.get('id_factura');
-    gasto.id_factura_fk = id_factura;
-    documento.delete('id_factura');
-    await actualizarFacturaDocumento(id_factura, documento, token);
-    return await manejarErrores(SIAPAPI.put(`presupuesto/gastos/${id}/`, gasto, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    }));
+export const actualizarGasto = async (id, gasto, factura, documento, token) => {
+    try {
+        const id_factura = factura.get('id_factura');
+        gasto.id_factura_fk = id_factura;
+        documento.delete('id_factura');
+        
+        await actualizarFactura(id_factura, factura, token);
+        await actualizarFacturaDocumento(id_factura, documento, token);
+        
+        return await manejarErrores(SIAPAPI.put(`presupuesto/gastos/${id}/`, gasto, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }));
+    } catch (error) {
+        console.error("Error actualizando gasto: ", error);
+        throw error;
+    }
 };
 
 export const eliminarGasto = async (id, token) => {
@@ -135,7 +146,7 @@ export const agregarFacturaDocumento = async (documento, token) => {
     return await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };
@@ -144,7 +155,7 @@ export const actualizarFacturaDocumento = async (id, documento, token) => {
     return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     }));
 };

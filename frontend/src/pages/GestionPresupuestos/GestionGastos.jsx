@@ -49,7 +49,9 @@ export const GestionGastos = () => {
 
     const addGasto = async (formData) => {
         try {
-            const Data = JSON.parse(formData.get('json'))
+            const Data = JSON.parse(formData.get('json'));
+            console.log(Data)
+            const token = localStorage.getItem('token');
             var toastId = toast.loading('Agregando...', {
                 position: 'bottom-right',
                 style: {
@@ -58,106 +60,148 @@ export const GestionGastos = () => {
                     fontSize: '18px',
                 },
             });
-            formData.delete('json')
+            for (let key of formData.keys()) {
+                console.log(key);
+            }
+            console.log("0")
+            formData.delete('json');
     
-            // Reestructuración y creación del objeto gasto
-            delete Data.gasto.id_gasto
-            Data.gasto.id_partida = Data.partida.id_partida
-            delete Data.partida.id_partida
+            // Reestructurar y crear el objeto gasto
+            delete Data.id_gasto;
+            console.log("1")
+            Data.id_partida_fk = parseInt(partidaID);
+            console.log("2")
+            Data.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk;
+            Data.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk;
+    
+            console.log("3")
+            // Adjuntar el ID de la factura al formulario formData
+            console.log(Data.id_factura_fk)
+            formData.append('id_factura_fk', Data.id_factura_fk.id_factura);
+
+            console.log("4")
+            await API.obtenerProveedores(token);
+    
+            let prod = await API.obtenerProductosServicios(token);
+            if (!prod) {
+                // Si el producto no existe, agregamos el nuevo producto
+                const producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, token);
+                Data.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
+            }
+    
+            formData.append("tipo", Data.id_documento_fk.tipo)
+            formData.append("detalle", Data.id_documento_fk.detalle)
+            const documentoResponse = await API.agregarFacturaDocumento(formData, token);
+            console.log(documentoResponse)
+            console.log(Data)
+            Data.id_documento_fk = documentoResponse.data.id_documento;
+            console.log(Data.id_documento_fk)
+
+            console.log("5")
+            // Agregar factura y gasto
+            const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
+            Data.id_factura_fk = facturaResponse.data.id_factura;
+            console.log(Data)
+            delete Data.id_cedula_proveedor_fk;
+            delete Data.id_producto_servicio_fk;
+            Data.monto = parseInt(Data.monto);
+            Data.fecha = '2024-03-07T10:14:40Z';
+            await API.agregarGasto(Data, token);
+    
+            toast.success('Gasto agregado correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                },
+            });
+            setAddClick(false);
+            document.body.classList.remove('modal-open');
+            window.location.reload();
+        } catch (error) {
+            toast.dismiss(toastId);
+            console.error("Error al agregar gasto: ", error);
+            toast.error('Error al agregar gasto', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--error-color)',
+                    color: '#fff',
+                },
+            });
+        }
+    };
+
+    const editGasto = async (formData) => {
+        try {
+            const Data = JSON.parse(formData.get('json'));
+            const token = localStorage.getItem('token');
+            var toastId = toast.loading('Editando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
+            formData.delete('json');
+    
+            // Reestructurar y crear el objeto gasto
+            delete Data.gasto.id_gasto;
+            Data.gasto.id_partida = Data.partida.id_partida;
+            delete Data.partida.id_partida;
     
             Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
             Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
     
+            delete Data.id_factura_fk;
+    
+            // Adjuntar el ID de la factura al formulario formData
+            formData.append('id_factura_fk', Data.factura.id_factura);
             delete Data.factura;
     
-            // Verificar si hay documento adjunto
-            if (!formData.has('documento')) {
-                throw new Error('Debe adjuntar un documento para agregar el gasto.');
+            await API.obtenerProveedores(token);
+    
+            let prod = await API.obtenerProductosServicios(token);
+            if (!prod) {
+                // Si el producto no existe, agregamos el nuevo producto
+                const producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, token);
+                Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
             }
     
-            // Agregar factura y gasto
-            const facturaResponse = await API.agregarFactura(Data.factura, localStorage.getItem('token'));
-            Data.gasto.id_factura_fk = facturaResponse.data.id_factura;
-            await API.agregarGasto(Data.gasto, formData, localStorage.getItem('token'));
+            delete Data.documento;
     
-            toast.success('Gasto agregado correctamente', {
-                id: toastId,
-                duration: 4000, 
-                position: 'bottom-right', 
-                style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                },
-            })
-            setAddClick(false)
-            document.body.classList.remove('modal-open');
-            success()
-        } catch (error) {
-            toast.dismiss(toastId)
-        }
-    }
-
-    const editGasto = async (formData) => {
-        try {
-            const Data = JSON.parse(formData.get('json'))
-            var toastId = toast.loading('Editando...', {
-                position: 'bottom-right',
-                style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                fontSize: '18px',
-                },
-            });
-            formData.delete('json')
-
-        // Reestructuración y creación del objeto gasto
-        delete Data.gasto.id_gasto;
-        Data.gasto.id_partida = Data.partida.id_partida;
-        delete Data.partida.id_partida;
-
-        Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
-        Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
-
-        delete Data.id_factura_fk;
-
-        // Adjuntar el ID de la factura al formulario formData
-        formData.append('id_factura_fk', Data.factura.id_factura);
-        delete Data.factura;
-
-        await API.obtenerProveedores(localStorage.getItem('token'));
-
-        let prod = await API.obtenerProductosServicios(localStorage.getItem('token'));
-        if (prod) {
-            // Si el producto existe, asignamos su ID al gasto
-            Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
-        } else {
-            // Si el producto no existe, agregamos el nuevo producto y asignamos su ID al gasto
-            let producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, localStorage.getItem('token'));
-            Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
-        }
-
-        delete Data.documento;
-
-        await API.actualizarFactura(Data.gasto.id_factura_fk, Data.factura, localStorage.getItem('token'));
-        
-        await API.actualizarGasto(gasto.id_gasto, Data.gasto, formData, localStorage.getItem('token'));
-
+            await API.actualizarFactura(Data.gasto.id_factura_fk, Data.factura, token);
+            
+            await API.actualizarGasto(Data.gasto.id_gasto, Data.gasto, formData, token);
+    
             toast.success('Gasto editado correctamente', {
                 id: toastId,
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
-            })
-            setAddClick(false)
+            });
+            setAddClick(false);
             document.body.classList.remove('modal-open');
-            success()
+            success();
         } catch (error) {
-            toast.dismiss(toastId)
+            toast.dismiss(toastId);
+            console.error("Error al editar gasto: ", error);
+            toast.error('Error al editar gasto', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--error-color)',
+                    color: '#fff',
+                },
+            });
         }
-    }
+    };
 
     const deleteGasto = async (id) => {
         try {
