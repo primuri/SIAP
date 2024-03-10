@@ -53,7 +53,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
     
     const check = (value) => {
       // Esta expresión regular permite solo letras y espacios.
-      const regex = /^[A-Za-z\s]*$/;
+      const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
       return regex.test(value);
   };
 

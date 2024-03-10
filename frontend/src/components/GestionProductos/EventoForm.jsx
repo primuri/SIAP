@@ -34,13 +34,13 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
 
     const checkLetraNum = (value) => {
         // Esta expresión regular permite solo letras y espacios.
-        const regex = /^[A-Za-z0-9\s]*$/;
+        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
         return regex.test(value);
       };
 
       const checkLetra = (value) => {
         // Esta expresión regular permite solo letras y espacios.
-        const regex = /^[A-Za-z\s]*$/;
+        const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
         return regex.test(value);
       };
 
