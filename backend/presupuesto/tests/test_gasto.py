@@ -3,12 +3,12 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from ..models import Presupuesto
+from ..models import Gasto
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-class PresupuestoTests(APITestCase):
+class GastoTests(APITestCase):
 
     def setUp(self):
 
@@ -172,7 +172,7 @@ class PresupuestoTests(APITestCase):
         response = self.client.post(reverse('codigofinanciero-list'), self.codigo_financiero, format='json')
         self.codigo_financiero_id = response.data['id_codigo_financiero']
 
-        self.data = {
+        self.presupuesto = {
             'anio_aprobacion': '2010',
             'id_tipo_presupuesto_fk' : self.tipo_presupuesto_id,
             'id_ente_financiero_fk' : self.ente_financiero_id,
@@ -180,80 +180,152 @@ class PresupuestoTests(APITestCase):
             'id_codigo_vi' : self.proyecto_id,
             'id_codigo_financiero_fk' : self.codigo_financiero_id,
             'id_version_proyecto_fk': self.version_proyecto_id
-        }    
+        } 
 
-    def test_post_presupuesto(self):
+        response = self.client.post(reverse('presupuesto-list'), self.presupuesto, format='json')
+        self.presupuesto_id = response.data['id_presupuesto']
 
-        url = reverse('presupuesto-list')
+        self.version_presupuesto ={
+            'version': '2',
+            'monto'  : '432',
+            'saldo'  : '6531',
+            'fecha'  : '2023-09-04T15:30:00',
+            'detalle': 'hola',
+            'id_presupuesto_fk' : self.presupuesto_id
+        }
+
+        response = self.client.post(reverse('versionpresupuesto-list'), self.version_presupuesto, format='json')
+        self.version_presupuesto_id = response.data['id_version_presupuesto']
+       
+        self.partida = {
+            'detalle' : 'prueba',
+            'monto' : '200',
+            'saldo' : '5000',
+            'id_version_presupuesto_fk' : self.version_presupuesto_id
+        }
+
+        response = self.client.post(reverse('partida-list'), self.partida, format='json')
+        self.partida_id = response.data['id_partida']
+
+        file3 = SimpleUploadedFile("documento1.pdf", b"content of the pdf")
+
+        # Crea los datos de Prueba
+        self.documento = {
+            'detalle': 'Detalle de documento',
+            'tipo': 'Acceso',
+            'documento': file3
+        }
+
+        response =self.client.post(reverse('documento-list'), self.documento, format='multipart')
+        self.documento_id = response.data['id_documento']
+
+        self.proveedor = {
+            'id_cedula_proveedor': '123456789',
+            'tipo' : 'Juridico',
+            'correo': '1234@gmail.com',
+            'nombre' : 'Sillas',
+            'telefono' : '8888888',
+            'id_documento_fk': self.documento_id
+        }
+
+        self.producto_servicio = {
+            'id_producto_servicio' : '12',
+            'detalle': 'Pintura'
+        }
+
+        response =self.client.post(reverse('proveedor-list'), self.proveedor, format='json')
+        self.proveedor_id = response.data['id_cedula_proveedor']
+
+        response =self.client.post(reverse('productoservicio-list'), self.producto_servicio, format='json')
+        self.producto_servicio_id = response.data['id_producto_servicio']
+
+        self.factura = {
+            'id_cedula_proveedor_fk': self.proveedor_id,
+            'id_producto_servicio_fk' : self.producto_servicio_id
+        }
+
+        response =self.client.post(reverse('factura-list'), self.factura, format='json')
+        self.factura_id = response.data['id_factura']
+
+        self.data = {
+            'fecha': '2024-03-04T15:30:00',
+            'detalle': 'Gasto de muebles',
+            'monto': '5680',
+            'id_partida_fk': self.partida_id,
+            'id_factura_fk': self.factura_id,
+            'tipo': 'Minimo'
+        }
+
+    def test_post_gasto(self):
+
+        url = reverse('gasto-list')
         response = self.client.post(url, self.data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Presupuesto.objects.count(), 1)
-        self.assertEqual(Presupuesto.objects.get().anio_aprobacion, 2010)
+        self.assertEqual(Gasto.objects.count(), 1)
+        self.assertEqual(Gasto.objects.get().detalle, 'Gasto de muebles')
 
-    def test_put_presupuesto(self):
+    def test_put_gasto(self):
         update_data = {
-            'anio_aprobacion': '2020',
-            'id_tipo_presupuesto_fk' : self.tipo_presupuesto_id,
-            'id_ente_financiero_fk' : self.ente_financiero_id,
-            'id_oficio_fk': self.oficio2_id,
-            'id_codigo_vi' : self.proyecto_id,
-            'id_codigo_financiero_fk' : self.codigo_financiero_id,
-            'id_version_proyecto_fk': self.version_proyecto_id   
+            'fecha': '2024-03-04T15:30:00',
+            'detalle': 'Gasto de muebles',
+            'monto': '5680',
+            'id_partida_fk': self.partida_id,
+            'id_factura_fk': self.factura_id,
+            'tipo': 'Maximo'
         }
         
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        url = reverse('presupuesto-detail', args=[1])
+        self.client.post(reverse('gasto-list'), self.data, format='json')
+        url = reverse('gasto-detail', args=[1])
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Presupuesto.objects.get().anio_aprobacion, 2020)
+        self.assertEqual(Gasto.objects.get().tipo, 'Maximo')
     
      
-    def test_get_lista_presupuesto(self):
+    def test_get_lista_gastos(self):
     
         data2 = {
-           'anio_aprobacion': '2022',
-            'id_tipo_presupuesto_fk' : self.tipo_presupuesto_id,
-            'id_ente_financiero_fk' : self.ente_financiero_id,
-            'id_oficio_fk': self.oficio2_id,
-            'id_codigo_vi' : self.proyecto_id,
-            'id_codigo_financiero_fk' : self.codigo_financiero_id,
-            'id_version_proyecto_fk': self.version_proyecto_id   
+            'fecha': '2024-01-04T15:30:00',
+            'detalle': 'Camisa',
+            'monto': '9253',
+            'id_partida_fk': self.partida_id,
+            'id_factura_fk': self.factura_id,
+            'tipo': 'Medio'
         }
 
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        self.client.post(reverse('presupuesto-list'), data2, format='json')
-        url = reverse('presupuesto-list')
+        self.client.post(reverse('gasto-list'), self.data, format='json')
+        self.client.post(reverse('gasto-list'), data2, format='json')
+        url = reverse('gasto-list')
         response = self.client.get(url)
-        url2 = reverse('presupuesto-detail', args=[2])
+        url2 = reverse('gasto-detail', args=[2])
         response2 = self.client.get(url2)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(response2.data['anio_aprobacion'], 2022)
+        self.assertEqual(response2.data['detalle'], 'Camisa')
 
         
-    def test_get_buscar_presupuesto(self):
+    def test_get_buscar_gasto(self):
 
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        url = reverse('presupuesto-detail', args=[1])
+        self.client.post(reverse('gasto-list'), self.data, format='json')
+        url = reverse('gasto-detail', args=[1])
         response = self.client.get(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['anio_aprobacion'], 2010)
+        self.assertEqual(response.data['detalle'], 'Gasto de muebles')
 
-    def test_delete_presupuesto(self):
+    def test_delete_gasto(self):
         
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        url = reverse('presupuesto-detail', args=[1])
+        self.client.post(reverse('gasto-list'), self.data, format='json')
+        url = reverse('gasto-detail', args=[1])
         response = self.client.delete(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Presupuesto.objects.count(), 0)
+        self.assertEqual(Gasto.objects.count(), 0)
