@@ -1,4 +1,4 @@
-import { FormModal } from "../../utils/FormModal";
+import { FormModalModified } from "../../utils/FormModalModified";
 import { VIFields } from "../../pages/GestionInformes/utils";
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
@@ -77,15 +77,15 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     const cargarVersiones = async () => {
         // Expresión regular para extraer el id_codigo_vi del string almacenado en proyectoSeleccionado
-        const regex = /^\d+/;
+        const regex = /(\d+-\d+)\s*\|/;
 
         try {
             // Suponiendo que proyectoSeleccionado es el string que contiene el id_codigo_vi
             const match = proyectoSeleccionado.match(regex);
 
             // Verificar si se encontró el id_codigo_vi en el string
-            if (match && match[0]) {
-                const idProyecto = match[0];
+            if (match && match[1]) {
+                const idProyecto = match[1];
                 setLoadedVersiones(false)
                 // Obtener las versiones del proyecto utilizando la API
                 const response = await API.obtenerVersionesProyecto(idProyecto);
@@ -176,7 +176,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     return (
         <>
-            <FormModal {...{ icono, mode, nombreForm: "evaluación", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
+            <FormModalModified {...{ icono, mode, borrar: true, nombreForm: "evaluación", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
                 <div className="modal-body" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
                         <div className="row mb-4">
@@ -286,7 +286,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                         </div>
                     </div>
                 </div>
-            </FormModal>
+            </FormModalModified>
         </>
     )
 }
