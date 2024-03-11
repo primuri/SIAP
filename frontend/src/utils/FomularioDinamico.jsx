@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { eliminarTelefonos, eliminarTitulos } from '../api/gestionAcademicos';
 import { eliminarCuentasBancarias } from '../api/gestionProveedores';
-import { agregarProductoServicio } from '../api/gestionGastos'; // Importar la función
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -10,8 +9,6 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export const FormularioDinamico = ({ items, setItems, configuracion, itemName }) => {
-    const [productoNuevo, setProductoNuevo] = useState({});
-
     const agregarItem = () => {
         const nuevoItem = {};
         configuracion.forEach(conf => {
@@ -33,28 +30,19 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
         setItems(nuevosItems);
     };
 
-    const eliminarItem = async (index) => {
-        try {
-            if (itemName === "Producto Servicio") {
-                await agregarProductoServicio(items[index], localStorage.getItem("token")); // Llamar a la función del API para guardar
-            } else {
-                if (Object.keys(items[0])[0] === "id_telefono") {
-                    eliminarTelefonos(items[index].id_telefono, localStorage.getItem("token"));
-                }
-                if (Object.keys(items[0])[0] === "id_titulos") {
-                    eliminarTitulos(items[index].id_titulos, localStorage.getItem("token"));
-                }
-                if (Object.keys(items[0])[0] === "id_numero") {
-                    eliminarCuentasBancarias(items[index].id_numero, localStorage.getItem("token"));
-                }
-            }
-            const nuevosItems = [...items];
-            nuevosItems.splice(index, 1);
-            setItems(nuevosItems);
-        } catch (error) {
-            console.error('Error al agregar producto/servicio:', error);
-            // Manejar el error apropiadamente (mensaje de error, notificación, etc.)
+    const eliminarItem = (index) => {
+        const nuevosItems = [...items];
+        nuevosItems.splice(index, 1);
+        if (Object.keys(items[0])[0] === "id_telefono") {
+            eliminarTelefonos(items[index].id_telefono, localStorage.getItem("token"));
         }
+        if (Object.keys(items[0])[0] === "id_titulos") {
+            eliminarTitulos(items[index].id_titulos, localStorage.getItem("token"));
+        }
+        if (Object.keys(items[0])[0] === "id_numero") {
+            eliminarCuentasBancarias(items[index].id_numero, localStorage.getItem("token"));
+        }
+        setItems(nuevosItems);
     };
 
     const dividirEnGruposDeDos = (array) => {
@@ -69,14 +57,16 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
 
     return (
         <>
+
             {items.map((item, index) => (
-                <Accordion key={index}>
+                <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                         <Typography>{itemName}  {index + 1}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        {grupos.map((grupo, grupoIndex) => (
-                            <div key={grupoIndex} className="row mb-4">
+
+                        {grupos.map((grupo) => (
+                            <div key={index} className="row mb-4">
                                 {grupo.map(conf => (
                                     <div key={conf.campo} className="col-md-6">
                                         <label htmlFor={conf.campo} className="label-personalizado mb-2">{conf.placeholder}</label>
@@ -108,15 +98,13 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                 ))}
                             </div>
                         ))}
-                        {itemName === "Producto Servicio" ? (
-                            <button type="button" className="mb-2 eliminarBtn" onClick={() => eliminarItem(index)}>Guardar</button>
-                        ) : (
-                            <button type="button" className="mb-2 eliminarBtn" onClick={() => eliminarItem(index)}>Eliminar</button>
-                        )}
+
+
+                        <button type="button" className="mb-2 eliminarBtn" onClick={() => eliminarItem(index)}>Eliminar</button>
                     </AccordionDetails>
                 </Accordion>
             ))}
-            <button type="button" className={items.length === 0 ? "agregarBtn" : "agregarBtnMod"} style={{ width: "100%" }} onClick={agregarItem}>+</button>
+            <button type="button" className={items.length == 0 ? "agregarBtn": "agregarBtnMod"} style={{ width: "100%" }} onClick={agregarItem}>+</button>
         </>
     );
 };

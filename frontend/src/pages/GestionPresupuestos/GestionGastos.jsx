@@ -83,7 +83,7 @@ export const GestionGastos = () => {
             await API.obtenerProveedores(token);
     
             let prod = await API.obtenerProductosServicios(token);
-            if (!prod) {
+            if (prod.id_producto_servicio == 0) {
                 // Si el producto no existe, agregamos el nuevo producto
                 const producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, token);
                 Data.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
@@ -148,34 +148,50 @@ export const GestionGastos = () => {
             });
             formData.delete('json');
     
+            console.log("0")
+            formData.delete('json');
+    
             // Reestructurar y crear el objeto gasto
-            delete Data.gasto.id_gasto;
-            Data.gasto.id_partida = Data.partida.id_partida;
-            delete Data.partida.id_partida;
+            delete Data.id_gasto;
+            console.log("1")
+            Data.id_partida_fk = parseInt(partidaID);
+            console.log("2")
+            Data.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk;
+            Data.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk;
     
-            Data.gasto.id_cedula_proveedor_fk = Data.factura.id_cedula_proveedor_fk;
-            Data.gasto.id_producto_servicio_fk = Data.factura.id_producto_servicio_fk;
-    
-            delete Data.id_factura_fk;
-    
+            console.log("3")
             // Adjuntar el ID de la factura al formulario formData
-            formData.append('id_factura_fk', Data.factura.id_factura);
-            delete Data.factura;
-    
+            console.log(Data.id_factura_fk)
+            formData.append('id_factura_fk', Data.id_factura_fk.id_factura);
+
+            console.log("4")
             await API.obtenerProveedores(token);
     
             let prod = await API.obtenerProductosServicios(token);
             if (!prod) {
                 // Si el producto no existe, agregamos el nuevo producto
                 const producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, token);
-                Data.gasto.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
+                Data.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
             }
     
-            delete Data.documento;
-    
-            await API.actualizarFactura(Data.gasto.id_factura_fk, Data.factura, token);
-            
-            await API.actualizarGasto(Data.gasto.id_gasto, Data.gasto, formData, token);
+            formData.append("tipo", Data.id_documento_fk.tipo)
+            formData.append("detalle", Data.id_documento_fk.detalle)
+            const documentoResponse = await API.agregarFacturaDocumento(formData, token);
+            console.log(documentoResponse)
+            console.log(Data)
+            Data.id_documento_fk = documentoResponse.data.id_documento;
+            console.log(Data.id_documento_fk)
+
+            console.log("5")
+            // Agregar factura y gasto
+            const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
+            Data.id_factura_fk = facturaResponse.data.id_factura;
+            console.log(Data)
+            delete Data.id_cedula_proveedor_fk;
+            delete Data.id_producto_servicio_fk;
+            Data.monto = parseInt(Data.monto);
+            Data.fecha = '2024-03-08T15:20:40Z';
+            await API.agregarGasto(Data, token);
     
             toast.success('Gasto editado correctamente', {
                 id: toastId,
