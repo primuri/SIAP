@@ -3,11 +3,12 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from ..models import Proyecto
+from ..models import Evaluacion
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
+from django.core.files.uploadedfile import SimpleUploadedFile
 
-class ProyectoTests(APITestCase):
+class EvaluacionTests(APITestCase):
 
     def setUp(self):
 
@@ -103,98 +104,162 @@ class ProyectoTests(APITestCase):
         response = self.client.post(reverse('propuestaproyecto-list'), self.propuesta, format='json')
         self.propuesta_id = response.data['id_codigo_cimpa']
 
-        self.data = {
+        self.proyecto = {
             'id_codigo_cimpa_fk': self.propuesta_id,
             'id_codigo_vi': '5-2023'
         }
+        response = self.client.post(reverse('proyecto-list'), self.proyecto, format='json')
+        self.proyecto_id = response.data['id_codigo_vi']
 
-    def test_post_proyecto(self):
+        file = SimpleUploadedFile("oficio.pdf", b"oficio 1")
 
-        url = reverse('proyecto-list')
+        # Crea los datos de Prueba
+        self.oficio = {
+            'detalle': 'Detalle de oficio',
+            'ruta_archivo': file
+        }
+        response = self.client.post(reverse('oficio-list'), self.oficio, format='multipart')
+        self.oficio_id = response.data['id_oficio']
+
+        self.vigencia = {
+            'fecha_inicio': '2023-09-04T15:30:00',
+            'fecha_fin': '2024-09-04T12:45:00'
+        }
+
+        response = self.client.post(reverse('vigencia-list'), self.vigencia, format='json')
+        self.vigencia_id = response.data['id_vigencia']
+
+        self.version_proyecto = {
+            'detalle': 'Detalle de la version de proyecto',
+            'numero_version': '1',
+            'id_oficio_fk': self.oficio_id,
+            'id_vigencia_fk': self.vigencia_id,
+            'id_codigo_vi_fk': self.proyecto_id
+        }
+
+        response = self.client.post(reverse('versionproyecto-list'), self.version_proyecto, format='json')
+        self.version_proyecto_id = response.data['id_version_proyecto']
+
+        self.nombre_completo_data2 = {
+            'nombre': 'Brandon',
+            'apellido': 'Castillo',
+            'segundo_apellido': 'Badilla'
+        }
+        self.area_especialidad_data2 = {
+            'nombre': 'Artes'
+        }
+
+        self.universidad_data2 = {
+            'pais': 'Costa Rica',
+            'nombre': 'Universidad Nacional de Costa Rica'
+        }
+
+        response = self.client.post(reverse('nombrecompleto-list'), self.nombre_completo_data2, format='json')
+        self.nombre_completo_id2 = response.data['id_nombre_completo']
+
+        response = self.client.post(reverse('areaespecialidad-list'), self.area_especialidad_data2, format='json')
+        self.area_especialidad_id2 = response.data['id_area_especialidad'] 
+
+        response = self.client.post(reverse('universidad-list'), self.universidad_data2, format='json')
+        self.universidad_id2 = response.data['id_universidad']
+
+        self.evaluador = {
+            'id_nombre_completo_fk': self.nombre_completo_id2,
+            'id_area_especialidad_fk': self.area_especialidad_id2,
+            'universidad_fk': self.universidad_id2,
+            'tipo': 'Interno',
+            'correo': 'brandon.castillo.badilla@est.una.ac.cr'
+        }
+
+        response = self.client.post(reverse('evaluador-list'), self.evaluador, format='json')
+        self.evaluador_id = response.data['id_evaluador']
+
+        file2 = SimpleUploadedFile("documento.pdf", b"doc prueba")
+
+        self.documento = {
+            'tipo': 'tipo',
+            'detalle': 'Detalle de documento',
+            'documento': file2
+        }
+
+        response =self.client.post(reverse('documento-list'), self.documento, format='multipart')
+        self.documento_id = response.data['id_documento']
+
+        self.data = {
+            'detalle': 'Evaluacion 11',
+            'estado': 'Activo',
+            'id_version_proyecto_fk': self.version_proyecto_id,
+            'id_evaluador_fk': self.evaluador_id,
+            'id_documento_evaluacion_fk': self.documento_id
+        }
+
+
+    def test_post_evaluacion(self):
+
+        url = reverse('evaluacion-list')
         response = self.client.post(url, self.data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Proyecto.objects.count(), 1)
-        self.assertEqual(Proyecto.objects.get().id_codigo_vi, '5-2023')
+        self.assertEqual(Evaluacion.objects.count(), 1)
+        self.assertEqual(Evaluacion.objects.get().detalle, 'Evaluacion 11')
 
-    def test_put_proyecto(self):
-        propuesta2 = {
-            'id_codigo_cimpa': '2-2023',
-            'detalle': 'Detalle de la propuesta',
-            'estado': 'En revisión',
-            'nombre': 'Proyecto ABC',
-            'descripcion': 'Descripción del proyecto ABC',
-            'fecha_vigencia': '2023-09-04T15:30:00',
-            'actividad': 'Actividad XYZ',
-            'id_colaborador_principal_fk': self.colaborador_id
-        }
-        response = self.client.post(reverse('propuestaproyecto-list'), propuesta2, format='json')
-        propuesta2_id = response.data['id_codigo_cimpa']
-    
+    def test_put_evaluacion(self):
         update_data = {
-            'id_codigo_cimpa_fk': propuesta2_id,
-            'id_codigo_vi': '5-2023'
+            'detalle': 'Evaluacion 12',
+            'estado': 'Inactivo',
+            'id_version_proyecto_fk': self.version_proyecto_id,
+            'id_evaluador_fk': self.evaluador_id,
+            'id_documento_evaluacion_fk': self.documento_id
         }
         
-        self.client.post(reverse('proyecto-list'), self.data, format='json')
-        url = reverse('proyecto-detail', args=['5-2023'])
+        self.client.post(reverse('evaluacion-list'), self.data, format='json')
+        url = reverse('evaluacion-detail', args=['1'])
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Proyecto.objects.get().id_codigo_cimpa_fk.id_codigo_cimpa, '2-2024')
+        self.assertEqual(Evaluacion.objects.get().detalle, 'Evaluacion 12')
 
-    def test_get_lista_proyectos(self):
-        
-        # Carga de datos 2
-        propuesta2 = {
-            'id_codigo_cimpa': '2-2023',
-            'detalle': 'Detalle de la propuesta',
-            'estado': 'En revisión',
-            'nombre': 'Proyecto Pedro',
-            'descripcion': 'Descripción del proyecto ABC',
-            'fecha_vigencia': '2023-09-04T15:30:00',
-            'actividad': 'Actividad XYZ',
-            'id_colaborador_principal_fk': self.colaborador_id
-        }
-        response = self.client.post(reverse('propuestaproyecto-list'), propuesta2, format='json')
-        propuesta2_id = response.data['id_codigo_cimpa']
-
+    def test_get_lista_evaluaciones(self):
         data2 = {
-            'id_codigo_cimpa_fk': propuesta2_id,
-            'id_codigo_vi': '3-2023'
+            'detalle': 'Evaluacion 13',
+            'estado': 'Inactivo',
+            'id_version_proyecto_fk': self.version_proyecto_id,
+            'id_evaluador_fk': self.evaluador_id,
+            'id_documento_evaluacion_fk': self.documento_id
         }
 
-        self.client.post(reverse('proyecto-list'), self.data, format='json')
-        self.client.post(reverse('proyecto-list'), data2, format='json')
-        url = reverse('proyecto-list')
+        self.client.post(reverse('evaluacion-list'), self.data, format='json')
+        self.client.post(reverse('evaluacion-list'), data2, format='json')
+        url = reverse('evaluacion-list')
         response = self.client.get(url)
-        url2 = reverse('proyecto-detail', args=['3-2023'])
+        url2 = reverse('evaluacion-detail', args=['2'])
         response2 = self.client.get(url2)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(response2.data['id_codigo_cimpa_fk']['nombre'], 'Proyecto Pedro')
-      
-    def test_get_buscar_proyecto(self):
+        self.assertEqual(response2.data['detalle'], 'Evaluacion 13')
 
-        self.client.post(reverse('proyecto-list'), self.data, format='json')
-        url = reverse('proyecto-detail', args=['5-2023'])
+        
+    def test_get_buscar_evaluacion(self):
+
+        self.client.post(reverse('evaluacion-list'), self.data, format='json')
+        url = reverse('evaluacion-detail', args=['1'])
         response = self.client.get(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id_codigo_cimpa_fk']['nombre'], 'Proyecto ABC')
+        self.assertEqual(response.data['detalle'], 'Evaluacion 11')
 
-    def test_delete_proyecto(self):
+    def test_delete_evaluacion(self):
         
-        self.client.post(reverse('proyecto-list'), self.data, format='json')
-        url = reverse('proyecto-detail', args=['5-2023'])
+        self.client.post(reverse('evaluacion-list'), self.data, format='json')
+        url = reverse('evaluacion-detail', args=['1'])
         response = self.client.delete(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Proyecto.objects.count(), 0)
+        self.assertEqual(Evaluacion.objects.count(), 0)

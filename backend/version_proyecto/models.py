@@ -77,7 +77,6 @@ class PreguntaEvaluacionCC(models.Model):
     class Meta:
         db_table = 'pregunta_evaluacion_cc'
 
-
 class VersionProyecto(models.Model):
     id_version_proyecto = models.AutoField(primary_key=True)
     detalle = models.CharField(max_length=255)
