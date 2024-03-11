@@ -72,7 +72,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
                     if(saveState){
                       saveState()
                     }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-informes`;
+                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto_fk.id_version_proyecto}/gestion-informes`;
                     navigate(nuevaRuta);
                  }}>Gestionar</button>
 
@@ -81,7 +81,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
                     if(saveState){
                       saveState()
                     }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-presupuestos`;
+                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto_fk.id_version_proyecto}/gestion-presupuestos`;
                     navigate(nuevaRuta);
                  }}>Gestionar</button>
                  
@@ -90,7 +90,7 @@ export const TableWithButtons = ({ columns, data, onDoubleClick , dataKeys, hasB
                     if(saveState){
                       saveState()
                     }
-                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto}/gestion-asistentes`;
+                    const nuevaRuta = `${location.pathname}/${row.id_version_proyecto_fk.id_version_proyecto}/gestion-asistentes`;
                     navigate(nuevaRuta);
                  }}>Gestionar</button>
 

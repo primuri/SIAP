@@ -3,12 +3,12 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from ..models import Presupuesto
+from ..models import VersionPresupuesto
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-class PresupuestoTests(APITestCase):
+class VersionPresupuestoTests(APITestCase):
 
     def setUp(self):
 
@@ -172,7 +172,7 @@ class PresupuestoTests(APITestCase):
         response = self.client.post(reverse('codigofinanciero-list'), self.codigo_financiero, format='json')
         self.codigo_financiero_id = response.data['id_codigo_financiero']
 
-        self.data = {
+        self.presupuesto = {
             'anio_aprobacion': '2010',
             'id_tipo_presupuesto_fk' : self.tipo_presupuesto_id,
             'id_ente_financiero_fk' : self.ente_financiero_id,
@@ -180,80 +180,91 @@ class PresupuestoTests(APITestCase):
             'id_codigo_vi' : self.proyecto_id,
             'id_codigo_financiero_fk' : self.codigo_financiero_id,
             'id_version_proyecto_fk': self.version_proyecto_id
-        }    
+        } 
 
-    def test_post_presupuesto(self):
+        response = self.client.post(reverse('presupuesto-list'), self.presupuesto, format='json')
+        self.presupuesto_id = response.data['id_presupuesto']
 
-        url = reverse('presupuesto-list')
+        self.data ={
+            'version': '2',
+            'monto'  : '432',
+            'saldo'  : '6531',
+            'fecha'  : '2023-09-04T15:30:00',
+            'detalle': 'hola',
+            'id_presupuesto_fk' : self.presupuesto_id
+        }
+       
+
+    def test_post_version_presupuesto(self):
+
+        url = reverse('versionpresupuesto-list')
         response = self.client.post(url, self.data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Presupuesto.objects.count(), 1)
-        self.assertEqual(Presupuesto.objects.get().anio_aprobacion, 2010)
+        self.assertEqual(VersionPresupuesto.objects.count(), 1)
+        self.assertEqual(VersionPresupuesto.objects.get().detalle, 'hola')
 
-    def test_put_presupuesto(self):
+    def test_put_version_presupuesto(self):
         update_data = {
-            'anio_aprobacion': '2020',
-            'id_tipo_presupuesto_fk' : self.tipo_presupuesto_id,
-            'id_ente_financiero_fk' : self.ente_financiero_id,
-            'id_oficio_fk': self.oficio2_id,
-            'id_codigo_vi' : self.proyecto_id,
-            'id_codigo_financiero_fk' : self.codigo_financiero_id,
-            'id_version_proyecto_fk': self.version_proyecto_id   
+            'version': '2',
+            'monto'  : '678',
+            'saldo'  : '9876',
+            'fecha'  : '2024-09-04T15:30:00',
+            'detalle': 'Camisas',
+            'id_presupuesto_fk' : self.presupuesto_id 
         }
         
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        url = reverse('presupuesto-detail', args=[1])
+        self.client.post(reverse('versionpresupuesto-list'), self.data, format='json')
+        url = reverse('versionpresupuesto-detail', args=[1])
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Presupuesto.objects.get().anio_aprobacion, 2020)
+        self.assertEqual(VersionPresupuesto.objects.get().detalle, 'Camisas')
     
      
-    def test_get_lista_presupuesto(self):
+    def test_get_lista_version_presupuesto(self):
     
         data2 = {
-           'anio_aprobacion': '2022',
-            'id_tipo_presupuesto_fk' : self.tipo_presupuesto_id,
-            'id_ente_financiero_fk' : self.ente_financiero_id,
-            'id_oficio_fk': self.oficio2_id,
-            'id_codigo_vi' : self.proyecto_id,
-            'id_codigo_financiero_fk' : self.codigo_financiero_id,
-            'id_version_proyecto_fk': self.version_proyecto_id   
+            'version': '4',
+            'monto'  : '591',
+            'saldo'  : '3871',
+            'fecha'  : '2024-10-04T15:30:00',
+            'detalle': 'Camas',
+            'id_presupuesto_fk' : self.presupuesto_id   
         }
 
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        self.client.post(reverse('presupuesto-list'), data2, format='json')
-        url = reverse('presupuesto-list')
+        self.client.post(reverse('versionpresupuesto-list'), self.data, format='json')
+        self.client.post(reverse('versionpresupuesto-list'), data2, format='json')
+        url = reverse('versionpresupuesto-list')
         response = self.client.get(url)
-        url2 = reverse('presupuesto-detail', args=[2])
+        url2 = reverse('versionpresupuesto-detail', args=[2])
         response2 = self.client.get(url2)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(response2.data['anio_aprobacion'], 2022)
+        self.assertEqual(response2.data['detalle'], 'Camas')
 
         
-    def test_get_buscar_presupuesto(self):
+    def test_get_buscar_version_presupuesto(self):
 
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        url = reverse('presupuesto-detail', args=[1])
+        self.client.post(reverse('versionpresupuesto-list'), self.data, format='json')
+        url = reverse('versionpresupuesto-detail', args=[1])
         response = self.client.get(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['anio_aprobacion'], 2010)
+        self.assertEqual(response.data['detalle'], 'hola')
 
-    def test_delete_presupuesto(self):
+    def test_delete_version_presupuesto(self):
         
-        self.client.post(reverse('presupuesto-list'), self.data, format='json')
-        url = reverse('presupuesto-detail', args=[1])
+        self.client.post(reverse('versionpresupuesto-list'), self.data, format='json')
+        url = reverse('versionpresupuesto-detail', args=[1])
         response = self.client.delete(url)
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Presupuesto.objects.count(), 0)
+        self.assertEqual(VersionPresupuesto.objects.count(), 0)

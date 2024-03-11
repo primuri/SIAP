@@ -167,3 +167,53 @@ export const eliminarProyecto = async (id, token) => {
         }
     }));
 };
+
+
+export const agregarColaboradorSecundario = async (colaborador_secundario, token) => {
+    try { 
+        return await manejarErrores( SIAPAPI.post('version_proyecto/colaboradorsecundario/', colaborador_secundario, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }));
+       
+    } catch(error) {
+        console.error("Error agregando colaborador secundario: ", error);
+        throw error;
+    } 
+};
+
+
+export const editarColaboradorSecundario = async (id, colaborador_secundario, token) => {
+    try { 
+        return await manejarErrores( SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id}/`, colaborador_secundario, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }));
+       
+    } catch(error) {
+        console.error("Error editar colaborador secundario: ", error);
+        throw error;
+    } 
+};
+
+export const obtenerColaboradorSecundario = async (token) => {
+    return await manejarErrores( SIAPAPI.get('version_proyecto/colaboradorsecundario', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
+export const eliminarColaboradorSecundario = async (id, token) => {
+    return await manejarErrores( SIAPAPI.delete(`version_proyecto/colaboradorsecundario/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
