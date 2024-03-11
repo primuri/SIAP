@@ -49,7 +49,7 @@ export const FormModalModified = ({ icono, mode, borrar, nombreForm, onCancel, h
               )}
             </div>
             <div className="col">
-              {mode === 2 && borrar !== true (
+              {mode === 2 && borrar !== true && (
                 <>
                   <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
                   {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto={nombreForm} />)}

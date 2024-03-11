@@ -176,7 +176,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     return (
         <>
-            <FormModalModified {...{ icono, mode, borrar: true, nombreForm: "evaluación", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
+            <FormModalModified {...{ icono, mode, borrar: (formData.estado === "Completa"), nombreForm: "evaluación", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
                 <div className="modal-body" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
                         <div className="row mb-4">
