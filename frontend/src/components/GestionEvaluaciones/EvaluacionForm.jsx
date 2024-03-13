@@ -198,6 +198,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                             setProyectoSeleccionado('')
                                         }
                                     }}
+                                    disabled={(formData.estado === "Completa")}
                                 />
                             </div>
                             <div className="col">
@@ -207,12 +208,12 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 )}
                                 {proyectoSeleccionado !== '' ? (<>
                                     <select
-                                        className="form-select seleccion"
+                                        className={formData.estado === "Completa" ? "form-control seleccion disabled-input" : "form-control seleccion"}
                                         name="id_version_proyecto_fk"
                                         id="id_version_proyecto_fk"
                                         value={formData.id_version_proyecto_fk}
                                         onChange={handleChange}
-                                        disabled={proyectoSeleccionado !== '' ? false : true}
+                                        disabled={formData.estado === "Completa" ? true : false}
                                         required
                                     >
                                         <option value="" defaultValue={""}>Seleccione una version</option>
@@ -258,6 +259,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                             setEvaluadorSeleccionado('')
                                         }
                                     }}
+                                    disabled={(formData.estado === "Completa")}
                                 />
                             </div>
                             {mode == 2 && (
@@ -270,7 +272,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
                             <div className="col">
                                 <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación <span className="disabled-input">(Opcional)</span></label>
-                                <input type="file" className="form-control" name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} />
+                                <input type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
                                 {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
@@ -281,7 +283,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>
                             <div className="col">
                                 <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación <span className="disabled-input">(Opcional)</span></label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
+                                <input type="text" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
                             </div>
                         </div>
                     </div>
