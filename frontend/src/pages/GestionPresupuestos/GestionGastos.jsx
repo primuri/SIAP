@@ -294,6 +294,27 @@ export const GestionGastos = () => {
         navigate(newPath);
     }
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
+
+    const formattedData = gastos.map(item => {
+        const formattedItem = {};
+        Object.keys(item).forEach(key => {
+          if (key === 'fecha') {
+            formattedItem[key] = formatDate(item[key]);
+          } else {
+            formattedItem[key] = item[key];
+          }
+        });
+        return formattedItem;
+    });
+
+
     return (
         <main >
           {!error ? (
@@ -305,7 +326,7 @@ export const GestionGastos = () => {
                 <Add onClick={addBtnClicked}></Add>
                 <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
               </div>
-              <Table columns={columnsGastos} data={gastos} dataKeys={dataKeyGastos} onDoubleClick={elementClicked} hasButtonColumn={false} buttonText="Gestionar"></Table>
+              <Table columns={columnsGastos} data={formattedData} dataKeys={dataKeyGastos} onDoubleClick={elementClicked} hasButtonColumn={false} buttonText="Gestionar"></Table>
               {addClick && (<Modal ><GastoForm onSubmit={addGasto} onCancel={onCancel} mode={1}></GastoForm></Modal>)}
               {edit &&
                 (
