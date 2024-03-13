@@ -235,7 +235,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 )}
                                 <Autocomplete
                                     value={evaluadorSeleccionado}
-                                    id="free-solo-demo"
+                                    id="free-solo-demo1"
                                     freeSolo
                                     options={evaluadores}
                                     renderInput={(params) => <TextField {...params} required/>}

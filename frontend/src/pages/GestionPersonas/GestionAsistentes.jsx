@@ -138,6 +138,7 @@ export const GestionAsistentes = () => {
         },
       })
       setAddClick(false)
+      setReload(!reload)
     } catch (error) {
       console.log(error);
       toast.dismiss(toastId)
