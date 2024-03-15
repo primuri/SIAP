@@ -78,6 +78,12 @@ export const GestionGastos = () => {
             Data.id_documento_fk = documentoResponse.data.id_documento;
 
             // Agregar factura y gasto
+            if(Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined){
+                Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio
+            }else{
+                var responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+                Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
+            }
             const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
             Data.id_factura_fk = facturaResponse.data.id_factura;
             delete Data.id_cedula_proveedor_fk;
