@@ -7,6 +7,7 @@ from ..models import RespuestaEvaluacion
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
 from django.core.files.uploadedfile import SimpleUploadedFile
+from personas.models import Evaluador
 
 class RespuestaEvaluacionTests(APITestCase):
 
@@ -202,6 +203,16 @@ class RespuestaEvaluacionTests(APITestCase):
             'respuesta': '7:30'
         }
 
+        # ---------------------------------------------------
+        #   Crear usuario evaluador que responde pregunta
+        # ---------------------------------------------------
+
+        self.user = Usuario.objects.create_user(correo='testEvaluador@example.com', password='testpassword', evaluador_fk=Evaluador.objects.get(id_evaluador=self.evaluador_id))
+        admin_group, created = Group.objects.get_or_create(name='evaluador')
+        self.user.groups.add(admin_group)
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
     def test_post_respuesta_evaluacion(self):
 
         url = reverse('respuestaevaluacion-list')
@@ -224,8 +235,8 @@ class RespuestaEvaluacionTests(APITestCase):
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(RespuestaEvaluacion.objects.get().respuesta, 'Malo')
+        self.assertNotEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(RespuestaEvaluacion.objects.get().respuesta, 'Malo')
 
     def test_get_lista_respuesta_evaluaciones(self):
         data2 = {
@@ -265,5 +276,5 @@ class RespuestaEvaluacionTests(APITestCase):
         response = self.client.delete(url)
 
         # Verificaciones
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(RespuestaEvaluacion.objects.count(), 0)
+        self.assertNotEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertNotEqual(RespuestaEvaluacion.objects.count(), 0)
