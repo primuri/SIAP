@@ -153,13 +153,27 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
         // Validación de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && validatePassword(formData.password) === false) {
-            alert("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.");
+            toast.error("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.", {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
             return;
         }
 
         // Validación de coincidencia de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && formData.password !== formData.confirmar_contrasena) {
-            alert("Las contraseñas no coinciden.");
+            toast.error("Las contraseñas no coinciden.", {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
             return;
         }
 
@@ -315,7 +329,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                         <div className="form-group">
                                             <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
@@ -351,7 +365,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                         <div className="form-group">
                                             <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} />
+                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required/>
                                                 {evaluadoresFilter.length > 0 && (
                                                     <div
                                                         className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
