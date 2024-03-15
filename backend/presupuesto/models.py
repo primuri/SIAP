@@ -70,7 +70,7 @@ class Proveedor(models.Model):
         db_table = 'proveedor'
 
 class ProductoServicio(models.Model):
-    id_producto_servicio = models.IntegerField(primary_key=True)
+    id_producto_servicio = models.AutoField(primary_key=True)
     detalle = models.CharField(max_length=150)
 
     class Meta:
@@ -91,13 +91,13 @@ class Gasto(models.Model):
     monto = models.DecimalField(max_digits=10, decimal_places=2)
     id_partida_fk = models.ForeignKey(Partida, on_delete=models.PROTECT)
     id_factura_fk = models.ForeignKey(Factura, on_delete=models.PROTECT)
-    tipo = models.CharField(max_length=64)
+    id_documento_fk = models.ForeignKey(Documento, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = 'gasto'
 #
 class CuentaBancaria(models.Model):
-    id_numero = models.IntegerField(primary_key=True)
+    id_numero = models.CharField(max_length=25, primary_key=True)
     banco = models.CharField(max_length=255)
     tipo = models.CharField(max_length=45)
     moneda = models.CharField(max_length=45)
