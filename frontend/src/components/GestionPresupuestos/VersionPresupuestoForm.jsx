@@ -17,7 +17,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             "id_presupuesto_fk": version? version.id_presupuesto_fk.id_presupuesto : id_presupuesto,
             "version": version ? version.version : "",
             "monto": version ? version.monto : "",
-            "saldo": version ? version.saldo : "",
+            "saldo": 12,
             "fecha": version ? version.fecha.split('T')[0] : "",
             "detalle": version ? version.detalle : "",
     });
@@ -128,12 +128,6 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                                 <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
                                 
                             </div>
-                            <div className="col-md-6">
-                                <label htmlFor="saldo" className="label-personalizado mb-2">Saldo</label>
-                                <input type="number" className="form-control" name="saldo" id="saldo" value={formData.saldo} onChange={handleChange} required/>
-                            </div>
-                        </div>
-                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
                                 <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
