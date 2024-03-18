@@ -131,13 +131,39 @@ export const GestionGastos = () => {
                 },
             });
             formData.delete('json');
-    
-            // Reestructurar y crear el objeto gasto
-            delete Data.id_gasto;
+
             Data.id_partida_fk = parseInt(partidaID);
 
+            // ACTUALIZAR FACTURA Y MANEJAR PRODUCTO SERVICIO
+
+            if(typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){ // Si lo que viene no es un objeto, solo pasa el ID
+                Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
+
+            }else{    
+                var responsePS = ""                                                                  // Si lo que viene ES un objeto, lo agrega y saca el ID
+                try{
+                    responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+                    console.log(responsePS)
+                } catch(error){
+                    console.log(responsePS)
+                }                                                               
+                Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
+            }
+
+            Data.id_factura_fk.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
+            const rF = await API.actualizarFactura(Data.id_factura_fk.id_factura, Data.id_factura_fk, token)
+
+            Data.id_factura_fk = rF.data.id_factura
             Data.monto = parseInt(Data.monto);
-            await API.actualizarGasto(Data, token);
+
+            // DOCUMENTO GASTO PENDIENTE
+
+            delete Data.id_documento_fk // Temporal para que deje actualizar sin documento.
+                                        // Guiarse con manejo de documentos en Proveedores (RF de Wendy)
+
+            // ACTUALIZAR GASTO CON LOS ID DE LAS COSAS
+
+            await API.actualizarGasto(Data.id_gasto, Data, token);
     
             toast.success('Gasto editado correctamente', {
                 id: toastId,
