@@ -15,10 +15,6 @@ from django.dispatch import receiver
 from django.forms.models import model_to_dict
 from django.core.mail import EmailMessage
 
-
-
-
-
 class NombreCompleto(models.Model):
     id_nombre_completo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150)
@@ -44,7 +40,6 @@ class Universidad(models.Model):
         db_table = 'universidad'
         unique_together = (('pais', 'nombre'),)
 
-
 def cambiar_nombre_archivo(instance, filename):
     _, extension = os.path.splitext(filename)
     user_id = instance.cedula
@@ -58,7 +53,6 @@ def cambiar_nombre_archivo(instance, filename):
     instance.foto.name = f'pfp/{nuevo_nombre}'  # Modificamos solo el nombre del archivo, no su contenido
 
     return ruta_nuevo_archivo
-
 
 class Academico(models.Model):
     id_academico = models.AutoField(primary_key=True)
@@ -102,7 +96,7 @@ pre_save.connect(imagen_asociada_sustituir, sender=Academico)
 
 logger = logging.getLogger(__name__) # Ayuda a ver los errores en los logs del back
 
-def enviar_correo_asincrono(asunto, instance, destinatario):
+def correo_academicos(asunto, instance, destinatario):
     def enviar():
         try:
             context = {
@@ -138,45 +132,15 @@ def enviar_correo_asincrono(asunto, instance, destinatario):
 
     Thread(target=enviar).start()
 
-
-"""def obtener_info_academico(instance):
-    # Información básica del académico
-    info_basica = f"Nombre Completo: {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido or ''}\n" \
-                  f"Cédula: {instance.cedula}\n" \
-                  f"Correo: {instance.correo}\n" \
-                  f"Correo Secundario: {instance.correo_secundario or 'No proporcionado'}\n" \
-                  f"Sitio Web: {instance.sitio_web}\n" \
-                  f"País de Procedencia: {instance.pais_procedencia}\n" \
-                  f"Grado Máximo: {instance.grado_maximo}\n" \
-                  f"Categoría en régimen: {instance.categoria_en_regimen}\n" \
-                  f"Unidad base: {instance.unidad_base}\n" \
-                  f"Area de especialidad: {instance.id_area_especialidad_fk.nombre}\n" \
-                  f"Areas de especialidad secundarias: {instance.id_area_especialidad_secundaria_fk.nombre or 'No proporcionado'}\n" \
-                  f"Universidad: {instance.universidad_fk.nombre} - {instance.universidad_fk.pais}\n"
-
-    # Teléfonos del académico (opcional)
-    telefonos = ', '.join([telefono.numero_tel for telefono in instance.telefono_set.all()]) or 'No hay teléfonos registrados'
-    info_telefonos = f"Teléfonos: {telefonos}\n"
-
-    # Títulos del académico (opcional)
-    titulos = instance.titulos_set.all()
-    info_titulos = "Títulos:\n" + '\n'.join([f"Titulos:  - {titulo.grado}, {titulo.detalle}, {titulo.institución} ({titulo.anio})" for titulo in titulos]) if titulos else 'No hay títulos registrados\n'
-
-    # Combinar toda la información
-    mensaje_completo = info_basica + info_telefonos + info_titulos
-
-    return mensaje_completo
-"""
-
 @receiver(post_save, sender=Academico)
 def academico_post_save(sender, instance, created, **kwargs):
-    asunto = f"Creación de Académico {instance.cedula}" if created else f"Actualización de Académico {instance.cedula}"
-    enviar_correo_asincrono(asunto, instance, "brandonbadilla143@gmail.com") #Cambiar por correo final
+    asunto = f"Creación de Académico {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}" if created else f"Actualización de Académico {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
+    correo_academicos(asunto, instance, "brandonbadilla143@gmail.com") #Cambiar por correo final
 
 @receiver(pre_delete, sender=Academico)
 def academico_pre_delete(sender, instance, **kwargs):
-    asunto = f"Eliminación de Académico {instance.cedula}"
-    enviar_correo_asincrono(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
+    asunto = f"Eliminación de Académico {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
+    correo_academicos(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
 
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)
@@ -209,6 +173,47 @@ class Evaluador(models.Model):
     class Meta:
         db_table = 'evaluador'
         unique_together = (('tipo', 'correo','universidad_fk','id_area_especialidad_fk','id_nombre_completo_fk'),) # Para evitar que un mismo evaluador este 2 veces
+    
+logger = logging.getLogger(__name__)
+
+def correo_evaluadores(asunto, instance, destinatario):
+    def enviar():
+        try:
+            context = {
+                'nombre_completo': f"{instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}",
+                'correo': instance.correo,
+                'tipo': instance.tipo,
+                'universidad': f"{instance.universidad_fk.nombre} - {instance.universidad_fk.pais}",
+                'area_especialidad': instance.id_area_especialidad_fk.nombre,
+                'id_evaluador': instance.id_evaluador
+            }
+
+            mensaje_html = render_to_string('email_evaluadores.html', context) # Asegúrate de crear esta plantilla
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html'
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo: {e}")
+
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=Evaluador)
+def evaluador_post_save(sender, instance, created, **kwargs):
+    asunto = f"Creación de Evaluador {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}" if created else f"Actualización de Evaluador {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
+    correo_evaluadores(asunto, instance, "brandonbadilla143@gmail.com") #Cambiar por correo final
+
+@receiver(pre_delete, sender=Evaluador)
+def evaluador_pre_delete(sender, instance, **kwargs):
+    asunto = f"Eliminación de Evaluador {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
+    correo_evaluadores(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
+
+
 
 class Asistente(models.Model):
     id_asistente_carnet = models.AutoField(primary_key=True)
