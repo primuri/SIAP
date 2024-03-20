@@ -71,12 +71,26 @@
             <div class="content">
                 
                 {% if rol_usuario != "No Aplicable (Usuario Eliminado)" %}
-                <p>Se acreado un usuario con el correo electrónico <strong>{{ usuario.correo }}</strong></p>
-                {% if rol_usuario %}
-                <p>Su rol actual es: <strong>{{ rol_usuario }}</strong>.</p>
-                {% endif %}
+                    <p>Se a creado un usuario con el correo electrónico <strong>{{ usuario.correo }}</strong></p>
+                    
+                    {% if rol_usuario %}
+                        <p><strong><i>Su rol es de: <strong>{{ rol_usuario }}</strong>.</i></strong></p>
+                    {% endif %}
+
+                    {% if rol_usuario == "Investigador" %}
+                        <p><strong><i> Esta asociado al investigador {{investigador}}</i></strong></p>
+                    {% endif %}
+
+                    {%  if rol_usuario == "Evaluador" %}
+                        <p><strong><i> Esta asociado al evaluador {{evaluador}}</i></strong></p>
+                    {% endif %}
+
+                    {%  if rol_usuario == "Evaluador/Investigador" %}
+                        <p><strong><i> Esta asociado al evaluador {{evaluador}} y al investigador {{investigador}}</i></strong></p>
+                    {% endif %}
+                    
                 {% else %}
-                <p>El usuario asociado al correo electrónico <strong>{{ usuario.correo }}</strong> ha sido eliminado.</p>
+                    <p>El usuario asociado al correo electrónico <strong>{{ usuario.correo }}</strong> ha sido eliminado.</p>
                 {% endif %}
     
             </div>

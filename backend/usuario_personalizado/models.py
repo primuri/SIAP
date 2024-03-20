@@ -87,6 +87,8 @@ def correo_usuarios(usuario, asunto, destinatario, es_eliminado=False):
                 'usuario': usuario,
                 'rol_usuario': rol_usuario,
                 'es_eliminado': es_eliminado,
+                'investigador': f"{usuario.academico_fk.id_nombre_completo_fk.nombre} {usuario.academico_fk.id_nombre_completo_fk.apellido} {usuario.academico_fk.id_nombre_completo_fk.segundo_apellido}" if usuario.academico_fk else "No tiene Investigador",
+                'evaluador': f"{usuario.evaluador_fk.id_nombre_completo_fk.nombre} {usuario.evaluador_fk.id_nombre_completo_fk.apellido} {usuario.evaluador_fk.id_nombre_completo_fk.segundo_apellido}" if usuario.evaluador_fk else "No tiene Evaluador"
             })
             
             correo = EmailMessage(
