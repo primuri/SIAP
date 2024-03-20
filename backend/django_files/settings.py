@@ -73,7 +73,11 @@ TEMPLATES = [
         'DIRS': [os.path.join(BASE_DIR, 'personas', 'templates'),
         os.path.join(BASE_DIR, 'propuesta_proyecto', 'templates'),
         os.path.join(BASE_DIR, 'presupuesto', 'templates'),
-         os.path.join(BASE_DIR, 'version_proyecto', 'templates')],
+        os.path.join(BASE_DIR, 'version_proyecto', 'templates'),
+        os.path.join(BASE_DIR, 'producto', 'templates'),
+        os.path.join(BASE_DIR, 'usuario_personalizado', 'templates'),
+        os.path.join(BASE_DIR, 'informe', 'templates'),
+        os.path.join(BASE_DIR, 'organo_colegiado', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

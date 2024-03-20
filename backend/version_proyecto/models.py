@@ -3,6 +3,14 @@ from propuesta_proyecto.models import PropuestaProyecto, Vigencia
 from personas.models import Evaluador, Asistente, Academico
 from django.db.models.signals import pre_delete
 from django.db.models.signals import pre_save
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.conf import settings
+import logging
+from threading import Thread
+
 
 class Proyecto(models.Model):
     id_codigo_vi = models.CharField(max_length=45, primary_key=True)
@@ -100,6 +108,77 @@ class Evaluacion(models.Model):
 
     class Meta:
         db_table = 'evaluacion'
+
+logger = logging.getLogger(__name__)
+
+def enviar_correo_evaluacion(asunto, instance, destinatario):
+    def enviar():
+        try:
+            documento = instance.id_documento_evaluacion_fk
+        
+            contexto = {
+                'detalle': instance.detalle if instance.detalle else 'No tiene detalle',
+                'estado': instance.estado,
+                'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'evaluador': f"{instance.id_evaluador_fk.id_nombre_completo_fk.nombre} {instance.id_evaluador_fk.id_nombre_completo_fk.apellido} {instance.id_evaluador_fk.id_nombre_completo_fk.segundo_apellido}",
+                'documento_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible'   
+            }
+        
+            mensaje_html = render_to_string('email_evaluacion.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+
+@receiver(post_save, sender=Evaluacion)
+def evaluacion_post_save(sender, instance, created, **kwargs):
+    asunto = "Nueva Evaluación Creada" if created else "Evaluación Actualizada"
+    enviar_correo_evaluacion(asunto, instance, "brandonbadilla143@gmail.com")
+    if not created and instance.estado == 'Pendiente':
+        asunto_asignacion = f"Se le asignó la evaluación del proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+        destinatario_asignacion = instance.id_evaluador_fk.correo 
+        correo_evaluacion_asignada(asunto_asignacion, instance, destinatario_asignacion)
+
+def correo_evaluacion_asignada(asunto,instance, destinatario):
+    def enviar():
+        try:
+                       
+            contexto = {
+                'detalle': instance.detalle if instance.detalle else 'No tiene detalle',
+                'estado': instance.estado,
+                'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'evaluador': f"{instance.id_evaluador_fk.id_nombre_completo_fk.nombre} {instance.id_evaluador_fk.id_nombre_completo_fk.apellido} {instance.id_evaluador_fk.id_nombre_completo_fk.segundo_apellido}",
+                'version': instance.id_version_proyecto_fk.numero_version
+            }
+            
+            mensaje_html = render_to_string('email_asignacion.html', contexto)
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html'
+            correo.send()
+        except Exception as e:
+                logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+
+@receiver(post_delete, sender=Evaluacion)
+def evaluacion_post_delete(sender, instance, **kwargs):
+    asunto = "Evaluación Eliminada"
+    enviar_correo_evaluacion(asunto, instance, "brandonbadilla143@gmail.com")
+
 
 class RespuestaEvaluacion(models.Model):
     id_respuesta_evaluacion = models.AutoField(primary_key=True)

@@ -1,6 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group
 from personas.models import Evaluador, Academico
+import logging
+from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
+from django.core.mail import send_mail
+from threading import Thread
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.db.models.signals import post_save,post_delete
+from django.dispatch import receiver
+from django.forms.models import model_to_dict
+from django.core.mail import EmailMessage
+
 
 class UsuarioManager(BaseUserManager):
 
@@ -49,3 +62,52 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Usuario'
         verbose_name_plural = 'Usuarios'
+
+@receiver(post_save, sender=Usuario)
+def usuario_post_save(sender, instance, created, **kwargs):
+    if created:
+        asunto = f"Usuario Creado: {instance.correo}"
+    else:
+        asunto = f"Usuario Actualizado: {instance.correo}"
+    correo_usuarios(instance, asunto, "brandonbadilla143@gmail.com") 
+
+
+@receiver(post_delete, sender=Usuario)
+def usuario_post_delete(sender, instance, **kwargs):
+    asunto = f"Usuario Eliminado: {instance.correo}"
+    correo_usuarios(instance, asunto,"brandonbadilla143@gmail.com" , es_eliminado=True)
+
+logger = logging.getLogger(__name__)
+
+def correo_usuarios(usuario, asunto, destinatario, es_eliminado=False):
+    def enviar():
+        try:
+            rol_usuario = 'No Aplicable (Usuario Eliminado)' if es_eliminado else determinar_rol_usuario(usuario)
+            mensaje_html = render_to_string('usuario_creado_email.html', {
+                'usuario': usuario,
+                'rol_usuario': rol_usuario,
+                'es_eliminado': es_eliminado,
+            })
+            
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html'
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+def determinar_rol_usuario(usuario):
+    if usuario.is_superuser:
+        return 'Root'
+    elif usuario.evaluador_fk_id and usuario.academico_fk_id:
+        return 'Evaluador/Investigador'
+    elif usuario.academico_fk_id:
+        return 'Investigador'
+    elif usuario.evaluador_fk_id:
+        return 'Evaluador'
+    return 'Invitado'

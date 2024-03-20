@@ -20,11 +20,23 @@
         .header {
             background: #4aace1;
             color: #ffffff;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
             padding: 8px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .header h2 {
+            margin-right: auto;
             text-align: center;
-            font-size: 24px;
+        }
+        .header img {
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 7px;
         }
         .footer {
             background: #eeeeee;
@@ -42,38 +54,47 @@
             text-align: center;
         }
         ul {
-            list-style-type: none;
-            padding: 0;
+            list-style-position: inside;
         }
-        li {
-            padding: 5px 0;
+        ul li {
+            padding: 5px;
         }
     </style>
 </head>
 <body>
+    
     <div class="container">
-        <div class="header">Información del Proveedor</div>
-        <div class="content">
-            <p><strong>Cédula de Proveedor:</strong> {{ id_cedula_proveedor }}</p>
-            <p><strong>Nombre:</strong> {{ nombre }}</p>
-            <p><strong>Tipo:</strong> {{ tipo }}</p>
-            <p><strong>Correo Electrónico:</strong> {{ correo }}</p>
-            <p><strong>Teléfono:</strong> {{ telefono }}</p>
-            <p><strong>Nombre del Documento:</strong> {{ documento_nombre }}</p>
-            <p><strong>Detalle del Documento:</strong> {{ documentos_detalle }}</p>
-            <h3>Cuentas Bancarias</h3>
-            <ul>
-                {% for cuenta in cuentas_bancarias %}
-                <li><strong>Banco:</strong> {{ cuenta.banco }}<br>
-                    <strong>Tipo de Cuenta:</strong> {{ cuenta.tipo }}<br>
-                    <strong>Moneda:</strong> {{ cuenta.moneda }}<br>
-                    <strong>Cuenta Principal:</strong> {{ cuenta.cuenta_principal }}<br>
-                    <strong>Número de Cuenta:</strong> {{ cuenta.numero }}
-                </li>
-                {% endfor %}
-            </ul>
+        <div class="header">
+            <h2>Información del Proveedor</h2>
+            <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
-        <div class="footer">Este es un mensaje automatizado, por favor no responder.</div>
+            <div class="content">
+                
+                <p><strong>Cédula de Proveedor:</strong> {{ id_cedula_proveedor }}</p>
+                <p><strong>Nombre:</strong> {{ nombre }}</p>
+                <p><strong>Tipo:</strong> {{ tipo }}</p>
+                <p><strong>Correo Electrónico:</strong> {{ correo }}</p>
+                <p><strong>Teléfono:</strong> {{ telefono }}</p>
+                <p><strong>Nombre del Documento:</strong> {{ documento_nombre }}</p>
+                <p><strong>Detalle del Documento:</strong> {{ documentos_detalle }}</p>
+                <h3>Cuentas Bancarias</h3>
+                <ul>
+                    {% for cuenta in cuentas_bancarias %}
+                    <li><strong>Banco:</strong> {{ cuenta.banco }}<br>
+                        <strong>Tipo de Cuenta:</strong> {{ cuenta.tipo }}<br>
+                        <strong>Moneda:</strong> {{ cuenta.moneda }}<br>
+                        <strong>Cuenta Principal:</strong> {{ cuenta.cuenta_principal }}<br>
+                        <strong>Número de Cuenta:</strong> {{ cuenta.numero }}
+                    </li>
+                    {% endfor %}
+                </ul>
+    
+            </div>
+            <div class="footer">
+                Este es un mensaje automatizado, por favor no responder.
+            </div>
+        </div>
+        
     </div>
 </body>
 </html>

@@ -65,35 +65,18 @@
     
     <div class="container">
         <div class="header">
-            <h2>Información del Academico</h2>
+            <h2>Información de la Evaluación</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
+        <h4>Estimado(a) {{evaluador}}</h4>
+        <p><strong><i>Nos complace informarle que a sido seleccionado(a) para evaluar el proyecto {{proyecto}}, versión {{version}}.</i></strong></p>
+        <p><strong><i>Le solicitamos encarecidamente que proceda con la evaluación del mismo a la mayor brevedad posible. En caso de encontrar discrepancias o tener cualquier consulta, le agradecemos que se ponga en contacto con el Centro de Investigación en Matemática Pura y Aplicada (CIMPA) de la Universidad de Costa Rica.</i></strong></p>
             <div class="content">
-                <p><i>Nombre Completo:</i> {{ nombre_completo }}</p>
-                <p><i>Cédula:</i> {{ cedula }}</p>
-                <p><i>Correo:</i> {{ correo }}</p>
-                <p><i>Correo Secundario:</i> {{ correo_secundario }}</p>
-                <p><i>Sitio Web:</i> {{ sitio_web }}</p>
-                <p><i>País de Procedencia:</i> {{ pais_procedencia }}</p>
-                <p><i>Grado Máximo:</i> {{ grado_maximo }}</p>
-                <p><i>Categoría en régimen:</i> {{ categoria_en_regimen }}</p>
-                <p><i>Unidad base:</i> {{ unidad_base }}</p>
-                <p><i>Área de especialidad:</i> {{ area_especialidad }}</p>
-                <p><i>Áreas de especialidad secundarias:</i> {{ areas_especialidad_secundarias }}</p>
-                <p><i>Universidad:</i> {{ universidad }}</p>
-                <h3>Teléfonos</h3>
-                    <ul>
-                        {% for telefono in telefonos %}
-                            <div><li>{{ telefono }}</li></div>
-                        {% endfor %}
-                    </ul>
-                <h3>Títulos</h3>
-                    <ul>
-                        {% for titulo in titulos %}
-                         <div><li>{{ titulo }}</li></div>
-                        {% endfor %}
-                    </ul>
-    
+                
+                <p><strong>Detalle de la Evaluación:</strong> {{ detalle }}</p>
+                <p><strong>Estado:</strong> {{ estado }}</p>
+                <p><strong>Proyecto:</strong> {{ proyecto }}</p>
+                <p><strong>Evaluador:</strong> {{ evaluador }}</p>    
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.
