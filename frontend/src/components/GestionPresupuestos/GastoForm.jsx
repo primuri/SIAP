@@ -9,32 +9,40 @@ import { obtenerProveedores, obtenerProductosServicios, obtenerFactura } from '.
 
 const filter = createFilterOptions();
 
-export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelete }) => { 
-    const [showConfirmationEdit, setShowConfirmationEdit]           = useState(false);
-    const [showConfirmationDelete, setShowConfirmationDelete]       = useState(false);
-    const [proveedor, setProveedor]                                 = useState([]); //extra
-    const [producto, setProductoServicio]                           = useState([]); //extra
-    const [factura, setFactura]                                     = useState([]);
-    const [documentoData, setDocumentoData]                         = useState(null);
-    const [selectedFactura, setSelectedFactura]                     = useState("");
-    const [selectedProveedor, setSelectedProveedor]                 = useState('');
+export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelete }) => {
+    const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
+    const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
+    const [proveedor, setProveedor] = useState([]); //extra
+    const [producto, setProductoServicio] = useState([]); //extra
+    const [factura, setFactura] = useState([]);
+    const [documentoData, setDocumentoData] = useState(null);
+    const [selectedFactura, setSelectedFactura] = useState("");
+    const [selectedProveedor, setSelectedProveedor] = useState('');
+    const [value, setValue] = useState(null);
+    const detalle = gasto ? gasto.id_factura_fk.id_producto_servicio_fk.detalle : ""
 
-    const [formData, setFormData]                                   = useState({
-        id_partida_fk: gasto? gasto.id_partida_fk.id_partida : id_partida,
+    const [formData, setFormData] = useState({
+        id_partida_fk: gasto ? gasto.id_partida_fk.id_partida : id_partida,
         id_gasto: gasto ? gasto.id_gasto : "",
         monto: gasto ? gasto.monto : "",
         fecha: gasto ? gasto.fecha.split('T')[0] : "",
         detalle: gasto ? gasto.detalle : "",
-        id_factura_fk: gasto ? gasto.id_factura_fk : {id_cedula_proveedor_fk: {detalle: ""}, id_producto_servicio_fk: ""},
-        id_documento_fk: gasto ? {...gasto.id_documento_fk} : {tipo: "Documento factura", detalle: "", documento: ""}  
+        id_factura_fk: gasto ? gasto.id_factura_fk : { id_cedula_proveedor_fk: { detalle: "" }, id_producto_servicio_fk: {detalle: ""} },
+        id_documento_fk: gasto ? { ...gasto.id_documento_fk } : { tipo: "Documento factura", detalle: "", documento: "" }
     });
 
     useEffect(() => {
+        if(mode == 2){
+            setValue(detalle)
+        }
         loadProveedores()
         loadProductosServicios()
         loadFacturas()
     }, [])
 
+    useEffect(() =>{
+        formData.id_factura_fk.id_producto_servicio_fk.detalle = value
+    }, [value])
     useEffect(() => {
         if (mode === 2) {
             setSelectedProveedor(formData.id_factura_fk.id_cedula_proveedor_fk);
@@ -121,16 +129,16 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
 
     const sendForm = (event) => {
         event.preventDefault();
-    
+
         const combinedData = new FormData();
-            if (documentoData) {
-                combinedData.append('documento', documentoData);
-            }
-            combinedData.append('json', JSON.stringify(formData));
-            onSubmit(combinedData);
+        if (documentoData) {
+            combinedData.append('documento', documentoData);
+        }
+        combinedData.append('json', JSON.stringify(formData));
+        onSubmit(combinedData);
     };
 
-    
+
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
     };
@@ -182,7 +190,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                     </div>
                 </div>
             </div>
-    
+
             <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center' encType="multipart/form-data">
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
@@ -244,85 +252,60 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                             <div className="col-md-6">
                                 <label htmlFor="id_producto_servicio_fk" className="label-personalizado mb-2 mr-2">Producto o Servicio</label>
                                 <Autocomplete
-                                        className="universidadAuto"
-                                        value={producto.find(prod => prod.id_producto_servicio === formData.id_factura_fk.id_producto_servicio_fk.id_producto_servicio) || ''}
-                                        onChange={async (event, newValue) => {
-                                            if (typeof newValue === 'string') {
-                                                // Usuario introdujo un valor libremente y presionó enter (freeSolo)
-                                                const productoServicio = { detalle: newValue }; // Estructura esperada por tu API para nuevo producto
-                                                try {
-                                                    const response = await API.agregarProductoServicio(productoServicio, localStorage.getItem('token'));
-                                                    // Suponiendo que la respuesta incluye el producto completo, incluido su id_producto_servicio
-                                                    const newProduct = response.data;
-                                                    setProductoServicio(prevProducts => [...prevProducts, newProduct]); // Actualiza el array de productos con el nuevo producto agregado
-                                                    setFormData({
-                                                        ...formData,
-                                                        id_factura_fk: {
-                                                            ...formData.id_factura_fk,
-                                                            id_producto_servicio_fk: newProduct.id_producto_servicio,
-                                                        },
-                                                    });
-                                                } catch (error) {
-                                                    console.error("Error agregando el nuevo producto: ", error);
-                                                    // Manejo de errores, p.ej. mostrar un mensaje al usuario
-                                                }
-                                            } else if (newValue && newValue.inputValue) {
-                                                // Usuario seleccionó la opción para añadir un nuevo valor
-                                                const productoServicio = { detalle: newValue.inputValue };
-                                                try {
-                                                    const response = await API.agregarProductoServicio(productoServicio, localStorage.getItem('token'));
-                                                    const newProduct = response.data;
-                                                    setProductoServicio(prevProducts => [...prevProducts, newProduct]); // Actualiza el array de productos con el nuevo producto agregado
-                                                    setFormData({
-                                                        ...formData,
-                                                        id_factura_fk: {
-                                                            ...formData.id_factura_fk,
-                                                            id_producto_servicio_fk: newProduct.id_producto_servicio,
-                                                        },
-                                                    });
-                                                } catch (error) {
-                                                    console.error("Error agregando el nuevo producto: ", error);
-                                                }
-                                            } else {
-                                                // Usuario seleccionó un producto existente
-                                                setFormData({
-                                                    ...formData,
-                                                    id_factura_fk: {
-                                                        ...formData.id_factura_fk,
-                                                        id_producto_servicio_fk: newValue ? newValue.id_producto_servicio : '',
-                                                    },
-                                                });
-                                            }
-                                        }}
-                                        filterOptions={(options, params) => {
-                                            const filtered = filter(options, params);
+                                    value={value}
+                                    onChange={(event, newValue) => {
+                                        if (typeof newValue === 'string') {
+                                            setValue({
+                                                detalle: newValue,
+                                            });
+                                        } else if (newValue && newValue.inputValue) {
+                                            // Create a new value from the user input
+                                            setValue({
+                                                detalle: newValue.inputValue,
+                                            });
+                                        } else {
+                                            setValue(newValue);
+                                        }
+                                    }}
+                                    filterOptions={(options, params) => {
+                                        const filtered = filter(options, params);
 
-                                            const { inputValue } = params;
-                                            if (inputValue !== '' && !options.some(option => option.detalle === inputValue)) {
-                                                filtered.push({
-                                                    inputValue,
-                                                    detalle: `Añadir "${inputValue}"`,
-                                                    id_producto_servicio: null,
-                                                });
-                                            }
-                                            return filtered;
-                                        }}
-                                        selectOnFocus
-                                        clearOnBlur
-                                        handleHomeEndKeys
-                                        id="id_producto_servicio_fk"
-                                        options={producto}
-                                        getOptionLabel={(option) => {
-                                            if (typeof option === 'string') return option;
-                                            if (option.inputValue) return option.inputValue;
-                                            return option.detalle;
-                                        }}
-                                        renderOption={(props, option) => <li {...props}>{option.detalle}</li>}
-                                        freeSolo
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Producto o Servicio" variant="outlined" className="form-control" />
-                                        )}
-                                    />
+                                        const { inputValue } = params;
+                                        // Suggest the creation of a new value
+                                        const isExisting = options.some((option) => inputValue === option.detalle);
+                                        if (inputValue !== '' && !isExisting) {
+                                            filtered.push({
+                                                inputValue,
+                                                detalle: `Add "${inputValue}"`,
+                                            });
+                                        }
+
+                                        return filtered;
+                                    }}
+                                    selectOnFocus
+                                    clearOnBlur
+                                    handleHomeEndKeys
+                                    id="free-solo-with-text-demo"
+                                    options={producto}
+                                    getOptionLabel={(option) => {
+                                        // Value selected with enter, right from the input
+                                        if (typeof option === 'string') {
+                                            return option;
+                                        }
+                                        // Add "xxx" option created dynamically
+                                        if (option.inputValue) {
+                                            return option.inputValue;
+                                        }
+                                        // Regular option
+                                        return option.detalle;
+                                    }}
+                                    renderOption={(props, option) => <li {...props}>{option.detalle}</li>}
+                                    sx={{ width: 300 }}
+                                    freeSolo
+                                    renderInput={(params) => (
+                                        <TextField {...params} />
+                                    )}
+                                />
 
                             </div>
                         </div>
@@ -330,11 +313,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label>
                                 <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
-                                { typeof formData.id_documento_fk.documento === 'string' && (
+                                {typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_documento_fk.documento.split('/').pop()}
                                     </a>
-                                ) }
+                                )}
                             </div>
                         </div>
                     </div>

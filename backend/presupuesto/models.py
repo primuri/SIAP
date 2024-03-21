@@ -71,7 +71,7 @@ class Proveedor(models.Model):
 
 class ProductoServicio(models.Model):
     id_producto_servicio = models.AutoField(primary_key=True)
-    detalle = models.CharField(max_length=150)
+    detalle = models.CharField(max_length=150, unique=True)
 
     class Meta:
         db_table = 'producto_servicio'
