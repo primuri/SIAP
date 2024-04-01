@@ -104,7 +104,7 @@ def correo_academicos(asunto, instance, destinatario):
                 'cedula': instance.cedula,
                 'correo': instance.correo,
                 'correo_secundario': instance.correo_secundario or 'No proporcionado',
-                'sitio_web': instance.sitio_web,
+                'sitio_web': instance.sitio_web or 'No proporcionado',
                 'pais_procedencia': instance.pais_procedencia,
                 'grado_maximo': instance.grado_maximo,
                 'categoria_en_regimen': instance.categoria_en_regimen,

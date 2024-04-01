@@ -11,7 +11,6 @@ from django.conf import settings
 import logging
 from threading import Thread
 
-
 class Proyecto(models.Model):
     id_codigo_vi = models.CharField(max_length=45, primary_key=True)
     id_codigo_cimpa_fk = models.ForeignKey(PropuestaProyecto, on_delete=models.PROTECT)
@@ -200,6 +199,96 @@ class DesignacionAsistente(models.Model):
     class Meta:
         db_table = 'designacion_asistente'
         unique_together = (('id_version_proyecto_fk', 'id_asistente_carnet_fk'),)
+
+
+logger = logging.getLogger(__name__)
+
+def enviar_correo_asistente(asunto, instance, destinatario):
+    def enviar():
+        try:
+            
+            documento = instance.id_documento_inopia_fk
+            
+            contexto = {
+                'cantidad_horas': instance.cantidad_horas,
+                'consecutivo': instance.consecutivo,
+                'inopia_detalle': documento.detalle,
+                'inopia_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',
+                'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'cedula': instance.id_asistente_carnet_fk.cedula,
+                'condicion_estudiante': instance.id_asistente_carnet_fk.condicion_estudiante,
+                'id_nombre_completo_fk': f"{instance.id_asistente_carnet_fk.id_nombre_completo_fk.nombre} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido}",
+                'carrera':  instance.id_asistente_carnet_fk.carrera,
+                'promedio_ponderado':  instance.id_asistente_carnet_fk.promedio_ponderado
+            }
+        
+            mensaje_html = render_to_string('email_asistente.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+
+@receiver(post_save, sender=DesignacionAsistente)
+def asistente_post_save(sender, instance, created, **kwargs):
+    asunto = "Nuevo Asistente Creado" if created else "Asistente Actualizado"
+    enviar_correo_asistente(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador =f"Se a creado un asistente en su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado la modificación de un asistente en su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_asistente_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+@receiver(pre_delete, sender=DesignacionAsistente)
+def asistente_post_delete(sender, instance, **kwargs):
+    asunto = "Asistente Eliminado"
+    enviar_correo_asistente(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador= f"Se a eliminado un asistente de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_asistente_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+def enviar_correo_asistente_investigador(asunto, instance, destinatario):
+    def enviar():
+        try:
+            
+            documento = instance.id_documento_inopia_fk
+            
+            contexto = {
+                'cantidad_horas': instance.cantidad_horas,
+                'consecutivo': instance.consecutivo,
+                'inopia_detalle': documento.detalle,
+                'inopia_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',
+                'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'cedula': instance.id_asistente_carnet_fk.cedula,
+                'condicion_estudiante': instance.id_asistente_carnet_fk.condicion_estudiante,
+                'id_nombre_completo_fk': f"{instance.id_asistente_carnet_fk.id_nombre_completo_fk.nombre} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido}",
+                'carrera':  instance.id_asistente_carnet_fk.carrera,
+                'promedio_ponderado':  instance.id_asistente_carnet_fk.promedio_ponderado,
+                'investigador': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}"
+            }
+        
+            mensaje_html = render_to_string('email_asistente_investigador.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
 
 class ColaboradorSecundario(models.Model):
     id_colaborador_secundario = models.AutoField(primary_key=True)

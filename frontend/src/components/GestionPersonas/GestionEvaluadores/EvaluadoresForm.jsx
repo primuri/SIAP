@@ -264,7 +264,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                   renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} className="form-control" />
+                    <TextField {...params} className="form-control" required/>
                   )}
                 />
               </div >
@@ -327,7 +327,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                   sx={{ width: 300 }}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} className="form-control" />
+                    <TextField {...params} className="form-control" required/>
                   )}
                 />
               </div>
