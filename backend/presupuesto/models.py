@@ -8,7 +8,8 @@ import logging
 from django.conf import settings
 from threading import Thread
 from django.db.models.signals import pre_delete
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_delete
+
 
 class TipoPresupuesto(models.Model):
     id_tipo_presupuesto = models.AutoField(primary_key=True)
@@ -31,7 +32,7 @@ class CodigoFinanciero(models.Model):
 
     class Meta:
         db_table = 'codigo_financiero'
-#
+
 class Presupuesto(models.Model):
     id_presupuesto = models.AutoField(primary_key=True)
     anio_aprobacion = models.IntegerField()
@@ -45,6 +46,88 @@ class Presupuesto(models.Model):
     class Meta:
         db_table = 'presupuesto'
 
+
+logger = logging.getLogger(__name__)
+
+def enviar_correo_presupuesto(asunto, instance, destinatario):
+    def enviar():
+        try:
+            documento = instance.id_oficio_fk
+            
+            contexto = {
+                'anio_aprobacion': instance.anio_aprobacion ,
+                'ente_financiero': instance.id_ente_financiero_fk.nombre,
+                'tipo_presupuesto':f"{instance.id_tipo_presupuesto_fk.tipo}",
+                'version': instance.id_version_proyecto_fk.numero_version,
+                'codigo_financiero': instance.id_codigo_financiero_fk.codigo,
+                'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'oficio_detalle': documento.detalle,
+                'oficio_nombre': documento.ruta_archivo.name.split('/')[-1] if documento else 'No disponible',
+            }
+        
+            mensaje_html = render_to_string('email_presupuesto.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=Presupuesto)
+def presupuesto_post_save(sender, instance, created, **kwargs):
+    asunto = "Nuevo Presupuesto Creado" if created else "Presupuesto Actualizado"
+    enviar_correo_presupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador =f"Se a creado un presupuesto de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación del presupuesto de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_presupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+@receiver(pre_delete, sender=Presupuesto)
+def presupuesto_post_delete(sender, instance, **kwargs):
+    asunto = "Presupuesto Eliminado"
+    enviar_correo_presupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador = f"Se a eliminado un presupuesto de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_presupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+def enviar_correo_presupuesto_investigador(asunto, instance, destinatario):
+    def enviar():
+        try:
+            documento = instance.id_oficio_fk
+            
+            contexto = {
+                'anio_aprobacion': instance.anio_aprobacion ,
+                'ente_financiero': instance.id_ente_financiero_fk.nombre,
+                'tipo_presupuesto':f"{instance.id_tipo_presupuesto_fk.tipo}",
+                'version': instance.id_version_proyecto_fk.numero_version,
+                'codigo_financiero': instance.id_codigo_financiero_fk.codigo,
+                'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'oficio_detalle': documento.detalle,
+                'oficio_nombre': documento.ruta_archivo.name.split('/')[-1] if documento else 'No disponible',
+                'investigador': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+            }
+        
+            mensaje_html = render_to_string('email_presupuesto_investigador.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
 class VersionPresupuesto(models.Model):
     id_version_presupuesto = models.AutoField(primary_key=True)
     version = models.CharField(max_length=45)
@@ -57,6 +140,84 @@ class VersionPresupuesto(models.Model):
     class Meta:
         db_table = 'version_presupuesto'
 
+logger = logging.getLogger(__name__)
+
+def enviar_correo_versionPresupuesto(asunto, instance, destinatario):
+    def enviar():
+        try:
+            
+            contexto = {
+                'version': instance.version ,
+                'monto': instance.monto,
+                'saldo':f"{instance.saldo}",
+                'fecha': instance.fecha.strftime("%Y-%m-%d"),
+                'detalle': instance.detalle,
+                'proyecto': f"{instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'version_proyecto': instance.id_presupuesto_fk.id_version_proyecto_fk.numero_version,
+            }
+        
+            mensaje_html = render_to_string('email_versioPresupuesto.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=VersionPresupuesto)
+def versionPresupuesto_post_save(sender, instance, created, **kwargs):
+    asunto = "Nueva Versión de Presupuesto Creada" if created else "Versión de Presupuesto Actualizada"
+    enviar_correo_versionPresupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador =f"Se a creado una versión de presupuesto de su proyecto: {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación de una versión de presupuesto de su proyecto: {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_versionPresupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+@receiver(pre_delete, sender=VersionPresupuesto)
+def versionPresupuesto_post_delete(sender, instance, **kwargs):
+    asunto = "Versión de Presupuesto Eliminado"
+    enviar_correo_versionPresupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador = f"Se a eliminado una versión de presupuesto de su proyecto: {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_versionPresupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+
+def enviar_correo_versionPresupuesto_investigador(asunto, instance, destinatario):
+    def enviar():
+        try:
+            
+            contexto = {
+                'version': instance.version ,
+                'monto': instance.monto,
+                'saldo':f"{instance.saldo}",
+                'fecha': instance.fecha.strftime("%Y-%m-%d"),
+                'detalle': instance.detalle,
+                'proyecto': f"{instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'version_proyecto': instance.id_presupuesto_fk.id_version_proyecto_fk.numero_version,
+                'investigador': f"{instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+            }
+        
+            mensaje_html = render_to_string('email_versioPresupuesto_investigador.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
 class Partida(models.Model):
     id_partida = models.AutoField(primary_key=True)
     detalle = models.CharField(max_length=255)
@@ -66,7 +227,87 @@ class Partida(models.Model):
 
     class Meta:
         db_table = 'partida'
-#
+
+logger = logging.getLogger(__name__)
+
+def enviar_correo_partida(asunto, instance, destinatario):
+    def enviar():
+        try:
+            
+            contexto = {
+                'id_partida': instance.id_partida if instance.id_partida else "No encontrado",
+                'monto': instance.monto,
+                'saldo':f"{instance.saldo}",
+                'detalle': instance.detalle,
+                'version_presupuesto': instance.id_version_presupuesto_fk.version,
+                'proyecto': f"{instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'version': instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.numero_version,
+            }
+        
+            mensaje_html = render_to_string('email_partida.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=Partida)
+def partida_post_save(sender, instance, created, **kwargs):
+    asunto = "Nueva Partida de una Versión de Presupuesto Creada" if created else "Partida de una Versión de Presupuesto Actualizada"
+    enviar_correo_partida(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador =f"Se a creado una partida de una versión de presupuesto de su proyecto: {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación de una partida de una versión de presupuesto de su proyecto: {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_partida_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+@receiver(pre_delete, sender=Partida)
+def partida_post_delete(sender, instance, **kwargs):
+    asunto = "Partida de una Versión de Presupuesto Eliminado"
+    enviar_correo_partida(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador = f"Se a eliminado una partida de una versión de presupuesto de su proyecto: {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_partida_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+
+def enviar_correo_partida_investigador(asunto, instance, destinatario):
+    def enviar():
+        try:
+            
+            contexto = {
+                'id_partida': instance.id_partida if instance.id_partida else "No encontrado",
+                'monto': instance.monto,
+                'saldo':f"{instance.saldo}",
+                'detalle': instance.detalle,
+                'version_presupuesto': instance.id_version_presupuesto_fk.version,
+                'proyecto': f"{instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'version': instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.numero_version,
+                'investigador': f"{instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+            }
+        
+            mensaje_html = render_to_string('email_partida_investigador.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+
+
 class Proveedor(models.Model):
     id_cedula_proveedor = models.CharField(max_length=11, primary_key=True, unique=True)
     tipo = models.CharField(max_length=45)
@@ -160,7 +401,98 @@ class Gasto(models.Model):
 
     class Meta:
         db_table = 'gasto'
-#
+
+
+logger = logging.getLogger(__name__)
+
+def enviar_correo_gasto(asunto, instance, destinatario):
+    def enviar():
+        try:   
+            
+            documento = instance.id_documento_fk
+            
+            contexto = {
+                'id_gasto': instance.id_gasto if instance.id_gasto else "No encontrado",
+                'fecha': instance.fecha.strftime("%Y-%m-%d"),
+                'detalle':f"{instance.detalle}",
+                'monto': instance.monto,
+                'partida': instance.id_partida_fk.id_partida,
+                'proveedor': instance.id_factura_fk.id_cedula_proveedor_fk.nombre,
+                'producto_servicio': instance.id_factura_fk.id_producto_servicio_fk.detalle,
+                'version_presupuesto': instance.id_partida_fk.id_version_presupuesto_fk.version,
+                'proyecto': f"{instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'version': instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.numero_version,
+                'documento_nombre': documento.documento.name.split('/')[-1] or 'No disponible',
+            }
+        
+            mensaje_html = render_to_string('email_gastos.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=Gasto)
+def gasto_post_save(sender, instance, created, **kwargs):
+    asunto = "Nuevo Gasto de una Partida Creada" if created else "Gasto de una Partida Actualizada"
+    enviar_correo_gasto(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador =f"Se a creado un gasto de una partida de su proyecto: {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación de un gasto de una partida de su proyecto: {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_gasto_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+@receiver(pre_delete, sender=Gasto)
+def gasto_post_delete(sender, instance, **kwargs):
+    asunto = "Gasto de una Partida Eliminado"
+    enviar_correo_gasto(asunto, instance, "brandonbadilla143@gmail.com")
+    asunto_investigador = f"Se a eliminado un gasto de una partida de su proyecto: {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
+    destinatario_investigador = instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
+    enviar_correo_gasto_investigador(asunto_investigador, instance, destinatario_investigador)
+
+
+
+def enviar_correo_gasto_investigador(asunto, instance, destinatario):
+    def enviar():
+        try:   
+            
+            documento = instance.id_documento_fk
+            
+            contexto = {
+                'id_gasto': instance.id_gasto if instance.id_gasto else "No encontrado",
+                'fecha': instance.fecha.strftime("%Y-%m-%d"),
+                'detalle':f"{instance.detalle}",
+                'monto': instance.monto,
+                'partida': instance.id_partida_fk.id_partida,
+                'proveedor': instance.id_factura_fk.id_cedula_proveedor_fk.nombre,
+                'producto_servicio': instance.id_factura_fk.id_producto_servicio_fk.detalle,
+                'version_presupuesto': instance.id_partida_fk.id_version_presupuesto_fk.version,
+                'proyecto': f"{instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
+                'version': instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.numero_version,
+                'documento_nombre': documento.documento.name.split('/')[-1] or 'No disponible',
+                'investigador': f"{instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+            }
+        
+            mensaje_html = render_to_string('email_gastos_investigador.html', contexto)
+
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html' 
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de notificación: {e}")
+    Thread(target=enviar).start()
+
 class CuentaBancaria(models.Model):
     id_numero = models.CharField(max_length=25, primary_key=True)
     banco = models.CharField(max_length=255)

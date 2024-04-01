@@ -31,7 +31,8 @@ def enviar_correo_informe(asunto, instance, destinatario):
                 'fecha_debe_presentar': instance.fecha_debe_presentar.strftime("%Y-%m-%d"),
                 'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
                 'estado':f"{instance.estado}",
-                'tipo': instance.tipo   
+                'tipo': instance.tipo,
+                'version': instance.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_informe.html', contexto)
@@ -78,7 +79,8 @@ def enviar_correo_informe_investigador(asunto, instance, destinatario):
                 'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
                 'estado':f"{instance.estado}",
                 'tipo': instance.tipo,
-                'investigador': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}"
+                'investigador': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+                'version': instance.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_informe_investigador.html', contexto)
@@ -119,7 +121,8 @@ def enviar_correo_versionInforme(asunto, instance, destinatario):
                 'oficio_detalle': oficio.detalle,
                 'oficio_nombre': oficio.ruta_archivo.name.split('/')[-1] if oficio else 'No disponible',
                 'informe_detalle': documento.detalle,
-                'informe_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible'   
+                'informe_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',   
+                'version': instance.id_informe_fk.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_versionInforme.html', contexto)
@@ -168,7 +171,8 @@ def enviar_correo_versionInforme_investigador(asunto, instance, destinatario):
                 'oficio_nombre': oficio.ruta_archivo.name.split('/')[-1] if oficio else 'No disponible',
                 'informe_detalle': documento.detalle,
                 'informe_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',
-                'investigador': f"{instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}"
+                'investigador': f"{instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+                'version': instance.id_informe_fk.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_versionInforme_investigador.html', contexto)
@@ -210,7 +214,8 @@ def enviar_correo_acciones(asunto, instance, destinatario):
                 'estado': instance.estado,
                 'proyecto': f"{instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
                 'version_informe':f"{instance.id_version_informe_fk.id_informe_fk.id_informe}  version N° {instance.id_version_informe_fk.numero_version}",
-                'documento_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible'   
+                'documento_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',  
+                'version': instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_accion.html', contexto)
@@ -260,8 +265,8 @@ def enviar_correo_acciones_investigador(asunto, instance, destinatario):
                 'proyecto': f"{instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
                 'version_informe':f"{instance.id_version_informe_fk.id_informe_fk.id_informe}  version N° {instance.id_version_informe_fk.numero_version}",
                 'documento_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',  
-                'investigador': f"{instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}"
-           
+                'investigador': f"{instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+                'version': instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_accion_investigador.html', contexto)

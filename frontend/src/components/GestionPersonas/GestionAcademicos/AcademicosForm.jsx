@@ -344,7 +344,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label>
+                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span class="optional">(Opcional)</span>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>

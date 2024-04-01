@@ -219,7 +219,8 @@ def enviar_correo_asistente(asunto, instance, destinatario):
                 'condicion_estudiante': instance.id_asistente_carnet_fk.condicion_estudiante,
                 'id_nombre_completo_fk': f"{instance.id_asistente_carnet_fk.id_nombre_completo_fk.nombre} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido}",
                 'carrera':  instance.id_asistente_carnet_fk.carrera,
-                'promedio_ponderado':  instance.id_asistente_carnet_fk.promedio_ponderado
+                'promedio_ponderado':  instance.id_asistente_carnet_fk.promedio_ponderado,
+                'version': instance.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_asistente.html', contexto)
@@ -272,7 +273,8 @@ def enviar_correo_asistente_investigador(asunto, instance, destinatario):
                 'id_nombre_completo_fk': f"{instance.id_asistente_carnet_fk.id_nombre_completo_fk.nombre} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} {instance.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido}",
                 'carrera':  instance.id_asistente_carnet_fk.carrera,
                 'promedio_ponderado':  instance.id_asistente_carnet_fk.promedio_ponderado,
-                'investigador': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}"
+                'investigador': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido} {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.segundo_apellido}",
+                'version': instance.id_version_proyecto_fk.numero_version
             }
         
             mensaje_html = render_to_string('email_asistente_investigador.html', contexto)
