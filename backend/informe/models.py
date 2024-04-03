@@ -53,7 +53,7 @@ def enviar_correo_informe(asunto, instance, destinatario):
 @receiver(post_save, sender=Informe)
 def informe_post_save(sender, instance, created, **kwargs):
     asunto = "Nuevo informe Creado" if created else "Informe Actualizado"
-    enviar_correo_informe(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_informe(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado un informe de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación en el informe de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_informe_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -62,7 +62,7 @@ def informe_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=Informe)
 def informe_post_delete(sender, instance, **kwargs):
     asunto = "Informe Eliminado"
-    enviar_correo_informe(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_informe(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador= f"Se a eliminado un informe de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_informe_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -143,7 +143,7 @@ def enviar_correo_versionInforme(asunto, instance, destinatario):
 @receiver(post_save, sender=VersionInforme)
 def versionInforme_post_save(sender, instance, created, **kwargs):
     asunto = "Nueva versión de informe Creada" if created else "Versión de informe Actualizada"
-    enviar_correo_versionInforme(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_versionInforme(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado una versión de informe de su proyecto: {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación en la versión de informe de su proyecto: {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_versionInforme_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -152,7 +152,7 @@ def versionInforme_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=VersionInforme)
 def versionInforme_post_delete(sender, instance, **kwargs):
     asunto = "Versión de informe Eliminada"
-    enviar_correo_versionInforme(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_versionInforme(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador= f"Se a eliminado una versión de informe de su proyecto: {instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_versionInforme_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -236,7 +236,7 @@ def enviar_correo_acciones(asunto, instance, destinatario):
 @receiver(post_save, sender=Accion)
 def accion_post_save(sender, instance, created, **kwargs):
     asunto = "Nueva acción de una versión de informe Creada" if created else "Acción de una versión de informe Actualizada"
-    enviar_correo_acciones(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_acciones(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado una acción de una versión de informe de su proyecto: {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación en la acción de una versión de informe de su proyecto: {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_acciones_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -245,7 +245,7 @@ def accion_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=Accion)
 def accion_post_delete(sender, instance, **kwargs):
     asunto = "Acción de una versión de informe Eliminada"
-    enviar_correo_acciones(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_acciones(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador = f"Se a eliminado una acción de una versión de informe de su proyecto: {instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_informe_fk.id_informe_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_acciones_investigador(asunto_investigador, instance, destinatario_investigador)

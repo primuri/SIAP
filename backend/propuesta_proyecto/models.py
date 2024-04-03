@@ -92,7 +92,7 @@ def correo_propuestas(asunto, instance, destinatario):
 @receiver(post_save, sender=PropuestaProyecto)
 def propuesta_post_save(sender, instance, created, **kwargs):
     asunto_general = f"Creación de Propuesta de Proyecto: {instance.nombre}" if created else f"Actualización de Propuesta de Proyecto: {instance.nombre}"
-    correo_propuestas(asunto_general, instance, "brandonbadilla143@gmail.com")
+    correo_propuestas(asunto_general, instance, settings.EMAIL_DEFAULT_SENDER)
     
     # Si la propuesta ha sido editada y su estado es "Aprobada", envía un correo adicional.
     if not created and instance.estado == 'Aprobada':
@@ -103,7 +103,7 @@ def propuesta_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=PropuestaProyecto)
 def propuesta_pre_delete(sender, instance, **kwargs):
     asunto = f"Eliminación de Propuesta de Proyecto: {instance.nombre}"
-    correo_propuestas(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
+    correo_propuestas(asunto, instance, settings.EMAIL_DEFAULT_SENDER) # Cambiar por correo final
 
 
 def correo_propuesta_aprobada(asunto,instance, destinatario):

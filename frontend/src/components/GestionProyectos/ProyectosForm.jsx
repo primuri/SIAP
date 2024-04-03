@@ -306,7 +306,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 
                                     <div className="position-relative">
                                         <input type="text" className="form-control" name="id_academico_fk.id_academico"
-                                        id="id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                        id="id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} required/>
                                         {(academicosFilter.length > 0) && (
                                             <div
                                                 className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"

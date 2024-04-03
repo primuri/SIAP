@@ -113,7 +113,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} />
+                        onChange={handleChange} required/>
                 </div>
             </div>
             <div className="row mb-2">
@@ -151,8 +151,8 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento   </label>
-                    <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} required />
+                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento </label>
+                    <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} />
                 </div>
                
             </div>

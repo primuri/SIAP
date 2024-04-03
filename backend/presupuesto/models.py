@@ -82,7 +82,7 @@ def enviar_correo_presupuesto(asunto, instance, destinatario):
 @receiver(post_save, sender=Presupuesto)
 def presupuesto_post_save(sender, instance, created, **kwargs):
     asunto = "Nuevo Presupuesto Creado" if created else "Presupuesto Actualizado"
-    enviar_correo_presupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_presupuesto(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado un presupuesto de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación del presupuesto de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_presupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -91,7 +91,7 @@ def presupuesto_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=Presupuesto)
 def presupuesto_post_delete(sender, instance, **kwargs):
     asunto = "Presupuesto Eliminado"
-    enviar_correo_presupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_presupuesto(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador = f"Se a eliminado un presupuesto de su proyecto: {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_presupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -173,7 +173,7 @@ def enviar_correo_versionPresupuesto(asunto, instance, destinatario):
 @receiver(post_save, sender=VersionPresupuesto)
 def versionPresupuesto_post_save(sender, instance, created, **kwargs):
     asunto = "Nueva Versión de Presupuesto Creada" if created else "Versión de Presupuesto Actualizada"
-    enviar_correo_versionPresupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_versionPresupuesto(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado una versión de presupuesto de su proyecto: {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación de una versión de presupuesto de su proyecto: {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_versionPresupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -182,7 +182,7 @@ def versionPresupuesto_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=VersionPresupuesto)
 def versionPresupuesto_post_delete(sender, instance, **kwargs):
     asunto = "Versión de Presupuesto Eliminado"
-    enviar_correo_versionPresupuesto(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_versionPresupuesto(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador = f"Se a eliminado una versión de presupuesto de su proyecto: {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_versionPresupuesto_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -261,7 +261,7 @@ def enviar_correo_partida(asunto, instance, destinatario):
 @receiver(post_save, sender=Partida)
 def partida_post_save(sender, instance, created, **kwargs):
     asunto = "Nueva Partida de una Versión de Presupuesto Creada" if created else "Partida de una Versión de Presupuesto Actualizada"
-    enviar_correo_partida(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_partida(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado una partida de una versión de presupuesto de su proyecto: {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación de una partida de una versión de presupuesto de su proyecto: {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_partida_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -270,7 +270,7 @@ def partida_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=Partida)
 def partida_post_delete(sender, instance, **kwargs):
     asunto = "Partida de una Versión de Presupuesto Eliminado"
-    enviar_correo_partida(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_partida(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador = f"Se a eliminado una partida de una versión de presupuesto de su proyecto: {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_partida_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -366,12 +366,12 @@ def correo_proveedor(asunto, instance, destinatario):
 @receiver(post_save, sender=Proveedor)
 def proveedor_post_save(sender, instance, created, **kwargs):
     asunto = f"Creación de el nuevo Proveedor: {instance.nombre}" if created else f"Actualización del Proveedor {instance.nombre}"
-    correo_proveedor(asunto, instance, "brandonbadilla143@gmail.com")
+    correo_proveedor(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
 
 @receiver(pre_delete, sender=Proveedor)
 def proveedor_pre_delete(sender, instance, **kwargs):
     asunto = f"Eliminación del Proveedor: {instance.nombre}"
-    correo_proveedor(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
+    correo_proveedor(asunto, instance, settings.EMAIL_DEFAULT_SENDER) # Cambiar por correo final
 
 
 
@@ -442,7 +442,7 @@ def enviar_correo_gasto(asunto, instance, destinatario):
 @receiver(post_save, sender=Gasto)
 def gasto_post_save(sender, instance, created, **kwargs):
     asunto = "Nuevo Gasto de una Partida Creada" if created else "Gasto de una Partida Actualizada"
-    enviar_correo_gasto(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_gasto(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador =f"Se a creado un gasto de una partida de su proyecto: {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre} " if created else f"Se a realizado una modificación de un gasto de una partida de su proyecto: {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_gasto_investigador(asunto_investigador, instance, destinatario_investigador)
@@ -451,7 +451,7 @@ def gasto_post_save(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=Gasto)
 def gasto_post_delete(sender, instance, **kwargs):
     asunto = "Gasto de una Partida Eliminado"
-    enviar_correo_gasto(asunto, instance, "brandonbadilla143@gmail.com")
+    enviar_correo_gasto(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
     asunto_investigador = f"Se a eliminado un gasto de una partida de su proyecto: {instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}"
     destinatario_investigador = instance.id_partida_fk.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo
     enviar_correo_gasto_investigador(asunto_investigador, instance, destinatario_investigador)

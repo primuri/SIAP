@@ -135,12 +135,12 @@ def correo_academicos(asunto, instance, destinatario):
 @receiver(post_save, sender=Academico)
 def academico_post_save(sender, instance, created, **kwargs):
     asunto = f"Creación de Académico {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}" if created else f"Actualización de Académico {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
-    correo_academicos(asunto, instance, "brandonbadilla143@gmail.com") #Cambiar por correo final
+    correo_academicos(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
 
 @receiver(pre_delete, sender=Academico)
 def academico_pre_delete(sender, instance, **kwargs):
     asunto = f"Eliminación de Académico {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
-    correo_academicos(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
+    correo_academicos(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
 
 class Telefono(models.Model):
     id_telefono = models.AutoField(primary_key=True)
@@ -188,7 +188,7 @@ def correo_evaluadores(asunto, instance, destinatario):
                 'id_evaluador': instance.id_evaluador
             }
 
-            mensaje_html = render_to_string('email_evaluadores.html', context) # Asegúrate de crear esta plantilla
+            mensaje_html = render_to_string('email_evaluadores.html', context)
 
             correo = EmailMessage(
                 subject=asunto,
@@ -206,12 +206,12 @@ def correo_evaluadores(asunto, instance, destinatario):
 @receiver(post_save, sender=Evaluador)
 def evaluador_post_save(sender, instance, created, **kwargs):
     asunto = f"Creación de Evaluador {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}" if created else f"Actualización de Evaluador {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
-    correo_evaluadores(asunto, instance, "brandonbadilla143@gmail.com") #Cambiar por correo final
+    correo_evaluadores(asunto, instance, settings.EMAIL_DEFAULT_SENDER) 
 
 @receiver(pre_delete, sender=Evaluador)
 def evaluador_pre_delete(sender, instance, **kwargs):
     asunto = f"Eliminación de Evaluador {instance.id_nombre_completo_fk.nombre} {instance.id_nombre_completo_fk.apellido} {instance.id_nombre_completo_fk.segundo_apellido}"
-    correo_evaluadores(asunto, instance, "brandonbadilla143@gmail.com") # Cambiar por correo final
+    correo_evaluadores(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
 
 
 

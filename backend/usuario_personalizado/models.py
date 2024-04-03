@@ -69,13 +69,13 @@ def usuario_post_save(sender, instance, created, **kwargs):
         asunto = f"Usuario Creado: {instance.correo}"
     else:
         asunto = f"Usuario Actualizado: {instance.correo}"
-    correo_usuarios(instance, asunto, "brandonbadilla143@gmail.com") 
+    correo_usuarios(instance, asunto, settings.EMAIL_DEFAULT_SENDER) 
 
 
 @receiver(post_delete, sender=Usuario)
 def usuario_post_delete(sender, instance, **kwargs):
     asunto = f"Usuario Eliminado: {instance.correo}"
-    correo_usuarios(instance, asunto,"brandonbadilla143@gmail.com" , es_eliminado=True)
+    correo_usuarios(instance, asunto,settings.EMAIL_DEFAULT_SENDER , es_eliminado=True)
 
 logger = logging.getLogger(__name__)
 
