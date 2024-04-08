@@ -13,7 +13,7 @@ export const Sidebar = () => {
       { label: 'Gestión <br/> proyectos',      link: '/gestion-proyectos' },
       { label: 'Gestión <br/> evaluaciones',    link: '/gestion-evaluaciones' },
       { label: 'Gestión proveedores',    link: '/gestion-proveedores' },
-      //{ label: 'Gestión órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
+      { label: 'Gestión órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
 
     ],
     "evaluador": [
