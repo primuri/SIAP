@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,7 +70,14 @@ ROOT_URLCONF = 'django_files.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'personas', 'templates'),
+        os.path.join(BASE_DIR, 'propuesta_proyecto', 'templates'),
+        os.path.join(BASE_DIR, 'presupuesto', 'templates'),
+        os.path.join(BASE_DIR, 'version_proyecto', 'templates'),
+        os.path.join(BASE_DIR, 'producto', 'templates'),
+        os.path.join(BASE_DIR, 'usuario_personalizado', 'templates'),
+        os.path.join(BASE_DIR, 'informe', 'templates'),
+        os.path.join(BASE_DIR, 'organo_colegiado', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -149,3 +157,11 @@ MEDIA_ROOT = BASE_DIR / 'media'              # Define la ubicación en el sistem
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # Servidor SMTP de Gmail
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'cimpa.siap@gmail.com'
+EMAIL_HOST_PASSWORD = 'clzjmmlwtanatyil'
+EMAIL_DEFAULT_SENDER = 'brandonbadilla143@gmail.com'

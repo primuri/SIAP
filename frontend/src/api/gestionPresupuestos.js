@@ -185,19 +185,6 @@ export const buscaCodigoFinanciero = async (codigo, token) => {
     return response.data.find(entidad => entidad.codigo === codigo);
 }
 
-// Versiones de presupuesto
-
-/*
-    {
-    "id_presupuesto_fk": null,
-    "version": "",
-    "monto": "",
-    "saldo": null,
-    "fecha": null,
-    "detalle": ""
-}
-*/
-
 export const obtenerVersionesPresupuesto = async (token) => {
     return await manejarErrores(SIAPAPI.get(`presupuesto/version_presupuestos`, {
         headers: {
@@ -234,16 +221,7 @@ export const eliminarVersionPresupuesto = async (id, token) => {
         }
     }))
 }
-//Partidas de una version de presupuesto
 
-/* 
-{
-    "id_version_presupuesto_fk": null,
-    "detalle": "",
-    "monto": null,
-    "saldo": null
-}
-*/
 export const obtenerPartidas = async (token) => {
     return await manejarErrores(SIAPAPI.get(`presupuesto/partidas`, {
         headers: {

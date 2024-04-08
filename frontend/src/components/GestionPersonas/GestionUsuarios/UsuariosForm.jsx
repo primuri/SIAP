@@ -100,8 +100,10 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             if (value === "") {
                 setAcademicosFilter([]);
             } else {
-                const filteredAcademicos = academicos.filter((academico) =>
-                    academico.correo.toLowerCase().includes(value.toLowerCase())
+                const filteredAcademicos = academicos.filter(academico =>
+                    academico.id_nombre_completo_fk.nombre.toLowerCase().includes(value.toLowerCase()) ||
+                    academico.id_nombre_completo_fk.apellido.toLowerCase().includes(value.toLowerCase()) ||
+                    academico.id_nombre_completo_fk.segundo_apellido.toLowerCase().includes(value.toLowerCase())
                 );
                 setAcademicosFilter(filteredAcademicos);
             }
@@ -109,8 +111,10 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             if (value === "") {
                 setEvaluadoresFilter([]);
             } else {
-                const filteredEvaluadores = evaluadores.filter((evaluador) =>
-                    evaluador.correo.toLowerCase().includes(value.toLowerCase())
+                const filteredEvaluadores = evaluadores.filter(evaluador =>
+                    evaluador.id_nombre_completo_fk.nombre.toLowerCase().includes(value.toLowerCase()) ||
+                    evaluador.id_nombre_completo_fk.apellido.toLowerCase().includes(value.toLowerCase()) ||
+                    evaluador.id_nombre_completo_fk.segundo_apellido.toLowerCase().includes(value.toLowerCase())
                 );
                 setEvaluadoresFilter(filteredEvaluadores);
             }
@@ -129,7 +133,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const handleSelectAcademico = (e, academico) => {
         setFormData((prev) => ({
             ...prev,
-            asociar_academico: academico.correo,
+            asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`,
             academico_fk: academico.id_academico,
         }));
         setAcademicosFilter([]); // Limpiar la lista desplegable
@@ -137,7 +141,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const handleSelectEvaluador = (e, evaluador) => {
         setFormData((prev) => ({
             ...prev,
-            asociar_evaluador: evaluador.correo,
+            asociar_evaluador:`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`,
             evaluador_fk: evaluador.id_evaluador,
         }));
         setEvaluadoresFilter([]); // Limpiar la lista desplegable
@@ -153,13 +157,27 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
         // Validación de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && validatePassword(formData.password) === false) {
-            alert("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.");
+            toast.error("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.", {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
             return;
         }
 
         // Validación de coincidencia de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && formData.password !== formData.confirmar_contrasena) {
-            alert("Las contraseñas no coinciden.");
+            toast.error("Las contraseñas no coinciden.", {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
             return;
         }
 
@@ -315,7 +333,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                         <div className="form-group">
                                             <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
@@ -331,7 +349,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                                         handleSelectAcademico(e, academico);
                                                                     }}
                                                                 >
-                                                                    {academico.correo}
+                                                                    {`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`}
                                                                 </div>
                                                             );
                                                         })}
@@ -351,7 +369,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                         <div className="form-group">
                                             <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} />
+                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required/>
                                                 {evaluadoresFilter.length > 0 && (
                                                     <div
                                                         className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
@@ -367,7 +385,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                                         handleSelectEvaluador(e, evaluador);
                                                                     }}
                                                                 >
-                                                                    {evaluador.correo}
+                                                                    {`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`}
                                                                 </div>
                                                             );
                                                         })}

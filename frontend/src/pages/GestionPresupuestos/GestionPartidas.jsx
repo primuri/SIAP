@@ -83,10 +83,14 @@ export const GestionPartidas = () => {
 
 
     const elementClicked = (selectedPartida) => {
-    
-        setPartida(selectedPartida)
-        setEditClicked(true)
-        setAddClicked(false)
+        if (event.target.tagName.toLowerCase() === 'button') {
+            setPartida(selectedPartida);
+            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos/`)
+        } else {
+            setPartida(selectedPartida)
+            setEditClicked(true)
+            setAddClicked(false)
+        }
     };
 
     function onCancel () {
@@ -119,7 +123,7 @@ export const GestionPartidas = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsPartidas} columns={dataKeyPartidas} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick ={elementClicked} hasButtonColumn={false} ></Table>
+                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
                     <Back onClick={volverVersiones}>Regresar a Versiones</Back>
                 </div>

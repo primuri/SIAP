@@ -21,7 +21,7 @@ class Articulo(models.Model):
     doi = models.CharField(max_length=255)
     isbn = models.CharField(max_length=255)
     cant_paginas = models.IntegerField()
-    observaciones = models.CharField(null=True, max_length=500)
+    observaciones = models.CharField(null=True, max_length=500, blank=True)
     id_revista_fk = models.ForeignKey(Revista, on_delete=models.CASCADE)
     id_producto_fk = models.ForeignKey(Producto, on_delete=models.CASCADE)
     id_autor_fk = models.ForeignKey(Autor, on_delete=models.CASCADE)

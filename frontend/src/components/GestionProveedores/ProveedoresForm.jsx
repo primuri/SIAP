@@ -63,7 +63,18 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const handleChange = (event) => {
         const { name, value } = event.target
 
-         if (name === "telefono") {
+        const checkCedula = (value) => {
+            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
+            const regex = /^[A-Za-z0-9]*$/;
+            return regex.test(value);
+        };
+
+    
+        if (name === "id_cedula_proveedor" && !checkCedula(value)) {
+            return;
+        }
+
+        if (name === "telefono") {
             if (/^\d*$/.test(value)) {
                 setFormData((prevFormData) => ({
                     ...prevFormData,
@@ -72,7 +83,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
             }
             return;
         }
-        
+
         if (name.includes('.')) {
             const keys = name.split('.')
             setFormData(prev => ({
@@ -173,7 +184,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             </div>
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula </label>
-                                <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange}>
+                                <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required >
                                     <option value="">Seleccionar tipo</option>
                                     <option value="Fisica">Física</option>
                                     <option value="Juridica">Jurídica</option>

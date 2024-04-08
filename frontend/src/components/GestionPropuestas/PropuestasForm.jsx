@@ -38,17 +38,10 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 }
             }
         },
-        asociar_academico: propuesta ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk?.correo : "",
+        asociar_academico: propuesta ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.nombre + " " + propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.apellido +" " + propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.segundo_apellido: ""
     });
 
-    //Carga los academicos para cargarlos en el Editar
-    const academicoSeleccionado = academicos.find(academico =>
-        String(academico.id_academico) === String(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico)
-    );
-    const nombreAcademico = academicoSeleccionado ? academicoSeleccionado.id_nombre_completo_fk.nombre : "";
-    const apellidoAcademico = academicoSeleccionado ? academicoSeleccionado.id_nombre_completo_fk.apellido : "";
-    const segundo_apellidoAcademico = academicoSeleccionado ? academicoSeleccionado.id_nombre_completo_fk.segundo_apellido : "";
-
+    
     //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -57,8 +50,10 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
             if (value === "") {
                 setAcademicosFilter([]);
             } else {
-                const filteredAcademicos = academicos.filter((academico) =>
-                    academico.correo.toLowerCase().includes(value.toLowerCase())
+                const filteredAcademicos = academicos.filter(academico =>
+                    academico.id_nombre_completo_fk.nombre.toLowerCase().includes(value.toLowerCase()) ||
+                    academico.id_nombre_completo_fk.apellido.toLowerCase().includes(value.toLowerCase()) ||
+                    academico.id_nombre_completo_fk.segundo_apellido.toLowerCase().includes(value.toLowerCase())
                 );
                 setAcademicosFilter(filteredAcademicos);
             }
@@ -167,16 +162,15 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 id_colaborador_principal_fk: {
                     ...prev.id_codigo_cimpa_fk.id_colaborador_principal_fk,
                     id_academico_fk: {
-                        ...prev.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk,
-                        id_academico: academico.id_academico // Actualiza esta propiedad
+                        id_academico: academico.id_academico
                     }
                 }
             },
-            asociar_academico: academico.correo
+            // Actualiza el estado para guardar el nombre completo del académico seleccionado.
+            asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`
         }));
-        setAcademicosFilter([]); // Limpiar la lista desplegable
+        setAcademicosFilter([]); // Limpia la lista de académicos filtrados después de seleccionar.
     };
-    
 
     return (
         <>
@@ -254,7 +248,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />
+                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} required/>
                             </div>
 
                             <div className="col-md-6">
@@ -270,25 +264,23 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 
                                 <div className="position-relative">
                                                 <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "40px" }}
+                                                        style={{ maxHeight: "120px"}}
                                                     >
                                                         {academicosFilter.map((academico) => {
-                                                            return (
-                                                                <div
-                                                                    key={academico.id_academico}
-                                                                    className=" pointer-event ms-1"
-                                                                    style={{ cursor: "pointer" }}
-                                                                    onClick={(e) => {
-                                                                        handleSelectAcademico(e, academico);
-                                                                    }}
-                                                                >
-                                                                    {academico.correo}
-                                                                </div>
-                                                            );
+                                                        return (
+                                                            <div
+                                                            key={academico.id_academico}
+                                                            className="pointer-event ms-1"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={(e) => handleSelectAcademico(e, academico)}
+                                                            >
+                                                            {`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`}
+                                                            </div>
+                                                        );
                                                         })}
                                                     </div>
                                                 )}

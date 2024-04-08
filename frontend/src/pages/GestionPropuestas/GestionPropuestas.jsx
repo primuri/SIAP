@@ -207,7 +207,6 @@ export const GestionPropuestas = () => {
             }else{
                 fecha_vigencia = fecha_vigencia_adaptada;
             }
-           
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
             Datos.id_codigo_cimpa_fk.fecha_vigencia = fecha_vigencia;
 

@@ -161,33 +161,71 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     }
 
     const handleChange = (event) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
+    
+        const check = (value) => {
+            // Esta expresión regular permite solo letras y espacios.
+            const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+            return regex.test(value) || value === "";
+        };
 
+        const checkCedula = (value) => {
+            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
+            const regex = /^[A-Za-z0-9]*$/;
+            return regex.test(value);
+        };
+
+        const camposAValidar = [
+            "id_nombre_completo_fk.nombre",
+            "id_nombre_completo_fk.apellido",
+            "id_nombre_completo_fk.segundo_apellido",
+            "id_area_especialidad_fk.nombre",
+            "id_area_especialidad_secundaria_fk.nombre"
+        ];
+    
+        if (camposAValidar.includes(name)) {
+            if (check(value)) {
+                const [objectName, attributeName] = name.split('.');
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    [objectName]: {
+                        ...prevFormData[objectName],
+                        [attributeName]: value, // Actualiza solo el atributo relevante
+                    },
+                }));
+            }
+            return;
+        } else if (name === "cedula" && !checkCedula(value)) {
+            return;
+        }
+    
         if (name === "pais_procedencia") {
             setPaisSeleccionado(value);
-            setFormData({
-                ...formData,
+            setFormData(prevFormData => ({
+                ...prevFormData,
                 [name]: value,
-            });
+            }));
+            // Continúa la ejecución para permitir la actualización de otros campos.
         }
-
+    
+        // Este bloque maneja todos los demás campos, incluyendo aquellos con puntos en sus nombres.
+        // Se ejecutará si el nombre del campo no es "id_nombre_completo_fk.nombre".
         if (name.includes('.')) {
-            const keys = name.split('.')
+            const keys = name.split('.');
             setFormData(prev => ({
                 ...prev,
                 [keys[0]]: {
                     ...prev[keys[0]],
                     [keys[1]]: value
                 }
-            }))
-
-        } else {
-            setFormData({
-                ...formData,
+            }));
+        } else if (name !== "pais_procedencia") { // Asegúrate de que este caso no se aplique al campo "pais_procedencia" ya manejado.
+            setFormData(prevFormData => ({
+                ...prevFormData,
                 [name]: value,
-            })
+            }));
         }
-    }
+    };
 
     const handleFileChange = (event) => {
         const foto = event.target.files[0];
@@ -306,7 +344,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido <span className="optional"> (Opcional)</span></label>
+                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span class="optional">(Opcional)</span>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>
@@ -318,7 +356,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label>
                                 <input type="email" className="form-control" name="correo_secundario" id="correo" value={formData.correo_secundario} onChange={handleChange} />
                             </div>
                         </div>
@@ -332,7 +370,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal</label>
                                 <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
 
@@ -417,7 +455,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
                                     )}
                                 />
                             </div >
@@ -480,7 +518,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     sx={{ width: 300 }}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
+                                        
                                     )}
                                 />
                             </div>
@@ -489,7 +528,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4 mt-4">
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado máximo </label>
-                                <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
+                                <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange} required>
                                     <option value="">Seleccionar grado</option>
                                     <option value="Br">Bachiller</option>
                                     <option value="Lic">Licenciado</option>
@@ -503,7 +542,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6 mt-4">
                                 <Tooltip title="Separar areas secundarias con coma" placement="right-start">
-                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundaria <span className="optional"> (Opcional)</span></label>
+                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
                                 <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
