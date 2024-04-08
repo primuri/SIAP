@@ -1,4 +1,6 @@
 export const columnsVI = ['ID', 'Version', 'Monto', 'Detalle', 'Partidas']
 export const dataKeyVI = ['id_version_presupuesto', 'version', 'monto', 'detalle', 'Partidas']
-export const columnsPartidas = ['ID','Monto','Saldo', 'Detalle']
+export const columnsPartidas = ['ID','Monto','Saldo', 'Gastos']
 export const dataKeyPartidas = ['id_partida','monto', 'saldo', 'detalle']
+export const columnsGastos = ['Código','Fecha','Detalle', 'Monto']
+export const dataKeyGastos = ['id_gasto','fecha', 'detalle', 'monto']

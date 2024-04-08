@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #eaeaea;
+        }
+        .container {
+            background-color: #f8f9fa;
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #4aace1;
+            color: #ffffff;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 8px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .header h2 {
+            margin-right: auto;
+            text-align: center;
+        }
+        .header img {
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 7px;
+        }
+        .footer {
+            background: #eeeeee;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px; 
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        h2, h3, h4{
+            text-align: center;
+        }
+        ul {
+            list-style-position: inside;
+        }
+        ul li {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <h2>Información de la Versión de Proyecto</h2>
+            <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
+        </div>
+        <h4>Estimado(a) {{investigador}}</h4>
+        <p><strong><i>Por el siguiente medio se le notifica que su proyecto {{proyecto}} ha recibido un cambio en la sección de versión de proyecto </i></strong></p>
+        <p><strong>En caso de no haber solicitado algún cambio, encontrar alguna discrepancia o tener cualquier consulta, le agradecemos que se ponga en contacto con el Centro de Investigación en Matemática Pura y Aplicada (CIMPA) de la Universidad de Costa Rica.</strong></p>
+            
+            <div class="content">
+                
+                <p><strong>Proyecto: </strong> {{ proyecto }} | versión N° {{ numero_version }}</p>
+                <p><strong>Detalle del la versión: </strong> {{ detalle_version_proyecto }}</p>
+                <p><strong>Colaborador Principal: </strong> {{investigador}}</p>
+                <p><strong>Fecha de inicio de la vesión de proyecto: </strong> {{ fecha_inicio_version }}</p>
+                <p><strong>Fecha de fin de la versión de proyecto: </strong> {{ fecha_fin_version }}</p>
+                <p><strong>Detalle del documento Oficio: </strong> {{ oficio_detalle }}</p>
+                <p><strong>Nombre del documento Oficio: </strong> {{ oficio_nombre }}</p>
+                
+                <p><strong>Colaborador Secundario: </strong></p>
+                    <li><strong>Nombre: </strong> {{ nombre_colaborador_secundario }}</li>
+                    <li><strong>Tipo: </strong> {{ tipo }}</li>
+                    <li><strong>Carga: </strong> {{ carga }}</li>
+                    <li><strong>Estado: </strong> {{ estado }}</li>
+                    <li><strong>Fecha de inicio: </strong> {{ fecha_inicio }}</li>
+                    <li><strong>Fecha de fin: </strong> {{ fecha_fin }}</li>
+                    
+
+                <h3><strong>Producto Asociado: </strong></h3>
+                    <li><strong>Detalle: </strong>{{productos.detalle}}</li>
+                    <li><strong>Fecha: </strong>{{productos.fecha}}</li>
+                
+                {% if productos.evento_nombre %}
+                    <h4><strong>Evento:</strong> </h4>
+                        <li><strong>Nombre: </strong>{{ productos.evento_nombre }}</li>
+                        <li><strong>Resumen: </strong>{{ productos.evento_resumen }}</li>
+                        <li><strong>Área: </strong> {{ productos.evento_area }}</li>
+                        <li><strong>Institución: </strong> {{ productos.evento_institucion }}</li>
+                        <li><strong>País: </strong>{{ productos.evento_pais }}</li>
+                        <li><strong>Tipo de participación: </strong>{{ productos.evento_tipo_participacion }}</li>
+                        <li><strong>Detalle del documento Oficio: </strong> {{ productos.evento_oficio_detalle }}</li>
+                        <li><strong>Nombre del documento Oficio: </strong>{{ productos.evento_oficio_nombre }}</li>
+                        <li><strong>Link: </strong>{{productos.evento_enlace}}</li>
+                {% elif productos.software_nombre %}
+                    <h4><strong>Software:</strong> </h4>
+                        <li><strong>Nombre: </strong>{{ productos.software_nombre }}</li>
+                        <li><strong>Versión: </strong>{{ productos.software_version }}</li>
+                        <li><strong>Detalle de la documentación: </strong> {{ productos.software_documentacion_detalle }}</li>
+                        <li><strong>Nombre del documento de documentación: </strong>{{ productos.software_documentacion_nombre }}</li>
+                {% elif productos.articulo_nombre %}
+                    <h4><strong>Artículo:</strong> </h4>
+                        <li><strong>Nombre: </strong>{{ productos.articulo_nombre }}</li>
+                        <li><strong>Autor Nombre: </strong>{{ productos.articulo_autor_nombre }}</li>
+                        <li><strong>Fecha de publicación: </strong>{{ productos.articulo_fecha_publicacion }}</li>                     
+                        <li><strong>Revista Nombre: </strong>{{ productos.articulo_revista_nombre }}</li>
+                        <li><strong>Revista País: </strong>{{ productos.articulo_revista_pais }}</li>
+                        <li><strong>Tipo: </strong>{{ productos.articulo_tipo }}</li> 
+                        <li><strong>Cantidad de páginas: </strong>{{ productos.articulo_cant_paginas }}</li>
+                        <li><strong>DOI: </strong>{{ productos.articulo_doi }}</li>
+                        <li><strong>ISBN: </strong>{{ productos.articulo_isbn }}</li>
+                        <li><strong>Detalle del documento: </strong> {{ productos.articulo_documento_detalle }}</li>
+                        <li><strong>Nombre del documento: </strong>{{ productos.articulo_documento_nombre }}</li>
+                        <li><strong>Observaciones: </strong>{{ productos.articulo_observaciones }}</li>
+                {% endif %}
+    
+            </div>
+            <div class="footer">
+                Este es un mensaje automatizado, por favor no responder.
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

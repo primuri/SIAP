@@ -100,8 +100,10 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             if (value === "") {
                 setAcademicosFilter([]);
             } else {
-                const filteredAcademicos = academicos.filter((academico) =>
-                    academico.correo.toLowerCase().includes(value.toLowerCase())
+                const filteredAcademicos = academicos.filter(academico =>
+                    academico.id_nombre_completo_fk.nombre.toLowerCase().includes(value.toLowerCase()) ||
+                    academico.id_nombre_completo_fk.apellido.toLowerCase().includes(value.toLowerCase()) ||
+                    academico.id_nombre_completo_fk.segundo_apellido.toLowerCase().includes(value.toLowerCase())
                 );
                 setAcademicosFilter(filteredAcademicos);
             }
@@ -109,8 +111,10 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             if (value === "") {
                 setEvaluadoresFilter([]);
             } else {
-                const filteredEvaluadores = evaluadores.filter((evaluador) =>
-                    evaluador.correo.toLowerCase().includes(value.toLowerCase())
+                const filteredEvaluadores = evaluadores.filter(evaluador =>
+                    evaluador.id_nombre_completo_fk.nombre.toLowerCase().includes(value.toLowerCase()) ||
+                    evaluador.id_nombre_completo_fk.apellido.toLowerCase().includes(value.toLowerCase()) ||
+                    evaluador.id_nombre_completo_fk.segundo_apellido.toLowerCase().includes(value.toLowerCase())
                 );
                 setEvaluadoresFilter(filteredEvaluadores);
             }
@@ -129,7 +133,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const handleSelectAcademico = (e, academico) => {
         setFormData((prev) => ({
             ...prev,
-            asociar_academico: academico.correo,
+            asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`,
             academico_fk: academico.id_academico,
         }));
         setAcademicosFilter([]); // Limpiar la lista desplegable
@@ -137,7 +141,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const handleSelectEvaluador = (e, evaluador) => {
         setFormData((prev) => ({
             ...prev,
-            asociar_evaluador: evaluador.correo,
+            asociar_evaluador:`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`,
             evaluador_fk: evaluador.id_evaluador,
         }));
         setEvaluadoresFilter([]); // Limpiar la lista desplegable
@@ -345,7 +349,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                                         handleSelectAcademico(e, academico);
                                                                     }}
                                                                 >
-                                                                    {academico.correo}
+                                                                    {`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`}
                                                                 </div>
                                                             );
                                                         })}
@@ -381,7 +385,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                                         handleSelectEvaluador(e, evaluador);
                                                                     }}
                                                                 >
-                                                                    {evaluador.correo}
+                                                                    {`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`}
                                                                 </div>
                                                             );
                                                         })}

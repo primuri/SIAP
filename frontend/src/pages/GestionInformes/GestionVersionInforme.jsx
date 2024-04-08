@@ -30,7 +30,9 @@ export const GestionVersionInforme = () => {
     const [numVersionProyecto, setNumVersionProyecto] = useState(null)  
     const [id_proyecto, setIdProyecto] = useState(null) 
 
-    useEffect(() => { loadVersionesInformeData() }, [reload])                        // Carga los datos tras detectar cambios
+    useEffect(() => {
+        loadVersionesInformeData()
+    }, [reload])                        // Re-carga los datos tras detectar cambios
 
     async function loadVersionesInformeData() {
         try{

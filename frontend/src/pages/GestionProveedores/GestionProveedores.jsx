@@ -4,7 +4,7 @@ import { Modal } from "../../utils/Modal"
 import { ProveedoresForm } from "../../components/GestionProveedores/ProveedoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta } from "../../api/gestionProveedores"
+import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta, eliminarDocumentoCuentas } from "../../api/gestionProveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { useNavigate, useParams } from "react-router-dom"
@@ -158,7 +158,7 @@ export const GestionProveedores = () => {
   }
 
   // Manejo del eliminar
-  const deleteProveedor = async (id) => {
+  const deleteProveedor = async (id, doc_id) => {
     try {
       var toastId = toast.loading('Eliminando...', {
         position: 'bottom-right',
@@ -169,6 +169,7 @@ export const GestionProveedores = () => {
         },
     });
       await eliminarProveedor(id, localStorage.getItem('token'))
+      await eliminarDocumentoCuentas(doc_id, localStorage.getItem('token'))
       toast.success('Proveedor eliminado correctamente', {
         id: toastId,
         duration: 4000,
@@ -240,7 +241,7 @@ export const GestionProveedores = () => {
                   mode={2}
                   onSubmit={editProveedor}
                   onCancel={onCancel}
-                  onDelete={() => deleteProveedor(proveedor.id_cedula_proveedor)}
+                  onDelete={() => deleteProveedor(proveedor.id_cedula_proveedor, proveedor.id_documento_fk.id_documento)}
                   proveedor={proveedor}
                 >
                 </ProveedoresForm>

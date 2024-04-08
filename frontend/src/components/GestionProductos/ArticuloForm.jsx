@@ -147,7 +147,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
                   id="id_producto_fk.fecha"
                   value={formData.id_producto_fk.fecha
                       ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                  onChange={handleChange} />
+                  onChange={handleChange} required/>
           </div>
       </div>
       <div className="row mb-2">
