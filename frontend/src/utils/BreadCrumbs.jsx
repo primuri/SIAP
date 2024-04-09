@@ -21,6 +21,7 @@ const routeNames = {
     'gestion-organos-colegiados': 'Órganos Colegiados',
     'gestion-evaluaciones': 'Evaluaciones',
     'gestion-asistentes': 'Asistentes', 
+    'gestion-integrantes': 'Integrantes Órgano Colegiado',
 };
 //Esto es para las rutas que no deberian de mostrar la url.
 const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/login', '/']);

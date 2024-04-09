@@ -13,16 +13,18 @@ class OrganoColegiado(models.Model):
         db_table = 'organo_colegiado'
 
 class Integrante(models.Model):
+    id_integrante = models.AutoField(primary_key=True) 
     id_organo_colegiado_fk = models.ForeignKey(OrganoColegiado, on_delete=models.PROTECT)
-    id_academico_fk = models.ForeignKey(Academico, on_delete=models.PROTECT)
-    id_oficio_nombramiento_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
+    id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT)
+    nombre_integrante = models.CharField(max_length=120)
     puesto = models.CharField(max_length=120)
     normativa_reguladora = models.CharField(max_length=120)
+    inicio_funciones = models.DateTimeField( blank=True, null=True) 
 
     class Meta:
         db_table = 'integrante'
-        unique_together = (('id_organo_colegiado_fk', 'id_academico_fk'),)
+        unique_together = (('id_organo_colegiado_fk', 'id_integrante'),)
 
 class Convocatoria(models.Model):
     id_convocatoria = models.AutoField(primary_key=True)

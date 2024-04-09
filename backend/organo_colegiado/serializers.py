@@ -15,8 +15,7 @@ class OrganoColegiadoSerializer(serializers.ModelSerializer):
 
 class IntegranteSerializer(serializers.ModelSerializer):
     id_organo_colegiado_fk = serializers.PrimaryKeyRelatedField(queryset=OrganoColegiado.objects.all())
-    id_academico_fk = serializers.PrimaryKeyRelatedField(queryset=Academico.objects.all())
-    id_oficio_nombramiento_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
+    id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
     id_vigencia_fk = serializers.PrimaryKeyRelatedField(queryset=Vigencia.objects.all())
 
     class Meta:
@@ -26,8 +25,7 @@ class IntegranteSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         rep = super(IntegranteSerializer, self).to_representation(instance)
         rep['id_organo_colegiado_fk'] = OrganoColegiadoSerializer(instance.id_organo_colegiado_fk).data
-        rep['id_academico_fk'] = AcademicoSerializer(instance.id_academico_fk).data
-        rep['id_oficio_nombramiento_fk'] = OficioSerializer(instance.id_oficio_nombramiento_fk).data
+        rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
         rep['id_vigencia_fk'] = VigenciaSerializer(instance.id_vigencia_fk).data
         return rep
     
