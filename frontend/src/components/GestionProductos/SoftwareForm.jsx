@@ -23,10 +23,10 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         // Esta expresión regular permite solo letras y espacios.
         const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
         return regex.test(value);
-      };
+    };
 
-      
-      const camposAValidar = [
+
+    const camposAValidar = [
         "id_producto_fk.detalle",
         "id_documento_documentacion_fk.detalle",
         "nombre"
@@ -36,7 +36,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const [formData, setFormData] = useState(initialFormData);
 
 
-  
+
     const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -50,9 +50,16 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                 return; // Evita la actualización del estado para valores no permitidos.
             }
         }
+        
+        if (name.includes('.')) {
+            const keys = name.split('.');
+            formData[keys[0]][keys[1]] = value;
+        } else {
+            formData[name] = value;
+        }
 
-        setFormData(prevFormData => updateNestedField(prevFormData, name, value));
-        setCambios({ softwareData: { ...formData, [name]: value }, softwareFile: fileData });
+
+        setCambios({ softwareData: { ...formData }, softwareFile: fileData });
     };
 
     const updateNestedField = (prevFormData, fieldPath, value) => {
@@ -74,13 +81,13 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setFileData(file);
-        setCambios({ softwareData: formData, softwareFile: file }); 
+        setCambios({ softwareData: formData, softwareFile: file });
     };
 
 
     return (
         <>
-        <div className="row mb-4">
+            <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
                     <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
@@ -92,13 +99,13 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} required/>
+                        onChange={handleChange} required />
                 </div>
             </div>
 
             <div className="row mb-2">
                 <div className="col"> </div>
-                    <h5 className="label-personalizado mb-2 col-sm-auto control-label">Software</h5>
+                <h5 className="label-personalizado mb-2 col-sm-auto control-label">Software</h5>
                 <div className="col"> </div>
             </div>
             <div className="row mb-4">
@@ -121,12 +128,12 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                     <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
                     {mode == 2 ? (
                         <Tooltip title={formData.id_documento_documentacion_fk.documento.split('/').pop()} placement="right-start">
-                         <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                            {"Ver documento"}
-                        </a>
+                            <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                {"Ver documento"}
+                            </a>
                         </Tooltip>
-                       
-                    ): ""}
+
+                    ) : ""}
                 </div>
             </div>
         </>

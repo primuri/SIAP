@@ -72,26 +72,15 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
         }
 
-        setFormData(prevFormData => updateNestedField(prevFormData, name, value));
-        setCambios({ eventoData: { ...formData, [name]: value }, eventoFile: fileData });
+        if (name.includes('.')) {
+            const keys = name.split('.');
+            formData[keys[0]][keys[1]] = value;
+        } else {
+            formData[name] = value;
+        }
+
+        setCambios({ eventoData: { ...formData}, eventoFile: fileData });
     };
-
-    const updateNestedField = (prevFormData, fieldPath, value) => {
-        const keys = fieldPath.split('.');
-        let data = { ...prevFormData }; // Crea una copia superficial del objeto prevFormData para evitar mutaciones.
-
-        keys.reduce((current, key, index) => {
-            if (index === keys.length - 1) {
-                current[key] = value;
-            } else {
-                current[key] = current[key] ? { ...current[key] } : {}; // Asegura la creación de un nuevo objeto si no existe, evitando mutaciones.
-            }
-            return current[key];
-        }, data);
-
-        return data;
-    };
-
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];

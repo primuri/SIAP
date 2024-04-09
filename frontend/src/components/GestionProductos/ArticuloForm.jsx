@@ -14,16 +14,16 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     observaciones: "",
     cant_paginas: "",
     id_revista_fk: {
-      id_revista: "", 
-      nombre: "", 
-      pais: "" 
+      id_revista: "",
+      nombre: "",
+      pais: ""
     },
     id_producto_fk: {
       id_producto: "",
       fecha: "",
       detalle: ""
     },
-    id_autor_fk : {
+    id_autor_fk: {
       id_autor: "",
       id_nombre_completo_fk: {
         id_nombre_completo: "",
@@ -51,109 +51,100 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     return { ...formData };
   };
 
-  
-    const check = (value) => {
-      // Esta expresión regular permite solo letras y espacios.
-      const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
-      return regex.test(value) || value === "";
-    };
 
-    const checkLetraNum = (value) => {
-      // Esta expresión regular permite solo letras y espacios.
-      const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-      return regex.test(value);
-    };
+  const check = (value) => {
+    // Esta expresión regular permite solo letras y espacios.
+    const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+    return regex.test(value) || value === "";
+  };
 
-
-    const checkCedula = (value) => {
-        // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
-        const regex = /^[A-Za-z0-9]*$/;
-        return regex.test(value);
-    };
-
-    const camposSoloLetras = [
-        "id_autor_fk.id_nombre_completo_fk.nombre",
-        "id_autor_fk.id_nombre_completo_fk.apellido",
-        "id_autor_fk.id_nombre_completo_fk.segundo_apellido",
-        "tipo"
-    ];
+  const checkLetraNum = (value) => {
+    // Esta expresión regular permite solo letras y espacios.
+    const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
+    return regex.test(value);
+  };
 
 
-    const camposLetrasNum = [
-      "id_revista_fk.nombre",
-      "nombre"
+  const checkCedula = (value) => {
+    // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
+    const regex = /^[A-Za-z0-9]*$/;
+    return regex.test(value);
+  };
+
+  const camposSoloLetras = [
+    "id_autor_fk.id_nombre_completo_fk.nombre",
+    "id_autor_fk.id_nombre_completo_fk.apellido",
+    "id_autor_fk.id_nombre_completo_fk.segundo_apellido",
+    "tipo"
   ];
-   
-      const handleChange = (event) => {
-        const { name, value } = event.target;
-    
-        // Primero, verifica campos que necesitan validación específica.
-        if (name === "pais_procedencia") {
-            setPaisRevista(value); // Asegúrate de que esta función actualice correctamente el estado.
-        } else if (name === "cant_paginas") {
-            // Solo permite dígitos.
-            if (/^[0-9]*$/.test(value) || value === "") {
-                setFormData(prev => ({ ...prev, [name]: value }));
-            }
-            return; // Termina la ejecución si es cant_paginas para no ejecutar updateNestedField
-        } else if (camposSoloLetras.includes(name) && !check(value)) {
-            return; // Termina si la validación de campos específicos falla.
-        } else if (name === "cedula" && !checkCedula(value)) {
-            return; // Evita actualizar el estado si la cédula no es válida.
-        } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
-            return;
-        }
-    
-        // Actualiza el estado para todos los demás casos, incluidos campos anidados.
-        const keys = name.split('.');
-        setFormData(prevFormData => {
-            const updatedFormData = { ...prevFormData };
-            let current = updatedFormData;
-    
-            keys.forEach((key, index) => {
-                if (index === keys.length - 1) {
-                    current[key] = value; // Establece el valor en el último nivel.
-                } else {
-                    current[key] = current[key] || {}; // Crea un objeto si no existe.
-                    current = current[key]; // Avanza al siguiente nivel.
-                }
-            });
-    
-            return updatedFormData;
-        });
-    
-        // No olvides actualizar setCambios para reflejar los cambios en el estado.
-        setCambios({ articuloData: formData, articuloFile: fileData });
-      };
-  
+
+
+  const camposLetrasNum = [
+    "id_revista_fk.nombre",
+    "nombre"
+  ];
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    // Primero, verifica campos que necesitan validación específica.
+    if (name === "pais_procedencia") {
+      setPaisRevista(value); // Asegúrate de que esta función actualice correctamente el estado.
+    } else if (name === "cant_paginas") {
+      // Solo permite dígitos.
+      if (/^[0-9]*$/.test(value) || value === "") {
+        setFormData(prev => ({ ...prev, [name]: value }));
+      }
+      return; // Termina la ejecución si es cant_paginas para no ejecutar updateNestedField
+    } else if (camposSoloLetras.includes(name) && !check(value)) {
+      return; // Termina si la validación de campos específicos falla.
+    } else if (name === "cedula" && !checkCedula(value)) {
+      return; // Evita actualizar el estado si la cédula no es válida.
+    } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
+      return;
+    }
+
+    console.log(formData)
+    // Actualiza el estado para todos los demás casos, incluidos campos anidados.
+
+    if (name.includes('.')) {
+      const keys = name.split('.');
+      formData[keys[0]][keys[1]] = value;
+    } else {
+      formData[name] = value;
+    }
+
+    setCambios({ articuloData: { ...formData }, articuloFile: fileData });
+  };
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileData(file);
-    setCambios({ articuloData: formData, articuloFile: file }); 
+    setCambios({ articuloData: formData, articuloFile: file });
   };
 
   return (
     <>
       <div className="row mb-4">
-          <div className="col-md-6">
-              <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-              <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
-          </div>
-          <div className="col">
-              <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto   </label>
-              <input type="date" className="form-control"
-                  name="id_producto_fk.fecha"
-                  id="id_producto_fk.fecha"
-                  value={formData.id_producto_fk.fecha
-                      ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                  onChange={handleChange} required/>
-          </div>
+        <div className="col-md-6">
+          <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
+          <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+        </div>
+        <div className="col">
+          <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto   </label>
+          <input type="date" className="form-control"
+            name="id_producto_fk.fecha"
+            id="id_producto_fk.fecha"
+            value={formData.id_producto_fk.fecha
+              ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
+            onChange={handleChange} required />
+        </div>
       </div>
       <div className="row mb-2">
-          <div className="col"> </div>
-              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Artículo</h5>
-          <div className="col"> </div>
+        <div className="col"> </div>
+        <h5 className="label-personalizado mb-2 col-sm-auto control-label">Artículo</h5>
+        <div className="col"> </div>
       </div>
       <div className="row mb-4">
         <div className="col">
@@ -162,10 +153,10 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         </div>
         <div className="col">
           <label htmlFor="fecha_publicacion" className="label-personalizado mb-2">Fecha de Publicación  </label>
-          <input type="date" className="form-control" name="fecha_publicacion" id="fecha_publicacion" 
-                  value={formData.fecha_publicacion
-                  ? new Date(formData.fecha_publicacion).toISOString().split('T')[0] : ""}
-              onChange={handleChange} required/>
+          <input type="date" className="form-control" name="fecha_publicacion" id="fecha_publicacion"
+            value={formData.fecha_publicacion
+              ? new Date(formData.fecha_publicacion).toISOString().split('T')[0] : ""}
+            onChange={handleChange} required />
         </div>
       </div>
       <div className="row mb-4">
@@ -189,9 +180,9 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         </div>
       </div>
       <div className="row mb-2">
-          <div className="col"> </div>
-              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Revista</h5>
-          <div className="col"> </div>
+        <div className="col"> </div>
+        <h5 className="label-personalizado mb-2 col-sm-auto control-label">Revista</h5>
+        <div className="col"> </div>
       </div>
       <div className="row mb-4">
         <div className="col">
@@ -201,16 +192,16 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         <div className="col-md-6">
           <label htmlFor="paisRevista" className="label-personalizado mb-2">País de la Revista   </label>
           <select className="form-control" name="id_revista_fk.pais" id="id_revista_fk.pais" value={formData.id_revista_fk.pais} onChange={handleChange} required>
-              <option value="">Seleccione un país</option>
-              {Paises.map((pais) => (
-                  <option key={pais.value} value={pais.value}> {pais.label} </option>))}
+            <option value="">Seleccione un país</option>
+            {Paises.map((pais) => (
+              <option key={pais.value} value={pais.value}> {pais.label} </option>))}
           </select>
-      </div>
+        </div>
       </div>
       <div className="row mb-2">
-          <div className="col"> </div>
-              <h5 className="label-personalizado mb-2 col-sm-auto control-label">Autor (a)</h5>
-          <div className="col"> </div>
+        <div className="col"> </div>
+        <h5 className="label-personalizado mb-2 col-sm-auto control-label">Autor (a)</h5>
+        <div className="col"> </div>
       </div>
       <div className="row mb-4">
         <div className="col">
@@ -228,8 +219,8 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo   </label>
-            <input type="text" className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
+          <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo   </label>
+          <input type="text" className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
         </div>
         <div className="col">
           <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo   </label>
@@ -240,15 +231,15 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
                 {"Descargar documento"}
               </a>
             </Tooltip>
-            
-          ): ""}
+
+          ) : ""}
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
-            <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="optional"> (Opcional)</span> </label>
-            <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange}/>
-        </div>        
+          <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="optional"> (Opcional)</span> </label>
+          <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} />
+        </div>
       </div>
     </>
   );
