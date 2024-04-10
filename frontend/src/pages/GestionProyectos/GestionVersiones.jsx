@@ -388,6 +388,7 @@ export const GestionVersiones = () => {
 
         } catch (error) {
             toast.dismiss(toastId)
+            await eliminarVersion(producto.id_producto_fk, localStorage.getItem("token"))
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
             

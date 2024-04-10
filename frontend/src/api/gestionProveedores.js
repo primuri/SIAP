@@ -134,6 +134,8 @@ export const eliminarCuentasBancarias = (id, token) => {
     });
 };
 
+
+
 // Editar documento cuentas 
 export const editarDocumentoCuentaAndDocumento = async (id, documento, token) => {
     return await manejarErrores( manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
@@ -162,4 +164,14 @@ export const editarDocumentoCuenta = async (id, documento, token) => {
             'Content-Type': 'application/json'
         }
     })));
+};
+
+
+export const eliminarDocumentoCuentas = (id, token) => {
+    return SIAPAPI.delete(`version_proyecto/documentos/${id}/`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+    });
 };

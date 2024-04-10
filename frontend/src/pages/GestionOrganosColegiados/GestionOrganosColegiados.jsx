@@ -106,6 +106,7 @@ export const GestionOrganosColegiados = () => {
             document.body.classList.remove('modal-open');
 
             toast.success('Órgano colegiado eliminado correctamente', {
+                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {

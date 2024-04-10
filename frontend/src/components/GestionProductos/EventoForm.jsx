@@ -72,26 +72,15 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
         }
 
-        setFormData(prevFormData => updateNestedField(prevFormData, name, value));
-        setCambios({ eventoData: { ...formData, [name]: value }, eventoFile: fileData });
+        if (name.includes('.')) {
+            const keys = name.split('.');
+            formData[keys[0]][keys[1]] = value;
+        } else {
+            formData[name] = value;
+        }
+
+        setCambios({ eventoData: { ...formData}, eventoFile: fileData });
     };
-
-    const updateNestedField = (prevFormData, fieldPath, value) => {
-        const keys = fieldPath.split('.');
-        let data = { ...prevFormData }; // Crea una copia superficial del objeto prevFormData para evitar mutaciones.
-
-        keys.reduce((current, key, index) => {
-            if (index === keys.length - 1) {
-                current[key] = value;
-            } else {
-                current[key] = current[key] ? { ...current[key] } : {}; // Asegura la creación de un nuevo objeto si no existe, evitando mutaciones.
-            }
-            return current[key];
-        }, data);
-
-        return data;
-    };
-
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -113,7 +102,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} />
+                        onChange={handleChange} required/>
                 </div>
             </div>
             <div className="row mb-2">
@@ -151,8 +140,8 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento   </label>
-                    <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} required />
+                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento </label>
+                    <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} />
                 </div>
                
             </div>

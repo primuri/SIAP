@@ -240,7 +240,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                         }));
                                     }}
                                     value={mode === 2 ? formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor : formData.id_factura_fk.id_cedula_proveedor_fk || ''}
-                                >
+                                required>
                                     <option value="">Seleccione un proveedor</option>
                                     {proveedor.map((proveedorItem) => (
                                         <option key={proveedorItem.id_cedula_proveedor} value={proveedorItem.id_cedula_proveedor}>
@@ -303,7 +303,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     sx={{ width: 300 }}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} />
+                                        <TextField {...params} required/>
                                     )}
                                 />
 
@@ -311,7 +311,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="row mb-4">
                             <div className="col">
-                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label>
+                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span class="optional">(Opcional)</span>
                                 <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
                                 {typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">

@@ -1,5 +1,3 @@
-    </body>
-</html>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,35 +65,34 @@
     
     <div class="container">
         <div class="header">
-            <h2>Información del Académico</h2>
+            <h2>Información del Academico</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
             <div class="content">
-                
-                    <p><i>Nombre Completo:</i> {{ nombre_completo }}</p>
-                    <p><i>Cédula:</i> {{ cedula }}</p>
-                    <p><i>Correo:</i> {{ correo }}</p>
-                    <p><i>Correo Secundario:</i> {{ correo_secundario }}</p>
-                    <p><i>Sitio Web:</i> {{ sitio_web }}</p>
-                    <p><i>País de Procedencia:</i> {{ pais_procedencia }}</p>
-                    <p><i>Grado Máximo:</i> {{ grado_maximo }}</p>
-                    <p><i>Categoría en régimen:</i> {{ categoria_en_regimen }}</p>
-                    <p><i>Unidad base:</i> {{ unidad_base }}</p>
-                    <p><i>Área de especialidad:</i> {{ area_especialidad }}</p>
-                    <p><i>Áreas de especialidad secundarias:</i> {{ areas_especialidad_secundarias }}</p>
-                    <p><i>Universidad:</i> {{ universidad }}</p>
-                    <h3>Teléfonos</h3>
-                        <ul>
-                            {% for telefono in telefonos %}
-                                <div><li>{{ telefono }}</li></div>
-                            {% endfor %}
-                        </ul>
-                    <h3>Títulos</h3>
-                        <ul>
-                            {% for titulo in titulos %}
-                             <div><li>{{ titulo }}</li></div>
-                            {% endfor %}
-                        </ul>
+                <p><i>Nombre Completo:</i> {{ nombre_completo }}</p>
+                <p><i>Cédula:</i> {{ cedula }}</p>
+                <p><i>Correo:</i> {{ correo }}</p>
+                <p><i>Correo Secundario:</i> {{ correo_secundario }}</p>
+                <p><i>Sitio Web:</i> {{ sitio_web }}</p>
+                <p><i>País de Procedencia:</i> {{ pais_procedencia }}</p>
+                <p><i>Grado Máximo:</i> {{ grado_maximo }}</p>
+                <p><i>Categoría en régimen:</i> {{ categoria_en_regimen }}</p>
+                <p><i>Unidad base:</i> {{ unidad_base }}</p>
+                <p><i>Área de especialidad:</i> {{ area_especialidad }}</p>
+                <p><i>Áreas de especialidad secundarias:</i> {{ areas_especialidad_secundarias }}</p>
+                <p><i>Universidad:</i> {{ universidad }}</p>
+                <h3>Teléfonos</h3>
+                    <ul>
+                        {% for telefono in telefonos %}
+                            <div><li>{{ telefono }}</li></div>
+                        {% endfor %}
+                    </ul>
+                <h3>Títulos</h3>
+                    <ul>
+                        {% for titulo in titulos %}
+                         <div><li>{{ titulo }}</li></div>
+                        {% endfor %}
+                    </ul>
     
             </div>
             <div class="footer">

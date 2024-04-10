@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #eaeaea;
+        }
+        .container {
+            background-color: #f8f9fa;
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #4aace1;
+            color: #ffffff;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 8px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .header h2 {
+            margin-right: auto;
+            text-align: center;
+        }
+        .header img {
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 7px;
+        }
+        .footer {
+            background: #eeeeee;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px; 
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        h2, h3{
+            text-align: center;
+        }
+        ul {
+            list-style-position: inside;
+        }
+        ul li {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <h2>Información de la Propuesta de Proyecto</h2>
+            <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
+        </div>
+            <div class="content">
+                
+                <p><i>Nombre del Proyecto:</i> {{ nombre }}</p>
+                <p><i>Objetivo General:</i> {{ objetivo_general }}</p>
+                <p><i>Estado:</i> {{ estado }}</p>
+                <p><i>Descripción:</i> {{ descripcion }}</p>
+                <p><i>Actividad:</i> {{ actividad }}</p>
+                <p><i>Fecha de Vigencia:</i> {{ fecha_vigencia }}</p>
+                <p><strong>Colaborador Principal:</strong>
+                <ul>
+                    <li><i>Nombre:</i> {{id_academico_fk}}</li>
+                    <li><i>Tipo:</i> {{ tipo_colaborador }}</li>
+                    <li><i>Carga:</i> {{ carga_colaborador }}</li>
+                    <li><i>Estado:</i> {{ estado_colaborador }}</li> 
+                    <li><i>Fechas de Vigencia:</i> Desde {{ fecha_inicio_vigencia }} hasta {{ fecha_fin_vigencia }}</li> 
+                </ul>
+                <p><strong>Documento Asociado</strong></p>
+                <ul>
+                    <li>Nombre: {{ documento_nombre }}</li>
+                    <li>Detalle: {{ documentos_detalle }}</li>    
+                </ul>
+    
+            </div>
+            <div class="footer">
+                Este es un mensaje automatizado, por favor no responder.
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

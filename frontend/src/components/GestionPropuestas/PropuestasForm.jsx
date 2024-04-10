@@ -248,7 +248,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />
+                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} required/>
                             </div>
 
                             <div className="col-md-6">
@@ -264,7 +264,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 
                                 <div className="position-relative">
                                                 <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
