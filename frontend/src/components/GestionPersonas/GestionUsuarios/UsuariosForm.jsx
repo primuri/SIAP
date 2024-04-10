@@ -19,6 +19,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     useEffect(() => {
         loadAcademicos();
         loadEvaluadores();
+        console.log(usuario)
     }, []);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -57,7 +58,11 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const [formData, setFormData] = useState({
         id: usuario ? usuario.id : "",
         correo: usuario ? usuario.correo : "",
-        rol: usuario ? usuario.groups[0] : "",
+        rol: usuario ? 
+                usuario.groups.length > 1? 
+                    "investigador-evaluador"
+                :   usuario.groups[0]
+            : "",
         password: "",
         confirmar_contrasena: "",
         academico_fk: usuario
@@ -148,13 +153,27 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
         // Validación de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && validatePassword(formData.password) === false) {
-            alert("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.");
+            toast.error("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.", {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
             return;
         }
 
         // Validación de coincidencia de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && formData.password !== formData.confirmar_contrasena) {
-            alert("Las contraseñas no coinciden.");
+            toast.error("Las contraseñas no coinciden.", {
+                duration: 10000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
             return;
         }
 
@@ -164,17 +183,32 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
         delete dataToSend.confirmar_contrasena;
         delete dataToSend.asociar_academico;
         delete dataToSend.asociar_evaluador;
-        if (dataToSend.rol === 'evaluador') {
-            if (dataToSend.academico_fk) {
+        if (dataToSend.rol === 'investigador' || dataToSend.rol ==="investigador-evaluador") {
+            if (!dataToSend.academico_fk) {
                 dataToSend.academico_fk = null
             }
-        } else if (dataToSend.rol === 'academico') {
-            if (dataToSend.evaluador_fk) {
+            //Cubre el caso en el que haya pasado de ser evaluador a academico.
+            if(dataToSend.rol !=="investigador-evaluador"){
                 dataToSend.evaluador_fk = null
+            }
+
+        } 
+        if (dataToSend.rol === 'evaluador' || dataToSend.rol ==="investigador-evaluador") {
+            if (!dataToSend.evaluador_fk) {
+                dataToSend.evaluador_fk = null
+            }
+
+            if(dataToSend.rol !=="investigador-evaluador"){
+                dataToSend.academico_fk = null
             }
         }
         // Asignar el rol al array de grupos
-        dataToSend.groups = [dataToSend.rol];
+        if (dataToSend.rol === "investigador-evaluador"){
+            dataToSend.groups = ['investigador', 'evaluador']
+        }else{
+           dataToSend.groups = [dataToSend.rol]; 
+        }
+        
         delete dataToSend.rol;
 
         // Si estamos en modo de edición y la contraseña está vacía, la eliminamos
@@ -183,7 +217,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
         }
 
         const jsonData = JSON.stringify(dataToSend);
-        console.log(dataToSend);
         onSubmit(jsonData);
     };
 
@@ -255,7 +288,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                     <label htmlFor="rol" className="label-personalizado mb-2">Rol</label>
                                     <select className="form-select seleccion" name="rol" id="rol" value={formData.rol} onChange={handleChange} required>
                                         <option value="" disabled defaultValue={""}>Seleccione un rol</option>
-                                        <option value="academico">Investigador(a)</option>
+                                        <option value="investigador">Investigador(a)</option>
                                         <option value="evaluador">Evaluador(a)</option>
                                         <option value="investigador-evaluador">Investigador(a) y Evaluador(a)</option>
                                         <option value="invitado">Invitado(a)</option>
@@ -289,14 +322,14 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
 
                         <div className="row mb-4">
-                            {(formData.rol === "academico" || formData.rol === "investigador-evaluador") && (
+                            {(formData.rol === "investigador" || formData.rol === "investigador-evaluador") && (
                                 <>
 
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
@@ -332,7 +365,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                         <div className="form-group">
                                             <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} />
+                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required/>
                                                 {evaluadoresFilter.length > 0 && (
                                                     <div
                                                         className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"

@@ -143,7 +143,7 @@ class ProyectoTests(APITestCase):
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Proyecto.objects.get().id_codigo_cimpa_fk.id_codigo_cimpa, '2-2023')
+        self.assertEqual(Proyecto.objects.get().id_codigo_cimpa_fk.id_codigo_cimpa, '2-2024')
 
     def test_get_lista_proyectos(self):
         

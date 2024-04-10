@@ -83,8 +83,13 @@ export const GestionEvaluaciones = () => {
     async function deleteEvaluacion() {
         try{
             var toastId = toastProcesando("Editando...")
-
-            await API.eliminarEvaluacion(evaluacionActual.id_evaluacion)
+            var canDelete = await API.canDelete(evaluacionActual.id_evaluacion)
+            if (!canDelete) {
+                throw new Error("No se puede eliminar la evaluación ya que contiene respuestas de otros evaluadores.");
+            }else{
+                await API.eliminarEvaluacion(evaluacionActual.id_evaluacion)
+            }
+            
 
             toastExito("Evaluación eliminada correctamente", toastId)
             setReload(!reload)

@@ -70,8 +70,8 @@ class Proveedor(models.Model):
         db_table = 'proveedor'
 
 class ProductoServicio(models.Model):
-    id_producto_servicio = models.IntegerField(primary_key=True)
-    detalle = models.CharField(max_length=150)
+    id_producto_servicio = models.AutoField(primary_key=True)
+    detalle = models.CharField(max_length=150, unique=True)
 
     class Meta:
         db_table = 'producto_servicio'
@@ -97,7 +97,7 @@ class Gasto(models.Model):
         db_table = 'gasto'
 #
 class CuentaBancaria(models.Model):
-    id_numero = models.IntegerField(primary_key=True)
+    id_numero = models.CharField(max_length=25, primary_key=True)
     banco = models.CharField(max_length=255)
     tipo = models.CharField(max_length=45)
     moneda = models.CharField(max_length=45)

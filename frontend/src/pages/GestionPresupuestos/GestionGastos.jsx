@@ -60,48 +60,32 @@ export const GestionGastos = () => {
                     fontSize: '18px',
                 },
             });
-            for (let key of formData.keys()) {
-                console.log(key);
-            }
-            console.log("0")
             formData.delete('json');
     
             // Reestructurar y crear el objeto gasto
             delete Data.id_gasto;
-            console.log("1")
             Data.id_partida_fk = parseInt(partidaID);
-            console.log("2")
             Data.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk;
             Data.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk;
     
-            console.log("3")
             // Adjuntar el ID de la factura al formulario formData
             console.log(Data.id_factura_fk)
             formData.append('id_factura_fk', Data.id_factura_fk.id_factura);
-
-            console.log("4")
-            await API.obtenerProveedores(token);
-    
-            let prod = await API.obtenerProductosServicios(token);
-            if (prod.id_producto_servicio == 0) {
-                // Si el producto no existe, agregamos el nuevo producto
-                const producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, token);
-                Data.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
-            }
     
             formData.append("tipo", Data.id_documento_fk.tipo)
             formData.append("detalle", Data.id_documento_fk.detalle)
             const documentoResponse = await API.agregarFacturaDocumento(formData, token);
-            console.log(documentoResponse)
-            console.log(Data)
             Data.id_documento_fk = documentoResponse.data.id_documento;
-            console.log(Data.id_documento_fk)
 
-            console.log("5")
             // Agregar factura y gasto
+            if(Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined){
+                Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio
+            }else{
+                var responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+                Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
+            }
             const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
             Data.id_factura_fk = facturaResponse.data.id_factura;
-            console.log(Data)
             delete Data.id_cedula_proveedor_fk;
             delete Data.id_producto_servicio_fk;
             Data.monto = parseInt(Data.monto);
@@ -147,51 +131,39 @@ export const GestionGastos = () => {
                 },
             });
             formData.delete('json');
-    
-            console.log("0")
-            formData.delete('json');
-    
-            // Reestructurar y crear el objeto gasto
-            delete Data.id_gasto;
-            console.log("1")
+
             Data.id_partida_fk = parseInt(partidaID);
-            console.log("2")
-            Data.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk;
-            Data.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk;
-    
-            console.log("3")
-            // Adjuntar el ID de la factura al formulario formData
-            console.log(Data.id_factura_fk)
-            formData.append('id_factura_fk', Data.id_factura_fk.id_factura);
 
-            console.log("4")
-            await API.obtenerProveedores(token);
-    
-            let prod = await API.obtenerProductosServicios(token);
-            if (!prod) {
-                // Si el producto no existe, agregamos el nuevo producto
-                const producto_servicio = await API.agregarProductoServicio(Data.id_producto_servicio_fk, token);
-                Data.id_producto_servicio_fk = producto_servicio.data.id_producto_servicio;
+            // ACTUALIZAR FACTURA Y MANEJAR PRODUCTO SERVICIO
+
+            if(typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){ // Si lo que viene no es un objeto, solo pasa el ID
+                Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
+
+            }else{    
+                var responsePS = ""                                                                  // Si lo que viene ES un objeto, lo agrega y saca el ID
+                try{
+                    responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+                    console.log(responsePS)
+                } catch(error){
+                    console.log(responsePS)
+                }                                                               
+                Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
             }
-    
-            formData.append("tipo", Data.id_documento_fk.tipo)
-            formData.append("detalle", Data.id_documento_fk.detalle)
-            const documentoResponse = await API.agregarFacturaDocumento(formData, token);
-            console.log(documentoResponse)
-            console.log(Data)
-            Data.id_documento_fk = documentoResponse.data.id_documento;
-            console.log(Data.id_documento_fk)
 
-            console.log("5")
-            // Agregar factura y gasto
-            const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
-            Data.id_factura_fk = facturaResponse.data.id_factura;
-            console.log(Data)
-            delete Data.id_cedula_proveedor_fk;
-            delete Data.id_producto_servicio_fk;
+            Data.id_factura_fk.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
+            const rF = await API.actualizarFactura(Data.id_factura_fk.id_factura, Data.id_factura_fk, token)
+
+            Data.id_factura_fk = rF.data.id_factura
             Data.monto = parseInt(Data.monto);
-            Data.fecha = '2024-03-08T15:20:40Z';
-            await API.agregarGasto(Data, token);
+
+            // DOCUMENTO GASTO PENDIENTE
+
+            delete Data.id_documento_fk // Temporal para que deje actualizar sin documento.
+                                        // Guiarse con manejo de documentos en Proveedores (RF de Wendy)
+
+            // ACTUALIZAR GASTO CON LOS ID DE LAS COSAS
+
+            await API.actualizarGasto(Data.id_gasto, Data, token);
     
             toast.success('Gasto editado correctamente', {
                 id: toastId,
@@ -204,7 +176,7 @@ export const GestionGastos = () => {
             });
             setAddClick(false);
             document.body.classList.remove('modal-open');
-            success();
+            window.location.reload();
         } catch (error) {
             toast.dismiss(toastId);
             console.error("Error al editar gasto: ", error);
@@ -241,7 +213,7 @@ export const GestionGastos = () => {
             })
             setEdit(false)
             document.body.classList.remove('modal-open');
-            success()
+            window.location.reload();
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -314,7 +286,6 @@ export const GestionGastos = () => {
         return formattedItem;
     });
 
-
     return (
         <main >
           {!error ? (
@@ -353,4 +324,3 @@ export const GestionGastos = () => {
         </main>
     )
 }
-

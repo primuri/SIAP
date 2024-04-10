@@ -58,16 +58,9 @@ export const agregarGasto = async (gasto, token) => {
     }
 };
 
-export const actualizarGasto = async (id, gasto, factura, documento, token) => {
+export const actualizarGasto = async (id, gasto, token) => {
     try {
-        const id_factura = factura.get('id_factura');
-        gasto.id_factura_fk = id_factura;
-        documento.delete('id_factura');
-        
-        await actualizarFactura(id_factura, factura, token);
-        await actualizarFacturaDocumento(id_factura, documento, token);
-        
-        return await manejarErrores(SIAPAPI.put(`presupuesto/gastos/${id}/`, gasto, {
+        return await manejarErrores(SIAPAPI.patch(`presupuesto/gastos/${id}/`, gasto, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'

@@ -91,7 +91,7 @@ class PropuestaProyectoTests(APITestCase):
 
         # Crea los datos de Prueba
         self.data = {
-            'id_codigo_cimpa': '1-2023',
+            'id_codigo_cimpa': '1-2024',
             'detalle': 'Detalle de la propuesta',
             'estado': 'En revisión',
             'nombre': 'Proyecto ABC',
@@ -113,7 +113,7 @@ class PropuestaProyectoTests(APITestCase):
 
     def test_put_propuesta_proyecto(self):
         update_data = {
-            'id_codigo_cimpa': '1-2023',
+            'id_codigo_cimpa': '1-2024',
             'detalle': 'Detalle editado',
             'estado': 'En revisión',
             'nombre': 'Proyecto YYY',
@@ -124,7 +124,7 @@ class PropuestaProyectoTests(APITestCase):
         }
         
         self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        url = reverse('propuestaproyecto-detail', args=['1-2024'])
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
@@ -190,7 +190,7 @@ class PropuestaProyectoTests(APITestCase):
        
         # Carga de datos 2
         data2 = {
-            'id_codigo_cimpa': '2-2023',
+            'id_codigo_cimpa': '2-2024',
             'detalle': 'Otro Detalle',
             'estado': 'Aprobado',
             'nombre': 'Proyecto GHI',
@@ -204,7 +204,7 @@ class PropuestaProyectoTests(APITestCase):
         self.client.post(reverse('propuestaproyecto-list'), data2, format='json')
         url = reverse('propuestaproyecto-list')
         response = self.client.get(url)
-        url2 = reverse('propuestaproyecto-detail', args=['2-2023'])
+        url2 = reverse('propuestaproyecto-detail', args=['2-2024'])
         response2 = self.client.get(url2)
 
         # Verificaciones
@@ -216,7 +216,7 @@ class PropuestaProyectoTests(APITestCase):
     def test_get_buscar_propuesta_proyecto(self):
 
         self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        url = reverse('propuestaproyecto-detail', args=['1-2024'])
         response = self.client.get(url)
 
         # Verificaciones
@@ -226,7 +226,7 @@ class PropuestaProyectoTests(APITestCase):
     def test_delete_propuesta_proyecto(self):
         
         self.client.post(reverse('propuestaproyecto-list'), self.data, format='json')
-        url = reverse('propuestaproyecto-detail', args=['1-2023'])
+        url = reverse('propuestaproyecto-detail', args=['1-2024'])
         response = self.client.delete(url)
 
         # Verificaciones

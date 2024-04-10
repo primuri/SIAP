@@ -31,32 +31,67 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             detalle: "",
         },
     };
+
+    const checkLetraNum = (value) => {
+        // Esta expresión regular permite solo letras y espacios.
+        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
+        return regex.test(value);
+      };
+
+      const checkLetra = (value) => {
+        // Esta expresión regular permite solo letras y espacios.
+        const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+        return regex.test(value);
+      };
+
+
+      
+      const camposLetrasNum = [
+        "id_producto_fk.detalle",
+        "nombre",
+        "resumen",
+        "id_oficio_fk.detalle"
+    ];
+
+    const camposLetras = [
+        "id_area_fk.nombre",
+        "id_institucion_fk.nombre"
+    ];
+
+
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
-
-    const updateNestedField = (formData, fieldPath, value) => {
-        const keys = fieldPath.split('.');
-        const lastKey = keys.pop();
-
-        keys.reduce((obj, key) => obj[key] = obj[key] || {}, formData)[lastKey] = value;
-
-        return { ...formData };
-    };
-
     const handleChange = (event) => {
         const { name, value } = event.target;
-        if (name === "pais_procedencia") {
-            setPaisSeleccionado(value);
-            setFormData({
-                ...formData,
-                [name]: value,
-            });
+
+        // Mover esta línea al inicio de la función para asegurar que la validación se realice correctamente.
+        if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
+            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
+        } else  if (camposLetras.includes(name) && !checkLetra(value)) {
+            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
         }
-        const updatedFormData = updateNestedField(formData, name, value);
-        setFormData(updatedFormData);
-        setCambios({ eventoData: { ...updatedFormData }, eventoFile: fileData });
+
+        setFormData(prevFormData => updateNestedField(prevFormData, name, value));
+        setCambios({ eventoData: { ...formData, [name]: value }, eventoFile: fileData });
     };
+
+    const updateNestedField = (prevFormData, fieldPath, value) => {
+        const keys = fieldPath.split('.');
+        let data = { ...prevFormData }; // Crea una copia superficial del objeto prevFormData para evitar mutaciones.
+
+        keys.reduce((current, key, index) => {
+            if (index === keys.length - 1) {
+                current[key] = value;
+            } else {
+                current[key] = current[key] ? { ...current[key] } : {}; // Asegura la creación de un nuevo objeto si no existe, evitando mutaciones.
+            }
+            return current[key];
+        }, data);
+
+        return data;
+    };
+
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];

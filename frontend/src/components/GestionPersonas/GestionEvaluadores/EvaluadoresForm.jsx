@@ -49,6 +49,36 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+
+    
+    const check = (value) => {
+      // Esta expresión regular permite solo letras y espacios.
+      const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+      return regex.test(value);
+  };
+
+  const camposAValidar = [
+      "id_nombre_completo_fk.nombre",
+      "id_nombre_completo_fk.apellido",
+      "id_nombre_completo_fk.segundo_apellido",
+      "unidad_base",
+      "id_area_especialidad_fk.nombre"
+  ];
+
+  if (camposAValidar.includes(name)) {
+      if (check(value)) {
+          const [objectName, attributeName] = name.split('.');
+          setFormData(prevFormData => ({
+              ...prevFormData,
+              [objectName]: {
+                  ...prevFormData[objectName],
+                  [attributeName]: value, // Actualiza solo el atributo relevante
+              },
+          }));
+      }
+      return;
+  } 
+
     if (name.includes('.')) {
       const keys = name.split('.');
       setFormData(prev => ({

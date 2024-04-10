@@ -1,4 +1,4 @@
-import { FormModal } from "../../utils/FormModal";
+import { FormModalModified } from "../../utils/FormModalModified";
 import { VIFields } from "../../pages/GestionInformes/utils";
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
@@ -20,10 +20,11 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     const [evaluadores, setEvaluadores] = useState([])
     const [evaluadorSeleccionado, setEvaluadorSeleccionado] = useState('')
     const [loadedEvaluadores, setLoadedEvaluadores] = useState(true)
-
+    const [canDelete, setCanDelete] = useState(true)
     useEffect(() => {
         obtenerProyectos()
         obtenerEvaluadores()
+        checkCanDelete()
         if(mode === 2 && evaluacion){
             setProyectoSeleccionado(`${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | ${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}`)
             setEvaluadorSeleccionado(`${evaluacion.id_evaluador_fk.id_evaluador} | ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.nombre} ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.apellido}`)
@@ -47,7 +48,16 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     })
 
     // => Funciones para el autoComplete
-
+    const checkCanDelete = async () => {
+        if(evaluacion){
+            var canDelete = await API.canDelete(evaluacion.id_evaluacion)
+            if (!canDelete) {
+                setCanDelete(false)
+            }
+            setCanDelete(true)
+        }
+        
+    }
     var obtenerProyectos = async () => {
         var listaProyectos = [];
         try {
@@ -67,15 +77,15 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     const cargarVersiones = async () => {
         // Expresión regular para extraer el id_codigo_vi del string almacenado en proyectoSeleccionado
-        const regex = /^\d+/;
+        const regex = /(\d+-\d+)\s*\|/;
 
         try {
             // Suponiendo que proyectoSeleccionado es el string que contiene el id_codigo_vi
             const match = proyectoSeleccionado.match(regex);
 
             // Verificar si se encontró el id_codigo_vi en el string
-            if (match && match[0]) {
-                const idProyecto = match[0];
+            if (match && match[1]) {
+                const idProyecto = match[1];
                 setLoadedVersiones(false)
                 // Obtener las versiones del proyecto utilizando la API
                 const response = await API.obtenerVersionesProyecto(idProyecto);
@@ -166,7 +176,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     return (
         <>
-            <FormModal {...{ icono, mode, nombreForm: "evaluación", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
+            <FormModalModified {...{ icono, mode, borrar: (formData.estado === "Completa"), nombreForm: "evaluación", onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm }}>
                 <div className="modal-body" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
                         <div className="row mb-4">
@@ -188,6 +198,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                             setProyectoSeleccionado('')
                                         }
                                     }}
+                                    disabled={(formData.estado === "Completa")}
                                 />
                             </div>
                             <div className="col">
@@ -197,12 +208,12 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 )}
                                 {proyectoSeleccionado !== '' ? (<>
                                     <select
-                                        className="form-select seleccion"
+                                        className={formData.estado === "Completa" ? "form-control seleccion disabled-input" : "form-control seleccion"}
                                         name="id_version_proyecto_fk"
                                         id="id_version_proyecto_fk"
                                         value={formData.id_version_proyecto_fk}
                                         onChange={handleChange}
-                                        disabled={proyectoSeleccionado !== '' ? false : true}
+                                        disabled={formData.estado === "Completa" ? true : false}
                                         required
                                     >
                                         <option value="" defaultValue={""}>Seleccione una version</option>
@@ -224,7 +235,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 )}
                                 <Autocomplete
                                     value={evaluadorSeleccionado}
-                                    id="free-solo-demo"
+                                    id="free-solo-demo1"
                                     freeSolo
                                     options={evaluadores}
                                     renderInput={(params) => <TextField {...params} required/>}
@@ -248,6 +259,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                             setEvaluadorSeleccionado('')
                                         }
                                     }}
+                                    disabled={(formData.estado === "Completa")}
                                 />
                             </div>
                             {mode == 2 && (
@@ -260,7 +272,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
                             <div className="col">
                                 <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación <span className="disabled-input">(Opcional)</span></label>
-                                <input type="file" className="form-control" name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} />
+                                <input type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
                                 {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
@@ -271,12 +283,12 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>
                             <div className="col">
                                 <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación <span className="disabled-input">(Opcional)</span></label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
+                                <input type="text" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
                             </div>
                         </div>
                     </div>
                 </div>
-            </FormModal>
+            </FormModalModified>
         </>
     )
 }

@@ -230,7 +230,7 @@ export const eliminarTitulos = (id, token) => {
 };
 
 
-const obtenerNombre = async (nombre, token) => {
+export const obtenerNombre = async (nombre, token) => {
     try {
         const response_nombre = await manejarErrores(SIAPAPI.post('personas/nombre_completo/', nombre, {
             headers: {
@@ -366,6 +366,5 @@ export const buscarUniversidad = async (nombre, pais, token) => {
             'Content-Type': 'application/json'
         }
     }))
-    console.log(response);
     return response.data.find(universidad => universidad.nombre === nombre && universidad.pais === pais);
 }
