@@ -1,43 +1,41 @@
 import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/person-i.png';
-import TextField from '@mui/material/TextField';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../utils/Confirmar'
 import Tooltip from '@mui/material/Tooltip';
-import { Modal } from "../../utils/Modal"
-import { Table } from "../../utils/Table"
-const filter = createFilterOptions();
 
+//{ onSubmit, mode, integrante, onCancel, onDelete, id_organo }) 
 export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [oficioData, setOficioData] = useState(null);
+    //const [fileData, setFileData] = useState(null);
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
 
     const [formData, setFormData] = useState({
         integrante : {
+            id_integrante: integrante ? integrante.id_integrante : "",
             puesto: integrante ? integrante.puesto : "",
             normativa_reguladora: integrante ? integrante.normativa_reguladora : "",
             inicio_funciones: integrante ? integrante.inicio_funciones.split('T')[0] : "",
             nombre_integrante: integrante ? integrante.nombre_integrante : "",
         },
-        id_organo_colegiado_fk: {
+        id_organo_colegiado_fk: integrante ? integrante.id_organo_colegiado_fk : {
             id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : "",
+            //id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
             nombre : integrante ? integrante.id_organo_colegiado_fk.nombre : "",
             numero_miembros : integrante ? integrante.id_organo_colegiado_fk.numero_miembros : "",
             quorum : integrante ? integrante.id_organo_colegiado_fk.quorum : "",
             acuerdo_firme : integrante ? integrante.id_organo_colegiado_fk.acuerdo_firme : "",
         },
-        id_vigencia_fk: {
+        id_vigencia_fk: integrante ? integrante.id_vigencia_fk : {
             id_vigencia : integrante ? integrante.id_vigencia_fk.id_vigencia : "",
             fecha_inicio : integrante ? integrante.id_vigencia_fk.fecha_inicio : "",
             fecha_fin : integrante ? integrante.id_vigencia_fk.fecha_fin : "",
         },
-        id_oficio_fk: {
+        id_oficio_fk: integrante ? integrante.id_oficio_fk : {
             id_oficio: integrante ? integrante.id_oficio_fk.id_oficio : "",
             ruta_archivo: integrante ? integrante.id_oficio_fk.ruta_archivo : "",
             detalle: integrante ? integrante.id_oficio_fk.detalle : "",
@@ -76,10 +74,21 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
         setFormData({ ...formData });
     };
 
+    // Función auxiliar para obtener valor por ruta de acceso en objeto anidado
+    function getValueByPath(object, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], object);
+    }
+
     const handleFileChange = (event) => {
         const oficio = event.target.files[0];
         setOficioData(oficio);
     }
+    /*
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setFileData(file);
+    };
+*/
     
     const sendForm = (event) => {
         event.preventDefault()
@@ -90,6 +99,18 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
         combinedData.append('json', JSON.stringify(formData))
         onSubmit(combinedData)
     }
+    /*
+    const sendForm = (event) => {
+        event.preventDefault();
+        const combinedData = new FormData();
+        if (fileData) {
+            combinedData.append('ruta_archivo', fileData);
+        }
+        const totalData = { ...formData };
+        combinedData.append('json', JSON.stringify(totalData));
+        onSubmit(combinedData);
+    };
+*/
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -253,4 +274,5 @@ IntegranteOrganoColegiadoForm.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func,
     integrante: PropTypes.object,
+    //id_organo: PropTypes.object,
 }

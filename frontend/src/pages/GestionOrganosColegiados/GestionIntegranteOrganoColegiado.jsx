@@ -7,7 +7,7 @@ import { Search } from "../../utils/Search"
 import { Back } from "../../utils/Back"
 import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, actualizarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, obtenerIntegranteOrganoColegiado, obtenerOrganosColegiados } from "../../api/gestionIntegranteOrganoColegiado"
+import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, actualizarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, eliminarOficio, obtenerIntegranteOrganoColegiado, obtenerOrganosColegiados } from "../../api/gestionIntegranteOrganoColegiado"
 import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionIntegranteOrganoColegiado = () => {
@@ -26,6 +26,14 @@ export const GestionIntegranteOrganoColegiado = () => {
   const [addClicked, setAddClicked]         = useState(false)
   const [editClicked, setEditClicked]       = useState(false)
 
+  /*
+  let {id_organo_colegiado,id} = useParams()
+  const user = JSON.parse(localStorage.getItem('user'))
+  const [data, setData] = useState([])
+  const [selectedIdOrganoCo, setSelectedIdOrganoCo] = useState(null);
+
+  const [clean_id, setClean_id] = useState(id.startsWith('p_id=') ? id.split('p_id=')[1] : '')
+  */
   const columns = ['Integrante', 'Inicio de funciones', 'Puesto', 'Número oficio', 'Normativa reguladora', 'Órgano Colegiado']
   const dataKeys = ['nombre_integrante', 'inicio_funciones', 'puesto', 'id_oficio_fk.id_oficio', 'normativa_reguladora', 'id_organo_colegiado_fk.nombre']
 
@@ -33,16 +41,27 @@ export const GestionIntegranteOrganoColegiado = () => {
 
   const token = localStorage.getItem('token')
 
-useEffect(() => {                                                           
-  async function fetchData() {
+  useEffect(() => {                                                           
+    async function fetchData() {
       loadIntegrantes()
       setCargado(true);
       const id_organo_colegiado = await loadIntegranteById(organoID);
 
       setOrganoColegiado(id_organo_colegiado);
-  }
-  fetchData();
-}, [reload]);
+    }
+    fetchData();
+  }, [reload]);
+/*
+useEffect(() => {
+    async function fetchData() {
+        
+        await loadIntegrantes(clean_id);
+        setCargado(true);
+    }
+
+    fetchData();
+  }, [reload, clean_id]);
+*/
 
   async function loadIntegrantes() {
     try{
@@ -56,6 +75,56 @@ useEffect(() => {
         console.log(error)
     }
   }
+  /*
+  async function loadIntegrantes(integrante) {
+    try {
+        setCargado(false);
+        const filteredData = res.data.filter(item => item.id_organo_colegiado_fk.id_organo_colegiado === integrante);
+        setData(filteredData);
+        setIntegrantes(filteredData)
+        setCargado(true);
+
+    } catch (error) {
+        
+    }
+  }
+
+  async function loadIntegrantes(integrante) {
+    try {
+        setCargado(false);
+        const filteredData = res.data.filter(item => item.id_organo_colegiado_fk.id_organo_colegiado === integrante);
+        setData(filteredData);
+        setIntegrantes(filteredData)
+        setCargado(true);
+
+    } catch (error) {
+        
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id_organo_colegiado && data.length > 0) {
+        const idNum = parseInt(id_organo_colegiado, 10);
+        const elemento = data.find(e => e.id_organo_colegiado_fk.id_organo_colegiado === idNum);
+        if (elemento) {
+          setEdit(true);
+          setAddClick(false);
+          setIntegarnte(elemento);
+        } else {
+          navigate(`/gestion-organos-colegiados/${id}/gestion-integrantes`);
+        }
+      }
+    };
+  
+    fetchData(); // Call the async function immediately
+  }, [data, id_organo_colegiado]);
+  
+  const success = () => {
+      window.location.href = `/gestion-organos-colegiados/${id}/gestion-integrantes`
+  }
+
+*/
 
   // Manejo de datos que se van a enviar para agregar
   const addIntegrante = async (formData) => {
@@ -96,6 +165,31 @@ useEffect(() => {
       }
       const id_vigencia_creado = await agregarVigencia(vigencia, token)
       delete Datos.integrante.id_vigencia_fk;
+
+      /*
+      const id_oc = Datos.integrante.id_organo_colegiado_fk.id_organo_colegiado;
+        delete Datos.integrante.id_organo_colegiado_fk;
+        Datos.integrante.id_organo_colegiado_fk = clean_id;
+        delete Datos.integrante.id_integrante;
+        Datos.integrante.id_vigencia_fk = id_vigencia_creado;
+
+        formData.delete(formData.id_integrante);
+        formData.delete(formData.id_vigencia_fk);
+        formData.delete(formData.id_organo_colegiado_fk);
+        formData.append('detalle', Datos.integrante.id_oficio_fk.detalle);
+
+        const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
+        delete Datos.integrante.id_oficio_fk;
+        Datos.integrante.id_oficio_fk = id_oficio_creado;
+        const id_integrante_creado = await agregarIntegrante(Datos.integrante, localStorage.getItem('token'))
+        producto.id_producto_fk.integrante = id_integrante_creado;
+
+        Datos.integrante = id_integrante_creado;
+
+        loadIntegrantes(id_oc)
+        */
+
+
       Datos.integrante.id_vigencia_fk = id_vigencia_creado;
       formData.delete(formData.id_vigencia_fk);
       
@@ -117,8 +211,8 @@ useEffect(() => {
       success()
     } catch (error) {
       toast.dismiss(toastId)
-      await eliminarOficio(Datos.id_oficio_fk, token);
-      await eliminarVigencia(Datos.id_vigencia_fk, token);
+      //await eliminarOficio(Data.id_oficio_fk, token);
+      //await eliminarVigencia(Data.id_vigencia_fk, token);
     }
 
   }
@@ -139,6 +233,13 @@ useEffect(() => {
       //Re estructuracion y creacion del objeto presupuesto
       delete Data.integrante.id_integrante
       Data.integrante.id_organo_colegiado_fk = Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
+      /*
+      const id_integrante = Datos.integrante.id_integrante;
+        const id_organo_colegiado = Datos.integrante.id_organo_colegiado_fk.id_organo_colegiado;
+        delete Datos.integrante.id_integrante;
+        delete Datos.integrante.id_organo_colegiado_fk;
+        */
+      
       delete Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
 
       const id_vig = Datos.integrante.id_vigencia_fk.id_vigencia;
@@ -168,6 +269,29 @@ useEffect(() => {
       }
 
       await editarVigencia(id_vig, vigencia, token)
+      /*
+
+        const id_vigencia_editada = Datos.integrante.id_vigencia_fk.id_vigencia;
+        delete Datos.integrante.id_vigencia_fk;
+        Datos.integrante.id_vigencia_fk = id_vigencia_editada;
+
+        const id_oficio = Datos.integrante.id_oficio_fk.id_oficio;
+        formData.delete(formData.id_integrante);
+        formData.delete(formData.id_vigencia_fk);
+        formData.delete(formData.id_organo_colegiado_fk);
+        formData.append('detalle', Datos.integrante.id_oficio_fk.detalle);
+        const id_oficio_editada = await editarOficio(id_oficio, formData, localStorage.getItem("token"))
+        delete Datos.integrante.id_oficio_fk;
+        Datos.integrante.id_oficio_fk = id_oficio_editada.data.id_oficio;
+
+        const id_integrante_editado = await editarIntegrante(id_integrante, Datos.integrante, localStorage.getItem("token"))
+
+        Datos.integrante = id_integrante_editado.data.id_integrante;
+
+        Datos.integrante = id_integrante;
+        loadIntegrantes(Datos.integrante.id_organo_colegiado_fk)
+
+      */
 
       formData.append('detalle', Data.oficio.detalle)
       formData.append('id_oficio', Data.oficio.id_oficio_fk)
@@ -184,6 +308,7 @@ useEffect(() => {
         },
       })
       setEdit(false)
+      //loadIntegrantes(Datos.id_organo_colegiado_fk)
       setReload(!reload)
       document.body.classList.remove('modal-open');
       success()
@@ -193,7 +318,7 @@ useEffect(() => {
   }
 
   // Manejo del eliminar
-  const deleteIntegrante = async (id) => {
+  const deleteIntegrante = async (id) => { //parametro integrante
     try {
       var toastId = toast.loading('Eliminando...', {
         position: 'bottom-right',
@@ -203,6 +328,17 @@ useEffect(() => {
           fontSize: '18px',
         },
       });
+
+    /*
+        const id = integrante.id_organo_colegiado_fk.id_organo_colegiado;
+        await eliminarIntegrante(integrante.id_integrante, localStorage.getItem("token"));
+        await eliminarOficio(integrante.id_oficio_fk.id_oficio, localStorage.getItem("token"));
+        await eliminarVigencia(integrante.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
+
+        loadIntegrantes(id)
+
+    */
+
       await eliminarIntegrante(id, token)
       toast.success('Integrante eliminado correctamente', {
         id: toastId,
@@ -214,6 +350,7 @@ useEffect(() => {
         },
       })
       setEdit(false)
+      //loadIntegrantes(id)
       setReload(!reload)
       document.body.classList.remove('modal-open');
       success()
@@ -331,3 +468,5 @@ useEffect(() => {
       )}
     </main>)
 } 
+
+//id_organo={selectedIdOrganoCo}  dentro del form para agregar
