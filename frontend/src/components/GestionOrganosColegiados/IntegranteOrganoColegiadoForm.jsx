@@ -10,18 +10,15 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [oficioData, setOficioData] = useState(null);
-    //const [fileData, setFileData] = useState(null);
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
 
     const [formData, setFormData] = useState({
-        integrante : {
-            id_integrante: integrante ? integrante.id_integrante : "",
-            puesto: integrante ? integrante.puesto : "",
-            normativa_reguladora: integrante ? integrante.normativa_reguladora : "",
-            inicio_funciones: integrante ? integrante.inicio_funciones.split('T')[0] : "",
-            nombre_integrante: integrante ? integrante.nombre_integrante : "",
-        },
+        id_integrante: integrante ? integrante.id_integrante : "",
+        puesto: integrante ? integrante.puesto : "",
+        normativa_reguladora: integrante ? integrante.normativa_reguladora : "",
+        inicio_funciones: integrante ? integrante.inicio_funciones.split('T')[0] : "",
+        nombre_integrante: integrante ? integrante.nombre_integrante : "",
         id_organo_colegiado_fk: integrante ? integrante.id_organo_colegiado_fk : {
             id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : "",
             //id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
@@ -83,12 +80,6 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
         const oficio = event.target.files[0];
         setOficioData(oficio);
     }
-    /*
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setFileData(file);
-    };
-*/
     
     const sendForm = (event) => {
         event.preventDefault()
@@ -99,18 +90,6 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
         combinedData.append('json', JSON.stringify(formData))
         onSubmit(combinedData)
     }
-    /*
-    const sendForm = (event) => {
-        event.preventDefault();
-        const combinedData = new FormData();
-        if (fileData) {
-            combinedData.append('ruta_archivo', fileData);
-        }
-        const totalData = { ...formData };
-        combinedData.append('json', JSON.stringify(totalData));
-        onSubmit(combinedData);
-    };
-*/
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -161,12 +140,12 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container ">
 
-                        <div className="col">
+                        {mode === 2 && (<div className="col">
                             <div className="form-group">
                                 <label htmlFor="OrganoColegiadoNombre" className="label-personalizado mb-2">Órgano al que pertenece</label>
-                                <input type="text" className="form-control disabled-input" name="id_organo_colegiado_fk.nombre" id="OrganoColegiadoNombre" value={formData.id_organo_colegiado_fk.nombre} required disabled />
+                                <input type="text" className="form-control disabled-input" name="id_organo_colegiado_fk.nombre" id="OrganoColegiadoNombre" value={formData.id_organo_colegiado_fk.nombre} onChange={handleChange} required disabled />
                             </div>
-                        </div>
+                        </div>)}
 
                         <div className="row mb-4">
                             <div className="col-md-6">

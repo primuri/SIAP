@@ -95,7 +95,7 @@ export const agregarIntegrante = async (integrante, token) => {
 };
 */
 
-export const actualizarIntegrante = async (id, integrante, oficio, token) => {
+/*export const editarIntegrante = async (id, integrante, oficio, token) => {
     data.delete('id_integrante')
     const id_oficio = oficio.get('id_oficio')
     integrante.id_oficio_fk = id_oficio
@@ -107,8 +107,8 @@ export const actualizarIntegrante = async (id, integrante, oficio, token) => {
             'Content-Type': 'application/json'
         }
     }));
-};
-/*
+};*/
+
 export const editarIntegrante = async (id, integrante, token) => {
 
     try { 
@@ -124,7 +124,7 @@ export const editarIntegrante = async (id, integrante, token) => {
         throw error;
     } 
 };
-*/ 
+
 
 export const eliminarIntegrante = async (id, token) => {
     return await manejarErrores(SIAPAPI.delete(`organo_colegiado/integrante/${id}/`, {
@@ -220,7 +220,7 @@ export const agregarOficio = async (oficio, token) => {
 };
 */
 
-export const actualizarOficio = async (id, oficio, token) => {
+export const editarOficio = async (id, oficio, token) => {
     return await manejarErrores(SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
         headers: {
             'Authorization': `token ${token}`,

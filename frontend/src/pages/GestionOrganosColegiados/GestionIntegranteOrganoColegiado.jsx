@@ -7,7 +7,7 @@ import { Search } from "../../utils/Search"
 import { Back } from "../../utils/Back"
 import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, actualizarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, eliminarOficio, obtenerIntegranteOrganoColegiado, obtenerOrganosColegiados } from "../../api/gestionIntegranteOrganoColegiado"
+import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, editarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, agregarOficio, editarOficio, eliminarOficio, obtenerIntegranteOrganoColegiado, obtenerOrganosColegiados } from "../../api/gestionIntegranteOrganoColegiado"
 import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionIntegranteOrganoColegiado = () => {
@@ -129,25 +129,21 @@ useEffect(() => {
   // Manejo de datos que se van a enviar para agregar
   const addIntegrante = async (formData) => {
     try {
-      const Data = JSON.parse(formData.get('json'))
-      var toastId = toast.loading('Agregando...', {
-        position: 'bottom-right',
-        style: {
-          background: 'var(--celeste-ucr)',
-          color: '#fff',
-          fontSize: '18px',
-        },
-      });
-
+        const Data = JSON.parse(formData.get('json'))
+        var toastId = toast.loading('Agregando...', {
+            position: 'bottom-right',
+            style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+            },
+        });
+/*
       formData.delete('id_oficio_fk'); // Eliminamos el archivo del FormData original
-      
       formData.delete('json')
-      //Re estructuracion y creacion del objeto integrante
       delete Data.integrante.id_integrante
-      Data.integrante.id_organo_colegiado_fk = Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
-      delete Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
-
-      Data.integrante.nombre_integrante = Data.nombre_integrante
+      Data.integrante.id_organo_colegiado_fk = Data.integrante.id_organo_colegiado_fk.id_organo_colegiado
+      delete Data.integrante.id_organo_colegiado_fk.id_organo_colegiado
 
       let fecha_ini = Datos.integrante.id_vigencia_fk.fecha_inicio;
       let fecha_fi = Datos.integrante.id_vigencia_fk.fecha_fin;
@@ -165,12 +161,11 @@ useEffect(() => {
       }
       const id_vigencia_creado = await agregarVigencia(vigencia, token)
       delete Datos.integrante.id_vigencia_fk;
-
+*/
       /*
       const id_oc = Datos.integrante.id_organo_colegiado_fk.id_organo_colegiado;
         delete Datos.integrante.id_organo_colegiado_fk;
         Datos.integrante.id_organo_colegiado_fk = clean_id;
-        delete Datos.integrante.id_integrante;
         Datos.integrante.id_vigencia_fk = id_vigencia_creado;
 
         formData.delete(formData.id_integrante);
@@ -189,26 +184,63 @@ useEffect(() => {
         loadIntegrantes(id_oc)
         */
 
-
+/*
       Datos.integrante.id_vigencia_fk = id_vigencia_creado;
       formData.delete(formData.id_vigencia_fk);
       
       formData.append('detalle', Data.oficio.detalle)
       delete Data.oficio
       await agregarIntegrante(Data.integrante, formData, token)
-      toast.success('Integrante agregado correctamente', {
-        id: toastId,
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
-        style: {
-          background: 'var(--celeste-ucr)',
-          color: '#fff',
-        },
-      })
-      setAddClicked(false)
-      setReload(!reload)
-      document.body.classList.remove('modal-open');
-      success()
+*/
+        console.log("Entro a add");
+        formData.delete('json');
+        let fecha_ini = Data.integrante.id_vigencia_fk.fecha_inicio;
+        let fecha_fi = Data.integrante.id_vigencia_fk.fecha_fin;
+
+        if (!fecha_ini || fecha_ini.trim() === "") {
+            fecha_ini = null;
+        }
+
+        if (!fecha_fi || fecha_fi.trim() === "") {
+            fecha_fi = null;
+        }
+        const vigencia = {
+            fecha_inicio: fecha_ini,
+            fecha_fin: fecha_fi
+        }
+        console.log(vigencia);
+        console.log("llego a vigencia");
+        const id_vigencia_creado = await agregarVigencia(vigencia, token)
+        delete Data.integrante.id_vigencia_fk;
+        Data.integrante.id_vigencia_fk = id_vigencia_creado;
+        console.log("guardo vigencia");
+
+        formData.delete(formData.id_integrante);
+        formData.delete(formData.id_vigencia_fk);
+        formData.delete(formData.id_organo_colegiado_fk);
+        formData.append('detalle', Data.integrante.id_oficio_fk.detalle);
+        console.log("hizo delete y append");
+
+        const id_oficio_creado = await agregarOficio(formData, token);
+        delete Data.integrante.id_oficio_fk;
+        Data.integrante.id_oficio_fk = id_oficio_creado;
+        console.log("guardo oficio");
+
+        await agregarIntegrante(Data.integrante, token)
+
+        toast.success('Integrante agregado correctamente', {
+            id: toastId,
+            duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+            position: 'bottom-right', // Posición en la pantalla
+            style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            },
+        })
+        setAddClicked(false)
+        setReload(!reload)
+        document.body.classList.remove('modal-open');
+        success()
     } catch (error) {
       toast.dismiss(toastId)
       //await eliminarOficio(Data.id_oficio_fk, token);
@@ -220,19 +252,19 @@ useEffect(() => {
   // Manejo de los datos del formulario de editar 
   const editIntegrante = async (formData) => {
     try {
-      const Data = JSON.parse(formData.get('json'))
-      var toastId = toast.loading('Editando...', {
-        position: 'bottom-right',
-        style: {
-          background: 'var(--celeste-ucr)',
-          color: '#fff',
-          fontSize: '18px',
-        },
-      });
-      formData.delete('json')
+        const Data = JSON.parse(formData.get('json'))
+        var toastId = toast.loading('Editando...', {
+            position: 'bottom-right',
+            style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            fontSize: '18px',
+            },
+        });
+        formData.delete('json')
       //Re estructuracion y creacion del objeto presupuesto
-      delete Data.integrante.id_integrante
-      Data.integrante.id_organo_colegiado_fk = Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
+      //delete Data.integrante.id_integrante
+      //Data.integrante.id_organo_colegiado_fk = Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
       /*
       const id_integrante = Datos.integrante.id_integrante;
         const id_organo_colegiado = Datos.integrante.id_organo_colegiado_fk.id_organo_colegiado;
@@ -240,6 +272,7 @@ useEffect(() => {
         delete Datos.integrante.id_organo_colegiado_fk;
         */
       
+        /*
       delete Data.integrante.id_organo_colegiado_fk.id_organo_Colegiado
 
       const id_vig = Datos.integrante.id_vigencia_fk.id_vigencia;
@@ -269,6 +302,7 @@ useEffect(() => {
       }
 
       await editarVigencia(id_vig, vigencia, token)
+      */
       /*
 
         const id_vigencia_editada = Datos.integrante.id_vigencia_fk.id_vigencia;
@@ -292,26 +326,80 @@ useEffect(() => {
         loadIntegrantes(Datos.integrante.id_organo_colegiado_fk)
 
       */
-
+/*
       formData.append('detalle', Data.oficio.detalle)
       formData.append('id_oficio', Data.oficio.id_oficio_fk)
       delete Data.oficio
 
       await actualizarIntegrante(integrante.id_integrante, Data.integrante, formData, token)
-      toast.success('Integrante actualizado correctamente', {
-        id: toastId,
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
-        style: {
-          background: 'var(--celeste-ucr)',
-          color: '#fff',
-        },
-      })
-      setEdit(false)
-      //loadIntegrantes(Datos.id_organo_colegiado_fk)
-      setReload(!reload)
-      document.body.classList.remove('modal-open');
-      success()
+
+*/
+
+
+        formData.delete('json');
+
+        const id_integrante = Data.integrante.id_integrante;
+        const id_organo_colegiado = Data.integrante.id_organo_colegiado_fk.id_organo_colegiado;
+        delete Data.integrante.id_integrante;
+        delete Data.integrante.id_organo_colegiado_fk;
+        Data.integrante.id_organo_colegiado_fk = id_organo_colegiado;
+
+        const id_vig = Data.integrante.id_vigencia_fk.id_vigencia;
+
+        let fecha_inicio_adaptada = Data.integrante.id_vigencia_fk.fecha_inicio;
+        let fecha_fin_adaptada = Data.integrante.id_vigencia_fk.fecha_fin;
+
+
+        if (!fecha_inicio_adaptada) {
+            fecha_inicio_adaptada = null;
+        } else {
+            if (!fecha_inicio_adaptada.endsWith("Z")) {
+                fecha_inicio_adaptada += "T00:00:00Z";
+            }
+        }
+
+        if (!fecha_fin_adaptada) {
+            fecha_fin_adaptada = null;
+        } else {
+            if (!fecha_fin_adaptada.endsWith("Z")) {
+                fecha_fin_adaptada += "T00:00:00Z";
+            }
+        }
+
+        const vigencia = {
+            fecha_inicio: fecha_inicio_adaptada,
+            fecha_fin: fecha_fin_adaptada
+        }
+
+        await editarVigencia(id_vig, vigencia, token)
+        const id_vigencia_editada = Data.integrante.id_vigencia_fk.id_vigencia;
+        delete Data.integrante.id_vigencia_fk;
+        Data.integrante.id_vigencia_fk = id_vigencia_editada;
+
+        const id_oficio = Data.integrante.id_oficio_fk.id_oficio;
+        formData.delete(formData.id_integrante);
+        formData.delete(formData.id_vigencia_fk);
+        formData.delete(formData.id_organo_colegiado_fk);
+        formData.append('detalle', Data.integrante.id_oficio_fk.detalle);
+        const id_oficio_editada = await editarOficio(id_oficio, formData, token)
+        delete Data.integrante.id_oficio_fk;
+        Data.integrante.id_oficio_fk = id_oficio_editada.data.id_oficio;
+
+        await editarIntegrante(id_integrante, Data.integrante, localStorage.getItem("token"))
+
+        toast.success('Integrante actualizado correctamente', {
+            id: toastId,
+            duration: 4000, // Duración en milisegundos (4 segundos en este caso)
+            position: 'bottom-right', // Posición en la pantalla
+            style: {
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
+            },
+        })
+        setEdit(false)
+        setReload(!reload)
+        document.body.classList.remove('modal-open');
+        success()
     } catch (error) {
       toast.dismiss(toastId)
     }
