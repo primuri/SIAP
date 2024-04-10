@@ -136,7 +136,7 @@ export const GestionOrganosColegiados = () => {
     const elementClicked = (selectedOrganoColegiado) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setOrganoColegiado(selectedOrganoColegiado);
-            navigate(`${location.pathname}/${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
+            navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
             // Aqui hay que poner uno para sesiones y otro para integrantes
             // navigate(`${location.pathname}/${selectedInforme.id_informe}/gestion-versiones`)
         } else {

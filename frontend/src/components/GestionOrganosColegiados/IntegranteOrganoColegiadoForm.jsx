@@ -5,8 +5,7 @@ import icono from '../../assets/person-i.png';
 import { Confirmar } from '../../utils/Confirmar'
 import Tooltip from '@mui/material/Tooltip';
 
-//{ onSubmit, mode, integrante, onCancel, onDelete, id_organo }) 
-export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCancel, onDelete }) => {
+export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_organo, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [oficioData, setOficioData] = useState(null);
@@ -20,8 +19,8 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, onCa
         inicio_funciones: integrante ? integrante.inicio_funciones.split('T')[0] : "",
         nombre_integrante: integrante ? integrante.nombre_integrante : "",
         id_organo_colegiado_fk: integrante ? integrante.id_organo_colegiado_fk : {
-            id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : "",
-            //id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
+            //id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : "",
+            id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
             nombre : integrante ? integrante.id_organo_colegiado_fk.nombre : "",
             numero_miembros : integrante ? integrante.id_organo_colegiado_fk.numero_miembros : "",
             quorum : integrante ? integrante.id_organo_colegiado_fk.quorum : "",
@@ -253,5 +252,5 @@ IntegranteOrganoColegiadoForm.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func,
     integrante: PropTypes.object,
-    //id_organo: PropTypes.object,
+    id_organo: PropTypes.object,
 }
