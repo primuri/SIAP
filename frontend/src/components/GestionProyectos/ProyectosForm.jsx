@@ -73,6 +73,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
+
          // Validación específica para el campo de número de versión
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
@@ -118,7 +119,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             const keys = path.split('.');
             const lastKey = keys.pop();
             const lastObj = keys.reduce((obj, key) => obj[key] = obj[key] || {}, obj);
+           
             lastObj[lastKey] = value;
+
         };
     
         updateFormData(name, updatedValue, formData);
@@ -197,6 +200,13 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setEventoFile(changes.eventoFile);
     };
 
+    const handleBlur = (event) => {
+        
+        if(formData.id_academico_fk.id_academico !== 'number'){
+            handleChange({target: { name: "asociar_academico", value: '' }});
+        }
+    }
+
     const handleSelectAcademico = (e, academico) => {
         setFormData(prev => ({
             ...prev,
@@ -227,7 +237,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 </div>
             </div>
 
-            <form onSubmit={sendForm} className='d-flex flex-column' encType="multipart/form-data">
+            <form id="formProyecto" onSubmit={sendForm} className='d-flex flex-column' encType="multipart/form-data">
                 <div className="modal-body" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
 
@@ -306,7 +316,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 
                                     <div className="position-relative">
                                         <input type="text" className="form-control" name="id_academico_fk.id_academico"
-                                        id="id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} />
+                                        id="id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} onBlur={handleBlur} required/>
                                         {(academicosFilter.length > 0) && (
                                             <div
                                                 className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"

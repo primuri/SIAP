@@ -344,7 +344,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label>
+                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span class="optional">(Opcional)</span>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>
@@ -455,7 +455,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
                                     )}
                                 />
                             </div >
@@ -518,7 +518,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     sx={{ width: 300 }}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
+                                        
                                     )}
                                 />
                             </div>
@@ -527,7 +528,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4 mt-4">
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado máximo </label>
-                                <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange}>
+                                <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange} required>
                                     <option value="">Seleccionar grado</option>
                                     <option value="Br">Bachiller</option>
                                     <option value="Lic">Licenciado</option>

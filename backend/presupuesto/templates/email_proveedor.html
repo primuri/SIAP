@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #eaeaea;
+        }
+        .container {
+            background-color: #f8f9fa;
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #4aace1;
+            color: #ffffff;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 8px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .header h2 {
+            margin-right: auto;
+            text-align: center;
+        }
+        .header img {
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 7px;
+        }
+        .footer {
+            background: #eeeeee;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px; 
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        h2, h3{
+            text-align: center;
+        }
+        ul {
+            list-style-position: inside;
+        }
+        ul li {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <h2>Información del Proveedor</h2>
+            <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
+        </div>
+            <div class="content">
+                
+                <p><strong>Cédula de Proveedor:</strong> {{ id_cedula_proveedor }}</p>
+                <p><strong>Nombre:</strong> {{ nombre }}</p>
+                <p><strong>Tipo:</strong> {{ tipo }}</p>
+                <p><strong>Correo Electrónico:</strong> {{ correo }}</p>
+                <p><strong>Teléfono:</strong> {{ telefono }}</p>
+                <p><strong>Nombre del Documento:</strong> {{ documento_nombre }}</p>
+                <p><strong>Detalle del Documento:</strong> {{ documentos_detalle }}</p>
+                <h3>Cuentas Bancarias</h3>
+                <ul>
+                    {% for cuenta in cuentas_bancarias %}
+                    <li><strong>Banco:</strong> {{ cuenta.banco }}<br>
+                        <strong>Tipo de Cuenta:</strong> {{ cuenta.tipo }}<br>
+                        <strong>Moneda:</strong> {{ cuenta.moneda }}<br>
+                        <strong>Cuenta Principal:</strong> {{ cuenta.cuenta_principal }}<br>
+                        <strong>Número de Cuenta:</strong> {{ cuenta.numero }}
+                    </li>
+                    {% endfor %}
+                </ul>
+    
+            </div>
+            <div class="footer">
+                Este es un mensaje automatizado, por favor no responder.
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

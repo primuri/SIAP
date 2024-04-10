@@ -359,7 +359,7 @@ export const GestionAsistentes = () => {
                     <div className=" flex-row">
                         <h1>Gestión de Asistentes de la versión {numVersion} de: </h1>
                         <br></br>
-                        <h3>proyecto id: {id_proyecto}</h3>
+                        <h3>{id_proyecto}</h3>
                     </div>
 
                     {(!cargado) && (

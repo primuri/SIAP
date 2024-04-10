@@ -104,6 +104,7 @@ export const GestionEvaluadores = () => {
         },
       })
       setAddClick(false)
+      success()
     } catch (error) {
       toast.dismiss(toastId)
     }

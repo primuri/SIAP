@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #eaeaea;
+        }
+        .container {
+            background-color: #f8f9fa;
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #4aace1;
+            color: #ffffff;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 8px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .header h2 {
+            margin-right: auto;
+            text-align: center;
+        }
+        .header img {
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 7px;
+        }
+        .footer {
+            background: #eeeeee;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px; 
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        h2, h3{
+            text-align: center;
+        }
+        ul {
+            list-style-position: inside;
+        }
+        ul li {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <h2>Información del Asistente</h2>
+            <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
+        </div>
+            <div class="content">
+                <p><strong>Proyecto: </strong> {{ proyecto }} | versión N° {{version}}</p>
+                <p><strong>Cedula: </strong> {{ cedula }}</p>
+                <p><strong>Nombre del estudiante: </strong> {{ id_nombre_completo_fk }}</p>
+                <p><strong>Condición del estudiante: </strong> {{ condicion_estudiante }}</p>
+                <p><strong>Carrera que cursa: </strong> {{ carrera }}</p>
+                <p><strong>Promedio ponderado: </strong> {{ promedio_ponderado }}</p>
+                <p><strong>Cantidad de horas trabajadas: </strong> {{ cantidad_horas }}</p>               
+                <p><strong>Cantidad de años consecutivos: </strong> {{ consecutivo }}</p>
+                <p><strong>Detalle de la inopia: </strong> {{ inopia_detalle }}</p>
+                <p><strong>Nombre del documento de inopia: </strong> {{ inopia_nombre }}</p>
+            </div>
+            <div class="footer">
+                Este es un mensaje automatizado, por favor no responder.
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

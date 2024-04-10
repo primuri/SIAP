@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.response import Response
 from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
 from .serializers import TipoPresupuestoSerializer, EnteFinancieroSerializer, PresupuestoSerializer, VersionPresupuestoSerializer, PartidaSerializer, ProveedorSerializer, ProductoServicioSerializer, FacturaSerializer, GastoSerializer, CuentaBancariaSerializer, CodigoFinancieroSerializer
 
@@ -75,6 +77,18 @@ class ProductoServicioViewSet(viewsets.ModelViewSet):
     view_name = 'productos_servicios'
     queryset = ProductoServicio.objects.all()
     serializer_class = ProductoServicioSerializer
+
+    def create(self, request, *args, **kwargs):
+        detalle = request.data.get('detalle')
+
+        # Verificar si ya existe un ProductoServicio con el mismo detalle
+        producto_servicio_existente = ProductoServicio.objects.filter(detalle=detalle).first()
+        if producto_servicio_existente:
+            # Devolver el ID del ProductoServicio existente
+            return Response({'id_producto_servicio': producto_servicio_existente.id_producto_servicio}, status=status.HTTP_200_OK)
+
+        # Si no existe, continuar con la creación normal
+        return super().create(request, *args, **kwargs)
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
