@@ -1,4 +1,0 @@
-[1m[31mERROR   [0m version_proyecto.models:models.py:563 Error al enviar el correo de notificación: database table is locked: oficio
-[1m[31mERROR   [0m version_proyecto.models:models.py:454 Error al enviar el correo de notificación: database table is locked: oficio
-[1m[31mERROR   [0m version_proyecto.models:models.py:454 Error al enviar el correo de notificación: database table is locked: oficio
-[1m[31mERROR   [0m version_proyecto.models:models.py:563 Error al enviar el correo de notificación: database table is locked: oficio

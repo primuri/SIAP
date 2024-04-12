@@ -1,2 +1,0 @@
-[31m[1mERROR   [0m personas.models:models.py:131 Error al enviar el correo: database table is locked: telefono
-[31m[1mERROR   [0m personas.models:models.py:131 Error al enviar el correo: database table is locked: telefono

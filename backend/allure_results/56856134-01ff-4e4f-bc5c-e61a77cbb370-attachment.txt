@@ -1,3 +1,0 @@
-[31m[1mERROR   [0m propuesta_proyecto.models:models.py:88 Error al enviar el correo: database table is locked: academico
-[31m[1mERROR   [0m version_proyecto.models:models.py:137 Error al enviar el correo de notificación: database table is locked: proyecto
-[31m[1mERROR   [0m version_proyecto.models:models.py:137 Error al enviar el correo de notificación: database table is locked: proyecto

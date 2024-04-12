@@ -1,2 +1,0 @@
-[1m[31mERROR   [0m version_proyecto.models:models.py:137 Error al enviar el correo de notificación: database table is locked: proyecto
-[1m[31mERROR   [0m usuario_personalizado.models:models.py:103 Error al enviar el correo de notificación: database table is locked: nombre_completo

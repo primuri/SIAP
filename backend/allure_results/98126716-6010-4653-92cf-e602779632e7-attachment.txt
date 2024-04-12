@@ -1,1 +1,0 @@
-[31m[1mERROR   [0m propuesta_proyecto.models:models.py:88 Error al enviar el correo: database table is locked: academico

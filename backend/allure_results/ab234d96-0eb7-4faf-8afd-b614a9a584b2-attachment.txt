@@ -1,2 +1,0 @@
-[31m[1mERROR   [0m propuesta_proyecto.models:models.py:88 Error al enviar el correo: database table is locked: documento_asociado
-[33mWARNING [0m django.request:log.py:241 Bad Request: /propuesta_proyecto/documento_asociado/

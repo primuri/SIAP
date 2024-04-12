@@ -1,2 +1,0 @@
-[33mWARNING [0m django.request:log.py:241 Forbidden: /test_token
-[33mWARNING [0m django.request:log.py:241 Forbidden: /test_token
