@@ -35,6 +35,11 @@ export const GestionIntegranteOrganoColegiado = () => {
 
   const token = localStorage.getItem('token')
 
+  const transformedIntegrantes = integrantes.map(integrante => ({
+    ...integrante,  
+    inicio_funciones: formatDate(integrante.inicio_funciones) 
+  }));
+
   useEffect(() => {
     async function fetchData() {
         await loadIntegrantes(clean_id);
@@ -46,31 +51,40 @@ export const GestionIntegranteOrganoColegiado = () => {
 
   async function loadIntegrantes(clean_id) {
     try {
-      const response = await obtenerIntegrantes(token);
-      console.log("clean_id:", clean_id);
-  
-      // Debugging: Imprimir todos los valores de item.id_organo_colegiado_fk antes del filtrado
-      console.log("Valores de item.id_organo_colegiado_fk antes del filtrado:");
-      response.data.forEach(item => {
-        console.log(item.id_organo_colegiado_fk.id_organo_colegiado);
-      });
-  
-      // Realizar el filtrado
-      const filteredData = response.data.filter(item => {
-        // Imprimir el valor específico que se va a comparar en cada item, justo antes de hacerlo
-        console.log("Comparando:", item.id_organo_colegiado_fk.id_organo_colegiado, "con clean_id:", clean_id);
-        return Number(item.id_organo_colegiado_fk.id_organo_colegiado) === Number(clean_id);
-      });
+        const response = await obtenerIntegrantes(token);
+        console.log("clean_id:", clean_id);
+        
+        // Debugging: Imprimir todos los valores de item.id_organo_colegiado_fk antes del filtrado
+        console.log("Valores de item.id_organo_colegiado_fk antes del filtrado:");
+        response.data.forEach(item => {
+            console.log(item.id_organo_colegiado_fk.id_organo_colegiado);
+        });
 
-      console.log("filteredData", filteredData);
-  
-      setData(filteredData);
-      setIntegrantes(filteredData);
-      setCargado(true);
+        // Aplicar formato de fecha y filtrar los datos
+        const formattedAndFilteredData = response.data.map(item => ({
+            ...item,
+            inicio_funciones: item.inicio_funciones ? formatDate(item.inicio_funciones) : 'No especificado' // Aplicando el formato aquí
+        })).filter(item => {
+            // Imprimir el valor específico que se va a comparar en cada item, justo antes de hacerlo
+            console.log("Comparando:", item.id_organo_colegiado_fk.id_organo_colegiado, "con clean_id:", clean_id);
+            return Number(item.id_organo_colegiado_fk.id_organo_colegiado) === Number(clean_id);
+        });
+
+        console.log("formattedAndFilteredData", formattedAndFilteredData);
+
+        setData(formattedAndFilteredData);
+        setIntegrantes(formattedAndFilteredData);
+        setCargado(true);
 
     } catch (error) {
-        
+        // Puedes manejar el error aquí, como mostrar un mensaje o realizar otras acciones de error
+        console.error('Error al cargar integrantes:', error);
     }
+  }
+
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    return new Date(dateString).toISOString().split('T')[0];
   }
 
   useEffect(() => {
@@ -341,6 +355,11 @@ export const GestionIntegranteOrganoColegiado = () => {
     navigate(newPath);
   }
 
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    return new Date(dateString).toISOString().split('T')[0];
+  }
+
   return (
     <main >
       {!error ? (
@@ -358,7 +377,7 @@ export const GestionIntegranteOrganoColegiado = () => {
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
             </div>
 
-          <Table columns={columns} data={integrantes} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={false} navigate={navigate} ></Table>
+          <Table columns={columns} data={transformedIntegrantes} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={false} navigate={navigate} ></Table>
            {addClick && (
                 <Modal ><IntegranteOrganoColegiadoForm 
                     id_organo={selectedIdOrganoColegiado} 
