@@ -35,6 +35,7 @@ export const GestionPropuestas = () => {
             fecha_vigencia: formatDate(propuesta.id_codigo_cimpa_fk.fecha_vigencia)
         }
     }));
+    
     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {
         async function fetchData() {

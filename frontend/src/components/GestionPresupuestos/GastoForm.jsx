@@ -194,15 +194,13 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
             <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center' encType="multipart/form-data">
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
-                    <div className="row mb-4">
-                            <div className="col">
-                                {mode === 2 && (
-                                    <h5>Información de factura</h5>
-                                )}
-                                {mode === 2 && (
-                                    <p>Código de factura: {formData.id_factura_fk.id_factura}</p>
-                                )}
-                            </div>
+                        <div className="row mb-4">
+                            {mode === 2 && (
+                                <div className="col">
+                                    <label htmlFor="id_factura_fk.id_factura" className="label-personalizado mb-2"> Código de factura   </label>
+                                    <input type="text" className="form-control" name="id_factura_fk.id_factura" id="id_factura_fk.id_factura" value={formData.id_factura_fk.id_factura} onChange={handleChange} disabled={true} />
+                                </div>
+                            )}
                         </div>
                         <div className="row mb-4">
                             <div className="col">
