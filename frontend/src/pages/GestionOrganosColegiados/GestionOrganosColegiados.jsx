@@ -139,7 +139,6 @@ export const GestionOrganosColegiados = () => {
             setOrganoColegiado(selectedOrganoColegiado);
             navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
             // Aqui hay que poner uno para sesiones y otro para integrantes
-            // navigate(`${location.pathname}/${selectedInforme.id_informe}/gestion-versiones`)
         } else {
             setOrganoColegiado(selectedOrganoColegiado);
             setEdit(true);
