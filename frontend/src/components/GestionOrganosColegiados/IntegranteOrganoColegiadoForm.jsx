@@ -155,7 +155,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                             </div>
                         </div>)}
 
-                        <div className="row mb-4">
+                        <div className="row mb-4 mt-4">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombreIntegrante" className="label-personalizado mb-2">Nombre integrante</label>
@@ -185,7 +185,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="id_vigencia_fk.fecha_inicio" className="label-personalizado mb-2">Inicio de vigencia <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="id_vigencia_fk.fecha_inicio" className="label-personalizado mb-2">Inicio de vigencia</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
@@ -193,7 +193,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                     onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="id_vigencia_fk.fecha_fin" className="label-personalizado mb-2">Finalización de vigencia <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="id_vigencia_fk.fecha_fin" className="label-personalizado mb-2">Finalización de vigencia </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_vigencia_fk.fecha_fin"
                                     id="id_vigencia_fk.fecha_fin"

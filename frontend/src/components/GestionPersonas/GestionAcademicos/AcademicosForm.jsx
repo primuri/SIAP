@@ -344,7 +344,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span class="optional">(Opcional)</span>
+                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span className="disabled-input">(Opcional)</span>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>
@@ -370,7 +370,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal</label>
+                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
 
@@ -441,15 +441,12 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     id="universidad_nombre"
                                     options={obtenerUniversidadesUnicasPorNombre(universidades)}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
@@ -470,7 +467,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                                 universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue },
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
                                                 universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue.inputValue },
@@ -503,15 +499,12 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     id="universidad_pais"
                                     options={obtenerUniversidadesUnicasPorPais(universidades)}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.pais;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.pais}</li>}
@@ -551,38 +544,36 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                         </div>
                         <hr></hr>
-                        {mode === 2 && (
-                            <>
-                        <div>
-                        {togglePropuestas && propuestas.length > 0 && (
-                            <div>
-                            <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
-                            <ul>
-                                {propuestas.map((propuesta, index) => (
-                                <li key={index}>{propuesta}</li>
-                                ))}
-                            </ul>
-                            </div>
-                        )}
-                            <div className="d-flex justify-content-center align-items-center">
-                                <button id="boton-personalizado" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
-                                {togglePropuestas ? 'Ocultar Propuestas' : 'Mostrar Propuestas'}
-                                </button>
-                            </div>
-                        </div>
-                        <hr></hr>
-                        </>
-                        )}
+              
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
                             <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Titulo"/>
                         </div>
-                        <hr></hr>                        
-                        <div className="d-flex flex-column">
+
+                        <div className="d-flex flex-column mt-4">
                             <label htmlFor="telefonos" className="label-personalizado mb-2 h5">Teléfonos </label>
                              <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} itemName="Telefono"/>
-                        </div>
-
+                        </div>              
+                        {mode === 2 && (
+                            <>
+                            <hr></hr>
+                            <div>
+                                {togglePropuestas && propuestas.length > 0 && (
+                                    <div>
+                                        <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
+                                        <ul>
+                                            {propuestas.map((propuesta, index) => (<li key={index}>{propuesta}</li>))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="d-flex align-items-center">
+                                <button id="boton-mostrar-propuestas" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
+                                {togglePropuestas ? 'Ocultar Propuestas' : 'Mostrar Propuestas'}
+                                </button>
+                            </div>
+                        </>
+                        )}
                     </div>
                 </div>
 
