@@ -269,7 +269,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                         <div className="row mb-4">
                         <div className="col">
-                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_version_proyecto_fk.id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio
@@ -277,7 +277,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_version_proyecto_fk.id_vigencia_fk.fecha_fin"
                                     id="id_version_proyecto_fk.id_vigencia_fk.fecha_fin"
@@ -366,7 +366,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
@@ -374,7 +374,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     onChange={handleChange} />
                             </div>
                             <div className="col">
-                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_vigencia_fk.fecha_fin"
                                     id="id_vigencia_fk.fecha_fin"

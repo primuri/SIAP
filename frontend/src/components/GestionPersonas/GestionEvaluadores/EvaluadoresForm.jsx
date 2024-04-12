@@ -182,7 +182,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
 
             <div className="row mb-4">
               <div className="col-md-6">
-                <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido <span class="optional">(Opcional)</span></label>
+                <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido </label> <span className="disabled-input">(Opcional)</span>
                 <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
               </div>
               <div className="col-md-6">

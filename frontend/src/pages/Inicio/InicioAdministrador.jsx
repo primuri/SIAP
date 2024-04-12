@@ -3,7 +3,6 @@ import inicio from '../../assets/inicio.jpg';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { createPopper } from '@popperjs/core';
 
 export const InicioAdministrador = ({ usuario }) => {
 
@@ -46,28 +45,25 @@ export const InicioAdministrador = ({ usuario }) => {
 
   return (
     <main>
-      <div className="d-flex p-5 mt-5 justify-content-center align-items-center">
-        <div className="col">
-            <div className="row align-items-center">
-                <div className="col-6 mx-auto">
+      <div className="d-flex p-5 mt-5">
+        <div className="col mt-4">
+            <div className="row" id="descripcion-inicio">
+              <div className="col-l" style={{ textAlign: 'justify' }}>
                 <h1 className="mt-5 text-center">¡Bienvenido(a), {obtenerNombreDeUsuario(correo)}!</h1>
                 <br/>
-                <p className="fs-5 text-justify m-5 mt-0 mb-4">
-                    <b>SIAP</b>, una solución para la Administración de Proyectos en el Centro de Investigación en Matemática Pura y Aplicada de la Universidad de Costa Rica.  Ha sido diseñado para satisfacer las necesidades específicas del CIMPA y a su vez ofrecer una plataforma centralizada, ordenada y segura para potenciar la eficiencia de cada proyecto.
+                <p className="fs-5 m-5 mt-0 mb-4">
+                  El sistema <b>SIAP</b> es una solución para la Administración de Proyectos en el Centro de Investigación en Matemática Pura y Aplicada de la UCR.  Está diseñado para proporcionar una plataforma centralizada, organizada y segura para el manejo de cada proyecto.
                 </p>
-                <p className="fs-5 text-justify m-5 mt-0 mb-4">     
-                  Cada administrador por medio de la barra de navegación ubicada a la izquierda va a tener la posibilidad de gestionar diferentes <strong>módulos</strong> dentro del sistema. Lo anterior incluyendo la gestión de: usuarios, propuestas, proyectos, investigadores, evaluadores y proveedores. Cada módulo presenta tablas de datos específicas, permitiendo realizar acciones como <strong>visualizar, agregar, editar y eliminar los registros </strong>correspondientes a ese módulo en particular.   
+                <p className="fs-5 m-5 mt-0 mb-4">
+                 Cada administrador puede gestionar varios <b>módulos</b> a través de una barra de navegación ubicada a la izquierda. Estos módulos incluyen la <b>gestión</b> de usuarios, propuestas, proyectos, investigadores, evaluadores y proveedores. Cada módulo presenta tablas de datos específicas que permiten <b>visualizar, agregar, editar y eliminar</b> registros relacionados con ese módulo en particular.
                 </p>
-                </div>
-                <div className="col-6 mt-5 text-center">
-                <img class="img-fluid" src={inicio} alt="Imagen de inicio" style={{ width: '75%', height: 'auto' }} />
-                </div>
+              </div>
             </div>
 
-            <div className="row mt-4">
+            <div className="row" id="accordion">
                 <div className="col-6 m-5">   
                     <h4 className="pb-3">Preguntas frecuentes</h4>
-                    <div className="accordion" id="accordionExample"> 
+                    <div className="accordion"> 
 
                       <div className="accordion-item">
                               <h2 className="accordion-header" id="headingOne">
@@ -81,7 +77,6 @@ export const InicioAdministrador = ({ usuario }) => {
                                 </div>
                               </div>
                       </div>
-
 
                       <div className="accordion-item">
                             <h2 className="accordion-header" id="headingTwo">
