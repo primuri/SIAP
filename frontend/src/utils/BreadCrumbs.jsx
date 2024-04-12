@@ -2,10 +2,17 @@ import { useLocation, Link } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 
+<<<<<<< HEAD
 // Links que no se deben de poder dar click
 const noLinks = ['p_id=', 'inf_id='];
 
 // Forma en que se van a mostrar las rutas en los breadcrumbs
+=======
+
+//Estos son los links que no se deberian de poder dar click
+const noLinks = ['p_id=', 'inf_id=', 'o_id='];
+//Esto es como se van a mostrar las distintas rutas en los breadcrumbs
+>>>>>>> ad56cb8221815414dad4237def89f468eff437ce
 const routeNames = {
     'gestion-proyectos': 'Proyectos',
     'gestion-informes': 'Informes',
