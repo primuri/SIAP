@@ -1,0 +1,2 @@
+[1m[31mERROR   [0m personas.models:models.py:131 Error al enviar el correo: database table is locked: area_especialidad
+[1m[31mERROR   [0m personas.models:models.py:131 Error al enviar el correo: database table is locked: universidad

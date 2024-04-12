@@ -1,0 +1,1 @@
+[1m[31mERROR   [0m version_proyecto.models:models.py:137 Error al enviar el correo de notificación: database table is locked: proyecto

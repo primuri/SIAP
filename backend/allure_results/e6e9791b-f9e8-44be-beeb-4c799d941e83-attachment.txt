@@ -1,0 +1,4 @@
+[1m[31mERROR   [0m propuesta_proyecto.models:models.py:88 Error al enviar el correo: database table is locked: nombre_completo
+[1m[31mERROR   [0m version_proyecto.models:models.py:137 Error al enviar el correo de notificación: database table is locked: proyecto
+[1m[31mERROR   [0m usuario_personalizado.models:models.py:103 Error al enviar el correo de notificación: database table is locked: nombre_completo
+[33mWARNING [0m django.request:log.py:241 Forbidden: /version_proyecto/respuestasevaluaciones/1/

@@ -1,0 +1,2 @@
+[31m[1mERROR   [0m presupuesto.models:models.py:362 Error al enviar el correo: database table is locked: cuenta_bancaria
+[31m[1mERROR   [0m presupuesto.models:models.py:362 Error al enviar el correo: database table is locked: cuenta_bancaria

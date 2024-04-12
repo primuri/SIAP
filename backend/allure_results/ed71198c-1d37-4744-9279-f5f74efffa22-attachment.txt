@@ -1,0 +1,1 @@
+[1m[31mERROR   [0m propuesta_proyecto.models:models.py:88 Error al enviar el correo: database table is locked: documento_asociado
