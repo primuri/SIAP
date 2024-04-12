@@ -57,7 +57,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                 return; // Detiene la ejecución si la fecha de inicio es mayor que la de fin
             }
         }
-    
+
         // Navegar por el objeto formData para encontrar y actualizar el valor correcto
         const updateFormData = (path, value, obj) => {
             const keys = path.split('.');
@@ -110,6 +110,15 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
     };
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+    
+        return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+    }
 
     return (
         <div>
