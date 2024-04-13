@@ -1,19 +1,17 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
-import search from '../assets/search.svg'
+import search from '../assets/search-i.png'
 
 export const Search = ({ columns, colNames, onSearch }) => {
-    const [selectedColumn, setSelectedColumn] = useState(""); // Estado para almacenar la columna seleccionada
-    const [searchText, setSearchText] = useState(""); // Estado para almacenar el texto de búsqueda
+    const [selectedColumn, setSelectedColumn] = useState(""); 
+    const [searchText, setSearchText] = useState(""); 
 
     const handleSearch = () => {
-        // Verifica que se haya seleccionado una columna antes de realizar la búsqueda
         if (selectedColumn) {
-            // Llama a la función onSearch con la columna y el texto de búsqueda
             onSearch(selectedColumn, searchText || "");
         }
     };
-    //"Esto es para buscar cuando se le de al enter"
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
           handleSearch();
@@ -22,12 +20,12 @@ export const Search = ({ columns, colNames, onSearch }) => {
     
     return (
         <div>
-            <select
+            <select 
                 value={selectedColumn}
                 onChange={(e) => setSelectedColumn(e.target.value)}
-                className="rounded-start-3 form-select d-inline p-2 shadow-sm" id="selectCol"
+                className="rounded-start-3 form-select d-inline p-2 shadow-sm" id="selectCol" style={{width: "200px" }}
             > 
-                <option value="">Seleccionar columna</option>
+                <option>Seleccionar columna</option>
                 { 
                     colNames.map((colName, index) => (
                         <option key={index} value={columns[index]}>

@@ -7,6 +7,7 @@ from ..models import Gasto
 from django.contrib.auth.models import Group
 from usuario_personalizado.models import Usuario
 from django.core.files.uploadedfile import SimpleUploadedFile
+from decimal import Decimal
 
 class GastoTests(APITestCase):
 
@@ -270,7 +271,7 @@ class GastoTests(APITestCase):
         update_data = {
             'fecha': '2024-03-04T15:30:00',
             'detalle': 'Gasto de muebles',
-            'monto': '5680',
+            'monto': '5680.00',
             'id_partida_fk': self.partida_id,
             'id_factura_fk': self.factura_id,
             'tipo': 'Maximo'
@@ -282,7 +283,8 @@ class GastoTests(APITestCase):
 
         # Verificaciones
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Gasto.objects.get().tipo, 'Maximo')
+        self.assertEqual(Gasto.objects.get().monto, Decimal('5680'))
+
     
      
     def test_get_lista_gastos(self):

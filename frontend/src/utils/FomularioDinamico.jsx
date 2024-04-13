@@ -104,7 +104,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                     </AccordionDetails>
                 </Accordion>
             ))}
-            <button type="button" className={items.length == 0 ? "agregarBtn": "agregarBtnMod"} style={{ width: "100%" }} onClick={agregarItem}>+</button>
+            <button type="button" className={items.length == 0 ? "agregarBtn": "agregarBtnMod"} style={{ width: "6%", backgroundColor: "#005da4", color: "white"}} onClick={agregarItem}>+</button>
         </>
     );
 };

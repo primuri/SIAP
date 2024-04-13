@@ -194,6 +194,16 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
             <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center' encType="multipart/form-data">
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
+                    <div className="row mb-4">
+                            <div className="col">
+                                {mode === 2 && (
+                                    <h5>Información de factura</h5>
+                                )}
+                                {mode === 2 && (
+                                    <p>Código de factura: {formData.id_factura_fk.id_factura}</p>
+                                )}
+                            </div>
+                        </div>
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="fecha" className="label-personalizado mb-2"> Fecha   </label>
@@ -214,14 +224,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                 <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
                             </div>
                         </div>
-                        <div className="row mb-4">
-                            <div className="col">
-                                <h5>Información de factura</h5>
-                                {mode === 2 && (
-                                    <p>Código de factura: {formData.id_factura_fk.id_factura}</p>
-                                )}
-                            </div>
-                        </div>
+
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_cedula_proveedor_fk" className="label-personalizado mb-2">Proveedor  </label>
@@ -311,7 +314,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="row mb-4">
                             <div className="col">
-                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span class="optional">(Opcional)</span>
+                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
                                 {typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">

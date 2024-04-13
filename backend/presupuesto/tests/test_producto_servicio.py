@@ -43,7 +43,7 @@ class ProductoServicioTests(APITestCase):
         }
 
         self.client.post(reverse('productoservicio-list'), self.data, format='json')
-        url = reverse('productoservicio-detail', args=['12'])
+        url = reverse('productoservicio-detail', args=[1])
         response = self.client.put(url, update_data, format='json')
 
         # Verificaciones
@@ -70,7 +70,7 @@ class ProductoServicioTests(APITestCase):
     def test_get_buscar_producto_servicio(self):
 
         self.client.post(reverse('productoservicio-list'), self.data, format='json')
-        url = reverse('productoservicio-detail', args=['12'])
+        url = reverse('productoservicio-detail', args=[1])
         response = self.client.get(url)
 
         # Verificaciones
@@ -79,7 +79,7 @@ class ProductoServicioTests(APITestCase):
 
     def test_delete_producto_servicio(self):
         self.client.post(reverse('productoservicio-list'), self.data, format='json')
-        url = reverse('productoservicio-detail', args=['12'])
+        url = reverse('productoservicio-detail', args=[1])
         response = self.client.delete(url)
 
         # Verificaciones

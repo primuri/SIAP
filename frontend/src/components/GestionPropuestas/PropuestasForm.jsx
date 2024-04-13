@@ -210,7 +210,10 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 {mode === 1 && (
-                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado <span className="optional"> (Predeterminado)</span></label>
+                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado </label> 
+                                )}
+                                {mode === 1 && (
+                                  <span className="optional"> (Predeterminado) </span> 
                                 )}
                                 {mode === 2 && (
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado</label>
@@ -241,8 +244,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                         <div className="row mb-4">
                             <div className="col">
-
-                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general </label> <span className="disabled-input">(Opcional)</span>
                                 <textarea className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange} />
                             </div>
                         </div>
@@ -315,7 +317,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio
@@ -323,7 +325,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                     onChange={handleChange} />
                             </div>
                             <div className="col">
-                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"

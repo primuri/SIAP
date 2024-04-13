@@ -264,14 +264,14 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>
                             {mode == 2 && (
                             <div className="col">
-                                <label htmlFor="numero_version" className="label-personalizado mb-2">Estado <span className="disabled-input">(Solo ver)</span></label>
+                                <label htmlFor="numero_version" className="label-personalizado mb-2">Estado </label> <span className="disabled-input">(Solo lectura)</span>
                                 <input type="text" className="form-control disabled-input" name="detalle" id="detalle" value={formData.estado} disabled/>
                             </div>)}
                         </div>
                         <div className="row mb-4">
 
                             <div className="col">
-                                <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación <span className="disabled-input">(Opcional)</span></label>
+                                <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
                                 {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
@@ -282,7 +282,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 )}
                             </div>
                             <div className="col">
-                                <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación <span className="disabled-input">(Opcional)</span></label>
+                                <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="text" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
                             </div>
                         </div>

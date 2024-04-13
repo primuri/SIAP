@@ -7,24 +7,22 @@ import icono from '../../../assets/person-i.png';
 import { Confirmar } from '../../../utils/Confirmar'
 
 export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) => {
-    // Cargar informacion
+
     const [academicos, setAcademicos] = useState([]);
     const [academicosFilter, setAcademicosFilter] = useState([]);
     const [evaluadores, setEvaluadores] = useState([]);
     const [evaluadoresFilter, setEvaluadoresFilter] = useState([]);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    //Cargan todos los academicos y evaluadores, para poderlos asignar
     useEffect(() => {
-        loadAcademicos();
+        loadInvestigadores();
         loadEvaluadores();
         console.log(usuario)
     }, []);
-
-    const [showPassword, setShowPassword] = useState(false);
-
-    async function loadAcademicos() {
+    
+    async function loadInvestigadores() {
         try {
             const res = await obtenerAcademicos(localStorage.getItem("token"));
             setAcademicos(res.data);
@@ -39,6 +37,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             });
         }
     }
+
     async function loadEvaluadores() {
         try {
             const res = await obtenerEvaluadores(localStorage.getItem("token"));
@@ -90,7 +89,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        // Actualizar el estado del formulario primero
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -136,15 +134,16 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`,
             academico_fk: academico.id_academico,
         }));
-        setAcademicosFilter([]); // Limpiar la lista desplegable
+        setAcademicosFilter([]); 
     };
+
     const handleSelectEvaluador = (e, evaluador) => {
         setFormData((prev) => ({
             ...prev,
             asociar_evaluador:`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`,
             evaluador_fk: evaluador.id_evaluador,
         }));
-        setEvaluadoresFilter([]); // Limpiar la lista desplegable
+        setEvaluadoresFilter([]); 
     };
 
     const validatePassword = (contrasena) => {
@@ -155,7 +154,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     const sendForm = (event) => {
         event.preventDefault();
 
-        // Validación de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && validatePassword(formData.password) === false) {
             toast.error("La contraseña debe contener mínimo 8 caracteres, que combine mayúsculas, minúsculas, números y símbolos !@#$%^&.", {
                 duration: 10000,
@@ -167,8 +165,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             });
             return;
         }
-
-        // Validación de coincidencia de contraseña para el modo de creación o si en el modo de edición se proporciona una contraseña
         if ((mode === 1 || (mode === 2 && formData.password !== "")) && formData.password !== formData.confirmar_contrasena) {
             toast.error("Las contraseñas no coinciden.", {
                 duration: 10000,
@@ -183,7 +179,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
 
         const dataToSend = { ...formData };
 
-        // Limpieza de datos que no se enviarán
         delete dataToSend.confirmar_contrasena;
         delete dataToSend.asociar_academico;
         delete dataToSend.asociar_evaluador;
@@ -191,7 +186,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             if (!dataToSend.academico_fk) {
                 dataToSend.academico_fk = null
             }
-            //Cubre el caso en el que haya pasado de ser evaluador a academico.
             if(dataToSend.rol !=="investigador-evaluador"){
                 dataToSend.evaluador_fk = null
             }
@@ -206,7 +200,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                 dataToSend.academico_fk = null
             }
         }
-        // Asignar el rol al array de grupos
+
         if (dataToSend.rol === "investigador-evaluador"){
             dataToSend.groups = ['investigador', 'evaluador']
         }else{
@@ -215,7 +209,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
         
         delete dataToSend.rol;
 
-        // Si estamos en modo de edición y la contraseña está vacía, la eliminamos
         if (mode === 2 && dataToSend.password === "") {
             delete dataToSend.password;
         }
@@ -261,15 +254,8 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
-                            <button
-                                type="button"
-                                onClick={onCancel}
-                                className="close"
-                                data-dismiss="modal"
-                            >
-                                <span aria-hidden="true" className="close-icon">
-                                    &times;
-                                </span>
+                            <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                                <span aria-hidden="true" className="close-icon"> &times;</span>
                             </button>
                         </div>
                     </div>
@@ -278,8 +264,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
             <form onSubmit={sendForm} className="d-flex flex-column">
                 <div className="modal-body" >
                     <div className="container">
-
-
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
@@ -300,7 +284,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                 </div>
                             </div>
                         </div>
-
 
                         <div className="row mb-4">
                             <div className="col-md-6">
@@ -324,21 +307,20 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                             </div>
                         </div>
 
-
-                        <div className="row mb-4">
+                      
                             {(formData.rol === "investigador" || formData.rol === "investigador-evaluador") && (
                                 <>
-
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
-                                            <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required/>
-                                                {(academicosFilter.length > 0) && (
-                                                    <div
-                                                        className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "40px" }}
-                                                    >
+                                    <div className="row mb-4">
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
+                                                <div className="position-relative">
+                                                    <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required/>
+                                                        {(academicosFilter.length > 0) && (
+                                                        <div
+                                                            className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                                            style={{ maxHeight: "40px" }}
+                                                        >
                                                         {academicosFilter.map((academico) => {
                                                             return (
                                                                 <div
@@ -353,51 +335,50 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                                 </div>
                                                             );
                                                         })}
-                                                    </div>
+                                                        </div>
                                                 )}
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    
+                                
+                                    {(formData.rol === "evaluador" || formData.rol === "investigador-evaluador") && (
+                                    <>
+
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
+                                                <div className="position-relative">
+                                                    <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required/>
+                                                    {evaluadoresFilter.length > 0 && (
+                                                        <div
+                                                            className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                                            style={{ maxHeight: "40px" }}
+                                                        >
+                                                            {evaluadoresFilter.map((evaluador) => {
+                                                                return (
+                                                                    <div
+                                                                        key={evaluador.id_evaluador}
+                                                                        className=" pointer-event ms-1"
+                                                                        style={{ cursor: "pointer" }}
+                                                                        onClick={(e) => {
+                                                                            handleSelectEvaluador(e, evaluador);
+                                                                        }}
+                                                                    >
+                                                                        {`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-
+                                    </>
+                                    )}     
+                                    </div>                      
                                 </>
                             )}
-
-                            {(formData.rol === "evaluador" || formData.rol === "investigador-evaluador") && (
-                                <>
-
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
-                                            <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required/>
-                                                {evaluadoresFilter.length > 0 && (
-                                                    <div
-                                                        className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "40px" }}
-                                                    >
-                                                        {evaluadoresFilter.map((evaluador) => {
-                                                            return (
-                                                                <div
-                                                                    key={evaluador.id_evaluador}
-                                                                    className=" pointer-event ms-1"
-                                                                    style={{ cursor: "pointer" }}
-                                                                    onClick={(e) => {
-                                                                        handleSelectEvaluador(e, evaluador);
-                                                                    }}
-                                                                >
-                                                                    {`${evaluador.id_nombre_completo_fk.nombre} ${evaluador.id_nombre_completo_fk.apellido} ${evaluador.id_nombre_completo_fk.segundo_apellido}`}
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </>
-                            )}
-                        </div>
                     </div>
                 </div>
                 <div className="modal-footer justify-content-center position-sticky bottom-0">

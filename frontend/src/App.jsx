@@ -38,24 +38,27 @@ function App() {
       <Header/>
       <div className='d-flex' id='content-box'>
         <Sidebar></Sidebar>
-        <div className=' overflow-hidden'>
+        <div className='overflow-hidden mr-4'>
           <BreadcrumbsCustom></BreadcrumbsCustom>
-          <Routes>
-            {GestionUsuarios}
-            {GestionPropuestas}
-            {GestionInformes}
-            {GestionPresupuestos}
-            {GestionProveedores}
-            {GestionProyectos}
-            {EvaluacionProyectos}
-            {GestionEvaluaciones}
-            {GestionOrganosColegiados}
-            {GestionAsistentes}
-            
-            <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
-            <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
-            <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
-          </Routes> 
+          <hr id="divider"></hr>
+          <div style={{ marginRight: '2rem' }}>
+            <Routes>
+              {GestionUsuarios}
+              {GestionPropuestas}
+              {GestionInformes}
+              {GestionPresupuestos}
+              {GestionProveedores}
+              {GestionProyectos}
+              {EvaluacionProyectos}
+              {GestionEvaluaciones}
+              {GestionOrganosColegiados}
+              {GestionAsistentes}
+              
+              <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
+              <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
+              <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
+            </Routes> 
+          </div>
         </div>
       </div>
       <Footer/>

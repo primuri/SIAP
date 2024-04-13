@@ -56,6 +56,13 @@ export const GestionVersionInforme = () => {
 
             let responseDocumento = await API.agregarDocumentoInforme(data.id_documento_informe_fk)
             data.id_documento_informe_fk = responseDocumento.data.id_documento
+
+            let responseDocEvaluacion = await API.agregarDocumentoInforme(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk)
+            data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = responseDocEvaluacion.data.id_documento
+
+            let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+            data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+
             data.id_informe_fk = informeID
 
             await API.agregarVersionInforme(data)
@@ -85,10 +92,18 @@ export const GestionVersionInforme = () => {
                 delete data.id_documento_informe_fk.documento
                 var responseDocumento = await API.editarDocumentoInforme(data.id_documento_informe_fk.id_documento, data.id_documento_informe_fk);
             }
+
+            await API.editarDocumentoInformeAndDocumento(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.id_documento, data.id_evaluacion_cc_fk.id_documento_evualuacion_fk);
+
+            data.id_evaluacion_cc_fk.id_documento_evualuacion_fk =  data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.id_documento
+
+            await API.editarEvaluacionCC(data.id_evaluacion_cc_fk.id_evaluacion_cc, data.id_evaluacion_cc_fk)
+
+            data.id_evaluacion_cc_fk = data.id_evaluacion_cc_fk.id_evaluacion_cc    
             
             data.id_documento_informe_fk = responseDocumento.data.id_documento;
 
-            data.id_evaluacion_cc_fk = (data.id_evaluacion_cc_fk.id_evaluacion_cc ? data.id_evaluacion_cc_fk.id_evaluacion_cc : null)
+            // data.id_evaluacion_cc_fk = (data.id_evaluacion_cc_fk.id_evaluacion_cc ? data.id_evaluacion_cc_fk.id_evaluacion_cc : null)
             data.id_informe_fk = informeID
             await API.editarVersionInforme(versionInforme.id_version_informe, data)
             
