@@ -170,10 +170,6 @@ main {
   border-color: var(--celeste-ucr);
 }
 
-.table {
-  width: 83vw !important;
-}
-
 thead {
   border-radius: 100px 100px 0 0;
   --bs-table-bg: var(--celeste-ucr);
