@@ -86,7 +86,7 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar presupuesto" : "Editar presupuesto"}
+                                {mode === 1 ? "Agregar partida" : "Editar partida"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -141,7 +141,7 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="presupuesto" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="partida" />)}
                                 </>
                             )}
                         </div>
@@ -149,7 +149,7 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="partida" />)}
                                 </>
                             )}
                         </div>

@@ -172,7 +172,7 @@ const sendForm = (event) => {
                 <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.apellido" id="apellidoAsistente" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} onChange={handleChange} required />
             </div>
             <div className="col">
-                <label htmlFor="segundoApellidoid_asistente_carnet_fk" className="label-personalizado"> Segundo Apellido <span className="optional"> (Opcional)</span> </label>
+                <label htmlFor="segundoApellidoid_asistente_carnet_fk" className="label-personalizado"> Segundo Apellido </label> <span className="disabled-input">(Opcional)</span>
                 <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido" id="segundoApellidoid_asistente_carnet_fk" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido} onChange={handleChange} />
             </div>
         </div>
@@ -241,7 +241,7 @@ const sendForm = (event) => {
               ) : (
                 <>
                   <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                  {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="evaluador(a)" />)}
+                  {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="asistente" />)}
                 </>
               )}
             </div>
@@ -249,7 +249,7 @@ const sendForm = (event) => {
               {mode === 2 && (
                 <>
                   <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                  {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="evaluador(a)" />)}
+                  {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="asistente" />)}
                 </>
               )}
             </div>

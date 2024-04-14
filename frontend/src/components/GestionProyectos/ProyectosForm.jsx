@@ -310,7 +310,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     : ""}
                             </div>
                             <div className="row mb-4">
-                                <h5 className="text-center my-3">Asociar Colaborador Secundario</h5>
+                                <h5 className="text-center my-3 mt-5">Asociar Colaborador Secundario</h5>
                                 <div className="col">
                                     <label htmlFor="id_academico_fk" className="label-personalizado mb-2">Investigador(a) </label>
                                 
@@ -443,7 +443,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="versión de proyecto" />)}
                                 </>
                             )}
                         </div>
