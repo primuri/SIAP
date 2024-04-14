@@ -23,10 +23,11 @@ const routeNames = {
     'gestion-evaluaciones': 'Evaluaciones',
     'gestion-asistentes': 'Asistentes', 
     'gestion-integrantes': 'Integrantes Órgano Colegiado',
+    'organos-colegiados': 'Órganos Colegiados',
 };
 
 // Para las rutas que no deberian de mostrar la url
-const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/login', '/']);
+const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/inicio-invitado', '/login', '/']);
 
 const BreadcrumbsCustom = () => {
     const location = useLocation();

@@ -467,6 +467,10 @@ input[type="submit"]:focus {
   font-size: 18px;
 }
 
+.ojo{
+  background-color: var(--gris-claro-ucr)!important;
+}
+
 .required {
   color: red;
 }
