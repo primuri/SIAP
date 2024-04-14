@@ -43,7 +43,7 @@ export const InicioSesion = () => {
         window.location.href = '/inicio-evaluador';
       }
       if(tipoUsuario === 'invitado') {
-        window.location.href = '/inicio-invitado';
+        window.location.href = '/organos-colegiados';
       }
       
     } catch (error) {

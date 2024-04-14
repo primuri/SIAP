@@ -226,13 +226,16 @@ export const GestionOrganosColegiados = () => {
            
                     {user.groups[0] === "administrador" && (
                         <div className="d-flex justify-content-between mt-4">
-                            <Add onClick={addClicked}></Add>                          
+                            <Add onClick={addClicked}></Add> 
+                            <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />                         
                         </div>
                     )}
                     
-                    <div className="d-flex justify-content-end mt-4">
-                        <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />
-                    </div>               
+                    {user.groups[0] === "invitado" && (
+                        <div className="d-flex justify-content-between mt-4">
+                            <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />                         
+                        </div>
+                    )}             
 
                     {user.groups[0] === "administrador" && (
                         <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} buttonText="Gestionar" />
