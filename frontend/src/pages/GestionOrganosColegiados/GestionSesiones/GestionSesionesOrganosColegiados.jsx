@@ -1,70 +1,81 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
-import { Add } from "../../utils/Add"
-import { Modal } from "../../utils/Modal"
-import { Table } from "../../utils/Table"
-import { Search } from "../../utils/Search"
-import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { Back } from "../../utils/Back"
+import { Add } from "../../../utils/Add"
+import { Modal } from "../../../utils/Modal"
+import { Table } from "../../../utils/Table"
+import { Search } from "../../../utils/Search"
+import { PermisoDenegado } from "../../../utils/PermisoDenegado"
+import { Back } from "../../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerOrganosColegiados, agregarOrganoColegiado, editarOrganoColegiado, eliminarOrganoColegiado } from "../../api/gestionOrganosColegiados"
-import { OrganosColegiadosForm } from "../../components/GestionOrganosColegiados/OrganosColegiadosForm"
+import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, eliminarSesion} from "../../../api/gestionOrganosColegiados"
+import { OrganosColegiadosSesionesForm  } from "../../../components/GestionOrganosColegiados/OrganosColegiadosSesionesForm"
 
-export const GestionOrganosColegiados = () => {
+export const GestionSesionesOrganosColegiados= () => {
                                                              
     const user = JSON.parse(localStorage.getItem('user'))  
-
+    
+    const {IdOrganoC} = useParams() 
     const location = useLocation()
     const navigate = useNavigate()
 
     const [data, setData] = useState([]) 
     const [reload, setReload] = useState(false)   
     const [cargado, setCargado] = useState(false)   
-    const [OrganoColegiado, setOrganoColegiado] = useState(null)                                
-    const [OrganosColegiados, setOrganosColegiados] = useState([])   
+    const [sesion, setSesion] = useState(null)                                
+    const [sesiones, setSesiones] = useState([])   
                         
     const [addClick, setAddClick] = useState(false)                              
     const [edit, setEdit] = useState(false)                                      
     const [error, setError] = useState(false)
 
-    const columns = ['Nombre', 'Quorum', 'Cantidad de integrantes', 'Acuerdo en firme', 'Integrantes', 'Sesiones']
-    const dataKeys = ['nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
+    const columns = ['Identificador', 'Fecha', 'N acta', 'N Acuerdos', 'Acuerdos']
+    const dataKeys = ['id_sesion','fecha', 'id_acta_fk.id_acta', 'n_acuerdos', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   
 
     useEffect(() => {                                                            
         async function fetchData() {
-            loadOrganosColegiados()
+            loadSesiones()
             setCargado(true);
         }
         fetchData();
     }, [reload]);
 
-    async function loadOrganosColegiados() {
+    async function loadSesiones() {
         try {
-            const response = await obtenerOrganosColegiados(localStorage.getItem('token')) 
-            setData(response.data)                                                                 
-            setOrganosColegiados(response.data)                                                              
-            setCargado(true)                                                                        
+            const response = await obtenerSesiones(localStorage.getItem('token'));
+            
+            // Filtrar sesiones por IdOrganoC
+            const sesionesFiltradas = response.data.filter(sesion => sesion.id_organo_colegiado_fk.id_organo_colegiado == IdOrganoC);
+    
+            // Añadir n_acuerdos a cada sesión filtrada
+            for (const sesion of sesionesFiltradas) {
+                const n_acuerdos = await obtenerNumeroAcuerdos(sesion.id_sesion);
+                sesion.n_acuerdos = n_acuerdos;
+            }
+    
+            setData(sesionesFiltradas);                                                                 
+            setSesiones(sesionesFiltradas);                                                              
+            setCargado(true);                                                                        
         } catch (error) {
+            console.error(error);
         }
     }
 
-    const addOrganoColegiado = async (formData) => {
+    const addSesiones = async (formData) => {
         
         var toastId = toastProcesando("Agregando...")
         
         try {
+            console.log(formData);
 
-            const Data = JSON.parse(formData)
-
-            await agregarOrganoColegiado(Data, localStorage.getItem("token"))
+            await agregarSesion(formData, IdOrganoC)
 
             setAddClick(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toastExito("Órgano colegiado agregado correctamente", toastId)
+            toastExito("Sesion agregada correctamente", toastId)
 
         } catch (error) {
             console.error("Error: \n" + error)
@@ -73,14 +84,14 @@ export const GestionOrganosColegiados = () => {
     }
 
 
-    const editOrganoColegiado = async (formData) => {
+    const editaSesion = async (formData) => {
     
         var toastId = toastProcesando("Editando...")
 
         try {
     
             const Data = JSON.parse(formData)
-            await editarOrganoColegiado(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
+            await editarSesion(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
 
             setEdit(false)
             setReload(!reload)
@@ -94,19 +105,18 @@ export const GestionOrganosColegiados = () => {
         }
     }
 
-    const deleteOrganoColegiado = async (organo_colegiado) => {
+    const deleteSesion = async (sesion) => {
 
         var toastId = toastProcesando("Eliminando...")
 
         try {
-            await eliminarOrganoColegiado(organo_colegiado.id_organo_colegiado, localStorage.getItem('token'))
+            await eliminarSesion(sesion.id_sesion)
 
             setEdit(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
             toast.success('Órgano colegiado eliminado correctamente', {
-                id: toastId,
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -134,11 +144,11 @@ export const GestionOrganosColegiados = () => {
         document.body.classList.add('modal-open');
     }
 
-    const elementClicked = (selectedOrganoColegiado) => {
+    const elementClicked = (selectedSesion) => {
         if (event.target.tagName.toLowerCase() === 'button') {
-            navigate(`${location.pathname}/${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
+            navigate(`${location.pathname}/${selectedSesion.id_sesion}/gestion-acuerdos`)
         } else {
-            setOrganoColegiado(selectedOrganoColegiado);
+            setSesion(selectedSesion);
             setEdit(true);
             setAddClick(false);
             document.body.classList.add('modal-open');
@@ -156,7 +166,7 @@ export const GestionOrganosColegiados = () => {
             }
             return e[col].toString().includes(filter)
         })
-        setOrganosColegiados(matches)
+        setSesiones(matches)
     }
 
     function toastProcesando(mensaje) {
@@ -189,7 +199,7 @@ export const GestionOrganosColegiados = () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        <h1>Gestión de órganos colegiados</h1>
+                        <h1>Gestión de Sesiones del Órgano Colegiado</h1>
                     </div>
 
                     {(!cargado) && (
@@ -200,20 +210,21 @@ export const GestionOrganosColegiados = () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} buttonText="Gestionar" />
+                    <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
-                        <Modal><OrganosColegiadosForm onSubmit={addOrganoColegiado} onCancel={onCancel} mode={1}></OrganosColegiadosForm></Modal>
+                        <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={IdOrganoC}></OrganosColegiadosSesionesForm></Modal>
                     )}
                     {edit && (
                         <Modal>
-                            <OrganosColegiadosForm
+                            <OrganosColegiadosSesionesForm
                                 mode={2}
-                                onSubmit={editOrganoColegiado}
+                                onSubmit={editaSesion}
                                 onCancel={onCancel}
-                                onDelete={() => deleteOrganoColegiado(OrganoColegiado)}
-                                organo_colegiado={OrganoColegiado}
+                                onDelete={() => deleteSesion(sesion)}
+                                sesion={sesion}
+                                organoColegiado={IdOrganoC}
                             >
-                            </OrganosColegiadosForm>
+                            </OrganosColegiadosSesionesForm>
                         </Modal>
                     )}
                     <Toaster></Toaster>
