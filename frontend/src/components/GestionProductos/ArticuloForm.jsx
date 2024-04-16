@@ -109,7 +109,14 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
 
     if (name.includes('.')) {
       const keys = name.split('.');
-      formData[keys[0]][keys[1]] = value;
+      let ref = formData;
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (ref[keys[i]] === undefined) {
+          ref[keys[i]] = {}; // Asegúrate de crear un objeto si no existe
+        }
+        ref = ref[keys[i]];
+      }
+      ref[keys[keys.length - 1]] = value;
     } else {
       formData[name] = value;
     }

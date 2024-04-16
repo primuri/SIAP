@@ -30,6 +30,7 @@ export const GestionVersiones = () => {
     const [data, setData] = useState([])
     const [proyecto, setProyecto] = useState(null) 
     const [producto, setProducto] = useState(null)
+    const [colaborador, setColaborador] = useState(null)
     const [clean_id, setClean_id] = useState(id.startsWith('p_id=') ? id.split('p_id=')[1] : '')
     const [tipo, setTipo] = useState(null)
     const [error, setError] = useState(false) 
@@ -38,7 +39,7 @@ export const GestionVersiones = () => {
     const [academicos, setAcademicos] = useState([]);
     const [selectedIdCodigoVi, setSelectedIdCodigoVi] = useState(null);
     const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle', 'Informes', 'Presupuesto', 'Asistentes']
-    const dataKeys2 = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'id_version_proyecto_fk.numero_version', 'id_version_proyecto_fk.detalle', '', '', '']
+    const dataKeys2 = ['id_codigo_vi_fk.id_codigo_vi', 'id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'numero_version', 'detalle', '', '', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null  
     const volver = () => {
@@ -75,8 +76,8 @@ export const GestionVersiones = () => {
     async function loadVersionProyectos(proyecto) {
         try {
             setCargado(false);
-            const res = await obtenerColaboradorSecundario(localStorage.getItem('token'))
-            const filteredData = res.data.filter(item => item.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi === proyecto);
+            const res = await obtenerVersionProyectos(localStorage.getItem('token'))
+            const filteredData = res.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === proyecto);
             setData(filteredData);
             setProyectosVersion(filteredData)
             setCargado(true);
@@ -93,7 +94,7 @@ export const GestionVersiones = () => {
             const matchedEvento = eventos.data.find(evento =>
                 evento.id_producto_fk &&
                 evento.id_producto_fk.id_version_proyecto_fk &&
-                evento.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto_fk.id_version_proyecto
+                evento.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
             );
 
             if (matchedEvento) {
@@ -119,7 +120,7 @@ export const GestionVersiones = () => {
             const matchedArticulo = articulos.data.find(articulo =>
                 articulo.id_producto_fk &&
                 articulo.id_producto_fk.id_version_proyecto_fk &&
-                articulo.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto_fk.id_version_proyecto
+                articulo.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
             );
 
             if (matchedArticulo) {
@@ -145,7 +146,7 @@ export const GestionVersiones = () => {
             const matchedSoftware = softwares.data.find(software =>
                 software.id_producto_fk &&
                 software.id_producto_fk.id_version_proyecto_fk &&
-                software.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto_fk.id_version_proyecto
+                software.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
             );
 
             if (matchedSoftware) {
@@ -164,15 +165,49 @@ export const GestionVersiones = () => {
     }
 
 
+
+
+    async function loadColaborador(user) {
+        try {
+            const colaboradores = await obtenerColaboradorSecundario(localStorage.getItem('token'));
+
+            // Buscar el software que coincide con user.id_version_proyecto
+            const matchedColaborador = colaboradores.data.find(colaborador =>
+                colaborador.id_version_proyecto_fk &&
+                colaborador.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
+            );
+
+            if (matchedColaborador) {
+                setColaborador(matchedColaborador);
+                const matchedAcademico = academicos.find(academico =>
+                    academico.id_nombre_completo_fk &&
+                    academico.id_nombre_completo_fk.nombre === matchedColaborador.id_academico_fk.id_nombre_completo_fk.nombre
+                );
+                //matchedColaborador.id_colaborador_secundario = matchedAcademico.id_nombre_completo_fk.nombre;
+                
+                return true;
+            } else {
+                console.warn('No se encontró el software que coincide con user.id_version_proyecto_fk.id_version_proyecto');
+                setColaborador(null);
+                return false;
+            }
+
+        } catch (error) {
+           
+        }
+    }
+
+
     useEffect(() => {
         const fetchData = async () => {
           if (id_version && data.length > 0) {
             const idNum = parseInt(id_version, 10);
-            const elemento = data.find(e => e.id_version_proyecto_fk.id_version_proyecto === idNum);
+            const elemento = data.find(e => e.id_version_proyecto === idNum);
             if (elemento) {
               setEdit(true);
               setAddClick(false);
               setProyecto(elemento);
+              await loadColaborador(elemento);
               try {
                 const isSoftware = await loadSoftware(elemento);
                 if (!isSoftware) {
@@ -181,6 +216,7 @@ export const GestionVersiones = () => {
                         await loadEvento(elemento);
                     }
                 }
+               
                 setEdit(true);
                 setAddClick(false);
               } catch (error) {
@@ -294,8 +330,8 @@ export const GestionVersiones = () => {
             }
 
             formData.delete('json');
-            let fecha_ini = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio;
-            let fecha_fi = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_fin;
+            let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
+            let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
 
             if (!fecha_ini || fecha_ini.trim() === "") {
                 fecha_ini = null;
@@ -309,25 +345,25 @@ export const GestionVersiones = () => {
                 fecha_fin: fecha_fi
             }
             const id_vigencia_creado = await agregarVigencia(vigencia, localStorage.getItem('token'))
-            delete Datos.id_version_proyecto_fk.id_vigencia_fk;
-            const id_vi = Datos.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi;
-            delete Datos.id_version_proyecto_fk.id_codigo_vi_fk;
-            Datos.id_version_proyecto_fk.id_codigo_vi_fk = clean_id;
-            delete Datos.id_version_proyecto_fk.id_version_proyecto;
-            Datos.id_version_proyecto_fk.id_vigencia_fk = id_vigencia_creado;
+            delete Datos.id_vigencia_fk;
+            const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
+            delete Datos.id_codigo_vi_fk;
+            Datos.id_codigo_vi_fk = clean_id;
+            delete Datos.id_version_proyecto;
+            Datos.id_vigencia_fk = id_vigencia_creado;
 
             formData.delete(formData.id_version_proyecto);
             formData.delete(formData.id_vigencia_fk);
             formData.delete(formData.id_codigo_vi_fk);
-            formData.append('detalle', Datos.id_version_proyecto_fk.id_oficio_fk.detalle);
+            formData.append('detalle', Datos.id_oficio_fk.detalle);
 
 
             const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
-            delete Datos.id_version_proyecto_fk.id_oficio_fk;
-            Datos.id_version_proyecto_fk.id_oficio_fk = id_oficio_creado;
+            delete Datos.id_oficio_fk;
+            Datos.id_oficio_fk = id_oficio_creado;
 
-
-            const id_version_creada = await agregarVersionProyectos(Datos.id_version_proyecto_fk, localStorage.getItem('token'))
+            //REVISAR
+            const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
             producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
 
             const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))
@@ -345,8 +381,10 @@ export const GestionVersiones = () => {
 
             
 
-            let fecha_ini_colab = Datos.id_vigencia_fk.fecha_inicio;
-            let fecha_fi_colab = Datos.id_vigencia_fk.fecha_fin;
+            
+            
+            let fecha_ini_colab = Datos.colaborador.id_vigencia_fk.fecha_fin;
+            let fecha_fi_colab = Datos.colaborador.id_vigencia_fk.fecha_fin;
 
             if (!fecha_ini_colab || fecha_ini_colab.trim() === "") {
                 fecha_ini_colab = null;
@@ -360,12 +398,12 @@ export const GestionVersiones = () => {
                 fecha_fin: fecha_fi_colab
             }
             const id_vigencia_colab_creado = await agregarVigencia(vigencia_colab, localStorage.getItem('token'))
-            delete Datos.id_vigencia_fk;
-            Datos.id_vigencia_fk = id_vigencia_colab_creado;
-            Datos.id_academico_fk =  Datos.id_academico_fk.id_academico
-            Datos.id_version_proyecto_fk = id_version_creada;
+            delete Datos.colaborador.id_vigencia_fk;
+            Datos.colaborador.id_vigencia_fk = id_vigencia_colab_creado;
+            Datos.colaborador.id_academico_fk =  Datos.colaborador.id_academico_fk.id_academico
+            Datos.colaborador.id_version_proyecto_fk = id_version_creada;
 
-            await agregarColaboradorSecundario(Datos, localStorage.getItem('token'))
+            await agregarColaboradorSecundario(Datos.colaborador, localStorage.getItem('token'))
 
             
 
@@ -504,16 +542,16 @@ export const GestionVersiones = () => {
 
             formData.delete('json');
 
-            const id_version_proy = Datos.id_version_proyecto_fk.id_version_proyecto;
-            const id_codigo_vi = Datos.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi;
-            delete Datos.id_version_proyecto_fk.id_version_proyecto;
-            delete Datos.id_version_proyecto_fk.id_codigo_vi_fk;
-            Datos.id_version_proyecto_fk.id_codigo_vi_fk = id_codigo_vi;
+            const id_version_proy = Datos.id_version_proyecto;
+            const id_codigo_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
+            delete Datos.id_version_proyecto;
+            delete Datos.id_codigo_vi_fk;
+            Datos.id_codigo_vi_fk = id_codigo_vi;
 
-            const id_vig = Datos.id_version_proyecto_fk.id_vigencia_fk.id_vigencia;
+            const id_vig = Datos.id_vigencia_fk.id_vigencia;
 
-            let fecha_inicio_adaptada = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio;
-            let fecha_fin_adaptada = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_fin;
+            let fecha_inicio_adaptada = Datos.id_vigencia_fk.fecha_inicio;
+            let fecha_fin_adaptada = Datos.id_vigencia_fk.fecha_fin;
 
 
             if (!fecha_inicio_adaptada) {
@@ -538,20 +576,21 @@ export const GestionVersiones = () => {
             }
 
             await editarVigencia(id_vig, vigencia, localStorage.getItem("token"))
-            const id_vigencia_editada = Datos.id_version_proyecto_fk.id_vigencia_fk.id_vigencia;
-            delete Datos.id_version_proyecto_fk.id_vigencia_fk;
-            Datos.id_version_proyecto_fk.id_vigencia_fk = id_vigencia_editada;
+            const id_vigencia_editada = Datos.id_vigencia_fk.id_vigencia;
+            delete Datos.id_vigencia_fk;
+            Datos.id_vigencia_fk = id_vigencia_editada;
 
-            const id_oficio = Datos.id_version_proyecto_fk.id_oficio_fk.id_oficio;
+            const id_oficio = Datos.id_oficio_fk.id_oficio;
             formData.delete(formData.id_version_proyecto);
             formData.delete(formData.id_vigencia_fk);
             formData.delete(formData.id_codigo_vi_fk);
-            formData.append('detalle', Datos.id_version_proyecto_fk.id_oficio_fk.detalle);
+            formData.append('detalle', Datos.id_oficio_fk.detalle);
             const id_oficio_editada = await editarOficio(id_oficio, formData, localStorage.getItem("token"))
-            delete Datos.id_version_proyecto_fk.id_oficio_fk;
-            Datos.id_version_proyecto_fk.id_oficio_fk = id_oficio_editada.data.id_oficio;
+            delete Datos.id_oficio_fk;
+            Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
-            const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos.id_version_proyecto_fk, localStorage.getItem("token"))
+            //REVISAR
+            const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
 
 
 
@@ -571,10 +610,10 @@ export const GestionVersiones = () => {
 
             }
 
-            const id_vig_colab = Datos.id_vigencia_fk.id_vigencia;
+            const id_vig_colab = Datos.colaborador.id_vigencia_fk.id_vigencia;
 
-            let fecha_inicio_colab = Datos.id_vigencia_fk.fecha_inicio;
-            let fecha_fin_colab = Datos.id_vigencia_fk.fecha_fin;
+            let fecha_inicio_colab = Datos.colaborador.id_vigencia_fk.fecha_inicio;
+            let fecha_fin_colab = Datos.colaborador.id_vigencia_fk.fecha_fin;
 
 
             if (!fecha_inicio_colab) {
@@ -599,21 +638,23 @@ export const GestionVersiones = () => {
             }
 
             await editarVigencia(id_vig_colab, vigencia_colab, localStorage.getItem("token"))
-            const id_vigencia_colab = Datos.id_vigencia_fk.id_vigencia;
-            delete Datos.id_vigencia_fk;
-            Datos.id_vigencia_fk = id_vigencia_colab;
-            Datos.id_academico_fk =  Datos.id_academico_fk.id_academico
+            const id_vigencia_colab = Datos.colaborador.id_vigencia_fk.id_vigencia;
+            delete Datos.colaborador.id_vigencia_fk.fecha_fin;
+            
+            delete Datos.colaborador.id_vigencia_fk;
+            Datos.colaborador.id_vigencia_fk = id_vigencia_colab;
+            Datos.colaborador.id_academico_fk =  Datos.colaborador.id_academico_fk.id_academico
 
-            Datos.id_version_proyecto_fk = id_version_proyecto_editado.data.id_version_proyecto;
+            Datos.colaborador.id_version_proyecto_fk = id_version_proyecto_editado.data.id_version_proyecto;
 
 
-            Datos.id_version_proyecto_fk = id_version_proy;
+            Datos.colaborador.id_version_proyecto_fk = id_version_proy;
            
-            await editarColaboradorSecundario(Datos.id_colaborador_secundario, Datos, localStorage.getItem('token'))
-
+            await editarColaboradorSecundario(Datos.colaborador.id_colaborador_secundario, Datos.colaborador, localStorage.getItem('token'))
+            
             
 
-            loadVersionProyectos(Datos.id_version_proyecto_fk.id_codigo_vi_fk)
+          
 
             toast.success('Versión proyecto actualizada correctamente', {
                 id: toastId,
@@ -702,7 +743,7 @@ export const GestionVersiones = () => {
 
 
     const elementClicked2 = async (user) => {
-        navigate(`/gestion-proyectos/${id}/gestion-versiones/${user.id_version_proyecto_fk.id_version_proyecto}`)
+        navigate(`/gestion-proyectos/${id}/gestion-versiones/${user.id_version_proyecto}`)
     }
 
     //se filtra
@@ -751,6 +792,7 @@ export const GestionVersiones = () => {
                                             onDelete={() => deleteProyecto(proyecto)}
                                             proyecto={proyecto}
                                             producto={producto}
+                                            colaborador={colaborador}
                                             tipo={tipo}
                                             saveState={null}
                                             canVersiones={proyectosVersion.length}

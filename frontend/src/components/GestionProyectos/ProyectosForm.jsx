@@ -5,13 +5,15 @@ import { Confirmar } from '../../utils/Confirmar'
 import { SoftwareForm } from "../GestionProductos/SoftwareForm";
 import { ArticuloForm } from "../GestionProductos/ArticuloForm";
 import { EventoForm } from "../GestionProductos/EventoForm";
+
 import { Boton } from "../../utils/Boton"
 import { GestionInformes } from "../../pages/GestionInformes/GestionInformes";
 import { useNavigate } from "react-router-dom";
 import Tooltip from '@mui/material/Tooltip';
+import { ColaboradorSecundarioForm } from "./ColaboradorSecundarioForm";
 
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, academicos }) => {
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, academicos, colaborador }) => {
 
     // Cargar informacion
     const navigate = useNavigate()
@@ -21,53 +23,40 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const [softwareFile, setSoftwareFile] = useState(null);
     const [articuloData, setArticuloData] = useState(null);
     const [articuloFile, setArticuloFile] = useState(null);
+    const [colaboradorData, setColaboradorData] = useState(null);
     const [eventoData, setEventoData] = useState(null);
     const [eventoFile, setEventoFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [showProductContent, setShowProductContent] = useState(false);
-    const [academicosFilter, setAcademicosFilter] = useState([]);
+   
     const [formData, setFormData] = useState({
-            id_colaborador_secundario: proyecto ? proyecto.id_colaborador_secundario: "" ,
-            tipo: proyecto ? proyecto.tipo : "Secundario",
-            estado: proyecto ? proyecto.estado : "",
-            carga: proyecto  ? proyecto.carga : "",
-            id_vigencia_fk: proyecto && proyecto.id_vigencia_fk ? proyecto.id_vigencia_fk : {
+            id_version_proyecto: proyecto ? proyecto.id_version_proyecto : "",
+            id_oficio_fk: proyecto ? proyecto.id_oficio_fk : {
+                id_oficio: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.id_oficio : "",
+                ruta_archivo: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.ruta_archivo : "",
+                detalle: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.detalle : ""
+            },
+            id_vigencia_fk: proyecto ? proyecto.id_vigencia_fk : {
+                id_vigencia: proyecto && proyecto.id_vigencia_fk ? proyecto.id_vigencia_fk.id_vigencia : "",
                 fecha_inicio: proyecto && proyecto.id_vigencia_fk ? proyecto.id_vigencia_fk.fecha_inicio : "",
                 fecha_fin: proyecto && proyecto.id_vigencia_fk ? proyecto.id_vigencia_fk.fecha_fin : ""
             },
-            id_academico_fk: proyecto ? proyecto.id_academico_fk : {
-                id_academico: proyecto && proyecto.id_academico ? proyecto.id_academico_fk.id_academico : ""
+            id_codigo_vi_fk: proyecto ? proyecto.id_codigo_vi_fk : {
+                id_codigo_vi: proyecto && proyecto.id_codigo_vi_fk ? proyecto.id_codigo_vi_fk.id_codigo_vi : id_codigo,
+                nombre: proyecto && proyecto.nombre ? proyecto.id_codigo_vi_fk.nombre : "",
             },
-            id_version_proyecto_fk: proyecto ? proyecto.id_version_proyecto_fk : {
-                id_version_proyecto: proyecto && proyecto.id_version_proyecto_fk.id_version_proyecto ? proyecto.id_version_proyecto_fk.id_version_proyecto : "",
-                id_oficio_fk: proyecto ? proyecto.id_version_proyecto_fk.id_oficio_fk : {
-                    id_oficio: proyecto && proyecto.id_version_proyecto_fk.id_oficio_fk ? proyecto.id_version_proyecto_fk.id_oficio_fk.id_oficio : "",
-                    ruta_archivo: proyecto && proyecto.id_version_proyecto_fk.id_oficio_fk ? proyecto.id_version_proyecto_fk.id_oficio_fk.ruta_archivo : "",
-                    detalle: proyecto && proyecto.id_version_proyecto_fk.id_oficio_fk ? proyecto.id_version_proyecto_fk.id_oficio_fk.detalle : ""
-                },
-                id_vigencia_fk: proyecto ? proyecto.id_version_proyecto_fk.id_vigencia_fk : {
-                    id_vigencia: proyecto && proyecto.id_version_proyecto_fk.id_vigencia_fk ? proyecto.id_version_proyecto_fk.id_vigencia_fk.id_vigencia : "",
-                    fecha_inicio: proyecto && proyecto.id_version_proyecto_fk.id_vigencia_fk ? proyecto.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio : "",
-                    fecha_fin: proyecto && proyecto.id_version_proyecto_fk.id_vigencia_fk ? proyecto.id_version_proyecto_fk.id_vigencia_fk.fecha_fin : ""
-                },
-                id_codigo_vi_fk: proyecto ? proyecto.id_version_proyecto_fk.id_codigo_vi_fk : {
-                    id_codigo_vi: proyecto && proyecto.id_version_proyecto_fk.id_codigo_vi_fk ? proyecto.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi : id_codigo,
-                    nombre: proyecto && proyecto.id_version_proyecto_fk.nombre ? proyecto.id_version_proyecto_fk.id_codigo_vi_fk.nombre : "",
-                },
-                detalle: proyecto && proyecto.id_version_proyecto_fk  ? proyecto.id_version_proyecto_fk.detalle : "",
-                numero_version: proyecto && proyecto.id_version_proyecto_fk ? proyecto.id_version_proyecto_fk.numero_version : canVersiones + 1,
-
-            },
-            asociar_academico: proyecto ? proyecto.id_academico_fk?.id_nombre_completo_fk?.nombre + " " + proyecto.id_academico_fk.id_nombre_completo_fk?.apellido +" " + proyecto.id_academico_fk.id_nombre_completo_fk?.segundo_apellido: ""
+            detalle: proyecto ? proyecto.detalle : "",
+            numero_version: proyecto ? proyecto.numero_version : canVersiones + 1,
     });
    
   
     useEffect(() => {
+        
         if (mode === 2) {
             setActiveForm(tipo);
         }
-    }, [mode, tipo]);
+    }, [ mode, tipo]);
 
 
     //Este handleChange acepta hasta 4 grados de anidacion
@@ -79,21 +68,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
                 // Si el valor incluye caracteres no permitidos, detiene la ejecución
                 return;
-            }
-        }
-
-        if (name === "id_academico_fk.id_academico") {
-            // Lógica para filtrar académicos basada en el valor ingresado
-            formData.asociar_academico = value;
-            if (value === "") {
-                setAcademicosFilter([]);
-            } else {
-                const filteredAcademicos = academicos.filter(academico =>
-                    academico.id_nombre_completo_fk.nombre.toLowerCase().includes(value.toLowerCase()) ||
-                    academico.id_nombre_completo_fk.apellido.toLowerCase().includes(value.toLowerCase()) ||
-                    academico.id_nombre_completo_fk.segundo_apellido.toLowerCase().includes(value.toLowerCase())
-                );
-                setAcademicosFilter(filteredAcademicos);
             }
         }
     
@@ -139,7 +113,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const sendForm = (event) => {
-        delete formData.asociar_academico
+        //delete formData.asociar_academico
         event.preventDefault();
         const combinedData = new FormData();
         if (fileData) {
@@ -154,7 +128,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         if (eventoFile) {
             combinedData.append('id_oficio_fk.documento', eventoFile);
         }
-        const totalData = { ...formData, software: softwareData, articulo: articuloData, evento: eventoData };
+        const totalData = { ...formData, software: softwareData, articulo: articuloData, evento: eventoData, colaborador: colaboradorData };
         combinedData.append('json', JSON.stringify(totalData));
         onSubmit(combinedData);
     };
@@ -183,12 +157,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const handleInformesClick = () => {
         saveState()
-        navigate(`/gestion-informes/${proyecto.id_version_proyecto_fk.id_version_proyecto}`);
+        navigate(`/gestion-informes/${proyecto.id_version_proyecto}`);
     };
 
     const handlePresupuestoClick = () => {
         saveState()
-        navigate(`/gestion-presupuestos/${proyecto.id_version_proyecto_fk.id_version_proyecto}`)
+        navigate(`/gestion-presupuestos/${proyecto.id_version_proyecto}`)
     };
 
     const setCambios = (changes) => {
@@ -198,25 +172,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setArticuloFile(changes.articuloFile);
         setEventoData(changes.eventoData);
         setEventoFile(changes.eventoFile);
-    };
-
-    const handleBlur = (event) => {
-        
-        if(formData.id_academico_fk.id_academico !== 'number'){
-            handleChange({target: { name: "asociar_academico", value: '' }});
+        if (changes.colaboradorData) {
+            setColaboradorData(changes.colaboradorData);
         }
-    }
-
-    const handleSelectAcademico = (e, academico) => {
-        setFormData(prev => ({
-            ...prev,
-                    id_academico_fk: {
-                        id_academico: academico.id_academico
-                    },
-            // Actualiza el estado para guardar el nombre completo del académico seleccionado.
-            asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`
-        }));
-        setAcademicosFilter([]); // Limpia la lista de académicos filtrados después de seleccionar.
     };
 
     return (
@@ -246,12 +204,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 <>
                                     <div className="col-md-6">
                                         <label htmlFor="id_codigo_vi" className="label-personalizado mb-2 ">Código VI</label>
-                                        <input type="text" className="form-control disabled-input" name="id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi" id="id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi" value={mode === 2 ? formData.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi : id_codigo} onChange={handleChange} disabled={true} />
+                                        <input type="text" className="form-control disabled-input" name="id_codigo_vi_fk.id_codigo_vi" id="id_codigo_vi_fk.id_codigo_vi" value={mode === 2 ? formData.id_codigo_vi_fk.id_codigo_vi : id_codigo} onChange={handleChange} disabled={true} />
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="id_version_proyecto_fk.numero_version" className="label-personalizado  mb-2">Versión</label>
-                                        <input type="text" className="form-control disabled-input " name="id_version_proyecto_fk.numero_version" id="id_version_proyecto_fk.numero_version" onChange={handleChange} value={formData.id_version_proyecto_fk.numero_version} min="1" step="1" pattern="^[0-9]+$" disabled={true} />
+                                        <label htmlFor="numero_version" className="label-personalizado  mb-2">Versión</label>
+                                        <input type="text" className="form-control disabled-input " name="numero_version" id="numero_version" onChange={handleChange} value={formData.numero_version} min="1" step="1" pattern="^[0-9]+$" disabled={true} />
                                     </div>
                                 </>
                             )
@@ -261,8 +219,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <div className="row mb-4">
 
                             <div className="col">
-                                <label htmlFor="id_version_proyecto_fk.detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <input type="text" className="form-control" name="id_version_proyecto_fk.detalle" id="id_version_proyecto_fk.detalle" onChange={handleChange} value={formData.id_version_proyecto_fk.detalle} required />
+                                <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
+                                <input type="text" className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
                             </div>
 
                         </div>
@@ -270,19 +228,19 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <div className="row mb-4">
                         <div className="col">
                                 <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
-                                <input type="date" className="form-control" name="id_version_proyecto_fk.id_vigencia_fk.fecha_inicio"
+                                <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
-                                    value={formData.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio
-                                        ? new Date(formData.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
+                                    value={formData.id_vigencia_fk.fecha_inicio
+                                        ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
-                                    name="id_version_proyecto_fk.id_vigencia_fk.fecha_fin"
-                                    id="id_version_proyecto_fk.id_vigencia_fk.fecha_fin"
-                                    value={formData.id_version_proyecto_fk.id_vigencia_fk.fecha_fin
-                                        ? new Date(formData.id_version_proyecto_fk.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
+                                    name="id_vigencia_fk.fecha_fin"
+                                    id="id_vigencia_fk.fecha_fin"
+                                    value={formData.id_vigencia_fk.fecha_fin
+                                        ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
                             </div>
                            
@@ -291,100 +249,29 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="id_version_proyecto_fk.id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
-                                <input type="text" className="form-control" name="id_version_proyecto_fk.id_oficio_fk.detalle" id="id_version_proyecto_fk.id_oficio_fk.detalle" value={formData.id_version_proyecto_fk.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
+                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
-                                <label htmlFor="id_version_proyecto_fk.id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
-                                <input type="file" className="form-control" name="id_version_proyecto_fk.id_oficio_fk.ruta_archivo" id="id_version_proyecto_fk.id_oficio_fk.ruta_archivo" onChange={handleFileChange}
+                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
+                                <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo" onChange={handleFileChange}
                                     required={mode == 1 ? true : ''} />
                                 {mode == 2 ? (
-                                    <Tooltip title={formData.id_version_proyecto_fk.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_version_proyecto_fk.id_oficio_fk.ruta_archivo} target="blank_"
+                                    <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
+                                        <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_"
                                             className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                             {"Ver documento"}
                                         </a>
                                     </Tooltip>
-
-                                )
-                                    : ""}
-                            </div>
-                            <div className="row mb-4">
-                                <h5 className="text-center my-3 mt-5">Asociar Colaborador Secundario</h5>
-                                <div className="col">
-                                    <label htmlFor="id_academico_fk" className="label-personalizado mb-2">Investigador(a) </label>
-                                
-                                    <div className="position-relative">
-                                        <input type="text" className="form-control" name="id_academico_fk.id_academico"
-                                        id="id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} onBlur={handleBlur} required/>
-                                        {(academicosFilter.length > 0) && (
-                                            <div
-                                                className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                style={{ maxHeight: "40px" }}
-                                            >
-                                                {academicosFilter.map((academico) => {
-                                                return (
-                                                    <div
-                                                    key={academico.id_academico}
-                                                    className="pointer-event ms-1"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={(e) => handleSelectAcademico(e, academico)}
-                                                    >
-                                                    {`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`}
-                                                    </div>
-                                                );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="estado" className="label-personalizado mb-2">Estado colaborador(a) </label>
-                                <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
-                                    <option value="">Seleccionar estado</option>
-                                    <option value="Activo">Activo</option>
-                                    <option value="Inactivo">Inactivo</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="carga" className="label-personalizado mb-2">Carga colaborador(a) </label>
-                                <select className="form-select seleccion" name="carga" id="carga" value={formData.carga} onChange={handleChange} required>
-                                    <option value="">Seleccionar carga</option>
-                                    <option value="1/8">1/8</option>
-                                    <option value="1/4">1/4</option>
-                                    <option value="3/4">3/4</option>
-                                    <option value="3/8">3/8</option>
-                                    <option value="1/2">1/2</option>
-                                    <option value="5/8">5/8</option>
-                                    <option value="7/8">7/8</option>
-                                    <option value="TS">TS</option>
-                                    <option value="Sc">SC</option>
-                                </select>
+                                    ): ""}
+                                    <br/>
                             </div>
                         </div>
-                        <div className="row mb-4">
-                            <div className="col-md-6">
-                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
-                                <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
-                                    id="id_vigencia_fk.fecha_inicio"
-                                    value={formData.id_vigencia_fk.fecha_inicio
-                                        ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} />
-                            </div>
-                            <div className="col">
-                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización </label> <span className="disabled-input">(Opcional)</span>
-                                <input type="date" className="form-control"
-                                    name="id_vigencia_fk.fecha_fin"
-                                    id="id_vigencia_fk.fecha_fin"
-                                    value={formData.id_vigencia_fk.fecha_fin
-                                        ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} />
-                            </div>
-                        </div>
-                        <br />
-                        </div>
+                        <hr></hr>
+                        <div className="row mb-2">
+                            <h5 className="text-center my-3 mt-2">Asociar Colaborador Secundario</h5>
+                            { <ColaboradorSecundarioForm mode={mode} setCambios={setCambios} colaborador={colaborador} academicos={academicos} />}
+                        </div>                                   
                         <hr></hr>
                         <div className="row mb-2">
                             <div className="col d-flex justify-content-center align-items-center">
@@ -461,7 +348,8 @@ ProyectosForm.propTypes = {
     onDelete: PropTypes.func,
     proyecto: PropTypes.object,
     producto: PropTypes.object,
+    colaborador: PropTypes.object,
     id_codigo: PropTypes.object,
     tipo: PropTypes.oneOf(['evento', 'software', 'articulo']),
-    academicos: PropTypes.arrayOf(PropTypes.object).isRequired
+    
 };
