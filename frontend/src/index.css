@@ -585,3 +585,17 @@ input[type="submit"]:focus {
     width: 100%;
   }
 }
+
+/* Estilos para el componente ReportePDF */
+
+.container {
+  margin-top: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.item-padding {
+  padding: 10px 10px 0px;
+}
