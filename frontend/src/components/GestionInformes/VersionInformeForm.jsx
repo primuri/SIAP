@@ -9,7 +9,9 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false)
     const [formData, setFormData] = useState(VIFields(versionInforme))
     const [fileOficio, setFileOficio] = useState(null);
-    const [fileInforme, setFileInforme] = useState(null);
+    const [fileInforme, setFileInforme] = useState(null);  
+    const [fileEvaluacion, setFileEvaluacion] = useState(null);
+
 
     const updateNestedField = (formData, fieldPath, value) => {
         const keys = fieldPath.split('.');
@@ -34,6 +36,9 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
         }
         if (fileInforme) {
             sendingForm.id_documento_informe_fk.documento = fileInforme
+        }
+        if (fileEvaluacion){
+            sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento = fileEvaluacion 
         }
 
         onSubmit(sendingForm);
@@ -68,6 +73,8 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
             setFileOficio(file);
         } else if (obj === "informe") {
             setFileInforme(file)
+        } else if (obj === "evaluacion"){
+            setFileEvaluacion(file)
         }
     };
 
@@ -122,20 +129,24 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 )}
                             </div>
                         </div>
-                        {mode === 2 && typeof formData.id_evaluacion_cc_fk.documento !== 'undefined' && (
                             <div className="row mb-4">
                                 <div className="col">
-                                    <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC   </label>
+                                    <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="disabled-input">(Opcional)</span>  </label>
                                     <input type="text" className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
                                 </div>
                                 <div className="col">
-                                    <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC   </label>
-                                    <a href={formData.id_evaluacion_cc_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.id_evaluacion_cc_fk.documento.split('/').pop()}
-                                    </a>
+                                    <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="disabled-input">(Opcional)</span> </label>
+                                    <input type="file" className="form-control" name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento" id="documentoEvaluacionCC" onChange={(event) => handleFileChange(event, 'evaluacion')} />
+                                {mode == 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento &&(
+
+                                    <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
+                                        <a href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                            {"Ver documento"}
+                                        </a>
+                                    </Tooltip>
+                                )}
                                 </div>
                             </div>
-                        )}
                     </div>
                 </div>
             </FormModal>

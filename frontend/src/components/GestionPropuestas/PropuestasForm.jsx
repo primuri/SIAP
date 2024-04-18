@@ -192,7 +192,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
             </div>
 
             <form onSubmit={sendForm} className='d-flex flex-column' encType="multipart/form-data">
-                <div className="modal-body" style={{ padding: '3vh 4vw' }}>
+                <div className="modal-body m-5 mt-4 mb-0">
                     <div className="container">
                         <div className="row mb-4">
                             {mode === 2 && (<div className="col-md-6">
@@ -340,46 +340,46 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
-  <div className="row">
-    <div className="col">
-      {mode === 1 ? (
-        <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
-          Agregar
-        </button>
-      ) : (
-        <>
-          {!isPropuestaAprobada && (
-            <button
-              id="boton-personalizado"
-              type="button"
-              onClick={aprobarPropuesta}
-              className='table-button border-0 p-2 rounded text-white'
-              style={{ backgroundColor: "#005da4" }}
-            >
-              Aprobar propuesta
-            </button>
-          )}
-          <button
-            id="boton-personalizado"
-            type="button"
-            onClick={handleEditClick}
-            className='table-button border-0 p-2 rounded text-white m-2'
-          >
-            Guardar
-          </button>
-          {showConfirmationEdit && (
-            <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
-          )}
-          {showConfirmationAprobar && (
-            <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
-          )}
-        </>
-      )}
-    </div>
-  </div>
-</div>
-            </form>
-        </>)
+                    <div className="row">
+                        <div className="col">
+                        {mode === 1 ? (
+                            <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
+                            Agregar
+                            </button>
+                        ) : (
+                            <>
+                            {!isPropuestaAprobada && (
+                                <button
+                                id="boton-personalizado"
+                                type="button"
+                                onClick={aprobarPropuesta}
+                                className='table-button border-0 p-2 rounded text-white'
+                                style={{ backgroundColor: "#005da4" }}
+                                >
+                                Aprobar propuesta
+                                </button>
+                            )}
+                            <button
+                                id="boton-personalizado"
+                                type="button"
+                                onClick={handleEditClick}
+                                className='table-button border-0 p-2 rounded text-white m-2'
+                            >
+                                Guardar
+                            </button>
+                            {showConfirmationEdit && (
+                                <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
+                            )}
+                            {showConfirmationAprobar && (
+                                <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
+                            )}
+                            </>
+                        )}
+                        </div>
+                    </div>
+                    </div>
+                                </form>
+                            </>)
 }
 
 PropuestasForm.propTypes = {

@@ -140,7 +140,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             </div>
             <div className="row mb-4">
                 <div className="col">
-                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del Evento </label>
+                    <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del evento </label> <span className="disabled-input">(Opcional)</span>
                     <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} />
                 </div>
                

@@ -170,10 +170,6 @@ main {
   border-color: var(--celeste-ucr);
 }
 
-.table {
-  width: 83vw !important;
-}
-
 thead {
   border-radius: 100px 100px 0 0;
   --bs-table-bg: var(--celeste-ucr);
@@ -248,6 +244,15 @@ select{
   background-color: #EAEAEA !important;
   height: 40px;
   max-width: 100%;  
+}
+
+.selectPersonalized{
+  --bs-box-shadow-sm: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  color: white !important;
+  box-shadow: none !important;
+  background-color: var(--celeste-ucr) !important;
+  border-color: var(--celeste-ucr) !important; 
 }
 
 .select_arrow::after{
@@ -471,6 +476,10 @@ input[type="submit"]:focus {
   font-size: 18px;
 }
 
+.ojo{
+  background-color: var(--gris-claro-ucr)!important;
+}
+
 .required {
   color: red;
 }
@@ -575,4 +584,18 @@ input[type="submit"]:focus {
   #boton-personalizado {
     width: 100%;
   }
+}
+
+/* Estilos para el componente ReportePDF */
+
+.container {
+  margin-top: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.item-padding {
+  padding: 10px 10px 0px;
 }

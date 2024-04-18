@@ -534,7 +534,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6 mt-4">
-                                <Tooltip title="Separar areas secundarias con coma" placement="right-start">
+                                <Tooltip title="Separar áreas secundarias con coma" placement="right-start">
                                     <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
                                 <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
@@ -547,7 +547,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
               
                         <div className="d-flex flex-column">
                             <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
-                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Titulo"/>
+                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Título"/>
                         </div>
 
                         <div className="d-flex flex-column mt-4">
