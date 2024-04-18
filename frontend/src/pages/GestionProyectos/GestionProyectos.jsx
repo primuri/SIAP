@@ -9,6 +9,7 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import {obtenerProyectos } from "../../api/gestionProyectos"
 import { useNavigate } from "react-router-dom"
 import { TableNoHover } from "../../utils/TableNoHover";
+import { ReportButton } from "../../utils/ReportButton";
 
 
 export const GestionProyectos = () => {
@@ -102,7 +103,7 @@ export const GestionProyectos = () => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-4">
-                            <div className="w-50">
+                            <div >
                                 <HtmlTooltip
                                     title={
                                         <React.Fragment>
@@ -129,7 +130,10 @@ export const GestionProyectos = () => {
 
 
                             </div>
-                            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                            <div className="d-flex container-fluid justify-content-end">
+                                <ReportButton tableData={transformedState} reportTittle="Reporte Proyectos" colNames={columns} dataKeys={dataKeys}></ReportButton>
+                                <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                            </div>
                         </div>
                         <TableNoHover style={{ cursor: 'default' }} columns={columns} data={transformedState} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></TableNoHover>
                         <Toaster></Toaster>

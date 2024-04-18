@@ -87,7 +87,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar presupuesto" : "Editar presupuesto"}
+                                {mode === 1 ? "Agregar versión de presupuesto" : "Editar versión de presupuesto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -144,7 +144,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="presupuesto" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="versión de presupuesto" />)}
                                 </>
                             )}
                         </div>
@@ -152,7 +152,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="versión de presupuesto" />)}
                                 </>
                             )}
                         </div>
