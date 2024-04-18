@@ -631,4 +631,6 @@ input[type="submit"]:focus {
 
 .reporteGeneral{
   width: 900px;
+  background-color: var(--gris-claro-ucr);
+  padding-bottom: 20px;
 }
