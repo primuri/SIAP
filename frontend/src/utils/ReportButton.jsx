@@ -1,28 +1,29 @@
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
+import React from 'react';
+import * as XLSX from 'xlsx';
 import reporte from '../assets/reporte.png'
 import { ReportHeader } from "../components/Layout/ReportHeader";
 import { usePDF } from 'react-to-pdf';
 import { ReportePDF } from "./ReportePDF";
 
 
-export const ReportButton = ({ tableData, reportTittle, colNames, dataKeys }) => {
+export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKey }) => {
     const [selectedOption, setSelectedOption] = useState("PDF");
     const [buttonClicked, setButtonClicked] = useState(true);
     const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
 
     const handleButtonClick = () => {
         if (buttonClicked) {
-            console.log("ADELANTE!");
             if (selectedOption === 'PDF') {
                 setTimeout(() => {
                     toPDF();
                 }, 0);
-            }
-
-        } else {
-            console.log("No se tocó botón");
-        }
+            } else {
+                if (selectedOption === 'EXCEL'){
+                    generarReporteExcel(reportData, colNames, dataKeys, reportTitle)
+                }
+            }}        
     };
 
     const handleBlur = () => {
@@ -33,6 +34,47 @@ export const ReportButton = ({ tableData, reportTittle, colNames, dataKeys }) =>
         setButtonClicked(false);
     };
 
+    function getValueByPath(obj, path) {
+        const value = path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    
+        const fechaRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+        if (typeof value === 'string' && fechaRegex.test(value)) {
+            return value.split('T')[0];
+        }
+    
+        return value;
+    }
+    
+    const generarReporteExcel = (tableData, colNames, dataKeys, fileName) => {
+        const flattenData = tableData.map(item => {
+            const flattenedItem = {};
+            colNames.forEach((col, index) => {
+                if (typeof col === 'string') {
+                    flattenedItem[col] = getValueByPath(item, dataKeys[index]);
+                } else {
+                    const tableName = col.tableName;
+                    const subDataKeys = col.colNames;
+                    const subData = getValueByPath(item, dataKeys[index]);
+                    subData.forEach((subItem, subIndex) => {
+                        subDataKeys.forEach((subKey, subKeyIndex) => {
+                            flattenedItem[`${tableName} ${subIndex + 1} ${subKey}`] = getValueByPath(subItem, subKey);
+                        });
+                    });
+                }
+            });
+            return flattenedItem;
+        });
+    
+        const ws = XLSX.utils.json_to_sheet(flattenData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
+        XLSX.writeFile(wb, `${fileName}.xlsx`);
+    };
+    
+    
+    if (reportData.length < 1){
+        return (<></>)
+    }
     return (
         <div style={{ marginRight: '1vw' }}>
             <button type="button" className="background-color-celeste-ucr border-0 text-light rounded-3 p-2 d-flex" onClick={handleButtonClick}>
@@ -47,7 +89,7 @@ export const ReportButton = ({ tableData, reportTittle, colNames, dataKeys }) =>
                 (buttonClicked && (
                     <div style={{ position: 'absolute', left: -9999, top: -9999, margin: '0px' }}>
                         <div  ref={targetRef}>
-                            <ReportePDF />
+                            <ReportePDF reportData={reportData} reportTitle={reportTitle} colNames={colNames} dataKeys={dataKeys} idKey={idKey}/>
                         </div>
                     </div>
                 ))
@@ -55,13 +97,6 @@ export const ReportButton = ({ tableData, reportTittle, colNames, dataKeys }) =>
 
         </div>
     );
-};
-
-ReportButton.propTypes = {
-    tableData: PropTypes.array.isRequired,
-    reportTittle: PropTypes.string.isRequired,
-    colNames: PropTypes.array.isRequired,
-    dataKeys: PropTypes.array.isRequired
-};
+}
 
 

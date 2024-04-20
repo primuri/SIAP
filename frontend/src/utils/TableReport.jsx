@@ -17,11 +17,11 @@ export const TableReport = ({ columns = [], data = [], dataKeys}) => {
   return (
     <div className="w-100">
       <div className="table-responsive-xl w-100" id="table-box" style={{ backgroundColor: "#EEEDED" }}>
-        <table className="table table-striped table-hover rounded-table table-resizable fs-5" >
+        <table className="table table-striped table-hover rounded-table table-resizable fs-7" >
           <thead className="rounded">
             <tr>
               {columns.map((column, index) => (
-                <th key={index}><span>{column}</span></th>
+                <th key={index}  className="th-report"><span>{column}</span></th>
               ))}
             </tr>
           </thead>

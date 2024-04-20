@@ -588,7 +588,7 @@ input[type="submit"]:focus {
 
 /* Estilos para el componente ReportePDF */
 
-.container {
+.reporteGeneral .container {
   margin-top: 20px;
   background-color: var(--gris-claro-ucr)
 }
@@ -633,4 +633,8 @@ input[type="submit"]:focus {
   width: 900px;
   background-color: var(--gris-claro-ucr);
   padding-bottom: 20px;
+}
+
+.th-report{
+  background-color: #a8a8a8 !important;
 }

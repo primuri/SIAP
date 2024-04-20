@@ -6,26 +6,28 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import {obtenerProyectos } from "../../api/gestionProyectos"
+import { obtenerProyectos } from "../../api/gestionProyectos"
 import { useNavigate } from "react-router-dom"
 import { TableNoHover } from "../../utils/TableNoHover";
 import { ReportButton } from "../../utils/ReportButton";
+
+import axios from 'axios' // PARA REPORTES
 
 
 export const GestionProyectos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const navigate = useNavigate();
     const [reload, setReload] = useState(false)
-    const [proyectos, setProyectos] = useState([]) 
+    const [proyectos, setProyectos] = useState([])
     const [cargado, setCargado] = useState(false)
     const [data, setData] = useState([])
-    const [error, setError] = useState(false) 
+    const [error, setError] = useState(false)
     const [transformedState, setTransformedState] = useState([]);
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
 
-    user.groups[0] !== "administrador" ? setError(true) : null  
-    useEffect(() => { 
+    user.groups[0] !== "administrador" ? setError(true) : null
+    useEffect(() => {
         const transformedProyectos = proyectos;
 
         setTransformedState(transformedProyectos);
@@ -89,6 +91,126 @@ export const GestionProyectos = () => {
         })
         setProyectos(matches)
     }
+
+    // ===============================================================
+    // Parte que cada uno debe crear para su reporte:
+
+    const JsonForReport = { reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} }
+
+    const createJsonForReport = () => {
+        JsonForReport.reportTitle = "Proyecto"
+        JsonForReport.dataKeys = [
+            'id_codigo_vi',
+            'id_codigo_cimpa_fk.id_codigo_cimpa',
+            'id_codigo_cimpa_fk.estado',
+            'id_codigo_cimpa_fk.nombre',
+            'id_codigo_cimpa_fk.fecha_vigencia',
+            'id_codigo_cimpa_fk.descripcion',
+            'id_codigo_cimpa_fk.actividad',
+            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk',
+            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.cedula',
+            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio',
+            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin',
+            'id_codigo_cimpa_fk.id_colaborador_principal_fk.tipo',
+            'id_codigo_cimpa_fk.id_colaborador_principal_fk.carga',
+            'id_version_proyecto.fk.numero_version',                                                // Extra (no viene en data)
+            'id'
+
+        ]
+
+
+    }
+
+    const getLastVersionProyecto = async (id_codigo_vi) => {
+        const token = localStorage.getItem('token');
+
+        const SIAPAPI = axios.create({
+            baseURL: 'http://localhost:8000/'
+        })
+
+        var response = await SIAPAPI.get('version_proyecto/versionproyecto/', {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        var lastVersion = {id_version_proyecto: 0}
+
+        response.data.foreach((version) => {
+            if(version.id_codigo_vi_fk.id_codigo_vi === id_codigo_vi && lastVersion.id_version_proyecto < version.id_version_proyecto){
+                lastVersion = version
+            }
+        })
+
+        return (lastVersion ? lastVersion : {})
+    }
+
+    const getProducto = async (id_version_proyecto) => {
+        const token = localStorage.getItem('token');
+
+        const SIAPAPI = axios.create({
+            baseURL: 'http://localhost:8000/'
+        })
+
+        var response = await SIAPAPI.get('producto/eventos/', {             // Buscar id version en eventos
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        response.data.foreach((producto) => {
+            if(producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto){
+                producto.tipo = 'eventos'
+                return producto
+            }
+        })
+
+        response = await SIAPAPI.get('producto/softwares/', {                 // Buscar id version en softwares
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        response.data.foreach((producto) => {
+            if(producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto){
+                producto.tipo = 'software'
+                return producto
+            }
+        })
+
+        response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        response.data.foreach((producto) => {
+            if(producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto){
+                producto.tipo = 'articulo'
+                return producto
+            }
+        })
+    }
+
+    const getAsistentes = async () => {
+        var response = await manejarErrores( SIAPAPI.get('version_proyecto/designacionasistente/', {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }));
+        const filteredData = response.data.filter(item => item.id_version_proyecto_fk.id_version_proyecto === numVersion);
+        
+        return filteredData ? filteredData : {}
+    }
+
+    // ===============================================================
+
+
     return (
         <main>
 
@@ -109,7 +231,7 @@ export const GestionProyectos = () => {
                                         <React.Fragment>
                                             <b>¿Cómo agregar un proyecto?</b>
                                             <br />
-                                                Para hacerlo, la propuesta de ese proyecto debe de estar aprobada. Diríjase a Gesión de propuestas, dele click a la propuesta y apruébela con el botón que lo indica.
+                                            Para hacerlo, la propuesta de ese proyecto debe de estar aprobada. Diríjase a Gesión de propuestas, dele click a la propuesta y apruébela con el botón que lo indica.
                                         </React.Fragment>
                                     }
                                     placement="right-start"
@@ -131,11 +253,11 @@ export const GestionProyectos = () => {
 
                             </div>
                             <div className="d-flex container-fluid justify-content-end">
-                                <ReportButton tableData={transformedState} reportTittle="Reporte Proyectos" colNames={columns} dataKeys={dataKeys}></ReportButton>
+                                <ReportButton reportData={transformedState} reportTitle='Proyectos' colNames={columns} dataKeys={dataKeys} idKey='id_codigo_vi'></ReportButton>
                                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                             </div>
                         </div>
-                        <TableNoHover style={{ cursor: 'default' }} columns={columns} data={transformedState} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></TableNoHover>
+                        <TableNoHover style={{ cursor: 'default' }} columns={columns} data={transformedState} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></TableNoHover>
                         <Toaster></Toaster>
                     </>
                 </div>
@@ -146,6 +268,7 @@ export const GestionProyectos = () => {
     );
 
 }
+
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
