@@ -26,13 +26,230 @@ export const GestionProyectos = () => {
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
 
-    user.groups[0] !== "administrador" ? setError(true) : null
+    //===============================================================================================================================
+    // Configuración particular para reporte de proyectos
+    //===============================================================================================================================
+
+    const configureReportData = async () => {
+        // Funcion auxiliar para jalar ultima versión de un proyecto
+        const getLastVersionProyecto = async (id_codigo_vi) => {
+            const token = localStorage.getItem('token');
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            }, [])
+
+            var response = await SIAPAPI.get('version_proyecto/versionproyecto/', {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            var lastVersion = { id_version_proyecto: 0 }
+
+            response.data.map((version) => {
+                if (version.id_codigo_vi_fk.id_codigo_vi === id_codigo_vi && lastVersion.id_version_proyecto < version.id_version_proyecto) {
+                    lastVersion = version
+                }
+            })
+
+            return (lastVersion ? lastVersion : {})
+        }
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const getProducto = async (id_version_proyecto) => {
+            const token = localStorage.getItem('token');
+            var productoBuscado = null
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            })
+
+            var response = await SIAPAPI.get('producto/eventos/', {             // Buscar id version en eventos
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((producto) => {
+                if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
+                    producto.tipo = 'evento'
+                    productoBuscado = producto
+                } else {
+                    return null
+                }
+            })
+
+            response = await SIAPAPI.get('producto/softwares/', {                 // Buscar id version en softwares
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((producto) => {
+                if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
+                    producto.tipo = 'software'
+                    productoBuscado = producto
+
+                } else {
+                    return null
+                }
+            })
+
+            response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((producto) => {
+                if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
+                    producto.tipo = 'articulo'
+                    productoBuscado = producto
+
+                } else {
+                    return null
+                }
+            })
+
+            return productoBuscado
+        }
+
+        // Funcion auxiliar para jalar asistentes dada una versión de proyecto
+        const getAsistentes = async (id_version_proyecto) => {
+            const token = localStorage.getItem('token');
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            })
+
+            var response = await SIAPAPI.get('version_proyecto/designacionasistente/', {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            const filteredData = response.data.filter(item => item.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto);
+
+            return filteredData ? filteredData : {}
+        }
+
+        // Jalar y pegar datos en reportData
+        if (proyectos.length > 0) {
+            try {
+                const promises = proyectos.map(async (proyecto) => {
+                    const ultimaVersion = await getLastVersionProyecto(proyecto.id_codigo_vi);
+                    const productoAsociado = await getProducto(ultimaVersion.id_version_proyecto);
+                    const asistentesLista = await getAsistentes(ultimaVersion.id_version_proyecto);
+
+                    // Asignar versión version proyecto a la data
+                    proyecto.id_version_proyecto_fk = ultimaVersion;
+
+                    // Asignar producto a la data
+                    proyecto.producto = productoAsociado;
+
+                    // Asignar los asistentes al proyecto a la data
+                    proyecto[JsonForReport.colNames.length - 1] = asistentesLista;
+
+                    return proyecto;
+                });
+
+                // Esperar que todas las promesas se resuelvan
+                const proyectosConDatosCompletos = await Promise.all(promises);
+
+                // Asignar los proyectos con datos completos a JsonForReport
+                JsonForReport.reportData = proyectosConDatosCompletos;
+                console.log(JsonForReport)
+                return true
+
+            } catch (exception) {
+                console.log("Ocurrió un error al crear el Json para reporte: ")
+                return false
+            }
+        }
+    }
+
+    // ==============================================================================================================================
+    // Parte que cada uno debe crear para su reporte:
+    // ==============================================================================================================================
+
+        // Json que almacena la información que debe recibir el componente ReportButton:  
+        const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+
+        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
+        const [JsonIsReady, setJsonIsReady] = useState(false)
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const createJsonForReport = async () => {
+            // Titulo del reporte a mostrar en PDF
+            JsonForReport.reportTitle = "Proyecto"
+
+            // LLave para acceder al id del objeto del reporte
+            JsonForReport.idKey = "id_codigo_vi"
+
+            // Llaves para acceder a los datos (incluye tabla extra)
+            JsonForReport.dataKeys = [
+                'id_codigo_vi',
+                'id_codigo_cimpa_fk.id_codigo_cimpa',
+                'id_codigo_cimpa_fk.estado',
+                'id_codigo_cimpa_fk.nombre',
+                'id_version_proyecto_fk.numero_version',
+                'id_codigo_cimpa_fk.fecha_vigencia',
+                'id_codigo_cimpa_fk.descripcion',
+                'id_codigo_cimpa_fk.actividad',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.cedula',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.tipo',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.carga',
+                'producto.id_producto_fk.detalle',
+                'producto.id_producto_fk.fecha',
+                'producto.tipo', ['id_asistente_carnet_fk.id_asistente_carnet', 'id_asistente_carnet_fk.id_nombre_completo_fk', 'id_asistente_carnet_fk.condicion_estudiante', 'cantidad_horas']
+            ]
+
+            // Nombres de las columnas o titulos de los items (incluye tabla extra)
+            JsonForReport.colNames = [
+                'Código VI',
+                'Código CIMPA',
+                'Estado proyecto',
+                'Nombre',
+                'Ultima versión de proyecto',
+                'Fecha vigencia',
+                'Descripción',
+                'Actividad',
+                'Colaborador Principal',
+                'Colaborador Principal Cedula',
+                'Colaborador Principal fecha inicio',
+                'Colaborador Principal fecha fin',
+                'Colaborador Principal tipo',
+                'Colaborador Principal carga',
+                'Detalle producto',
+                'Fecha producto',
+                'Tipo producto',
+                {'tableName': 'Asistentes', 'colNames': ['Carnet', 'Nombre', 'Condición', 'Cantidad horas']}
+            ]
+
+            // Función auxiliar particular para configurar data del reporte
+            setJsonIsReady(await configureReportData())
+        }
+
+        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
+        useEffect(() => {
+            setJsonIsReady(false)
+            createJsonForReport()
+        }, [proyectos])
+
+    // ==============================================================================================================================
+    
     useEffect(() => {
         const transformedProyectos = proyectos;
-
         setTransformedState(transformedProyectos);
-
-    }, [proyectos]);
+    }, [proyectos]);               // Se ejecuta con cada cambio realizado en proyectos
 
     useEffect(() => {
         async function fetchData() {
@@ -43,13 +260,10 @@ export const GestionProyectos = () => {
         fetchData();
     }, [reload]);
 
-
-
     async function loadProyectos() {
         try {
             const res = await obtenerProyectos(localStorage.getItem('token'))
             setData(res.data)
-
             setProyectos(res.data)
 
         } catch (error) {
@@ -74,7 +288,6 @@ export const GestionProyectos = () => {
         navigate(`/gestion-proyectos/p_id=${proyecto.id_codigo_vi}/gestion-versiones`)
     }
 
-
     //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
@@ -92,124 +305,7 @@ export const GestionProyectos = () => {
         setProyectos(matches)
     }
 
-    // ===============================================================
-    // Parte que cada uno debe crear para su reporte:
-
-    const JsonForReport = { reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} }
-
-    const createJsonForReport = () => {
-        JsonForReport.reportTitle = "Proyecto"
-        JsonForReport.dataKeys = [
-            'id_codigo_vi',
-            'id_codigo_cimpa_fk.id_codigo_cimpa',
-            'id_codigo_cimpa_fk.estado',
-            'id_codigo_cimpa_fk.nombre',
-            'id_codigo_cimpa_fk.fecha_vigencia',
-            'id_codigo_cimpa_fk.descripcion',
-            'id_codigo_cimpa_fk.actividad',
-            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk',
-            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.cedula',
-            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio',
-            'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin',
-            'id_codigo_cimpa_fk.id_colaborador_principal_fk.tipo',
-            'id_codigo_cimpa_fk.id_colaborador_principal_fk.carga',
-            'id_version_proyecto.fk.numero_version',                                                // Extra (no viene en data)
-            'id'
-
-        ]
-
-
-    }
-
-    const getLastVersionProyecto = async (id_codigo_vi) => {
-        const token = localStorage.getItem('token');
-
-        const SIAPAPI = axios.create({
-            baseURL: 'http://localhost:8000/'
-        })
-
-        var response = await SIAPAPI.get('version_proyecto/versionproyecto/', {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        var lastVersion = {id_version_proyecto: 0}
-
-        response.data.foreach((version) => {
-            if(version.id_codigo_vi_fk.id_codigo_vi === id_codigo_vi && lastVersion.id_version_proyecto < version.id_version_proyecto){
-                lastVersion = version
-            }
-        })
-
-        return (lastVersion ? lastVersion : {})
-    }
-
-    const getProducto = async (id_version_proyecto) => {
-        const token = localStorage.getItem('token');
-
-        const SIAPAPI = axios.create({
-            baseURL: 'http://localhost:8000/'
-        })
-
-        var response = await SIAPAPI.get('producto/eventos/', {             // Buscar id version en eventos
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        response.data.foreach((producto) => {
-            if(producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto){
-                producto.tipo = 'eventos'
-                return producto
-            }
-        })
-
-        response = await SIAPAPI.get('producto/softwares/', {                 // Buscar id version en softwares
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        response.data.foreach((producto) => {
-            if(producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto){
-                producto.tipo = 'software'
-                return producto
-            }
-        })
-
-        response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        response.data.foreach((producto) => {
-            if(producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto){
-                producto.tipo = 'articulo'
-                return producto
-            }
-        })
-    }
-
-    const getAsistentes = async () => {
-        var response = await manejarErrores( SIAPAPI.get('version_proyecto/designacionasistente/', {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        }));
-        const filteredData = response.data.filter(item => item.id_version_proyecto_fk.id_version_proyecto === numVersion);
-        
-        return filteredData ? filteredData : {}
-    }
-
-    // ===============================================================
-
+    user.groups[0] !== "administrador" ? setError(true) : null
 
     return (
         <main>
@@ -253,7 +349,9 @@ export const GestionProyectos = () => {
 
                             </div>
                             <div className="d-flex container-fluid justify-content-end">
-                                <ReportButton reportData={transformedState} reportTitle='Proyectos' colNames={columns} dataKeys={dataKeys} idKey='id_codigo_vi'></ReportButton>
+                                {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
+                                {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                                {/* ----------------------------------------------------------------------------------------------------------------------*/}
                                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                             </div>
                         </div>
@@ -268,8 +366,6 @@ export const GestionProyectos = () => {
     );
 
 }
-
-
 
 const HtmlTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />

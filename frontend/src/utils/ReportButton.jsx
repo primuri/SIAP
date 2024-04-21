@@ -20,10 +20,11 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                     toPDF();
                 }, 0);
             } else {
-                if (selectedOption === 'EXCEL'){
+                if (selectedOption === 'EXCEL') {
                     generarReporteExcel(reportData, colNames, dataKeys, reportTitle)
                 }
-            }}        
+            }
+        }
     };
 
     const handleBlur = () => {
@@ -35,16 +36,40 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
     };
 
     function getValueByPath(obj, path) {
-        const value = path.split('.').reduce((acc, part) => acc && acc[part], obj);
-    
-        const fechaRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
-        if (typeof value === 'string' && fechaRegex.test(value)) {
-            return value.split('T')[0];
+        try {
+            var value = path.split('.').reduce((acc, part) => acc && acc[part], obj);
+
+            const fechaRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+            if (typeof value === 'string' && fechaRegex.test(value)) {
+                return value.split('T')[0];
+            }
+
+            if (typeof value === 'object') {
+                if (value !== null) {
+
+                    try {
+                        value = value.nombre + ' ' + value.apellido + ' ' + value.segundo_apellido
+
+                    } catch (ex) {
+
+                        console.log('error al obtener nombre completo: ')
+                        console.log(ex)
+                        return ""
+                    }
+                } else {
+                    return ""
+                }
+
+            }
+
+            return value;
+        } catch (error) {
+            console.log(error)
         }
-    
-        return value;
+        return "";
+
     }
-    
+
     const generarReporteExcel = (tableData, colNames, dataKeys, fileName) => {
         const flattenData = tableData.map(item => {
             const flattenedItem = {};
@@ -53,26 +78,39 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                     flattenedItem[col] = getValueByPath(item, dataKeys[index]);
                 } else {
                     const tableName = col.tableName;
-                    const subDataKeys = col.colNames;
-                    const subData = getValueByPath(item, dataKeys[index]);
-                    subData.forEach((subItem, subIndex) => {
-                        subDataKeys.forEach((subKey, subKeyIndex) => {
-                            flattenedItem[`${tableName} ${subIndex + 1} ${subKey}`] = getValueByPath(subItem, subKey);
-                        });
+                    const subColNames = col.colNames;
+                    const subDataKeys = dataKeys[index];
+                    const subData = item[index];
+                    subDataKeys.forEach((subKey, subKeyIndex) => {
+                        const subDataValues = subData.map(subItem => getValueByPath(subItem, subKey));
+                        const maxLength = Math.max(...subDataValues.map(value => String(value).length));
+                        flattenedItem[`${tableName} ${subColNames[subKeyIndex]}`] = subDataValues.join(', ');
                     });
                 }
             });
             return flattenedItem;
         });
-    
+
         const ws = XLSX.utils.json_to_sheet(flattenData);
+
+        // Calcular el ancho de cada columna
+        const columnWidths = Object.keys(flattenData[0]).map(columnName => {
+            const columnData = flattenData.map(item => item[columnName] || ''); // Manejar datos nulos
+            const dataMaxLength = Math.max(...columnData.map(value => String(value).length));
+            const nameLength = columnName.length; // Longitud del nombre de columna
+            return { wch: Math.max(dataMaxLength, nameLength) + 2 }; // Ajuste adicional de ancho
+        });
+
+        // Aplicar los anchos de columna al libro de trabajo
+        ws['!cols'] = columnWidths;
+
+        // Crear libro de trabajo y guardar archivo
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
         XLSX.writeFile(wb, `${fileName}.xlsx`);
     };
-    
-    
-    if (reportData.length < 1){
+
+    if (reportData.length < 1) {
         return (<></>)
     }
     return (
@@ -82,14 +120,13 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                 <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
                     <option>PDF</option>
                     <option>EXCEL</option>
-                    <option>CALC</option>
                 </select>
             </button>
             {
                 (buttonClicked && (
                     <div style={{ position: 'absolute', left: -9999, top: -9999, margin: '0px' }}>
-                        <div  ref={targetRef}>
-                            <ReportePDF reportData={reportData} reportTitle={reportTitle} colNames={colNames} dataKeys={dataKeys} idKey={idKey}/>
+                        <div ref={targetRef}>
+                            <ReportePDF reportData={reportData} reportTitle={reportTitle} colNames={colNames} dataKeys={dataKeys} idKey={idKey} />
                         </div>
                     </div>
                 ))
