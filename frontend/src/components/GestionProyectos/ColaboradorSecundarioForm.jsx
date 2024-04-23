@@ -6,6 +6,9 @@ export const ColaboradorSecundarioForm = ({ mode, colaborador, setCambios, acade
   const [academicosFilter, setAcademicosFilter] = useState([]);
   const [colaboradorData, setColaboradorData] = useState(colaborador || {});
   const defaultFormData = {
+
+    //COrregir la recarga de Colaborador porque la primera vez que entra en modo de edicion no recupera nada ahca que sea la segunda vez
+    //hacer que se recupere el nombre de el investigador
     id_colaborador_secundario: colaborador ? colaborador.id_colaborador_secundario : "",
     tipo: colaborador ? colaborador.tipo : "Secundario",
     estado: colaborador ? colaborador.estado : "",
