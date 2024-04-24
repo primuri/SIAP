@@ -7,7 +7,6 @@ import { Confirmar } from '../../utils/Confirmar'
 
 
 export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
-    // Cargar informacion
     const [fileData, setFileData] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationAprobar, setShowConfirmationAprobar] = useState(false);
@@ -42,7 +41,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     });
 
     
-    //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
         if (name === "id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico") {
@@ -85,7 +83,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     }));
                     break;
                 case 4:
-                    // Verificación de la fecha (Solución de IA)
                     if (keys[3] === 'fecha_inicio' || keys[3] === 'fecha_fin') {
                         const startDate = keys[3] === 'fecha_inicio' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_inicio;
                         const endDate = keys[3] === 'fecha_fin' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_fin;
@@ -149,7 +146,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     const aprobarPropuesta = () => {
         formData.id_codigo_cimpa_fk.estado = "Aprobada";
         setShowConfirmationAprobar(true);
-        console.log(formData.id_codigo_cimpa_fk.estado);
     };
 
     const isPropuestaAprobada = formData.id_codigo_cimpa_fk.estado === "Aprobada";
@@ -166,10 +162,9 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     }
                 }
             },
-            // Actualiza el estado para guardar el nombre completo del académico seleccionado.
             asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`
         }));
-        setAcademicosFilter([]); // Limpia la lista de académicos filtrados después de seleccionar.
+        setAcademicosFilter([]);
     };
 
     return (

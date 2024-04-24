@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {manejarErrores} from './errorHandler'
 
-const token = localStorage.getItem('token')                                      // Token para los request
+const token = localStorage.getItem('token')
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'

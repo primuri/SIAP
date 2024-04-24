@@ -50,7 +50,6 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             combinedData.append(key, value);
         }
         for (let [key, value] of combinedData.entries()) {
-            console.log(`${key}: ${value}`);
         }
         onSubmit(combinedData)
     }

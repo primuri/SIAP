@@ -12,8 +12,8 @@ const filter = createFilterOptions();
 export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [proveedor, setProveedor] = useState([]); //extra
-    const [producto, setProductoServicio] = useState([]); //extra
+    const [proveedor, setProveedor] = useState([]);
+    const [producto, setProductoServicio] = useState([]);
     const [factura, setFactura] = useState([]);
     const [documentoData, setDocumentoData] = useState(null);
     const [selectedFactura, setSelectedFactura] = useState("");
@@ -262,7 +262,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                                 detalle: newValue,
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setValue({
                                                 detalle: newValue.inputValue,
                                             });
@@ -274,7 +273,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.detalle);
                                         if (inputValue !== '' && !isExisting) {
                                             filtered.push({
@@ -291,15 +289,12 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     id="free-solo-with-text-demo"
                                     options={producto}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.detalle;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.detalle}</li>}

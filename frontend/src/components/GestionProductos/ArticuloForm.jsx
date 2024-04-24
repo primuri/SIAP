@@ -53,20 +53,17 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
 
 
   const check = (value) => {
-    // Esta expresión regular permite solo letras y espacios.
     const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
     return regex.test(value) || value === "";
   };
 
   const checkLetraNum = (value) => {
-    // Esta expresión regular permite solo letras y espacios.
     const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
     return regex.test(value);
   };
 
 
   const checkCedula = (value) => {
-    // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
     const regex = /^[A-Za-z0-9]*$/;
     return regex.test(value);
   };
@@ -87,25 +84,21 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    // Primero, verifica campos que necesitan validación específica.
     if (name === "pais_procedencia") {
-      setPaisRevista(value); // Asegúrate de que esta función actualice correctamente el estado.
+      setPaisRevista(value);
     } else if (name === "cant_paginas") {
-      // Solo permite dígitos.
       if (/^[0-9]*$/.test(value) || value === "") {
         setFormData(prev => ({ ...prev, [name]: value }));
       }
-      return; // Termina la ejecución si es cant_paginas para no ejecutar updateNestedField
+      return;
     } else if (camposSoloLetras.includes(name) && !check(value)) {
-      return; // Termina si la validación de campos específicos falla.
+      return;
     } else if (name === "cedula" && !checkCedula(value)) {
-      return; // Evita actualizar el estado si la cédula no es válida.
+      return;
     } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
       return;
     }
 
-    console.log(formData)
-    // Actualiza el estado para todos los demás casos, incluidos campos anidados.
 
     if (name.includes('.')) {
       const keys = name.split('.');

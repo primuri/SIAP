@@ -19,7 +19,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     useEffect(() => {
         loadInvestigadores();
         loadEvaluadores();
-        console.log(usuario)
     }, []);
     
     async function loadInvestigadores() {

@@ -49,7 +49,6 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
             combinedData.append(key, value);
         }
         for (let [key, value] of combinedData.entries()) {
-            console.log(`${key}: ${value}`);
         }
         onSubmit(combinedData)
     }

@@ -64,23 +64,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
         }
     }
 
-    // const loadProyectos = async () => {
-    //     try {
-    //         const res = await obtenerProyectos(localStorage.getItem('token'))
-    //         setProyectos(res.data)
-
-    //     } catch (error) {
-    //         toast.error('Error al cargar proyectos', {
-    //             duration: 4000,
-    //             position: 'bottom-right',
-    //             style: {
-    //                 background: '#670000',
-    //                 color: '#fff',
-    //             },
-    //         })
-    //     }
-    // }
-
     const loadEntidades = async () => {
         try {
             const res = await obtenerEntesFinancieros(localStorage.getItem('token'))
@@ -257,7 +240,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                                 ente_financiero_fk: { nombre: newValue, id_ente_financiero: formData.ente_financiero_fk.id_ente_financiero },
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
                                                 ente_financiero_fk: { nombre: newValue.inputValue, id_ente_financiero: formData.ente_financiero_fk.id_ente_financiero },
@@ -273,7 +255,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option?.nombre);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
@@ -291,15 +272,12 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     id="ente_nombre"
                                     options={obtenerEntidadesPorNombre(entidades)}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
@@ -320,7 +298,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                                 id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue },
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
                                                 id_codigo_financiero_fk: { id_codigo_financiero: formData.id_codigo_financiero_fk.id_codigo_financiero, codigo: newValue.inputValue },
@@ -336,7 +313,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.codigo);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
@@ -354,15 +330,12 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     id="codigoFinanciero"
                                     options={obtenerCodigosFinancierosPorCodigo(codigoFinancieros)}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.codigo;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.codigo}</li>}

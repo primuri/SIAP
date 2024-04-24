@@ -3,9 +3,6 @@ import { ReportHeader } from "../components/Layout/ReportHeader";
 import { TableReport } from "./TableReport";
 
 function getValueByPath(obj, path) {
-    if(path === 'id_version_proyecto_fk.numero_version'){
-        console.log("OBJETO: ",obj)
-    }
     try{
         var value = path.split('.').reduce((acc, part) => acc && acc[part], obj);
 
@@ -22,8 +19,8 @@ function getValueByPath(obj, path) {
         
                 } catch (ex){
 
-                    console.log('error al obtener nombre completo: ')
-                    console.log(ex)
+                    console.error('error al obtener nombre completo: ')
+                    console.error(ex)
                     return ""
                 }
             }else{
@@ -32,12 +29,10 @@ function getValueByPath(obj, path) {
             
         }
         
-        if(path === 'id_version_proyecto_fk.numero_version'){
-            console.log("VALOR: ", value)
-        }
+       
         return value;
     }catch(error){
-        //console.log(error)
+        console.error(error)
     }
     return "";
    
@@ -49,7 +44,6 @@ function getLength(value) {
 
 export const ReportePDF = ({ reportData, reportTitle, colNames, dataKeys, idKey }) => {
     useEffect(() => {
-        //console.log('DATOS: ', reportData)
     }, [reportData])
 
     const ajustarAlturaTarjetas = () => {

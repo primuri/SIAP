@@ -17,8 +17,8 @@ export const TableReport = ({ columns = [], data = [], dataKeys }) => {
 
         } catch (ex) {
 
-          console.log('error al obtener nombre completo: ')
-          console.log(ex)
+          console.error('error al obtener nombre completo: ')
+          console.error(ex)
           return ""
         }
       } else {

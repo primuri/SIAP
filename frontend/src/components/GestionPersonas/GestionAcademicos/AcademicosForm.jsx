@@ -43,7 +43,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const [propuestas, setPropuestas] = useState([]);
     const [togglePropuestas, setTogglePropuestas] = useState(false);
 
-    // Si hay informacion en el academico, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         cedula: academico ? academico.cedula : "",
         foto: academico ? academico.foto : "",
@@ -59,7 +58,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         id_area_especialidad_secundaria_fk: academico ? academico.id_area_especialidad_secundaria_fk : { nombre: "" },
         universidad_fk: academico ? academico.universidad_fk : { pais: "", nombre: "" }
     })
-    //si hay titulos o telefonos los carga
+
     useEffect(() => {
         if (academico) {
             loadTitulos()
@@ -83,7 +82,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         const resultado = prop.nombre;
                         resultados.push(resultado);
                        
-                        console.log(prop.nombre);
                     }
                   });
                
@@ -108,7 +106,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 const titulosFiltrados = res.data.filter(titulo => titulo.id_academico_fk.id_academico === academico.id_academico)
                 setTitulos(titulosFiltrados)
             } else {
-                setTitulos([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setTitulos([])
             }
 
         } catch (error) {
@@ -129,7 +127,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 const telefonosFiltrados = res.data.filter(telefono => telefono.id_academico_fk.id_academico === academico.id_academico)
                 setTelefonos(telefonosFiltrados)
             } else {
-                setTelefonos([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setTelefonos([])
             }
 
         } catch (error) {
@@ -164,13 +162,11 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         const { name, value } = event.target;
     
         const check = (value) => {
-            // Esta expresión regular permite solo letras y espacios.
             const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
             return regex.test(value) || value === "";
         };
 
         const checkCedula = (value) => {
-            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
             const regex = /^[A-Za-z0-9]*$/;
             return regex.test(value);
         };
@@ -190,7 +186,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     ...prevFormData,
                     [objectName]: {
                         ...prevFormData[objectName],
-                        [attributeName]: value, // Actualiza solo el atributo relevante
+                        [attributeName]: value,
                     },
                 }));
             }
@@ -205,11 +201,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 ...prevFormData,
                 [name]: value,
             }));
-            // Continúa la ejecución para permitir la actualización de otros campos.
         }
     
-        // Este bloque maneja todos los demás campos, incluyendo aquellos con puntos en sus nombres.
-        // Se ejecutará si el nombre del campo no es "id_nombre_completo_fk.nombre".
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData(prev => ({
@@ -219,7 +212,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     [keys[1]]: value
                 }
             }));
-        } else if (name !== "pais_procedencia") { // Asegúrate de que este caso no se aplique al campo "pais_procedencia" ya manejado.
+        } else if (name !== "pais_procedencia") {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 [name]: value,
@@ -236,11 +229,9 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         event.preventDefault()
         if (titulos.length > 0) {
             formData.titulos = titulos
-            console.log(titulos)
         }
         if (telefonos.length > 0) {
             formData.telefonos = telefonos
-            console.log(telefonos)
         }
         const combinedData = new FormData();
         if (fotoData) {
@@ -407,7 +398,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                                 universidad_fk: { nombre: newValue, pais: formData.universidad_fk.pais },
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
                                                 universidad_fk: { nombre: newValue.inputValue, pais: formData.universidad_fk.pais },
@@ -423,7 +413,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.nombre);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
@@ -482,7 +471,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.pais);
                                         if (inputValue !== '' && !isExisting) {
                                             filtered.push({

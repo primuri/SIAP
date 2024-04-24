@@ -33,13 +33,11 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
     };
 
     const checkLetraNum = (value) => {
-        // Esta expresión regular permite solo letras y espacios.
         const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
         return regex.test(value);
       };
 
       const checkLetra = (value) => {
-        // Esta expresión regular permite solo letras y espacios.
         const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
         return regex.test(value);
       };
@@ -65,11 +63,10 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        // Mover esta línea al inicio de la función para asegurar que la validación se realice correctamente.
         if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
-            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
+            return;
         } else  if (camposLetras.includes(name) && !checkLetra(value)) {
-            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
+            return;
         }
 
         if (name.includes('.')) {

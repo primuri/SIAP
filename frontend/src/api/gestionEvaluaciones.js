@@ -46,7 +46,6 @@ export const canDelete = async (id_evaluacion) => {
         }
     })
     )
-    console.log(response)
     const elementosFiltrados = response.data.filter(elemento => elemento.id_evaluacion_fk.id_evaluacion == id_evaluacion)
     return elementosFiltrados.length === 0
 }

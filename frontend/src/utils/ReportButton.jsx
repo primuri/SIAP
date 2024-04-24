@@ -51,9 +51,7 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                         value = value.nombre + ' ' + value.apellido + ' ' + value.segundo_apellido
 
                     } catch (ex) {
-
-                        console.log('error al obtener nombre completo: ')
-                        console.log(ex)
+                        console.error(ex)
                         return ""
                     }
                 } else {
@@ -64,7 +62,7 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
 
             return value;
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
         return "";
 

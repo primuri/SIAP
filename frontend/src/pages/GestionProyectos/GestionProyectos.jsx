@@ -163,11 +163,10 @@ export const GestionProyectos = () => {
 
                 // Asignar los proyectos con datos completos a JsonForReport
                 JsonForReport.reportData = proyectosConDatosCompletos;
-                console.log(JsonForReport)
                 return true
 
             } catch (exception) {
-                console.log("Ocurrió un error al crear el Json para reporte: ")
+                console.error("Ocurrió un error al crear el Json para reporte: ")
                 return false
             }
         }
@@ -249,7 +248,7 @@ export const GestionProyectos = () => {
     useEffect(() => {
         const transformedProyectos = proyectos;
         setTransformedState(transformedProyectos);
-    }, [proyectos]);               // Se ejecuta con cada cambio realizado en proyectos
+    }, [proyectos]);
 
     useEffect(() => {
         async function fetchData() {
@@ -278,22 +277,14 @@ export const GestionProyectos = () => {
         }
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (proyecto) => {
-        // setSelectedProyecto(proyecto);
-        // setProyectosVersion([])
-        // setSelectedIdCodigoVi(proyecto.id_codigo_vi);
-        // loadVersionProyectos(proyecto.id_codigo_vi);
-        // setDetalleVisible(true);
         navigate(`/gestion-proyectos/p_id=${proyecto.id_codigo_vi}/gestion-versiones`)
     }
 
-    //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {

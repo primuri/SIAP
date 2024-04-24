@@ -9,5 +9,3 @@ export const VIFields = (versionInforme) => {
         id_documento_informe_fk: versionInforme ? {...versionInforme.id_documento_informe_fk} : {tipo: "Informe", detalle: "", documento: ""}
     }
 }
-
-// Notas desarrollo: La evaluación solo se puede visualizar 

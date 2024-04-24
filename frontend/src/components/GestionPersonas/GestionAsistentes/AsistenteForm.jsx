@@ -11,7 +11,6 @@ import Tooltip from '@mui/material/Tooltip';
 const filter = createFilterOptions();
 
 export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete }) => {
-  // Cargar informacion
   const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
   const [fileData, setFileData] = useState(null);
@@ -42,16 +41,13 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    // Validación específica para campos numéricos
     if ((name === "cantidad_horas" || name === "consecutivo") && (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value))) {
-        // Evita la actualización del estado si el valor es inválido, pero no detiene las actualizaciones para otros campos
         return;
     }
 
-    // Manejo de campos anidados
     if (name.includes('.')) {
       const keys = name.split('.');
-      if (keys.length === 3) { // Caso específico para tres niveles de profundidad
+      if (keys.length === 3) {
         setFormData(prev => ({
           ...prev,
           [keys[0]]: {
@@ -62,7 +58,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
             }
           }
         }));
-      } else { // Caso general para un nivel de profundidad
+      } else {
         setFormData(prev => ({
           ...prev,
           [keys[0]]: {
@@ -72,7 +68,6 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
         }));
       }
     } else {
-      // Actualización para campos no anidados
       setFormData({
         ...formData,
         [name]: value,
@@ -101,7 +96,6 @@ const sendForm = (event) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileData(file);
-    //setCambios({ asistenteData: formData, asistenteFile: file }); 
   };
 
 
