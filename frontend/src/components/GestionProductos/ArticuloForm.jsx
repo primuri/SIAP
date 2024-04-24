@@ -80,35 +80,43 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     "id_revista_fk.nombre",
     "nombre"
   ];
-
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+  
     if (name === "pais_procedencia") {
-      setPaisRevista(value);
+        setPaisRevista(value);
+        return;  
     } else if (name === "cant_paginas") {
-      if (/^[0-9]*$/.test(value) || value === "") {
-        setFormData(prev => ({ ...prev, [name]: value }));
-      }
-      return;
-    } else if (camposSoloLetras.includes(name) && !check(value)) {
-      return;
+        if (/^[0-9]*$/.test(value) || value === "") {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+        return; 
+    }
+
+    if (camposSoloLetras.includes(name) && !check(value)) {
+        return;
     } else if (name === "cedula" && !checkCedula(value)) {
-      return;
+        return; 
     } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
-      return;
+        return; 
     }
 
-
-    if (name.includes('.')) {
-      const keys = name.split('.');
-      formData[keys[0]][keys[1]] = value;
-    } else {
-      formData[name] = value;
+  
+    function updateNestedObject(obj, path, newValue) {
+        const keys = path.split('.');
+        const lastKey = keys.pop();  
+        const lastObj = keys.reduce((o, key) => o[key] = o[key] || {}, obj);
+        lastObj[lastKey] = newValue;
     }
 
-    setCambios({ articuloData: { ...formData }, articuloFile: fileData });
-  };
+    setFormData(prevFormData => {
+        const newFormData = JSON.parse(JSON.stringify(prevFormData));
+        updateNestedObject(newFormData, name, value);  
+        setCambios({ articuloData: newFormData, articuloFile: fileData });  
+        return newFormData;  
+    });
+};
 
 
   const handleFileChange = (event) => {
