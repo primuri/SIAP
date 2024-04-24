@@ -75,6 +75,8 @@ export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasBut
                   {buttonText}
                 </button>
                 ) : (
+                  Array.isArray(getValueByPath(row, column)) ?
+                  getValueByPath(row, column).join(' e ') :  
                   typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                     ? getValueByPath(row, column).split('/').pop()
                     : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)
