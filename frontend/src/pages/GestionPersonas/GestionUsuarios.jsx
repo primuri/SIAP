@@ -177,7 +177,7 @@ export const GestionUsuarios = () => {
         <main >
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                    <div className="d-flex flex-row"><h1>Gestión de usuarios</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+                    <div className="d-flex flex-row"><h1>Gestión de usuarios</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
                     <div className="d-flex justify-content-between mt-4">
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>

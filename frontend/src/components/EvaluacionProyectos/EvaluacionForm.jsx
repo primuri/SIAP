@@ -114,17 +114,17 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
                                 </p>
                                 <div className="row mb-4">
                             <div className="col mt-2 text-center">
-                                <div class="form-check form-check-inline">       
-                                    <label class="form-check-label" for="inlineRadio1">1: Muy insactisfactorio</label>
+                                <div className="form-check form-check-inline">       
+                                    <label className="form-check-label" for="inlineRadio1">1: Muy insactisfactorio</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="inlineRadio3">3: Satisfactorio</label>
+                                <div className="form-check form-check-inline">
+                                    <label className="form-check-label" for="inlineRadio3">3: Satisfactorio</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="inlineRadio4">5: Muy Satisfactorio</label>
+                                <div className="form-check form-check-inline">
+                                    <label className="form-check-label" for="inlineRadio4">5: Muy Satisfactorio</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="inlineRadio4">N/A: No aplica</label>
+                                <div className="form-check form-check-inline">
+                                    <label className="form-check-label" for="inlineRadio4">N/A: No aplica</label>
                                 </div>
                             </div>
                         </div>
