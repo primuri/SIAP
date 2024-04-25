@@ -14,20 +14,20 @@ import { useLocation, useNavigate, useParams }  from "react-router-dom"
 export const GestionGastos = () => {   
     const {partidaID}                   = useParams() 
     const user                          = JSON.parse(localStorage.getItem('user'))  
-    const [reload, setReload]           = useState(false)                           // Para recargar tabla   
+    const [reload, setReload]           = useState(false)                        
     const navigate                      = useNavigate()
     const location                      = useLocation()                       
-    const [gastos, setGastos]           = useState([])                              //Gastos que se muestran
-    const [data, setData]               = useState([])                              //Todos los Gastos
-    const [gasto, setGasto]             = useState(null)                            //Gasto al que se le da click en la tabla para editar
+    const [gastos, setGastos]           = useState([])                             
+    const [data, setData]               = useState([])                             
+    const [gasto, setGasto]             = useState(null)                            
     const [cargado, setCargado]         = useState(false)
     const [error, setError]             = useState(false) 
-    const [addClick, setAddClick]       = useState(false)                           // Para evento de agregar
-    const [edit, setEdit]               = useState(false)                           // Para evento de editar
+    const [addClick, setAddClick]       = useState(false)                      
+    const [edit, setEdit]               = useState(false)              
 
-    user.groups[0] !== "administrador" ? setError(true) : null                      //Si no es administrador, pone el error en true
+    user.groups[0] !== "administrador" ? setError(true) : null              
 
-    useEffect(() => { loadGastosData(partidaID) }, [reload, partidaID])             // Carga los datos tras detectar cambios
+    useEffect(() => { loadGastosData(partidaID) }, [reload, partidaID]) 
 
     async function loadGastosData(partidaID) {
         try {
@@ -50,7 +50,6 @@ export const GestionGastos = () => {
     const addGasto = async (formData) => {
         try {
             const Data = JSON.parse(formData.get('json'));
-            console.log(Data)
             const token = localStorage.getItem('token');
             var toastId = toast.loading('Agregando...', {
                 position: 'bottom-right',
@@ -62,14 +61,11 @@ export const GestionGastos = () => {
             });
             formData.delete('json');
     
-            // Reestructurar y crear el objeto gasto
             delete Data.id_gasto;
             Data.id_partida_fk = parseInt(partidaID);
             Data.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk;
             Data.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk;
     
-            // Adjuntar el ID de la factura al formulario formData
-            console.log(Data.id_factura_fk)
             formData.append('id_factura_fk', Data.id_factura_fk.id_factura);
     
             formData.append("tipo", Data.id_documento_fk.tipo)
@@ -77,7 +73,6 @@ export const GestionGastos = () => {
             const documentoResponse = await API.agregarFacturaDocumento(formData, token);
             Data.id_documento_fk = documentoResponse.data.id_documento;
 
-            // Agregar factura y gasto
             if(Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined){
                 Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio
             }else{
@@ -134,18 +129,16 @@ export const GestionGastos = () => {
 
             Data.id_partida_fk = parseInt(partidaID);
 
-            // ACTUALIZAR FACTURA Y MANEJAR PRODUCTO SERVICIO
 
-            if(typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){ // Si lo que viene no es un objeto, solo pasa el ID
+            if(typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){
                 Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
 
             }else{    
-                var responsePS = ""                                                                  // Si lo que viene ES un objeto, lo agrega y saca el ID
+                var responsePS = ""                                                             
                 try{
                     responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
-                    console.log(responsePS)
                 } catch(error){
-                    console.log(responsePS)
+                    console.error(responsePS)
                 }                                                               
                 Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
             }
@@ -156,12 +149,9 @@ export const GestionGastos = () => {
             Data.id_factura_fk = rF.data.id_factura
             Data.monto = parseInt(Data.monto);
 
-            // DOCUMENTO GASTO PENDIENTE
+      
 
-            delete Data.id_documento_fk // Temporal para que deje actualizar sin documento.
-                                        // Guiarse con manejo de documentos en Proveedores (RF de Wendy)
-
-            // ACTUALIZAR GASTO CON LOS ID DE LAS COSAS
+            delete Data.id_documento_fk 
 
             await API.actualizarGasto(Data.id_gasto, Data, token);
     
@@ -219,14 +209,12 @@ export const GestionGastos = () => {
         }
     }
 
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
     }
 
-    // Al hacer click en la tabla 
     const elementClicked = (selectedGasto) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setGasto(selectedGasto);

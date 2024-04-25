@@ -123,7 +123,6 @@ export const agregarColaborador = async (colaborador, token) => {
 
 export const agregarPropuestas = async (propuesta, token) => {
     try {
-        console.log("propuesta:", propuesta)
         const response_propuesta = await manejarErrores( SIAPAPI.post('propuesta_proyecto/propuesta_proyecto/', propuesta, {
             headers: {
                 'Authorization': `token ${token}`,

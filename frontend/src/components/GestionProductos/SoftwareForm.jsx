@@ -20,7 +20,6 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
     };
 
     const checkLetraNum = (value) => {
-        // Esta expresión regular permite solo letras y espacios.
         const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
         return regex.test(value);
     };
@@ -40,14 +39,13 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        // Mover esta línea al inicio de la función para asegurar que la validación se realice correctamente.
         if (camposAValidar.includes(name) && !checkLetraNum(value)) {
-            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
+            return;
         }
 
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
-                return; // Evita la actualización del estado para valores no permitidos.
+                return;
             }
         }
         
@@ -64,13 +62,13 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
 
     const updateNestedField = (prevFormData, fieldPath, value) => {
         const keys = fieldPath.split('.');
-        let data = { ...prevFormData }; // Crea una copia superficial del objeto prevFormData para evitar mutaciones.
+        let data = { ...prevFormData };
 
         keys.reduce((current, key, index) => {
             if (index === keys.length - 1) {
                 current[key] = value;
             } else {
-                current[key] = current[key] ? { ...current[key] } : {}; // Asegura la creación de un nuevo objeto si no existe, evitando mutaciones.
+                current[key] = current[key] ? { ...current[key] } : {};
             }
             return current[key];
         }, data);

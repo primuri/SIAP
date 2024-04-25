@@ -12,18 +12,16 @@ export const GestionEvaluaciones = () => {
     const [evaluacionesData, setEvaluacionesData] = useState([])
     const [evaluacionesList, setEvaluacionesList] = useState([])
     const [evaluacionActual, setEvaluacionActual] = useState(null)
-    const [loaded, setLoaded]                     = useState(false)          // Data cargada
-    const [reload, setReload]                     = useState(false)          // Para recargar tabla
-    const [addClicked, setAddClicked]             = useState(false)          // Para evento de agregar
-    const [editClicked, setEditClicked]           = useState(false)          // Para evento de editar
+    const [loaded, setLoaded]                     = useState(false)        
+    const [reload, setReload]                     = useState(false)         
+    const [addClicked, setAddClicked]             = useState(false)         
+    const [editClicked, setEditClicked]           = useState(false)      
     const [btnClicked, setBtnClicked]          = useState(false)
     const [preguntas, setPreguntas]               = useState([])
 
     useEffect(() => {
         loadEvaluaciones()
     }, [reload])
-
-    // ============== Funciones CRUD ================ //
 
     async function loadEvaluaciones(){
         try {
@@ -100,7 +98,6 @@ export const GestionEvaluaciones = () => {
         }
     }
 
-    // ========== Funciones manejo vista ============= //
 
     function filtrarEvaluaciones (col, filter) {
         setEvaluacionesList(filtrar(col, filter, evaluacionesData))
@@ -122,7 +119,6 @@ export const GestionEvaluaciones = () => {
         setBtnClicked(true)
         var response = await API.obtenerPreguntasEvaluacion(evaluacion.id_evaluacion)
         setPreguntas(response.data)
-        console.log(preguntas)
     }
     
     function onCancel() {
@@ -135,7 +131,6 @@ export const GestionEvaluaciones = () => {
         setPreguntas([])
     }
 
-    // ========== Componente react ================ //
 
     return (
         <main>
@@ -174,8 +169,6 @@ export const GestionEvaluaciones = () => {
 }
 
 
-// ========== Variables auxiliares ============= //
-
 const columns = ['Código VI', 'Nombre proyecto', 'Versión proyecto', 'Evaluador', '', 'Estado', 'Formulario']
 const dataKeys = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi',
                   'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre',
@@ -185,7 +178,6 @@ const dataKeys = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi',
                   'estado', 
                   'Formulario']
 
-// ========== Funciones auxiliares ============= //
 
 function toastProcesando(mensaje) {
     var toastId = toast.loading(mensaje, {

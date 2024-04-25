@@ -12,8 +12,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 
 export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, academicos }) => {
-
-    // Cargar informacion
     const navigate = useNavigate()
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
@@ -70,20 +68,16 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     }, [mode, tipo]);
 
 
-    //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-         // Validación específica para el campo de número de versión
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
-                // Si el valor incluye caracteres no permitidos, detiene la ejecución
                 return;
             }
         }
 
         if (name === "id_academico_fk.id_academico") {
-            // Lógica para filtrar académicos basada en el valor ingresado
             formData.asociar_academico = value;
             if (value === "") {
                 setAcademicosFilter([]);
@@ -97,11 +91,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             }
         }
     
-        // Procesamiento general para otros campos, incluidas las fechas
         const keys = name.split('.');
         let updatedValue = value;
     
-        // Si el campo modificado es de fecha, realiza la validación correspondiente
         if (keys.includes('fecha_inicio') || keys.includes('fecha_fin')) {
             const startDateKey = keys.slice(0, -1).join('.') + '.fecha_inicio';
             const endDateKey = keys.slice(0, -1).join('.') + '.fecha_fin';
@@ -109,12 +101,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             const endDate = keys[keys.length - 1] === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
     
             if (startDate > endDate) {
-                console.log("La fecha de inicio no puede ser posterior a la fecha de fin.");
-                return; // Detiene la ejecución si la fecha de inicio es mayor que la de fin
+                return;
             }
         }
     
-        // Navegar por el objeto formData para encontrar y actualizar el valor correcto
         const updateFormData = (path, value, obj) => {
             const keys = path.split('.');
             const lastKey = keys.pop();
@@ -128,7 +118,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setFormData({ ...formData });
     };
     
-    // Función auxiliar para obtener valor por ruta de acceso en objeto anidado
     function getValueByPath(object, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], object);
     }
@@ -213,10 +202,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                     id_academico_fk: {
                         id_academico: academico.id_academico
                     },
-            // Actualiza el estado para guardar el nombre completo del académico seleccionado.
             asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`
         }));
-        setAcademicosFilter([]); // Limpia la lista de académicos filtrados después de seleccionar.
+        setAcademicosFilter([]);
     };
 
     return (

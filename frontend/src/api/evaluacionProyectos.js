@@ -7,7 +7,6 @@ const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
-// Obtener evaluaciones 
 export const obtenerEvaluacionesProyectos = async (token) => {
     return await manejarErrores(SIAPAPI.get('version_proyecto/evaluaciones', {
         headers: {
@@ -17,7 +16,6 @@ export const obtenerEvaluacionesProyectos = async (token) => {
     }));
 };
 
-// Obtener evaluaciones por id
 export const obtenerEvaluacionPorID = async (token, id) => {
     return await manejarErrores(SIAPAPI.get(`version_proyecto/evaluaciones/?id_evaluacion=${id}`, {
         headers: {
@@ -28,7 +26,6 @@ export const obtenerEvaluacionPorID = async (token, id) => {
 };
 
 
-// Editar evaluacion
 export const editarEvaluacion = async (id, evaluacion, token) => {
     return await manejarErrores(SIAPAPI.patch(`version_proyecto/evaluaciones/${id}/`, evaluacion, {
         headers: {
@@ -38,7 +35,6 @@ export const editarEvaluacion = async (id, evaluacion, token) => {
     }));
 };
 
-// Obtener evaluaciones por id de evaluador
 export const obtenerEvaluacionesPorEvaluador = async (token, id) => {
     return await manejarErrores(SIAPAPI.get(`version_proyecto/evaluaciones/?id_evaluador=${id}`, {
         headers: {

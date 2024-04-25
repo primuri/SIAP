@@ -137,14 +137,13 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 <div className="col">
                                     <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="disabled-input">(Opcional)</span> </label>
                                     <input type="file" className="form-control" name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento" id="documentoEvaluacionCC" onChange={(event) => handleFileChange(event, 'evaluacion')} />
-                                {mode == 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento &&(
-
+                                {mode === 2 ? (
                                     <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                             {"Ver documento"}
                                         </a>
                                     </Tooltip>
-                                )}
+                                ): ""}
                                 </div>
                             </div>
                     </div>

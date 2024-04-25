@@ -15,17 +15,16 @@ export const GestionEvaluadores = () => {
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
-  const [evaluadores, setEvaluadores] = useState([]) // Evaluadores que se muestran
-  const [data, setData] = useState([])//Todos los evaluadores
-  const [evaluador, setEvaluador] = useState(null) //Usuario al que se le da click en la tabla para editar
+  const [evaluadores, setEvaluadores] = useState([]) 
+  const [data, setData] = useState([])
+  const [evaluador, setEvaluador] = useState(null)
   const [cargado, setCargado] = useState(false)
-  const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+  const [error, setError] = useState(false)
   const [addClick, setAddClick] = useState(false)
   const [edit, setEdit] = useState(false)
   const columns = ['Nombre', 'Correo', 'Tipo', 'Universidad']
   const dataKeys = ['id_nombre_completo_fk.nombre', 'correo', 'tipo', 'universidad_fk.nombre']
-  user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-  // Detecta cambios y realiza la solicitud nuevamente  
+  user.groups[0] !== "administrador" ? setError(true) : null 
   useEffect(() => { loadEvaluadores() }, [reload])
   async function loadEvaluadores() {
     try {
@@ -46,7 +45,6 @@ export const GestionEvaluadores = () => {
     }
   }
 
-  //Uso de id_evaluador para urls
   useEffect(()=>{
     if(id_evaluador && data.length > 0){
         const idNum = parseInt(id_evaluador, 10);
@@ -64,7 +62,6 @@ export const GestionEvaluadores = () => {
   const success = () => {
     window.location.href = '/gestion-evaluadores'
   }
-  // Manejo de datos que se van a enviar para agregar
   const addEvaluador = async (formData) => {
     try {
       const Datos = JSON.parse(formData)
@@ -110,7 +107,6 @@ export const GestionEvaluadores = () => {
     }
 
   }
-  // Manejo de los datos del formulario de editar 
   const editEvaluador = async (formData) => {
     try {
       const Datos = JSON.parse(formData)
@@ -138,7 +134,7 @@ export const GestionEvaluadores = () => {
       toast.dismiss(toastId)
     }
   }
-  // Manejo del eliminar
+
   const deleteEvaluador = async (correo) => {
     try {
       var toastId = toast.loading('Eliminando...', {
@@ -165,29 +161,24 @@ export const GestionEvaluadores = () => {
       toast.dismiss(toastId)
     }
   }
-  // Al darle click a cancelar, se cierra el modal
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
     navigate('/gestion-evaluadores')
   }
-  // Al darle click a agregar, muestra el modal
   const addClicked = () => {
     setAddClick(true)
     setEdit(false)
   }
 
-  // Al hacer click en la tabla
   const elementClicked = (user) => {
     navigate(`/gestion-evaluadores/${user.id_evaluador}`)
   }
 
-  //se filtra
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj)
   }
 
-  //se filtra
   const search = (col, filter) => {
     const matches = data.filter((e) => {
       if (col.includes('.')) {
@@ -202,7 +193,7 @@ export const GestionEvaluadores = () => {
     <main >
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-          <div className="d-flex flex-row"><h1>Gestión de evaluadores</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+          <div className="d-flex flex-row"><h1>Gestión de evaluadores</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className="d-flex justify-content-between mt-4">
             <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>

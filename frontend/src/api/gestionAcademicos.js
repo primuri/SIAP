@@ -148,7 +148,6 @@ export const agregarTelefonos = (telefonos, id_academico, token) => {
 
 export const actualizarTitulos = (titulos, academico, token) => {
     try {
-        //Dos casos si el titulo tiene un id significa que ya existia en la base de datos, sino hay que crearlo.
         titulos.forEach(async titulo => {
             if(titulo.id_titulos){
                 let id_titulos = titulo.id_titulos;

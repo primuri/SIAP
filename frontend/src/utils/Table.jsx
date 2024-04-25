@@ -15,7 +15,6 @@ export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasBut
     return Math.ceil(data.length / itemsPerPage);
   }, [data, itemsPerPage]);
 
-  // Calcular el índice del último y primer elemento en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -76,6 +75,8 @@ export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasBut
                   {buttonText}
                 </button>
                 ) : (
+                  Array.isArray(getValueByPath(row, column)) ?
+                  getValueByPath(row, column).join(' e ') :  
                   typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')
                     ? getValueByPath(row, column).split('/').pop()
                     : getValueByPath(row, column) === 'academico' ? 'investigador' : getValueByPath(row, column)

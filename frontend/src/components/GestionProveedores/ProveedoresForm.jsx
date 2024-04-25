@@ -22,7 +22,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const [edit, setEdit] = useState(false)
     const [fileProveedor, setFileProveedor] = useState(null);
 
-    // Si hay informacion en el proveedor, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         id_cedula_proveedor: proveedor ? proveedor.id_cedula_proveedor : "",
         correo: proveedor ? proveedor.correo : "",
@@ -45,7 +44,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                 const cuentasFiltradas = res.data.filter(cuenta => cuenta.id_proveedor_fk.id_cedula_proveedor === proveedor.id_cedula_proveedor)
                 setCuentaBancaria(cuentasFiltradas)
             } else {
-                setCuentaBancaria([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setCuentaBancaria([])
             }
 
         } catch (error) {
@@ -64,7 +63,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         const { name, value } = event.target
 
         const checkCedula = (value) => {
-            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
             const regex = /^[A-Za-z0-9]*$/;
             return regex.test(value);
         };
