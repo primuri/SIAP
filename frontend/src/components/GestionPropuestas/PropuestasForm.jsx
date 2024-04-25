@@ -176,9 +176,11 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="text-center" style={{ marginLeft: '3.5vw' }}>
-                    <h2>{mode == 1 ? ("Agregar una propuesta") : ("Editar propuesta")}</h2>
-                </div>
+                <div className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar propuesta" : "Editar propuesta"}
+                            </h2>
+                        </div>
                 <div>
                     <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
                         <span aria-hidden="true" className="close-icon">&times;</span>
@@ -261,11 +263,11 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 
                                 <div className="position-relative">
                                                 <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} required/>
+                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange}  required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "120px"}}
+                                                        style={{ maxHeight: "60px"}}
                                                     >
                                                         {academicosFilter.map((academico) => {
                                                         return (
