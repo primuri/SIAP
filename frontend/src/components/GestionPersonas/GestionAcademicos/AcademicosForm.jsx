@@ -362,7 +362,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal </label> <span className="disabled-input">(Opcional)</span>
-                                <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
+                                <textarea  className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
 
                         </div>
@@ -525,7 +525,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <Tooltip title="Separar áreas secundarias con coma" placement="right-start">
                                     <label data-toggle="tooltip" data-placement="top" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
-                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
+                                <textarea className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
                                 <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />

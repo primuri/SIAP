@@ -199,7 +199,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             
                             <div className="col">
                                 <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
-                                <input type="text" className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required />
                             </div>
                         </div>
 
@@ -252,7 +252,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                             <div className="col-md-6">
                                 <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento </label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
                             </div>
                         </div>
                         <hr />

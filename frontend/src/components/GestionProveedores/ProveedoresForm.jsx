@@ -194,7 +194,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
-                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -222,7 +222,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleDocumento" className="label-personalizado mb-2"> Detalle Documento </label>
-                                <input type="text" className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} />
                             </div>
                         </div>
 

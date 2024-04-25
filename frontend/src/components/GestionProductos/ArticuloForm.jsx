@@ -130,7 +130,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col-md-6">
           <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-          <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+          <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
         </div>
         <div className="col">
           <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto   </label>
@@ -150,7 +150,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del artículo   </label>
-          <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+          <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
         </div>
         <div className="col">
           <label htmlFor="fecha_publicacion" className="label-personalizado mb-2">Fecha de Publicación  </label>
@@ -188,7 +188,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="nombreRevista" className="label-personalizado mb-2"> Nombre de la Revista   </label>
-          <input type="text" className="form-control" name="id_revista_fk.nombre" id="nombreRevista" value={formData.id_revista_fk.nombre} onChange={handleChange} required />
+          <textarea className="form-control" name="id_revista_fk.nombre" id="nombreRevista" value={formData.id_revista_fk.nombre} onChange={handleChange} required />
         </div>
         <div className="col-md-6">
           <label htmlFor="paisRevista" className="label-personalizado mb-2">País de la Revista   </label>
@@ -221,7 +221,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo   </label>
-          <input type="text" className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
+          <textarea className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
         </div>
         <div className="col">
           <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo   </label>
@@ -239,7 +239,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="optional"> (Opcional)</span> </label>
-          <input type="textArea" className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} />
+          <textarea className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} />
         </div>
       </div>
     </>

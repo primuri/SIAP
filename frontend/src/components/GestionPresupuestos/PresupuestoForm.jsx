@@ -349,7 +349,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio  </label>
-                                <input type="text" className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento" className="label-personalizado mb-2">Oficio   </label>

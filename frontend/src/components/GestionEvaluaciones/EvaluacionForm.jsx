@@ -188,6 +188,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                         }
                                     }}
                                     disabled={(formData.estado === "Completa")}
+                                    
                                 />
                             </div>
                             <div className="col">
@@ -271,7 +272,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>
                             <div className="col">
                                 <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación </label> <span className="disabled-input">(Opcional)</span>
-                                <input type="text" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
+                                <textarea className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
                             </div>
                         </div>
                     </div>

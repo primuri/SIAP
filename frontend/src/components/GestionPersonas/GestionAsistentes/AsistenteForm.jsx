@@ -209,7 +209,7 @@ const sendForm = (event) => {
         <div className="row mb-4">
             <div className="col">
                 <label htmlFor="detalleInopia" className="label-personalizado mb-2"> Detalle Inopia   </label> <span className="disabled-input">(Opcional)</span>
-                <input type="text" className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle || ''} onChange={handleChange} />
+                <textarea className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle || ''} onChange={handleChange} />
             </div>
             <div className="col">
                 <label htmlFor="documentoInopia" className="label-personalizado mb-2"> Documento del Inopia   </label> <span className="disabled-input">(Opcional)</span>
