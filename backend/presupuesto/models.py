@@ -503,5 +503,5 @@ class CuentaBancaria(models.Model):
 
     class Meta:
         db_table = 'cuenta_bancaria'
-        unique_together = (('banco','tipo','moneda','cuenta_principal','id_proveedor_fk'),) 
+        unique_together = (('id_numero','banco','tipo','moneda','cuenta_principal','id_proveedor_fk'),) 
 

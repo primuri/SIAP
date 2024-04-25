@@ -14,33 +14,61 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [formData, setFormData] = useState({
-            "id_partida": version? version.id_partida : "",
-            "id_version_presupuesto_fk": version? version.id_version_presupuesto_fk.id_version_presupuesto : id_version,
-            "monto": version ? version.monto : "",
-            "saldo": version ? version.saldo : "",
-            "detalle": version ? version.detalle : "",
+        "id_partida": version? version.id_partida : "",
+        "id_version_presupuesto_fk": version? version.id_version_presupuesto_fk.id_version_presupuesto : id_version,
+        "monto": version ? version.monto : "",
+        "saldo": version ? version.saldo : "",
+        "detalle": version ? version.detalle : "",
+    });
+
+    //Agregado para verificacion de saldo<monto. Mostrar error en el form
+    const [formErrors, setFormErrors] = useState({
+        saldo: '',
+        monto: ''
     });
 
     const handleChange = (event) => {
-        const { name, value } = event.target
-
-        if (name.includes('.')) {
-            const keys = name.split('.')
-            setFormData(prev => ({
-                ...prev,
-                [keys[0]]: {
-                    ...prev[keys[0]],
-                    [keys[1]]: value
-                }
-            }))
-
-        } else {
-            setFormData({
-                ...formData,
-                [name]: value,
-            })
+        const { name, value } = event.target;
+        let updatedValue = value;
+    
+        // Determinar si el campo es numérico o de texto
+        if (name === 'saldo' || name === 'monto') {
+            const numericValue = parseFloat(value);
+            updatedValue = isNaN(numericValue) ? '' : numericValue; // Si no es numérico, establecer a 0
         }
-    }
+    
+        // Actualizar el estado del formulario
+        setFormData(prev => {
+            const newFormData = {
+                ...prev,
+                [name]: updatedValue
+            };
+    
+            // Validar después de actualizar, solo para campos numéricos
+            if (name === 'saldo' || name === 'monto') {
+                const saldo = parseFloat(newFormData.saldo || 0);
+                const monto = parseFloat(newFormData.monto || 0);
+    
+                if (saldo > monto) {
+                    setFormErrors(errors => ({
+                        ...errors,
+                        saldo: saldo > monto ? "El saldo no puede ser mayor al monto." : ''
+                    }));
+                    return prev; // Devolver el estado anterior si la validación falla
+                }
+            }
+
+            // Limpiar errores si todo está correcto
+            setFormErrors(errors => ({
+                ...errors,
+                [name]: ''
+            }));
+    
+            return newFormData; // Si todo está correcto, actualizamos el estado
+        });
+    };
+    
+    
 
     const sendForm = (event) => {
         event.preventDefault()
@@ -123,11 +151,12 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
                                 <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
-                                
+                                {formErrors.monto && <div style={{ color: 'red' }}>{formErrors.monto}</div>}
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="saldo" className="label-personalizado mb-2">Saldo</label>
                                 <input type="number" className="form-control" name="saldo" id="saldo" value={formData.saldo} onChange={handleChange} required/>
+                                {formErrors.saldo && <div style={{ color: 'red' }}>{formErrors.saldo}</div>}
                             </div>
                         </div>
                     </div>
