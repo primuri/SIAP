@@ -215,9 +215,11 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="text-center" style={{ marginLeft: '3.5vw' }}>
-                    <h2>{mode === 1 ? ("Agregar una versión de proyecto") : ("Editar versión de proyecto")}</h2>
-                </div>
+                <div className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar una versión de proyecto" : "Editar una versión de proyecto"}
+                            </h2>
+                        </div>
                 <div>
                     <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
                         <span aria-hidden="true" className="close-icon">&times;</span>
@@ -250,7 +252,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                             <div className="col">
                                 <label htmlFor="id_version_proyecto_fk.detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <input type="text" className="form-control" name="id_version_proyecto_fk.detalle" id="id_version_proyecto_fk.detalle" onChange={handleChange} value={formData.id_version_proyecto_fk.detalle} required />
+                                <textarea className="form-control" name="id_version_proyecto_fk.detalle" id="id_version_proyecto_fk.detalle" onChange={handleChange} value={formData.id_version_proyecto_fk.detalle} required />
                             </div>
 
                         </div>
@@ -308,7 +310,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                         {(academicosFilter.length > 0) && (
                                             <div
                                                 className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                style={{ maxHeight: "40px" }}
+                                                style={{ maxHeight: "60px" }}
                                             >
                                                 {academicosFilter.map((academico) => {
                                                 return (

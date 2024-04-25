@@ -153,7 +153,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombreIntegrante" className="label-personalizado mb-2">Nombre integrante</label>
-                                    <input type="text" className="form-control" name="nombre_integrante" id="nombreIntegrante" value={formData.nombre_integrante} onChange={handleChange} required />
+                                    <textarea className="form-control" name="nombre_integrante" id="nombreIntegrante" value={formData.nombre_integrante} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -168,7 +168,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="normativaReguladora" className="label-personalizado mb-2">Normativa reguladora</label>
-                                    <input type="text" className="form-control" name="normativa_reguladora" id="normativaReguladora"  value={formData.normativa_reguladora} onChange={handleChange} required/>
+                                    <textarea className="form-control" name="normativa_reguladora" id="normativaReguladora"  value={formData.normativa_reguladora} onChange={handleChange} required/>
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -200,7 +200,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Número de oficio  </label>
-                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio de nombramiento  </label>

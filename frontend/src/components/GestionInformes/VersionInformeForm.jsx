@@ -96,7 +96,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle oficio   </label>
-                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio   </label>
@@ -114,7 +114,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleInforme" className="label-personalizado mb-2"> Detalle informe   </label>
-                                <input type="text" className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe   </label>
@@ -132,7 +132,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             <div className="row mb-4">
                                 <div className="col">
                                     <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="disabled-input">(Opcional)</span>  </label>
-                                    <input type="text" className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
+                                    <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
                                 </div>
                                 <div className="col">
                                     <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="disabled-input">(Opcional)</span> </label>
