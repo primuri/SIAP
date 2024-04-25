@@ -523,7 +523,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6 mt-4">
                                 <Tooltip title="Separar áreas secundarias con coma" placement="right-start">
-                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
+                                    <label data-toggle="tooltip" data-placement="top" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
                                 <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
