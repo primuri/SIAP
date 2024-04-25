@@ -106,14 +106,24 @@ export const GestionAsistentes = () => {
         delete Datos.id_asistente_carnet_fk.id_asistente_carnet;
         const id_asistente_creado = await agregarAsistente(Datos.id_asistente_carnet_fk, localStorage.getItem('token'))
         delete  Datos.id_asistente_carnet_fk;
-
-        const designacion_asistente = {  
+        let designacion_asistente;
+      if(id_documento_creada === ""){
+        designacion_asistente = {  
+            id_version_proyecto_fk: proyectoID,              
+            id_asistente_carnet_fk : id_asistente_creado,
+            cantidad_horas : Datos.cantidad_horas,
+            consecutivo : Datos.consecutivo
+        }
+      } else {
+        designacion_asistente = {  
             id_version_proyecto_fk: proyectoID,              
             id_asistente_carnet_fk : id_asistente_creado,
             id_documento_inopia_fk : id_documento_creada,
             cantidad_horas : Datos.cantidad_horas,
             consecutivo : Datos.consecutivo
         }
+      }
+       
         await agregarDesinacionAsistente(designacion_asistente, localStorage.getItem('token'));
 
 
@@ -136,7 +146,7 @@ export const GestionAsistentes = () => {
   }
     const editAsistente = async (formData) => {
         try {
-
+            let id_docu = -1;
             const documentoFile = formData.get('id_documento_inopia_fk');
             formData.delete('id_documento_inopia_fk');
 
@@ -144,11 +154,29 @@ export const GestionAsistentes = () => {
             formData.delete('json');
 
             if (documentoFile) {
-            const DocumentoData = new FormData();
-            DocumentoData.append('documento', documentoFile);
-            DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
-            const id_docu = Datos.id_documento_inopia_fk.id_documento;
-            await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+                const DocumentoData = new FormData();
+                DocumentoData.append('documento', documentoFile);
+                DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+                DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+                id_docu = Datos.id_documento_inopia_fk.id_documento;
+                if(id_docu === ""){
+                    id_docu = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+                    await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }else{
+                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }
+           
+            }else{
+                const DocumentoData = new FormData();
+                DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+                DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+                id_docu = Datos.id_documento_inopia_fk.id_documento;
+                if(id_docu === ""){
+                    id_docu = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+                    await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }else{
+                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }
             }
 
            
@@ -180,13 +208,15 @@ export const GestionAsistentes = () => {
             const id_asistente_editado = Datos.id_asistente_carnet_fk.id_asistente_carnet
             delete Datos.id_asistente_carnet_fk
             Datos.id_asistente_carnet_fk = id_asistente_editado
-
-
-            const id_doc = Datos.id_documento_inopia_fk.id_documento;
+            let id_doc;
+            if(id_docu === -1){
+                id_doc = Datos.id_documento_inopia_fk.id_documento;
+            }else{
+                id_doc = id_docu;
+            }
+           
             delete Datos.id_documento_inopia_fk.id_documento;
 
-
-            
             Datos.id_documento_inopia_fk = id_doc
 
 

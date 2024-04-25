@@ -246,7 +246,7 @@ class DesignacionAsistente(models.Model):
     id_designacion_asistente = models.AutoField(primary_key=True)
     cantidad_horas = models.DecimalField(max_digits=5, decimal_places=2)
     consecutivo = models.CharField(max_length=45)
-    id_documento_inopia_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_documento_inopia_fk = models.ForeignKey(Documento, on_delete=models.PROTECT,  null=True, blank=True)
     id_version_proyecto_fk = models.ForeignKey(VersionProyecto, on_delete=models.PROTECT, related_name='designaciones_asistente')
     id_asistente_carnet_fk = models.ForeignKey(Asistente, on_delete=models.PROTECT, related_name='designaciones_asistente')
 
