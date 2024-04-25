@@ -146,8 +146,7 @@ export const GestionIntegranteOrganoColegiado = () => {
         Data.id_oficio_fk = id_oficio_creado;
 
         await agregarIntegrante(Data, token)
-
-        loadIntegrantes(id_oc)
+        setReload(!reload)
 
         toast.success('Integrante agregado correctamente', {
             id: toastId,
@@ -159,7 +158,6 @@ export const GestionIntegranteOrganoColegiado = () => {
             },
         })
         setAddClick(false)
-        loadIntegrantes(id_oc)
         success()
     } catch (error) {
       toast.dismiss(toastId)
@@ -227,8 +225,7 @@ export const GestionIntegranteOrganoColegiado = () => {
         Data.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
         await editarIntegrante(id_integrante, Data, localStorage.getItem("token"))
-
-        loadIntegrantes(Data.id_organo_colegiado_fk)
+        setReload(!reload)
 
         toast.success('Integrante actualizado correctamente', {
             id: toastId,
@@ -240,7 +237,6 @@ export const GestionIntegranteOrganoColegiado = () => {
             },
         })
         setEdit(false)
-        loadIntegrantes(Data.id_organo_colegiado_fk)
         success()
     } catch (error) {
       toast.dismiss(toastId)
@@ -263,8 +259,8 @@ export const GestionIntegranteOrganoColegiado = () => {
       await eliminarIntegrante(integrante.id_integrante, token)
       await eliminarOficio(integrante.id_oficio_fk.id_oficio, token);
       await eliminarVigencia(integrante.id_vigencia_fk.id_vigencia, token);
+      setReload(!reload)
 
-      loadIntegrantes(id)
 
       toast.success('Integrante eliminado correctamente', {
         id: toastId,
@@ -276,7 +272,6 @@ export const GestionIntegranteOrganoColegiado = () => {
         },
       })
       setEdit(false)
-      loadIntegrantes(id)
       success()
     } catch (error) {
       toast.dismiss(toastId)
