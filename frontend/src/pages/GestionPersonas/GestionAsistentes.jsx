@@ -1,5 +1,5 @@
 import { AsistenteForm } from "../../components/GestionPersonas/GestionAsistentes/AsistenteForm"
-import { agregarAsistente, editarAsistente, obtenerAsistente, eliminarAsistente, eliminarDesinacionAsistente, editarDesinacionAsistente, agregarDesinacionAsistente, obtenerDesinacionAsistente } from "../../api/gestionAsistentes"
+import { agregarAsistente, editarAsistente, obtenerAsistente, eliminarAsistente, eliminarDesignacionAsistente, editarDesignacionAsistente, agregarDesignacionAsistente, obtenerDesignacionAsistente } from "../../api/gestionAsistentes"
 import { editarNombre, obtenerNombre } from "../../api/gestionAcademicos"
 import { agregarDocumentacion,editarDocumentacion, eliminarDocumentacion } from "../../api/gestionProductos"
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -48,7 +48,7 @@ export const GestionAsistentes = () => {
 
     async function loadAsistentes( numVersion) {
         try {
-          const response = await obtenerDesinacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
+          const response = await obtenerDesignacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
           const filteredData = response.data.filter(item => item.id_version_proyecto_fk.numero_version === numVersion);
           console.log(filteredData)
           setData(filteredData);                                                                     
@@ -125,7 +125,7 @@ export const GestionAsistentes = () => {
             cantidad_horas : Datos.cantidad_horas,
             consecutivo : Datos.consecutivo
         }
-        await agregarDesinacionAsistente(designacion_asistente, localStorage.getItem('token'));
+        await agregarDesignacionAsistente(designacion_asistente, localStorage.getItem('token'));
 
 
       toast.success('Asistente agregado correctamente', {
@@ -220,7 +220,7 @@ export const GestionAsistentes = () => {
                 id_documento_inopia_fk: Datos.id_documento_inopia_fk,
                 id_version_proyecto_fk: proyectoID
             }
-            await editarDesinacionAsistente(id_designacion, designacion, localStorage.getItem("token"))
+            await editarDesignacionAsistente(id_designacion, designacion, localStorage.getItem("token"))
 
             
             
@@ -246,7 +246,7 @@ export const GestionAsistentes = () => {
         try {
           
             
-            await eliminarDesinacionAsistente(asistente.id_designacion_asistente, localStorage.getItem('token'))
+            await eliminarDesignacionAsistente(asistente.id_designacion_asistente, localStorage.getItem('token'))
             await eliminarDocumentacion(asistente.id_documento_inopia_fk.id_documento, localStorage.getItem('token'))
             await eliminarAsistente(asistente.id_asistente_carnet_fk.id_asistente_carnet, localStorage.getItem('token'))
 
