@@ -68,7 +68,6 @@ export const GestionAsistentes = () => {
 
   const addAsistente = async (formData) => {
     try {
-        let id_documento_creada = ""
         var toastId = toast.loading('Agregando...', {
             position: 'bottom-right',
             style: {
@@ -78,6 +77,7 @@ export const GestionAsistentes = () => {
             },
         });
 
+        let id_documento_creada = ""
         const documentoFile = formData.get('id_documento_inopia_fk');
         formData.delete('id_documento_inopia_fk');
     

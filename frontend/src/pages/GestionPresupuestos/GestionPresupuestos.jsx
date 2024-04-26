@@ -111,7 +111,7 @@ export const GestionPresupuestos = () => {
       })
       setAddClick(false)
       document.body.classList.remove('modal-open');
-      success()
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -165,8 +165,8 @@ export const GestionPresupuestos = () => {
         },
       })
       setEdit(false)
+      setReload(!reload)
       document.body.classList.remove('modal-open');
-      success()
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -193,7 +193,7 @@ export const GestionPresupuestos = () => {
       })
       setEdit(false)
       document.body.classList.remove('modal-open');
-      success()
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }

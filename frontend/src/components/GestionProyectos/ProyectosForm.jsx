@@ -282,7 +282,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_version_proyecto_fk.id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
-                                <input type="text" className="form-control" name="id_version_proyecto_fk.id_oficio_fk.detalle" id="id_version_proyecto_fk.id_oficio_fk.detalle" value={formData.id_version_proyecto_fk.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_version_proyecto_fk.id_oficio_fk.detalle" id="id_version_proyecto_fk.id_oficio_fk.detalle" value={formData.id_version_proyecto_fk.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="id_version_proyecto_fk.id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>

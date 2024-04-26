@@ -84,8 +84,16 @@ export const GestionGastos = () => {
             delete Data.id_cedula_proveedor_fk;
             delete Data.id_producto_servicio_fk;
             Data.monto = parseInt(Data.monto);
-            Data.fecha = '2024-03-08T15:20:40Z';
-            await API.agregarGasto(Data, token);
+           // Data.fecha = '2024-03-08T15:20:40Z'; //corregir
+            const Datos = {
+                monto: Data.monto,
+                fecha: Data.fecha,
+                id_documento_fk: Data.id_documento_fk,
+                id_factura_fk: Data.id_factura_fk,
+                id_partida_fk:  Data.id_partida_fk,
+                detalle: Data.detalle
+            }
+            await API.agregarGasto(Datos, token);
     
             toast.success('Gasto agregado correctamente', {
                 id: toastId,
@@ -98,7 +106,7 @@ export const GestionGastos = () => {
             });
             setAddClick(false);
             document.body.classList.remove('modal-open');
-            window.location.reload();
+            setReload(!reload)
         } catch (error) {
             toast.dismiss(toastId);
             console.error("Error al agregar gasto: ", error);
@@ -137,8 +145,9 @@ export const GestionGastos = () => {
                 var responsePS = ""                                                             
                 try{
                     responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+
                 } catch(error){
-                    console.error(responsePS)
+                    console.log(responsePS)
                 }                                                               
                 Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
             }

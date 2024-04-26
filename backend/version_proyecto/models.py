@@ -45,9 +45,9 @@ pre_save.connect(oficio_sustituir, sender=Oficio)
 
 class Documento(models.Model):
     id_documento = models.AutoField(primary_key=True)
-    tipo = models.CharField(max_length=45)
-    detalle = models.CharField(max_length=360, null=True)
-    documento = models.FileField(upload_to='media/documentos/',  max_length=500, null=True)  # Se cambió de char a file
+    tipo = models.CharField(max_length=45, null=True, blank=True)
+    detalle = models.CharField(max_length=360, null=True, blank=True)
+    documento = models.FileField(upload_to='media/documentos/',  max_length=500, null=True, blank=True)  # Se cambió de char a file
 
     class Meta:
         db_table = 'documento'
@@ -69,8 +69,8 @@ pre_save.connect(documento_sustituir, sender=Documento)
 
 class EvaluacionCC(models.Model):
     id_evaluacion_cc = models.AutoField(primary_key=True)
-    detalle = models.CharField(max_length=50)
-    id_documento_evualuacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    detalle = models.CharField(max_length=255, null=True)
+    id_documento_evualuacion_fk = models.ForeignKey(Documento, on_delete=models.PROTECT, null=True, blank=True)
 
     class Meta:
         db_table = 'evaluacion_cc'
