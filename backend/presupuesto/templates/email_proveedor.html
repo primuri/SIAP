@@ -62,39 +62,35 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="header">
-            <h2>Información del Proveedor</h2>
+            <h2>Información del proveedor</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
             <div class="content">
-                
-                <p><strong>Cédula de Proveedor:</strong> {{ id_cedula_proveedor }}</p>
+                <p><strong>Cédula:</strong> {{ id_cedula_proveedor }}</p>
                 <p><strong>Nombre:</strong> {{ nombre }}</p>
                 <p><strong>Tipo:</strong> {{ tipo }}</p>
-                <p><strong>Correo Electrónico:</strong> {{ correo }}</p>
+                <p><strong>Correo electrónico:</strong> {{ correo }}</p>
                 <p><strong>Teléfono:</strong> {{ telefono }}</p>
-                <p><strong>Nombre del Documento:</strong> {{ documento_nombre }}</p>
-                <p><strong>Detalle del Documento:</strong> {{ documentos_detalle }}</p>
+                <p><strong>Nombre del documento:</strong> {{ documento_nombre }}</p>
+                <p><strong>Detalle del documento:</strong> {{ documentos_detalle }}</p>
                 <h3>Cuentas Bancarias</h3>
                 <ul>
                     {% for cuenta in cuentas_bancarias %}
                     <li><strong>Banco:</strong> {{ cuenta.banco }}<br>
-                        <strong>Tipo de Cuenta:</strong> {{ cuenta.tipo }}<br>
+                        <strong>Tipo de cuenta:</strong> {{ cuenta.tipo }}<br>
                         <strong>Moneda:</strong> {{ cuenta.moneda }}<br>
-                        <strong>Cuenta Principal:</strong> {{ cuenta.cuenta_principal }}<br>
-                        <strong>Número de Cuenta:</strong> {{ cuenta.numero }}
+                        <strong>Cuenta principal:</strong> {{ cuenta.cuenta_principal }}<br>
+                        <strong>Número de cuenta:</strong> {{ cuenta.numero }}
                     </li>
                     {% endfor %}
                 </ul>
-    
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.
             </div>
         </div>
-        
     </div>
 </body>
 </html>

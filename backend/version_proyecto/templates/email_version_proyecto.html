@@ -62,23 +62,21 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="header">
-            <h2>Información de la Versión de Proyecto</h2>
+            <h2>Información de la versión de proyecto</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
             <div class="content">
-                
                 <p><strong>Proyecto: </strong> {{ proyecto }} | versión N° {{ numero_version }}</p>
                 <p><strong>Detalle del la versión: </strong> {{ detalle_version_proyecto }}</p>
-                <p><strong>Colaborador Principal: </strong> {{investigador}}</p>
+                <p><strong>Colaborador principal: </strong> {{investigador}}</p>
                 <p><strong>Fecha de inicio de la vesión de proyecto: </strong> {{ fecha_inicio_version }}</p>
                 <p><strong>Fecha de fin de la versión de proyecto: </strong> {{ fecha_fin_version }}</p>
-                <p><strong>Detalle del documento Oficio: </strong> {{ oficio_detalle }}</p>
-                <p><strong>Nombre del documento Oficio: </strong> {{ oficio_nombre }}</p>
-                
-                <p><strong>Colaborador Secundario: </strong></p>
+                <p><strong>Nombre del documento oficio: </strong> {{ oficio_nombre }}</p>
+                <p><strong>Detalle del documento oficio: </strong> {{ oficio_detalle }}</p>
+
+                <p><strong>Colaborador secundario: </strong></p>
                     <li><strong>Nombre: </strong> {{ nombre_colaborador_secundario }}</li>
                     <li><strong>Tipo: </strong> {{ tipo }}</li>
                     <li><strong>Carga: </strong> {{ carga }}</li>
@@ -87,7 +85,7 @@
                     <li><strong>Fecha de fin: </strong> {{ fecha_fin }}</li>
                     
 
-                <h3><strong>Producto Asociado: </strong></h3>
+                <h3><strong>Producto asociado: </strong></h3>
                     <li><strong>Detalle: </strong>{{productos.detalle}}</li>
                     <li><strong>Fecha: </strong>{{productos.fecha}}</li>
                 
@@ -99,22 +97,22 @@
                         <li><strong>Institución: </strong> {{ productos.evento_institucion }}</li>
                         <li><strong>País: </strong>{{ productos.evento_pais }}</li>
                         <li><strong>Tipo de participación: </strong>{{ productos.evento_tipo_participacion }}</li>
-                        <li><strong>Detalle del documento Oficio: </strong> {{ productos.evento_oficio_detalle }}</li>
-                        <li><strong>Nombre del documento Oficio: </strong>{{ productos.evento_oficio_nombre }}</li>
-                        <li><strong>Link: </strong>{{productos.evento_enlace}}</li>
+                        <li><strong>Nombre del documento oficio: </strong>{{ productos.evento_oficio_nombre }}</li>
+                        <li><strong>Detalle del documento oficio: </strong> {{ productos.evento_oficio_detalle }}</li>
+                        <li><strong>Enlace: </strong>{{productos.evento_enlace}}</li>
                         {% elif productos.software_nombre %}
                     <h4><strong>Software:</strong> </h4>
                         <li><strong>Nombre: </strong>{{ productos.software_nombre }}</li>
                         <li><strong>Versión: </strong>{{ productos.software_version }}</li>
-                        <li><strong>Detalle de la documentación: </strong> {{ productos.software_documentacion_detalle }}</li>
                         <li><strong>Nombre del documento de documentación: </strong>{{ productos.software_documentacion_nombre }}</li>
+                        <li><strong>Detalle de la documentación: </strong> {{ productos.software_documentacion_detalle }}</li>
                 {% elif productos.articulo_nombre %}
                     <h4><strong>Artículo:</strong> </h4>
-                        <li><strong>Nombre: </strong>{{ productos.articulo_nombre }}</li>
-                        <li><strong>Autor Nombre: </strong>{{ productos.articulo_autor_nombre }}</li>
+                        <li><strong>Nombre del artículo: </strong>{{ productos.articulo_nombre }}</li>
+                        <li><strong>Nombre del autor: </strong>{{ productos.articulo_autor_nombre }}</li>
                         <li><strong>Fecha de publicación: </strong>{{ productos.articulo_fecha_publicacion }}</li>                     
-                        <li><strong>Revista Nombre: </strong>{{ productos.articulo_revista_nombre }}</li>
-                        <li><strong>Revista País: </strong>{{ productos.articulo_revista_pais }}</li>
+                        <li><strong>Nombre revista: </strong>{{ productos.articulo_revista_nombre }}</li>
+                        <li><strong>País revista: </strong>{{ productos.articulo_revista_pais }}</li>
                         <li><strong>Tipo: </strong>{{ productos.articulo_tipo }}</li> 
                         <li><strong>Cantidad de páginas: </strong>{{ productos.articulo_cant_paginas }}</li>
                         <li><strong>DOI: </strong>{{ productos.articulo_doi }}</li>
@@ -123,13 +121,11 @@
                         <li><strong>Nombre del documento: </strong>{{ productos.articulo_documento_nombre }}</li>
                         <li><strong>Observaciones: </strong>{{ productos.articulo_observaciones }}</li>
                 {% endif %}
-    
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.
             </div>
         </div>
-        
     </div>
 </body>
 </html>

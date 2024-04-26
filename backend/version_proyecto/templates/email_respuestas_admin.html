@@ -62,18 +62,17 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="header">
-            <h2>Respuestas de la evaluación de su Proyecto</h2>
+            <h2>Respuestas de la evaluación de su proyecto</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
             <div class="content">
                 
                 <p><strong>Proyecto: </strong> {{ proyecto }} | versión N° {{ version }}</p>
-                <p><strong>Colaborador Principal: </strong> {{investigador}}</p>
+                <p><strong>Colaborador principal: </strong> {{investigador}}</p>
                 <p><strong>Evaluador: </strong> {{evaluador}}</p>
-                <h3>Preguntas y Respuestas:</h3>
+                <h3>Preguntas y respuestas:</h3>
                     <ul>
                         {% for respuesta in respuestas %}
                         <li>
@@ -82,13 +81,11 @@
                         </li>
                         {% endfor %}
                     </ul>
-              
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.
             </div>
         </div>
-        
     </div>
 </body>
 </html>
