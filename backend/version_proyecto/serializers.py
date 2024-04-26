@@ -36,7 +36,7 @@ class DocumentoSerializer(serializers.ModelSerializer):
         return rep
 
 class EvaluacionCCSerializer(serializers.ModelSerializer):
-    id_documento_evualuacion_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())
+    id_documento_evualuacion_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = EvaluacionCC
