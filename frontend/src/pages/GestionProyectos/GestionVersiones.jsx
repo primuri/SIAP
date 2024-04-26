@@ -115,7 +115,6 @@ export const GestionVersiones = () => {
         try {
             const articulos = await obtenerArticulo(localStorage.getItem('token'));
 
-            // Buscar el software que coincide con user.id_version_proyecto
             const matchedArticulo = articulos.data.find(articulo =>
                 articulo.id_producto_fk &&
                 articulo.id_producto_fk.id_version_proyecto_fk &&
@@ -141,7 +140,6 @@ export const GestionVersiones = () => {
         try {
             const softwares = await obtenerSoftware(localStorage.getItem('token'));
 
-            // Buscar el software que coincide con user.id_version_proyecto
             const matchedSoftware = softwares.data.find(software =>
                 software.id_producto_fk &&
                 software.id_producto_fk.id_version_proyecto_fk &&
@@ -192,13 +190,12 @@ export const GestionVersiones = () => {
           }
         };
       
-        fetchData(); // Call the async function immediately
+        fetchData();
       }, [data, id_version]);
       
     const success = () => {
         window.location.href = `/gestion-proyectos/${id}/gestion-versiones`
     }
-    // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
         try {
@@ -210,7 +207,6 @@ export const GestionVersiones = () => {
                     fontSize: '18px',
                 },
             });
-            //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
             let producto = null;
             let soft = null;
             let artic = null;
@@ -378,8 +374,8 @@ export const GestionVersiones = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                     fontSize: '18px',
-                    height: '60px', // Aumentar la altura
-                    width: '300px',  // Aumentar el ancho
+                    height: '60px', 
+                    width: '300px',
                 },
             })
             setAddClick(false)
@@ -395,7 +391,6 @@ export const GestionVersiones = () => {
         }
     }
 
-    // Manejo de los datos del formulario de editar 
     const editProyecto = async (formData) => {
         try {
             var toastId = toast.loading('Editando...', {
@@ -633,7 +628,6 @@ export const GestionVersiones = () => {
         }
     }
 
-    // Manejo del eliminar
     const deleteProyecto = async (proyecto) => {
         try {
             var toastId = toast.loading('Eliminando...', {
@@ -684,17 +678,15 @@ export const GestionVersiones = () => {
             loadVersionProyectos(id)
             success()
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.dismiss(toastId)
         }
     }
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         navigate(`/gestion-proyectos/${id}/gestion-versiones`)
     }
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
@@ -705,11 +697,9 @@ export const GestionVersiones = () => {
         navigate(`/gestion-proyectos/${id}/gestion-versiones/${user.id_version_proyecto_fk.id_version_proyecto}`)
     }
 
-    //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
-    //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {

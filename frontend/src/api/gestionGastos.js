@@ -1,35 +1,5 @@
 import axios from 'axios'
 import {manejarErrores} from './errorHandler'
-/*
-    {
-    "gasto": {
-        "id_gasto": 1,
-        "fecha": 01/01/2023,
-        "detalle": "equipo",
-        "monto": 100000,
-        "id_partida_fk": 1,
-        "id_factura_fk": 1,
-        "id_documento_fk": 1
-    },
-    "partida": {
-        "id_partida": 1,
-        // ... otros campos del modelo Partida
-    },
-    "factura": {
-        "id_factura": 1,
-        "id_cedula_proveedor_fk": 1,
-        "id_producto_servicio_fk": 1
-    },
-    "productoServicio": {
-        "id_producto_servicio": 1,
-        "detalle": "equipo"
-    },
-    "proveedor": {
-        "id_cedula_proveedor": 1
-        // ... otros campos del modelo Proveedor
-    }
-}
-*/
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'

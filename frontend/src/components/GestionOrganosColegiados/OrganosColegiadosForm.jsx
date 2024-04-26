@@ -30,11 +30,10 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
         const { name, value } = event.target;
 
         if (rol === "invitado") {
-            return; // Si el rol es "invitado", no permitir cambios
+            return;
         }
     
         if (name === 'numero_miembros' || name === 'quorum' || name === 'acuerdo_firme') {
-            // Verifica si es un número válido y positivo
             const numericValue = Number(value);
             if (!isNaN(numericValue) && numericValue >= 0) {
                 setFormData((prev) => ({

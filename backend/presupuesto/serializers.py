@@ -98,6 +98,7 @@ class FacturaSerializer(serializers.ModelSerializer):
 class GastoSerializer(serializers.ModelSerializer):
     id_partida_fk = serializers.PrimaryKeyRelatedField(queryset=Partida.objects.all())
     id_factura_fk = serializers.PrimaryKeyRelatedField(queryset=Factura.objects.all())
+    id_documento_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Gasto
@@ -107,6 +108,7 @@ class GastoSerializer(serializers.ModelSerializer):
         rep = super(GastoSerializer, self).to_representation(instance)
         rep['id_partida_fk'] = PartidaSerializer(instance.id_partida_fk).data
         rep['id_factura_fk'] = FacturaSerializer(instance.id_factura_fk).data
+        rep['id_documento_fk'] = DocumentoSerializer(instance.id_documento_fk).data
         return rep
 
 class CuentaBancariaSerializer(serializers.ModelSerializer):

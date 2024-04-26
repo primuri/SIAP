@@ -27,7 +27,6 @@ function App() {
     const user = localStorage.getItem('user');
     const currentPath = window.location.pathname;
   
-    // Si no se encuentra un usuario en el localStorage (sin iniciar sesión) y la ruta actual no es /log-in, redirige a /log-in
     if (!user && currentPath !== '/login') {
       window.location.href = '/login';
     }

@@ -14,21 +14,20 @@ export const GestionAcademicos = () => {
     let {id_academico} = useParams()
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
-    const [reload, setReload] = useState(false)                           // Se usa para definir cuando se debe de actualizr la pagina.
+    const [reload, setReload] = useState(false)
     const [academicos, setAcademicos] = useState([])  
-    const [cargado, setCargado] = useState(false)                    // Académicos que se muestran
-    const [data, setData] = useState([])                                  // Todos los académicos
-    const [academico, setAcademico] = useState(null)                      // Usuario al que se le da click en la tabla para editar
+    const [cargado, setCargado] = useState(false)                  
+    const [data, setData] = useState([])                              
+    const [academico, setAcademico] = useState(null)                   
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
-    const [error, setError] = useState(false)                             // Si hay error, se muestra una página para eso
+    const [error, setError] = useState(false)                           
     const columns = ['Cédula', 'Nombre','Correo','Universidad']
     const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
 
-    user.groups[0] !== "administrador" ? setError(true) : null           // Si no es administrador, pone el error en true
+    user.groups[0] !== "administrador" ? setError(true) : null         
     useEffect(() => { loadAcademicos() }, [reload])
 
-    // Detecta cambios y realiza la solicitud nuevamente  
     async function loadAcademicos() {
         try {
             const res = await obtenerAcademicos(localStorage.getItem('token'))
@@ -47,7 +46,6 @@ export const GestionAcademicos = () => {
         }
     }
 
-    //Uso de id_academico para url
     useEffect(()=>{
         if(id_academico && data.length > 0){
             const idNum = parseInt(id_academico, 10);
@@ -66,7 +64,6 @@ export const GestionAcademicos = () => {
         window.location.href = '/gestion-investigadores'
     }
 
-    // Manejo de datos que se van a enviar para agregar
     const addAcademico = async (formData) => {       
         try {
             
@@ -117,7 +114,6 @@ export const GestionAcademicos = () => {
         }
     }
 
-    // Manejo de los datos del formulario de editar 
     const editAcademico = async (formData) => {       
         try {
             const Datos = JSON.parse(formData.get('json'))
@@ -203,7 +199,6 @@ export const GestionAcademicos = () => {
 
 
 
-    // Manejo del eliminar
     const deleteAcademicos = async (academico) => {
         try {
             var toastId = toast.loading('Eliminando...', {
@@ -237,7 +232,6 @@ export const GestionAcademicos = () => {
         setEdit(false)
     }
 
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
@@ -246,24 +240,20 @@ export const GestionAcademicos = () => {
         
     }
 
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
         document.body.classList.add('modal-open');
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (selectedAcademico) =>{
         navigate(`/gestion-investigadores/${selectedAcademico.id_academico}`)
     }
 
-    // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
         if (col.includes('.')) {

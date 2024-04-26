@@ -71,7 +71,7 @@ export const InicioAdministrador = ({ usuario }) => {
                                     ¿Cómo se agrega un nuevo registro?
                                 </button>
                               </h2>
-                              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                              <div id="collapseOne" className="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div className="accordion-body">
                                 Haga click en el botón "Agregar" ubicado en la esquina superior izquierda. Esto abrirá un formulario para ingresar la información necesaria. Complete el formulario proporcionando la información solicitada. Una vez que haya ingresado todos los detalles, haga clic en el botón "Agregar" dentro del formulario para guardar el nuevo registro. En caso de ya no querer agregarlo, dele click a la "x" en la esquina superior derecha.
                                 </div>
@@ -84,7 +84,7 @@ export const InicioAdministrador = ({ usuario }) => {
                                   ¿Cómo se edita un registro?
                               </button>
                             </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                                Haga clic en el registro que desea, esto abrirá un formulario con los datos del registros. Haga las modificaciones necesarias y de click en el botón "Guardar" ubicado en la parte inferior del formulario. En caso de ya no querer guardarlo, dele click a la "x" en la esquina superior derecha.
                               </div>
@@ -97,7 +97,7 @@ export const InicioAdministrador = ({ usuario }) => {
                                   ¿Cómo se elimina un registro?
                               </button>
                             </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                                Haga clic en el registro que desea, esto abrirá un formulario. De click en el botón "Eliminar" ubicado en la parte inferior del formulario. En caso de ya no querer eliminarlo, dele click a la "x" en la esquina superior derecha.
                               </div>
@@ -110,7 +110,7 @@ export const InicioAdministrador = ({ usuario }) => {
                                   ¿Cómo se agrega un proyecto?
                               </button>
                             </h2>
-                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                            <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                               Para que un proyecto adquiera existencia formal, es necesario que previamente exista una propuesta correspondiente. La transición de una propuesta a proyecto se materializa únicamente mediante la aprobación de dicha propuesta. Por lo tanto, para agregar un nuevo proyecto, el proceso implica dirigirse a la sección de "Propuestas de Proyectos", donde la aprobación de la propuesta es el paso clave. Una vez aprobada, la propuesta se transformará en un proyecto, visible y gestionable en la sección designada para "Proyectos". Este flujo asegura un proceso estructurado y controlado en la evolución de las ideas propuestas hacia la ejecución efectiva de proyectos.
                               </div>
@@ -123,8 +123,8 @@ export const InicioAdministrador = ({ usuario }) => {
                                   ¿Por qué no se puede editar o borrar un proyecto?
                               </button>
                             </h2>
-                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-                              <div class="accordion-body">
+                            <div id="collapseFive" className="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
                               Cada proyecto tiene una o varias versiones. Es por esto que si se desea editar, debe de ser directamente en una de las versiones y no en un proyecto en general como tal. Por otro lado, por seguridad, estos datos no pueden ser eliminados ya que es informacion sensible. 
                               </div>
                             </div>
@@ -136,8 +136,8 @@ export const InicioAdministrador = ({ usuario }) => {
                                   ¿Por qué no se puede agregar más de un presupuesto?
                               </button>
                             </h2>
-                            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
-                              <div class="accordion-body">
+                            <div id="collapseSix" className="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
                               Un proyecto tiene únicamente un presupuesto, no se deben ingresar varios. En caso de desear modificarlo, se puede hacer.
                               </div>
                             </div>
@@ -149,8 +149,8 @@ export const InicioAdministrador = ({ usuario }) => {
                                 ¿Cómo saber cuando un dato es opcional?
                             </button>
                             </h2>
-                            <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
-                              <div class="accordion-body">
+                            <div id="collapseSeven" className="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
                               En cada formulario, ya sea para agregar o editar un registro, si hay algún dato que no es requerido se detalla explícitamente que es opcional al lado de su nombre. 
                               </div>
                             </div>

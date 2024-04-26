@@ -151,8 +151,6 @@ export const GestionOrganosColegiados = () => {
             if (rol === "invitado") {
                 navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/integrantes`)
             }
-            
-            // Aqui hay que poner uno para sesiones y otro para integrantes
 
 
         } else {

@@ -588,8 +588,9 @@ input[type="submit"]:focus {
 
 /* Estilos para el componente ReportePDF */
 
-.container {
+.reporteGeneral .container {
   margin-top: 20px;
+  background-color: var(--gris-claro-ucr)
 }
 
 .card {
@@ -598,4 +599,42 @@ input[type="submit"]:focus {
 
 .item-padding {
   padding: 10px 10px 0px;
+}
+
+.elemento-reporte{
+  background-color: #f0f0f0 !important;
+}
+
+.page-report{
+  background-color: white;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 90%;
+  margin-bottom: 25px;
+  border-radius: 10px;
+}
+
+.nombrePage{
+  margin-bottom: 20px ;
+}
+
+.nombrePage::before {
+  content: '';
+  width: 5px;
+  height: 100%; /* Establece la altura inicial en 0 */
+  display:inline-block;
+  margin-right: 10px;
+  background-color: var(--celeste-ucr);
+}
+
+
+.reporteGeneral{
+  width: 900px;
+  background-color: var(--gris-claro-ucr);
+  padding-bottom: 20px;
+}
+
+.th-report{
+  background-color: #a8a8a8 !important;
 }

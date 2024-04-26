@@ -15,7 +15,7 @@ export const TableEvaluaciones = ({ columns = [], data = [], dataKeys, onClick})
     return Math.ceil(data.length / itemsPerPage);
   }, [data, itemsPerPage]);
 
-  // Calcular el índice del último y primer elemento en la página actual
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
