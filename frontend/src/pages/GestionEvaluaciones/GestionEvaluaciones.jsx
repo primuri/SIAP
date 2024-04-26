@@ -4,6 +4,7 @@ import { Add } from "../../utils/Add"
 import { Modal } from "../../utils/Modal"
 import { TableOneButtom} from "../../utils/TableOneButtom"
 import { Search } from "../../utils/Search"
+import { ReportButton } from "../../utils/ReportButton";
 import { EvaluacionForm } from "../../components/GestionEvaluaciones/EvaluacionForm"
 import { EvaluacionListaForm } from "../../components/GestionEvaluaciones/EvaluacionListaForm"
 import * as API from "../../api/gestionEvaluaciones"
@@ -16,8 +17,68 @@ export const GestionEvaluaciones = () => {
     const [reload, setReload]                     = useState(false)         
     const [addClicked, setAddClicked]             = useState(false)         
     const [editClicked, setEditClicked]           = useState(false)      
-    const [btnClicked, setBtnClicked]          = useState(false)
+    const [btnClicked, setBtnClicked]             = useState(false)
     const [preguntas, setPreguntas]               = useState([])
+    const columns = ['Código VI', 'Nombre proyecto', 'Versión proyecto', 'Evaluador', '', 'Estado', 'Formulario']
+    const dataKeys = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi',
+                      'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre',
+                      'id_version_proyecto_fk.numero_version',
+                      'id_evaluador_fk.id_nombre_completo_fk.nombre',
+                      'id_evaluador_fk.id_nombre_completo_fk.apellido',
+                      'estado', 
+                      'Formulario']
+    const [JsonIsReady, setJsonIsReady] = useState(false)
+    const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+    
+    useEffect(() => {
+        setJsonIsReady(false)
+        createJsonForReport()
+    }, [evaluacionesList])
+
+    const createJsonForReport = async () => {
+        JsonForReport.reportTitle = "Evaluación";
+        JsonForReport.idKey = "id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi";
+        JsonForReport.dataKeys = [
+            'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi',
+            'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre',
+            'id_version_proyecto_fk.numero_version',
+            'id_evaluador_fk.id_nombre_completo_fk.nombre',
+            'id_evaluador_fk.id_nombre_completo_fk.apellido',
+            'estado', 
+            'Formulario'
+        ];
+        JsonForReport.colNames = [
+            'Código VI', 
+            'Nombre del proyecto', 
+            'Versión del proyecto', 
+            'Nombre evaluador asignado',
+            'Apellido evaluador asignado',
+            'Estado de la evaluación',
+            'Respuestas'
+        ];
+    
+        setJsonIsReady(await configureReportData());
+    };
+    
+
+    const configureReportData = async () => {
+        if (evaluacionesList.length > 0) {
+            try {
+                const promises = evaluacionesList.map(async (evaluacion) => {
+                    console.log(evaluacion)
+                    return evaluacion;
+                });
+                const evaluaciones = await Promise.all(promises);
+                JsonForReport.reportData = evaluaciones;
+
+                return true
+
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el JSON para reporte: ")
+                return false
+            }
+        }
+    }
 
     useEffect(() => {
         loadEvaluaciones()
@@ -87,7 +148,6 @@ export const GestionEvaluaciones = () => {
             }else{
                 await API.eliminarEvaluacion(evaluacionActual.id_evaluacion)
             }
-            
 
             toastExito("Evaluación eliminada correctamente", toastId)
             setReload(!reload)
@@ -107,7 +167,6 @@ export const GestionEvaluaciones = () => {
         setAddClicked(true)
         setEditClicked(false)
     }
-    
     
     const elementClicked = (selectedEvaluacion) => {
         setEvaluacionActual(selectedEvaluacion)
@@ -138,9 +197,12 @@ export const GestionEvaluaciones = () => {
                 <div className="d-flex flex-row">
                     <h1>Gestión evaluaciones de versiones de proyectos</h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
-                <div className="d-flex justify-content-between mt-4">
-                    <Add onClick={addBtnClicked}></Add>
-                    <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={filtrarEvaluaciones}></Search>
+                <div className="d-flex mt-4">
+                    <div className="col">
+                        <Add onClick={addBtnClicked}></Add>
+                    </div> 
+                    {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                    <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={filtrarEvaluaciones}></Search> 
                 </div>
                 <TableOneButtom columns={columns} data={evaluacionesList} dataKeys={dataKeys} onDoubleClick={elementClicked} onButtonClick={buttonClicked} hasButtonColumn={true} buttonText="Ver formulario"></TableOneButtom>
                 {(addClicked || editClicked) && (
@@ -167,17 +229,6 @@ export const GestionEvaluaciones = () => {
         </main>
     )
 }
-
-
-const columns = ['Código VI', 'Nombre proyecto', 'Versión proyecto', 'Evaluador', '', 'Estado', 'Formulario']
-const dataKeys = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi',
-                  'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre',
-                  'id_version_proyecto_fk.numero_version',
-                  'id_evaluador_fk.id_nombre_completo_fk.nombre',
-                  'id_evaluador_fk.id_nombre_completo_fk.apellido',
-                  'estado', 
-                  'Formulario']
-
 
 function toastProcesando(mensaje) {
     var toastId = toast.loading(mensaje, {
