@@ -1,7 +1,6 @@
 
 
 export const EvaluacionListaForm = ({ onCancel, preguntas }) => {
-    console.log(preguntas)
     return (
         <div>
             <div className="pb-0 position-sticky ml-2 mt-4">

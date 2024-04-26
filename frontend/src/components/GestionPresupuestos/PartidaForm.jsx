@@ -49,7 +49,6 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
             combinedData.append(key, value);
         }
         for (let [key, value] of combinedData.entries()) {
-            console.log(`${key}: ${value}`);
         }
         onSubmit(combinedData)
     }
@@ -115,7 +114,7 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                             </div>)}
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
                             </div>
                             
                         </div>

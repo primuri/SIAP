@@ -1,0 +1,1102 @@
+{
+  "id": "7d857d0a-298b-4083-abab-963e5f86fd04",
+  "version": "2.0",
+  "name": "Sprint 4",
+  "url": "http://localhost:5173",
+  "tests": [{
+    "id": "304e3a5b-68f5-4aa9-bfff-dcff8cceac73",
+    "name": "Agregar Integrante",
+    "commands": [{
+      "id": "bb5ef346-d7f5-45cc-842e-5b27c0352f35",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a0a62384-e5be-4dd0-8d60-a62cfc670d07",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1376x754",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c853461b-2def-4ba8-971f-048fffc1a5c1",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1c8e0563-af6b-4981-b424-c05c1bdf3b83",
+      "comment": "",
+      "command": "click",
+      "target": "id=acciones-button",
+      "targets": [
+        ["id=acciones-button", "id"],
+        ["css=.mx-2:nth-child(5) > #acciones-button", "css:finder"],
+        ["xpath=//button[@id='acciones-button']", "xpath:attributes"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[5]/button", "xpath:idRelative"],
+        ["xpath=//td[5]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Gestionar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb148a58-3400-439a-b4f4-6d15e6b6467f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.justify-content-between > .table-button",
+      "targets": [
+        ["css=.justify-content-between > .table-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Agregar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e85b05fa-6583-43cc-a420-615e1db5d443",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.justify-content-between > .table-button",
+      "targets": [
+        ["css=.justify-content-between > .table-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Agregar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "dfd91ee0-bcd6-441b-a989-f6caee4419f1",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.justify-content-between > .table-button",
+      "targets": [
+        ["css=.justify-content-between > .table-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Agregar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4b95442e-9056-49bc-ab53-9cad86abb8dd",
+      "comment": "",
+      "command": "click",
+      "target": "id=nombreIntegrante",
+      "targets": [
+        ["id=nombreIntegrante", "id"],
+        ["name=nombre_integrante", "name"],
+        ["css=#nombreIntegrante", "css:finder"],
+        ["xpath=//input[@id='nombreIntegrante']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f0accb86-b1fc-479f-98c7-9635183b78c9",
+      "comment": "",
+      "command": "click",
+      "target": "id=nombreIntegrante",
+      "targets": [
+        ["id=nombreIntegrante", "id"],
+        ["name=nombre_integrante", "name"],
+        ["css=#nombreIntegrante", "css:finder"],
+        ["xpath=//input[@id='nombreIntegrante']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8ac85951-fc75-4110-a414-edd59295384f",
+      "comment": "",
+      "command": "type",
+      "target": "id=nombreIntegrante",
+      "targets": [
+        ["id=nombreIntegrante", "id"],
+        ["name=nombre_integrante", "name"],
+        ["css=#nombreIntegrante", "css:finder"],
+        ["xpath=//input[@id='nombreIntegrante']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "Darío Mena Arias"
+    }, {
+      "id": "4a9b041f-4fc4-4d5c-8f8f-4b1ad0f50e2e",
+      "comment": "",
+      "command": "click",
+      "target": "id=inicioFunciones",
+      "targets": [
+        ["id=inicioFunciones", "id"],
+        ["name=inicio_funciones", "name"],
+        ["css=#inicioFunciones", "css:finder"],
+        ["xpath=//input[@id='inicioFunciones']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b35ade3c-fb59-426b-b1d9-edb41d9f1150",
+      "comment": "",
+      "command": "type",
+      "target": "id=inicioFunciones",
+      "targets": [
+        ["id=inicioFunciones", "id"],
+        ["name=inicio_funciones", "name"],
+        ["css=#inicioFunciones", "css:finder"],
+        ["xpath=//input[@id='inicioFunciones']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "0002-12-05"
+    }, {
+      "id": "31e47dec-0184-4056-874e-68a47e9ea654",
+      "comment": "",
+      "command": "type",
+      "target": "id=inicioFunciones",
+      "targets": [
+        ["id=inicioFunciones", "id"],
+        ["name=inicio_funciones", "name"],
+        ["css=#inicioFunciones", "css:finder"],
+        ["xpath=//input[@id='inicioFunciones']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "0020-12-05"
+    }, {
+      "id": "7e68dae7-d34c-4715-969b-d4a38416bcc6",
+      "comment": "",
+      "command": "type",
+      "target": "id=inicioFunciones",
+      "targets": [
+        ["id=inicioFunciones", "id"],
+        ["name=inicio_funciones", "name"],
+        ["css=#inicioFunciones", "css:finder"],
+        ["xpath=//input[@id='inicioFunciones']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "0202-12-05"
+    }, {
+      "id": "16652367-364a-47d3-926e-7f295d7bc588",
+      "comment": "",
+      "command": "type",
+      "target": "id=inicioFunciones",
+      "targets": [
+        ["id=inicioFunciones", "id"],
+        ["name=inicio_funciones", "name"],
+        ["css=#inicioFunciones", "css:finder"],
+        ["xpath=//input[@id='inicioFunciones']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "2023-12-05"
+    }, {
+      "id": "a83ca4a3-a9e2-4003-8ec8-860a58a526ba",
+      "comment": "",
+      "command": "click",
+      "target": "id=puesto",
+      "targets": [
+        ["id=puesto", "id"],
+        ["name=puesto", "name"],
+        ["css=#puesto", "css:finder"],
+        ["xpath=//input[@id='puesto']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b1e20d3-4094-4d0e-882b-1dcd85a180ff",
+      "comment": "",
+      "command": "type",
+      "target": "id=puesto",
+      "targets": [
+        ["id=puesto", "id"],
+        ["name=puesto", "name"],
+        ["css=#puesto", "css:finder"],
+        ["xpath=//input[@id='puesto']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Sub-Director del CIMPA"
+    }, {
+      "id": "af59a50f-f0c9-4948-bfef-f64ab737869e",
+      "comment": "",
+      "command": "click",
+      "target": "id=normativaReguladora",
+      "targets": [
+        ["id=normativaReguladora", "id"],
+        ["name=normativa_reguladora", "name"],
+        ["css=#normativaReguladora", "css:finder"],
+        ["xpath=//input[@id='normativaReguladora']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8363b874-d323-4e48-ae53-33e04f6f8939",
+      "comment": "",
+      "command": "click",
+      "target": "id=normativaReguladora",
+      "targets": [
+        ["id=normativaReguladora", "id"],
+        ["name=normativa_reguladora", "name"],
+        ["css=#normativaReguladora", "css:finder"],
+        ["xpath=//input[@id='normativaReguladora']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "eafceefb-b136-4fe6-9fc3-5d8dc42cc012",
+      "comment": "",
+      "command": "type",
+      "target": "id=normativaReguladora",
+      "targets": [
+        ["id=normativaReguladora", "id"],
+        ["name=normativa_reguladora", "name"],
+        ["css=#normativaReguladora", "css:finder"],
+        ["xpath=//input[@id='normativaReguladora']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": "Normativa institucional"
+    }, {
+      "id": "22a2e67f-95c9-46d1-8f95-b9ca4f7c2f2a",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_vigencia_fk.fecha_fin",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_fin", "id"],
+        ["name=id_vigencia_fk.fecha_fin", "name"],
+        ["css=#id_vigencia_fk\\.fecha_fin", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_fin']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "cc8fb3d6-df22-45ae-ac77-6fb2d6661b5e",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_fin",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_fin", "id"],
+        ["name=id_vigencia_fk.fecha_fin", "name"],
+        ["css=#id_vigencia_fk\\.fecha_fin", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_fin']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": "0002-11-05"
+    }, {
+      "id": "67905762-f46d-46d0-b23d-42bae29d1361",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_fin",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_fin", "id"],
+        ["name=id_vigencia_fk.fecha_fin", "name"],
+        ["css=#id_vigencia_fk\\.fecha_fin", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_fin']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": "0020-11-05"
+    }, {
+      "id": "a20d125d-b512-4657-95c1-9d58620eaebe",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_fin",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_fin", "id"],
+        ["name=id_vigencia_fk.fecha_fin", "name"],
+        ["css=#id_vigencia_fk\\.fecha_fin", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_fin']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": "0202-11-05"
+    }, {
+      "id": "31270b5f-39b9-466c-94cb-41a8f7a2addf",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_fin",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_fin", "id"],
+        ["name=id_vigencia_fk.fecha_fin", "name"],
+        ["css=#id_vigencia_fk\\.fecha_fin", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_fin']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/input", "xpath:position"]
+      ],
+      "value": "2024-11-05"
+    }, {
+      "id": "04528801-395a-4451-a7b2-0e6a4f62c314",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_vigencia_fk.fecha_inicio",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_inicio", "id"],
+        ["name=id_vigencia_fk.fecha_inicio", "name"],
+        ["css=#id_vigencia_fk\\.fecha_inicio", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_inicio']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fafa5c60-9f3a-4e9b-985d-624e71a98056",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_inicio",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_inicio", "id"],
+        ["name=id_vigencia_fk.fecha_inicio", "name"],
+        ["css=#id_vigencia_fk\\.fecha_inicio", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_inicio']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "0002-12-05"
+    }, {
+      "id": "05e8e2be-e8bd-4f9a-b42e-a7afa49ab8b2",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_inicio",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_inicio", "id"],
+        ["name=id_vigencia_fk.fecha_inicio", "name"],
+        ["css=#id_vigencia_fk\\.fecha_inicio", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_inicio']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "0020-12-05"
+    }, {
+      "id": "0b7260f7-9ea2-42b8-8ef1-be66c1db95ee",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_inicio",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_inicio", "id"],
+        ["name=id_vigencia_fk.fecha_inicio", "name"],
+        ["css=#id_vigencia_fk\\.fecha_inicio", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_inicio']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "0202-12-05"
+    }, {
+      "id": "38d8c24f-ab54-4f40-bec3-adb8739485ce",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_vigencia_fk.fecha_inicio",
+      "targets": [
+        ["id=id_vigencia_fk.fecha_inicio", "id"],
+        ["name=id_vigencia_fk.fecha_inicio", "name"],
+        ["css=#id_vigencia_fk\\.fecha_inicio", "css:finder"],
+        ["xpath=//input[@id='id_vigencia_fk.fecha_inicio']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[3]/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/input", "xpath:position"]
+      ],
+      "value": "2023-12-05"
+    }, {
+      "id": "3f156f1c-1f07-4c13-b6ef-c73c337eb141",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_oficio_fk.detalle",
+      "targets": [
+        ["id=id_oficio_fk.detalle", "id"],
+        ["name=id_oficio_fk.detalle", "name"],
+        ["css=#id_oficio_fk\\.detalle", "css:finder"],
+        ["xpath=//input[@id='id_oficio_fk.detalle']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "107bfbe4-bd90-4c3f-8ee4-a3cb1569da22",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_oficio_fk.detalle",
+      "targets": [
+        ["id=id_oficio_fk.detalle", "id"],
+        ["name=id_oficio_fk.detalle", "name"],
+        ["css=#id_oficio_fk\\.detalle", "css:finder"],
+        ["xpath=//input[@id='id_oficio_fk.detalle']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[4]/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/div/input", "xpath:position"]
+      ],
+      "value": "CA23"
+    }]
+  }, {
+    "id": "f3fe4167-c6db-4567-9f3a-4dd8727480c1",
+    "name": "Editar Integrante",
+    "commands": [{
+      "id": "36c723f1-bb8e-4c70-8c16-9cda9c1fb317",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "68ae48da-5282-4032-b9a9-29988aa4b5e7",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1376x754",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "37f483f0-5059-4d69-b18c-b19955144d87",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ef4c8343-59fb-4025-a5d4-877a28be67ef",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "27102ba0-7246-4d00-9c4f-15fa5c146fe4",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.active",
+      "targets": [
+        ["css=.active", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e5c98309-1d2f-4c66-9c79-d7b18460aa63",
+      "comment": "",
+      "command": "click",
+      "target": "id=acciones-button",
+      "targets": [
+        ["id=acciones-button", "id"],
+        ["css=.mx-2:nth-child(5) > #acciones-button", "css:finder"],
+        ["xpath=//button[@id='acciones-button']", "xpath:attributes"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[5]/button", "xpath:idRelative"],
+        ["xpath=//td[5]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Gestionar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "af0a72e3-21a6-4340-bf12-d4b64b752b36",
+      "comment": "",
+      "command": "doubleClick",
+      "target": "css=.mx-2:nth-child(4)",
+      "targets": [
+        ["css=.mx-2:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[4]", "xpath:idRelative"],
+        ["xpath=//td[4]", "xpath:position"],
+        ["xpath=//td[contains(.,'87')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "98b6da73-b8fc-4b9e-9260-e66943e58a17",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex > .modal-body",
+      "targets": [
+        ["css=.d-flex > .modal-body", "css:finder"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div", "xpath:idRelative"],
+        ["xpath=//form/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "af5011d7-0607-4c03-a59d-4d3595d3ac4e",
+      "comment": "",
+      "command": "type",
+      "target": "id=nombreIntegrante",
+      "targets": [
+        ["id=nombreIntegrante", "id"],
+        ["name=nombre_integrante", "name"],
+        ["css=#nombreIntegrante", "css:finder"],
+        ["xpath=//input[@id='nombreIntegrante']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": "Alberto Hernández Alvarado"
+    }, {
+      "id": "8d0d07dd-aa0a-4d5a-b27d-0a0c97063b49",
+      "comment": "",
+      "command": "click",
+      "target": "id=boton-personalizado",
+      "targets": [
+        ["id=boton-personalizado", "id"],
+        ["css=.col:nth-child(1) > #boton-personalizado", "css:finder"],
+        ["xpath=//button[@id='boton-personalizado']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Guardar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "375c4dc1-2fb9-43dd-9bb6-3dc0f2f62c34",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal-footer > .table-button",
+      "targets": [
+        ["css=.modal-footer > .table-button", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Editar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c92c32c8-6bce-4d01-b250-7b5343b4339d",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.modal-footer > .table-button",
+      "targets": [
+        ["css=.modal-footer > .table-button", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Editar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "184f6a31-ed0a-453e-80a7-454861ad3159",
+    "name": "Eliminar Integrante",
+    "commands": [{
+      "id": "3f10f97b-1fb0-4ae5-9902-d277e207e751",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "311aec7a-3c2b-445a-b0c7-eb128c63c40c",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1376x754",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b015f7da-67ae-4f05-87f9-a8dfbbd5f19f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bcbbfff1-d390-447f-bfe8-977d0328148a",
+      "comment": "",
+      "command": "click",
+      "target": "id=acciones-button",
+      "targets": [
+        ["id=acciones-button", "id"],
+        ["css=.mx-2:nth-child(5) > #acciones-button", "css:finder"],
+        ["xpath=//button[@id='acciones-button']", "xpath:attributes"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[5]/button", "xpath:idRelative"],
+        ["xpath=//td[5]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Gestionar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9ec5202c-8b18-47f4-80ee-7bd4b2dd372a",
+      "comment": "",
+      "command": "doubleClick",
+      "target": "css=.mx-2:nth-child(4)",
+      "targets": [
+        ["css=.mx-2:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[4]", "xpath:idRelative"],
+        ["xpath=//td[4]", "xpath:position"],
+        ["xpath=//td[contains(.,'87')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2ad3a613-f659-4cde-8c15-9adb998f6ed0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col:nth-child(2) > #boton-personalizado",
+      "targets": [
+        ["css=.col:nth-child(2) > #boton-personalizado", "css:finder"],
+        ["xpath=(//button[@id='boton-personalizado'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Eliminar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "71518869-34a2-4c6c-aa1f-9a44548fa3bb",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.col:nth-child(2) > #boton-personalizado",
+      "targets": [
+        ["css=.col:nth-child(2) > #boton-personalizado", "css:finder"],
+        ["xpath=(//button[@id='boton-personalizado'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Eliminar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ad8b471e-65c1-4689-a18b-8e4c3ddcf944",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.col:nth-child(2) > #boton-personalizado",
+      "targets": [
+        ["css=.col:nth-child(2) > #boton-personalizado", "css:finder"],
+        ["xpath=(//button[@id='boton-personalizado'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Eliminar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f5c5ba23-a806-4123-a85f-83a647356de6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal-footer > .delete-button",
+      "targets": [
+        ["css=.modal-footer > .delete-button", "css:finder"],
+        ["xpath=(//button[@type='button'])[7]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div[2]/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div[3]/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "92b9c1df-9901-41cd-ae85-75e50cde101a",
+    "name": "Agregar un organo colegiado",
+    "commands": [{
+      "id": "f64c222d-c3f2-4e8d-982b-825d9dbc03a6",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "22202c03-0291-491c-80d8-781a288c280c",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1376x754",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6776fbee-6bd0-4335-85bf-5bb9fa8d2e7e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d7db407f-7f1e-4ccd-adf3-904cb24e76e1",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,296.66668701171875)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bfbf517a-a7a9-4150-9331-6f62a428d429",
+      "comment": "",
+      "command": "click",
+      "target": "css=.table-button",
+      "targets": [
+        ["css=.table-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Agregar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "255222e0-a4eb-4b38-a81f-1e208ae73369",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.table-button",
+      "targets": [
+        ["css=.table-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Agregar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0264f768-85fa-44e3-a588-29a8f2bcd852",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.rounded-3",
+      "targets": [
+        ["css=.rounded-3", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Agregar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d167db1c-d12d-4e61-a5ff-8df33030d5a6",
+      "comment": "",
+      "command": "click",
+      "target": "id=nombre",
+      "targets": [
+        ["id=nombre", "id"],
+        ["name=nombre", "name"],
+        ["css=#nombre", "css:finder"],
+        ["xpath=//input[@id='nombre']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f8ff08f4-6b68-4684-a464-2f0691b36269",
+      "comment": "",
+      "command": "type",
+      "target": "id=nombre",
+      "targets": [
+        ["id=nombre", "id"],
+        ["name=nombre", "name"],
+        ["css=#nombre", "css:finder"],
+        ["xpath=//input[@id='nombre']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/input", "xpath:position"]
+      ],
+      "value": "Consejo Asesor"
+    }, {
+      "id": "84136cbe-7d9a-46c3-be37-4e43ac449c6d",
+      "comment": "",
+      "command": "click",
+      "target": "id=acuerdo_firme",
+      "targets": [
+        ["id=acuerdo_firme", "id"],
+        ["name=acuerdo_firme", "name"],
+        ["css=#acuerdo_firme", "css:finder"],
+        ["xpath=//input[@id='acuerdo_firme']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb47be3d-55bf-4960-9fc7-9c94e78eef7a",
+      "comment": "",
+      "command": "type",
+      "target": "id=acuerdo_firme",
+      "targets": [
+        ["id=acuerdo_firme", "id"],
+        ["name=acuerdo_firme", "name"],
+        ["css=#acuerdo_firme", "css:finder"],
+        ["xpath=//input[@id='acuerdo_firme']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "23"
+    }, {
+      "id": "7bacc496-a42f-41db-96b8-27d34195e90b",
+      "comment": "",
+      "command": "click",
+      "target": "id=quorum",
+      "targets": [
+        ["id=quorum", "id"],
+        ["name=quorum", "name"],
+        ["css=#quorum", "css:finder"],
+        ["xpath=//input[@id='quorum']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5d25fe89-25b3-4aa1-9a04-1156808524a0",
+      "comment": "",
+      "command": "type",
+      "target": "id=quorum",
+      "targets": [
+        ["id=quorum", "id"],
+        ["name=quorum", "name"],
+        ["css=#quorum", "css:finder"],
+        ["xpath=//input[@id='quorum']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "5"
+    }, {
+      "id": "c16f6527-587e-4065-973b-ffdd006cdbda",
+      "comment": "",
+      "command": "click",
+      "target": "id=numero_miembros",
+      "targets": [
+        ["id=numero_miembros", "id"],
+        ["name=numero_miembros", "name"],
+        ["css=#numero_miembros", "css:finder"],
+        ["xpath=//input[@id='numero_miembros']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7ac85e0d-d69b-4a0c-9811-c2e5fc854fd5",
+      "comment": "",
+      "command": "type",
+      "target": "id=numero_miembros",
+      "targets": [
+        ["id=numero_miembros", "id"],
+        ["name=numero_miembros", "name"],
+        ["css=#numero_miembros", "css:finder"],
+        ["xpath=//input[@id='numero_miembros']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": "7"
+    }, {
+      "id": "37029c27-9451-426e-be89-e164756daadc",
+      "comment": "",
+      "command": "click",
+      "target": "id=boton-personalizado",
+      "targets": [
+        ["id=boton-personalizado", "id"],
+        ["css=#boton-personalizado", "css:finder"],
+        ["xpath=//button[@id='boton-personalizado']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "19b91aea-b7e2-4b82-9c6f-60138744f494",
+    "name": "Editar un organo colegiado",
+    "commands": [{
+      "id": "3099e16a-5ec6-403f-8046-0754e8192c96",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c269084b-fda6-4b37-8c8d-6a8b0c1610f2",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1376x754",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f67bb804-4638-47c2-b886-3ad13dfb14c2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b22d39be-3487-4aa4-ad8e-db2280b95671",
+      "comment": "",
+      "command": "doubleClick",
+      "target": "css=.mx-2:nth-child(4)",
+      "targets": [
+        ["css=.mx-2:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[4]", "xpath:idRelative"],
+        ["xpath=//td[4]", "xpath:position"],
+        ["xpath=//td[contains(.,'23')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5a839023-a328-4081-85cb-adb3dd8c0735",
+      "comment": "",
+      "command": "click",
+      "target": "id=acuerdo_firme",
+      "targets": [
+        ["id=acuerdo_firme", "id"],
+        ["name=acuerdo_firme", "name"],
+        ["css=#acuerdo_firme", "css:finder"],
+        ["xpath=//input[@id='acuerdo_firme']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "acf1b153-2122-4133-a03c-be60b020caf4",
+      "comment": "",
+      "command": "type",
+      "target": "id=acuerdo_firme",
+      "targets": [
+        ["id=acuerdo_firme", "id"],
+        ["name=acuerdo_firme", "name"],
+        ["css=#acuerdo_firme", "css:finder"],
+        ["xpath=//input[@id='acuerdo_firme']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div/div/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "013"
+    }, {
+      "id": "482d6b41-b9b0-4af3-a77e-c90d593a3ac3",
+      "comment": "",
+      "command": "click",
+      "target": "id=boton-personalizado",
+      "targets": [
+        ["id=boton-personalizado", "id"],
+        ["css=.col:nth-child(1) > #boton-personalizado", "css:finder"],
+        ["xpath=//button[@id='boton-personalizado']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Guardar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1a012b81-9982-40ad-b8ea-c4146e110273",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=boton-personalizado",
+      "targets": [
+        ["id=boton-personalizado", "id"],
+        ["css=.col:nth-child(1) > #boton-personalizado", "css:finder"],
+        ["xpath=//button[@id='boton-personalizado']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Guardar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "97273c65-466c-4453-ba33-7591a2174289",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=boton-personalizado",
+      "targets": [
+        ["id=boton-personalizado", "id"],
+        ["css=.col:nth-child(1) > #boton-personalizado", "css:finder"],
+        ["xpath=//button[@id='boton-personalizado']", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Guardar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2aa9133d-a76d-435a-be15-8520135ac377",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal-footer > .table-button",
+      "targets": [
+        ["css=.modal-footer > .table-button", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div/div/div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Editar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "905b5d7f-c7fb-4a0d-8895-cf4d75513e86",
+    "name": "Eliminar un organo colegiado",
+    "commands": [{
+      "id": "e1d0e0aa-8625-4e1b-8e8e-49c29065e1eb",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "53c8f883-c12e-4d44-b476-88b9a63369f9",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1376x754",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f59cdb9d-e409-4a7f-a7c5-82e3a5371136",
+      "comment": "",
+      "command": "click",
+      "target": "css=.d-flex:nth-child(17) > .text-decoration-none",
+      "targets": [
+        ["css=.d-flex:nth-child(17) > .text-decoration-none", "css:finder"],
+        ["xpath=//div[@id='content-box']/nav/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/gestion-organos-colegiados')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2a9d8e34-81c3-4c46-a9fb-1a3541e1dc95",
+      "comment": "",
+      "command": "doubleClick",
+      "target": "css=.mx-2:nth-child(4)",
+      "targets": [
+        ["css=.mx-2:nth-child(4)", "css:finder"],
+        ["xpath=//div[@id='table-box']/table/tbody/tr/td[4]", "xpath:idRelative"],
+        ["xpath=//td[4]", "xpath:position"],
+        ["xpath=//td[contains(.,'13')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e86e8a2a-0f0d-4d5f-a15c-d4dbe1719deb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.col:nth-child(2) > #boton-personalizado",
+      "targets": [
+        ["css=.col:nth-child(2) > #boton-personalizado", "css:finder"],
+        ["xpath=(//button[@id='boton-personalizado'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Eliminar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f6f22876-fc30-42b1-a39f-d43f6a9b85e0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal-footer > .delete-button",
+      "targets": [
+        ["css=.modal-footer > .delete-button", "css:finder"],
+        ["xpath=(//button[@type='button'])[7]", "xpath:attributes"],
+        ["xpath=//div[@id='content-box']/div/main/div/div[4]/div/div/div/div/form/div[2]/div/div[2]/div/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/div[3]/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "332fafb0-2b03-4628-90db-36bbc2b36734",
+    "name": "Integrantes",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["304e3a5b-68f5-4aa9-bfff-dcff8cceac73", "f3fe4167-c6db-4567-9f3a-4dd8727480c1", "184f6a31-ed0a-453e-80a7-454861ad3159"]
+  }, {
+    "id": "944a5b56-abfd-4ed7-850e-dddec58560ba",
+    "name": "Organo Colegiado",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["92b9c1df-9901-41cd-ae85-75e50cde101a", "19b91aea-b7e2-4b82-9c6f-60138744f494", "905b5d7f-c7fb-4a0d-8895-cf4d75513e86"]
+  }],
+  "urls": ["http://localhost:5173/"],
+  "plugins": []
+}

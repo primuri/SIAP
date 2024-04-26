@@ -136,7 +136,6 @@ export const eliminarCuentasBancarias = (id, token) => {
 
 
 
-// Editar documento cuentas 
 export const editarDocumentoCuentaAndDocumento = async (id, documento, token) => {
     return await manejarErrores( manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
@@ -146,7 +145,6 @@ export const editarDocumentoCuentaAndDocumento = async (id, documento, token) =>
     })));
 };
 
-// Agregar documento cuentas
 export const agregarDocumentoCuenta = async (documento, token) => {
     return await manejarErrores( manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
@@ -156,7 +154,6 @@ export const agregarDocumentoCuenta = async (documento, token) => {
     })));
 };
 
-// Editar documento cuentas solo detalle
 export const editarDocumentoCuenta = async (id, documento, token) => {
     return await manejarErrores( manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {

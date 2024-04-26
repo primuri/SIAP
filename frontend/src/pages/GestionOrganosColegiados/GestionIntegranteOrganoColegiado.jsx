@@ -16,15 +16,15 @@ export const GestionIntegranteOrganoColegiado = () => {
   const navigate                        = useNavigate()
   const [clean_id, setClean_id]         = useState(id.startsWith('o_id=') ? id.split('o_id=')[1] : '')
 
-  const [data, setData]                                                 = useState([])//Todos los Integrantes
+  const [data, setData]                                                 = useState([])
   const [reload, setReload]                                             = useState(false)
   const [cargado, setCargado]                                           = useState(false)
-  const [integrante, setIntegrante]                                     = useState(null) //Integrante al que se le da click en la tabla para editar
-  const [integrantes, setIntegrantes]                                   = useState([]) //Integrantes que se muestran
+  const [integrante, setIntegrante]                                     = useState(null)
+  const [integrantes, setIntegrantes]                                   = useState([])
   const [organo_colegiado, setOrganoColegiado]                          = useState(null)
   const [selectedIdOrganoColegiado, setSelectedIdOrganoColegiado]       = useState(null);
 
-  const [error, setError]                   = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+  const [error, setError]                   = useState(false)
   const [addClick, setAddClick]             = useState(false)
   const [edit, setEdit]                     = useState(false)
 
@@ -52,32 +52,21 @@ export const GestionIntegranteOrganoColegiado = () => {
   async function loadIntegrantes(clean_id) {
     try {
         const response = await obtenerIntegrantes(token);
-        console.log("clean_id:", clean_id);
-        
-        // Debugging: Imprimir todos los valores de item.id_organo_colegiado_fk antes del filtrado
-        console.log("Valores de item.id_organo_colegiado_fk antes del filtrado:");
         response.data.forEach(item => {
-            console.log(item.id_organo_colegiado_fk.id_organo_colegiado);
         });
 
-        // Aplicar formato de fecha y filtrar los datos
         const formattedAndFilteredData = response.data.map(item => ({
             ...item,
-            inicio_funciones: item.inicio_funciones ? formatDate(item.inicio_funciones) : 'No especificado' // Aplicando el formato aquí
+            inicio_funciones: item.inicio_funciones ? formatDate(item.inicio_funciones) : 'No especificado'
         })).filter(item => {
-            // Imprimir el valor específico que se va a comparar en cada item, justo antes de hacerlo
-            console.log("Comparando:", item.id_organo_colegiado_fk.id_organo_colegiado, "con clean_id:", clean_id);
             return Number(item.id_organo_colegiado_fk.id_organo_colegiado) === Number(clean_id);
         });
-
-        console.log("formattedAndFilteredData", formattedAndFilteredData);
 
         setData(formattedAndFilteredData);
         setIntegrantes(formattedAndFilteredData);
         setCargado(true);
 
     } catch (error) {
-        // Puedes manejar el error aquí, como mostrar un mensaje o realizar otras acciones de error
         console.error('Error al cargar integrantes:', error);
     }
   }
@@ -91,9 +80,7 @@ export const GestionIntegranteOrganoColegiado = () => {
     const fetchData = async () => {
       if (id_organo && data.length > 0) {
         const idNum = parseInt(id_organo, 10);
-        console.log("idNum", idNum);
         const elemento = data.find(e => e.id_organo_colegiado_fk.id_organo_colegiado === idNum);
-        console.log("elemento", elemento);
         if (elemento) {
           setEdit(true);
           setAddClick(false);
@@ -104,14 +91,13 @@ export const GestionIntegranteOrganoColegiado = () => {
       }
     };
   
-    fetchData(); // Call the async function immediately
+    fetchData();
   }, [data, organo_colegiado]);
   
   const success = () => {
       window.location.href = `/gestion-organos-colegiados/${id}/gestion-integrantes`
   }
 
-  // Manejo de datos que se van a enviar para agregar
   const addIntegrante = async (formData) => {
     const Data = JSON.parse(formData.get('json'))
     try {
@@ -125,9 +111,6 @@ export const GestionIntegranteOrganoColegiado = () => {
         });
 
         formData.delete('json');
-
-        console.log("add")
-        console.log(formData)
 
         let fecha_ini = Data.id_vigencia_fk.fecha_inicio;
         let fecha_fi = Data.id_vigencia_fk.fecha_fin;
@@ -147,9 +130,6 @@ export const GestionIntegranteOrganoColegiado = () => {
         delete Data.id_vigencia_fk;
         Data.id_vigencia_fk = id_vigencia_creado;
 
-        console.log("add")
-        console.log(formData)
-
         const id_oc = Data.id_organo_colegiado_fk.id_organo_colegiado;
         delete Data.id_organo_colegiado_fk;
 
@@ -166,29 +146,24 @@ export const GestionIntegranteOrganoColegiado = () => {
         Data.id_oficio_fk = id_oficio_creado;
 
         await agregarIntegrante(Data, token)
-
-        loadIntegrantes(id_oc)
+        setReload(!reload)
 
         toast.success('Integrante agregado correctamente', {
             id: toastId,
-            duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-            position: 'bottom-right', // Posición en la pantalla
+            duration: 4000,
+            position: 'bottom-right',
             style: {
             background: 'var(--celeste-ucr)',
             color: '#fff',
             },
         })
         setAddClick(false)
-        loadIntegrantes(id_oc)
         success()
     } catch (error) {
       toast.dismiss(toastId)
-      //await eliminarOficio(Data.id_oficio_fk, token);
-      //await eliminarVigencia(Data.id_vigencia_fk, token);
     }
   }
 
-  // Manejo de los datos del formulario de editar 
   const editIntegrante = async (formData) => {
     try {
         var toastId = toast.loading('Editando...', {
@@ -202,9 +177,6 @@ export const GestionIntegranteOrganoColegiado = () => {
         const Data = JSON.parse(formData.get('json'))
 
         formData.delete('json')
-
-        console.log("edit")
-        console.log(formData)
 
         const id_integrante = Data.id_integrante;
         const id_organo_colegiado = Data.id_organo_colegiado_fk.id_organo_colegiado;
@@ -253,27 +225,24 @@ export const GestionIntegranteOrganoColegiado = () => {
         Data.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
         await editarIntegrante(id_integrante, Data, localStorage.getItem("token"))
-
-        loadIntegrantes(Data.id_organo_colegiado_fk)
+        setReload(!reload)
 
         toast.success('Integrante actualizado correctamente', {
             id: toastId,
-            duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-            position: 'bottom-right', // Posición en la pantalla
+            duration: 4000,
+            position: 'bottom-right', 
             style: {
             background: 'var(--celeste-ucr)',
             color: '#fff',
             },
         })
         setEdit(false)
-        loadIntegrantes(Data.id_organo_colegiado_fk)
         success()
     } catch (error) {
       toast.dismiss(toastId)
     }
   }
 
-  // Manejo del eliminar
   const deleteIntegrante = async (integrante) => { 
     try {
       var toastId = toast.loading('Eliminando...', {
@@ -290,40 +259,36 @@ export const GestionIntegranteOrganoColegiado = () => {
       await eliminarIntegrante(integrante.id_integrante, token)
       await eliminarOficio(integrante.id_oficio_fk.id_oficio, token);
       await eliminarVigencia(integrante.id_vigencia_fk.id_vigencia, token);
+      setReload(!reload)
 
-      loadIntegrantes(id)
 
       toast.success('Integrante eliminado correctamente', {
         id: toastId,
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
+        duration: 4000,
+        position: 'bottom-right', 
         style: {
           background: 'var(--celeste-ucr)',
           color: '#fff',
         },
       })
       setEdit(false)
-      loadIntegrantes(id)
       success()
     } catch (error) {
       toast.dismiss(toastId)
     }
   }
 
-  // Al darle click a cancelar, se cierra el modal
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
     navigate(`/gestion-organos-colegiados/${id}/gestion-integrantes`)
   }
 
-  // Al darle click a agregar, muestra el modal
   const addClicked = () => {
     setAddClick(true)
     setEdit(false)
   }
 
-  // Al hacer click en la tabla
   const elementClicked = (selectedIntegrante) => {
     setIntegrante(selectedIntegrante)
     setAddClick(false)
@@ -331,12 +296,10 @@ export const GestionIntegranteOrganoColegiado = () => {
     document.body.classList.add('modal-open');
   }
 
-  //se filtra
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj)
   }
 
-  //se filtra
   const search = (col, filter) => {
     const matches = data.filter((e) => {
       if (col.includes('.')) {

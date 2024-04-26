@@ -23,7 +23,7 @@ export const Search = ({ columns, colNames, onSearch }) => {
             <select 
                 value={selectedColumn}
                 onChange={(e) => setSelectedColumn(e.target.value)}
-                className="rounded-start-3 form-select d-inline p-2 shadow-sm" id="selectCol" style={{width: "200px" }}
+                className="rounded-start-3 form-select d-inline p-2 shadow-sm" id="selectCol" style={{width: "11rem", backgroundPosition: 'right 0rem center' }}
             > 
                 <option>Seleccionar columna</option>
                 { 

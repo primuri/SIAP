@@ -1,38 +1,10 @@
 import axios from 'axios'
 import {manejarErrores} from './errorHandler'
 
-/*
-    {
-    "integrante": {
-        "id_integrante": 1,
-        "id_organo_colegiado_fk": 1,
-        "nombre_integrante": "nombre",
-        "id_oficio_fk": 1,
-        "id_vigencia_fk": 1,
-        "puesto": "Secretario",
-        "normativa_reguladora": "sin detalle",
-        "inicio_funciones": 01/01/2023
-    },
-    "organoColegiado": {
-        "id_organo_colegiado": 1,
-        // ... otros campos del modelo 
-    },
-    "oficio": {
-        "id_oficio": 1,
-        // ... otros campos del modelo 
-    },
-    "vigencia": {
-        "id_vigencia": 1
-        // ... otros campos del modelo 
-    }
-}
-*/
-
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
-//Integrante
 
 export const obtenerIntegrantes = async (token) => {
     return await manejarErrores(SIAPAPI.get(`organo_colegiado/integrante/`, {
@@ -83,7 +55,6 @@ export const eliminarIntegrante = async (id, token) => {
     }));
 };
 
-//Vigencia
 
 export const agregarVigencia = async (vigencia, token) => {
     try {
@@ -120,7 +91,6 @@ export const eliminarVigencia = async (id, token) => {
     }));
 };
 
-//Oficio
 
 export const agregarOficio = async (oficio, token) => {
     try {

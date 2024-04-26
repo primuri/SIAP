@@ -14,20 +14,19 @@ export const GestionProveedores = () => {
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
-  const [proveedores, setProveedores] = useState([]) // Proveedores que se muestran
-  const [data, setData] = useState([])//Todos los Proveedores
-  const [proveedor, setProveedor] = useState(null) //Usuario al que se le da click en la tabla para editar
+  const [proveedores, setProveedores] = useState([]) 
+  const [data, setData] = useState([])
+  const [proveedor, setProveedor] = useState(null)
   const [cargado, setCargado] = useState(false)
-  const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+  const [error, setError] = useState(false)
   const [addClick, setAddClick] = useState(false)
   const [edit, setEdit] = useState(false)
   const columns = ['Cédula', 'Tipo', 'Correo', 'Nombre', 'Teléfono']
   const dataKeys = ['id_cedula_proveedor', 'tipo', 'correo', 'nombre', 'telefono']
 
-  user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
+  user.groups[0] !== "administrador" ? setError(true) : null
   useEffect(() => { loadProveedores() }, [reload])
 
-  // Detecta cambios y realiza la solicitud nuevamente
   async function loadProveedores() {
     try {
       const res = await obtenerProveedores(localStorage.getItem('token'))
@@ -47,7 +46,6 @@ export const GestionProveedores = () => {
     }
   }
 
-  //Uso de id_cedula_proveedor en url
   useEffect(()=>{
     if(id_cedula_proveedor && data.length > 0){
         const elemento = data.find(e => e.id_cedula_proveedor === id_cedula_proveedor);
@@ -65,7 +63,6 @@ export const GestionProveedores = () => {
     window.location.href = '/gestion-proveedores'
 }
 
-  // Manejo de datos que se van a enviar para agregar
   const addProveedor = async (formData) => {
     try {
       var toastId = toast.loading('Agregando...', {
@@ -103,8 +100,7 @@ export const GestionProveedores = () => {
     }
 
   }
-
-  // Manejo de los datos del formulario de editar 
+ 
   const editProveedor = async (formData) => {
     try {
       var toastId = toast.loading('Editando...', {
@@ -157,7 +153,6 @@ export const GestionProveedores = () => {
     }
   }
 
-  // Manejo del eliminar
   const deleteProveedor = async (id, doc_id) => {
     try {
       var toastId = toast.loading('Eliminando...', {
@@ -187,14 +182,14 @@ export const GestionProveedores = () => {
      
     }
   }
-  // Al darle click a cancelar, se cierra el modal
+  
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
     document.body.classList.remove('modal-open');
     navigate('/gestion-proveedores')
   }
-  // Al darle click a agregar, muestra el modal
+  
   const addClicked = () => {
     setAddClick(true)
     setEdit(false)
@@ -202,17 +197,14 @@ export const GestionProveedores = () => {
 
   }
 
-  // Al hacer click en la tabla
   const elementClicked = (user) => {
     navigate(`/gestion-proveedores/${user.id_cedula_proveedor}`)
   }
 
-  //se filtra
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj)
   }
 
-  //se filtra
   const search = (col, filter) => {
     const matches = data.filter((e) => {
       if (col.includes('.')) {
@@ -227,7 +219,7 @@ export const GestionProveedores = () => {
     <main >
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-          <div className="d-flex flex-row"><h1>Gestión de proveedores</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+          <div className="d-flex flex-row"><h1>Gestión de proveedores</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className="d-flex justify-content-between mt-4">
             <Add onClick={addClicked}></Add>
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>

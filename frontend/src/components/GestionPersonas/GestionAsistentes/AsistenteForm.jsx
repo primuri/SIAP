@@ -11,7 +11,6 @@ import Tooltip from '@mui/material/Tooltip';
 const filter = createFilterOptions();
 
 export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete }) => {
-  // Cargar informacion
   const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
   const [fileData, setFileData] = useState(null);
@@ -30,7 +29,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
         apellido: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.apellido: "", 
         segundo_apellido: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido: "" }
     },
-      id_documento_inopia_fk: asistente ? asistente.id_documento_inopia_fk: { id_documento: "", tipo: "Asistente", detalle: "", documento: "" }
+      id_documento_inopia_fk: asistente?.id_documento_inopia_fk || { id_documento: "", tipo: "Asistente", detalle: "", documento: "" }
 
   });
 
@@ -42,16 +41,13 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    // Validación específica para campos numéricos
     if ((name === "cantidad_horas" || name === "consecutivo") && (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value))) {
-        // Evita la actualización del estado si el valor es inválido, pero no detiene las actualizaciones para otros campos
         return;
     }
 
-    // Manejo de campos anidados
     if (name.includes('.')) {
       const keys = name.split('.');
-      if (keys.length === 3) { // Caso específico para tres niveles de profundidad
+      if (keys.length === 3) {
         setFormData(prev => ({
           ...prev,
           [keys[0]]: {
@@ -62,7 +58,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
             }
           }
         }));
-      } else { // Caso general para un nivel de profundidad
+      } else {
         setFormData(prev => ({
           ...prev,
           [keys[0]]: {
@@ -72,7 +68,6 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
         }));
       }
     } else {
-      // Actualización para campos no anidados
       setFormData({
         ...formData,
         [name]: value,
@@ -101,7 +96,6 @@ const sendForm = (event) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileData(file);
-    //setCambios({ asistenteData: formData, asistenteFile: file }); 
   };
 
 
@@ -214,19 +208,21 @@ const sendForm = (event) => {
 
         <div className="row mb-4">
             <div className="col">
-                <label htmlFor="detalleInopia" className="label-personalizado mb-2"> Detalle Inopia   </label>
-                <input type="text" className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle} onChange={handleChange} required />
+                <label htmlFor="detalleInopia" className="label-personalizado mb-2"> Detalle Inopia   </label> <span className="disabled-input">(Opcional)</span>
+                <textarea className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle || ''} onChange={handleChange} />
             </div>
             <div className="col">
-                <label htmlFor="documentoInopia" className="label-personalizado mb-2"> Documento del Inopia   </label>
-                <input type="file" className="form-control" name="id_documento_inopia_fk.documento" id="documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
-                {mode === 2 ? (
-                    <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
-                        <a href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                            {"Descargar documento"}
-                        </a>
-                    </Tooltip>
-                ): ""}
+                <label htmlFor="documentoInopia" className="label-personalizado mb-2"> Documento del Inopia   </label> <span className="disabled-input">(Opcional)</span>
+                <input type="file" className="form-control" name="id_documento_inopia_fk.documento" id="documento" onChange={handleFileChange} />
+                {mode === 2 && formData.id_documento_inopia_fk.documento ? (
+                <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
+                  {formData.id_documento_inopia_fk.documento !== "" && (
+                    <a href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                      {"Descargar documento"}
+                    </a>
+                  )}
+                </Tooltip>
+              ) : null}
             </div>
         </div>
         

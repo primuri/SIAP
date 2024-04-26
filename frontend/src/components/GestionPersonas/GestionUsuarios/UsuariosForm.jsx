@@ -19,7 +19,6 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
     useEffect(() => {
         loadInvestigadores();
         loadEvaluadores();
-        console.log(usuario)
     }, []);
     
     async function loadInvestigadores() {
@@ -319,7 +318,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                         {(academicosFilter.length > 0) && (
                                                         <div
                                                             className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                            style={{ maxHeight: "40px" }}
+                                                            style={{ maxHeight: "60px", margin: "5px" }}
                                                         >
                                                         {academicosFilter.map((academico) => {
                                                             return (
@@ -352,8 +351,8 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                     <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required/>
                                                     {evaluadoresFilter.length > 0 && (
                                                         <div
-                                                            className=" bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                            style={{ maxHeight: "40px" }}
+                                                            className=" form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                                            style={{ maxHeight: "60px", margin: "5px" }}
                                                         >
                                                             {evaluadoresFilter.map((evaluador) => {
                                                                 return (

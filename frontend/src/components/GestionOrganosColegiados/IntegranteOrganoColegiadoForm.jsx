@@ -19,7 +19,6 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
         inicio_funciones: integrante ? integrante.inicio_funciones.split('T')[0] : "",
         nombre_integrante: integrante ? integrante.nombre_integrante : "",
         id_organo_colegiado_fk: integrante ? integrante.id_organo_colegiado_fk : {
-            //id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : "",
             id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
             nombre : integrante ? integrante.id_organo_colegiado_fk.nombre : "",
             numero_miembros : integrante ? integrante.id_organo_colegiado_fk.numero_miembros : "",
@@ -41,11 +40,9 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
     const handleChange = (event) => {
         const { name, value } = event.target
 
-        // Procesamiento general para otros campos, incluidas las fechas
         const keys = name.split('.');
         let updatedValue = value;
     
-        // Si el campo modificado es de fecha, realiza la validación correspondiente
         if (keys.includes('fecha_inicio') || keys.includes('fecha_fin')) {
             const startDateKey = keys.slice(0, -1).join('.') + '.fecha_inicio';
             const endDateKey = keys.slice(0, -1).join('.') + '.fecha_fin';
@@ -53,12 +50,10 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
             const endDate = keys[keys.length - 1] === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
     
             if (startDate > endDate) {
-                console.log("La fecha de inicio no puede ser posterior a la fecha de fin.");
-                return; // Detiene la ejecución si la fecha de inicio es mayor que la de fin
+                return;
             }
         }
 
-        // Navegar por el objeto formData para encontrar y actualizar el valor correcto
         const updateFormData = (path, value, obj) => {
             const keys = path.split('.');
             const lastKey = keys.pop();
@@ -70,7 +65,6 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
         setFormData({ ...formData });
     };
 
-    // Función auxiliar para obtener valor por ruta de acceso en objeto anidado
     function getValueByPath(object, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], object);
     }
@@ -159,7 +153,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombreIntegrante" className="label-personalizado mb-2">Nombre integrante</label>
-                                    <input type="text" className="form-control" name="nombre_integrante" id="nombreIntegrante" value={formData.nombre_integrante} onChange={handleChange} required />
+                                    <textarea className="form-control" name="nombre_integrante" id="nombreIntegrante" value={formData.nombre_integrante} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -174,7 +168,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="normativaReguladora" className="label-personalizado mb-2">Normativa reguladora</label>
-                                    <input type="text" className="form-control" name="normativa_reguladora" id="normativaReguladora"  value={formData.normativa_reguladora} onChange={handleChange} required/>
+                                    <textarea className="form-control" name="normativa_reguladora" id="normativaReguladora"  value={formData.normativa_reguladora} onChange={handleChange} required/>
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -206,7 +200,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Número de oficio  </label>
-                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio de nombramiento  </label>
