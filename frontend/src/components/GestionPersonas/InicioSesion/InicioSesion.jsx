@@ -45,6 +45,9 @@ export const InicioSesion = () => {
       if(tipoUsuario === 'invitado') {
         window.location.href = '/organos-colegiados';
       }
+      if(tipoUsuario === 'investigador') {
+        window.location.href = '/proyectos';
+      }
       
     } catch (error) {
       toast.error('Usuario o contraseña incorrectos', {
