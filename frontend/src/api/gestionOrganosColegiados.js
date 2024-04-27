@@ -129,6 +129,15 @@ export const obtenerNumeroAcuerdos = async (id_sesion) => {
     return acuerdosFiltrados.length;
 }
 
+export const obtenerAcuerdos = async () => {
+    return await manejarErrores(SIAPAPI.get('organo_colegiado/acuerdo/', {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+}
+
 export const obtenerIntegrantes = async (id_organo_colegiado) => {
     const response = await manejarErrores(SIAPAPI.get('organo_colegiado/integrante/', {
         headers:{
