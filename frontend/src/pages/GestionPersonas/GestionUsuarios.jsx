@@ -158,6 +158,7 @@ export const GestionUsuarios = () => {
 
         // Funcion auxiliar para jalar producto dada una versión de proyecto
         const createJsonForReport = () => {
+
             // Titulo del reporte a mostrar en PDF
             JsonForReport.reportTitle = "Usuario"
 
@@ -177,6 +178,7 @@ export const GestionUsuarios = () => {
             ]
 
             JsonForReport.reportData = usuarios
+            setJsonIsReady(false)
 
             // Función auxiliar particular para configurar data del reporte
             setJsonIsReady(true)
@@ -216,7 +218,10 @@ export const GestionUsuarios = () => {
             }
             return e[col].toString().includes(filter)
         })
+
         setUsuarios(matches)
+        setJsonIsReady(false)
+
     }
     return (
         <main >
