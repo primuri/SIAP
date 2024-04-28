@@ -35,7 +35,22 @@ export const GestionEvaluaciones = () => {
         createJsonForReport()
     }, [evaluacionesList])
 
-    const createJsonForReport = async () => {
+    const configureReportData = () => {
+        if (evaluacionesList.length > 0) {
+            try {
+                const evaluaciones = evaluacionesList.map((evaluacion) => evaluacion);
+                JsonForReport.reportData = evaluaciones;
+    
+                return true;
+    
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
+                return false;
+            }
+        }
+    }
+
+    const createJsonForReport = () => {
         JsonForReport.reportTitle = "Evaluación";
         JsonForReport.idKey = "id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi";
         JsonForReport.dataKeys = [
@@ -54,31 +69,12 @@ export const GestionEvaluaciones = () => {
             'Nombre evaluador asignado',
             'Apellido evaluador asignado',
             'Estado de la evaluación',
-            'Respuestas'
+
         ];
-    
-        setJsonIsReady(await configureReportData());
+        setJsonIsReady(false)
+        setJsonIsReady(configureReportData());
     };
     
-
-    const configureReportData = async () => {
-        if (evaluacionesList.length > 0) {
-            try {
-                const promises = evaluacionesList.map(async (evaluacion) => {
-                    console.log(evaluacion)
-                    return evaluacion;
-                });
-                const evaluaciones = await Promise.all(promises);
-                JsonForReport.reportData = evaluaciones;
-
-                return true
-
-            } catch (exception) {
-                console.error("Ocurrió un error al crear el JSON para reporte: ")
-                return false
-            }
-        }
-    }
 
     useEffect(() => {
         loadEvaluaciones()
@@ -160,7 +156,8 @@ export const GestionEvaluaciones = () => {
 
 
     function filtrarEvaluaciones (col, filter) {
-        setEvaluacionesList(filtrar(col, filter, evaluacionesData))
+        setEvaluacionesList(filtrar(col, filter, evaluacionesData));
+        setJsonIsReady(false)
     }
     
     function addBtnClicked() {

@@ -638,3 +638,7 @@ input[type="submit"]:focus {
 .th-report{
   background-color: #a8a8a8 !important;
 }
+
+#header-confirmar {
+  justify-content: space-between;
+}
