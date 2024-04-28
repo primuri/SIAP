@@ -44,10 +44,8 @@ export const GestionAcuerdos = () => {
     async function loadAcuerdos() {
         try {
             const response = await obtenerAcuerdos();
-            // Filtrar sesiones por IdOrganoC
             const acuerdosFiltrados = response.data.filter(acuerdo => acuerdo.id_sesion_fk.id_sesion == idSesion);
     
-            // Añadir n_acuerdos a cada sesión filtrad
             setData(acuerdosFiltrados);                                                                 
             setAcuerdos(acuerdosFiltrados);                                                              
             setCargado(true);                                                                        
@@ -63,7 +61,7 @@ export const GestionAcuerdos = () => {
         try {
             console.log(formData);
 
-            
+            await agregarOrganoColegiado(Data, localStorage.getItem("token"))
 
             setAddClick(false)
             setReload(!reload)
@@ -193,7 +191,7 @@ export const GestionAcuerdos = () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        <h1>Gestión de acuerdos de la sesion</h1>
+                        <h1>Gestión de acuerdos de la sesión: {idSesion}</h1>
                     </div>
 
                     {(!cargado) && (

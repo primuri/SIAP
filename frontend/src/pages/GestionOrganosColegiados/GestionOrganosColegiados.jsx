@@ -78,7 +78,6 @@ export const GestionOrganosColegiados = () => {
         var toastId = toastProcesando("Editando...")
 
         try {
-    
             const Data = JSON.parse(formData)
             await editarOrganoColegiado(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
 

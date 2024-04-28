@@ -124,7 +124,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar sesión" : "Editar sesión"}
+                                {mode === 1 ? "Agregar acuerdo" : "Editar acuerdo"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -142,7 +142,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    {mode == 2 ?  
+                                    {mode == 1 ?  
                                         (<>
                                             <label htmlFor="id_acuerdo" className="label-personalizado mb-2">Identificador</label>
                                             <input type="text" className="form-control" name="id_acuerdo" id="id_acuerdo" value={formData.id_acuerdo} onChange={handleChange} />
@@ -158,82 +158,54 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             </div>
                         </div>
                         <div className="row mb-4">
-                        <div className="col-md-6">
-                                <label htmlFor="estado" className="label-personalizado mb-2">Estado</label>
-                                <select
-                                className="form-control"
-                                name="estado"
-                                id="id_agenda_fk.tipo"
-                                value={formData.estado}
-                                onChange={handleChange}
-                                required
-                                >
-                                    <option value="">Selecciona un estado</option>
-                                    <option value="tramitado">Tramitado</option>
-                                    <option value="en_tramite">En trámite</option>
-                                    <option value="no_tramite">No requiere trámite</option>
-                                </select>
-                            </div>
                             <div className="col-md-6">
-                                <label htmlFor="fecha_cumplimiento" className="label-personalizado mb-2">Fecha cumplimiento</label>
-                                <input type="date" className="form-control" name="fecha_cumplimiento" id="fecha_cumplimiento" value={formData.fecha_cumplimiento} onChange={handleChange} required />
-                            </div>
+                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado</label>
+                                    <select
+                                    className="form-control"
+                                    name="estado"
+                                    id="id_agenda_fk.tipo"
+                                    value={formData.estado}
+                                    onChange={handleChange}
+                                    required
+                                    >
+                                        <option value="">Selecciona un estado</option>
+                                        <option value="tramitado">Tramitado</option>
+                                        <option value="en_tramite">En trámite</option>
+                                        <option value="no_tramite">No requiere trámite</option>
+                                    </select>
+                                </div>
+                                <div className="col-md-6">
+                                    <label htmlFor="fecha_cumplimiento" className="label-personalizado mb-2">Fecha cumplimiento</label>
+                                    <input type="date" className="form-control" name="fecha_cumplimiento" id="fecha_cumplimiento" value={formData.fecha_cumplimiento} onChange={handleChange} required />
+                                </div>
                         </div> 
-          
-                        <div className="row mb-4">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label htmlFor="numero_actas" className="label-personalizado mb-2">Número de acta</label>
-                                    <input type="number" className="form-control" name="numero_actas" id="id_acta_fk.id_acta" value={formData.id_acta_fk.id_acta} onChange={handleChange} readOnly/>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="documento_acta" className="label-personalizado mb-2">Documento Acta</label>
-                                {mode === 1 ? <input type="file" className="form-control" name="documento_acta" id="id_acta_fk.id_documento_acta_fk"  onChange={(event) => handleFileChange(event, 'acta')} required />: 
-                                <a href={"http://localhost:8000" + formData.id_acta_fk.id_documento_acta_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2 d-block">
-                                {"Ver documento"}
-                            </a>}
-                            </div>
-                        </div>       
+             
 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="detalle_agenda" className="label-personalizado mb-2">Detalle agenda</label>
-                                    <input type="text" className="form-control" name="detalle_agenda" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange}/>
+                                    <label htmlFor="detalle_agenda" className="label-personalizado mb-2">Encargado</label>
+                                    <input type="text" className="form-control" name="encargado" id="encargado" value={formData.encargado} onChange={handleChange}/>
                                 </div>
                             </div>
-                            <div className="col-md-6">
-                                <label htmlFor="tipo_agenda" className="label-personalizado mb-2">Tipo agenda</label>
-                                <select
-                                className="form-control"
-                                name="tipo_agenda"
-                                id="id_agenda_fk.tipo"
-                                value={formData.id_agenda_fk.tipo}
-                                onChange={handleChange}
-                                required
-                                >
-                                    <option value="">Selecciona un tipo</option>
-                                    <option value="inicial">Inicial</option>
-                                    <option value="modificacion">Modificación</option>
-                                </select>
-                            </div>
-                        </div>   
-                        <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="numero_actas" className="label-personalizado mb-2">Documento convocatoria</label>
-                                    {mode === 1 ? <input type="file" className="form-control" name="documento_acta" id="id_acta_fk.id_documento_acta_fk" onChange={(event) => handleFileChange(event, 'convocatoria')} required /> : 
-                                    <a href={"http://localhost:8000" + formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2 d-block">
-                                    {"Ver documento"}
-                                </a>}
+                                    <label htmlFor="detalle_agenda" className="label-personalizado mb-2">Oficio (ESTO ES UN DOCUMENTO)</label>
+                                    <input type="text" className="form-control" name="oficio" id="oficio"/>
                                 </div>
                             </div>
-                        </div>     
-
-                        <div className="row mb-4">
-                           
                         </div>           
+                        <div className="row mb-4">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="detalle_agenda" className="label-personalizado mb-2">Seguimiento (????)</label>
+                                    <input type="text" className="form-control" />
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+
+                            </div>
+                        </div>         
                     </div>
                 </div>
        
@@ -245,7 +217,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="órgano colegiado" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="acuerdo" />)}
                                 </>
                             )}
                         </div>
@@ -253,7 +225,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="órgano colegiado" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="acuerdo" />)}
                                 </>
                             )}
                         </div>

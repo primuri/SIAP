@@ -124,6 +124,8 @@ export const GestionSesionesOrganosColegiados= () => {
         setEdit(false)
     }
 
+    
+
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
