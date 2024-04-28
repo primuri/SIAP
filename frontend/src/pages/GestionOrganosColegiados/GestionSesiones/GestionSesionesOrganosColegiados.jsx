@@ -31,7 +31,13 @@ export const GestionSesionesOrganosColegiados= () => {
     const columns = ['Identificador', 'Fecha', 'Número de acta', 'Cantidad de acuerdos', 'Acuerdos']
     const dataKeys = ['id_sesion','fecha', 'id_acta_fk.id_acta', 'n_acuerdos', '']
 
-    user.groups[0] !== "administrador" ? setError(true) : null                   
+    user.groups[0] !== "administrador" ? setError(true) : null 
+    
+    const transformedSesiones = sesiones.map(sesion => ({
+        ...sesion,  
+        fecha: formatDate(sesion.fecha) 
+      }));
+    
 
     useEffect(() => {                                                            
         async function fetchData() {
@@ -124,8 +130,6 @@ export const GestionSesionesOrganosColegiados= () => {
         setEdit(false)
     }
 
-    
-
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
@@ -188,6 +192,15 @@ export const GestionSesionesOrganosColegiados= () => {
           })
     }
 
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+    
     return (
         <main>
             {!error ? (
@@ -204,7 +217,7 @@ export const GestionSesionesOrganosColegiados= () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false} buttonText="Gestionar" />
+                    <Table columns={columns} data={transformedSesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
                         <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={IdOrganoC}></OrganosColegiadosSesionesForm></Modal>
                     )}
