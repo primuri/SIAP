@@ -8,7 +8,7 @@ import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { obtenerUsuarios, signup, actualizarUsuario, eliminarUsuario } from "../../api/gestionUsuarios"
 import { useNavigate, useParams } from "react-router-dom"
-
+import { ReportButton } from "../../utils/ReportButton";
 
 export const GestionUsuarios = () => {
     let {id} = useParams()
@@ -145,6 +145,51 @@ export const GestionUsuarios = () => {
             toast.dismiss(toastId)
         }
     }
+
+    // ==============================================================================================================================
+    // Parte que cada uno debe crear para su reporte:
+    // ==============================================================================================================================
+
+        // Json que almacena la información que debe recibir el componente ReportButton:  
+        const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+
+        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
+        const [JsonIsReady, setJsonIsReady] = useState(false)
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const createJsonForReport = () => {
+            // Titulo del reporte a mostrar en PDF
+            JsonForReport.reportTitle = "Usuario"
+
+            // LLave para acceder al id del objeto del reporte
+            JsonForReport.idKey = "correo"
+
+            // Llaves para acceder a los datos (incluye tabla extra)
+            JsonForReport.dataKeys = [
+                'correo',
+                'groups.0'
+            ]
+
+            // Nombres de las columnas o titulos de los items (incluye tabla extra)
+            JsonForReport.colNames = [
+                'Correo',
+                'Tipo'
+            ]
+
+            JsonForReport.reportData = usuarios
+
+            // Función auxiliar particular para configurar data del reporte
+            setJsonIsReady(true)
+        }
+
+        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
+        useEffect(() => {
+            setJsonIsReady(false)
+            createJsonForReport()
+        }, [usuarios])
+
+    // ==============================================================================================================================
+
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
@@ -178,8 +223,13 @@ export const GestionUsuarios = () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className="d-flex flex-row"><h1>Gestión de usuarios</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
-                    <div className="d-flex justify-content-between mt-4">
+                    <div className="d-flex mt-4">
+                    <div className="col">
                         <Add onClick={addClicked}></Add>
+                    </div>
+                        {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
+                        {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                                {/* ----------------------------------------------------------------------------------------------------------------------*/}
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
                     <Table columns={columns} data={usuarios} dataKeys={dataKeys} onDoubleClick ={elementClicked}></Table>
