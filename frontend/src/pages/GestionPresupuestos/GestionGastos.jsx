@@ -339,7 +339,10 @@ export const GestionGastos = () => {
                 <h1>Gestión de gastos de la partida </h1>
                 {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
               <div className="d-flex justify-content-between mt-4">
-                <Add onClick={addBtnClicked}></Add>
+                <div className="col">
+                    <Add onClick={addBtnClicked}></Add>
+                </div>
+                
                 {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
                 <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
               </div>
