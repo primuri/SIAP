@@ -20,7 +20,7 @@ const routeNames = {
     'gestion-organos-colegiados': 'Órganos Colegiados',
     'gestion-evaluaciones': 'Evaluaciones',
     'gestion-asistentes': 'Asistentes', 
-    'gestion-integrantes': 'Integrantes Órgano Colegiado',
+    'gestion-integrantes': 'Integrantes',
     'organos-colegiados': 'Órganos Colegiados',
 };
 

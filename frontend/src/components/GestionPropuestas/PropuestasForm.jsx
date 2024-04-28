@@ -176,13 +176,13 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="col-10 mb-0 text-center">
-                            <h2 className="headerForm">
+                <div className="col-10 mb-0 text-center" >
+                            <h2 className="headerForm" id="header-propuestas">
                                 {mode === 1 ? "Agregar propuesta" : "Editar propuesta"}
                             </h2>
                         </div>
                 <div>
-                    <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                    <button type="button" onClick={onCancel} className="close" data-dismiss="modal" id="close-propuestas">
                         <span aria-hidden="true" className="close-icon">&times;</span>
                     </button>
                 </div>

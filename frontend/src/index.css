@@ -642,3 +642,12 @@ input[type="submit"]:focus {
 #header-confirmar {
   justify-content: space-between;
 }
+
+#header-propuestas {
+  margin-left: 20%;
+}
+
+#close-propuestas {
+  margin-top: 10%;
+  margin-left: 170%;
+}
