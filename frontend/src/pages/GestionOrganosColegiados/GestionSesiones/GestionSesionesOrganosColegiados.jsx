@@ -14,10 +14,10 @@ export const GestionSesionesOrganosColegiados= () => {
                                                              
     const user = JSON.parse(localStorage.getItem('user'))  
     
-    const {IdOrganoC} = useParams() 
-    const location = useLocation()
+    const { IdOrganoC } = useParams();
+    const location = useLocation();
+    const nombreOC = location.state ? location.state.nombreOC : null;
     const navigate = useNavigate()
-
     const [data, setData] = useState([]) 
     const [reload, setReload] = useState(false)   
     const [cargado, setCargado] = useState(false)   
@@ -28,7 +28,7 @@ export const GestionSesionesOrganosColegiados= () => {
     const [edit, setEdit] = useState(false)                                      
     const [error, setError] = useState(false)
 
-    const columns = ['Identificador', 'Fecha', 'N acta', 'N Acuerdos', 'Acuerdos']
+    const columns = ['Identificador', 'Fecha', 'Número de acta', 'Cantidad de acuerdos', 'Acuerdos']
     const dataKeys = ['id_sesion','fecha', 'id_acta_fk.id_acta', 'n_acuerdos', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null                   
@@ -45,10 +45,8 @@ export const GestionSesionesOrganosColegiados= () => {
         try {
             const response = await obtenerSesiones(localStorage.getItem('token'));
             
-            // Filtrar sesiones por IdOrganoC
             const sesionesFiltradas = response.data.filter(sesion => sesion.id_organo_colegiado_fk.id_organo_colegiado == IdOrganoC);
-    
-            // Añadir n_acuerdos a cada sesión filtrada
+
             for (const sesion of sesionesFiltradas) {
                 const n_acuerdos = await obtenerNumeroAcuerdos(sesion.id_sesion);
                 sesion.n_acuerdos = n_acuerdos;
@@ -67,8 +65,6 @@ export const GestionSesionesOrganosColegiados= () => {
         var toastId = toastProcesando("Agregando...")
         
         try {
-            console.log(formData);
-
             await agregarSesion(formData, IdOrganoC)
 
             setAddClick(false)
@@ -83,21 +79,17 @@ export const GestionSesionesOrganosColegiados= () => {
         }
     }
 
-
-    const editaSesion = async (formData) => {
-    
+    const editaSesion = async (id, formData) => {
         var toastId = toastProcesando("Editando...")
 
-        try {
-    
-            const Data = JSON.parse(formData)
-            await editarSesion(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
+        try {   
+            await editarSesion(id, formData, localStorage.getItem("token"))
 
             setEdit(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toastExito("Evaluación editada correctamente", toastId)
+            toastExito("Sesión editada correctamente", toastId)
 
         } catch (error) {
             console.error("Error: \n" + error)
@@ -116,7 +108,7 @@ export const GestionSesionesOrganosColegiados= () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toast.success('Órgano colegiado eliminado correctamente', {
+            toast.success('Sesión eliminada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -199,7 +191,7 @@ export const GestionSesionesOrganosColegiados= () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        <h1>Gestión de Sesiones del Órgano Colegiado</h1>
+                        <h1>Gestión de Sesiones del Órgano Colegiado: {nombreOC}</h1>
                     </div>
 
                     {(!cargado) && (

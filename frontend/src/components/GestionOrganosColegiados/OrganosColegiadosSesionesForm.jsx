@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
-//Tiene que tener los siguiente un campo para el identificador, otro para la fecha, [zona de acta, numero y documento del acta], [zona de agenda, documento de convocatoria, detalle y una seleccion de tipo(inicial o modificacion)], un link a  la documentacion.
+
 export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel, onDelete, organoColegiado }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
@@ -30,9 +30,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
         if (name === 'numero_miembros' || name === 'quorum' || name === 'acuerdo_firme') {
-            // Verifica si es un número válido y positivo
             const numericValue = Number(value);
             if (!isNaN(numericValue) && numericValue >= 0) {
                 setFormData((prev) => ({
@@ -56,7 +54,6 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
             }));
         }
     };
-    
 
     const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
@@ -69,18 +66,29 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
     };
 
     const sendForm = (event) => {
-        
         event.preventDefault();
         const combinedData = new FormData();
+
+        const jsonData = JSON.stringify(formData);
+        console.log(formData)
+
+        console.log(combinedData)
         if (actaFile) {
-            combinedData.append('acta_file', actaFile);
+            jsonData.append('acta_file', actaFile);
+
         }
-        if(convocatoriaFile){
-            combinedData.append('convocatoria_file', actaFile);
+        if (convocatoriaFile) {
+            jsonData.append('convocatoria_file', convocatoriaFile);
+
         }
-        combinedData.append('json', JSON.stringify(formData));
-        onSubmit(combinedData);
+        onSubmit(sesion.id_sesion, jsonData);
     };
+
+        /*
+        event.preventDefault();
+        const jsonData = JSON.stringify(formData);
+        onSubmit(sesion.id_sesion, jsonData);
+        */
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -140,23 +148,10 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="quorum" className="label-personalizado mb-2">Fecha</label>
-                                        <input type="date" className="form-control" name="fecha" id="quorum" value={formData.fecha} onChange={handleChange} />
+                                        <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} />
                                     </div>
                             </div>
                         </div>
-                        <div className="row mb-4">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label htmlFor="link_doc" className="label-personalizado mb-2">Link a la documentación</label>
-                                    <input type="url" className="form-control" name="link_carpeta" id="link_carpeta" value={formData.link_carpeta} onChange={handleChange}/>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="medio" className="label-personalizado mb-2">Medio</label>
-                                <input type="text" className="form-control" name="medio" id="medio" value={formData.medio} onChange={handleChange} required />
-                            </div>
-                        </div> 
-          
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
@@ -165,23 +160,30 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="documento_acta" className="label-personalizado mb-2">Documento Acta</label>
+                                <label htmlFor="documento_acta" className="label-personalizado mb-2">Documento del acta</label>
                                 {mode === 1 ? <input type="file" className="form-control" name="documento_acta" id="id_acta_fk.id_documento_acta_fk"  onChange={(event) => handleFileChange(event, 'acta')} required />: 
                                 <a href={"http://localhost:8000" + formData.id_acta_fk.id_documento_acta_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2 d-block">
                                 {"Ver documento"}
                             </a>}
                             </div>
+                        </div> 
+          
+                        <div className="row mb-4">
+                            <div className="col-md-6">
+                                <label htmlFor="medio" className="label-personalizado mb-2">Medio</label>
+                                <input type="text" className="form-control" name="medio" id="medio" value={formData.medio} onChange={handleChange} required />
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="link_doc" className="label-personalizado mb-2">Enlace a la documentación</label>
+                                    <input type="url" className="form-control" name="link_carpeta" id="link_carpeta" value={formData.link_carpeta} onChange={handleChange}/>
+                                </div>
+                            </div>
                         </div>       
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <div className="form-group">
-                                    <label htmlFor="detalle_agenda" className="label-personalizado mb-2">Detalle agenda</label>
-                                    <input type="text" className="form-control" name="detalle_agenda" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange}/>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="tipo_agenda" className="label-personalizado mb-2">Tipo agenda</label>
+                                <label htmlFor="tipo_agenda" className="label-personalizado mb-2">Tipo de agenda</label>
                                 <select
                                 className="form-control"
                                 name="tipo_agenda"
@@ -195,11 +197,17 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                                     <option value="modificacion">Modificación</option>
                                 </select>
                             </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label htmlFor="detalle_agenda" className="label-personalizado mb-2">Detalle agenda</label>
+                                    <input type="text" className="form-control" name="detalle_agenda" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange}/>
+                                </div>
+                            </div>
                         </div>   
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="numero_actas" className="label-personalizado mb-2">Documento convocatoria</label>
+                                    <label htmlFor="numero_actas" className="label-personalizado mb-2">Documento de la convocatoria</label>
                                     {mode === 1 ? <input type="file" className="form-control" name="documento_acta" id="id_acta_fk.id_documento_acta_fk" onChange={(event) => handleFileChange(event, 'convocatoria')} required /> : 
                                     <a href={"http://localhost:8000" + formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2 d-block">
                                     {"Ver documento"}
@@ -222,7 +230,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="órgano colegiado" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="sesión" />)}
                                 </>
                             )}
                         </div>
@@ -230,7 +238,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="órgano colegiado" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="sesión" />)}
                                 </>
                             )}
                         </div>

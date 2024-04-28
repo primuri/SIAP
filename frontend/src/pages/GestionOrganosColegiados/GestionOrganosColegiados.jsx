@@ -86,7 +86,7 @@ export const GestionOrganosColegiados = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toastExito("Evaluación editada correctamente", toastId)
+            toastExito("Órgano colegiado editado correctamente", toastId)
 
         } catch (error) {
             console.error("Error: \n" + error)
@@ -136,7 +136,7 @@ export const GestionOrganosColegiados = () => {
 
     const elementClicked = (selectedOrganoColegiado) => {
         if (event.target.tagName.toLowerCase() === 'button') {
-            navigate(`${location.pathname}/${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
+            navigate(`${location.pathname}/${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`, { state: { nombreOC: selectedOrganoColegiado.nombre } });
         } else {
             setOrganoColegiado(selectedOrganoColegiado);
             setEdit(true);

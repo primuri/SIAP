@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {manejarErrores} from './errorHandler'
 
-const token = localStorage.getItem('token')                                      // Token para los request
+const token = localStorage.getItem('token')                                     
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -27,16 +27,6 @@ export const agregarOrganoColegiado = async (organo_colegiado) => {
     )
 }
 
-/*export const editarOrganoColegiado = async (organo_colegiado) => {
-    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/organo_colegiado/${organo_colegiado.id_organo_colegiado}`, organo_colegiado, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    )
-}*/
-
 export const editarOrganoColegiado = async (id_organo_colegiado, organo_colegiado, token) => {
     return await manejarErrores(SIAPAPI.patch(`organo_colegiado/organo_colegiado/${id_organo_colegiado}/`, organo_colegiado, {
         headers: {
@@ -45,7 +35,6 @@ export const editarOrganoColegiado = async (id_organo_colegiado, organo_colegiad
         }
     }));
 };
-
 
 export const eliminarOrganoColegiado = async (id_organo_colegiado) => {
     return await manejarErrores(SIAPAPI.delete(`organo_colegiado/organo_colegiado/${id_organo_colegiado}`, {
@@ -56,13 +45,6 @@ export const eliminarOrganoColegiado = async (id_organo_colegiado) => {
     })
     )
 }
-
-
-
-// RF-018 Gestionar sesiones 
-
-
-//get
 
 export const obtenerSesiones = async () => {
     return await manejarErrores(SIAPAPI.get('organo_colegiado/sesion/', {
@@ -151,10 +133,6 @@ export const obtenerIntegrantes = async (id_organo_colegiado) => {
     return integrantesFiltrados;
 }
 
-
-//POST
-
-
 export const agregarDocumento = async (documento) => {
     const uploadDoc = await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento,{
         headers: {
@@ -163,7 +141,6 @@ export const agregarDocumento = async (documento) => {
         }
     })
     );
-
     return uploadDoc.data.id_documento
 }
 
@@ -251,12 +228,21 @@ export const addInvitados = async (invitados) => {
 }
 
 
-
-export const editarSesion = async (sesion_id, sesion) => {
-    return "none"
-}
-
+export const editarSesion = async (sesion_id, sesion, token) => {
+    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/sesion/${sesion_id}/`, sesion, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
 
 export const eliminarSesion = async (sesion_id) => {
-    return "none"
+    return await manejarErrores(SIAPAPI.delete(`organo_colegiado/sesion/${sesion_id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
 }
