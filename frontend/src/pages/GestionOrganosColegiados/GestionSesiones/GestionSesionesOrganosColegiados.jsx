@@ -68,16 +68,32 @@ export const GestionSesionesOrganosColegiados= () => {
 
     const addSesiones = async (formData) => {
         
-        var toastId = toastProcesando("Agregando...")
+        var toastId = toast.loading('Agregando...', {
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+                fontSize: '18px',
+            },
+        });
         
         try {
+            const Datos = JSON.parse(formData.get('json'));
             await agregarSesion(formData, IdOrganoC)
 
             setAddClick(false)
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toastExito("Sesion agregada correctamente", toastId)
+            toast.success('Sesion agregada correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
 
         } catch (error) {
             console.error("Error: \n" + error)
@@ -86,19 +102,17 @@ export const GestionSesionesOrganosColegiados= () => {
     }
 
     const editaSesion = async (id, formData) => {
+        console.log("Datos enviados para editar:", formData);
         var toastId = toastProcesando("Editando...")
-
         try {   
             await editarSesion(id, formData, localStorage.getItem("token"))
-
-            setEdit(false)
-            setReload(!reload)
+            console.log("Edición completada con éxito");
+            setEdit(false);
+            setReload(!reload);
             document.body.classList.remove('modal-open');
-
             toastExito("Sesión editada correctamente", toastId)
-
         } catch (error) {
-            console.error("Error: \n" + error)
+            console.error("Error en la edición:", error)
             toast.dismiss(toastId)
         }
     }
@@ -143,6 +157,7 @@ export const GestionSesionesOrganosColegiados= () => {
     }
 
     const elementClicked = (selectedSesion) => {
+        console.log("Sesión seleccionada para editar:", selectedSesion);
         if (event.target.tagName.toLowerCase() === 'button') {
             navigate(`${location.pathname}/${selectedSesion.id_sesion}/gestion-acuerdos`)
         } else {
@@ -150,6 +165,7 @@ export const GestionSesionesOrganosColegiados= () => {
             setEdit(true);
             setAddClick(false);
             document.body.classList.add('modal-open');
+            console.log("Estado 'sesion' después de seleccionar para editar:", sesion);
         }
     };
 

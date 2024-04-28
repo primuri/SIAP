@@ -12,99 +12,113 @@ import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
 
 export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel, onDelete, organoColegiado }) => {
-    const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
-    const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [addClick, setAddClick] = useState(false) 
-    const [edit, setEdit] = useState(false);
-    const [convocatoriaFile, setConvocatoriaFile] = useState(null);
-    const [actaFile, setActaFile] = useState(null);
-
-    const [formData, setFormData] = useState({
-        id_sesion: sesion ? sesion.id_sesion : "",
-        id_acta_fk: sesion ? sesion.id_acta_fk : "",
-        id_agenda_fk: sesion ? sesion.id_agenda_fk : "",
-        fecha: sesion ? sesion.fecha : "",
-        link_carpeta: sesion ? sesion.link_carpeta : "",
-        medio: sesion ? sesion.medio : "",
-    })
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        if (name === 'numero_miembros' || name === 'quorum' || name === 'acuerdo_firme') {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue) && numericValue >= 0) {
-                setFormData((prev) => ({
-                    ...prev,
-                    [name]: numericValue,
-                }));
-            }
-        } else if (name.includes('.')) {
-            const keys = name.split('.');
-            setFormData((prev) => ({
-                ...prev,
-                [keys[0]]: {
-                    ...prev[keys[0]],
-                    [keys[1]]: value,
-                },
-            }));
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-        }
-    };
-
-    const handleFileChange = (event, obj) => {
-        const file = event.target.files[0];
+        // Cargar informacion
+        const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
+        const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
+        const [fileData, setFileData] = useState(null);
+        const [fileData2, setFileData2] = useState(null);
+      
+        const [formData, setFormData] = useState({
+            id_sesion: sesion ? sesion.id_sesion: "",
+            fecha: sesion ? sesion.fecha: "",
+            medio: sesion ? sesion.medio: "",
+            link_carpeta: sesion ? sesion.link_carpeta: "",
+            id_agenda_fk: sesion ? sesion.id_agenda_fk: { 
+                id_agenda: sesion ? sesion.id_agenda_fk.id_agenda: "",
+                tipo: sesion ? sesion.id_agenda_fk.tipo: "",
+                detalle: sesion ? sesion.id_agenda_fk.detalle: "", 
+                id_convocatoria_fk: sesion && sesion.id_agenda_fk.id_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk : { 
+                    id_convocatoria: sesion && sesion.id_agenda_fk.id_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk.id_convocatoria : "" , 
+                    id_documento_convocatoria_fk: sesion && sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk : {
+                        id_documento: sesion && sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.id_documento: "", 
+                        tipo: sesion && sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.tipo: "Agenda Sesion", 
+                        detalle: sesion && sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.detalle: "", 
+                        documento: sesion && sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk ? sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento: "" 
+                    }
+                }
+            },
+            id_acta_fk: sesion ? sesion.id_acta_fk: {
+                id_acta: sesion ? sesion.id_acta_fk.id_acta: "",
+                id_documento_acta_fk: sesion && sesion.id_acta_fk.id_documento_acta_fk ? sesion.id_acta_fk.id_documento_acta_fk : { 
+                    id_documento: sesion && sesion.id_acta_fk.id_documento_acta_fk ? sesion.id_acta_fk.id_documento_acta_fk.id_documento: "", 
+                    tipo: sesion && sesion.id_acta_fk.id_documento_acta_fk ? sesion.id_acta_fk.id_documento_acta_fk.tipo: "Acta Sesion", 
+                    detalle: sesion && sesion.id_acta_fk.id_documento_acta_fk ? sesion.id_acta_fk.id_documento_acta_fk.detalle: "", 
+                    documento: sesion && sesion.id_acta_fk.id_documento_acta_fk ? sesion.id_acta_fk.id_documento_acta_fk.documento: "" 
+                }
+            },
+        });
+      
+        useEffect(() => {
+        }, [sesion])
+      
+      
+        const handleChange = (event) => {
+            const { name, value } = event.target;
         
-        if (obj === "acta") {
-            setActaFile(file);
-        } else if (obj === "convocatoria") {
-            setConvocatoriaFile(file)
-        }
-    };
+            // Función para manejar cambios en propiedades anidadas
+            const setNestedData = (path, value, obj) => {
+                const keys = path.split('.');
+                const lastKey = keys.pop();
+                const lastObj = keys.reduce((o, key) => o[key] = o[key] || {}, obj);
+                lastObj[lastKey] = value;
+            };
+        
+            // Utiliza la función setNestedData para actualizar el estado
+            setFormData((prev) => {
+                const newData = {...prev};
+                setNestedData(name, value, newData);
+                return newData;
+            });
+        };
 
-    const sendForm = (event) => {
+     const sendForm = (event) => {
         event.preventDefault();
         const combinedData = new FormData();
-        if (actaFile) {
-            combinedData.append('acta_file', actaFile);
+
+        if (formData.id_agenda_fk && formData.id_agenda_fk.id_convocatoria_fk &&
+            formData.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk &&
+            formData.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento) {
+            combinedData.append('id_documento_convocatoria_fk.documento', formData.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento);
         }
-        if(convocatoriaFile){
-            combinedData.append('convocatoria_file', actaFile);
+
+        if (formData.id_acta_fk && formData.id_acta_fk.id_documento_acta_fk &&
+            formData.id_acta_fk.id_documento_acta_fk.documento) {
+            combinedData.append('id_documento_acta_fk.documento', formData.id_acta_fk.id_documento_acta_fk.documento);
         }
+
         combinedData.append('json', JSON.stringify(formData));
         onSubmit(combinedData);
-
-        /*
-        event.preventDefault();
-        const jsonData = JSON.stringify(formData);
-        onSubmit(sesion.id_sesion, jsonData);
-        */
     };
-
-    const handleDeleteClick = () => {
-        setShowConfirmationDelete(true);
-    };
-
-    const handleEditClick = () => {
-        setShowConfirmationEdit(true);
-    };
-
-    const handleDeleteConfirm = () => {
-        onDelete();
-        setShowConfirmationDelete(false);
-    };
-
-    const handleDeleteCancel = () => {
-        setShowConfirmationDelete(false);
-    };
-
-    const handleEditCancel = () => {
-        setShowConfirmationEdit(false);
-    };
-
+      
+        const handleDeleteClick = () => {
+          setShowConfirmationDelete(true);
+        };
+      
+        const handleEditClick = () => {
+          setShowConfirmationEdit(true);
+        };
+        
+        
+        const handleFileChange = (event) => {
+          const file = event.target.files[0];
+          setFileData(file);
+          //setCambios({ asistenteData: formData, asistenteFile: file }); 
+        };
+      
+      
+        const handleDeleteConfirm = () => {
+          onDelete();
+          setShowConfirmationDelete(false);
+        };
+      
+        const handleDeleteCancel = () => {
+          setShowConfirmationDelete(false);
+        };
+      
+        const handleEditCancel = () => {
+          setShowConfirmationEdit(false);
+        };
+      
     return (
         <div>
             <div className="modal-header pb-0 position-sticky top-0">
@@ -142,7 +156,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="quorum" className="label-personalizado mb-2">Fecha</label>
-                                        <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} />
+                                        <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange}  />
                                     </div>
                             </div>
                         </div>
