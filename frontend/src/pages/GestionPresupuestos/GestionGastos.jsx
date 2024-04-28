@@ -38,9 +38,11 @@ export const GestionGastos = () => {
     const configureReportData = () => {
         if (gastos.length > 0) {
             try {
-                const gastos_ = gastos.map((gasto) => gasto);
+                const gastos_ = gastos.map((gasto) => {
+                    gasto.partidaID = partidaID;
+                    return gasto;
+                });
                 JsonForReport.reportData = gastos_;
-    
                 return true;
     
             } catch (exception) {
@@ -51,8 +53,9 @@ export const GestionGastos = () => {
     }
 
     const createJsonForReport = () => {
-        JsonForReport.reportTitle = "Gasto";
-        JsonForReport.idKey = "id_gasto";
+        JsonForReport.reportTitle = "Gasto de la partida";
+        JsonForReport.idKey = 'partidaID';
+
         JsonForReport.dataKeys = [
             'id_gasto',
             'id_factura_fk.id_factura',
