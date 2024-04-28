@@ -68,27 +68,21 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
     const sendForm = (event) => {
         event.preventDefault();
         const combinedData = new FormData();
-
-        const jsonData = JSON.stringify(formData);
-        console.log(formData)
-
-        console.log(combinedData)
         if (actaFile) {
-            jsonData.append('acta_file', actaFile);
-
+            combinedData.append('acta_file', actaFile);
         }
-        if (convocatoriaFile) {
-            jsonData.append('convocatoria_file', convocatoriaFile);
-
+        if(convocatoriaFile){
+            combinedData.append('convocatoria_file', actaFile);
         }
-        onSubmit(sesion.id_sesion, jsonData);
-    };
+        combinedData.append('json', JSON.stringify(formData));
+        onSubmit(combinedData);
 
         /*
         event.preventDefault();
         const jsonData = JSON.stringify(formData);
         onSubmit(sesion.id_sesion, jsonData);
         */
+    };
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
