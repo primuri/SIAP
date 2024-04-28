@@ -139,27 +139,39 @@ export const GestionOrganosColegiados = () => {
     }
 
     const elementClicked = (selectedOrganoColegiado) => {
+
+        setOrganoColegiado(selectedOrganoColegiado);
+        setEdit(true);
+        setAddClick(false);
+        document.body.classList.add('modal-open');
+    };
+
+    const elementClickedBtnIntegrantes = (selectedOrganoColegiado) => {
+        setOrganoColegiado(selectedOrganoColegiado);
+        console.log(selectedOrganoColegiado)
         if (event.target.tagName.toLowerCase() === 'button') {
 
-            setOrganoColegiado(selectedOrganoColegiado);
-
-            if (rol === "administrador") {
-                navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
-            }
-
-
-            if (rol === "invitado") {
-                navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/integrantes`)
-            }
-
-
-        } else {
-            setOrganoColegiado(selectedOrganoColegiado);
-            setEdit(true);
-            setAddClick(false);
-            document.body.classList.add('modal-open');
+                if (rol === "administrador") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
+                }    
+                if (rol === "invitado") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/integrantes`)
+                }
         }
-    };
+    }
+
+    const elementClickedBtnSesiones = (selectedOrganoColegiado) => {
+        setOrganoColegiado(selectedOrganoColegiado);
+        console.log(selectedOrganoColegiado.id_organo_colegiado)
+        if (event.target.tagName.toLowerCase() === 'button') {
+                if (rol === "administrador") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
+                }    
+                if (rol === "invitado") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/sesiones`)
+                }
+        }
+    }
 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
@@ -236,11 +248,11 @@ export const GestionOrganosColegiados = () => {
                     )}             
 
                     {user.groups[0] === "administrador" && (
-                        <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} buttonText="Gestionar" />
+                        <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} onClickButton1={elementClickedBtnIntegrantes} onClickButton2={elementClickedBtnSesiones} buttonText="Gestionar" />
                     )}
 
                     {user.groups[0] === "invitado" && (
-                        <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} buttonText="Visualizar" />
+                        <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} onClickButton1={elementClickedBtnIntegrantes} onClickButton2={elementClickedBtnSesiones} buttonText="Visualizar" />
                     )}
 
                     {addClick && (

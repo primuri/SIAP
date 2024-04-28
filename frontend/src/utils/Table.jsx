@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from 'prop-types';
 
-export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasButtonColumn = false, hasButtonColumn2 = false, buttonText = "" }) => {
+export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasButtonColumn = false, hasButtonColumn2 = false, buttonText = "", onClickButton1= () => {} , onClickButton2= () => {}  }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -66,12 +66,12 @@ export const Table = ({ columns = [], data = [], onDoubleClick, dataKeys, hasBut
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
               {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( 
-                <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick(row)}>
+                <button id="acciones-button" className="btn btn-primary"  onClick={() => onClickButton2 (row)}>
                   {buttonText}
                 </button>
               ) : (
                 colIndex === dataKeys.length - 2 && hasButtonColumn2 ? (
-                  <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick(row)}>
+                  <button id="acciones-button" className="btn btn-primary" onClick={() => onClickButton1 (row)}>
                   {buttonText}
                 </button>
                 ) : (
