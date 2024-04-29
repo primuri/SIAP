@@ -15,7 +15,7 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
     <div className="row">
       {(mode === 1 || (mode === 2 && noFileSelected)) && (
         <>
-          <label className="label-personalizado mb-2" htmlFor="foto">
+          <label className="label-personalizado mt-4" htmlFor="foto">
             {mode === 1 ? (
               <>
                 Subir foto

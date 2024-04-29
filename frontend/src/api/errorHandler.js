@@ -15,7 +15,6 @@ const mostrarError = (error) => {
     const inputStr = error.request.response;
     const matches = inputStr.match(/"(.*?)"/g);
 
-    // Procesar cada coincidencia y convertir la primera letra después de un espacio en mayúscula
     let resultStr = "";
     if (matches) {
         matches.forEach((match, index) => {
@@ -28,7 +27,6 @@ const mostrarError = (error) => {
         resultStr = "Error no identificado."
     }
 
-    // Eliminar las comillas dobles de la cadena resultante
     resultStr = resultStr.replace(/"/g, '');
 
     resultStr = resultStr.replace(/_/g, ' ');

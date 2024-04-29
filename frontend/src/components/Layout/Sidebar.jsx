@@ -25,6 +25,9 @@ export const Sidebar = () => {
       { label: 'Inicio',        link: '/inicio-investigador' },
       { label: 'Perfil', link: '/perfil' },
     ],
+    "invitado": [
+        { label: 'Órganos colegiados', link: '/organos-colegiados' },
+      ],
   };
    return(
     <>

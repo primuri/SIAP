@@ -7,7 +7,6 @@ import { Confirmar } from '../../utils/Confirmar'
 
 
 export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, academicos }) => {
-    // Cargar informacion
     const [fileData, setFileData] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationAprobar, setShowConfirmationAprobar] = useState(false);
@@ -42,7 +41,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     });
 
     
-    //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
         if (name === "id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico") {
@@ -85,7 +83,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     }));
                     break;
                 case 4:
-                    // Verificación de la fecha (Solución de IA)
                     if (keys[3] === 'fecha_inicio' || keys[3] === 'fecha_fin') {
                         const startDate = keys[3] === 'fecha_inicio' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_inicio;
                         const endDate = keys[3] === 'fecha_fin' ? value : formData[keys[0]][keys[1]][keys[2]].fecha_fin;
@@ -149,7 +146,6 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     const aprobarPropuesta = () => {
         formData.id_codigo_cimpa_fk.estado = "Aprobada";
         setShowConfirmationAprobar(true);
-        console.log(formData.id_codigo_cimpa_fk.estado);
     };
 
     const isPropuestaAprobada = formData.id_codigo_cimpa_fk.estado === "Aprobada";
@@ -166,10 +162,9 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     }
                 }
             },
-            // Actualiza el estado para guardar el nombre completo del académico seleccionado.
             asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`
         }));
-        setAcademicosFilter([]); // Limpia la lista de académicos filtrados después de seleccionar.
+        setAcademicosFilter([]);
     };
 
     return (
@@ -181,18 +176,20 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="text-center" style={{ marginLeft: '3.5vw' }}>
-                    <h2>{mode == 1 ? ("Agregar una propuesta") : ("Editar propuesta")}</h2>
-                </div>
+                <div className="col-10 mb-0 text-center" >
+                            <h2 className="headerForm" id="header-propuestas">
+                                {mode === 1 ? "Agregar propuesta" : "Editar propuesta"}
+                            </h2>
+                        </div>
                 <div>
-                    <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                    <button type="button" onClick={onCancel} className="close" data-dismiss="modal" id="close-propuestas">
                         <span aria-hidden="true" className="close-icon">&times;</span>
                     </button>
                 </div>
             </div>
 
             <form onSubmit={sendForm} className='d-flex flex-column' encType="multipart/form-data">
-                <div className="modal-body" style={{ padding: '3vh 4vw' }}>
+                <div className="modal-body m-5 mt-4 mb-0">
                     <div className="container">
                         <div className="row mb-4">
                             {mode === 2 && (<div className="col-md-6">
@@ -202,7 +199,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             
                             <div className="col">
                                 <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
-                                <input type="text" className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required />
                             </div>
                         </div>
 
@@ -210,7 +207,10 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 {mode === 1 && (
-                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado <span className="optional"> (Predeterminado)</span></label>
+                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado </label> 
+                                )}
+                                {mode === 1 && (
+                                  <span className="optional"> (Predeterminado) </span> 
                                 )}
                                 {mode === 2 && (
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado</label>
@@ -241,8 +241,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                         <div className="row mb-4">
                             <div className="col">
-
-                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general </label> <span className="disabled-input">(Opcional)</span>
                                 <textarea className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange} />
                             </div>
                         </div>
@@ -253,7 +252,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                             <div className="col-md-6">
                                 <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento </label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
                             </div>
                         </div>
                         <hr />
@@ -264,11 +263,11 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 
                                 <div className="position-relative">
                                                 <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} required/>
+                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange}  required/>
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "120px"}}
+                                                        style={{ maxHeight: "60px"}}
                                                     >
                                                         {academicosFilter.map((academico) => {
                                                         return (
@@ -315,7 +314,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio
@@ -323,7 +322,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                     onChange={handleChange} />
                             </div>
                             <div className="col">
-                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"
@@ -338,46 +337,46 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
-  <div className="row">
-    <div className="col">
-      {mode === 1 ? (
-        <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
-          Agregar
-        </button>
-      ) : (
-        <>
-          {!isPropuestaAprobada && (
-            <button
-              id="boton-personalizado"
-              type="button"
-              onClick={aprobarPropuesta}
-              className='table-button border-0 p-2 rounded text-white'
-              style={{ backgroundColor: "#005da4" }}
-            >
-              Aprobar propuesta
-            </button>
-          )}
-          <button
-            id="boton-personalizado"
-            type="button"
-            onClick={handleEditClick}
-            className='table-button border-0 p-2 rounded text-white m-2'
-          >
-            Guardar
-          </button>
-          {showConfirmationEdit && (
-            <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
-          )}
-          {showConfirmationAprobar && (
-            <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
-          )}
-        </>
-      )}
-    </div>
-  </div>
-</div>
-            </form>
-        </>)
+                    <div className="row">
+                        <div className="col">
+                        {mode === 1 ? (
+                            <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
+                            Agregar
+                            </button>
+                        ) : (
+                            <>
+                            {!isPropuestaAprobada && (
+                                <button
+                                id="boton-personalizado"
+                                type="button"
+                                onClick={aprobarPropuesta}
+                                className='table-button border-0 p-2 rounded text-white'
+                                style={{ backgroundColor: "#005da4" }}
+                                >
+                                Aprobar propuesta
+                                </button>
+                            )}
+                            <button
+                                id="boton-personalizado"
+                                type="button"
+                                onClick={handleEditClick}
+                                className='table-button border-0 p-2 rounded text-white m-2'
+                            >
+                                Guardar
+                            </button>
+                            {showConfirmationEdit && (
+                                <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
+                            )}
+                            {showConfirmationAprobar && (
+                                <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
+                            )}
+                            </>
+                        )}
+                        </div>
+                    </div>
+                    </div>
+                                </form>
+                            </>)
 }
 
 PropuestasForm.propTypes = {

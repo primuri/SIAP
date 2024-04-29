@@ -5,18 +5,14 @@ import { styled } from '@mui/material/styles';
 import { Back } from "../../utils/Back"
 import { Modal } from "../../utils/Modal"
 import { ProyectosForm } from "../../components/GestionProyectos/ProyectosForm"
-import { Table } from "../../utils/Table"
 import { TableWithButtons } from "../../utils/TableWithButtons";
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarOficio, agregarVersionProyectos, agregarVigencia, editarOficio, editarVersionProyectos, editarVigencia, eliminarOficio, eliminarVersion, eliminarVigencia, obtenerColaboradorSecundario, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 import { agregarArea, agregarArticulo, agregarAutor, agregarDocumentacion, agregarInstitucion, agregarProducto, agregarRevista, agregarSoftware, agregarevento, editarArticulo, editarAutor, editarDocumentacion, editarProducto, editarRevista, editarSoftware, eliminarArea, eliminarDocumentacion, eliminarInstitucion, eliminarProducto, eliminarRevista, eliminarSoftware, obtenerArticulo, obtenerEvento, obtenerSoftware, editarArea, editarInstitucion, editarevento } from "../../api/gestionProductos"
 import { eliminarNombre } from "../../api/gestionAcademicos"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { obtenerNombre } from "../../api/gestionAcademicos"
+import { useNavigate, useParams } from "react-router-dom"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 import { agregarColaboradorSecundario, editarColaboradorSecundario, eliminarColaboradorSecundario } from "../../api/gestionProyectos";
 export const GestionVersiones = () => {
@@ -47,7 +43,6 @@ export const GestionVersiones = () => {
 
     useEffect(() => {
         async function fetchData() {
-            
             await loadVersionProyectos(clean_id);
             await loadAcademicos();
             setCargado(true);
@@ -80,7 +75,6 @@ export const GestionVersiones = () => {
             setData(filteredData);
             setProyectosVersion(filteredData)
             setCargado(true);
-
         } catch (error) {
             
         }
@@ -107,7 +101,6 @@ export const GestionVersiones = () => {
             }
 
         } catch (error) {
-           
         }
     }
 
@@ -115,7 +108,6 @@ export const GestionVersiones = () => {
         try {
             const articulos = await obtenerArticulo(localStorage.getItem('token'));
 
-            // Buscar el software que coincide con user.id_version_proyecto
             const matchedArticulo = articulos.data.find(articulo =>
                 articulo.id_producto_fk &&
                 articulo.id_producto_fk.id_version_proyecto_fk &&
@@ -140,8 +132,6 @@ export const GestionVersiones = () => {
     async function loadSoftware(user) {
         try {
             const softwares = await obtenerSoftware(localStorage.getItem('token'));
-
-            // Buscar el software que coincide con user.id_version_proyecto
             const matchedSoftware = softwares.data.find(software =>
                 software.id_producto_fk &&
                 software.id_producto_fk.id_version_proyecto_fk &&
@@ -157,7 +147,6 @@ export const GestionVersiones = () => {
                 setProducto(null);
                 return false;
             }
-
         } catch (error) {
            
         }
@@ -192,13 +181,12 @@ export const GestionVersiones = () => {
           }
         };
       
-        fetchData(); // Call the async function immediately
+        fetchData();
       }, [data, id_version]);
       
     const success = () => {
         window.location.href = `/gestion-proyectos/${id}/gestion-versiones`
     }
-    // Manejo de datos que se van a enviar para agregar
     const addProyecto = async (formData) => {
         const Datos = JSON.parse(formData.get('json'))
         try {
@@ -210,7 +198,6 @@ export const GestionVersiones = () => {
                     fontSize: '18px',
                 },
             });
-            //Guardar el archivo de odcumentacion en otro form para trabajarlo en la peticion API
             let producto = null;
             let soft = null;
             let artic = null;
@@ -283,7 +270,6 @@ export const GestionVersiones = () => {
                 delete Datos.evento.id_institucion_fk.id_institucion;
                 const id_institucion_creada = await agregarInstitucion(Datos.evento.id_institucion_fk, localStorage.getItem('token'))
 
-
                 Datos.evento.id_oficio_fk = id_documento_oficio_creado;
                 Datos.evento.id_area_fk = id_area_creada;
                 Datos.evento.id_institucion_fk = id_institucion_creada;
@@ -292,7 +278,6 @@ export const GestionVersiones = () => {
                 delete Datos.evento;
                 ev = true;
             }
-
             formData.delete('json');
             let fecha_ini = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio;
             let fecha_fi = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_fin;
@@ -321,11 +306,9 @@ export const GestionVersiones = () => {
             formData.delete(formData.id_codigo_vi_fk);
             formData.append('detalle', Datos.id_version_proyecto_fk.id_oficio_fk.detalle);
 
-
             const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
             delete Datos.id_version_proyecto_fk.id_oficio_fk;
             Datos.id_version_proyecto_fk.id_oficio_fk = id_oficio_creado;
-
 
             const id_version_creada = await agregarVersionProyectos(Datos.id_version_proyecto_fk, localStorage.getItem('token'))
             producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
@@ -342,8 +325,6 @@ export const GestionVersiones = () => {
             } else if (ev) {
                 await agregarevento(producto, localStorage.getItem('token'));
             }
-
-            
 
             let fecha_ini_colab = Datos.id_vigencia_fk.fecha_inicio;
             let fecha_fi_colab = Datos.id_vigencia_fk.fecha_fin;
@@ -367,8 +348,6 @@ export const GestionVersiones = () => {
 
             await agregarColaboradorSecundario(Datos, localStorage.getItem('token'))
 
-            
-
             loadVersionProyectos(id_vi)
             toast.success('Versión de proyecto agregada correctamente', {
                 id: toastId,
@@ -378,8 +357,8 @@ export const GestionVersiones = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                     fontSize: '18px',
-                    height: '60px', // Aumentar la altura
-                    width: '300px',  // Aumentar el ancho
+                    height: '60px', 
+                    width: '300px',
                 },
             })
             setAddClick(false)
@@ -391,11 +370,9 @@ export const GestionVersiones = () => {
             await eliminarVersion(producto.id_producto_fk, localStorage.getItem("token"))
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
-            
         }
     }
 
-    // Manejo de los datos del formulario de editar 
     const editProyecto = async (formData) => {
         try {
             var toastId = toast.loading('Editando...', {
@@ -427,7 +404,6 @@ export const GestionVersiones = () => {
                 delete Datos.software.id_documento_documentacion_fk;
                 Datos.software.id_documento_documentacion_fk = id_docu;
 
-
                 producto = Datos.software;
                 delete Datos.software;
                 soft = true;
@@ -451,7 +427,6 @@ export const GestionVersiones = () => {
                 await editarRevista(id_revista, Datos.articulo.id_revista_fk, localStorage.getItem('token'))
                 delete Datos.articulo.id_revista_fk;
                 Datos.articulo.id_revista_fk = id_revista;
-
 
                 const id_autor = Datos.articulo.id_autor_fk.id_autor;
 
@@ -479,7 +454,6 @@ export const GestionVersiones = () => {
                 const id_docu = Datos.evento.id_oficio_fk.id_oficio;
                 await editarOficio(id_docu, DocumentoOficioData, localStorage.getItem('token'))
 
-
                 delete Datos.evento.id_oficio_fk;
                 Datos.evento.id_oficio_fk = id_docu;
 
@@ -494,8 +468,6 @@ export const GestionVersiones = () => {
                 await editarInstitucion(id_institucion, Datos.evento.id_institucion_fk, localStorage.getItem('token'))
                 delete Datos.evento.id_institucion_fk;
                 Datos.evento.id_institucion_fk = id_institucion;
-
-
 
                 producto = Datos.evento;
                 delete Datos.evento;
@@ -514,7 +486,6 @@ export const GestionVersiones = () => {
 
             let fecha_inicio_adaptada = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio;
             let fecha_fin_adaptada = Datos.id_version_proyecto_fk.id_vigencia_fk.fecha_fin;
-
 
             if (!fecha_inicio_adaptada) {
                 fecha_inicio_adaptada = null;
@@ -553,8 +524,6 @@ export const GestionVersiones = () => {
 
             const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos.id_version_proyecto_fk, localStorage.getItem("token"))
 
-
-
             if (producto != null) {
                 producto.id_producto_fk.id_version_proyecto_fk = id_version_proy;
                 const id_produ = producto.id_producto_fk.id_producto;
@@ -568,7 +537,6 @@ export const GestionVersiones = () => {
                 } else if (ev) {
                     await editarevento(producto.id_evento, producto, localStorage.getItem('token'))
                 }
-
             }
 
             const id_vig_colab = Datos.id_vigencia_fk.id_vigencia;
@@ -606,12 +574,9 @@ export const GestionVersiones = () => {
 
             Datos.id_version_proyecto_fk = id_version_proyecto_editado.data.id_version_proyecto;
 
-
             Datos.id_version_proyecto_fk = id_version_proy;
            
             await editarColaboradorSecundario(Datos.id_colaborador_secundario, Datos, localStorage.getItem('token'))
-
-            
 
             loadVersionProyectos(Datos.id_version_proyecto_fk.id_codigo_vi_fk)
 
@@ -633,7 +598,6 @@ export const GestionVersiones = () => {
         }
     }
 
-    // Manejo del eliminar
     const deleteProyecto = async (proyecto) => {
         try {
             var toastId = toast.loading('Eliminando...', {
@@ -666,7 +630,6 @@ export const GestionVersiones = () => {
                 await eliminarVigencia(proyecto.id_vigencia_fk.id_vigencia, localStorage.getItem("token"));
                 await eliminarArea(producto.id_area_fk.id_area, localStorage.getItem("token"));
                 await eliminarInstitucion(producto.id_institucion_fk.id_institucion, localStorage.getItem("token"));
-
             }
 
             loadVersionProyectos(id)
@@ -684,32 +647,27 @@ export const GestionVersiones = () => {
             loadVersionProyectos(id)
             success()
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.dismiss(toastId)
         }
     }
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         navigate(`/gestion-proyectos/${id}/gestion-versiones`)
     }
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
     }
 
-
     const elementClicked2 = async (user) => {
         navigate(`/gestion-proyectos/${id}/gestion-versiones/${user.id_version_proyecto_fk.id_version_proyecto}`)
     }
 
-    //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
-    //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -720,7 +678,6 @@ export const GestionVersiones = () => {
         })
         setProyectosVersion(matches)
     }
-
     
     return(
         <main>

@@ -55,6 +55,11 @@ input[type="submit"] {
   background-color: var(--celeste-ucr);
 }
 
+nav.container {
+  height: 100vh;
+  background-color: white;
+}
+
 nav {
   height: calc(125vh);
   margin-top: 108px;
@@ -74,7 +79,7 @@ main {
 }
 
 .bread_custom ol li p, .bread_custom ol li a{
-  font-size: 1.5rem !important;
+  font-size: 1.3rem !important;
 }
 
 .last_bread{
@@ -165,10 +170,6 @@ main {
   border-color: var(--celeste-ucr);
 }
 
-.table {
-  width: 83vw !important;
-}
-
 thead {
   border-radius: 100px 100px 0 0;
   --bs-table-bg: var(--celeste-ucr);
@@ -243,6 +244,15 @@ select{
   background-color: #EAEAEA !important;
   height: 40px;
   max-width: 100%;  
+}
+
+.selectPersonalized{
+  --bs-box-shadow-sm: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  color: white !important;
+  box-shadow: none !important;
+  background-color: var(--celeste-ucr) !important;
+  border-color: var(--celeste-ucr) !important; 
 }
 
 .select_arrow::after{
@@ -424,8 +434,9 @@ input[type="submit"]:focus {
 
 .eliminarBtn {
   border-radius: 10px;
-  color: black;
+  color: white;
   width: 20% !important;
+  background-color: #670000;
   border: 1px solid #670000;
   padding-left: 0.05%;
   padding-right: 0.05%;
@@ -465,16 +476,16 @@ input[type="submit"]:focus {
   font-size: 18px;
 }
 
+.ojo{
+  background-color: var(--gris-claro-ucr)!important;
+}
+
 .required {
   color: red;
 }
 
 .disabled-input{
   color: gray!important;
-}
-
-.ojo{
-  background-color: var(--gris-claro-ucr)!important;
 }
 
 /* Asegura que la tabla se expanda al máximo del contenedor padre */
@@ -544,8 +555,118 @@ input[type="submit"]:focus {
   border-color: #005da4;
 }
 
+#boton-mostrar-propuestas {
+  background-color:#005da4;
+  border-color: #005da4;
+}
+
+#descripcion-inicio {
+  margin-top: 2%;
+  margin-right: 3%;
+  margin-left: 3%;
+}
+
+#accordion {
+  margin-left: 3%;
+}
+
+@media (max-width: 992px) {
+  #accordion {
+    margin-left: 0%;
+  }
+  
+  #descripcion-inicio {
+  margin-top: 1%;
+  margin-right: 1%;
+  margin-left: 0%;
+  }
+
+  #boton-personalizado {
+    width: 100%;
+  }
+}
+
+/* Estilos para el componente ReportePDF */
+
+.reporteGeneral .container {
+  margin-top: 20px;
+  background-color: var(--gris-claro-ucr)
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.item-padding {
+  padding: 10px 10px 0px;
+}
+
+.elemento-reporte{
+  background-color: #f0f0f0 !important;
+}
+
+.page-report{
+  background-color: white;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 90%;
+  margin-bottom: 25px;
+  border-radius: 10px;
+}
+
+.nombrePage{
+  margin-bottom: 20px ;
+}
+
+.nombrePage::before {
+  content: '';
+  width: 5px;
+  height: 100%; /* Establece la altura inicial en 0 */
+  display:inline-block;
+  margin-right: 10px;
+  background-color: var(--celeste-ucr);
+}
 
 
+.reporteGeneral{
+  width: 900px;
+  background-color: var(--gris-claro-ucr);
+  padding-bottom: 20px;
+}
 
+.th-report{
+  background-color: #a8a8a8 !important;
+}
 
+#header-confirmar {
+  justify-content: space-between;
+}
 
+#header-propuestas {
+  margin-left: 20%;
+}
+
+#close-propuestas {
+  margin-top: 10%;
+  margin-left: 170%;
+}
+
+/* CSS para la tabla */
+.table-report {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-report th,
+.table-report td {
+  padding: 8px; /* Ajusta el padding según sea necesario */
+  border: 1px solid #ddd; /* Cambia el estilo del borde según tus preferencias */
+  word-wrap: break-word !important;  /* Permite que las palabras largas se dividan en varias líneas */
+  white-space: normal; /* Asegura que el texto no se trunque y se muestre en varias líneas si es necesario */
+}
+
+/* CSS para aumentar la altura de la fila si el texto es muy largo */
+.table-report tbody td {
+  min-height: 50px; /* Ajusta la altura mínima de la fila según sea necesario */
+}

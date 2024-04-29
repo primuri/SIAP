@@ -18,7 +18,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             "version": version ? version.version : "",
             "monto": version ? version.monto : "",
             "saldo": 12,
-            "fecha": version ? version.fecha.split('T')[0] : "",
+            "fecha": version ? version.fecha: "",
             "detalle": version ? version.detalle : "",
     });
 
@@ -50,7 +50,6 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             combinedData.append(key, value);
         }
         for (let [key, value] of combinedData.entries()) {
-            console.log(`${key}: ${value}`);
         }
         onSubmit(combinedData)
     }
@@ -87,7 +86,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar presupuesto" : "Editar presupuesto"}
+                                {mode === 1 ? "Agregar versión de presupuesto" : "Editar versión de presupuesto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -130,7 +129,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
                             </div>
                         </div>
                     </div>
@@ -144,7 +143,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="presupuesto" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="versión de presupuesto" />)}
                                 </>
                             )}
                         </div>
@@ -152,7 +151,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="versión de presupuesto" />)}
                                 </>
                             )}
                         </div>

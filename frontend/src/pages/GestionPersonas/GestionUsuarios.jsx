@@ -8,24 +8,23 @@ import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { obtenerUsuarios, signup, actualizarUsuario, eliminarUsuario } from "../../api/gestionUsuarios"
 import { useNavigate, useParams } from "react-router-dom"
-
+import { ReportButton } from "../../utils/ReportButton";
 
 export const GestionUsuarios = () => {
     let {id} = useParams()
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
-    const [usuarios, setUsuarios] = useState([]) //Usuarios que se muestran
-    const [data, setData] = useState([])//Todos los usuarios
-    const [usuario, setUsuario] = useState(null) //Usuario al que se le da click en la tabla para editar
+    const [usuarios, setUsuarios] = useState([])
+    const [data, setData] = useState([])
+    const [usuario, setUsuario] = useState(null)
     const [cargado, setCargado] = useState(false)
-    const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+    const [error, setError] = useState(false)
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const columns = ['Correo', 'Rol']
     const dataKeys = ['correo', 'groups']
-    user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-    // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
+    user.groups[0] !== "administrador" ? setError(true) : null
     useEffect(() => { loadUsuarios() }, [reload])
     async function loadUsuarios() {
         try {
@@ -38,7 +37,6 @@ export const GestionUsuarios = () => {
         }
     }
     
-    //Uso de id en url
     useEffect(()=>{
         if(id && data.length > 0){
             const idNum = parseInt(id, 10);
@@ -57,7 +55,6 @@ export const GestionUsuarios = () => {
         window.location.href = '/gestion-usuarios'
     }
 
-    // Manejo de datos que se van a enviar para agregar
     const addUsuario = async (formData) => {
         try {
             const Datos = JSON.parse(formData)
@@ -78,8 +75,8 @@ export const GestionUsuarios = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                     fontSize: '18px',
-                    height: '60px', // Aumentar la altura
-                    width: '300px',  // Aumentar el ancho
+                    height: '60px',
+                    width: '300px',
                 },
             })
             setAddClick(false)
@@ -89,7 +86,6 @@ export const GestionUsuarios = () => {
         }
 
     }
-    // Manejo de los datos del formulario de editar 
     const editUsuario = async (formData) => {
         try {
             const Datos = JSON.parse(formData)
@@ -110,8 +106,8 @@ export const GestionUsuarios = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                     fontSize: '18px',
-                    height: '60px', // Aumentar la altura
-                    width: '300px',  // Aumentar el ancho
+                    height: '60px',
+                    width: '300px',
                 },
             })
             setEdit(false)
@@ -120,7 +116,6 @@ export const GestionUsuarios = () => {
             toast.dismiss(toastId)
         }
     }
-    // Manejo del eliminar
     const deleteUsuario = async (id) => {
         try {
             var toastId = toast.loading('Eliminando...', {
@@ -140,8 +135,8 @@ export const GestionUsuarios = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                     fontSize: '20px',
-                    height: '68px', // Aumentar la altura
-                    width: '320px%',  // Aumentar el ancho
+                    height: '68px',
+                    width: '320px%',
                 },
             })
             setEdit(false)
@@ -150,30 +145,71 @@ export const GestionUsuarios = () => {
             toast.dismiss(toastId)
         }
     }
-    // Al darle click a cancelar, se cierra el modal
+
+    // ==============================================================================================================================
+    // Parte que cada uno debe crear para su reporte:
+    // ==============================================================================================================================
+
+        // Json que almacena la información que debe recibir el componente ReportButton:  
+        const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+
+        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
+        const [JsonIsReady, setJsonIsReady] = useState(false)
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const createJsonForReport = () => {
+
+            // Titulo del reporte a mostrar en PDF
+            JsonForReport.reportTitle = "Usuario"
+
+            // LLave para acceder al id del objeto del reporte
+            JsonForReport.idKey = "correo"
+
+            // Llaves para acceder a los datos (incluye tabla extra)
+            JsonForReport.dataKeys = [
+                'correo',
+                'groups.0'
+            ]
+
+            // Nombres de las columnas o titulos de los items (incluye tabla extra)
+            JsonForReport.colNames = [
+                'Correo',
+                'Tipo'
+            ]
+
+            JsonForReport.reportData = usuarios
+            setJsonIsReady(false)
+
+            // Función auxiliar particular para configurar data del reporte
+            setJsonIsReady(true)
+        }
+
+        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
+        useEffect(() => {
+            setJsonIsReady(false)
+            createJsonForReport()
+        }, [usuarios])
+
+    // ==============================================================================================================================
+
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         navigate('/gestion-usuarios')
     }
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (user) => {
-        console.log(user)
         navigate(`/gestion-usuarios/${user.id}`)
     }
 
-    //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -182,15 +218,23 @@ export const GestionUsuarios = () => {
             }
             return e[col].toString().includes(filter)
         })
+
         setUsuarios(matches)
+        setJsonIsReady(false)
+
     }
     return (
         <main >
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                    <div className="d-flex flex-row"><h1>Gestión de usuarios</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
-                    <div className="d-flex justify-content-between mt-4">
+                    <div className="d-flex flex-row"><h1>Gestión de usuarios</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+                    <div className="d-flex mt-4">
+                    <div className="col">
                         <Add onClick={addClicked}></Add>
+                    </div>
+                        {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
+                        {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                                {/* ----------------------------------------------------------------------------------------------------------------------*/}
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
                     <Table columns={columns} data={usuarios} dataKeys={dataKeys} onDoubleClick ={elementClicked}></Table>

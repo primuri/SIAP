@@ -1,5 +1,5 @@
 import { AsistenteForm } from "../../components/GestionPersonas/GestionAsistentes/AsistenteForm"
-import { agregarAsistente, editarAsistente, obtenerAsistente, eliminarAsistente, eliminarDesinacionAsistente, editarDesinacionAsistente, agregarDesinacionAsistente, obtenerDesinacionAsistente } from "../../api/gestionAsistentes"
+import { agregarAsistente, editarAsistente, obtenerAsistente, eliminarAsistente, eliminarDesignacionAsistente, editarDesignacionAsistente, agregarDesignacionAsistente, obtenerDesignacionAsistente } from "../../api/gestionAsistentes"
 import { editarNombre, obtenerNombre } from "../../api/gestionAcademicos"
 import { agregarDocumentacion,editarDocumentacion, eliminarDocumentacion } from "../../api/gestionProductos"
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -14,27 +14,26 @@ import { toast, Toaster } from 'react-hot-toast'
 import { obtenerVersionProyectos } from '../../api/gestionProyectos';
 export const GestionAsistentes = () => {
     let { proyectoID } = useParams();
-
-    // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
-    const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
+                                                               
+    const user = JSON.parse(localStorage.getItem('user'))                     
     const location = useLocation()
     const navigate = useNavigate()
-    const [reload, setReload] = useState(false)                                  // Para controlar cuándo se debe de recargar la página
-    const [asistentes, setAsistentes] = useState([])                                 // Estado para almacenar todos los informes
-    const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no  
-    const [data, setData] = useState([])                                         // Todos los informes.                          
-    const [asistente, setAsistente] = useState(null)                                 // Informe al que se le da click en la tabla.
-    const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
-    const [edit, setEdit] = useState(false)                                      // Cuando se da click en editar
+    const [reload, setReload] = useState(false)                                  
+    const [asistentes, setAsistentes] = useState([])                                
+    const [cargado, setCargado] = useState(false)                               
+    const [data, setData] = useState([])                                                           
+    const [asistente, setAsistente] = useState(null)                             
+    const [addClick, setAddClick] = useState(false)                           
+    const [edit, setEdit] = useState(false)                                     
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
-    const [id_proyecto, setIdProyecto] = useState(null)                          // Cuando hay un error
+    const [id_proyecto, setIdProyecto] = useState(null)                    
     const columns = ['Cedula', 'Nombre', 'Carrera', 'Ponderado', 'Condicion de Estudiante']
     const dataKeys = ['id_asistente_carnet_fk.cedula', 'id_asistente_carnet_fk.id_nombre_completo_fk.nombre', 'id_asistente_carnet_fk.carrera', 'id_asistente_carnet_fk.promedio_ponderado', 'id_asistente_carnet_fk.condicion_estudiante']
 
-    user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true
+    user.groups[0] !== "administrador" ? setError(true) : null                
 
-    useEffect(() => {                                                            // Cuando reload cambia, se llama a load()
+    useEffect(() => {                                                          
         async function fetchData() {
             
             setCargado(true);
@@ -48,9 +47,8 @@ export const GestionAsistentes = () => {
 
     async function loadAsistentes( numVersion) {
         try {
-          const response = await obtenerDesinacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
+          const response = await obtenerDesignacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
           const filteredData = response.data.filter(item => item.id_version_proyecto_fk.numero_version === numVersion);
-          console.log(filteredData)
           setData(filteredData);                                                                     
           setAsistentes(filteredData);                                                               
           setCargado(true);                                                                          
@@ -68,10 +66,8 @@ export const GestionAsistentes = () => {
   }
     
 
-  // Manejo de datos que se van a enviar para agregar
   const addAsistente = async (formData) => {
     try {
-        let id_documento_creada = ""
         var toastId = toast.loading('Agregando...', {
             position: 'bottom-right',
             style: {
@@ -81,27 +77,24 @@ export const GestionAsistentes = () => {
             },
         });
 
+        let id_documento_creada = ""
         const documentoFile = formData.get('id_documento_inopia_fk');
-        formData.delete('id_documento_inopia_fk'); // Eliminamos el archivo del FormData original
+        formData.delete('id_documento_inopia_fk');
     
 
         const Datos = JSON.parse(formData.get('json'));
-        formData.delete('json'); // Limpiamos formData
+        formData.delete('json');
 
-    // Si existe el archivo, procedemos a manejarlo según sea necesario
-    if (documentoFile) {
-        const DocumentoData = new FormData();
-        DocumentoData.append('documento', documentoFile);
-        DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
-        DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
-        // Aquí deberías tener el ID del documento si es necesario para editarDocumentacion
-        // Supongamos que lo obtenemos de alguna manera, por ejemplo:
+        if (documentoFile) {
+            const DocumentoData = new FormData();
+            DocumentoData.append('documento', documentoFile);
+            DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+            DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
 
-        id_documento_creada = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
-        formData.delete('json')
-        delete Datos.id_documento_inopia_fk;
-        // Aquí deberías ajustar según cómo necesitas manejar la respuesta de editarDocumentacion
-      }
+            id_documento_creada = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+            formData.delete('json')
+            delete Datos.id_documento_inopia_fk;
+        }
 
         delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
         const nombre_asistente = Datos.id_asistente_carnet_fk.id_nombre_completo_fk;
@@ -112,18 +105,27 @@ export const GestionAsistentes = () => {
         delete Datos.id_asistente_carnet_fk.id_asistente_carnet;
         const id_asistente_creado = await agregarAsistente(Datos.id_asistente_carnet_fk, localStorage.getItem('token'))
         delete  Datos.id_asistente_carnet_fk;
-
-        const designacion_asistente = {  
-            id_version_proyecto_fk: proyectoID,              
-            id_asistente_carnet_fk : id_asistente_creado,
-            id_documento_inopia_fk : id_documento_creada,
-            cantidad_horas : Datos.cantidad_horas,
-            consecutivo : Datos.consecutivo
+        let designacion_asistente;
+        if(id_documento_creada === ""){
+            designacion_asistente = {  
+                id_version_proyecto_fk: proyectoID,              
+                id_asistente_carnet_fk : id_asistente_creado,
+                cantidad_horas : Datos.cantidad_horas,
+                consecutivo : Datos.consecutivo
+            }
+        } else {
+            designacion_asistente = {  
+                id_version_proyecto_fk: proyectoID,              
+                id_asistente_carnet_fk : id_asistente_creado,
+                id_documento_inopia_fk : id_documento_creada,
+                cantidad_horas : Datos.cantidad_horas,
+                consecutivo : Datos.consecutivo
+            }
         }
-        await agregarDesinacionAsistente(designacion_asistente, localStorage.getItem('token'));
+        await agregarDesignacionAsistente(designacion_asistente, localStorage.getItem('token'));
 
 
-      toast.success('Asistente agregado correctamente', {
+        toast.success('Asistente agregado correctamente', {
         id: toastId,
         duration: 4000,
         position: 'bottom-right',
@@ -135,36 +137,44 @@ export const GestionAsistentes = () => {
       setAddClick(false)
       setReload(!reload)
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.dismiss(toastId)
     }
 
   }
-    // Manejo de los datos del formulario de editar 
     const editAsistente = async (formData) => {
         try {
-
-
-              //falta hacer lo de documento que funcione
-            //formData.append('detalle', Datos.id_documento_inopia_fk.detalle)
-            //await editarDocumento(id_doc, formData, localStorage.getItem("token"))
+            let id_docu = -1;
             const documentoFile = formData.get('id_documento_inopia_fk');
-            formData.delete('id_documento_inopia_fk'); // Eliminamos el archivo del FormData original
+            formData.delete('id_documento_inopia_fk');
 
-            // Ahora extraemos y parseamos los datos JSON del FormData
             const Datos = JSON.parse(formData.get('json'));
-            formData.delete('json'); // Limpiamos formData
+            formData.delete('json');
 
-            // Si existe el archivo, procedemos a manejarlo según sea necesario
             if (documentoFile) {
-            const DocumentoData = new FormData();
-            DocumentoData.append('documento', documentoFile);
-            DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
-            // Aquí deberías tener el ID del documento si es necesario para editarDocumentacion
-            // Supongamos que lo obtenemos de alguna manera, por ejemplo:
-            const id_docu = Datos.id_documento_inopia_fk.id_documento;
-            await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
-            // Aquí deberías ajustar según cómo necesitas manejar la respuesta de editarDocumentacion
+                const DocumentoData = new FormData();
+                DocumentoData.append('documento', documentoFile);
+                DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+                DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+                id_docu = Datos.id_documento_inopia_fk.id_documento;
+                if(id_docu === ""){
+                    id_docu = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+                    await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }else{
+                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }
+           
+            }else{
+                const DocumentoData = new FormData();
+                DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+                DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+                id_docu = Datos.id_documento_inopia_fk.id_documento;
+                if(id_docu === ""){
+                    id_docu = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+                    await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }else{
+                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+            }
             }
 
            
@@ -196,13 +206,15 @@ export const GestionAsistentes = () => {
             const id_asistente_editado = Datos.id_asistente_carnet_fk.id_asistente_carnet
             delete Datos.id_asistente_carnet_fk
             Datos.id_asistente_carnet_fk = id_asistente_editado
-
-
-            const id_doc = Datos.id_documento_inopia_fk.id_documento;
+            let id_doc;
+            if(id_docu === -1){
+                id_doc = Datos.id_documento_inopia_fk.id_documento;
+            }else{
+                id_doc = id_docu;
+            }
+           
             delete Datos.id_documento_inopia_fk.id_documento;
 
-
-            
             Datos.id_documento_inopia_fk = id_doc
 
 
@@ -215,7 +227,7 @@ export const GestionAsistentes = () => {
                 id_documento_inopia_fk: Datos.id_documento_inopia_fk,
                 id_version_proyecto_fk: proyectoID
             }
-            await editarDesinacionAsistente(id_designacion, designacion, localStorage.getItem("token"))
+            await editarDesignacionAsistente(id_designacion, designacion, localStorage.getItem("token"))
 
             
             
@@ -232,16 +244,15 @@ export const GestionAsistentes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 
-    // Manejo del eliminar
     const deleteAsistente = async (asistente) => {
         try {
           
             
-            await eliminarDesinacionAsistente(asistente.id_designacion_asistente, localStorage.getItem('token'))
+            await eliminarDesignacionAsistente(asistente.id_designacion_asistente, localStorage.getItem('token'))
             await eliminarDocumentacion(asistente.id_documento_inopia_fk.id_documento, localStorage.getItem('token'))
             await eliminarAsistente(asistente.id_asistente_carnet_fk.id_asistente_carnet, localStorage.getItem('token'))
 
@@ -262,14 +273,12 @@ export const GestionAsistentes = () => {
     }
 
 
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
     }
 
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
@@ -277,7 +286,6 @@ export const GestionAsistentes = () => {
 
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (selectedAsistente) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             navigate(`${location.pathname}/${selectedAsistente.id_asistente}/gestion-asistentes`)
@@ -289,12 +297,10 @@ export const GestionAsistentes = () => {
         }
     };
 
-    // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -333,7 +339,7 @@ export const GestionAsistentes = () => {
 
             if (idCodigoVi && numVersion && descripcion) {
               loadAsistentes(numVersion) 
-              return [idCodigoVi, numVersion, descripcion]; // Devuelve las variables como un array
+              return [idCodigoVi, numVersion, descripcion];
             } else {
                 throw new Error('No se encontró una versión de proyecto que coincida con el asistente');
             }

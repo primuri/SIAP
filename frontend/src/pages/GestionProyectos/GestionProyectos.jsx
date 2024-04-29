@@ -6,29 +6,242 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { Search } from "../../utils/Search"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import {obtenerProyectos } from "../../api/gestionProyectos"
+import { obtenerProyectos } from "../../api/gestionProyectos"
 import { useNavigate } from "react-router-dom"
 import { TableNoHover } from "../../utils/TableNoHover";
+import { ReportButton } from "../../utils/ReportButton";
+
+import axios from 'axios' // PARA REPORTES
 
 
 export const GestionProyectos = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const navigate = useNavigate();
     const [reload, setReload] = useState(false)
-    const [proyectos, setProyectos] = useState([]) 
+    const [proyectos, setProyectos] = useState([])
     const [cargado, setCargado] = useState(false)
     const [data, setData] = useState([])
-    const [error, setError] = useState(false) 
+    const [error, setError] = useState(false)
     const [transformedState, setTransformedState] = useState([]);
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
 
-    user.groups[0] !== "administrador" ? setError(true) : null  
-    useEffect(() => { 
+    //===============================================================================================================================
+    // Configuración particular para reporte de proyectos
+    //===============================================================================================================================
+
+    const configureReportData = async () => {
+        // Funcion auxiliar para jalar ultima versión de un proyecto
+        const getLastVersionProyecto = async (id_codigo_vi) => {
+            const token = localStorage.getItem('token');
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            }, [])
+
+            var response = await SIAPAPI.get('version_proyecto/versionproyecto/', {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            var lastVersion = { id_version_proyecto: 0 }
+
+            response.data.map((version) => {
+                if (version.id_codigo_vi_fk.id_codigo_vi === id_codigo_vi && lastVersion.id_version_proyecto < version.id_version_proyecto) {
+                    lastVersion = version
+                }
+            })
+
+            return (lastVersion ? lastVersion : {})
+        }
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const getProducto = async (id_version_proyecto) => {
+            const token = localStorage.getItem('token');
+            var productoBuscado = null
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            })
+
+            var response = await SIAPAPI.get('producto/eventos/', {             // Buscar id version en eventos
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((producto) => {
+                if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
+                    producto.tipo = 'evento'
+                    productoBuscado = producto
+                }
+            })
+
+            response = await SIAPAPI.get('producto/softwares/', {                 // Buscar id version en softwares
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((producto) => {
+                if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
+                    producto.tipo = 'software'
+                    productoBuscado = producto
+
+                } 
+            })
+
+            response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((producto) => {
+                if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
+                    producto.tipo = 'articulo'
+                    productoBuscado = producto
+
+                } 
+            })
+
+            return productoBuscado
+        }
+
+        // Funcion auxiliar para jalar asistentes dada una versión de proyecto
+        const getAsistentes = async (id_version_proyecto) => {
+            const token = localStorage.getItem('token');
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            })
+
+            var response = await SIAPAPI.get('version_proyecto/designacionasistente/', {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            const filteredData = response.data.filter(item => item.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto);
+
+            return filteredData ? filteredData : {}
+        }
+
+        // Jalar y pegar datos en reportData
+        if (proyectos.length > 0) {
+            try {
+                const promises = proyectos.map(async (proyecto) => {
+                    const ultimaVersion = await getLastVersionProyecto(proyecto.id_codigo_vi);
+                    const productoAsociado = await getProducto(ultimaVersion.id_version_proyecto);
+                    const asistentesLista = await getAsistentes(ultimaVersion.id_version_proyecto);
+
+                    // Asignar versión version proyecto a la data
+                    proyecto.id_version_proyecto_fk = ultimaVersion;
+
+                    // Asignar producto a la data
+                    proyecto.producto = productoAsociado;
+
+                    // Asignar los asistentes al proyecto a la data
+                    proyecto[JsonForReport.colNames.length - 1] = asistentesLista;
+
+                    return proyecto;
+                });
+
+                // Esperar que todas las promesas se resuelvan
+                const proyectosConDatosCompletos = await Promise.all(promises);
+
+                // Asignar los proyectos con datos completos a JsonForReport
+                JsonForReport.reportData = proyectosConDatosCompletos;
+                return true
+
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el Json para reporte: ")
+                return false
+            }
+        }
+    }
+
+    // ==============================================================================================================================
+    // Parte que cada uno debe crear para su reporte:
+    // ==============================================================================================================================
+
+        // Json que almacena la información que debe recibir el componente ReportButton:  
+        const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+
+        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
+        const [JsonIsReady, setJsonIsReady] = useState(false)
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const createJsonForReport = async () => {
+            // Titulo del reporte a mostrar en PDF
+            JsonForReport.reportTitle = "Proyecto"
+
+            // LLave para acceder al id del objeto del reporte
+            JsonForReport.idKey = "id_codigo_vi"
+
+            // Llaves para acceder a los datos (incluye tabla extra)
+            JsonForReport.dataKeys = [
+                'id_codigo_vi',
+                'id_codigo_cimpa_fk.id_codigo_cimpa',
+                'id_codigo_cimpa_fk.estado',
+                'id_codigo_cimpa_fk.nombre',
+                'id_version_proyecto_fk.numero_version',
+                'id_codigo_cimpa_fk.fecha_vigencia',
+                'id_codigo_cimpa_fk.descripcion',
+                'id_codigo_cimpa_fk.actividad',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.cedula',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.tipo',
+                'id_codigo_cimpa_fk.id_colaborador_principal_fk.carga',
+                'producto.id_producto_fk.detalle',
+                'producto.id_producto_fk.fecha',
+                'producto.tipo', ['id_asistente_carnet_fk.id_asistente_carnet', 'id_asistente_carnet_fk.id_nombre_completo_fk', 'id_asistente_carnet_fk.condicion_estudiante', 'cantidad_horas']
+            ]
+
+            // Nombres de las columnas o titulos de los items (incluye tabla extra)
+            JsonForReport.colNames = [
+                'Código VI',
+                'Código CIMPA',
+                'Estado proyecto',
+                'Nombre',
+                'Ultima versión de proyecto',
+                'Fecha vigencia',
+                'Descripción',
+                'Actividad',
+                'Colaborador Principal',
+                'Colaborador Principal Cedula',
+                'Colaborador Principal fecha inicio',
+                'Colaborador Principal fecha fin',
+                'Colaborador Principal tipo',
+                'Colaborador Principal carga',
+                'Detalle producto',
+                'Fecha producto',
+                'Tipo producto',
+                {'tableName': 'Asistentes', 'colNames': ['Carnet', 'Nombre', 'Condición', 'Cantidad horas']}
+            ]
+
+            // Función auxiliar particular para configurar data del reporte
+            setJsonIsReady(await configureReportData())
+        }
+
+        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
+        useEffect(() => {
+            setJsonIsReady(false)
+            createJsonForReport()
+        }, [proyectos])
+
+    // ==============================================================================================================================
+    
+    useEffect(() => {
         const transformedProyectos = proyectos;
-
         setTransformedState(transformedProyectos);
-
     }, [proyectos]);
 
     useEffect(() => {
@@ -40,13 +253,10 @@ export const GestionProyectos = () => {
         fetchData();
     }, [reload]);
 
-
-
     async function loadProyectos() {
         try {
             const res = await obtenerProyectos(localStorage.getItem('token'))
             setData(res.data)
-
             setProyectos(res.data)
 
         } catch (error) {
@@ -61,23 +271,14 @@ export const GestionProyectos = () => {
         }
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (proyecto) => {
-        // setSelectedProyecto(proyecto);
-        // setProyectosVersion([])
-        // setSelectedIdCodigoVi(proyecto.id_codigo_vi);
-        // loadVersionProyectos(proyecto.id_codigo_vi);
-        // setDetalleVisible(true);
         navigate(`/gestion-proyectos/p_id=${proyecto.id_codigo_vi}/gestion-versiones`)
     }
 
-
-    //se filtra
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    //se filtra
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -88,6 +289,9 @@ export const GestionProyectos = () => {
         })
         setProyectos(matches)
     }
+
+    user.groups[0] !== "administrador" ? setError(true) : null
+
     return (
         <main>
 
@@ -102,13 +306,13 @@ export const GestionProyectos = () => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-4">
-                            <div className="w-50">
+                            <div >
                                 <HtmlTooltip
                                     title={
                                         <React.Fragment>
                                             <b>¿Cómo agregar un proyecto?</b>
                                             <br />
-                                                Para hacerlo, la propuesta de ese proyecto debe de estar aprobada. Diríjase a Gesión de propuestas, dele click a la propuesta y apruébela con el botón que lo indica.
+                                            Para hacerlo, la propuesta de ese proyecto debe de estar aprobada. Diríjase a Gesión de propuestas, dele click a la propuesta y apruébela con el botón que lo indica.
                                         </React.Fragment>
                                     }
                                     placement="right-start"
@@ -129,9 +333,14 @@ export const GestionProyectos = () => {
 
 
                             </div>
-                            <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                            <div className="d-flex container-fluid justify-content-end">
+                                {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
+                                {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                                {/* ----------------------------------------------------------------------------------------------------------------------*/}
+                                <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                            </div>
                         </div>
-                        <TableNoHover style={{ cursor: 'default' }} columns={columns} data={transformedState} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></TableNoHover>
+                        <TableNoHover style={{ cursor: 'default' }} columns={columns} data={transformedState} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar" ></TableNoHover>
                         <Toaster></Toaster>
                     </>
                 </div>
@@ -142,7 +351,6 @@ export const GestionProyectos = () => {
     );
 
 }
-
 
 const HtmlTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />

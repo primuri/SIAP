@@ -15,7 +15,6 @@ export const TableOneButtom = ({ columns = [], data = [], onDoubleClick, onButto
     return Math.ceil(data.length / itemsPerPage);
   }, [data, itemsPerPage]);
 
-  // Calcular el índice del último y primer elemento en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -66,7 +65,7 @@ export const TableOneButtom = ({ columns = [], data = [], onDoubleClick, onButto
           <tr key={rowIndex} onDoubleClick={() => onDoubleClick (row)}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}>
-              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
+              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? (
                 (row.estado === 'Completa' ? (<button id="acciones-button" className="btn btn-primary" onClick={() => onButtonClick (row)}>{buttonText}</button>):<button className="btn btn-primary" style={{backgroundColor:'gray', borderColor:'gray', cursor:'default'}} disabled>{buttonText}</button>)
                 
               ) : (

@@ -37,7 +37,7 @@ class Evento(models.Model):
     resumen = models.CharField(max_length=255)
     pais = models.CharField(max_length=150)
     tipo_participacion = models.CharField(max_length=10)
-    enlace = models.CharField(max_length=1024, null=True)
+    enlace = models.CharField(max_length=1024, blank=True, null=True)
     id_producto_fk = models.ForeignKey(Producto, on_delete=models.CASCADE)
     id_institucion_fk = models.ForeignKey(Institucion, on_delete=models.CASCADE)  
     id_area_fk = models.ForeignKey(Area, on_delete=models.CASCADE)

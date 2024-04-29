@@ -5,15 +5,16 @@ import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { obtenerProveedores, obtenerProductosServicios, obtenerFactura } from '../../api/gestionGastos';
+import { obtenerProveedores, obtenerProductosServicios, obtenerFactura, obtenerGastos } from '../../api/gestionGastos';
+import Tooltip from '@mui/material/Tooltip';
 
 const filter = createFilterOptions();
 
 export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [proveedor, setProveedor] = useState([]); //extra
-    const [producto, setProductoServicio] = useState([]); //extra
+    const [proveedor, setProveedor] = useState([]);
+    const [producto, setProductoServicio] = useState([]);
     const [factura, setFactura] = useState([]);
     const [documentoData, setDocumentoData] = useState(null);
     const [selectedFactura, setSelectedFactura] = useState("");
@@ -25,7 +26,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         id_partida_fk: gasto ? gasto.id_partida_fk.id_partida : id_partida,
         id_gasto: gasto ? gasto.id_gasto : "",
         monto: gasto ? gasto.monto : "",
-        fecha: gasto ? gasto.fecha.split('T')[0] : "",
+        fecha: gasto ? gasto.fecha : "",
         detalle: gasto ? gasto.detalle : "",
         id_factura_fk: gasto ? gasto.id_factura_fk : { id_cedula_proveedor_fk: { detalle: "" }, id_producto_servicio_fk: {detalle: ""} },
         id_documento_fk: gasto ? { ...gasto.id_documento_fk } : { tipo: "Documento factura", detalle: "", documento: "" }
@@ -38,6 +39,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         loadProveedores()
         loadProductosServicios()
         loadFacturas()
+        
     }, [])
 
     useEffect(() =>{
@@ -195,6 +197,14 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                 <div className="modal-body justify-content-center" style={{ padding: '3vh 4vw' }}>
                     <div className="container">
                         <div className="row mb-4">
+                            {mode === 2 && (
+                                <div className="col">
+                                    <label htmlFor="id_factura_fk.id_factura" className="label-personalizado mb-2"> Código de factura   </label>
+                                    <input type="text" className="form-control" name="id_factura_fk.id_factura" id="id_factura_fk.id_factura" value={formData.id_factura_fk.id_factura} onChange={handleChange} disabled={true} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="fecha" className="label-personalizado mb-2"> Fecha   </label>
                                 <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required />
@@ -207,21 +217,14 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto   </label>
                                 <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
                             </div>
                         </div>
-                        <div className="row mb-4">
-                            <div className="col">
-                                <h5>Información de factura</h5>
-                                {mode === 2 && (
-                                    <p>Código de factura: {formData.id_factura_fk.id_factura}</p>
-                                )}
-                            </div>
-                        </div>
+
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_cedula_proveedor_fk" className="label-personalizado mb-2">Proveedor  </label>
@@ -259,7 +262,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                                 detalle: newValue,
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setValue({
                                                 detalle: newValue.inputValue,
                                             });
@@ -271,7 +273,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.detalle);
                                         if (inputValue !== '' && !isExisting) {
                                             filtered.push({
@@ -288,15 +289,12 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     id="free-solo-with-text-demo"
                                     options={producto}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.detalle;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.detalle}</li>}
@@ -311,13 +309,17 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="row mb-4">
                             <div className="col">
-                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span class="optional">(Opcional)</span>
+                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
-                                {typeof formData.id_documento_fk.documento === 'string' && (
-                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {formData.id_documento_fk.documento.split('/').pop()}
-                                    </a>
-                                )}
+                                {mode === 2 && formData.id_documento_fk.documento ? (
+                                    <Tooltip title={formData.id_documento_fk.documento.split('/').pop()} placement="right-start">
+                                    {formData.id_documento_fk.documento !== "" && (
+                                        <a href={"http://localhost:8000" + formData.id_documento_fk.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {"Descargar documento"}
+                                        </a>
+                                    )}
+                                    </Tooltip>
+                                ) : null}
                             </div>
                         </div>
                     </div>

@@ -43,7 +43,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const [propuestas, setPropuestas] = useState([]);
     const [togglePropuestas, setTogglePropuestas] = useState(false);
 
-    // Si hay informacion en el academico, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         cedula: academico ? academico.cedula : "",
         foto: academico ? academico.foto : "",
@@ -59,7 +58,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         id_area_especialidad_secundaria_fk: academico ? academico.id_area_especialidad_secundaria_fk : { nombre: "" },
         universidad_fk: academico ? academico.universidad_fk : { pais: "", nombre: "" }
     })
-    //si hay titulos o telefonos los carga
+
     useEffect(() => {
         if (academico) {
             loadTitulos()
@@ -83,7 +82,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         const resultado = prop.nombre;
                         resultados.push(resultado);
                        
-                        console.log(prop.nombre);
                     }
                   });
                
@@ -108,7 +106,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 const titulosFiltrados = res.data.filter(titulo => titulo.id_academico_fk.id_academico === academico.id_academico)
                 setTitulos(titulosFiltrados)
             } else {
-                setTitulos([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setTitulos([])
             }
 
         } catch (error) {
@@ -129,7 +127,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 const telefonosFiltrados = res.data.filter(telefono => telefono.id_academico_fk.id_academico === academico.id_academico)
                 setTelefonos(telefonosFiltrados)
             } else {
-                setTelefonos([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setTelefonos([])
             }
 
         } catch (error) {
@@ -164,13 +162,11 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         const { name, value } = event.target;
     
         const check = (value) => {
-            // Esta expresión regular permite solo letras y espacios.
             const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
             return regex.test(value) || value === "";
         };
 
         const checkCedula = (value) => {
-            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
             const regex = /^[A-Za-z0-9]*$/;
             return regex.test(value);
         };
@@ -190,7 +186,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     ...prevFormData,
                     [objectName]: {
                         ...prevFormData[objectName],
-                        [attributeName]: value, // Actualiza solo el atributo relevante
+                        [attributeName]: value,
                     },
                 }));
             }
@@ -205,11 +201,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 ...prevFormData,
                 [name]: value,
             }));
-            // Continúa la ejecución para permitir la actualización de otros campos.
         }
     
-        // Este bloque maneja todos los demás campos, incluyendo aquellos con puntos en sus nombres.
-        // Se ejecutará si el nombre del campo no es "id_nombre_completo_fk.nombre".
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData(prev => ({
@@ -219,7 +212,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     [keys[1]]: value
                 }
             }));
-        } else if (name !== "pais_procedencia") { // Asegúrate de que este caso no se aplique al campo "pais_procedencia" ya manejado.
+        } else if (name !== "pais_procedencia") {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 [name]: value,
@@ -236,11 +229,9 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         event.preventDefault()
         if (titulos.length > 0) {
             formData.titulos = titulos
-            console.log(titulos)
         }
         if (telefonos.length > 0) {
             formData.telefonos = telefonos
-            console.log(telefonos)
         }
         const combinedData = new FormData();
         if (fotoData) {
@@ -344,7 +335,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span class="optional">(Opcional)</span>
+                                    <label htmlFor="segundoApellido" className="label-personalizado mb-2">Segundo apellido</label> <span className="disabled-input">(Opcional)</span>
                                     <input type="text" className="form-control" name="id_nombre_completo_fk.segundo_apellido" id="segundo_apellido" value={formData.id_nombre_completo_fk.segundo_apellido || ""} onChange={handleChange} />
                                 </div>
                             </div>
@@ -370,8 +361,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 </select>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal</label>
-                                <input type="text" className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
+                                <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal </label> <span className="disabled-input">(Opcional)</span>
+                                <textarea  className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
 
                         </div>
@@ -407,7 +398,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                                 universidad_fk: { nombre: newValue, pais: formData.universidad_fk.pais },
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
                                                 universidad_fk: { nombre: newValue.inputValue, pais: formData.universidad_fk.pais },
@@ -423,7 +413,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.nombre);
                                         if (inputValue !== '' && !isExisting) {
                                             let cadena = `Añadir "${inputValue}"`;
@@ -441,15 +430,12 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     id="universidad_nombre"
                                     options={obtenerUniversidadesUnicasPorNombre(universidades)}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.nombre;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
@@ -470,7 +456,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                                 universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue },
                                             });
                                         } else if (newValue && newValue.inputValue) {
-                                            // Create a new value from the user input
                                             setFormData({
                                                 ...formData,
                                                 universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue.inputValue },
@@ -486,7 +471,6 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                         const filtered = filter(options, params);
 
                                         const { inputValue } = params;
-                                        // Suggest the creation of a new value
                                         const isExisting = options.some((option) => inputValue === option.pais);
                                         if (inputValue !== '' && !isExisting) {
                                             filtered.push({
@@ -503,15 +487,12 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     id="universidad_pais"
                                     options={obtenerUniversidadesUnicasPorPais(universidades)}
                                     getOptionLabel={(option) => {
-                                        // Value selected with enter, right from the input
                                         if (typeof option === 'string') {
                                             return option;
                                         }
-                                        // Add "xxx" option created dynamically
                                         if (option.inputValue) {
                                             return option.inputValue;
                                         }
-                                        // Regular option
                                         return option.pais;
                                     }}
                                     renderOption={(props, option) => <li {...props}>{option.pais}</li>}
@@ -541,48 +522,46 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="text" className="form-control" name="id_area_especialidad_fk.nombre" id="areaEspecialidad" value={formData.id_area_especialidad_fk.nombre} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6 mt-4">
-                                <Tooltip title="Separar areas secundarias con coma" placement="right-start">
-                                    <label data-toggle="tooltip" data-placement="top" title="Este es un tooltip de Bootstrap" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
+                                <Tooltip title="Separar áreas secundarias con coma" placement="right-start">
+                                    <label data-toggle="tooltip" data-placement="top" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
                                 </Tooltip>
-                                <input type="text" className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
+                                <textarea className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
                                 <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} />
                             </div>
                         </div>
                         <hr></hr>
+              
+                        <div className="d-flex flex-column">
+                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
+                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Título"/>
+                        </div>
+
+                        <div className="d-flex flex-column mt-4">
+                            <label htmlFor="telefonos" className="label-personalizado mb-2 h5">Teléfonos </label>
+                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} itemName="Telefono"/>
+                        </div>              
                         {mode === 2 && (
                             <>
-                        <div>
-                        {togglePropuestas && propuestas.length > 0 && (
+                            <hr></hr>
                             <div>
-                            <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
-                            <ul>
-                                {propuestas.map((propuesta, index) => (
-                                <li key={index}>{propuesta}</li>
-                                ))}
-                            </ul>
+                                {togglePropuestas && propuestas.length > 0 && (
+                                    <div>
+                                        <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
+                                        <ul>
+                                            {propuestas.map((propuesta, index) => (<li key={index}>{propuesta}</li>))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                            <div className="d-flex justify-content-center align-items-center">
-                                <button id="boton-personalizado" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
+                            <div className="d-flex align-items-center">
+                                <button id="boton-mostrar-propuestas" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
                                 {togglePropuestas ? 'Ocultar Propuestas' : 'Mostrar Propuestas'}
                                 </button>
                             </div>
-                        </div>
-                        <hr></hr>
                         </>
                         )}
-                        <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
-                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Titulo"/>
-                        </div>
-                        <hr></hr>                        
-                        <div className="d-flex flex-column">
-                            <label htmlFor="telefonos" className="label-personalizado mb-2 h5">Teléfonos </label>
-                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} itemName="Telefono"/>
-                        </div>
-
                     </div>
                 </div>
 

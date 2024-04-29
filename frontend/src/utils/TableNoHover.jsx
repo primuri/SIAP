@@ -15,7 +15,6 @@ export const TableNoHover = ({ columns, data, onDoubleClick , dataKeys, hasButto
     return Math.ceil(data.length / itemsPerPage);
   }, [data, itemsPerPage]);
 
-  // Calcular el índice del último y primer elemento en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -66,7 +65,7 @@ export const TableNoHover = ({ columns, data, onDoubleClick , dataKeys, hasButto
           <tr key={rowIndex}>
           {dataKeys.map((column, colIndex) => (
             <td className="mx-2" key={colIndex}  style={{ pointerEvents: "none" }}>
-              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? ( // Comprueba si se necesita boton y si está en la última columna
+              {(colIndex === dataKeys.length - 1 && hasButtonColumn) ? (
                 <button id="acciones-button" className="btn btn-primary" onClick={() => onDoubleClick (row)} style={{ pointerEvents: 'all' }}>{buttonText}</button>
               ) : (
                 typeof getValueByPath(row, column) === 'string' && getValueByPath(row, column).includes('/')

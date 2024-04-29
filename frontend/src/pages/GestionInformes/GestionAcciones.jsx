@@ -15,8 +15,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionAcciones = () => {
     let {versionID,informeID} = useParams() 
-    const navigate = useNavigate()
-    // Estados                                                                  
+    const navigate = useNavigate()                                                              
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
     const [acciones, setAcciones] = useState([])
@@ -52,7 +51,6 @@ export const GestionAcciones = () => {
         }
     }
 
-    // Manejo de datos que se van a enviar para agregar
     const addAccion = async (formData) => {
         try {
 
@@ -75,8 +73,7 @@ export const GestionAcciones = () => {
         } catch (error) {
         }
     }
-
-    // Manejo de los datos del formulario de editar 
+ 
     const editAccion = async (formData) => {
         try {
             formData.id_version_informe_fk = versionID;
@@ -106,7 +103,6 @@ export const GestionAcciones = () => {
         }
     }
 
-    // Manejo del eliminar
     const deleteAccion = async (accion) => {
         try {
             await eliminarAccion(accion.id_accion, localStorage.getItem('token'))
@@ -129,14 +125,12 @@ export const GestionAcciones = () => {
     }
 
 
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
     }
 
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
@@ -144,7 +138,6 @@ export const GestionAcciones = () => {
 
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (selectedAccion) => {
         setAccion(selectedAccion);
         setEdit(true);
@@ -153,12 +146,10 @@ export const GestionAcciones = () => {
 
     };
 
-    // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -186,10 +177,6 @@ export const GestionAcciones = () => {
         const newPath = `/${newPathParts.join('/')}`;
         navigate(newPath);
     }
-
-    // if (returnVersionInformes === true) {
-    //     return <GestionVersionInforme informeID={versionID.informeID.informeID} />;
-    // }
 
     return (
         <main>

@@ -18,6 +18,7 @@ import GestionProyectos from "./routes/GestionProyectos"
 import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
+import pruebaReporte from './routes/pruebaReporte'
 
 import GestionAsistentes from "./routes/GestionAsistentes"
 
@@ -26,7 +27,6 @@ function App() {
     const user = localStorage.getItem('user');
     const currentPath = window.location.pathname;
   
-    // Si no se encuentra un usuario en el localStorage (sin iniciar sesión) y la ruta actual no es /log-in, redirige a /log-in
     if (!user && currentPath !== '/login') {
       window.location.href = '/login';
     }
@@ -38,24 +38,27 @@ function App() {
       <Header/>
       <div className='d-flex' id='content-box'>
         <Sidebar></Sidebar>
-        <div className=' overflow-hidden'>
+        <div className='overflow-hidden mr-4'>
           <BreadcrumbsCustom></BreadcrumbsCustom>
-          <Routes>
-            {GestionUsuarios}
-            {GestionPropuestas}
-            {GestionInformes}
-            {GestionPresupuestos}
-            {GestionProveedores}
-            {GestionProyectos}
-            {EvaluacionProyectos}
-            {GestionEvaluaciones}
-            {GestionOrganosColegiados}
-            {GestionAsistentes}
-            
-            <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
-            <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
-            <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
-          </Routes> 
+          <hr id="divider"></hr>
+          <div style={{ marginRight: '2rem' }}>
+            <Routes>
+              {GestionUsuarios}
+              {GestionPropuestas}
+              {GestionInformes}
+              {GestionPresupuestos}
+              {GestionProveedores}
+              {GestionProyectos}
+              {EvaluacionProyectos}
+              {GestionEvaluaciones}
+              {GestionOrganosColegiados}
+              {GestionAsistentes}
+              {pruebaReporte}
+              <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
+              <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
+              <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
+            </Routes> 
+          </div>
         </div>
       </div>
       <Footer/>

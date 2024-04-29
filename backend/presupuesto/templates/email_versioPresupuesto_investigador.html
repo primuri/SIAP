@@ -62,31 +62,26 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="header">
-            <h2>Información del Versión de Presupuesto</h2>
+            <h2>Información del Versión de presupuesto</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
         <h4>Estimado(a) {{investigador}}</h4>
-        <p><strong><i>Por el siguiente medio se le notifica que su proyecto {{proyecto}} en la versión N° {{version_proyecto}} ha recibido un cambio en la sección de versión de presupuesto </i></strong></p>
+        <p><strong><i>Se le notifica que su proyecto {{proyecto}} en la versión N° {{version_proyecto}} fue modificado en la sección de versión de presupuesto</i></strong></p>
         <p><strong>En caso de no haber solicitado algún cambio, encontrar alguna discrepancia o tener cualquier consulta, le agradecemos que se ponga en contacto con el Centro de Investigación en Matemática Pura y Aplicada (CIMPA) de la Universidad de Costa Rica.</strong></p>
-           
             <div class="content">
-               
                 <p><strong>Proyecto: </strong> {{ proyecto }} | version N° {{version_proyecto}}</p>
                 <p><strong>Presupuesto: </strong> versión N° {{version}}</p>
                 <p><strong>Monto: </strong> {{ monto }}</p>
                 <p><strong>Saldo: </strong> {{saldo}}</p>
                 <p><strong>Fecha: </strong> {{ fecha }}</p>
                 <p><strong>Detalle: </strong>{{detalle}}</p>
-    
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.
             </div>
         </div>
-        
     </div>
 </body>
 </html>

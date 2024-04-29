@@ -36,7 +36,7 @@ class DocumentoSerializer(serializers.ModelSerializer):
         return rep
 
 class EvaluacionCCSerializer(serializers.ModelSerializer):
-    id_documento_evualuacion_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())
+    id_documento_evualuacion_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = EvaluacionCC
@@ -107,7 +107,7 @@ class VersionProyectoSerializer(serializers.ModelSerializer):
         return rep
 
 class DesignacionAsistenteSerializer(serializers.ModelSerializer):
-    id_documento_inopia_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())
+    id_documento_inopia_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all(), required=False, allow_null=True)
     id_version_proyecto_fk = serializers.PrimaryKeyRelatedField(queryset=VersionProyecto.objects.all())
     id_asistente_carnet_fk = serializers.PrimaryKeyRelatedField(queryset=Asistente.objects.all())
 
@@ -117,7 +117,7 @@ class DesignacionAsistenteSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(DesignacionAsistenteSerializer, self).to_representation(instance)
-        rep['id_documento_inopia_fk'] = DocumentoSerializer(instance.id_documento_inopia_fk).data
+        rep['id_documento_inopia_fk'] = DocumentoSerializer(instance.id_documento_inopia_fk).data if instance.id_documento_inopia_fk else None
         rep['id_version_proyecto_fk'] = VersionProyectoSerializer(instance.id_version_proyecto_fk).data
         rep['id_asistente_carnet_fk'] = AsistenteSerializer(instance.id_asistente_carnet_fk).data
         return rep

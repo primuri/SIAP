@@ -17,22 +17,22 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 export const GestionVersionInforme = () => {   
     let {informeID} = useParams()      
     const navigate = useNavigate()
-    const location = useLocation()                      // Versiones de un infome   
-    const [versionesInformeData, setVersionesInformeData] = useState([])             // Datos completos
-    const [versionesInformeList, setVersionesInformeList] = useState([])             // Datos filtrados
-    const [versionInforme, setVersionInforme]             = useState(null)           // Version actual
+    const location = useLocation()                       
+    const [versionesInformeData, setVersionesInformeData] = useState([])            
+    const [versionesInformeList, setVersionesInformeList] = useState([])             
+    const [versionInforme, setVersionInforme]             = useState(null)           
     const [showAcciones, setShowAcciones]                 = useState(false);
-    const [loaded, setLoaded]                             = useState(false)          // Data cargada
-    const [reload, setReload]                             = useState(false)          // Para recargar tabla
-    const [addClicked, setAddClicked]                     = useState(false)          // Para evento de agregar
-    const [editClicked, setEditClicked]                   = useState(false)          // Para evento de editar
+    const [loaded, setLoaded]                             = useState(false)          
+    const [reload, setReload]                             = useState(false)          
+    const [addClicked, setAddClicked]                     = useState(false)         
+    const [editClicked, setEditClicked]                   = useState(false)         
     const [returnInformes, setReturnInformes] = useState(false); 
     const [numVersionProyecto, setNumVersionProyecto] = useState(null)  
     const [id_proyecto, setIdProyecto] = useState(null) 
 
     useEffect(() => {
         loadVersionesInformeData()
-    }, [reload])                        // Re-carga los datos tras detectar cambios
+    }, [reload])                    
 
     async function loadVersionesInformeData() {
         try{
@@ -56,6 +56,23 @@ export const GestionVersionInforme = () => {
 
             let responseDocumento = await API.agregarDocumentoInforme(data.id_documento_informe_fk)
             data.id_documento_informe_fk = responseDocumento.data.id_documento
+
+            if(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento instanceof File ){
+                let responseDocEvaluacion = await API.agregarDocumentoInforme(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk)
+                data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = responseDocEvaluacion.data.id_documento
+                if(data.id_evaluacion_cc_fk.detalle === ""){
+                    delete data.id_evaluacion_cc_fk.detalle
+                }
+                let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+                data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+            }else{
+                data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = null
+               
+                let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+                data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+            }
+            
+
             data.id_informe_fk = informeID
 
             await API.agregarVersionInforme(data)
@@ -85,17 +102,47 @@ export const GestionVersionInforme = () => {
                 delete data.id_documento_informe_fk.documento
                 var responseDocumento = await API.editarDocumentoInforme(data.id_documento_informe_fk.id_documento, data.id_documento_informe_fk);
             }
-            
+            if (data.id_evaluacion_cc_fk.id_documento_evualuacion_fk === null){
+                    if(data.id_evaluacion_cc_fk.detalle !== ""){
+                        let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+                        data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+                    }else{
+                        data.id_evaluacion_cc_fk = null
+                    }
+                   
+            } else {
+         
+                    if(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento instanceof File ){
+                        
+                        let responseDocEvaluacion = await API.agregarDocumentoInforme(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk)
+                        data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = responseDocEvaluacion.data.id_documento
+                        if(data.id_evaluacion_cc_fk.detalle === ""){
+                            delete data.id_evaluacion_cc_fk.detalle
+                        }
+                        let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+                        data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+                       
+                        //
+                    }else{
+                        data.id_evaluacion_cc_fk.id_documento_evualuacion_fk =  data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.id_documento
+    
+                        await API.editarEvaluacionCC(data.id_evaluacion_cc_fk.id_evaluacion_cc, data.id_evaluacion_cc_fk)
+                        data.id_evaluacion_cc_fk = data.id_evaluacion_cc_fk.id_evaluacion_cc  
+                    }
+                   
+                   
+                
+               
+            }
+     
             data.id_documento_informe_fk = responseDocumento.data.id_documento;
 
-            data.id_evaluacion_cc_fk = (data.id_evaluacion_cc_fk.id_evaluacion_cc ? data.id_evaluacion_cc_fk.id_evaluacion_cc : null)
             data.id_informe_fk = informeID
             await API.editarVersionInforme(versionInforme.id_version_informe, data)
             
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Versión informe editada correctamente")
-            console.log(versionInforme)
         }catch(error){
         }
     }
@@ -145,13 +192,6 @@ export const GestionVersionInforme = () => {
         navigate(newPath);
     }
 
-    // if(returnInformes === true) {
-    //     return <GestionInformes/>;
-    // }
-
-    // else if (versionInforme && showAcciones === true) {
-    //     return <GestionAcciones versionID={versionInforme.id_version_informe} informeID={informeID}/>;
-    // }
 
     return (
         <main>

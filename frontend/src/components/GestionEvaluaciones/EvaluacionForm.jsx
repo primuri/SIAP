@@ -33,10 +33,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
     useEffect(() => {
         cargarVersiones()
-        console.log("Proyecto selec: " + proyectoSeleccionado)
     }, [proyectoSeleccionado])
-
-    // => Campos del formulario 
 
     const [formData, setFormData] = useState({
         id_evaluacion: evaluacion ? evaluacion.id_evaluacion : '',
@@ -47,7 +44,6 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         id_documento_evaluacion_fk: evaluacion ? { ...evaluacion.id_documento_evaluacion_fk } : { tipo: "Evaluacion", detalle: "", documento: null }
     })
 
-    // => Funciones para el autoComplete
     const checkCanDelete = async () => {
         if(evaluacion){
             var canDelete = await API.canDelete(evaluacion.id_evaluacion)
@@ -69,34 +65,29 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                 
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
         setProyectos(listaProyectos)
         setLoadedLista(true)
     };
 
     const cargarVersiones = async () => {
-        // Expresión regular para extraer el id_codigo_vi del string almacenado en proyectoSeleccionado
         const regex = /(\d+-\d+)\s*\|/;
 
         try {
-            // Suponiendo que proyectoSeleccionado es el string que contiene el id_codigo_vi
             const match = proyectoSeleccionado.match(regex);
 
-            // Verificar si se encontró el id_codigo_vi en el string
             if (match && match[1]) {
                 const idProyecto = match[1];
                 setLoadedVersiones(false)
-                // Obtener las versiones del proyecto utilizando la API
                 const response = await API.obtenerVersionesProyecto(idProyecto);
 
-                // Actualizar el estado con las versiones del proyecto
                 setVersionesProyecto(response.data);
                 setLoadedVersiones(true)
 
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -111,13 +102,12 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                 listaEvaluadores.push(stringEvaluador);
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
         setEvaluadores(listaEvaluadores)
         setLoadedEvaluadores(true)
     }
 
-    // => Funciones de manejo de cambios
 
     const updateNestedField = (formData, fieldPath, value) => {
         const keys = fieldPath.split('.');
@@ -161,7 +151,6 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         setDocumento(file)
     };
 
-    // => Recoleccion y envio de formulario
 
     const sendForm = (event) => {
         event.preventDefault();
@@ -199,6 +188,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                         }
                                     }}
                                     disabled={(formData.estado === "Completa")}
+                                    
                                 />
                             </div>
                             <div className="col">
@@ -251,9 +241,8 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                                     const idEvaluador = match[0];
                                                     formData.id_evaluador_fk = idEvaluador
                                                 }
-                                                console.log(formData.id_evaluador_fk)
                                             } catch (error) {
-                                                console.log(error);
+                                                console.error(error);
                                             }
                                         } else {
                                             setEvaluadorSeleccionado('')
@@ -264,14 +253,14 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>
                             {mode == 2 && (
                             <div className="col">
-                                <label htmlFor="numero_version" className="label-personalizado mb-2">Estado <span className="disabled-input">(Solo ver)</span></label>
+                                <label htmlFor="numero_version" className="label-personalizado mb-2">Estado </label> <span className="disabled-input">(Solo lectura)</span>
                                 <input type="text" className="form-control disabled-input" name="detalle" id="detalle" value={formData.estado} disabled/>
                             </div>)}
                         </div>
                         <div className="row mb-4">
 
                             <div className="col">
-                                <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación <span className="disabled-input">(Opcional)</span></label>
+                                <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
                                 {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
@@ -282,8 +271,8 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 )}
                             </div>
                             <div className="col">
-                                <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación <span className="disabled-input">(Opcional)</span></label>
-                                <input type="text" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
+                                <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación </label> <span className="disabled-input">(Opcional)</span>
+                                <textarea className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
                             </div>
                         </div>
                     </div>

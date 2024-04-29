@@ -22,7 +22,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const [edit, setEdit] = useState(false)
     const [fileProveedor, setFileProveedor] = useState(null);
 
-    // Si hay informacion en el proveedor, la almacena en formData, sino queda vacía
     const [formData, setFormData] = useState({
         id_cedula_proveedor: proveedor ? proveedor.id_cedula_proveedor : "",
         correo: proveedor ? proveedor.correo : "",
@@ -45,7 +44,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                 const cuentasFiltradas = res.data.filter(cuenta => cuenta.id_proveedor_fk.id_cedula_proveedor === proveedor.id_cedula_proveedor)
                 setCuentaBancaria(cuentasFiltradas)
             } else {
-                setCuentaBancaria([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setCuentaBancaria([])
             }
 
         } catch (error) {
@@ -64,7 +63,6 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         const { name, value } = event.target
 
         const checkCedula = (value) => {
-            // Esta expresión regular permite letras y números, pero no espacios ni caracteres especiales.
             const regex = /^[A-Za-z0-9]*$/;
             return regex.test(value);
         };
@@ -196,7 +194,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
-                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -212,7 +210,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2"> Documento </label>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
+                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} required/>
                                 { typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_documento_fk.documento.split('/').pop()}
@@ -224,7 +222,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleDocumento" className="label-personalizado mb-2"> Detalle Documento </label>
-                                <input type="text" className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} required/>
                             </div>
                         </div>
 

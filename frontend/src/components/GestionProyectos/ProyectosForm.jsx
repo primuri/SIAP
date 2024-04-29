@@ -12,8 +12,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 
 export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, academicos }) => {
-
-    // Cargar informacion
     const navigate = useNavigate()
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
@@ -70,20 +68,16 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     }, [mode, tipo]);
 
 
-    //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-         // Validación específica para el campo de número de versión
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
-                // Si el valor incluye caracteres no permitidos, detiene la ejecución
                 return;
             }
         }
 
         if (name === "id_academico_fk.id_academico") {
-            // Lógica para filtrar académicos basada en el valor ingresado
             formData.asociar_academico = value;
             if (value === "") {
                 setAcademicosFilter([]);
@@ -97,11 +91,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             }
         }
     
-        // Procesamiento general para otros campos, incluidas las fechas
         const keys = name.split('.');
         let updatedValue = value;
     
-        // Si el campo modificado es de fecha, realiza la validación correspondiente
         if (keys.includes('fecha_inicio') || keys.includes('fecha_fin')) {
             const startDateKey = keys.slice(0, -1).join('.') + '.fecha_inicio';
             const endDateKey = keys.slice(0, -1).join('.') + '.fecha_fin';
@@ -109,12 +101,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             const endDate = keys[keys.length - 1] === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
     
             if (startDate > endDate) {
-                console.log("La fecha de inicio no puede ser posterior a la fecha de fin.");
-                return; // Detiene la ejecución si la fecha de inicio es mayor que la de fin
+                return;
             }
         }
     
-        // Navegar por el objeto formData para encontrar y actualizar el valor correcto
         const updateFormData = (path, value, obj) => {
             const keys = path.split('.');
             const lastKey = keys.pop();
@@ -128,7 +118,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setFormData({ ...formData });
     };
     
-    // Función auxiliar para obtener valor por ruta de acceso en objeto anidado
     function getValueByPath(object, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], object);
     }
@@ -213,10 +202,9 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                     id_academico_fk: {
                         id_academico: academico.id_academico
                     },
-            // Actualiza el estado para guardar el nombre completo del académico seleccionado.
             asociar_academico: `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`
         }));
-        setAcademicosFilter([]); // Limpia la lista de académicos filtrados después de seleccionar.
+        setAcademicosFilter([]);
     };
 
     return (
@@ -227,9 +215,11 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="text-center" style={{ marginLeft: '3.5vw' }}>
-                    <h2>{mode === 1 ? ("Agregar una versión de proyecto") : ("Editar versión de proyecto")}</h2>
-                </div>
+                <div className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar una versión de proyecto" : "Editar una versión de proyecto"}
+                            </h2>
+                        </div>
                 <div>
                     <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
                         <span aria-hidden="true" className="close-icon">&times;</span>
@@ -262,14 +252,14 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                             <div className="col">
                                 <label htmlFor="id_version_proyecto_fk.detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <input type="text" className="form-control" name="id_version_proyecto_fk.detalle" id="id_version_proyecto_fk.detalle" onChange={handleChange} value={formData.id_version_proyecto_fk.detalle} required />
+                                <textarea className="form-control" name="id_version_proyecto_fk.detalle" id="id_version_proyecto_fk.detalle" onChange={handleChange} value={formData.id_version_proyecto_fk.detalle} required />
                             </div>
 
                         </div>
 
                         <div className="row mb-4">
                         <div className="col">
-                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_version_proyecto_fk.id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_version_proyecto_fk.id_vigencia_fk.fecha_inicio
@@ -277,7 +267,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     onChange={handleChange} />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_version_proyecto_fk.id_vigencia_fk.fecha_fin"
                                     id="id_version_proyecto_fk.id_vigencia_fk.fecha_fin"
@@ -292,7 +282,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_version_proyecto_fk.id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
-                                <input type="text" className="form-control" name="id_version_proyecto_fk.id_oficio_fk.detalle" id="id_version_proyecto_fk.id_oficio_fk.detalle" value={formData.id_version_proyecto_fk.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_version_proyecto_fk.id_oficio_fk.detalle" id="id_version_proyecto_fk.id_oficio_fk.detalle" value={formData.id_version_proyecto_fk.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="id_version_proyecto_fk.id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
@@ -310,7 +300,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     : ""}
                             </div>
                             <div className="row mb-4">
-                                <h5 className="text-center my-3">Asociar Colaborador Secundario</h5>
+                                <h5 className="text-center my-3 mt-5">Asociar Colaborador Secundario</h5>
                                 <div className="col">
                                     <label htmlFor="id_academico_fk" className="label-personalizado mb-2">Investigador(a) </label>
                                 
@@ -320,7 +310,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                         {(academicosFilter.length > 0) && (
                                             <div
                                                 className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                style={{ maxHeight: "40px" }}
+                                                style={{ maxHeight: "60px" }}
                                             >
                                                 {academicosFilter.map((academico) => {
                                                 return (
@@ -366,7 +356,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="inicioVigenciaColaborador" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
@@ -374,7 +364,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     onChange={handleChange} />
                             </div>
                             <div className="col">
-                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización <span className="optional"> (Opcional)</span></label>
+                                <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control"
                                     name="id_vigencia_fk.fecha_fin"
                                     id="id_vigencia_fk.fecha_fin"
@@ -443,7 +433,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="versión de proyecto" />)}
                                 </>
                             )}
                         </div>

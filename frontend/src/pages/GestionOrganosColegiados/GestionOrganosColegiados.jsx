@@ -30,8 +30,12 @@ export const GestionOrganosColegiados = () => {
     const columns = ['Nombre', 'Quorum', 'Cantidad de integrantes', 'Acuerdo en firme', 'Integrantes', 'Sesiones']
     const dataKeys = ['nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
 
-    user.groups[0] !== "administrador" ? setError(true) : null                   
+    const rol = user.groups[0]
 
+    if (rol !== "administrador" && rol !== "invitado") {
+        setError(true);
+    }
+                       
     useEffect(() => {                                                            
         async function fetchData() {
             loadOrganosColegiados()
@@ -134,15 +138,38 @@ export const GestionOrganosColegiados = () => {
     }
 
     const elementClicked = (selectedOrganoColegiado) => {
-        if (event.target.tagName.toLowerCase() === 'button') {
-            navigate(`${location.pathname}/${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`, { state: { nombreOC: selectedOrganoColegiado.nombre } });
-        } else {
-            setOrganoColegiado(selectedOrganoColegiado);
-            setEdit(true);
-            setAddClick(false);
-            document.body.classList.add('modal-open');
-        }
+        setOrganoColegiado(selectedOrganoColegiado);
+        setEdit(true);
+        setAddClick(false);
+        document.body.classList.add('modal-open');
     };
+
+    const elementClickedBtnIntegrantes = (selectedOrganoColegiado) => {
+        setOrganoColegiado(selectedOrganoColegiado);
+        console.log(selectedOrganoColegiado)
+        if (event.target.tagName.toLowerCase() === 'button') {
+
+                if (rol === "administrador") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
+                }    
+                if (rol === "invitado") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/integrantes`)
+                }
+        }
+    }
+
+    const elementClickedBtnSesiones = (selectedOrganoColegiado) => {
+        setOrganoColegiado(selectedOrganoColegiado);
+        console.log(selectedOrganoColegiado.id_organo_colegiado)
+        if (event.target.tagName.toLowerCase() === 'button') {
+                if (rol === "administrador") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
+                }    
+                if (rol === "invitado") {
+                    navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/sesiones`)
+                }
+        }
+    }
 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
@@ -187,22 +214,49 @@ export const GestionOrganosColegiados = () => {
         <main>
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                    <div className=" flex-row">
-                        <h1>Gestión de órganos colegiados</h1>
-                    </div>
+
+                    {user.groups[0] === "administrador" && (
+                        <div className=" flex-row">
+                            <h1>Gestión de órganos colegiados</h1>
+                        </div>
+                    )}
+
+                    {user.groups[0] === "invitado" && (
+                        <div className=" flex-row">
+                            <h1>Órganos colegiados</h1>
+                        </div>
+                    )}
 
                     {(!cargado) && (
                         <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                     )}             
 
-                    <div className="d-flex justify-content-between mt-4">
-                        <Add onClick={addClicked}></Add>
-                        <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
-                    </div>
-                    <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} buttonText="Gestionar" />
-                    {addClick && (
-                        <Modal><OrganosColegiadosForm onSubmit={addOrganoColegiado} onCancel={onCancel} mode={1}></OrganosColegiadosForm></Modal>
+           
+                    {user.groups[0] === "administrador" && (
+                        <div className="d-flex justify-content-between mt-4">
+                            <Add onClick={addClicked}></Add> 
+                            <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />                         
+                        </div>
                     )}
+                    
+                    {user.groups[0] === "invitado" && (
+                        <div className="d-flex justify-content-between mt-4">
+                            <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />                         
+                        </div>
+                    )}             
+
+                    {user.groups[0] === "administrador" && (
+                        <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} onClickButton1={elementClickedBtnIntegrantes} onClickButton2={elementClickedBtnSesiones} buttonText="Gestionar" />
+                    )}
+
+                    {user.groups[0] === "invitado" && (
+                        <Table columns={columns} data={OrganosColegiados} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={true} onClickButton1={elementClickedBtnIntegrantes} onClickButton2={elementClickedBtnSesiones} buttonText="Visualizar" />
+                    )}
+
+                    {addClick && (
+                        <Modal><OrganosColegiadosForm onSubmit={addOrganoColegiado} onCancel={onCancel} mode={1} rol={rol}></OrganosColegiadosForm></Modal>
+                    )}
+
                     {edit && (
                         <Modal>
                             <OrganosColegiadosForm
@@ -210,7 +264,8 @@ export const GestionOrganosColegiados = () => {
                                 onSubmit={editOrganoColegiado}
                                 onCancel={onCancel}
                                 onDelete={() => deleteOrganoColegiado(OrganoColegiado)}
-                                organo_colegiado={OrganoColegiado}
+                                organo_colegiado={OrganoColegiado}                  
+                                rol={rol}
                             >
                             </OrganosColegiadosForm>
                         </Modal>
