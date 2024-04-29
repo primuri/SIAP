@@ -82,7 +82,6 @@ export const GestionOrganosColegiados = () => {
         var toastId = toastProcesando("Editando...")
 
         try {
-    
             const Data = JSON.parse(formData)
             await editarOrganoColegiado(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
 
@@ -90,7 +89,7 @@ export const GestionOrganosColegiados = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
 
-            toastExito("Evaluación editada correctamente", toastId)
+            toastExito("Órgano colegiado editado correctamente", toastId)
 
         } catch (error) {
             console.error("Error: \n" + error)
@@ -139,7 +138,6 @@ export const GestionOrganosColegiados = () => {
     }
 
     const elementClicked = (selectedOrganoColegiado) => {
-
         setOrganoColegiado(selectedOrganoColegiado);
         setEdit(true);
         setAddClick(false);

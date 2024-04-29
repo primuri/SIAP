@@ -185,7 +185,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                                 <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required >
                                     <option value="">Seleccionar tipo</option>
                                     <option value="Fisica">Física</option>
-                                    <option value="Juridica">Jurídica</option>
+                                    <option value="Jurídica">Jurídica</option>
                                 </select>
                             </div>
                         </div>
@@ -221,7 +221,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
 
                         <div className="row mb-4">
                             <div className="col">
-                                <label htmlFor="detalleDocumento" className="label-personalizado mb-2"> Detalle Documento </label>
+                                <label htmlFor="detalleDocumento" className="label-personalizado mb-2"> Detalle del documento </label>
                                 <textarea className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} required/>
                             </div>
                         </div>

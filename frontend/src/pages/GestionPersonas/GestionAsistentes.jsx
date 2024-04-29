@@ -270,7 +270,6 @@ export const GestionAsistentes = () => {
         } catch (error) {
             
         }
-        setEdit(false)
     }
 
 
