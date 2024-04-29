@@ -77,8 +77,6 @@ export const GestionProyectos = () => {
                 if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
                     producto.tipo = 'evento'
                     productoBuscado = producto
-                } else {
-                    return null
                 }
             })
 
@@ -94,9 +92,7 @@ export const GestionProyectos = () => {
                     producto.tipo = 'software'
                     productoBuscado = producto
 
-                } else {
-                    return null
-                }
+                } 
             })
 
             response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
@@ -111,9 +107,7 @@ export const GestionProyectos = () => {
                     producto.tipo = 'articulo'
                     productoBuscado = producto
 
-                } else {
-                    return null
-                }
+                } 
             })
 
             return productoBuscado

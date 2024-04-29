@@ -10,6 +10,7 @@ import { toast, Toaster }                       from 'react-hot-toast'
 import { PermisoDenegado }                      from "../../utils/PermisoDenegado"
 import * as API                                 from "../../api/gestionGastos"
 import { useLocation, useNavigate, useParams }  from "react-router-dom"
+import { ReportButton } from "../../utils/ReportButton";
 
 export const GestionGastos = () => {   
     const {partidaID}                   = useParams() 
@@ -24,8 +25,58 @@ export const GestionGastos = () => {
     const [error, setError]             = useState(false) 
     const [addClick, setAddClick]       = useState(false)                      
     const [edit, setEdit]               = useState(false)              
+    const [JsonIsReady, setJsonIsReady] = useState(false)
+    const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
 
     user.groups[0] !== "administrador" ? setError(true) : null              
+
+    useEffect(() => {
+        setJsonIsReady(false)
+        createJsonForReport()
+    }, [gastos])
+
+    const configureReportData = () => {
+        if (gastos.length > 0) {
+            try {
+                const gastos_ = gastos.map((gasto) => {
+                    gasto.partidaID = partidaID;
+                    return gasto;
+                });
+                JsonForReport.reportData = gastos_;
+                return true;
+    
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
+                return false;
+            }
+        }
+    }
+
+    const createJsonForReport = () => {
+        JsonForReport.reportTitle = "Gasto de la partida";
+        JsonForReport.idKey = 'partidaID';
+
+        JsonForReport.dataKeys = [
+            'id_gasto',
+            'id_factura_fk.id_factura',
+            'fecha',
+            'detalle',
+            'id_factura_fk.id_cedula_proveedor_fk.nombre',
+            'id_factura_fk.id_producto_servicio_fk.detalle',
+            'monto'
+        ];
+        JsonForReport.colNames = [
+            'Código del gasto',
+            'Código de la factura',
+            'Fecha', 
+            'Detalle', 
+            'Proveedor',
+            'Producto o Servicio',
+            'Monto'
+        ];
+        setJsonIsReady(false)
+        setJsonIsReady(configureReportData());
+    };
 
     useEffect(() => { loadGastosData(partidaID) }, [reload, partidaID]) 
 
@@ -158,8 +209,6 @@ export const GestionGastos = () => {
             Data.id_factura_fk = rF.data.id_factura
             Data.monto = parseInt(Data.monto);
 
-      
-
             delete Data.id_documento_fk 
 
             await API.actualizarGasto(Data.id_gasto, Data, token);
@@ -225,6 +274,7 @@ export const GestionGastos = () => {
     }
 
     const elementClicked = (selectedGasto) => {
+        console.log(selectedGasto)
         if (event.target.tagName.toLowerCase() === 'button') {
             setGasto(selectedGasto);
             navigate(`${location.pathname}${selectedGasto.id_gasto}`)
@@ -249,6 +299,7 @@ export const GestionGastos = () => {
           return e[col].toString().includes(filter)
         })
         setGastos(matches)
+        setJsonIsReady(false)
     }
 
     function addBtnClicked () {
@@ -291,7 +342,11 @@ export const GestionGastos = () => {
                 <h1>Gestión de gastos de la partida </h1>
                 {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
               <div className="d-flex justify-content-between mt-4">
-                <Add onClick={addBtnClicked}></Add>
+                <div className="col">
+                    <Add onClick={addBtnClicked}></Add>
+                </div>
+                
+                {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
                 <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
               </div>
               <Table columns={columnsGastos} data={formattedData} dataKeys={dataKeyGastos} onDoubleClick={elementClicked} hasButtonColumn={false} buttonText="Gestionar"></Table>

@@ -13,11 +13,13 @@ export const Confirmar = ({ onConfirm, onCancel, accion, objeto }) => {
     <div className="modal d-block" tabIndex="-1">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content" >
-          <div className="modal-header">
-            <h4>{accionMa} {objeto}</h4>
-            <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
-              <span aria-hidden="true" className="close-icon">&times;</span>
-            </button>
+          <div className="modal-header" id="header-confirmar">
+              <h4 >{accionMa} {objeto}</h4>
+
+              <button id='close-confirmar' type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                <span aria-hidden="true" className="close-icon">&times;</span>
+              </button>
+
           </div>
           <div className="modal-body">
             <p className='text-center'>¿Está seguro(a) de {accionMi} {objeto}? {reversibleMessage}</p>

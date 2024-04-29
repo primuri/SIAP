@@ -137,10 +137,10 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                                 <label htmlFor="estado" className="label-personalizado mb-2">Estado  </label>
                                 <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
                                     <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
-                                    <option value="aprobado">Aprobado</option>
-                                    <option value="no aprobado">No aprobado</option>
-                                    <option value="cerrado por incumplimiento">Cerrado por incumplimiento</option>
-                                    <option value="cerrado con permiso">Cerrado con permiso</option>
+                                    <option value="Aprobado">Aprobado</option>
+                                    <option value="No aprobado">No aprobado</option>
+                                    <option value="Cerrado por incumplimiento">Cerrado por incumplimiento</option>
+                                    <option value="Cerrado con permiso">Cerrado con permiso</option>
                                 </select>
                             </div>
                         </div>
