@@ -17,7 +17,6 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             "id_presupuesto_fk": version? version.id_presupuesto_fk.id_presupuesto : id_presupuesto,
             "version": version ? version.version : "",
             "monto": version ? version.monto : "",
-            "saldo": 12,
             "fecha": version ? version.fecha: "",
             "detalle": version ? version.detalle : "",
     });

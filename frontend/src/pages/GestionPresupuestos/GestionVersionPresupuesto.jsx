@@ -50,6 +50,7 @@ export const GestionVersionPresupuesto = () => {
 
     async function editVersionPresupuesto(dataForm) {
         try{
+            
             await API.editarVersionesPresupuesto(versionPresupuesto.id_version_presupuesto, localStorage.getItem('token'), dataForm)
             setEditClicked(false)
             setReload(!reload)
@@ -77,7 +78,6 @@ export const GestionVersionPresupuesto = () => {
         setEditClicked(false)
     }
 
-
     const elementClicked = (selectedVersionPresupuesto) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setVersionPresupuesto(selectedVersionPresupuesto);
@@ -101,7 +101,6 @@ export const GestionVersionPresupuesto = () => {
         const newPath = `/${newPathParts.join('/')}`;
         navigate(newPath);
     }
-
 
     return (
         <main>
@@ -157,13 +156,5 @@ function filtrar(col, filter, data) {
       })
 }
 
-function formatearFecha(response) {
-    return response?.map((obj) => {
-      const fechaISO = obj.fecha_presentacion;
-      const dateObj = new Date(fechaISO);
-      const fechaFormateada = dateObj.toISOString().split('T')[0];
-      
-      return { ...obj, fecha_presentacion: fechaFormateada };
-    });
-}
+
   
