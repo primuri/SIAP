@@ -35,22 +35,7 @@ export const GestionEvaluaciones = () => {
         createJsonForReport()
     }, [evaluacionesList])
 
-    const configureReportData = () => {
-        if (evaluacionesList.length > 0) {
-            try {
-                const evaluaciones = evaluacionesList.map((evaluacion) => evaluacion);
-                JsonForReport.reportData = evaluaciones;
-    
-                return true;
-    
-            } catch (exception) {
-                console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
-                return false;
-            }
-        }
-    }
-
-    const createJsonForReport = () => {
+    const createJsonForReport = async () => {
         JsonForReport.reportTitle = "Evaluación";
         JsonForReport.idKey = "id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi";
         JsonForReport.dataKeys = [
@@ -60,7 +45,7 @@ export const GestionEvaluaciones = () => {
             'id_evaluador_fk.id_nombre_completo_fk.nombre',
             'id_evaluador_fk.id_nombre_completo_fk.apellido',
             'estado', 
-            'Formulario'
+            ['pregunta', 'respuesta']
         ];
         JsonForReport.colNames = [
             'Código VI', 
@@ -69,12 +54,33 @@ export const GestionEvaluaciones = () => {
             'Nombre evaluador asignado',
             'Apellido evaluador asignado',
             'Estado de la evaluación',
-
+            {'tableName': 'Evaluación', 'colNames': ['Pregunta', 'Respuesta']}
         ];
-        setJsonIsReady(false)
-        setJsonIsReady(configureReportData());
+    
+        setJsonIsReady(await configureReportData());
     };
     
+
+    const configureReportData = async () => {
+        if (evaluacionesList.length > 0) {
+            try {
+                const promises = evaluacionesList.map(async (evaluacion) => {
+                    console.log(evaluacion)
+                    var response = await API.obtenerPreguntasEvaluacion(evaluacion.id_evaluacion)
+                    evaluacion[JsonForReport.colNames.length - 1] = response.data
+                    return evaluacion;
+                });
+                const evaluaciones = await Promise.all(promises);
+                JsonForReport.reportData = evaluaciones;
+
+                return true
+
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el JSON para reporte: ")
+                return false
+            }
+        }
+    }
 
     useEffect(() => {
         loadEvaluaciones()
