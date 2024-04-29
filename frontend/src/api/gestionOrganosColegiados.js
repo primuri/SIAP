@@ -257,4 +257,22 @@ export const eliminarSesion = async (sesion_id) => {
     )
 }
 
+export const eliminarDocumento = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/documentos/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
+}
 
+export const eliminarActa = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`organo_colegiado/acta//${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
+}

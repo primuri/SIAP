@@ -7,16 +7,17 @@ import { Search } from "../../../utils/Search"
 import { PermisoDenegado } from "../../../utils/PermisoDenegado"
 import { Back } from "../../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, eliminarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda} from "../../../api/gestionOrganosColegiados"
+import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda, eliminarActa, eliminarDocumento} from "../../../api/gestionOrganosColegiados"
 import { OrganosColegiadosSesionesForm  } from "../../../components/GestionOrganosColegiados/OrganosColegiadosSesionesForm"
 
 export const GestionSesionesOrganosColegiados= () => {
                                                              
     const user = JSON.parse(localStorage.getItem('user'))  
-    
+    const rol = user.groups[0]
     const { IdOrganoC } = useParams();
     const location = useLocation();
     const nombreOC = location.state ? location.state.nombreOC : null;
+    const [clean_id, setClean_id]         = useState(IdOrganoC.startsWith('o_id=') ? IdOrganoC.split('o_id=')[1] : '')
     const navigate = useNavigate()
     const [data, setData] = useState([]) 
     const [reload, setReload] = useState(false)   
@@ -33,12 +34,18 @@ export const GestionSesionesOrganosColegiados= () => {
     const dataKeys = ['id_sesion','fecha', 'id_acta_fk.id_acta', 'n_acuerdos', '']
 
     user.groups[0] !== "administrador" ? setError(true) : null 
-    
+    if (rol !== "administrador" && rol !== "invitado") {
+        setError(true);
+    }
+
     const transformedSesiones = sesiones.map(sesion => ({
         ...sesion,  
         fecha: formatDate(sesion.fecha) 
       }));
     
+      const volver = () => {
+        navigate(`/gestion-organos-colegiados`)
+    };
 
     useEffect(() => {                                                            
         async function fetchData() {
@@ -48,13 +55,16 @@ export const GestionSesionesOrganosColegiados= () => {
         fetchData();
     }, [reload]);
     
-    function formatearFecha(response) {
-        return response.data.map((obj) => {
-            const fechaISO = obj.fecha;
+    function formatearFecha(sesiones) {
+        return sesiones.map(sesion => {
+            const fechaISO = sesion.fecha;
+            if (!fechaISO) {
+                return { ...sesion, fecha: "" };  // Devuelve un string vacío si no hay fecha
+            }
             const dateObj = new Date(fechaISO);
-            const fechaFormateada = dateObj.toISOString().split('T')[0];
-
-            return { ...obj, fecha: fechaFormateada };
+            // Utiliza toLocaleDateString para evitar problemas de zona horaria
+            const fechaFormateada = dateObj.toLocaleDateString('en-CA', { timeZone: 'UTC' });
+            return { ...sesion, fecha: fechaFormateada };
         });
     }
 
@@ -62,17 +72,17 @@ export const GestionSesionesOrganosColegiados= () => {
     async function loadSesiones() {
         try {
             const response = await obtenerSesiones(localStorage.getItem('token'));
-            setSesion(formatearFecha(response))
             
-            const sesionesFiltradas = response.data.filter(sesion => sesion.id_organo_colegiado_fk.id_organo_colegiado == IdOrganoC);
-
-            for (const sesion of sesionesFiltradas) {
+            
+            const sesionesFiltradas = response.data.filter(sesion => sesion.id_organo_colegiado_fk.id_organo_colegiado == parseInt(clean_id));
+            const sesionesConFechaFormateada = formatearFecha(sesionesFiltradas);
+            for (const sesion of sesionesConFechaFormateada) {
                 const n_acuerdos = await obtenerNumeroAcuerdos(sesion.id_sesion);
                 sesion.n_acuerdos = n_acuerdos;
             }
     
-            setData(sesionesFiltradas);                                                                 
-            setSesiones(sesionesFiltradas);                                                              
+            setData(sesionesConFechaFormateada);                                                                 
+            setSesiones(sesionesConFechaFormateada);                                                              
             setCargado(true);                                                                        
         } catch (error) {
             console.error(error);
@@ -89,10 +99,11 @@ export const GestionSesionesOrganosColegiados= () => {
                 fontSize: '18px',
             },
         });
+        let id_convocatoria_creado;
+        let  id_acta_doc_creado;
         
         try {
-            let id_convocatoria_creado;
-            let  id_acta_doc_creado;
+           
             const convocatoraFile = formData.get('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
             formData.delete('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
     
@@ -133,7 +144,7 @@ export const GestionSesionesOrganosColegiados= () => {
           Datos.id_acta_fk.id_documento_acta_fk = id_acta_doc_creado;
           const id_acta_creada = await addActa(Datos.id_acta_fk);
           Datos.id_acta_fk = id_acta_creada;
-          Datos.id_organo_colegiado_fk = IdOrganoC;
+          Datos.id_organo_colegiado_fk = clean_id;
 
             await agregarSesion(Datos)
 
@@ -154,6 +165,8 @@ export const GestionSesionesOrganosColegiados= () => {
 
         } catch (error) {
             console.error("Error: \n" + error)
+            await eliminarDocumento(id_acta_doc_creado)
+            await eliminarDocumento(id_convocatoria_creado)
             toast.dismiss(toastId)
         }
     }
@@ -186,7 +199,7 @@ export const GestionSesionesOrganosColegiados= () => {
             let id_docu_acta 
 
             
-            if (convocatoraFile && actaFile) {
+            if (convocatoraFile) {
                 const DocumentoComvocatoria = new FormData();
                 DocumentoComvocatoria.append('documento', convocatoraFile);
                 DocumentoComvocatoria.append('detalle', Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.detalle);
@@ -194,18 +207,27 @@ export const GestionSesionesOrganosColegiados= () => {
                 
                 id_docu_convocatoria = Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.id_documento;
                 await editarDocumento(id_docu_convocatoria, DocumentoComvocatoria);
+            }
 
 
+            if(actaFile){
                 const DocumentoActa = new FormData();
                 DocumentoActa.append('documento', actaFile);
                 DocumentoActa.append('detalle', Datos.id_acta_fk.id_documento_acta_fk.detalle);
                 DocumentoActa.append('tipo', Datos.id_acta_fk.id_documento_acta_fk.tipo);
                 
-               
+
                 id_docu_acta = Datos.id_acta_fk.id_documento_acta_fk.id_documento;
                 await editarDocumento(id_docu_acta, DocumentoActa);
             
+            }else {
+                const DocumentoData = new FormData();
+                DocumentoData.append('detalle', Datos.id_acta_fk.id_documento_acta_fk.detalle);
+                DocumentoData.append('tipo', Datos.id_acta_fk.id_documento_acta_fk.tipo);
+                const id_docu = Datos.id_acta_fk.id_documento_acta_fk.id_documento;
+                await editarDocumento(id_docu, DocumentoData);
             }
+
 
            
             const id_agenda_editada = Datos.id_agenda_fk.id_agenda;
@@ -243,7 +265,9 @@ export const GestionSesionesOrganosColegiados= () => {
     const deleteSesion = async (sesion) => {
 
         try {
-            await eliminarSesion(sesion.id_sesion)
+            const documento_acta_id = sesion.id_acta_fk.id_documento_acta_fk.id_documento;
+            await eliminarDocumento(sesion.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.id_documento)
+            await eliminarDocumento(documento_acta_id)
 
             toast.success('Sesion eliminada correctamente', {
                 duration: 4000,
@@ -276,17 +300,20 @@ export const GestionSesionesOrganosColegiados= () => {
     }
 
     const elementClicked = (selectedSesion) => {
-        console.log("Sesión seleccionada para editar:", selectedSesion);
-        if (event.target.tagName.toLowerCase() === 'button') {
-            navigate(`${location.pathname}/${selectedSesion.id_sesion}/gestion-acuerdos`)
-        } else {
             setSesion(selectedSesion);
             setEdit(true);
             setAddClick(false);
             document.body.classList.add('modal-open');
-            console.log("Estado 'sesion' después de seleccionar para editar:", sesion);
-        }
     };
+
+    const elementClickedBtnAcuerdos = (selectedSesion) => {
+        setSesion(selectedSesion);
+        console.log(selectedSesion)
+        if (event.target.tagName.toLowerCase() === 'button') {
+        navigate(`${location.pathname}/${selectedSesion.id_sesion}/gestion-acuerdos`)
+                  
+        }
+    }
 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
@@ -300,19 +327,6 @@ export const GestionSesionesOrganosColegiados= () => {
             return e[col].toString().includes(filter)
         })
         setSesiones(matches)
-    }
-
-    function toastProcesando(mensaje) {
-        var toastId = toast.loading(mensaje, {
-            position: 'bottom-right',
-            style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                fontSize: '18px',
-            },
-        });
-    
-        return toastId
     }
     
     
@@ -342,9 +356,10 @@ export const GestionSesionesOrganosColegiados= () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false} buttonText="Gestionar" />
+                    <div className="mt-3">
+                    <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false}  onClickButton2={elementClickedBtnAcuerdos} buttonText="Gestionar" />
                     {addClick && (
-                        <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={IdOrganoC}></OrganosColegiadosSesionesForm></Modal>
+                        <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={parseInt(clean_id)}></OrganosColegiadosSesionesForm></Modal>
                     )}
                     {edit && (
                         <Modal>
@@ -354,12 +369,14 @@ export const GestionSesionesOrganosColegiados= () => {
                                 onCancel={onCancel}
                                 onDelete={() => deleteSesion(sesion)}
                                 sesion={sesion}
-                                organoColegiado={IdOrganoC}
+                                organoColegiado={clean_id}
                             >
                             </OrganosColegiadosSesionesForm>
                         </Modal>
                     )}
                     <Toaster></Toaster>
+                    <Back onClick={volver}>Regresar a Organos Colegiados</Back>
+                    </div>
                 </div>
             ) : (
                 <PermisoDenegado></PermisoDenegado>
