@@ -7,7 +7,7 @@ import { Search } from "../../../utils/Search"
 import { PermisoDenegado } from "../../../utils/PermisoDenegado"
 import { Back } from "../../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, eliminarSesion} from "../../../api/gestionOrganosColegiados"
+import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, eliminarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda} from "../../../api/gestionOrganosColegiados"
 import { OrganosColegiadosSesionesForm  } from "../../../components/GestionOrganosColegiados/OrganosColegiadosSesionesForm"
 
 export const GestionSesionesOrganosColegiados= () => {
@@ -23,6 +23,7 @@ export const GestionSesionesOrganosColegiados= () => {
     const [cargado, setCargado] = useState(false)   
     const [sesion, setSesion] = useState(null)                                
     const [sesiones, setSesiones] = useState([])   
+    
                         
     const [addClick, setAddClick] = useState(false)                              
     const [edit, setEdit] = useState(false)                                      
@@ -46,10 +47,22 @@ export const GestionSesionesOrganosColegiados= () => {
         }
         fetchData();
     }, [reload]);
+    
+    function formatearFecha(response) {
+        return response.data.map((obj) => {
+            const fechaISO = obj.fecha;
+            const dateObj = new Date(fechaISO);
+            const fechaFormateada = dateObj.toISOString().split('T')[0];
+
+            return { ...obj, fecha: fechaFormateada };
+        });
+    }
+
 
     async function loadSesiones() {
         try {
             const response = await obtenerSesiones(localStorage.getItem('token'));
+            setSesion(formatearFecha(response))
             
             const sesionesFiltradas = response.data.filter(sesion => sesion.id_organo_colegiado_fk.id_organo_colegiado == IdOrganoC);
 
@@ -78,12 +91,53 @@ export const GestionSesionesOrganosColegiados= () => {
         });
         
         try {
-            const Datos = JSON.parse(formData.get('json'));
-            await agregarSesion(formData, IdOrganoC)
+            let id_convocatoria_creado;
+            let  id_acta_doc_creado;
+            const convocatoraFile = formData.get('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
+            formData.delete('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
+    
+            const actaFile = formData.get('id_acta_fk.id_documento_acta_fk.documento');
+            formData.delete('id_acta_fk.id_documento_acta_fk.documento');
 
-            setAddClick(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
+            const Datos = JSON.parse(formData.get('json'));
+            formData.delete('json'); 
+
+           
+            if (convocatoraFile && actaFile) {
+                const DocumentoComvocatoria = new FormData();
+
+                DocumentoComvocatoria.append('documento', convocatoraFile);
+                DocumentoComvocatoria.append('detalle', Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.detalle);
+                DocumentoComvocatoria.append('tipo', Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.tipo);
+    
+                const DocumentoActa = new FormData();
+                DocumentoActa.append('documento', actaFile);
+                DocumentoActa.append('detalle', Datos.id_acta_fk.id_documento_acta_fk.detalle);
+                DocumentoActa.append('tipo', Datos.id_acta_fk.id_documento_acta_fk.tipo);
+    
+                id_convocatoria_creado = await agregarDocumento(DocumentoComvocatoria, localStorage.getItem('token'));
+                id_acta_doc_creado = await agregarDocumento(DocumentoActa, localStorage.getItem('token'));
+            }
+
+          
+
+          delete Datos.id_agenda_fk.id_convocatoria_fk.id_convocatoria
+          Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk = id_convocatoria_creado
+          const id_convocatoria_creada = await addConvocatoria(Datos.id_agenda_fk.id_convocatoria_fk);
+          Datos.id_agenda_fk.id_convocatoria_fk = id_convocatoria_creada
+          delete Datos.id_agenda_fk.id_agenda;
+          const id_agenda_creada = await addAgenda(Datos.id_agenda_fk);
+          Datos.id_agenda_fk = id_agenda_creada
+
+          delete Datos.id_acta_fk.id_acta;
+          Datos.id_acta_fk.id_documento_acta_fk = id_acta_doc_creado;
+          const id_acta_creada = await addActa(Datos.id_acta_fk);
+          Datos.id_acta_fk = id_acta_creada;
+          Datos.id_organo_colegiado_fk = IdOrganoC;
+
+            await agregarSesion(Datos)
+
+            
 
             toast.success('Sesion agregada correctamente', {
                 id: toastId,
@@ -94,6 +148,9 @@ export const GestionSesionesOrganosColegiados= () => {
                   color: '#fff',
                 },
               })
+              setAddClick(false)
+              setReload(!reload)
+              document.body.classList.remove('modal-open');
 
         } catch (error) {
             console.error("Error: \n" + error)
@@ -101,16 +158,82 @@ export const GestionSesionesOrganosColegiados= () => {
         }
     }
 
-    const editaSesion = async (id, formData) => {
-        console.log("Datos enviados para editar:", formData);
-        var toastId = toastProcesando("Editando...")
+    const editaSesion = async (formData) => {
+        
         try {   
-            await editarSesion(id, formData, localStorage.getItem("token"))
-            console.log("Edición completada con éxito");
-            setEdit(false);
-            setReload(!reload);
-            document.body.classList.remove('modal-open');
-            toastExito("Sesión editada correctamente", toastId)
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
+
+           
+
+            
+            const convocatoraFile = formData.get('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
+            formData.delete('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
+    
+            const actaFile = formData.get('id_acta_fk.id_documento_acta_fk.documento');
+            formData.delete('id_acta_fk.id_documento_acta_fk.documento');
+
+            const Datos = JSON.parse(formData.get('json'));
+            formData.delete('json');
+
+            let id_docu_convocatoria;
+            let id_docu_acta 
+
+            
+            if (convocatoraFile && actaFile) {
+                const DocumentoComvocatoria = new FormData();
+                DocumentoComvocatoria.append('documento', convocatoraFile);
+                DocumentoComvocatoria.append('detalle', Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.detalle);
+                DocumentoComvocatoria.append('tipo', Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.tipo);
+                
+                id_docu_convocatoria = Datos.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.id_documento;
+                await editarDocumento(id_docu_convocatoria, DocumentoComvocatoria);
+
+
+                const DocumentoActa = new FormData();
+                DocumentoActa.append('documento', actaFile);
+                DocumentoActa.append('detalle', Datos.id_acta_fk.id_documento_acta_fk.detalle);
+                DocumentoActa.append('tipo', Datos.id_acta_fk.id_documento_acta_fk.tipo);
+                
+               
+                id_docu_acta = Datos.id_acta_fk.id_documento_acta_fk.id_documento;
+                await editarDocumento(id_docu_acta, DocumentoActa);
+            
+            }
+
+           
+            const id_agenda_editada = Datos.id_agenda_fk.id_agenda;
+            delete Datos.id_agenda_fk.id_agenda
+            Datos.id_agenda_fk.id_convocatoria_fk = Datos.id_agenda_fk.id_convocatoria_fk.id_convocatoria;
+            await editarAgenda(id_agenda_editada, Datos.id_agenda_fk);
+            Datos.id_agenda_fk = id_agenda_editada
+            Datos.id_acta_fk = Datos.id_acta_fk.id_acta
+
+            const id_sesion_editada = parseInt(Datos.id_sesion, 10);
+            delete  Datos.id_sesion
+
+            await editarSesion(id_sesion_editada, Datos)
+
+
+
+            toast.success('Asistente agregado correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+              setEdit(false)
+                setReload(!reload)
+                document.body.classList.remove('modal-open');
         } catch (error) {
             console.error("Error en la edición:", error)
             toast.dismiss(toastId)
@@ -119,16 +242,10 @@ export const GestionSesionesOrganosColegiados= () => {
 
     const deleteSesion = async (sesion) => {
 
-        var toastId = toastProcesando("Eliminando...")
-
         try {
             await eliminarSesion(sesion.id_sesion)
 
-            setEdit(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
-
-            toast.success('Sesión eliminada correctamente', {
+            toast.success('Sesion eliminada correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -136,12 +253,14 @@ export const GestionSesionesOrganosColegiados= () => {
                     color: '#fff',
                 },
             })
+            setEdit(false)
+            setReload(!reload)
+            document.body.classList.remove('modal-open');
 
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
         }
-        setEdit(false)
     }
 
     const onCancel = () => {
@@ -196,17 +315,7 @@ export const GestionSesionesOrganosColegiados= () => {
         return toastId
     }
     
-    function toastExito(mensaje, toastId) {
-        toast.success(mensaje, {
-            id: toastId,
-            duration: 1000,
-            position: 'bottom-right',
-            style: {
-                background: 'var(--celeste-ucr)',
-              color: '#fff',
-            },
-          })
-    }
+    
 
     function formatDate(dateString) {
         if (!dateString) return "";
@@ -233,7 +342,7 @@ export const GestionSesionesOrganosColegiados= () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={transformedSesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false} buttonText="Gestionar" />
+                    <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
                         <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={IdOrganoC}></OrganosColegiadosSesionesForm></Modal>
                     )}

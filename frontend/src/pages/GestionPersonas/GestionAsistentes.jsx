@@ -103,11 +103,6 @@ export const GestionAsistentes = () => {
         // Aquí deberías ajustar según cómo necesitas manejar la respuesta de editarDocumentacion
       }
 
-  
-        
-        
-
-        
         delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
         const nombre_asistente = Datos.id_asistente_carnet_fk.id_nombre_completo_fk;
         const id_nombre_creado = await obtenerNombre(nombre_asistente, localStorage.getItem('token'))
@@ -264,7 +259,6 @@ export const GestionAsistentes = () => {
         } catch (error) {
             
         }
-        setEdit(false)
     }
 
 

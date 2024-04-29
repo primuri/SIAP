@@ -145,21 +145,36 @@ export const agregarDocumento = async (documento) => {
 }
 
 
-export const agregarSesion = async (sesion, o_colegiado) => {
+export const editarDocumento = async (id, documento) => {
+    try { 
+        return await manejarErrores( SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }));
+       
+    } catch(error) {
+        console.error("Error editar Documento sesion: ", error);
+        throw error;
+    } 
+}
 
-    console.log(sesion)
-    const acta_file = sesion.get('acta_file');
-    const sesion_json = JSON.parse(sesion.get('json'))
-    const acta_form_data = new FormData();
-    acta_form_data.append('documento',  acta_file);
-    acta_form_data.append("detalle", "acta");
-    acta_form_data.append("tipo", "acta");
-    const acta = await addActa(acta_form_data)
 
-    const agenda = await addAgenda(sesion)
+export const editarAgenda = async (id, agenda) => {
+    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/agenda/${id}/`, agenda, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
 
-    const sesion_data = {'id_sesion': sesion_json.id_sesion, 'fecha': sesion_json.fecha, 'id_organo_colegiado_fk': o_colegiado, 'medio': sesion_json.medio, 'link_carpeta': sesion_json.link_carpeta, 'id_acta_fk':acta.data.id_acta, 'id_agenda_fk': agenda.data.id_agenda }
-    return await manejarErrores(SIAPAPI.post('organo_colegiado/sesion/',sesion_data, {
+
+
+
+export const agregarSesion = async (sesion) => {
+    return await manejarErrores(SIAPAPI.post('organo_colegiado/sesion/', sesion,{
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -169,45 +184,39 @@ export const agregarSesion = async (sesion, o_colegiado) => {
 }
 
 export const addActa = async (acta) => {
-    const acta_data = {'id_documento_acta_fk': await agregarDocumento(acta)}
-    return await manejarErrores(SIAPAPI.post('organo_colegiado/acta/', acta_data,{
+    const actaid = await manejarErrores(SIAPAPI.post('organo_colegiado/acta/', acta,{
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json'
         }
     })
     )
+    return actaid.data.id_acta
 }
 
-export const addAgenda = async (sesion) => {
+export const addConvocatoria = async (convocatoria) => {
 
-    const convocatoria_file2 = sesion.get('convocatoria_file');
-    const convocatoria_file = new FormData();
-    const sesion_json = JSON.parse(sesion.get('json'));
-    convocatoria_file.append('documento',  convocatoria_file2);
-    convocatoria_file.append("detalle", "acta");
-    convocatoria_file.append("tipo", "acta");
-
-    
-    const convocatoria_data = {'id_documento_convocatoria_fk': await agregarDocumento(convocatoria_file)};
-
-    const convocatoria_ = await manejarErrores(SIAPAPI.post('organo_colegiado/convocatoria/', convocatoria_data,{
+    let convocatoriaid = await manejarErrores(SIAPAPI.post('organo_colegiado/convocatoria/', convocatoria,{
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     })
     )
+    return convocatoriaid.data.id_convocatoria;
+}
 
-    const agenda_data = {'tipo':sesion_json.tipo_agenda, 'detalle': sesion_json.detalle_agenda, 'id_convocatoria_fk': convocatoria_.data.id_convocatoria }
 
-    return await manejarErrores(SIAPAPI.post('organo_colegiado/agenda/', agenda_data,{
+export const addAgenda = async (agenda) => {
+
+    let agendaid = await manejarErrores(SIAPAPI.post('organo_colegiado/agenda/', agenda,{
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     })
     )
+    return agendaid.data.id_agenda;
 }
 
 export const addInvitados = async (invitados) => {
@@ -228,8 +237,8 @@ export const addInvitados = async (invitados) => {
 }
 
 
-export const editarSesion = async (sesion_id, sesion, token) => {
-    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/sesion/${sesion_id}/`, sesion, {
+export const editarSesion = async (id, sesion) => {
+    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/sesion/${id}/`, sesion, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
