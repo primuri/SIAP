@@ -53,10 +53,12 @@ export const GestionPresupuestos = () => {
             }
         })
 
-        var lastVersion = { id_presupuesto: 0 }
+        var lastVersion = { id_version_presupuesto: 0 }
 
         response.data.map((version) => {
-            if (version.id_codigo_vi_fk.id_codigo_vi === id_codigo_vi && lastVersion.id_version_proyecto < version.id_version_proyecto) {
+            console.log("map");
+            if (version.id_presupuesto_fk.id_presupuesto === id_presupuesto && lastVersion.id_version_presupuesto < version.id_version_presupuesto) {
+                console.log(version);
                 lastVersion = version
             }
         })
@@ -64,104 +66,37 @@ export const GestionPresupuestos = () => {
         return (lastVersion ? lastVersion : {})
     }
 
-    // Funcion auxiliar para jalar producto dada una versión de proyecto
-    const getProducto = async (id_version_proyecto) => {
-        const token = localStorage.getItem('token');
-        var productoBuscado = null
-
-        const SIAPAPI = axios.create({
-            baseURL: 'http://localhost:8000/'
-        })
-
-        var response = await SIAPAPI.get('producto/eventos/', {             // Buscar id version en eventos
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        response.data.map((producto) => {
-            if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
-                producto.tipo = 'evento'
-                productoBuscado = producto
-            } else {
-                return null
-            }
-        })
-
-        response = await SIAPAPI.get('producto/softwares/', {                 // Buscar id version en softwares
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        response.data.map((producto) => {
-            if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
-                producto.tipo = 'software'
-                productoBuscado = producto
-
-            } else {
-                return null
-            }
-        })
-
-        response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-
-        response.data.map((producto) => {
-            if (producto.id_producto_fk.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto) {
-                producto.tipo = 'articulo'
-                productoBuscado = producto
-
-            } else {
-                return null
-            }
-        })
-
-        return productoBuscado
-    }
-
-    // Funcion auxiliar para jalar asistentes dada una versión de proyecto
-    const getAsistentes = async (id_version_proyecto) => {
+    const getPartidas = async (id_version_presupuesto) => {
         const token = localStorage.getItem('token');
 
         const SIAPAPI = axios.create({
             baseURL: 'http://localhost:8000/'
         })
 
-        var response = await SIAPAPI.get('version_proyecto/designacionasistente/', {
+        var response = await SIAPAPI.get('presupuesto/partidas/', {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         })
-        const filteredData = response.data.filter(item => item.id_version_proyecto_fk.id_version_proyecto === id_version_proyecto);
+        const filteredData = response.data.filter(item => item.id_version_presupuesto_fk.id_version_presupuesto === id_version_presupuesto);
 
         return filteredData ? filteredData : {}
     }
 
-    if (pesupuestos.length > 0) {
+    if (presupuestos.length > 0) {
         try {
-            const promises = pesupuestos.map(async (pesupuesto) => {
-                const ultimaVersion = await getLastVersionProyecto(proyecto.id_codigo_vi);
-                const productoAsociado = await getProducto(ultimaVersion.id_version_proyecto);
-                const asistentesLista = await getAsistentes(ultimaVersion.id_version_proyecto);
+            console.log("try");
+            const promises = presupuestos.map(async (presupuesto) => {
+                const ultimaVersion = await getLastVersionPresupuesto(presupuesto.id_presupuesto);
+                console.log(ultimaVersion);
+                const partidasLista = await getPartidas(ultimaVersion.id_version_presupuesto);
+                console.log(partidasLista);
 
-                // Asignar versión version proyecto a la data
-                pesupuesto.id_version_proyecto_fk = ultimaVersion;
+                presupuesto.id_version_presupuesto_fk = ultimaVersion;
+                presupuesto[JsonForReport.colNames.length - 1] = partidasLista;
 
-                // Asignar producto a la data
-                pesupuesto.producto = productoAsociado;
-
-                // Asignar los asistentes al proyecto a la data
-                pesupuesto[JsonForReport.colNames.length - 1] = asistentesLista;
-
-                return pesupuesto;
+                return presupuesto;
             });
 
             const presupuestosConDatosCompletos = await Promise.all(promises);
@@ -179,34 +114,33 @@ export const GestionPresupuestos = () => {
       JsonForReport.reportTitle = "Presupuesto"
       JsonForReport.idKey = "id_presupuesto"
       JsonForReport.dataKeys = [
-          'id_codigo_cimpa_fk.id_codigo_cimpa',
-          'id_codigo_cimpa_fk.nombre',
-          'id_codigo_cimpa_fk.estado',
-          'id_codigo_cimpa_fk.objetivo_general',
-          'id_codigo_cimpa_fk.fecha_vigencia',
-          'id_codigo_cimpa_fk.descripcion',
-          'id_codigo_cimpa_fk.actividad',
-          'id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk',
-          'id_colaborador_principal_fk.id_academico_fk.cedula',
-          'id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio',
-          'id_colaborador_principal_fk.id_vigencia_fk.fecha_fin',
-          'id_colaborador_principal_fk.tipo',
-          'id_colaborador_principal_fk.carga'
+          'id_presupuesto',
+          'id_codigo_vi.id_codigo_vi',
+          'id_version_proyecto_fk.numero_version',
+          'id_tipo_presupuesto_fk.tipo',
+          'id_ente_financiero_fk.nombre',
+          'id_codigo_financiero_fk.codigo',
+          'anio_aprobacion',
+          'id_version_presupuesto_fk.id_version_presupuesto',
+          'id_version_presupuesto_fk.monto',
+          'id_version_presupuesto_fk.fecha',
+          'id_version_presupuesto_fk.detalle',
+          ['id_partida', 'detalle', 'monto', 'saldo']
       ]
 
       JsonForReport.colNames = [
-          'Proyecto asociado',
-          'Tipo',
+          'Presupuesto',
+          'Código VI',
           'Versión de proyecto',
+          'Tipo',
           'Ente financiero',
           'Código financiero',
           'Año de aprobación',
-          'Colaborador Principal',
-          'Colaborador Principal Cedula',
-          'Colaborador Principal fecha inicio',
-          'Colaborador Principal fecha fin',
-          'Colaborador Principal tipo',
-          'Colaborador Principal carga'
+          'Versión de presupuesto',
+          'Monto',
+          'Fecha',
+          'Detalle',
+          {'tableName': 'Partidas', 'colNames': ['Identificador', 'Detalle', 'Monto', 'Saldo']}
       ]
 
       setJsonIsReady(await configureReportData())
