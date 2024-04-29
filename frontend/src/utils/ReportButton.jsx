@@ -19,6 +19,10 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                 setTimeout(() => {
                     toPDF();
                 }, 0);
+
+                //const reporte = document.getElementById("REPORTE")
+               // const root = document.getElementById("root")
+                //root.replaceChildren(reporte)
             } else {
                 if (selectedOption === 'EXCEL') {
                     generarReporteExcel(reportData, colNames, dataKeys, reportTitle)
