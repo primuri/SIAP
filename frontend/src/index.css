@@ -79,7 +79,7 @@ main {
 }
 
 .bread_custom ol li p, .bread_custom ol li a{
-  font-size: 1.5rem !important;
+  font-size: 1.3rem !important;
 }
 
 .last_bread{
@@ -637,4 +637,36 @@ input[type="submit"]:focus {
 
 .th-report{
   background-color: #a8a8a8 !important;
+}
+
+#header-confirmar {
+  justify-content: space-between;
+}
+
+#header-propuestas {
+  margin-left: 20%;
+}
+
+#close-propuestas {
+  margin-top: 10%;
+  margin-left: 170%;
+}
+
+/* CSS para la tabla */
+.table-report {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-report th,
+.table-report td {
+  padding: 8px; /* Ajusta el padding según sea necesario */
+  border: 1px solid #ddd; /* Cambia el estilo del borde según tus preferencias */
+  word-wrap: break-word !important;  /* Permite que las palabras largas se dividan en varias líneas */
+  white-space: normal; /* Asegura que el texto no se trunque y se muestre en varias líneas si es necesario */
+}
+
+/* CSS para aumentar la altura de la fila si el texto es muy largo */
+.table-report tbody td {
+  min-height: 50px; /* Ajusta la altura mínima de la fila según sea necesario */
 }

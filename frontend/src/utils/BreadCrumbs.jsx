@@ -15,12 +15,15 @@ const routeNames = {
     'gestion-evaluadores': 'Evaluadores',
     'gestion-proveedores': 'Proveedores',
     'gestion-presupuestos': 'Presupuesto',
+    'gestion-partidas': 'Partidas',
+    'gestion-gastos': 'Gastos',
     'gestion-acciones': 'Acciones',
     'evaluacion-proyectos': 'Evaluaciones',
     'gestion-organos-colegiados': 'Órganos Colegiados',
     'gestion-evaluaciones': 'Evaluaciones',
     'gestion-asistentes': 'Asistentes', 
-    'gestion-integrantes': 'Integrantes Órgano Colegiado',
+    'gestion-integrantes': 'Integrantes',
+    'gestion-sesiones': 'Sesiones',
     'organos-colegiados': 'Órganos Colegiados',
 };
 

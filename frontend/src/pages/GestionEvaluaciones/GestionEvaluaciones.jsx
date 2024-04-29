@@ -45,7 +45,7 @@ export const GestionEvaluaciones = () => {
             'id_evaluador_fk.id_nombre_completo_fk.nombre',
             'id_evaluador_fk.id_nombre_completo_fk.apellido',
             'estado', 
-            'Formulario'
+            ['pregunta', 'respuesta']
         ];
         JsonForReport.colNames = [
             'Código VI', 
@@ -54,7 +54,7 @@ export const GestionEvaluaciones = () => {
             'Nombre evaluador asignado',
             'Apellido evaluador asignado',
             'Estado de la evaluación',
-            'Respuestas'
+            {'tableName': 'Evaluación', 'colNames': ['Pregunta', 'Respuesta']}
         ];
     
         setJsonIsReady(await configureReportData());
@@ -66,6 +66,8 @@ export const GestionEvaluaciones = () => {
             try {
                 const promises = evaluacionesList.map(async (evaluacion) => {
                     console.log(evaluacion)
+                    var response = await API.obtenerPreguntasEvaluacion(evaluacion.id_evaluacion)
+                    evaluacion[JsonForReport.colNames.length - 1] = response.data
                     return evaluacion;
                 });
                 const evaluaciones = await Promise.all(promises);
@@ -160,7 +162,8 @@ export const GestionEvaluaciones = () => {
 
 
     function filtrarEvaluaciones (col, filter) {
-        setEvaluacionesList(filtrar(col, filter, evaluacionesData))
+        setEvaluacionesList(filtrar(col, filter, evaluacionesData));
+        setJsonIsReady(false)
     }
     
     function addBtnClicked() {
