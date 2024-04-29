@@ -85,18 +85,17 @@ export const GestionAsistentes = () => {
         const Datos = JSON.parse(formData.get('json'));
         formData.delete('json');
 
-    if (documentoFile) {
-        const DocumentoData = new FormData();
-        DocumentoData.append('documento', documentoFile);
-        DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
-        DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+        if (documentoFile) {
+            const DocumentoData = new FormData();
+            DocumentoData.append('documento', documentoFile);
+            DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+            DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
 
-        id_documento_creada = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
-        formData.delete('json')
-        delete Datos.id_documento_inopia_fk;
-      }
+            id_documento_creada = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+            formData.delete('json')
+            delete Datos.id_documento_inopia_fk;
+        }
 
-  
         delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
         const nombre_asistente = Datos.id_asistente_carnet_fk.id_nombre_completo_fk;
         const id_nombre_creado = await obtenerNombre(nombre_asistente, localStorage.getItem('token'))
@@ -107,25 +106,26 @@ export const GestionAsistentes = () => {
         const id_asistente_creado = await agregarAsistente(Datos.id_asistente_carnet_fk, localStorage.getItem('token'))
         delete  Datos.id_asistente_carnet_fk;
         let designacion_asistente;
-      if(id_documento_creada === ""){
-        designacion_asistente = {  
-            id_version_proyecto_fk: proyectoID,              
-            id_asistente_carnet_fk : id_asistente_creado,
-            cantidad_horas : Datos.cantidad_horas,
-            consecutivo : Datos.consecutivo
-        }
-      } else {
-        designacion_asistente = {  
-            id_version_proyecto_fk: proyectoID,              
-            id_asistente_carnet_fk : id_asistente_creado,
-            id_documento_inopia_fk : id_documento_creada,
-            cantidad_horas : Datos.cantidad_horas,
-            consecutivo : Datos.consecutivo
+        if(id_documento_creada === ""){
+            designacion_asistente = {  
+                id_version_proyecto_fk: proyectoID,              
+                id_asistente_carnet_fk : id_asistente_creado,
+                cantidad_horas : Datos.cantidad_horas,
+                consecutivo : Datos.consecutivo
+            }
+        } else {
+            designacion_asistente = {  
+                id_version_proyecto_fk: proyectoID,              
+                id_asistente_carnet_fk : id_asistente_creado,
+                id_documento_inopia_fk : id_documento_creada,
+                cantidad_horas : Datos.cantidad_horas,
+                consecutivo : Datos.consecutivo
+            }
         }
         await agregarDesignacionAsistente(designacion_asistente, localStorage.getItem('token'));
 
 
-      toast.success('Asistente agregado correctamente', {
+        toast.success('Asistente agregado correctamente', {
         id: toastId,
         duration: 4000,
         position: 'bottom-right',

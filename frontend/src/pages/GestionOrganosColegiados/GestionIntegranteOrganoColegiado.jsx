@@ -317,12 +317,7 @@ export const GestionIntegranteOrganoColegiado = () => {
     const newPath = `/${newPathParts.join('/')}`;
     navigate(newPath);
   }
-
-  function formatDate(dateString) {
-    if (!dateString) return "";
-    return new Date(dateString).toISOString().split('T')[0];
-  }
-
+  
   return (
     <main >
       {!error ? (
