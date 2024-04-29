@@ -9,28 +9,74 @@ import { Back } from "../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
 import { obtenerOrganosColegiados, agregarOrganoColegiado, editarOrganoColegiado, eliminarOrganoColegiado } from "../../api/gestionOrganosColegiados"
 import { OrganosColegiadosForm } from "../../components/GestionOrganosColegiados/OrganosColegiadosForm"
+import { ReportButton } from "../../utils/ReportButton";
 
-export const GestionOrganosColegiados = () => {
-                                                             
+export const GestionOrganosColegiados = () => {                                                     
     const user = JSON.parse(localStorage.getItem('user'))  
-
     const location = useLocation()
     const navigate = useNavigate()
-
     const [data, setData] = useState([]) 
     const [reload, setReload] = useState(false)   
     const [cargado, setCargado] = useState(false)   
     const [OrganoColegiado, setOrganoColegiado] = useState(null)                                
-    const [OrganosColegiados, setOrganosColegiados] = useState([])   
-                        
+    const [OrganosColegiados, setOrganosColegiados] = useState([])                     
     const [addClick, setAddClick] = useState(false)                              
     const [edit, setEdit] = useState(false)                                      
     const [error, setError] = useState(false)
-
     const columns = ['Nombre', 'Quorum', 'Cantidad de integrantes', 'Acuerdo en firme', 'Integrantes', 'Sesiones']
     const dataKeys = ['nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
-
     const rol = user.groups[0]
+    
+    // ==============================================================================================================================
+    // Parte que cada uno debe crear para su reporte:
+    // ==============================================================================================================================
+
+        // Json que almacena la información que debe recibir el componente ReportButton:  
+        const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+
+        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
+        const [JsonIsReady, setJsonIsReady] = useState(false)
+
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
+        const createJsonForReport = async () => {
+            // Titulo del reporte a mostrar en PDF
+            JsonForReport.reportTitle = "Órgano colegiado"
+
+            // LLave para acceder al id del objeto del reporte
+            JsonForReport.idKey = "id_organo_colegiado"
+
+            // Llaves para acceder a los datos (incluye tabla extra)
+            JsonForReport.dataKeys = [
+                'id_organo_colegiado',
+                'nombre',
+                'numero_miembros',
+                'quorum',
+                'acuerdo_firme'
+            ]
+
+            // Nombres de las columnas o titulos de los items (incluye tabla extra)
+            JsonForReport.colNames = [
+                'ID órgano colegiado',
+                'Nombre',
+                'Numero miembros',
+                'Quorum',
+                'Acuerdo firme'
+            ]
+
+            JsonForReport.reportData = OrganosColegiados
+
+            // Función auxiliar particular para configurar data del reporte
+            setJsonIsReady(true)
+        }
+
+        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
+        useEffect(() => {
+            setJsonIsReady(false)
+            createJsonForReport()
+        }, [OrganosColegiados])
+
+    // ==============================================================================================================================
+
 
     if (rol !== "administrador" && rol !== "invitado") {
         setError(true);
@@ -235,8 +281,14 @@ export const GestionOrganosColegiados = () => {
 
            
                     {user.groups[0] === "administrador" && (
-                        <div className="d-flex justify-content-between mt-4">
-                            <Add onClick={addClicked}></Add> 
+                        <div className="d-flex mt-4">
+                            <div className="col">
+                            <Add  onClick={addClicked}></Add> 
+                            </div>
+                            
+                            {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
+                            {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                            {/* ----------------------------------------------------------------------------------------------------------------------*/}
                             <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />                         
                         </div>
                     )}
