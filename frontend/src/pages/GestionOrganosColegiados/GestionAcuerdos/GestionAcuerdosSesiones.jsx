@@ -7,7 +7,7 @@ import { Search } from "../../../utils/Search"
 import { PermisoDenegado } from "../../../utils/PermisoDenegado"
 import { Back } from "../../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerAcuerdos, editarSesion} from "../../../api/gestionOrganosColegiados"
+import { obtenerAcuerdos, editarSesion, eliminarSesion} from "../../../api/gestionOrganosColegiados"
 import { OrganosColegiadosAcuerdosForm } from '../../../components/GestionOrganosColegiados/OrganosColegiadosAcuerdosForm';
 
 export const GestionAcuerdos = () => {

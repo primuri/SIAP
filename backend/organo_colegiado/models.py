@@ -127,7 +127,7 @@ def integrante_pre_delete(sender, instance, **kwargs):
 
 class Convocatoria(models.Model):
     id_convocatoria = models.AutoField(primary_key=True)
-    id_documento_convocatoria_fk = models.ForeignKey(Documento, on_delete=models.CASCADE)
+    id_documento_convocatoria_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'convocatoria'
@@ -136,14 +136,14 @@ class Agenda(models.Model):
     id_agenda = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
     detalle = models.CharField(max_length=255)
-    id_convocatoria_fk = models.ForeignKey(Convocatoria, on_delete=models.CASCADE)
+    id_convocatoria_fk = models.ForeignKey(Convocatoria, on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'agenda'
 
 class Acta(models.Model):
     id_acta = models.AutoField(primary_key=True)
-    id_documento_acta_fk = models.ForeignKey(Documento, on_delete=models.CASCADE)
+    id_documento_acta_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'acta'
@@ -151,9 +151,9 @@ class Acta(models.Model):
 class Sesion(models.Model):
     id_sesion = models.CharField(max_length=64, primary_key=True)
     fecha = models.DateTimeField()
-    id_organo_colegiado_fk = models.ForeignKey(OrganoColegiado, on_delete=models.CASCADE)
-    id_agenda_fk = models.ForeignKey(Agenda, on_delete=models.CASCADE)
-    id_acta_fk = models.ForeignKey(Acta, on_delete=models.CASCADE)
+    id_organo_colegiado_fk = models.ForeignKey(OrganoColegiado, on_delete=models.PROTECT)
+    id_agenda_fk = models.ForeignKey(Agenda, on_delete=models.PROTECT)
+    id_acta_fk = models.ForeignKey(Acta, on_delete=models.PROTECT)
     medio = models.CharField(max_length=128)
     link_carpeta = models.CharField(max_length=2048)
 
