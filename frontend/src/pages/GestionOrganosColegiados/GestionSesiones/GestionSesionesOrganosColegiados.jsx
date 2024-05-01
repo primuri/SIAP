@@ -308,7 +308,6 @@ export const GestionSesionesOrganosColegiados= () => {
 
     const elementClickedBtnAcuerdos = (selectedSesion) => {
         setSesion(selectedSesion);
-        console.log(selectedSesion)
         if (event.target.tagName.toLowerCase() === 'button') {
         navigate(`${location.pathname}/${selectedSesion.id_sesion}/gestion-acuerdos`)
                   
@@ -369,7 +368,7 @@ export const GestionSesionesOrganosColegiados= () => {
                                 onCancel={onCancel}
                                 onDelete={() => deleteSesion(sesion)}
                                 sesion={sesion}
-                                organoColegiado={clean_id}
+                                organoColegiado={parseInt(clean_id)}
                             >
                             </OrganosColegiadosSesionesForm>
                         </Modal>

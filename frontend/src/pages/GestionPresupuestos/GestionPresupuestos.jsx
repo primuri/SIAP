@@ -55,9 +55,7 @@ export const GestionPresupuestos = () => {
         var lastVersion = { id_version_presupuesto: 0 }
 
         response.data.map((version) => {
-            console.log("map");
             if (version.id_presupuesto_fk.id_presupuesto === id_presupuesto && lastVersion.id_version_presupuesto < version.id_version_presupuesto) {
-                console.log(version);
                 lastVersion = version
             }
         })
@@ -85,12 +83,9 @@ export const GestionPresupuestos = () => {
 
     if (presupuestos.length > 0) {
         try {
-            console.log("try");
             const promises = presupuestos.map(async (presupuesto) => {
                 const ultimaVersion = await getLastVersionPresupuesto(presupuesto.id_presupuesto);
-                console.log(ultimaVersion);
                 const partidasLista = await getPartidas(ultimaVersion.id_version_presupuesto);
-                console.log(partidasLista);
 
                 presupuesto.id_version_presupuesto_fk = ultimaVersion;
                 presupuesto[JsonForReport.colNames.length - 1] = partidasLista;

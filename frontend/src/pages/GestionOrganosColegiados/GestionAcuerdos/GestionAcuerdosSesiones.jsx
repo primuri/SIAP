@@ -250,11 +250,7 @@ export const GestionAcuerdos = () => {
     const deleteAcuerdo = async (acuerdo) => {
 
         try {
-            const id_seguimiento_doc = acuerdo.id_seguimiento_fk.id_documento_seguimiento_fk.id_documento
             const  id_acuerdo_doc= acuerdo.id_documento_acuerdo_fk.id_documento
-            const id_oficio = acuerdo.id_oficio_fk.id_oficio
-            await eliminarDocumento(id_seguimiento_doc)
-            await eliminarOficio(id_oficio)
             await eliminarDocumento(id_acuerdo_doc)
 
             toast.success('Acuerdo eliminado correctamente', {
@@ -333,7 +329,7 @@ export const GestionAcuerdos = () => {
                     <div className="mt-3">
                     <Table columns={columns} data={acuerdos} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={false} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
-                        <Modal><OrganosColegiadosAcuerdosForm onSubmit={addAcuerdo} onCancel={onCancel} mode={1} sesion={idSesion}></OrganosColegiadosAcuerdosForm></Modal>
+                        <Modal><OrganosColegiadosAcuerdosForm onSubmit={addAcuerdo} onCancel={onCancel} mode={1} sesion={parseInt(idSesion)}></OrganosColegiadosAcuerdosForm></Modal>
                     )}
                     {edit && (
                         <Modal>
@@ -343,7 +339,7 @@ export const GestionAcuerdos = () => {
                                 onCancel={onCancel}
                                 onDelete={() => deleteAcuerdo(acuerdo)}
                                 acuerdo={acuerdo}
-                                sesion={idSesion}
+                                sesion={parseInt(idSesion)}
                             >
                             </OrganosColegiadosAcuerdosForm>
                         </Modal>

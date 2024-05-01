@@ -198,7 +198,7 @@ export const GestionGastos = () => {
                     responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
 
                 } catch(error){
-                    console.log(responsePS)
+                    console.error(responsePS)
                 }                                                               
                 Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
             }
@@ -274,7 +274,6 @@ export const GestionGastos = () => {
     }
 
     const elementClicked = (selectedGasto) => {
-        console.log(selectedGasto)
         if (event.target.tagName.toLowerCase() === 'button') {
             setGasto(selectedGasto);
             navigate(`${location.pathname}${selectedGasto.id_gasto}`)

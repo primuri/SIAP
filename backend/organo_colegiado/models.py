@@ -160,6 +160,52 @@ class Sesion(models.Model):
     class Meta:
         db_table = 'sesion'
 
+logger = logging.getLogger(__name__)
+def enviar_correo_sesion(asunto, instance, destinatario):
+    def enviar():
+        try:
+            documento = instance.id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk
+            acta = instance.id_acta_fk.id_documento_acta_fk
+            context = {
+                'id_sesion': instance.id_sesion,
+                'fecha': instance.fecha.strftime('%Y-%m-%d %H:%M'),
+                'organo_colegiado': instance.id_organo_colegiado_fk.nombre,
+                'agenda_tipo': instance.id_agenda_fk.tipo,
+                'agenda_detalle': instance.id_agenda_fk.detalle,
+                'agenda_docuemnto_nombre': documento.documento.name.split('/')[-1] if documento else 'No disponible',
+                'acta_detalle': acta.detalle,
+                'acta_documento_nombre': acta.documento.name.split('/')[-1] if acta else 'No disponible',
+                'medio': instance.medio,
+                'link_carpeta': instance.link_carpeta,
+            }
+
+            mensaje_html = render_to_string('email_sesion.html', context)
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html'
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo de la sesión: {e}")
+
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=Sesion)
+def sesion_post_save(sender, instance, created, **kwargs):
+    if created:
+        asunto = f"Nueva Sesión Creada: {instance.id_sesion}"
+    else:
+        asunto = f"Actualización de Sesión: {instance.id_sesion}"
+    enviar_correo_sesion(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
+
+@receiver(pre_delete, sender=Sesion)
+def sesion_pre_delete(sender, instance, **kwargs):
+    asunto = f"Eliminación de Sesión: {instance.id_sesion}"
+    enviar_correo_sesion(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
+
 class Invitado(models.Model):
     id_persona_externa_fk = models.ForeignKey(PersonaExterna, on_delete=models.PROTECT)
     id_sesion_fk = models.ForeignKey(Sesion, on_delete=models.PROTECT)
@@ -188,6 +234,47 @@ class Acuerdo(models.Model):
 
     class Meta:
         db_table='acuerdo'
+
+def enviar_correo_acuerdo(asunto, instance, destinatario):
+    def enviar():
+        try:
+            context = {
+                'id_acuerdo': instance.id_acuerdo,
+                'descripcion': instance.descripcion,
+                'estado': instance.estado,
+                'fecha_cumplimiento': instance.fecha_cumplimiento.strftime('%Y-%m-%d'),
+                'encargado': instance.encargado,
+                'seguimiento': instance.id_seguimiento_fk.id_documento_seguimiento_fk.detalle,
+                'oficio': instance.id_oficio_fk.detalle,
+                'sesion': instance.id_sesion_fk.id_sesion,
+            }
+
+            mensaje_html = render_to_string('email_acuerdo.html', context)
+            correo = EmailMessage(
+                subject=asunto,
+                body=mensaje_html,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[destinatario],
+            )
+            correo.content_subtype = 'html'
+            correo.send()
+        except Exception as e:
+            logger.error(f"Error al enviar el correo del acuerdo: {e}")
+
+    Thread(target=enviar).start()
+
+@receiver(post_save, sender=Acuerdo)
+def acuerdo_post_save(sender, instance, created, **kwargs):
+    if created:
+        asunto = f"Nuevo Acuerdo Creado: {instance.id_acuerdo}"
+    else:
+        asunto = f"Actualización de Acuerdo: {instance.id_acuerdo}"
+    enviar_correo_acuerdo(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
+
+@receiver(pre_delete, sender=Acuerdo)
+def acuerdo_pre_delete(sender, instance, **kwargs):
+    asunto = f"Eliminación de Acuerdo: {instance.id_acuerdo}"
+    enviar_correo_acuerdo(asunto, instance, settings.EMAIL_DEFAULT_SENDER)
 
 class Participante(models.Model):
    id_participante=  models.AutoField(primary_key=True) 
