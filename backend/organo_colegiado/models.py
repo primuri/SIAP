@@ -238,14 +238,19 @@ class Acuerdo(models.Model):
 def enviar_correo_acuerdo(asunto, instance, destinatario):
     def enviar():
         try:
+            documento = instance.id_documento_acuerdo_fk
+            seguimiento = instance.id_seguimiento_fk.id_documento_seguimiento_fk
+            oficio = instance.id_oficio_fk
             context = {
                 'id_acuerdo': instance.id_acuerdo,
                 'descripcion': instance.descripcion,
                 'estado': instance.estado,
                 'fecha_cumplimiento': instance.fecha_cumplimiento.strftime('%Y-%m-%d'),
                 'encargado': instance.encargado,
-                'seguimiento': instance.id_seguimiento_fk.id_documento_seguimiento_fk.detalle,
-                'oficio': instance.id_oficio_fk.detalle,
+                'nombre_documento_seguimiento': seguimiento.documento.name.split('/')[-1] if seguimiento else 'No disponible',
+                'oficio_detalle': oficio.detalle,
+                'oficio_nombre': oficio.ruta_archivo.name.split('/')[-1] if oficio else 'No disponible',
+                'nombre_documento_acuerdo': documento.documento.name.split('/')[-1] if documento else 'No disponible',
                 'sesion': instance.id_sesion_fk.id_sesion,
             }
 
