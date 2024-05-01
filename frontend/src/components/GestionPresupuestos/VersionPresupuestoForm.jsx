@@ -17,7 +17,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             "id_presupuesto_fk": version? version.id_presupuesto_fk.id_presupuesto : id_presupuesto,
             "version": version ? version.version : "",
             "monto": version ? version.monto : "",
-            "fecha": version ? version.fecha: "",
+            "fecha": version ? version.fecha.split('T')[0] : "",
             "detalle": version ? version.detalle : "",
     });
 
@@ -73,6 +73,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
     const handleEditCancel = () => {
         setShowConfirmationEdit(false);
     };
+
     return (
         <div>
             <div className="modal-header pb-0 position-sticky top-0">
