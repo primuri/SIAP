@@ -27,25 +27,20 @@ export const GestionOrganosColegiados = () => {
     const dataKeys = ['nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
     const rol = user.groups[0]
     
-    // ==============================================================================================================================
-    // Parte que cada uno debe crear para su reporte:
-    // ==============================================================================================================================
-
-        // Json que almacena la información que debe recibir el componente ReportButton:  
+   
+         
         const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
 
-        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
+       
         const [JsonIsReady, setJsonIsReady] = useState(false)
 
-        // Funcion auxiliar para jalar producto dada una versión de proyecto
+       
         const createJsonForReport = async () => {
-            // Titulo del reporte a mostrar en PDF
+            
             JsonForReport.reportTitle = "Órgano colegiado"
 
-            // LLave para acceder al id del objeto del reporte
             JsonForReport.idKey = "id_organo_colegiado"
 
-            // Llaves para acceder a los datos (incluye tabla extra)
             JsonForReport.dataKeys = [
                 'id_organo_colegiado',
                 'nombre',
@@ -54,7 +49,6 @@ export const GestionOrganosColegiados = () => {
                 'acuerdo_firme'
             ]
 
-            // Nombres de las columnas o titulos de los items (incluye tabla extra)
             JsonForReport.colNames = [
                 'ID órgano colegiado',
                 'Nombre',
@@ -65,17 +59,14 @@ export const GestionOrganosColegiados = () => {
 
             JsonForReport.reportData = OrganosColegiados
 
-            // Función auxiliar particular para configurar data del reporte
             setJsonIsReady(true)
         }
 
-        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
         useEffect(() => {
             setJsonIsReady(false)
             createJsonForReport()
         }, [OrganosColegiados])
 
-    // ==============================================================================================================================
 
 
     if (rol !== "administrador" && rol !== "invitado") {

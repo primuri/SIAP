@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom"
 import { TableNoHover } from "../../utils/TableNoHover";
 import { ReportButton } from "../../utils/ReportButton";
 
-import axios from 'axios' // PARA REPORTES
+import axios from 'axios'
 
 
 export const GestionProyectos = () => {
@@ -26,12 +26,7 @@ export const GestionProyectos = () => {
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
 
-    //===============================================================================================================================
-    // Configuración particular para reporte de proyectos
-    //===============================================================================================================================
-
     const configureReportData = async () => {
-        // Funcion auxiliar para jalar ultima versión de un proyecto
         const getLastVersionProyecto = async (id_codigo_vi) => {
             const token = localStorage.getItem('token');
 
@@ -57,7 +52,6 @@ export const GestionProyectos = () => {
             return (lastVersion ? lastVersion : {})
         }
 
-        // Funcion auxiliar para jalar producto dada una versión de proyecto
         const getProducto = async (id_version_proyecto) => {
             const token = localStorage.getItem('token');
             var productoBuscado = null
@@ -66,7 +60,7 @@ export const GestionProyectos = () => {
                 baseURL: 'http://localhost:8000/'
             })
 
-            var response = await SIAPAPI.get('producto/eventos/', {             // Buscar id version en eventos
+            var response = await SIAPAPI.get('producto/eventos/', { 
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
@@ -80,7 +74,7 @@ export const GestionProyectos = () => {
                 }
             })
 
-            response = await SIAPAPI.get('producto/softwares/', {                 // Buscar id version en softwares
+            response = await SIAPAPI.get('producto/softwares/', {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
@@ -95,7 +89,7 @@ export const GestionProyectos = () => {
                 } 
             })
 
-            response = await SIAPAPI.get('producto/articulos/', {                 // Buscar id version en articulos
+            response = await SIAPAPI.get('producto/articulos/', {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
@@ -113,7 +107,6 @@ export const GestionProyectos = () => {
             return productoBuscado
         }
 
-        // Funcion auxiliar para jalar asistentes dada una versión de proyecto
         const getAsistentes = async (id_version_proyecto) => {
             const token = localStorage.getItem('token');
 
@@ -132,7 +125,6 @@ export const GestionProyectos = () => {
             return filteredData ? filteredData : {}
         }
 
-        // Jalar y pegar datos en reportData
         if (proyectos.length > 0) {
             try {
                 const promises = proyectos.map(async (proyecto) => {
@@ -140,22 +132,17 @@ export const GestionProyectos = () => {
                     const productoAsociado = await getProducto(ultimaVersion.id_version_proyecto);
                     const asistentesLista = await getAsistentes(ultimaVersion.id_version_proyecto);
 
-                    // Asignar versión version proyecto a la data
                     proyecto.id_version_proyecto_fk = ultimaVersion;
 
-                    // Asignar producto a la data
                     proyecto.producto = productoAsociado;
 
-                    // Asignar los asistentes al proyecto a la data
                     proyecto[JsonForReport.colNames.length - 1] = asistentesLista;
 
                     return proyecto;
                 });
 
-                // Esperar que todas las promesas se resuelvan
                 const proyectosConDatosCompletos = await Promise.all(promises);
 
-                // Asignar los proyectos con datos completos a JsonForReport
                 JsonForReport.reportData = proyectosConDatosCompletos;
                 return true
 
@@ -165,26 +152,16 @@ export const GestionProyectos = () => {
             }
         }
     }
-
-    // ==============================================================================================================================
-    // Parte que cada uno debe crear para su reporte:
-    // ==============================================================================================================================
-
-        // Json que almacena la información que debe recibir el componente ReportButton:  
+ 
         const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
 
-        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
         const [JsonIsReady, setJsonIsReady] = useState(false)
 
-        // Funcion auxiliar para jalar producto dada una versión de proyecto
         const createJsonForReport = async () => {
-            // Titulo del reporte a mostrar en PDF
             JsonForReport.reportTitle = "Proyecto"
 
-            // LLave para acceder al id del objeto del reporte
             JsonForReport.idKey = "id_codigo_vi"
 
-            // Llaves para acceder a los datos (incluye tabla extra)
             JsonForReport.dataKeys = [
                 'id_codigo_vi',
                 'id_codigo_cimpa_fk.id_codigo_cimpa',
@@ -205,7 +182,7 @@ export const GestionProyectos = () => {
                 'producto.tipo', ['id_asistente_carnet_fk.id_asistente_carnet', 'id_asistente_carnet_fk.id_nombre_completo_fk', 'id_asistente_carnet_fk.condicion_estudiante', 'cantidad_horas']
             ]
 
-            // Nombres de las columnas o titulos de los items (incluye tabla extra)
+           
             JsonForReport.colNames = [
                 'Código VI',
                 'Código CIMPA',
@@ -227,17 +204,15 @@ export const GestionProyectos = () => {
                 {'tableName': 'Asistentes', 'colNames': ['Carnet', 'Nombre', 'Condición', 'Cantidad horas']}
             ]
 
-            // Función auxiliar particular para configurar data del reporte
+           
             setJsonIsReady(await configureReportData())
         }
 
-        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
         useEffect(() => {
             setJsonIsReady(false)
             createJsonForReport()
         }, [proyectos])
 
-    // ==============================================================================================================================
     
     useEffect(() => {
         const transformedProyectos = proyectos;

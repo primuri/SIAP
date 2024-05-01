@@ -135,7 +135,7 @@ export const GestionGastos = () => {
             delete Data.id_cedula_proveedor_fk;
             delete Data.id_producto_servicio_fk;
             Data.monto = parseInt(Data.monto);
-           // Data.fecha = '2024-03-08T15:20:40Z'; //corregir
+           
             const Datos = {
                 monto: Data.monto,
                 fecha: Data.fecha,

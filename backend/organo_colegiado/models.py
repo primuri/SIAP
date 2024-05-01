@@ -170,7 +170,7 @@ class Invitado(models.Model):
 
 class Seguimiento(models.Model):
     id_seguimiento = models.AutoField(primary_key=True)
-    id_documento_seguimiento_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_documento_seguimiento_fk = models.ForeignKey(Documento, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'seguimiento'
@@ -181,10 +181,10 @@ class Acuerdo(models.Model):
     estado = models.CharField(max_length=45)
     fecha_cumplimiento = models.DateField()
     encargado = models.CharField(max_length=150)
-    id_seguimiento_fk = models.ForeignKey(Seguimiento, on_delete=models.PROTECT)
-    id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
+    id_seguimiento_fk = models.ForeignKey(Seguimiento, on_delete=models.CASCADE)
+    id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.CASCADE)
     id_sesion_fk = models.ForeignKey(Sesion, on_delete=models.PROTECT)
-    id_documento_acuerdo_fk = models.ForeignKey(Documento, on_delete=models.PROTECT)
+    id_documento_acuerdo_fk = models.ForeignKey(Documento, on_delete=models.CASCADE)
 
     class Meta:
         db_table='acuerdo'

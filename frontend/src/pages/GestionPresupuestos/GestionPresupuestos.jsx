@@ -31,8 +31,7 @@ export const GestionPresupuestos = () => {
   const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo','Versiones']
   user.groups[0] !== "administrador" ? setError(true) : null 
   
-  //===============================================================================================================================
-
+  
   useEffect(() => {
     setJsonIsReady(false)
     createJsonForReport()
@@ -146,8 +145,7 @@ export const GestionPresupuestos = () => {
       setJsonIsReady(await configureReportData())
   }
 
-  // ==============================================================================================================================
-
+ 
   useEffect(() => {
     loadPresupuestos(proyectoID)
     loadVersiones(proyectoID)
