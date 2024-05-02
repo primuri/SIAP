@@ -7,6 +7,7 @@ import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { Back } from "../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
+import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda, eliminarActa, eliminarDocumento} from "../../api/gestionOrganosColegiados"
 import { obtenerOrganosColegiados, agregarOrganoColegiado, editarOrganoColegiado, eliminarOrganoColegiado } from "../../api/gestionOrganosColegiados"
 import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, editarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, agregarOficio, editarOficio, eliminarOficio } from "../../api/gestionIntegranteOrganoColegiado"
 import { OrganosColegiadosForm } from "../../components/GestionOrganosColegiados/OrganosColegiadosForm"
@@ -54,7 +55,7 @@ export const GestionOrganosColegiados = () => {
             'quorum',
             'acuerdo_firme',
             ['nombre_integrante', 'inicio_funciones', 'puesto', 'id_oficio_fk.id_oficio', 'normativa_reguladora'],
-            ['id_sesion', 'fecha', 'id_acta_fk.id_acta', 'n_acuerdos', '']
+            ['fecha', 'medio', 'id_acta_fk.id_documento_acta_fk.detalle', 'n_acuerdos']
         ]
 
         // Nombres de las columnas o titulos de los items (incluye tabla extra)
@@ -65,20 +66,40 @@ export const GestionOrganosColegiados = () => {
             'Quorum',
             'Acuerdo firme',
             { 'tableName': 'Integrantes', 'colNames': ['Integrante', 'Inicio', 'Puesto', 'Número oficio', 'Normativa reguladora'] },
-            { 'tableName': 'Sesiones', 'colNames': ['Identificador', 'Fecha', 'Número de acta', 'Cantidad acuerdos'] }
+            { 'tableName': 'Sesiones', 'colNames': ['Fecha', 'Medio','Detalle acta', 'Cantidad acuerdos'] }
         ]
 
         JsonForReport.reportData = OrganosColegiados
 
         // Función auxiliar particular para configurar data del reporte
-        setJsonIsReady(await configureReportData)
+        await configureReportData()
+        setJsonIsReady(true)
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        return new Date(dateString).toISOString().split('T')[0];
+      }
+
+      function formatearFecha(sesiones) {
+        return sesiones.map(sesion => {
+            const fechaISO = sesion.fecha;
+            if (!fechaISO) {
+                return { ...sesion, fecha: "" }; 
+            }
+            const dateObj = new Date(fechaISO);
+            
+            const fechaFormateada = dateObj.toLocaleDateString('en-CA', { timeZone: 'UTC' });
+            return { ...sesion, fecha: fechaFormateada };
+        });
     }
 
     const configureReportData = async () => {
+        
         if (JsonForReport.reportData.length > 0) {
             try {
-                const promises = JsonForReport.reportData.map(async (organo) => {
-                    var response1 = await obtenerIntegrantes(localStorage.getItem('token'));
+                const promises = OrganosColegiados.map(async (organo) => {
+                    const response1 = await obtenerIntegrantes(localStorage.getItem('token'));
                     const formattedAndFilteredData = response1.data.map(item => ({
                         ...item,
                         inicio_funciones: item.inicio_funciones ? formatDate(item.inicio_funciones) : 'No especificado'
@@ -86,7 +107,7 @@ export const GestionOrganosColegiados = () => {
                         return Number(item.id_organo_colegiado_fk.id_organo_colegiado) === Number(organo.id_organo_colegiado);
                     });
 
-                    var response2 = await obtenerSesiones(localStorage.getItem('token'));
+                    const response2 = await obtenerSesiones(localStorage.getItem('token'));
                     const sesionesFiltradas = response2.data.filter(sesion => sesion.id_organo_colegiado_fk.id_organo_colegiado == parseInt(organo.id_organo_colegiado));
                     const sesionesConFechaFormateada = formatearFecha(sesionesFiltradas);
                     for (const sesion of sesionesConFechaFormateada) {
@@ -102,8 +123,8 @@ export const GestionOrganosColegiados = () => {
 
                     organo[JsonForReport.colNames.length - 1] = sesionesConFechaFormateada;
 
-                    return organo
-                })
+                    return organo;
+                });
 
                 const organosCompletos = await Promise.all(promises);
 
@@ -112,6 +133,7 @@ export const GestionOrganosColegiados = () => {
 
                 return true
             } catch (error) {
+                console.log(error)
                 return false
             }
         }else{
@@ -279,6 +301,7 @@ export const GestionOrganosColegiados = () => {
             }
             return e[col].toString().includes(filter)
         })
+        setJsonIsReady(false)
         setOrganosColegiados(matches)
     }
 
