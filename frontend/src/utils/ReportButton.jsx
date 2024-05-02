@@ -11,7 +11,7 @@ import { ReportePDF } from "./ReportePDF";
 export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKey }) => {
     const [selectedOption, setSelectedOption] = useState("PDF");
     const [buttonClicked, setButtonClicked] = useState(true);
-    const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
+    const { toPDF, targetRef } = usePDF({ filename: `Reporte ${reportTitle}` });
 
     const handleButtonClick = () => {
         if (buttonClicked) {
