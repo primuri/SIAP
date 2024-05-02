@@ -24,6 +24,7 @@ const routeNames = {
     'gestion-asistentes': 'Asistentes', 
     'gestion-integrantes': 'Integrantes',
     'gestion-sesiones': 'Sesiones',
+    'gestion-acuerdos': 'Acuerdos',
     'organos-colegiados': 'Órganos Colegiados',
 };
 
