@@ -19,10 +19,6 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                 setTimeout(() => {
                     toPDF();
                 }, 0);
-
-                //const reporte = document.getElementById("REPORTE")
-               // const root = document.getElementById("root")
-                //root.replaceChildren(reporte)
             } else {
                 if (selectedOption === 'EXCEL') {
                     generarReporteExcel(reportData, colNames, dataKeys, reportTitle)
@@ -95,18 +91,18 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
 
         const ws = XLSX.utils.json_to_sheet(flattenData);
 
-        // Calcular el ancho de cada columna
+       
         const columnWidths = Object.keys(flattenData[0]).map(columnName => {
-            const columnData = flattenData.map(item => item[columnName] || ''); // Manejar datos nulos
+            const columnData = flattenData.map(item => item[columnName] || ''); 
             const dataMaxLength = Math.max(...columnData.map(value => String(value).length));
-            const nameLength = columnName.length; // Longitud del nombre de columna
-            return { wch: Math.max(dataMaxLength, nameLength) + 2 }; // Ajuste adicional de ancho
+            const nameLength = columnName.length;
+            return { wch: Math.max(dataMaxLength, nameLength) + 2 }; 
         });
 
-        // Aplicar los anchos de columna al libro de trabajo
+        
         ws['!cols'] = columnWidths;
 
-        // Crear libro de trabajo y guardar archivo
+        
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
         XLSX.writeFile(wb, `${fileName}.xlsx`);

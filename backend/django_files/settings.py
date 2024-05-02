@@ -164,4 +164,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cimpa.siap@gmail.com'
 EMAIL_HOST_PASSWORD = 'clzjmmlwtanatyil'
-EMAIL_DEFAULT_SENDER = 'brandonchin07@gmail.com'
+EMAIL_DEFAULT_SENDER = 'brandonbadilla143@gmail.com'

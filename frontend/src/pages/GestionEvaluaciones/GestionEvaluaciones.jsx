@@ -65,7 +65,6 @@ export const GestionEvaluaciones = () => {
         if (evaluacionesList.length > 0) {
             try {
                 const promises = evaluacionesList.map(async (evaluacion) => {
-                    console.log(evaluacion)
                     var response = await API.obtenerPreguntasEvaluacion(evaluacion.id_evaluacion)
                     evaluacion[JsonForReport.colNames.length - 1] = response.data
                     return evaluacion;
