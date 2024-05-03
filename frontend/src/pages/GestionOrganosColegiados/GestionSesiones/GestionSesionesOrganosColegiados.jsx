@@ -59,10 +59,10 @@ export const GestionSesionesOrganosColegiados= () => {
         return sesiones.map(sesion => {
             const fechaISO = sesion.fecha;
             if (!fechaISO) {
-                return { ...sesion, fecha: "" };  // Devuelve un string vacío si no hay fecha
+                return { ...sesion, fecha: "" }; 
             }
             const dateObj = new Date(fechaISO);
-            // Utiliza toLocaleDateString para evitar problemas de zona horaria
+            
             const fechaFormateada = dateObj.toLocaleDateString('en-CA', { timeZone: 'UTC' });
             return { ...sesion, fecha: fechaFormateada };
         });
@@ -308,7 +308,6 @@ export const GestionSesionesOrganosColegiados= () => {
 
     const elementClickedBtnAcuerdos = (selectedSesion) => {
         setSesion(selectedSesion);
-        console.log(selectedSesion)
         if (event.target.tagName.toLowerCase() === 'button') {
         navigate(`${location.pathname}/${selectedSesion.id_sesion}/gestion-acuerdos`)
                   
@@ -369,7 +368,7 @@ export const GestionSesionesOrganosColegiados= () => {
                                 onCancel={onCancel}
                                 onDelete={() => deleteSesion(sesion)}
                                 sesion={sesion}
-                                organoColegiado={clean_id}
+                                organoColegiado={parseInt(clean_id)}
                             >
                             </OrganosColegiadosSesionesForm>
                         </Modal>

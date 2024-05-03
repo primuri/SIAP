@@ -21,7 +21,7 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
         "detalle": version ? version.detalle : "",
     });
 
-    //Agregado para verificacion de saldo<monto. Mostrar error en el form
+    
     const [formErrors, setFormErrors] = useState({
         saldo: '',
         monto: ''
@@ -31,20 +31,20 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
         const { name, value } = event.target;
         let updatedValue = value;
     
-        // Determinar si el campo es numérico o de texto
+       
         if (name === 'saldo' || name === 'monto') {
             const numericValue = parseFloat(value);
-            updatedValue = isNaN(numericValue) ? '' : numericValue; // Si no es numérico, establecer a 0
+            updatedValue = isNaN(numericValue) ? '' : numericValue;
         }
     
-        // Actualizar el estado del formulario
+        
         setFormData(prev => {
             const newFormData = {
                 ...prev,
                 [name]: updatedValue
             };
     
-            // Validar después de actualizar, solo para campos numéricos
+            
             if (name === 'saldo' || name === 'monto') {
                 const saldo = parseFloat(newFormData.saldo || 0);
                 const monto = parseFloat(newFormData.monto || 0);
@@ -54,17 +54,17 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                         ...errors,
                         saldo: saldo > monto ? "El saldo no puede ser mayor al monto." : ''
                     }));
-                    return prev; // Devolver el estado anterior si la validación falla
+                    return prev;
                 }
             }
 
-            // Limpiar errores si todo está correcto
+            
             setFormErrors(errors => ({
                 ...errors,
                 [name]: ''
             }));
     
-            return newFormData; // Si todo está correcto, actualizamos el estado
+            return newFormData; 
         });
     };
     

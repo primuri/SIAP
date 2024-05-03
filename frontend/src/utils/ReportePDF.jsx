@@ -77,6 +77,7 @@ export const ReportePDF = ({ reportData, reportTitle, colNames, dataKeys, idKey 
     
                 <div className="container" style={{ width: "840px" }}>
                     {reportData.map((data) => (
+
                         <div className="row page-report">
                             <div className="row">
                                 <h5 className="nombrePage">{reportTitle + " " + getValueByPath(data, idKey)}</h5>
@@ -102,7 +103,9 @@ export const ReportePDF = ({ reportData, reportTitle, colNames, dataKeys, idKey 
                             </div>
                             )
                             ))}
+
                         </div>
+                        
                     ))}
     
                 </div>

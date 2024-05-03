@@ -7,7 +7,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import icono from '../../assets/person-i.png'
 import * as API from '../../api/gestionEvaluaciones'
-//coment
 
 export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false)
