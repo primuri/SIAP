@@ -81,7 +81,7 @@ export const GestionPartidas = () => {
     const elementClicked = (selectedPartida) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setPartida(selectedPartida);
-            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos/`)
+            navigate(`${location.pathname}/g_id=${selectedPartida.id_partida}/gestion-gastos`)
         } else {
             setPartida(selectedPartida)
             setEditClicked(true)
@@ -142,7 +142,7 @@ function mostrarExito (mensaje) {
           background: 'var(--celeste-ucr)',
           color: '#fff',
         },
-      })
+    })
 }
 
 function getValueByPath(obj, path) {
@@ -156,13 +156,5 @@ function filtrar(col, filter, data) {
       })
 }
 
-function formatearFecha(response) {
-    return response?.map((obj) => {
-      const fechaISO = obj.fecha_presentacion;
-      const dateObj = new Date(fechaISO);
-      const fechaFormateada = dateObj.toISOString().split('T')[0];
-      
-      return { ...obj, fecha_presentacion: fechaFormateada };
-    });
-}
+
   

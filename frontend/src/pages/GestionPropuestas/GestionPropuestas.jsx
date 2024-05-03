@@ -161,6 +161,7 @@ export const GestionPropuestas = () => {
             });
         }
     }
+
     async function loadPropuestas() {
         try {
             const res = await obtenerPropuestas(localStorage.getItem('token'))
@@ -407,9 +408,11 @@ export const GestionPropuestas = () => {
     const elementClicked = (user) => {
         navigate(`/gestion-propuestas/${user.id_codigo_cimpa_fk.id_codigo_cimpa}`)
     }
+
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
+
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -420,6 +423,7 @@ export const GestionPropuestas = () => {
         })
         setPropuestas(matches)
     }
+
     return (
         <main >
             {!error ? (

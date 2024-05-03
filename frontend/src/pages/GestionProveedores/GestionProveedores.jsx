@@ -72,7 +72,8 @@ export const GestionProveedores = () => {
             color: '#fff',
             fontSize: '18px',
         },
-    });
+      });
+
       if (formData.id_documento_fk.documento !== "") {
         var responseDocumento = await agregarDocumentoCuenta(formData.id_documento_fk, localStorage.getItem('token'))
         formData.id_documento_fk = responseDocumento.data.id_documento;
