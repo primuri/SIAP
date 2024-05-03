@@ -50,7 +50,7 @@ export const GestionVersionPresupuesto = () => {
 
     async function editVersionPresupuesto(dataForm) {
         try{
-            
+            console.log(dataForm)
             await API.editarVersionesPresupuesto(versionPresupuesto.id_version_presupuesto, localStorage.getItem('token'), dataForm)
             setEditClicked(false)
             setReload(!reload)
@@ -156,5 +156,3 @@ function filtrar(col, filter, data) {
       })
 }
 
-
-  

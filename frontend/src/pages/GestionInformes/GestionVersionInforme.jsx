@@ -122,6 +122,7 @@ export const GestionVersionInforme = () => {
                         let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
                         data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
                        
+                        //
                     }else{
                         data.id_evaluacion_cc_fk.id_documento_evualuacion_fk =  data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.id_documento
     

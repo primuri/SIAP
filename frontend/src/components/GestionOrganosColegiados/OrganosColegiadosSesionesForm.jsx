@@ -12,6 +12,7 @@ import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
 
 export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel, onDelete, organoColegiado }) => {
+        // Cargar informacion
         const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
         const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
         const [fileData, setFileData] = useState(null);
@@ -56,17 +57,23 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
             const name = target.name;
         
             setFormData(prevFormData => {
+                // Función recursiva para establecer datos anidados
+                console.log(`Field name: ${name}, Value: ${value}`);
+
                 const setNestedData = (path, value, obj) => {
                     let levels = path.split('.');
                     let lastLevel = levels.pop();
                     let depth = levels.reduce((o, level) => {
-                        if (!o[level]) o[level] = {}; 
+                        if (!o[level]) o[level] = {};  // Crear el nivel si no existe
                         return o[level];
                     }, obj);
                     depth[lastLevel] = value;
                 };
+        
+                // Crea una copia del estado anterior para evitar mutaciones
                 const updatedFormData = {...prevFormData};
-    
+        
+                // Actualizar el estado usando la función para manejar datos anidados
                 setNestedData(name, value, updatedFormData);
         
                 return updatedFormData;
@@ -88,6 +95,11 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
         combinedData.append('json', JSON.stringify(formData));
         onSubmit(combinedData);
     };
+
+    function formDate(dateString){
+        if(!dateString) return "";
+        return new Date(dateString).toISOString().split('T')[0];
+    }
       
         const handleDeleteClick = () => {
           setShowConfirmationDelete(true);

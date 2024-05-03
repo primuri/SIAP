@@ -25,7 +25,6 @@ class IntegranteTests(APITestCase):
             'quorum': 6,
             'acuerdo_firme': 8
         }
-        
         response = self.client.post(reverse('organocolegiado-list'), self.organo_colegiado, format='json')
         self.id_organo_colegiado = response.data['id_organo_colegiado']
 

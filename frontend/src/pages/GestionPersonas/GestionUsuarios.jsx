@@ -145,22 +145,33 @@ export const GestionUsuarios = () => {
             toast.dismiss(toastId)
         }
     }
- 
+
+    // ==============================================================================================================================
+    // Parte que cada uno debe crear para su reporte:
+    // ==============================================================================================================================
+
+        // Json que almacena la información que debe recibir el componente ReportButton:  
         const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
 
+        // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
         const [JsonIsReady, setJsonIsReady] = useState(false)
 
+        // Funcion auxiliar para jalar producto dada una versión de proyecto
         const createJsonForReport = () => {
 
+            // Titulo del reporte a mostrar en PDF
             JsonForReport.reportTitle = "Usuario"
 
+            // LLave para acceder al id del objeto del reporte
             JsonForReport.idKey = "correo"
 
+            // Llaves para acceder a los datos (incluye tabla extra)
             JsonForReport.dataKeys = [
                 'correo',
                 'groups.0'
             ]
 
+            // Nombres de las columnas o titulos de los items (incluye tabla extra)
             JsonForReport.colNames = [
                 'Correo',
                 'Tipo'
@@ -169,13 +180,17 @@ export const GestionUsuarios = () => {
             JsonForReport.reportData = usuarios
             setJsonIsReady(false)
 
+            // Función auxiliar particular para configurar data del reporte
             setJsonIsReady(true)
         }
 
+        // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
         useEffect(() => {
             setJsonIsReady(false)
             createJsonForReport()
         }, [usuarios])
+
+    // ==============================================================================================================================
 
     const onCancel = () => {
         setAddClick(false)

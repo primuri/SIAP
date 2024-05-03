@@ -3,7 +3,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 
 
-const noLinks = ['p_id=', 'inf_id=', 'o_id='];
+const noLinks = ['p_id=', 'inf_id=', 'o_id=', 'g_id='];
 
 const routeNames = {
     'gestion-proyectos': 'Proyectos',
@@ -24,7 +24,6 @@ const routeNames = {
     'gestion-asistentes': 'Asistentes', 
     'gestion-integrantes': 'Integrantes',
     'gestion-sesiones': 'Sesiones',
-    'gestion-acuerdos': 'Acuerdos',
     'organos-colegiados': 'Órganos Colegiados',
 };
 

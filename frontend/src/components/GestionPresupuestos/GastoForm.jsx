@@ -26,7 +26,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         id_partida_fk: gasto ? gasto.id_partida_fk.id_partida : id_partida,
         id_gasto: gasto ? gasto.id_gasto : "",
         monto: gasto ? gasto.monto : "",
-        fecha: gasto ? gasto.fecha : "",
+        fecha: gasto ? gasto.fecha.split('T')[0] : "",
         detalle: gasto ? gasto.detalle : "",
         id_factura_fk: gasto ? gasto.id_factura_fk : { id_cedula_proveedor_fk: { detalle: "" }, id_producto_servicio_fk: {detalle: ""} },
         id_documento_fk: gasto ? { ...gasto.id_documento_fk } : { tipo: "Documento factura", detalle: "", documento: "" }
@@ -311,15 +311,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
                                 <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
-                                {mode === 2 && formData.id_documento_fk.documento ? (
-                                    <Tooltip title={formData.id_documento_fk.documento.split('/').pop()} placement="right-start">
-                                    {formData.id_documento_fk.documento !== "" && (
-                                        <a href={"http://localhost:8000" + formData.id_documento_fk.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {"Descargar documento"}
-                                        </a>
-                                    )}
-                                    </Tooltip>
-                                ) : null}
+                                { typeof formData.id_documento_fk.documento === 'string' && (
+                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.id_documento_fk.documento.split('/').pop()}
+                                    </a>
+                                ) }
                             </div>
                         </div>
                     </div>

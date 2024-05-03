@@ -47,7 +47,7 @@ export const GestionAsistentes = () => {
 
     async function loadAsistentes( numVersion) {
         try {
-          const response = await obtenerDesignacionAsistente(localStorage.getItem('token'));
+          const response = await obtenerDesignacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
           const filteredData = response.data.filter(item => item.id_version_proyecto_fk.numero_version === numVersion);
           setData(filteredData);                                                                     
           setAsistentes(filteredData);                                                               
