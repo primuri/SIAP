@@ -81,7 +81,7 @@ export const GestionPartidas = () => {
     const elementClicked = (selectedPartida) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setPartida(selectedPartida);
-            navigate(`${location.pathname}/g_id=${selectedPartida.id_partida}/gestion-gastos`)
+            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos`)
         } else {
             setPartida(selectedPartida)
             setEditClicked(true)

@@ -7,7 +7,7 @@ import { Search } from "../../../utils/Search"
 import { PermisoDenegado } from "../../../utils/PermisoDenegado"
 import { Back } from "../../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerAcuerdos, editarSesion} from "../../../api/gestionOrganosColegiados"
+import { obtenerAcuerdos, editarSesion, agregarDocumento, agregarOficio, agregarSeguimiento, agregarAcuerdo, eliminarOficio, eliminarDocumento, editarOficio, editarAcuerdo, editarDocumento} from "../../../api/gestionOrganosColegiados"
 import { OrganosColegiadosAcuerdosForm } from '../../../components/GestionOrganosColegiados/OrganosColegiadosAcuerdosForm';
 
 export const GestionAcuerdos = () => {
@@ -44,7 +44,7 @@ export const GestionAcuerdos = () => {
     async function loadAcuerdos() {
         try {
             const response = await obtenerAcuerdos();
-            const acuerdosFiltrados = response.data.filter(acuerdo => acuerdo.id_sesion_fk.id_sesion == idSesion);
+            const acuerdosFiltrados = response.data.filter(acuerdo => acuerdo.id_sesion_fk.id_sesion == parseInt(idSesion));
     
             setData(acuerdosFiltrados);                                                                 
             setAcuerdos(acuerdosFiltrados);                                                              
@@ -54,61 +54,206 @@ export const GestionAcuerdos = () => {
         }
     }
 
-    const addSesiones = async (formData) => {
-        
-        var toastId = toastProcesando("Agregando...")
-        
+    const volver = () => {
+        const pathParts = location.pathname.split('/').filter(part => part !== '');
+        const newPathParts = pathParts.slice(0, -2);
+        const newPath = `/${newPathParts.join('/')}`;
+        navigate(newPath);
+    };
+
+    const addAcuerdo = async (formData) => {
+        var toastId = toast.loading('Agregando...', {
+            position: 'bottom-right',
+            style: {
+                background: 'var(--celeste-ucr)',
+                color: '#fff',
+                fontSize: '18px',
+            },
+        });
+
+        let  id_acuerdo_doc_creado;
+        let id_seguimiento_doc_creado;
+        let id_oficio_doc_creado;
+
         try {
-            console.log(formData);
+           
+            const seguimientoFile = formData.get('id_seguimiento_fk.id_documento_seguimiento_fk.documento');
+            formData.delete('id_seguimiento_fk.id_documento_seguimiento_fk.documento');
+    
+            const acuerdoFile = formData.get('id_documento_acuerdo_fk.documento');
+            formData.delete('id_documento_acuerdo_fk.documento');
 
-            await agregarOrganoColegiado(Data, localStorage.getItem("token"))
+            const oficioFile = formData.get('id_oficio_fk.ruta_archivo');
+            formData.delete('id_oficio_fk.ruta_archivo');
 
-            setAddClick(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
+            const Datos = JSON.parse(formData.get('json'));
+            formData.delete('json'); 
 
-            toastExito("Sesion agregada correctamente", toastId)
+           
+            if (oficioFile && acuerdoFile && seguimientoFile) {
+                const DocumentoAcuerdo = new FormData();
+                DocumentoAcuerdo.append('documento', acuerdoFile);
+                DocumentoAcuerdo.append('detalle', Datos.id_documento_acuerdo_fk.detalle);
+                DocumentoAcuerdo.append('tipo', Datos.id_documento_acuerdo_fk.tipo);
+    
+                const DocumentoSeguimiento = new FormData();
+                DocumentoSeguimiento.append('documento', seguimientoFile);
+                DocumentoSeguimiento.append('detalle', Datos.id_seguimiento_fk.id_documento_seguimiento_fk.detalle);
+                DocumentoSeguimiento.append('tipo', Datos.id_seguimiento_fk.id_documento_seguimiento_fk.tipo);
+    
+                const DocumentoOficio = new FormData();
+                DocumentoOficio.append('ruta_archivo', oficioFile);
+                DocumentoOficio.append('detalle', Datos.id_oficio_fk.detalle);
+               
+
+                id_acuerdo_doc_creado = await agregarDocumento(DocumentoAcuerdo);
+                id_seguimiento_doc_creado = await agregarDocumento(DocumentoSeguimiento);
+                id_oficio_doc_creado = await agregarOficio(DocumentoOficio);
+            }
+
+            Datos.id_oficio_fk = id_oficio_doc_creado;
+            Datos.id_documento_acuerdo_fk = id_acuerdo_doc_creado;
+            Datos.id_seguimiento_fk.id_documento_seguimiento_fk = id_seguimiento_doc_creado;
+            delete Datos.id_seguimiento_fk.id_seguimiento;
+
+            const id_segui = await agregarSeguimiento(Datos.id_seguimiento_fk);
+            Datos.id_seguimiento_fk = id_segui;
+            delete Datos.id_acuerdo;
+            Datos.id_sesion_fk = parseInt(idSesion);
+
+            await agregarAcuerdo(Datos);
+
+
+
+            toast.success('Acuerdo agregado correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+              setAddClick(false)
+              setReload(!reload)
+              document.body.classList.remove('modal-open');
 
         } catch (error) {
             console.error("Error: \n" + error)
+            await eliminarDocumento(id_seguimiento_doc_creado)
+            await eliminarDocumento(id_acuerdo_doc_creado)
+            await eliminarOficio(id_oficio_doc_creado)
             toast.dismiss(toastId)
         }
     }
 
 
-    const editaSesion = async (formData) => {
+    const editaAcuerdo = async (formData) => {
+         
+        try {   
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
+
+           
+
+            
+            const seguimientoFile = formData.get('id_seguimiento_fk.id_documento_seguimiento_fk.documento');
+            formData.delete('id_seguimiento_fk.id_documento_seguimiento_fk.documento');
     
-        var toastId = toastProcesando("Editando...")
+            const acuerdoFile = formData.get('id_documento_acuerdo_fk.documento');
+            formData.delete('id_documento_acuerdo_fk.documento');
 
-        try {
+            const oficioFile = formData.get('id_oficio_fk.ruta_archivo');
+            formData.delete('id_oficio_fk.ruta_archivo');
+
+            const Datos = JSON.parse(formData.get('json'));
+            formData.delete('json');
+
+            let id_acuerdo_doc_creado;
+            let id_seguimiento_doc_creado;
+            let id_oficio_doc_creado;
+
+
+            
+            if (acuerdoFile) {
+                const DocumentoAcuerdo = new FormData();
+                DocumentoAcuerdo.append('documento', acuerdoFile);
+                DocumentoAcuerdo.append('detalle', Datos.id_documento_acuerdo_fk.detalle);
+                DocumentoAcuerdo.append('tipo', Datos.id_documento_acuerdo_fk.tipo);
     
-            const Data = JSON.parse(formData)
-            await editarSesion(Data.id_organo_colegiado, Data, localStorage.getItem("token"))
+                id_acuerdo_doc_creado = Datos.id_documento_acuerdo_fk.id_documento;
+                await editarDocumento(id_acuerdo_doc_creado, DocumentoAcuerdo);
+            }
 
-            setEdit(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
 
-            toastExito("Evaluación editada correctamente", toastId)
+            if(seguimientoFile){
+                const DocumentoSeguimiento = new FormData();
+                DocumentoSeguimiento.append('documento', seguimientoFile);
+                DocumentoSeguimiento.append('detalle', Datos.id_seguimiento_fk.id_documento_seguimiento_fk.detalle);
+                DocumentoSeguimiento.append('tipo', Datos.id_seguimiento_fk.id_documento_seguimiento_fk.tipo);
+    
 
+                id_seguimiento_doc_creado = Datos.id_seguimiento_fk.id_documento_seguimiento_fk.id_documento;
+                await editarDocumento(id_seguimiento_doc_creado, DocumentoSeguimiento);
+            
+            }
+
+            if(oficioFile){
+                const DocumentoOficio = new FormData();
+                DocumentoOficio.append('ruta_archivo', oficioFile);
+                DocumentoOficio.append('detalle', Datos.id_oficio_fk.detalle);
+
+                id_oficio_doc_creado = Datos.id_oficio_fk.id_oficio;
+                await editarOficio(id_oficio_doc_creado, DocumentoOficio);
+            
+            }else {
+                const DocumentoData = new FormData();
+                DocumentoData.append('detalle', Datos.id_oficio_fk.detalle);
+               
+                const id_docu = Datos.id_oficio_fk.id_oficio;
+                await editarOficio(id_docu, DocumentoData);
+            }
+
+
+            Datos.id_documento_acuerdo_fk =  Datos.id_seguimiento_fk.id_documento_seguimiento_fk.id_documento
+            Datos.id_oficio_fk = Datos.id_oficio_fk.id_oficio
+            Datos.id_seguimiento_fk =  Datos.id_seguimiento_fk.id_seguimiento
+            const id_acuerdo = Datos.id_acuerdo
+            delete Datos.id_acuerdo
+
+            await editarAcuerdo(id_acuerdo, Datos);
+            
+            toast.success('Asistente agregado correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                  background: 'var(--celeste-ucr)',
+                  color: '#fff',
+                },
+              })
+              setEdit(false)
+                setReload(!reload)
+                document.body.classList.remove('modal-open');
         } catch (error) {
-            console.error("Error: \n" + error)
+            console.error("Error en la edición:", error)
             toast.dismiss(toastId)
         }
     }
 
-    const deleteSesion = async (sesion) => {
-
-        var toastId = toastProcesando("Eliminando...")
+    const deleteAcuerdo = async (acuerdo) => {
 
         try {
-            await eliminarSesion(sesion.id_sesion)
+            const  id_acuerdo_doc= acuerdo.id_documento_acuerdo_fk.id_documento
+            await eliminarDocumento(id_acuerdo_doc)
 
-            setEdit(false)
-            setReload(!reload)
-            document.body.classList.remove('modal-open');
-
-            toast.success('Órgano colegiado eliminado correctamente', {
+            toast.success('Acuerdo eliminado correctamente', {
                 duration: 4000,
                 position: 'bottom-right',
                 style: {
@@ -116,12 +261,14 @@ export const GestionAcuerdos = () => {
                     color: '#fff',
                 },
             })
+            setEdit(false)
+            setReload(!reload)
+            document.body.classList.remove('modal-open');
 
         } catch (error) {
             console.error("Error: \n" + error)
             toast.dismiss(toastId)
         }
-        setEdit(false)
     }
 
     const onCancel = () => {
@@ -161,30 +308,7 @@ export const GestionAcuerdos = () => {
         setAcuerdos(matches)
     }
 
-    function toastProcesando(mensaje) {
-        var toastId = toast.loading(mensaje, {
-            position: 'bottom-right',
-            style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                fontSize: '18px',
-            },
-        });
-    
-        return toastId
-    }
-    
-    function toastExito(mensaje, toastId) {
-        toast.success(mensaje, {
-            id: toastId,
-            duration: 1000,
-            position: 'bottom-right',
-            style: {
-                background: 'var(--celeste-ucr)',
-              color: '#fff',
-            },
-          })
-    }
+   
 
     return (
         <main>
@@ -202,24 +326,27 @@ export const GestionAcuerdos = () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
+                    <div className="mt-3">
                     <Table columns={columns} data={acuerdos} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={false} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
-                        <Modal><OrganosColegiadosAcuerdosForm onSubmit={addSesiones} onCancel={onCancel} mode={1} sesion={idSesion}></OrganosColegiadosAcuerdosForm></Modal>
+                        <Modal><OrganosColegiadosAcuerdosForm onSubmit={addAcuerdo} onCancel={onCancel} mode={1} sesion={parseInt(idSesion)}></OrganosColegiadosAcuerdosForm></Modal>
                     )}
                     {edit && (
                         <Modal>
                             <OrganosColegiadosAcuerdosForm
                                 mode={2}
-                                onSubmit={editaSesion}
+                                onSubmit={editaAcuerdo}
                                 onCancel={onCancel}
-                                onDelete={() => deleteSesion(acuerdo)}
+                                onDelete={() => deleteAcuerdo(acuerdo)}
                                 acuerdo={acuerdo}
-                                sesion={idSesion}
+                                sesion={parseInt(idSesion)}
                             >
                             </OrganosColegiadosAcuerdosForm>
                         </Modal>
                     )}
                     <Toaster></Toaster>
+                    <Back onClick={volver}>Regresar a Sesiones</Back>
+                    </div>
                 </div>
             ) : (
                 <PermisoDenegado></PermisoDenegado>
