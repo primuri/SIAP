@@ -377,7 +377,7 @@ export const GestionPresupuestos = () => {
             {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
           {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1}></PresupuestoForm></Modal>)}
           {edit &&
             (
@@ -396,7 +396,7 @@ export const GestionPresupuestos = () => {
           }
           <Toaster></Toaster>
           <div className="d-flex justify-content-start">
-            <Back onClick={volver}>Regresar</Back>
+            <Back onClick={volver}>Regresar a versión de proyecto</Back>
           </div>
         </div>
       ) : (

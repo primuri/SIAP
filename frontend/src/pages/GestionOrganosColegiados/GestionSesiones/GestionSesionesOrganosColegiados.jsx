@@ -344,7 +344,7 @@ export const GestionSesionesOrganosColegiados= () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        <h1>Gestión de Sesiones del Órgano Colegiado: {nombreOC}</h1>
+                        <h1>Gestión de sesiones del órgano colegiado: {nombreOC}</h1>
                     </div>
 
                     {(!cargado) && (
@@ -374,7 +374,7 @@ export const GestionSesionesOrganosColegiados= () => {
                         </Modal>
                     )}
                     <Toaster></Toaster>
-                    <Back onClick={volver}>Regresar a Órganos Colegiados</Back>
+                    <Back onClick={volver}>Regresar a órganos colegiados</Back>
                     </div>
                 </div>
             ) : (

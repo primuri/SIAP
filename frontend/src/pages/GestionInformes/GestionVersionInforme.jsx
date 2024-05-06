@@ -203,7 +203,7 @@ export const GestionVersionInforme = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsVI.slice(0, -1)} columns={dataKeyVI.slice(0, -1)} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+                <Table columns={columnsVI} data={versionesInformeList} dataKeys={dataKeyVI} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
                     <Back onClick={volverInformes}>Regresar a informes</Back>
                 </div>

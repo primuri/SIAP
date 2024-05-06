@@ -322,7 +322,7 @@ export const GestionIntegranteOrganoColegiado = () => {
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
             <div className="d-flex flex-row">
-                <h1>Gestión de integrantes del Órgano Colegiado</h1>
+                <h1>Gestión de integrantes del órgano colegiado</h1>
             </div>
 
             {(!cargado) && (

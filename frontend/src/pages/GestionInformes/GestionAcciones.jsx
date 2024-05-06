@@ -194,7 +194,7 @@ export const GestionAcciones = () => {
                     </div>
                     <Table columns={columns} data={acciones} dataKeys={dataKeys} onDoubleClick ={elementClicked} />
                     <div>
-                        <Back onClick={volverVersionInformes}>Regresar a versiones informe</Back>
+                        <Back onClick={volverVersionInformes}>Regresar a versión de informe</Back>
                     </div>
                     {addClick && (
                         <Modal><AccionesForm onSubmit={addAccion} onCancel={onCancel} mode={1}></AccionesForm></Modal>

@@ -345,7 +345,7 @@ export const GestionAcuerdos = () => {
                         </Modal>
                     )}
                     <Toaster></Toaster>
-                    <Back onClick={volver}>Regresar a Sesiones</Back>
+                    <Back onClick={volver}>Regresar a sesiones</Back>
                     </div>
                 </div>
             ) : (
