@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom"
 export const GestionIntegranteOrganoColegiado = () => {
   let {id_organo,id}                    = useParams()
   const user                            = JSON.parse(localStorage.getItem('user'))
+  const rol = user.groups[0]
   const navigate                        = useNavigate()
   const [clean_id, setClean_id]         = useState(id.startsWith('o_id=') ? id.split('o_id=')[1] : '')
 
@@ -31,7 +32,9 @@ export const GestionIntegranteOrganoColegiado = () => {
   const columns = ['Integrante', 'Inicio de funciones', 'Puesto', 'Número oficio', 'Normativa reguladora', 'Órgano Colegiado']
   const dataKeys = ['nombre_integrante', 'inicio_funciones', 'puesto', 'id_oficio_fk.id_oficio', 'normativa_reguladora', 'id_organo_colegiado_fk.nombre']
 
-  user.groups[0] !== "administrador" ? setError(true) : null  
+  if (rol !== "administrador" && rol !== "invitado") {
+    setError(true);
+  }
 
   const token = localStorage.getItem('token')
 
@@ -321,18 +324,35 @@ export const GestionIntegranteOrganoColegiado = () => {
     <main >
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-            <div className="d-flex flex-row">
-                <h1>Gestión de integrantes del órgano colegiado</h1>
-            </div>
+
+            {user.groups[0] === "administrador" && (
+                        <div className=" flex-row">
+                             <h1>Gestión de integrantes del órgano colegiado: {clean_id}</h1>
+                        </div>
+            )}
+
+            {user.groups[0] === "invitado" && (
+                <div className=" flex-row">
+                    <h1>Integrantes del órgano colegiado: {clean_id}</h1>
+                </div>
+            )}
 
             {(!cargado) && (
                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
             )}
 
-            <div className="d-flex justify-content-between mt-4">
+            {user.groups[0] === "administrador" && (
+              <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
-            </div>
+              </div>
+            )}
+
+          {user.groups[0] === "invitado" && (
+              <div className="d-flex justify-content-between mt-4">
+                  <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+              </div>
+          )}
 
           <Table columns={columns} data={transformedIntegrantes} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={false} navigate={navigate} ></Table>
            {addClick && (
@@ -349,7 +369,8 @@ export const GestionIntegranteOrganoColegiado = () => {
                     onSubmit={editIntegrante}
                     onCancel={onCancel}
                     onDelete={() => deleteIntegrante(integrante)}
-                    integrante={integrante}>
+                    integrante={integrante}
+                    rol={rol}>
                 </IntegranteOrganoColegiadoForm></Modal>
             )}
           <Toaster></Toaster>

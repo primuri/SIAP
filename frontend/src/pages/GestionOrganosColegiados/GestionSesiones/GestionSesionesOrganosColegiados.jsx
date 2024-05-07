@@ -33,7 +33,7 @@ export const GestionSesionesOrganosColegiados= () => {
     const columns = ['Identificador', 'Fecha', 'Número de acta', 'Cantidad de acuerdos', 'Acuerdos']
     const dataKeys = ['id_sesion','fecha', 'id_acta_fk.id_acta', 'n_acuerdos', '']
 
-    user.groups[0] !== "administrador" ? setError(true) : null 
+  
     if (rol !== "administrador" && rol !== "invitado") {
         setError(true);
     }
@@ -343,18 +343,36 @@ export const GestionSesionesOrganosColegiados= () => {
         <main>
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
+
+                {user.groups[0] === "administrador" && (
                     <div className=" flex-row">
-                        <h1>Gestión de sesiones del órgano colegiado: {nombreOC}</h1>
+                            <h1>Gestión de sesiones del órgano colegiado: {clean_id}</h1>
                     </div>
+                )}
+
+                {user.groups[0] === "invitado" && (
+                    <div className=" flex-row">
+                        <h1>Sesiones del órgano colegiado: {clean_id}</h1>
+                    </div>
+                )}
 
                     {(!cargado) && (
                         <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                     )}             
 
-                    <div className="d-flex justify-content-between mt-4">
-                        <Add onClick={addClicked}></Add>
-                        <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
-                    </div>
+                    {user.groups[0] === "administrador" && (
+                        <div className="d-flex justify-content-between mt-4">
+                            <Add onClick={addClicked}></Add>
+                            <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
+                        </div>
+                    )}
+
+                    {user.groups[0] === "invitado" && (
+                        <div className="d-flex justify-content-between mt-4">
+                            <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
+                        </div>
+                    )}
+
                     <div className="mt-3">
                     <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false}  onClickButton2={elementClickedBtnAcuerdos} buttonText="Gestionar" />
                     {addClick && (
@@ -369,6 +387,7 @@ export const GestionSesionesOrganosColegiados= () => {
                                 onDelete={() => deleteSesion(sesion)}
                                 sesion={sesion}
                                 organoColegiado={parseInt(clean_id)}
+                                rol={rol}
                             >
                             </OrganosColegiadosSesionesForm>
                         </Modal>

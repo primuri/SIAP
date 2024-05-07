@@ -29,25 +29,14 @@ export const GestionOrganosColegiados = () => {
     const dataKeys = ['nombre', 'quorum', 'numero_miembros', 'acuerdo_firme', '', '']
     const rol = user.groups[0]
 
-    // ==============================================================================================================================
-    // Parte que cada uno debe crear para su reporte:
-    // ==============================================================================================================================
-
-    // Json que almacena la información que debe recibir el componente ReportButton:  
     const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
-
-    // Variable que mide cuando el Json está listo para ser enviado al ReportButton:
     const [JsonIsReady, setJsonIsReady] = useState(false)
 
-    // Funcion auxiliar para jalar producto dada una versión de proyecto
-    const createJsonForReport = async () => {
-        // Titulo del reporte a mostrar en PDF
-        JsonForReport.reportTitle = "Órgano colegiado"
 
-        // LLave para acceder al id del objeto del reporte
+    const createJsonForReport = async () => {
+        JsonForReport.reportTitle = "Órgano colegiado"
         JsonForReport.idKey = "id_organo_colegiado"
 
-        // Llaves para acceder a los datos (incluye tabla extra)
         JsonForReport.dataKeys = [
             'id_organo_colegiado',
             'nombre',
@@ -58,7 +47,6 @@ export const GestionOrganosColegiados = () => {
             ['fecha', 'medio', 'id_acta_fk.id_documento_acta_fk.detalle', 'n_acuerdos']
         ]
 
-        // Nombres de las columnas o titulos de los items (incluye tabla extra)
         JsonForReport.colNames = [
             'ID órgano colegiado',
             'Nombre',
@@ -70,8 +58,7 @@ export const GestionOrganosColegiados = () => {
         ]
 
         JsonForReport.reportData = OrganosColegiados
-
-        // Función auxiliar particular para configurar data del reporte
+        
         await configureReportData()
         setJsonIsReady(true)
     }
@@ -115,12 +102,7 @@ export const GestionOrganosColegiados = () => {
                         sesion.n_acuerdos = n_acuerdos;
                     }
 
-                    // Agregar integrantes a organo
-
                     organo[JsonForReport.colNames.length - 2] = formattedAndFilteredData;
-
-                    // Agregar sesiones a organo
-
                     organo[JsonForReport.colNames.length - 1] = sesionesConFechaFormateada;
 
                     return organo;
@@ -128,7 +110,6 @@ export const GestionOrganosColegiados = () => {
 
                 const organosCompletos = await Promise.all(promises);
 
-                // Asignar los proyectos con datos completos a JsonForReport
                 JsonForReport.reportData = organosCompletos;
 
                 return true
@@ -142,13 +123,10 @@ export const GestionOrganosColegiados = () => {
 
     }
 
-    // Use effect para cada vez que hay un cambio en la data (contemplando filtrado [Search]), se actualice el JSON
     useEffect(() => {
         setJsonIsReady(false)
         createJsonForReport()
     }, [OrganosColegiados])
-
-    // ==============================================================================================================================
 
 
     if (rol !== "administrador" && rol !== "invitado") {
@@ -267,13 +245,7 @@ export const GestionOrganosColegiados = () => {
         setOrganoColegiado(selectedOrganoColegiado);
         console.log(selectedOrganoColegiado)
         if (event.target.tagName.toLowerCase() === 'button') {
-
-            if (rol === "administrador") {
-                navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
-            }
-            if (rol === "invitado") {
-                navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/integrantes`)
-            }
+            navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
         }
     }
 
@@ -281,12 +253,7 @@ export const GestionOrganosColegiados = () => {
         setOrganoColegiado(selectedOrganoColegiado);
         console.log(selectedOrganoColegiado.id_organo_colegiado)
         if (event.target.tagName.toLowerCase() === 'button') {
-            if (rol === "administrador") {
-                navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
-            }
-            if (rol === "invitado") {
-                navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/sesiones`)
-            }
+            navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
         }
     }
 
@@ -357,10 +324,7 @@ export const GestionOrganosColegiados = () => {
                             <div className="col">
                                 <Add onClick={addClicked}></Add>
                             </div>
-
-                            {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
                             {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
-                            {/* ----------------------------------------------------------------------------------------------------------------------*/}
                             <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search} />
                         </div>
                     )}

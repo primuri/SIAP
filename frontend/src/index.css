@@ -647,6 +647,14 @@ input[type="submit"]:focus {
   margin-left: 20%;
 }
 
+#modal-header-proyecto {
+  margin-left: 10%;
+}
+
+#button-close-proyecto {
+  margin-top: 1%;
+}
+
 #close-propuestas {
   margin-top: 10%;
   margin-left: 170%;

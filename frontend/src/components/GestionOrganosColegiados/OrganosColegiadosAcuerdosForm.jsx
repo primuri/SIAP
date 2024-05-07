@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
-export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCancel, onDelete, sesion }) => {
+export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCancel, onDelete, sesion, rol }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [oficioFile, setOficioFile] = useState(null);
@@ -52,6 +52,11 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
     }, [sesion])
   
     const handleChange = (event) => {
+
+        if (rol === "invitado") {
+            return;
+        }
+
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
@@ -144,7 +149,16 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar acuerdo" : "Editar acuerdo"}
+                                {rol === "administrador" && (
+                                    <span>
+                                        {mode === 1 ? "Agregar acuerdo" : "Editar acuerdo"}
+                                    </span>
+                                )}
+                                {rol === "invitado" && (
+                                    <span>
+                                        Acuerdo
+                                    </span>
+                                )}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -165,7 +179,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                     <div className="col">
                                     <div className="form-group">
                                         <label htmlFor="id_acuerdo" className="label-personalizado mb-2">Identificador</label>
-                                        <input type="text" className="form-control" name="id_acuerdo" id="id_acuerdo" value={formData.id_acuerdo} onChange={handleChange} readOnly = {mode === 2} />
+                                        <input type="text" className="form-control" name="id_acuerdo" id="id_acuerdo" value={formData.id_acuerdo} onChange={handleChange} readOnly = {mode === 2} disabled={rol === "invitado"}/>
                                     </div>
                                 </div>
                                 </>) 
@@ -175,7 +189,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             <div className="col">
                                     <div className="form-group">
                                         <label htmlFor="descripcion" className="label-personalizado mb-2">Descripción</label>
-                                        <textarea className="form-control" name="descripcion" id="descripcion" value={formData.descripcion} onChange={handleChange} required/>
+                                        <textarea className="form-control" name="descripcion" id="descripcion" value={formData.descripcion} onChange={handleChange} required disabled={rol === "invitado"}/>
                                     </div>
                             </div>
                         </div>
@@ -183,6 +197,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             <div className="col-md-6">
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado</label>
                                     <select
+                                    disabled={rol === "invitado"}
                                     className="form-control"
                                     name="estado"
                                     id="estado"
@@ -198,7 +213,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="fecha_cumplimiento" className="label-personalizado mb-2">Fecha cumplimiento</label>
-                                    <input type="date" className="form-control" name="fecha_cumplimiento" id="fecha_cumplimiento" value={formData.fecha_cumplimiento} onChange={handleChange} required />
+                                    <input type="date" className="form-control" name="fecha_cumplimiento" id="fecha_cumplimiento" value={formData.fecha_cumplimiento} onChange={handleChange} required disabled={rol === "invitado"}/>
                                 </div>
                         </div> 
              
@@ -207,12 +222,12 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="encargado" className="label-personalizado mb-2">Encargado</label>
-                                    <input type="text" className="form-control" name="encargado" id="encargado" value={formData.encargado} onChange={handleChange} required/>
+                                    <input type="text" className="form-control" name="encargado" id="encargado" value={formData.encargado} onChange={handleChange} required disabled={rol === "invitado"}/>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento_seguimiento" className="label-personalizado mb-2">Documento del segimiento</label>
-                                <input type="file" className="form-control" name="id_seguimiento_fk.id_documento_seguimiento_fk.documento" id="id_seguimiento_fk.id_documento_seguimiento_fk.documento" onChange={handleFileChange} required />
+                                <input type="file" className="form-control" name="id_seguimiento_fk.id_documento_seguimiento_fk.documento" id="id_seguimiento_fk.id_documento_seguimiento_fk.documento" onChange={handleFileChange} required disabled={rol === "invitado"} />
                                 {mode === 2 && formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento ? (
                                     <Tooltip title={formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento.split('/').pop()} placement="right-start">
                                     <a href={"http://localhost:8000" + formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -226,7 +241,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             
                             <div className="col-md-6">
                                 <label htmlFor="documento_acuerdo" className="label-personalizado mb-2">Documento del acuerdo</label>
-                                <input type="file" className="form-control" name="id_documento_acuerdo_fk.documento" id="id_documento_acuerdo_fk.documento"  onChange={handleFileChange} required />
+                                <input type="file" className="form-control" name="id_documento_acuerdo_fk.documento" id="id_documento_acuerdo_fk.documento"  onChange={handleFileChange} required disabled={rol === "invitado"} />
                                 {mode === 2 && formData.id_documento_acuerdo_fk?.documento ? (
                                     <Tooltip title={formData.id_documento_acuerdo_fk.documento.split('/').pop()} placement="right-start">
                                     <a href={"http://localhost:8000" + formData.id_documento_acuerdo_fk?.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -238,14 +253,14 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="detalle_oficio" className="label-personalizado mb-2">Detalle oficio</label>
-                                        <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange}  required/>
+                                        <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange}  required disabled={rol === "invitado"}/>
                                     </div>
                                 </div>
                         </div> 
                         <div className="row mb-4">
                                 <div className="col-md-6">
                                     <label htmlFor="documento_oficio" className="label-personalizado mb-2">Documento del oficio</label>
-                                    <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo"  onChange={handleFileChange} required />
+                                    <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo"  onChange={handleFileChange} required disabled={rol === "invitado"}/>
                                     {mode === 2 && formData.id_oficio_fk?.ruta_archivo ? (
                                         <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_oficio_fk?.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -258,7 +273,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                         
                     </div>
                 </div>
-       
+                {rol === "administrador" && (    
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -281,6 +296,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                         </div>
                     </div>
                 </div>
+                  )}
             </form>
             <Toaster></Toaster>
         </div>

@@ -26,7 +26,8 @@ export const Sidebar = () => {
       { label: 'Perfil', link: '/perfil' },
     ],
     "invitado": [
-        { label: 'Órganos colegiados', link: '/organos-colegiados' },
+        { label: 'Inicio',        link: '/inicio-invitado' },
+        { label: 'Órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
       ],
   };
    return(

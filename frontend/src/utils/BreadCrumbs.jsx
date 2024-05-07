@@ -22,9 +22,10 @@ const routeNames = {
     'gestion-organos-colegiados': 'Órganos Colegiados',
     'gestion-evaluaciones': 'Evaluaciones',
     'gestion-asistentes': 'Asistentes', 
+    'organos-colegiados': 'Órganos Colegiados',
     'gestion-integrantes': 'Integrantes',
     'gestion-sesiones': 'Sesiones',
-    'organos-colegiados': 'Órganos Colegiados',
+    'gestion-acuerdos': 'Acuerdos'
 };
 
 const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/inicio-invitado', '/login', '/']);
