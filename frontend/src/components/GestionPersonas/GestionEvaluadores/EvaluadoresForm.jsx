@@ -51,7 +51,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
 
     
     const check = (value) => {
-      const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+      const regex = /^[A-Za-záéíóúÁÉÍÓÚñ\s]*$/;
       return regex.test(value);
   };
 

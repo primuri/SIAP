@@ -19,18 +19,6 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         }
     };
 
-    const checkLetraNum = (value) => {
-        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-    };
-
-
-    const camposAValidar = [
-        "id_producto_fk.detalle",
-        "id_documento_documentacion_fk.detalle",
-        "nombre"
-    ];
-
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
@@ -39,9 +27,6 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        if (camposAValidar.includes(name) && !checkLetraNum(value)) {
-            return;
-        }
 
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {

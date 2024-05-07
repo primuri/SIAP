@@ -42,44 +42,12 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
   const initialFormData = producto || defaultFormData;
   const [formData, setFormData] = useState(initialFormData);
 
-  const updateNestedField = (formData, fieldPath, value) => {
-    const keys = fieldPath.split('.');
-    const lastKey = keys.pop();
-
-    keys.reduce((obj, key) => obj[key] = obj[key] || {}, formData)[lastKey] = value;
-
-    return { ...formData };
-  };
-
-
-  const check = (value) => {
-    const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
-    return regex.test(value) || value === "";
-  };
-
-  const checkLetraNum = (value) => {
-    const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-    return regex.test(value);
-  };
-
-
   const checkCedula = (value) => {
     const regex = /^[A-Za-z0-9]*$/;
     return regex.test(value);
   };
 
-  const camposSoloLetras = [
-    "id_autor_fk.id_nombre_completo_fk.nombre",
-    "id_autor_fk.id_nombre_completo_fk.apellido",
-    "id_autor_fk.id_nombre_completo_fk.segundo_apellido",
-    "tipo"
-  ];
 
-
-  const camposLetrasNum = [
-    "id_revista_fk.nombre",
-    "nombre"
-  ];
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -94,11 +62,8 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         return; 
     }
 
-    if (camposSoloLetras.includes(name) && !check(value)) {
-        return;
-    } else if (name === "cedula" && !checkCedula(value)) {
-        return; 
-    } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
+   
+    if (name === "cedula" && !checkCedula(value)) {
         return; 
     }
 

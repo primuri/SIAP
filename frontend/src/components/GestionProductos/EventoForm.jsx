@@ -32,42 +32,12 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
         },
     };
 
-    const checkLetraNum = (value) => {
-        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-      };
-
-      const checkLetra = (value) => {
-        const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-      };
-
-
-      
-      const camposLetrasNum = [
-        "id_producto_fk.detalle",
-        "nombre",
-        "resumen",
-        "id_oficio_fk.detalle"
-    ];
-
-    const camposLetras = [
-        "id_area_fk.nombre",
-        "id_institucion_fk.nombre"
-    ];
-
 
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-
-        if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
-            return;
-        } else  if (camposLetras.includes(name) && !checkLetra(value)) {
-            return;
-        }
 
         if (name.includes('.')) {
             const keys = name.split('.');
