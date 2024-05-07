@@ -13,7 +13,7 @@ import { OrganosColegiadosAcuerdosForm } from '../../../components/GestionOrgano
 export const GestionAcuerdos = () => {
                                                              
     const user = JSON.parse(localStorage.getItem('user'))  
-    
+    const rol = user.groups[0]
     const {idSesion} = useParams() 
     const location = useLocation()
     const navigate = useNavigate()
@@ -31,7 +31,10 @@ export const GestionAcuerdos = () => {
     const columns = ['Identificador', 'Descripción', 'Estado', 'Encargado']
     const dataKeys = ['id_acuerdo','descripcion', 'estado', 'encargado']
 
-    user.groups[0] !== "administrador" ? setError(true) : null                   
+    
+    if (rol !== "administrador" && rol !== "invitado") {
+        setError(true);
+    }                 
 
     useEffect(() => {                                                            
         async function fetchData() {
@@ -314,18 +317,40 @@ export const GestionAcuerdos = () => {
         <main>
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                    <div className=" flex-row">
-                        <h1>Gestión de acuerdos de la sesión: {idSesion}</h1>
-                    </div>
+
+                    {user.groups[0] === "administrador" && (
+                        <div className=" flex-row">
+                             <h1>Gestión de acuerdos de la sesión: {idSesion}</h1>
+                        </div>
+                    )}
+
+                    {user.groups[0] === "invitado" && (
+                        <div className=" flex-row">
+                             <h1>Acuerdos de la sesión: {idSesion}</h1>
+                        </div>
+                    )}
 
                     {(!cargado) && (
                         <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                     )}             
 
+ 
+
+
+
+                {user.groups[0] === "administrador" && (
                     <div className="d-flex justify-content-between mt-4">
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
                     </div>
+                )}
+
+                {user.groups[0] === "invitado" && (
+                    <div className="d-flex justify-content-between mt-4">
+                        <Search colNames={columns.slice(0, -2)} columns={dataKeys.slice(0, -2)} onSearch={search}></Search>
+                    </div>
+                )}
+
                     <div className="mt-3">
                     <Table columns={columns} data={acuerdos} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={false} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
@@ -340,6 +365,7 @@ export const GestionAcuerdos = () => {
                                 onDelete={() => deleteAcuerdo(acuerdo)}
                                 acuerdo={acuerdo}
                                 sesion={parseInt(idSesion)}
+                                rol={rol}
                             >
                             </OrganosColegiadosAcuerdosForm>
                         </Modal>

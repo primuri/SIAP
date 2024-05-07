@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import inicio from '../../assets/inicio.jpg';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -155,6 +153,20 @@ export const InicioAdministrador = ({ usuario }) => {
                               </div>
                             </div>
                         </div>
+
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingEight">
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                  ¿Por qué no siempre se puede editar o borrar una evaluación?
+                              </button>
+                            </h2>
+                            <div id="collapseEight" className="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
+                                  Cuando el estado de una evaluación pasa a ser Completa ya no puede ser editada o eliminada, esto con el fin de evitar discrepancias y pérdida de datos. 
+                              </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

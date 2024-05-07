@@ -215,13 +215,13 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="col-10 mb-0 text-center">
+                <div id="modal-header-proyecto" className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar una versión de proyecto" : "Editar una versión de proyecto"}
+                                {mode === 1 ? "Agregar una  de proyecto" : "Editar una versión de proyecto"}
                             </h2>
                         </div>
                 <div>
-                    <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                    <button id="button-close-proyecto" type="button" onClick={onCancel} className="close" data-dismiss="modal">
                         <span aria-hidden="true" className="close-icon">&times;</span>
                     </button>
                 </div>
@@ -254,7 +254,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 <label htmlFor="id_version_proyecto_fk.detalle" className="label-personalizado mb-2">Detalle   </label>
                                 <textarea className="form-control" name="id_version_proyecto_fk.detalle" id="id_version_proyecto_fk.detalle" onChange={handleChange} value={formData.id_version_proyecto_fk.detalle} required />
                             </div>
-
                         </div>
 
                         <div className="row mb-4">
@@ -275,8 +274,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                         ? new Date(formData.id_version_proyecto_fk.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
                             </div>
-                           
-
                         </div>
 
                         <div className="row mb-4">
@@ -299,7 +296,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 )
                                     : ""}
                             </div>
-                            <div className="row mb-4">
+                                
                                 <h5 className="text-center my-3 mt-5">Asociar Colaborador Secundario</h5>
                                 <div className="col">
                                     <label htmlFor="id_academico_fk" className="label-personalizado mb-2">Investigador(a) </label>
@@ -396,7 +393,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             </div>
                         </div>
                         
-                       
                         {showProductContent && (
                             <div className="row mb-4">
                                 {mode !== 2 && (
@@ -423,8 +419,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             </div>
                         )}
                     </div>
-                </div>
-
+          
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -441,8 +436,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 </div>
             </form>
         </>
-    )
-}
+    )};
+
 
 ProyectosForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
