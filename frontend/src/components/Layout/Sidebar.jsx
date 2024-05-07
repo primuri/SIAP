@@ -18,7 +18,6 @@ export const Sidebar = () => {
     ],
     "evaluador": [
       { label: 'Inicio',        link: '/inicio-evaluador' },
-
       { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
     ],
     "academico": [

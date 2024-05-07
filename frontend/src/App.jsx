@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { InicioAdministrador } from './pages/Inicio/InicioAdministrador'
 import { InicioInvestigador } from './pages/Inicio/InicioInvestigador'
 import { InicioEvaluador } from './pages/Inicio/InicioEvaluador'
+import { InicioInvestigadorEvaluador } from './pages/Inicio/InicioInvestigadorEvaluador'
 import { Sidebar } from './components/Layout/Sidebar'
 import { Footer } from './components/Layout/Footer'
 import BreadcrumbsCustom from './utils/BreadCrumbs'
@@ -19,7 +20,6 @@ import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
 import pruebaReporte from './routes/pruebaReporte'
-
 import GestionAsistentes from "./routes/GestionAsistentes"
 import { InicioInvitado } from './pages/Inicio/InicioInvitado'
 
@@ -59,6 +59,7 @@ function App() {
               <Route path='/inicio-invitado' element={<InicioInvitado usuario={localStorage.getItem('user')} />}></Route>
               <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
               <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
+              <Route path='/inicio-investigador-evaluador' element={<InicioInvestigadorEvaluador></InicioInvestigadorEvaluador>}></Route>
             </Routes> 
           </div>
         </div>
