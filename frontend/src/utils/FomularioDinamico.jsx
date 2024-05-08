@@ -98,8 +98,6 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                 ))}
                             </div>
                         ))}
-
-
                         <button type="button" className="mb-2 eliminarBtn" onClick={() => eliminarItem(index)}>Eliminar</button>
                     </AccordionDetails>
                 </Accordion>

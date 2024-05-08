@@ -13,51 +13,48 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 export const GestionVersionPresupuesto = () => {   
     let {presupuestoID} = useParams()      
     const navigate = useNavigate()
-    const location = useLocation()                      // Versiones de un infome   
-    const [versionesPresupuestoData, setVersionesPresupuestoData] = useState([])             // Datos completos
-    const [versionesPresupuestoList, setVersionesPresupuestoList] = useState([])             // Datos filtrados
-    const [versionPresupuesto, setVersionPresupuesto]             = useState(null)           // Version actual
-    const [loaded, setLoaded]                             = useState(false)          // Data cargada
-    const [reload, setReload]                             = useState(false)          // Para recargar tabla
-    const [addClicked, setAddClicked]                     = useState(false)          // Para evento de agregar
-    const [editClicked, setEditClicked]                   = useState(false)          // Para evento de editar
+    const location = useLocation()                  
+    const [versionesPresupuestoData, setVersionesPresupuestoData] = useState([])            
+    const [versionesPresupuestoList, setVersionesPresupuestoList] = useState([])             
+    const [versionPresupuesto, setVersionPresupuesto]             = useState(null)          
+    const [loaded, setLoaded]                             = useState(false)          
+    const [reload, setReload]                             = useState(false)          
+    const [addClicked, setAddClicked]                     = useState(false)         
+    const [editClicked, setEditClicked]                   = useState(false)          
 
-    useEffect(() => { loadVersionesPresupuestoData() }, [reload])                        // Carga los datos tras detectar cambios
+    useEffect(() => { loadVersionesPresupuestoData() }, [reload])                    
 
     async function loadVersionesPresupuestoData() {
         try{
             var response = await API.obtenerVersionesPresupuesto(localStorage.getItem('token'))
-            console.log(response.data)
             let filteredResponse = response.data.filter(element => element.id_presupuesto_fk.id_presupuesto == presupuestoID);
-            console.log("load",filteredResponse)
             setVersionesPresupuestoData(filteredResponse)
             setVersionesPresupuestoList(filteredResponse)
 
             setLoaded(true)
         } catch (error){
-            console.log(error)
+            console.error(error)
         }
     }
 
     async function addVersionPresupuesto (formData) {
         try{
-            console.log('entra a addversion')
             await API.agregarVersionPresupuesto(formData, localStorage.getItem('token'))
             setAddClicked(false)
             setReload(!reload)
             mostrarExito("Versión Presupuesto agregada correctamente")
         } catch(error){
-            console.log(error)
+            console.error(error)
         }
     }
 
     async function editVersionPresupuesto(dataForm) {
         try{
+            console.log(dataForm)
             await API.editarVersionesPresupuesto(versionPresupuesto.id_version_presupuesto, localStorage.getItem('token'), dataForm)
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Versión Presupuesto editada correctamente")
-            console.log(versionPresupuesto)
         }catch(error){
         }
     }
@@ -80,7 +77,6 @@ export const GestionVersionPresupuesto = () => {
         setAddClicked(true)
         setEditClicked(false)
     }
-
 
     const elementClicked = (selectedVersionPresupuesto) => {
         if (event.target.tagName.toLowerCase() === 'button') {
@@ -106,14 +102,6 @@ export const GestionVersionPresupuesto = () => {
         navigate(newPath);
     }
 
-    // if(returnPresupuestos === true) {
-    //     return <GestionPresupuestos/>;
-    // }
-
-    // else if (versionPresupuesto && showAcciones === true) {
-    //     return <GestionAcciones versionID={versionPresupuesto.id_version_Presupuesto} PresupuestoID={PresupuestoID}/>;
-    // }
-
     return (
         <main>
             <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
@@ -124,9 +112,9 @@ export const GestionVersionPresupuesto = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsVI.slice(0, -1)} columns={dataKeyVI.slice(0, -1)} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsVI} data={versionesPresupuestoList} dataKeys={dataKeyVI} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+                <Table columns={columnsVI} data={versionesPresupuestoList} dataKeys={dataKeyVI} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
-                    <Back onClick={volverPresupuestos}>Regresar a Presupuestos</Back>
+                    <Back onClick={volverPresupuestos}>Regresar a presupuestos</Back>
                 </div>
                 {(addClicked || editClicked) && (
                     <Modal>
@@ -168,13 +156,3 @@ function filtrar(col, filter, data) {
       })
 }
 
-function formatearFecha(response) {
-    return response?.map((obj) => {
-      const fechaISO = obj.fecha_presentacion;
-      const dateObj = new Date(fechaISO);
-      const fechaFormateada = dateObj.toISOString().split('T')[0];
-      
-      return { ...obj, fecha_presentacion: fechaFormateada };
-    });
-}
-  

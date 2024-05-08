@@ -15,28 +15,25 @@ import { obtenerVersionProyectos } from '../../api/gestionProyectos';
 export const GestionInformes = () => {
 
     const { proyectoID } = useParams();
-
-    // Estados                                                                   // Son objetos que contienen información para un componente y puede cambiar
-    const user = JSON.parse(localStorage.getItem('user'))                        // Se recupera el usuario local del navegador, el que está usando el sistema
+    const user = JSON.parse(localStorage.getItem('user'))
     const location = useLocation()
     const navigate = useNavigate()
-    const [reload, setReload] = useState(false)                                  // Para controlar cuándo se debe de recargar la página
-    const [informes, setInformes] = useState([])                                 // Estado para almacenar todos los informes
-    const [cargado, setCargado] = useState(false)                                // Para controlar si los informes se cargaron o no  
-    //const [showVersions, setShowVersions] = useState(false);
-    const [data, setData] = useState([])                                         // Todos los informes.                          
-    const [informe, setInforme] = useState(null)                                 // Informe al que se le da click en la tabla.
-    const [addClick, setAddClick] = useState(false)                              // Cuando se da click en agregar
-    const [edit, setEdit] = useState(false)                                      // Cuando se da click en editar
+    const [reload, setReload] = useState(false)                           
+    const [informes, setInformes] = useState([])                             
+    const [cargado, setCargado] = useState(false)  
+    const [data, setData] = useState([])                                                                 
+    const [informe, setInforme] = useState(null)                              
+    const [addClick, setAddClick] = useState(false)                             
+    const [edit, setEdit] = useState(false)                                    
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
-    const [id_proyecto, setIdProyecto] = useState(null)                          // Cuando hay un error
+    const [id_proyecto, setIdProyecto] = useState(null)                        
     const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones']
     const dataKeys = ['id_informe', 'estado', 'tipo', 'Versiones']
 
-    user.groups[0] !== "administrador" ? setError(true) : null                   // Si no es administrador, pone el error en true
+    user.groups[0] !== "administrador" ? setError(true) : null
 
-    useEffect(() => {                                                            // Cuando reload cambia, se llama a load()
+    useEffect(() => {                    
         async function fetchData() {
             loadInformes()
             setCargado(true);
@@ -50,16 +47,15 @@ export const GestionInformes = () => {
 
     async function loadInformes() {
         try {
-            const response = await obtenerInformesProyecto(localStorage.getItem('token'), proyectoID) // Se envía el token y se obtienen todos los informes
-            setData(response.data)                                                                    // Se guardan en data todos los informes
-            setInformes(response.data)                                                                // Se guardan todos los informes
-            setCargado(true)                                                                          // Como se cargaron, se pone cargado en true
+            const response = await obtenerInformesProyecto(localStorage.getItem('token'), proyectoID)
+            setData(response.data)                                                                    
+            setInformes(response.data)                                                                
+            setCargado(true)                                                                         
         } catch (error) {
         
         }
     }
 
-    // Manejo de datos que se van a enviar para agregar
     const addInforme = async (formData) => {
         try {
 
@@ -84,8 +80,6 @@ export const GestionInformes = () => {
         }
     }
 
-
-    // Manejo de los datos del formulario de editar 
     const editInforme = async (formData) => {
         try {
             const Data = JSON.parse(formData)
@@ -108,7 +102,6 @@ export const GestionInformes = () => {
         }
     }
 
-    // Manejo del eliminar
     const deleteInforme = async (informe) => {
         try {
             await eliminarInforme(informe.id_informe, localStorage.getItem('token'))
@@ -131,14 +124,12 @@ export const GestionInformes = () => {
     }
 
 
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
     }
 
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
@@ -146,7 +137,6 @@ export const GestionInformes = () => {
 
     }
 
-    // Al hacer click en la tabla
     const elementClicked = (selectedInforme) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             navigate(`${location.pathname}/${selectedInforme.id_informe}/gestion-versiones`)
@@ -158,12 +148,10 @@ export const GestionInformes = () => {
         }
     };
 
-    // Obtener atributo de un objeto 
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
 
-    // Búsqueda filtrada
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -201,7 +189,7 @@ export const GestionInformes = () => {
             }
 
             if (idCodigoVi && numVersion && descripcion) {
-                return [idCodigoVi, numVersion, descripcion];  // Devuelve las variables como un array
+                return [idCodigoVi, numVersion, descripcion];
             } else {
                 throw new Error('No se encontró una versión de proyecto que coincida con el informe');
             }
@@ -212,9 +200,6 @@ export const GestionInformes = () => {
         }
     }
 
-    // if (informe && showVersions === true) {
-    //     return <GestionVersionInforme informeID={informe.id_informe} />;
-    // }
 
     return (
         <main>
@@ -234,7 +219,7 @@ export const GestionInformes = () => {
                         <Add onClick={addClicked}></Add>
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
+                    <Table columns={columns} data={informes} dataKeys={dataKeys} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
                     {addClick && (
                         <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>
                     )}
@@ -252,7 +237,7 @@ export const GestionInformes = () => {
                     )}
                     <Toaster></Toaster>
                     <div className="d-flex justify-content-start">
-                        <Back onClick={volver}>Regresar</Back>
+                        <Back onClick={volver}>Regresar a versión de proyecto</Back>
                     </div>
                 </div>
             ) : (

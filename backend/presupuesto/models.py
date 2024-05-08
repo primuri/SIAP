@@ -132,7 +132,6 @@ class VersionPresupuesto(models.Model):
     id_version_presupuesto = models.AutoField(primary_key=True)
     version = models.CharField(max_length=45)
     monto = models.CharField(max_length=45)
-    saldo = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateTimeField()
     detalle = models.CharField(max_length=255, null=True)
     id_presupuesto_fk = models.ForeignKey(Presupuesto, on_delete=models.PROTECT)
@@ -149,7 +148,6 @@ def enviar_correo_versionPresupuesto(asunto, instance, destinatario):
             contexto = {
                 'version': instance.version ,
                 'monto': instance.monto,
-                'saldo':f"{instance.saldo}",
                 'fecha': instance.fecha.strftime("%Y-%m-%d"),
                 'detalle': instance.detalle,
                 'proyecto': f"{instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
@@ -196,7 +194,6 @@ def enviar_correo_versionPresupuesto_investigador(asunto, instance, destinatario
             contexto = {
                 'version': instance.version ,
                 'monto': instance.monto,
-                'saldo':f"{instance.saldo}",
                 'fecha': instance.fecha.strftime("%Y-%m-%d"),
                 'detalle': instance.detalle,
                 'proyecto': f"{instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
@@ -503,5 +500,5 @@ class CuentaBancaria(models.Model):
 
     class Meta:
         db_table = 'cuenta_bancaria'
-        unique_together = (('banco','tipo','moneda','cuenta_principal','id_proveedor_fk'),) 
+        unique_together = (('id_numero','banco','tipo','moneda','cuenta_principal','id_proveedor_fk'),) 
 

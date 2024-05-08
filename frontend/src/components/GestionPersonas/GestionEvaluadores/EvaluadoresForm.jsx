@@ -11,7 +11,6 @@ import { Confirmar } from '../../../utils/Confirmar'
 const filter = createFilterOptions();
 
 export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete }) => {
-  // Cargar informacion
   const [universidades, setUniversidades] = useState([])
   const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
@@ -52,8 +51,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
 
     
     const check = (value) => {
-      // Esta expresión regular permite solo letras y espacios.
-      const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+      const regex = /^[A-Za-záéíóúÁÉÍÓÚñ\s]*$/;
       return regex.test(value);
   };
 
@@ -72,7 +70,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
               ...prevFormData,
               [objectName]: {
                   ...prevFormData[objectName],
-                  [attributeName]: value, // Actualiza solo el atributo relevante
+                  [attributeName]: value,
               },
           }));
       }
@@ -232,7 +230,6 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
-                    // Suggest the creation of a new value
                     const isExisting = options.some((option) => inputValue === option.nombre);
                     if (inputValue !== '' && !isExisting) {
                       let cadena = `Añadir "${inputValue}"`;
@@ -250,15 +247,12 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                   id="universidad_nombre"
                   options={obtenerUniversidadesUnicasPorNombre(universidades)}
                   getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
                     if (typeof option === 'string') {
                       return option;
                     }
-                    // Add "xxx" option created dynamically
                     if (option.inputValue) {
                       return option.inputValue;
                     }
-                    // Regular option
                     return option.nombre;
                   }}
                   renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
@@ -279,7 +273,6 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                         universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue },
                       });
                     } else if (newValue && newValue.inputValue) {
-                      // Create a new value from the user input
                       setFormData({
                         ...formData,
                         universidad_fk: { nombre: formData.universidad_fk.nombre, pais: newValue.inputValue },
@@ -295,7 +288,6 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                     const filtered = filter(options, params);
 
                     const { inputValue } = params;
-                    // Suggest the creation of a new value
                     const isExisting = options.some((option) => inputValue === option.pais);
                     if (inputValue !== '' && !isExisting) {
                       filtered.push({
@@ -312,15 +304,12 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                   id="universidad_pais"
                   options={obtenerUniversidadesUnicasPorPais(universidades)}
                   getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
                     if (typeof option === 'string') {
                       return option;
                     }
-                    // Add "xxx" option created dynamically
                     if (option.inputValue) {
                       return option.inputValue;
                     }
-                    // Regular option
                     return option.pais;
                   }}
                   renderOption={(props, option) => <li {...props}>{option.pais}</li>}

@@ -19,19 +19,6 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         }
     };
 
-    const checkLetraNum = (value) => {
-        // Esta expresión regular permite solo letras y espacios.
-        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-    };
-
-
-    const camposAValidar = [
-        "id_producto_fk.detalle",
-        "id_documento_documentacion_fk.detalle",
-        "nombre"
-    ];
-
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
@@ -40,14 +27,10 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        // Mover esta línea al inicio de la función para asegurar que la validación se realice correctamente.
-        if (camposAValidar.includes(name) && !checkLetraNum(value)) {
-            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
-        }
 
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
-                return; // Evita la actualización del estado para valores no permitidos.
+                return;
             }
         }
         
@@ -64,13 +47,13 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
 
     const updateNestedField = (prevFormData, fieldPath, value) => {
         const keys = fieldPath.split('.');
-        let data = { ...prevFormData }; // Crea una copia superficial del objeto prevFormData para evitar mutaciones.
+        let data = { ...prevFormData };
 
         keys.reduce((current, key, index) => {
             if (index === keys.length - 1) {
                 current[key] = value;
             } else {
-                current[key] = current[key] ? { ...current[key] } : {}; // Asegura la creación de un nuevo objeto si no existe, evitando mutaciones.
+                current[key] = current[key] ? { ...current[key] } : {};
             }
             return current[key];
         }, data);
@@ -90,7 +73,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-                    <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
                 </div>
                 <div className="col">
                     <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto  </label>
@@ -111,7 +94,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre   </label>
-                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
                     <label htmlFor="numero_version" className="label-personalizado mb-2"> Num. versión   </label>
@@ -121,7 +104,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="detalleDocumentación" className="label-personalizado mb-2"> Detalle documentación   </label>
-                    <input type="text" className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required />
                 </div>
                 <div className="col">
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación   </label>

@@ -9,25 +9,140 @@ import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte, buscaCodigoFinanciero, agregarCodigosFinancieros, obtenerVersionesProyectos } from "../../api/gestionPresupuestos"
 import { useNavigate, useParams } from "react-router-dom"
-
+import { ReportButton } from "../../utils/ReportButton";
+import axios from 'axios' 
 
 export const GestionPresupuestos = () => {
   const { proyectoID } = useParams();
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
   const navigate = useNavigate();
-  const [presupuestos, setPresupuestos] = useState([]) //Presupuestos que se muestran
-  const [data, setData] = useState([])//Todos los Presupuestos
-  const [presupuesto, setPresupuesto] = useState(null) //Presupuesto al que se le da click en la tabla para editar
-  const [version, setVersion] = useState(null) //Se carga la version del proyecto a la que pertenece el presupuesto, ya sea para agregar o no.
+  const [presupuestos, setPresupuestos] = useState([])
+  const [data, setData] = useState([])
+  const [presupuesto, setPresupuesto] = useState(null) 
+  const [version, setVersion] = useState(null)
   const [cargado, setCargado] = useState(false)
-  const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+  const [error, setError] = useState(false)
   const [addClick, setAddClick] = useState(false)
   const [edit, setEdit] = useState(false)
+  const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+  const [JsonIsReady, setJsonIsReady] = useState(false)
   const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero','Versiones']
   const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo','Versiones']
-  user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
-  // Detecta cambios y realiza la solicitud nuevamente  ** FALTA: que la haga constantemente y no solo al inicio **
+  user.groups[0] !== "administrador" ? setError(true) : null 
+  
+  //===============================================================================================================================
+
+  useEffect(() => {
+    setJsonIsReady(false)
+    createJsonForReport()
+  }, [presupuestos])
+
+  const configureReportData = async () => {
+    const getLastVersionPresupuesto = async (id_presupuesto) => {
+        const token = localStorage.getItem('token');
+
+        const SIAPAPI = axios.create({
+            baseURL: 'http://localhost:8000/'
+        }, [])
+
+        var response = await SIAPAPI.get('presupuesto/version_presupuestos/', {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        var lastVersion = { id_version_presupuesto: 0 }
+
+        response.data.map((version) => {
+            if (version.id_presupuesto_fk.id_presupuesto === id_presupuesto && lastVersion.id_version_presupuesto < version.id_version_presupuesto) {
+                lastVersion = version
+            }
+        })
+
+        return (lastVersion ? lastVersion : {})
+    }
+
+    const getPartidas = async (id_version_presupuesto) => {
+        const token = localStorage.getItem('token');
+
+        const SIAPAPI = axios.create({
+            baseURL: 'http://localhost:8000/'
+        })
+
+        var response = await SIAPAPI.get('presupuesto/partidas/', {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        const filteredData = response.data.filter(item => item.id_version_presupuesto_fk.id_version_presupuesto === id_version_presupuesto);
+
+        return filteredData ? filteredData : {}
+    }
+
+    if (presupuestos.length > 0) {
+        try {
+            const promises = presupuestos.map(async (presupuesto) => {
+                const ultimaVersion = await getLastVersionPresupuesto(presupuesto.id_presupuesto);
+                const partidasLista = await getPartidas(ultimaVersion.id_version_presupuesto);
+
+                presupuesto.id_version_presupuesto_fk = ultimaVersion;
+                presupuesto[JsonForReport.colNames.length - 1] = partidasLista;
+
+                return presupuesto;
+            });
+
+            const presupuestosConDatosCompletos = await Promise.all(promises);
+            JsonForReport.reportData = presupuestosConDatosCompletos;
+            return true
+
+        } catch (exception) {
+            console.error("Ocurrió un error al crear el Json para reporte: ")
+            return false
+        }
+    }
+  }
+
+  const createJsonForReport = async () => {
+      JsonForReport.reportTitle = "Presupuesto"
+      JsonForReport.idKey = "id_presupuesto"
+      JsonForReport.dataKeys = [
+          'id_presupuesto',
+          'id_codigo_vi.id_codigo_vi',
+          'id_version_proyecto_fk.numero_version',
+          'id_tipo_presupuesto_fk.tipo',
+          'id_ente_financiero_fk.nombre',
+          'id_codigo_financiero_fk.codigo',
+          'anio_aprobacion',
+          'id_version_presupuesto_fk.id_version_presupuesto',
+          'id_version_presupuesto_fk.monto',
+          'id_version_presupuesto_fk.fecha',
+          'id_version_presupuesto_fk.detalle',
+          ['id_partida', 'detalle', 'monto', 'saldo']
+      ]
+
+      JsonForReport.colNames = [
+          'Presupuesto',
+          'Código VI',
+          'Versión de proyecto',
+          'Tipo',
+          'Ente financiero',
+          'Código financiero',
+          'Año de aprobación',
+          'Versión de presupuesto',
+          'Monto',
+          'Fecha',
+          'Detalle',
+          {'tableName': 'Partidas', 'colNames': ['Identificador', 'Detalle', 'Monto', 'Saldo']}
+      ]
+
+      setJsonIsReady(await configureReportData())
+  }
+
+  // ==============================================================================================================================
+
   useEffect(() => {
     loadPresupuestos(proyectoID)
     loadVersiones(proyectoID)
@@ -40,8 +155,8 @@ export const GestionPresupuestos = () => {
       setCargado(true)
     } catch (error) {
       toast.error('Error al cargar los datos de Presupuestos', {
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
+        duration: 4000, 
+        position: 'bottom-right',
         style: {
           background: '#670000',
           color: '#fff',
@@ -64,7 +179,7 @@ export const GestionPresupuestos = () => {
       navigate(-1);
     }, 1000);
   }
-  // Manejo de datos que se van a enviar para agregar
+  
   const addPresupuesto = async (formData) => {
     try {
       const Data = JSON.parse(formData.get('json'))
@@ -77,7 +192,6 @@ export const GestionPresupuestos = () => {
         },
       });
       formData.delete('json')
-      //Re estructuracion y creacion del objeto presupuesto
       delete Data.presupuesto.id_presupuesto
       Data.presupuesto.id_codigo_vi = Data.proyecto.id_codigo_vi
       delete Data.proyecto.id_codigo_vi
@@ -87,7 +201,6 @@ export const GestionPresupuestos = () => {
         delete Data.ente_financiero_fk
         Data.presupuesto.id_ente_financiero_fk = ente.id_ente_financiero
       } else {
-        //Se crea un nuevo ente financiero.
         delete Data.ente_financiero_fk.id_ente_financiero
         ente = await agregarEnte(Data.ente_financiero_fk, localStorage.getItem('token'))
         Data.presupuesto.id_ente_financiero_fk = ente.data.id_ente_financiero
@@ -97,7 +210,6 @@ export const GestionPresupuestos = () => {
         delete Data.id_codigo_financiero_fk
         Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.id_codigo_financiero
       } else {
-        //Se crea un nuevo ente financiero.
         delete Data.id_codigo_financiero_fk.id_codigo_financiero
         codigo_financiero = await agregarCodigosFinancieros(Data.id_codigo_financiero_fk, localStorage.getItem('token'))
         Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.data.id_codigo_financiero
@@ -107,8 +219,8 @@ export const GestionPresupuestos = () => {
       await agregarPresupuesto(Data.presupuesto, formData, localStorage.getItem('token'))
       toast.success('Presupuesto agregado correctamente', {
         id: toastId,
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
+        duration: 4000,
+        position: 'bottom-right',
         style: {
           background: 'var(--celeste-ucr)',
           color: '#fff',
@@ -116,13 +228,13 @@ export const GestionPresupuestos = () => {
       })
       setAddClick(false)
       document.body.classList.remove('modal-open');
-      success()
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }
 
   }
-  // Manejo de los datos del formulario de editar 
+
   const editPresupuesto = async (formData) => {
     try {
       const Data = JSON.parse(formData.get('json'))
@@ -135,7 +247,6 @@ export const GestionPresupuestos = () => {
         },
       });
       formData.delete('json')
-      //Re estructuracion y creacion del objeto presupuesto
       delete Data.presupuesto.id_presupuesto
       Data.presupuesto.id_codigo_vi = Data.proyecto.id_codigo_vi
       delete Data.proyecto.id_codigo_vi
@@ -145,7 +256,6 @@ export const GestionPresupuestos = () => {
         delete Data.ente_financiero_fk
         Data.presupuesto.id_ente_financiero_fk = ente.id_ente_financiero
       } else {
-        //Se crea un nuevo ente financiero.
         delete Data.ente_financiero_fk.id_ente_financiero
         ente = await agregarEnte(Data.ente_financiero_fk, localStorage.getItem('token'))
         Data.presupuesto.id_ente_financiero_fk = ente.data.id_ente_financiero
@@ -155,7 +265,6 @@ export const GestionPresupuestos = () => {
         delete Data.id_codigo_financiero_fk
         Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.id_codigo_financiero
       } else {
-        //Se crea un nuevo ente financiero.
         delete Data.id_codigo_financiero_fk.id_codigo_financiero
         codigo_financiero = await agregarCodigosFinancieros(Data.id_codigo_financiero_fk, localStorage.getItem('token'))
         Data.presupuesto.id_codigo_financiero_fk = codigo_financiero.data.id_codigo_financiero
@@ -166,21 +275,21 @@ export const GestionPresupuestos = () => {
       await actualizarPresupuesto(presupuesto.id_presupuesto, Data.presupuesto, formData, localStorage.getItem('token'))
       toast.success('Presupuesto actualizado correctamente', {
         id: toastId,
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
+        duration: 4000, 
+        position: 'bottom-right', 
         style: {
           background: 'var(--celeste-ucr)',
           color: '#fff',
         },
       })
       setEdit(false)
+      setReload(!reload)
       document.body.classList.remove('modal-open');
-      success()
     } catch (error) {
       toast.dismiss(toastId)
     }
   }
-  // Manejo del eliminar
+
   const deletePresupuesto = async (id) => {
     try {
       var toastId = toast.loading('Eliminando...', {
@@ -194,8 +303,8 @@ export const GestionPresupuestos = () => {
       await eliminarPresupuesto(id, localStorage.getItem('token'))
       toast.success('Presupuesto eliminado correctamente', {
         id: toastId,
-        duration: 4000, // Duración en milisegundos (4 segundos en este caso)
-        position: 'bottom-right', // Posición en la pantalla
+        duration: 4000,
+        position: 'bottom-right',
         style: {
           background: 'var(--celeste-ucr)',
           color: '#fff',
@@ -203,18 +312,18 @@ export const GestionPresupuestos = () => {
       })
       setEdit(false)
       document.body.classList.remove('modal-open');
-      success()
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }
   }
-  // Al darle click a cancelar, se cierra el modal
+
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
     document.body.classList.remove('modal-open');
   }
-  // Al darle click a agregar, muestra el modal
+
   const addClicked = () => {
     setAddClick(true)
     setEdit(false)
@@ -222,7 +331,6 @@ export const GestionPresupuestos = () => {
 
   }
 
-  // Al hacer click en la tabla
   const elementClicked = (presupuesto) => {
     if (event.target.tagName.toLowerCase() === 'button') {
       navigate(`${location.pathname}/${presupuesto.id_presupuesto}/gestion-versiones`)
@@ -234,12 +342,10 @@ export const GestionPresupuestos = () => {
     }
   }
 
-  //se filtra
   function getValueByPath(obj, path) {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj)
   }
 
-  //se filtra
   const search = (col, filter) => {
     const matches = data.filter((e) => {
       if (col.includes('.')) {
@@ -257,6 +363,7 @@ export const GestionPresupuestos = () => {
     const newPath = `/${newPathParts.join('/')}`;
     navigate(newPath);
   }
+
   return (
     <main >
       {!error ? (
@@ -267,9 +374,10 @@ export const GestionPresupuestos = () => {
             {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className={`d-flex ${data.length < 1 ? "justify-content-between" : "justify-content-end"} mt-4`}>
             {data.length < 1 ? <Add onClick={addClicked}></Add> : ''}
+            {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
           {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1}></PresupuestoForm></Modal>)}
           {edit &&
             (
@@ -288,7 +396,7 @@ export const GestionPresupuestos = () => {
           }
           <Toaster></Toaster>
           <div className="d-flex justify-content-start">
-            <Back onClick={volver}>Regresar</Back>
+            <Back onClick={volver}>Regresar a versión de proyecto</Back>
           </div>
         </div>
       ) : (

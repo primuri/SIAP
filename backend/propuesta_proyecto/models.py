@@ -28,7 +28,7 @@ class ColaboradorPrincipal(models.Model):
     tipo = models.CharField(max_length=80)
     carga = models.CharField(max_length=80)
     estado = models.CharField(max_length=45)
-    id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.CASCADE, db_column='id_vigencia_fk',  blank=True, null=True)
+    id_vigencia_fk = models.ForeignKey(Vigencia, on_delete=models.PROTECT, db_column='id_vigencia_fk',  blank=True, null=True)
     id_academico_fk = models.ForeignKey(Academico, on_delete=models.PROTECT, db_column='id_academico_fk')
 
     class Meta:

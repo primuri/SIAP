@@ -18,15 +18,16 @@ import GestionProyectos from "./routes/GestionProyectos"
 import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
+import pruebaReporte from './routes/pruebaReporte'
 
 import GestionAsistentes from "./routes/GestionAsistentes"
+import { InicioInvitado } from './pages/Inicio/InicioInvitado'
 
 function App() {
   useEffect(() => {
     const user = localStorage.getItem('user');
     const currentPath = window.location.pathname;
   
-    // Si no se encuentra un usuario en el localStorage (sin iniciar sesión) y la ruta actual no es /log-in, redirige a /log-in
     if (!user && currentPath !== '/login') {
       window.location.href = '/login';
     }
@@ -53,8 +54,9 @@ function App() {
               {GestionEvaluaciones}
               {GestionOrganosColegiados}
               {GestionAsistentes}
-              
+              {pruebaReporte}
               <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
+              <Route path='/inicio-invitado' element={<InicioInvitado usuario={localStorage.getItem('user')} />}></Route>
               <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
               <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
             </Routes> 

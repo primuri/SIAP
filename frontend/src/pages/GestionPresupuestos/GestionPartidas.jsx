@@ -13,41 +13,38 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 export const GestionPartidas = () => {   
     let {versionPresupuestoID, presupuestoID} = useParams()      
     const navigate = useNavigate()
-    const location = useLocation()                      // Versiones de un infome   
-    const [PartidaData, setPartidaData] = useState([])             // Datos completos
-    const [PartidaList, setPartidaList] = useState([])             // Datos filtrados
-    const [Partida, setPartida]             = useState(null)           // Version actual
-    const [loaded, setLoaded]                             = useState(false)          // Data cargada
-    const [reload, setReload]                             = useState(false)          // Para recargar tabla
-    const [addClicked, setAddClicked]                     = useState(false)          // Para evento de agregar
-    const [editClicked, setEditClicked]                   = useState(false)          // Para evento de editar
+    const location = useLocation()                      
+    const [PartidaData, setPartidaData] = useState([])           
+    const [PartidaList, setPartidaList] = useState([])            
+    const [Partida, setPartida]             = useState(null)       
+    const [loaded, setLoaded]                             = useState(false)        
+    const [reload, setReload]                             = useState(false)         
+    const [addClicked, setAddClicked]                     = useState(false)         
+    const [editClicked, setEditClicked]                   = useState(false)     
 
-    useEffect(() => { loadPartidaData() }, [reload])                        // Carga los datos tras detectar cambios
+    useEffect(() => { loadPartidaData() }, [reload])                       
 
     async function loadPartidaData() {
         try{
             var response = await API.obtenerPartidas(localStorage.getItem('token'))
-            console.log(response.data)
             let filteredResponse = response.data.filter(element => element.id_version_presupuesto_fk.id_version_presupuesto == versionPresupuestoID);
-            console.log("load",filteredResponse)
             setPartidaData(filteredResponse)
             setPartidaList(filteredResponse)
 
             setLoaded(true)
         } catch (error){
-            console.log(error)
+            console.error(error)
         }
     }
 
     async function addPartida(formData) {
         try{
-            console.log('entra a addversion')
             await API.agregarPartidas(formData, localStorage.getItem('token'))
             setAddClicked(false)
             setReload(!reload)
             mostrarExito("Partida agregada correctamente")
         } catch(error){
-            console.log(error)
+            console.error(error)
         }
     }
 
@@ -57,7 +54,6 @@ export const GestionPartidas = () => {
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Partida editada correctamente")
-            console.log(Partida)
         }catch(error){
         }
     }
@@ -85,7 +81,7 @@ export const GestionPartidas = () => {
     const elementClicked = (selectedPartida) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setPartida(selectedPartida);
-            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos/`)
+            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos`)
         } else {
             setPartida(selectedPartida)
             setEditClicked(true)
@@ -105,13 +101,6 @@ export const GestionPartidas = () => {
         navigate(newPath);
     }
 
-    // if(returnPresupuestos === true) {
-    //     return <GestionPresupuestos/>;
-    // }
-
-    // else if (Partida && showAcciones === true) {
-    //     return <GestionAcciones versionID={Partida.id_version_Presupuesto} PresupuestoID={PresupuestoID}/>;
-    // }
 
     return (
         <main>
@@ -123,9 +112,9 @@ export const GestionPartidas = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsPartidas} columns={dataKeyPartidas} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
-                    <Back onClick={volverVersiones}>Regresar a Versiones</Back>
+                    <Back onClick={volverVersiones}>Regresar a versión de presupuesto</Back>
                 </div>
                 {(addClicked || editClicked) && (
                     <Modal>
@@ -153,7 +142,7 @@ function mostrarExito (mensaje) {
           background: 'var(--celeste-ucr)',
           color: '#fff',
         },
-      })
+    })
 }
 
 function getValueByPath(obj, path) {
@@ -167,13 +156,5 @@ function filtrar(col, filter, data) {
       })
 }
 
-function formatearFecha(response) {
-    return response?.map((obj) => {
-      const fechaISO = obj.fecha_presentacion;
-      const dateObj = new Date(fechaISO);
-      const fechaFormateada = dateObj.toISOString().split('T')[0];
-      
-      return { ...obj, fecha_presentacion: fechaFormateada };
-    });
-}
+
   

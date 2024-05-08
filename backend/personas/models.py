@@ -217,7 +217,7 @@ def evaluador_pre_delete(sender, instance, **kwargs):
 
 class Asistente(models.Model):
     id_asistente_carnet = models.AutoField(primary_key=True)
-    cedula = models.CharField(max_length=45)
+    cedula = models.CharField(max_length=45, unique=True)
     condicion_estudiante = models.CharField(max_length=45)
     id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.CASCADE, db_column='id_nombre_completo_fk')
     carrera = models.CharField(max_length=128)

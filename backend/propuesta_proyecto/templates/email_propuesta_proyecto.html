@@ -69,27 +69,25 @@
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
             <div class="content">
-                
-                <p><i>Nombre del Proyecto:</i> {{ nombre }}</p>
-                <p><i>Objetivo General:</i> {{ objetivo_general }}</p>
+                <p><i>Nombre del proyecto:</i> {{ nombre }}</p>
+                <p><i>Objetivo general:</i> {{ objetivo_general }}</p>
                 <p><i>Estado:</i> {{ estado }}</p>
                 <p><i>Descripción:</i> {{ descripcion }}</p>
                 <p><i>Actividad:</i> {{ actividad }}</p>
-                <p><i>Fecha de Vigencia:</i> {{ fecha_vigencia }}</p>
-                <p><strong>Colaborador Principal:</strong>
+                <p><i>Fecha de vigencia:</i> {{ fecha_vigencia }}</p>
+                <p><strong>Colaborador principal:</strong>
                 <ul>
                     <li><i>Nombre:</i> {{id_academico_fk}}</li>
                     <li><i>Tipo:</i> {{ tipo_colaborador }}</li>
                     <li><i>Carga:</i> {{ carga_colaborador }}</li>
                     <li><i>Estado:</i> {{ estado_colaborador }}</li> 
-                    <li><i>Fechas de Vigencia:</i> Desde {{ fecha_inicio_vigencia }} hasta {{ fecha_fin_vigencia }}</li> 
+                    <li><i>Fechas de vigencia:</i> Desde {{ fecha_inicio_vigencia }} hasta {{ fecha_fin_vigencia }}</li> 
                 </ul>
-                <p><strong>Documento Asociado</strong></p>
+                <p><strong>Documento asociado</strong></p>
                 <ul>
                     <li>Nombre: {{ documento_nombre }}</li>
                     <li>Detalle: {{ documentos_detalle }}</li>    
                 </ul>
-    
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.

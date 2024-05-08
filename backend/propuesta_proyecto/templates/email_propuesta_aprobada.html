@@ -65,26 +65,26 @@
     
     <div class="container">
         <div class="header">
-            <h2>Información de la Propuesta de Proyecto</h2>
+            <h2>Información de la propuesta de proyecto</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
-        <h4>Estimado(a) {{nombre_investigador}}</h4>
-        <p><strong><i>Nos complace informarle que su propuesta de proyecto ha sido revisada y, como resultado, ha sido aprobada o ha sufrido modificaciones. Le solicitamos encarecidamente que verifique la exactitud de todos los datos presentados. En caso de encontrar discrepancias o tener cualquier consulta, le agradecemos que se ponga en contacto con el Centro de Investigación en Matemática Pura y Aplicada (CIMPA) de la Universidad de Costa Rica.</i></strong></p>
+        <h4>Estimado(a) {{nombre_investigador}}:</h4>
+        <p><strong><i>Su propuesta de proyecto ha sido revisada y como resultado, ha sido aprobada o modificada. Le solicitamos que verifique la exactitud de todos los datos presentados. En caso de encontrar discrepancias o tener cualquier consulta, le agradecemos que se ponga en contacto con el Centro de Investigación en Matemática Pura y Aplicada (CIMPA) de la Universidad de Costa Rica.</i></strong></p>
             <div class="content">
                 
-                <p><i>Nombre del Proyecto:</i> {{ nombre_propuesta }}</p>
-                <p><i>Objetivo General:</i> {{ objetivo_general }}</p>
+                <p><i>Nombre del proyecto:</i> {{ nombre_propuesta }}</p>
+                <p><i>Objetivo general:</i> {{ objetivo_general }}</p>
                 <p><i>Estado:</i> {{ estado }}</p>
                 <p><i>Descripción:</i> {{ descripcion }}</p>
                 <p><i>Actividad:</i> {{ actividad }}</p>
-                <p><i>Fecha de Vigencia:</i> {{ fecha_vigencia }}</p>
-                <p><strong>Colaborador Principal:</strong>
+                <p><i>Fecha de vigencia:</i> {{ fecha_vigencia }}</p>
+                <p><strong>Colaborador principal:</strong>
                 <ul>
                     <li><i>Nombre:</i> {{nombre_investigador}}</li>
                     <li><i>Tipo:</i> {{ tipo_colaborador }}</li>
                     <li><i>Carga:</i> {{ carga_colaborador }}</li>
                     <li><i>Estado:</i> {{ estado_colaborador }}</li> 
-                    <li><i>Fechas de Vigencia:</i> Desde {{ fecha_inicio_vigencia }} hasta {{ fecha_fin_vigencia }}</li> 
+                    <li><i>Fechas de vigencia:</i> Desde {{ fecha_inicio_vigencia }} hasta {{ fecha_fin_vigencia }}</li> 
                 </ul>
                 <p><strong>Documento Asociado</strong></p>
                 <ul>

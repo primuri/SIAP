@@ -9,6 +9,8 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, eliminarColaborador, eliminarDocumento, eliminarPropuesta, obtenerPropuestas } from "../../api/gestionPropuestas"
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 import { useNavigate, useParams } from "react-router-dom"
+import { ReportButton } from "../../utils/ReportButton";
+import axios from 'axios' 
 
 import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 
@@ -17,17 +19,114 @@ export const GestionPropuestas = () => {
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
-    const [propuestas, setPropuestas] = useState([]) // Propuestas que se muestran
+    const [propuestas, setPropuestas] = useState([])
     const [cargado, setCargado] = useState(false)
-    const [data, setData] = useState([])//Todas las propuestas
-    const [propuesta, setPropuesta] = useState(null) //Propuesta al que se le da click en la tabla para editar
-    const [error, setError] = useState(false) //Si hay un error se muestra una página para eso. Este es para el error de permisos.
+    const [data, setData] = useState([])
+    const [propuesta, setPropuesta] = useState(null)
+    const [error, setError] = useState(false)
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const [academicos, setAcademicos] = useState([]);
+    const [academicos, setAcademicos] = useState([])
+    const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
+    const [JsonIsReady, setJsonIsReady] = useState(false)
     const columns = ['Código CIMPA', 'Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
     const dataKeys = ['id_codigo_cimpa_fk.id_codigo_cimpa', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.estado', 'id_codigo_cimpa_fk.fecha_vigencia', 'id_codigo_cimpa_fk.actividad', 'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre', 'documento']
-    user.groups[0] !== "administrador" ? setError(true) : null  //Si no es administrador, pone el error en true
+    user.groups[0] !== "administrador" ? setError(true) : null
+    
+    //===============================================================================================================================
+
+    useEffect(() => {
+        setJsonIsReady(false)
+        createJsonForReport()
+    }, [propuestas])
+
+    const configureReportData = async () => {
+    
+        const getColaborador = async (id_colaborador_principal) => {
+            const token = localStorage.getItem('token');
+            var colaborador = null
+
+            const SIAPAPI = axios.create({
+                baseURL: 'http://localhost:8000/'
+            })
+
+            var response = await SIAPAPI.get('propuesta_proyecto/colaborador_principal/', {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            response.data.map((colaborador_principal) => {
+                if (colaborador_principal.id_colaborador_principal === id_colaborador_principal) {
+                    colaborador = colaborador_principal;
+                } else {
+                    return null;
+                }
+            })
+            return colaborador;
+        }
+
+        if (propuestas.length > 0) {
+            try {
+                const promises = propuestas.map(async (propuesta) => {
+                    const codigo = propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_colaborador_principal;
+                    const colaboradorAsociado = await getColaborador(codigo);
+                    propuesta.id_colaborador_principal_fk = colaboradorAsociado;
+                    return propuesta;
+                });
+
+                const propuestasConDatosCompletos = await Promise.all(promises);
+                JsonForReport.reportData = propuestasConDatosCompletos;
+                return true
+
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el Json para reporte: ")
+                return false
+            }
+        }
+    }
+
+    const createJsonForReport = async () => {
+        JsonForReport.reportTitle = "Propuesta"
+        JsonForReport.idKey = "id_codigo_cimpa_fk.id_codigo_cimpa"
+        JsonForReport.dataKeys = [
+            'id_codigo_cimpa_fk.id_codigo_cimpa',
+            'id_codigo_cimpa_fk.nombre',
+            'id_codigo_cimpa_fk.estado',
+            'id_codigo_cimpa_fk.objetivo_general',
+            'id_codigo_cimpa_fk.fecha_vigencia',
+            'id_codigo_cimpa_fk.descripcion',
+            'id_codigo_cimpa_fk.actividad',
+            'id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk',
+            'id_colaborador_principal_fk.id_academico_fk.cedula',
+            'id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio',
+            'id_colaborador_principal_fk.id_vigencia_fk.fecha_fin',
+            'id_colaborador_principal_fk.tipo',
+            'id_colaborador_principal_fk.carga'
+        ]
+
+        JsonForReport.colNames = [
+            'Código CIMPA',
+            'Nombre',
+            'Estado propuesta',
+            'Objetivo General',
+            'Fecha vigencia',
+            'Descripción',
+            'Actividad',
+            'Colaborador Principal',
+            'Colaborador Principal Cedula',
+            'Colaborador Principal fecha inicio',
+            'Colaborador Principal fecha fin',
+            'Colaborador Principal tipo',
+            'Colaborador Principal carga'
+        ]
+
+        setJsonIsReady(await configureReportData())
+    }
+
+    // ==============================================================================================================================
+
     const transformedPropuestas = propuestas.map(propuesta => ({
         ...propuesta,
         id_codigo_cimpa_fk: {
@@ -35,6 +134,7 @@ export const GestionPropuestas = () => {
             fecha_vigencia: formatDate(propuesta.id_codigo_cimpa_fk.fecha_vigencia)
         }
     }));
+    
     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {
         async function fetchData() {
@@ -61,11 +161,11 @@ export const GestionPropuestas = () => {
             });
         }
     }
+
     async function loadPropuestas() {
         try {
             const res = await obtenerPropuestas(localStorage.getItem('token'))
             setData(res.data)
-            console.log(res.data)
             setPropuestas(res.data)
 
         } catch (error) {
@@ -73,7 +173,6 @@ export const GestionPropuestas = () => {
         }
     }
 
-    //Uso de id en url
     useEffect(()=>{
         if(id_codigo_cimpa && data.length > 0){
             const elemento = data.find(e => e.id_codigo_cimpa_fk.id_codigo_cimpa === id_codigo_cimpa);
@@ -90,7 +189,6 @@ export const GestionPropuestas = () => {
     const success = () => {
         window.location.href = '/gestion-propuestas'
     }
-    // Manejo de datos que se van a enviar para agregar
     const addPropuesta = async (formData) => {
         try {
             var toastId = toast.loading('Agregando...', {
@@ -143,7 +241,6 @@ export const GestionPropuestas = () => {
         }
     }
 
-    // Manejo de los datos del formulario de editar 
     const editPropuesta = async (formData) => {
         try {
             var toastId = toast.loading('Editando...', {
@@ -229,7 +326,6 @@ export const GestionPropuestas = () => {
                     })
                 }
 
-                //Para borrar proyectos
             } else if (Datos.id_codigo_cimpa_fk.estado == "En desarrollo") {
 
                 const existe = await proyectoExiste(id_propu, localStorage.getItem("token"));
@@ -266,7 +362,6 @@ export const GestionPropuestas = () => {
         }
     }
 
-    // Manejo del eliminar
     const deletePropuesta = async (propuesta) => {
         try {
 
@@ -298,28 +393,26 @@ export const GestionPropuestas = () => {
             toast.dismiss(toastId)
         }
     }
-    // Al darle click a cancelar, se cierra el modal
     const onCancel = () => {
         setAddClick(false)
         setEdit(false)
         document.body.classList.remove('modal-open');
         navigate('/gestion-propuestas')
     }
-    // Al darle click a agregar, muestra el modal
     const addClicked = () => {
         setAddClick(true)
         setEdit(false)
         document.body.classList.add('modal-open');
     }
-    // Al hacer click en la tabla
+
     const elementClicked = (user) => {
         navigate(`/gestion-propuestas/${user.id_codigo_cimpa_fk.id_codigo_cimpa}`)
     }
-    //se filtra
+
     function getValueByPath(obj, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], obj)
     }
-    //se filtra
+
     const search = (col, filter) => {
         const matches = data.filter((e) => {
             if (col.includes('.')) {
@@ -330,14 +423,18 @@ export const GestionPropuestas = () => {
         })
         setPropuestas(matches)
     }
+
     return (
         <main >
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                    <div className="d-flex flex-row"><h1>Gestión de propuestas</h1>{(!cargado) && (<div class="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
-                    <div className="d-flex justify-content-between mt-4">
-                        <Add onClick={addClicked}></Add>
-                        <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                    <div className="d-flex flex-row"><h1>Gestión de propuestas</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+                    <div className="d-flex mt-4">
+                        <div className="col">
+                            <Add onClick={addClicked}></Add>
+                        </div> 
+                        {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                        <Search colNames={columns} columns={dataKeys} onSearch={search}></Search> 
                     </div>
                     <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
                     {addClick && (<Modal ><PropuestasForm academicos={academicos} onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}

@@ -3,10 +3,8 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 
 
-//Estos son los links que no se deberian de poder dar click
 const noLinks = ['p_id=', 'inf_id=', 'o_id='];
 
-//Esto es como se van a mostrar las distintas rutas en los breadcrumbs
 const routeNames = {
     'gestion-proyectos': 'Proyectos',
     'gestion-informes': 'Informes',
@@ -17,16 +15,19 @@ const routeNames = {
     'gestion-evaluadores': 'Evaluadores',
     'gestion-proveedores': 'Proveedores',
     'gestion-presupuestos': 'Presupuesto',
+    'gestion-partidas': 'Partidas',
+    'gestion-gastos': 'Gastos',
     'gestion-acciones': 'Acciones',
     'evaluacion-proyectos': 'Evaluaciones',
     'gestion-organos-colegiados': 'Órganos Colegiados',
     'gestion-evaluaciones': 'Evaluaciones',
     'gestion-asistentes': 'Asistentes', 
-    'gestion-integrantes': 'Integrantes Órgano Colegiado',
     'organos-colegiados': 'Órganos Colegiados',
+    'gestion-integrantes': 'Integrantes',
+    'gestion-sesiones': 'Sesiones',
+    'gestion-acuerdos': 'Acuerdos'
 };
 
-// Para las rutas que no deberian de mostrar la url
 const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/inicio-invitado', '/login', '/']);
 
 const BreadcrumbsCustom = () => {

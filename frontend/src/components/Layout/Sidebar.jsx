@@ -8,11 +8,11 @@ export const Sidebar = () => {
       { label: 'Inicio',        link: '/inicio-administrador' },
       { label: 'Gestión usuarios',        link: '/gestion-usuarios' },
       { label: 'Gestión <br/> investigadores', link: '/gestion-investigadores' },
-      { label: 'Gestión <br/> evaluadores',    link: '/gestion-evaluadores' },
       { label: 'Gestión <br/> propuestas',     link: '/gestion-propuestas' },
       { label: 'Gestión <br/> proyectos',      link: '/gestion-proyectos' },
-      { label: 'Gestión <br/> evaluaciones',    link: '/gestion-evaluaciones' },
       { label: 'Gestión proveedores',    link: '/gestion-proveedores' },
+      { label: 'Gestión <br/> evaluadores',    link: '/gestion-evaluadores' },
+      { label: 'Gestión <br/> evaluaciones',    link: '/gestion-evaluaciones' },
       { label: 'Gestión órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
 
     ],
@@ -26,7 +26,8 @@ export const Sidebar = () => {
       { label: 'Perfil', link: '/perfil' },
     ],
     "invitado": [
-        { label: 'Órganos colegiados', link: '/organos-colegiados' },
+        { label: 'Inicio',        link: '/inicio-invitado' },
+        { label: 'Órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
       ],
   };
    return(

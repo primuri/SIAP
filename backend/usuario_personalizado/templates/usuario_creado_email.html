@@ -62,43 +62,39 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="header">
-            <h2>Información del Usuario</h2>
+            <h2>Información del usuario</h2>
             <img src="https://cimpa.ucr.ac.cr/images/Cimpa/images/Logos/wikicimpa.png" alt="logo">
         </div>
             <div class="content">
-                
                 {% if rol_usuario != "No Aplicable (Usuario Eliminado)" %}
-                    <p>Se a creado un usuario con el correo electrónico <strong>{{ usuario.correo }}</strong></p>
+                    <p>Se ha creado un usuario con el correo electrónico <strong>{{ usuario.correo }}</strong></p>
                     
                     {% if rol_usuario %}
                         <p><strong><i>Su rol es de: <strong>{{ rol_usuario }}</strong>.</i></strong></p>
                     {% endif %}
 
                     {% if rol_usuario == "Investigador" %}
-                        <p><strong><i> Esta asociado al investigador {{investigador}}</i></strong></p>
+                        <p><strong><i> Está asociado al investigador {{investigador}}</i></strong></p>
                     {% endif %}
 
                     {%  if rol_usuario == "Evaluador" %}
-                        <p><strong><i> Esta asociado al evaluador {{evaluador}}</i></strong></p>
+                        <p><strong><i> Está asociado al evaluador {{evaluador}}</i></strong></p>
                     {% endif %}
 
                     {%  if rol_usuario == "Evaluador/Investigador" %}
-                        <p><strong><i> Esta asociado al evaluador {{evaluador}} y al investigador {{investigador}}</i></strong></p>
+                        <p><strong><i> Está asociado al evaluador {{evaluador}} y al investigador {{investigador}}</i></strong></p>
                     {% endif %}
                     
                 {% else %}
                     <p>El usuario asociado al correo electrónico <strong>{{ usuario.correo }}</strong> ha sido eliminado.</p>
                 {% endif %}
-    
             </div>
             <div class="footer">
                 Este es un mensaje automatizado, por favor no responder.
             </div>
         </div>
-        
     </div>
 </body>
 </html>

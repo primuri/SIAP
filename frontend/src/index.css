@@ -79,7 +79,7 @@ main {
 }
 
 .bread_custom ol li p, .bread_custom ol li a{
-  font-size: 1.5rem !important;
+  font-size: 1.3rem !important;
 }
 
 .last_bread{
@@ -584,4 +584,97 @@ input[type="submit"]:focus {
   #boton-personalizado {
     width: 100%;
   }
+}
+
+/* Estilos para el componente ReportePDF */
+
+.reporteGeneral .container {
+  margin-top: 20px;
+  background-color: var(--gris-claro-ucr)
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.item-padding {
+  padding: 10px 10px 0px;
+}
+
+.elemento-reporte{
+  background-color: #f0f0f0 !important;
+}
+
+.page-report{
+  background-color: white;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 90%;
+  margin-bottom: 25px;
+  border-radius: 10px;
+}
+
+.nombrePage{
+  margin-bottom: 20px ;
+}
+
+.nombrePage::before {
+  content: '';
+  width: 5px;
+  height: 100%; /* Establece la altura inicial en 0 */
+  display:inline-block;
+  margin-right: 10px;
+  background-color: var(--celeste-ucr);
+}
+
+
+.reporteGeneral{
+  width: 900px;
+  background-color: var(--gris-claro-ucr);
+  padding-bottom: 20px;
+}
+
+.th-report{
+  background-color: #a8a8a8 !important;
+}
+
+#header-confirmar {
+  justify-content: space-between;
+}
+
+#header-propuestas {
+  margin-left: 20%;
+}
+
+#modal-header-proyecto {
+  margin-left: 10%;
+}
+
+#button-close-proyecto {
+  margin-top: 1%;
+}
+
+#close-propuestas {
+  margin-top: 10%;
+  margin-left: 170%;
+}
+
+/* CSS para la tabla */
+.table-report {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-report th,
+.table-report td {
+  padding: 8px; /* Ajusta el padding según sea necesario */
+  border: 1px solid #ddd; /* Cambia el estilo del borde según tus preferencias */
+  word-wrap: break-word !important;  /* Permite que las palabras largas se dividan en varias líneas */
+  white-space: normal; /* Asegura que el texto no se trunque y se muestre en varias líneas si es necesario */
+}
+
+/* CSS para aumentar la altura de la fila si el texto es muy largo */
+.table-report tbody td {
+  min-height: 50px; /* Ajusta la altura mínima de la fila según sea necesario */
 }

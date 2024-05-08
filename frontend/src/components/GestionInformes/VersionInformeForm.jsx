@@ -1,6 +1,6 @@
 import { FormModal } from "../../utils/FormModal";
 import { VIFields } from "../../pages/GestionInformes/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Tooltip from '@mui/material/Tooltip';
 import icono from '../../assets/person-i.png'
 
@@ -12,6 +12,14 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const [fileInforme, setFileInforme] = useState(null);  
     const [fileEvaluacion, setFileEvaluacion] = useState(null);
 
+    useEffect(() => {
+        if (versionInforme) {
+            setFormData(VIFields(versionInforme));
+            setFileOficio(versionInforme.id_oficio_fk?.ruta_archivo || null);
+            setFileInforme(versionInforme.id_documento_informe_fk?.documento || null);
+            setFileEvaluacion(versionInforme.id_evaluacion_cc_fk?.id_documento_evualuacion_fk?.documento || null);
+        }
+    }, [versionInforme]);
 
     const updateNestedField = (formData, fieldPath, value) => {
         const keys = fieldPath.split('.');
@@ -38,7 +46,17 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
             sendingForm.id_documento_informe_fk.documento = fileInforme
         }
         if (fileEvaluacion){
+           if(sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk === null){
+                sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk = {
+                    tipo: "Evaluacion",
+                    detalle: "Doc EVCC",
+                    documento: null
+                };
+           }
             sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento = fileEvaluacion 
+           
+            
+           
         }
 
         onSubmit(sendingForm);
@@ -68,6 +86,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
 
     const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
+        
 
         if (obj === "oficio") {
             setFileOficio(file);
@@ -96,25 +115,26 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle oficio   </label>
-                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio   </label>
                                 <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={(event) => handleFileChange(event, 'oficio')} required={mode == 1} />
-                                {mode == 2 && (
+                                {mode == 2 && formData.id_oficio_fk.ruta_archivo ?(
                                      <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                     <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                      {formData.id_oficio_fk.ruta_archivo !== "" && (
+                                     <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {"Ver documento"}
                                     </a>
+                                    )}
                                     </Tooltip>
-                                    
-                                )}
+                                ) : null}
                             </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleInforme" className="label-personalizado mb-2"> Detalle informe   </label>
-                                <input type="text" className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe   </label>
@@ -132,19 +152,20 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             <div className="row mb-4">
                                 <div className="col">
                                     <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="disabled-input">(Opcional)</span>  </label>
-                                    <input type="text" className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
+                                    <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
                                 </div>
                                 <div className="col">
                                     <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="disabled-input">(Opcional)</span> </label>
                                     <input type="file" className="form-control" name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento" id="documentoEvaluacionCC" onChange={(event) => handleFileChange(event, 'evaluacion')} />
-                                {mode == 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento &&(
-
+                                {mode === 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk?.documento  ? (
                                     <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                        {formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento !== "" && (
+                                        <a href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento} target="blank_" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                             {"Ver documento"}
                                         </a>
+                                        )}
                                     </Tooltip>
-                                )}
+                                 ) : ""}
                                 </div>
                             </div>
                     </div>

@@ -32,45 +32,12 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
         },
     };
 
-    const checkLetraNum = (value) => {
-        // Esta expresión regular permite solo letras y espacios.
-        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-      };
-
-      const checkLetra = (value) => {
-        // Esta expresión regular permite solo letras y espacios.
-        const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-      };
-
-
-      
-      const camposLetrasNum = [
-        "id_producto_fk.detalle",
-        "nombre",
-        "resumen",
-        "id_oficio_fk.detalle"
-    ];
-
-    const camposLetras = [
-        "id_area_fk.nombre",
-        "id_institucion_fk.nombre"
-    ];
-
 
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-
-        // Mover esta línea al inicio de la función para asegurar que la validación se realice correctamente.
-        if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
-            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
-        } else  if (camposLetras.includes(name) && !checkLetra(value)) {
-            return; // Evita actualizar el estado si el valor no cumple con el patrón permitido.
-        }
 
         if (name.includes('.')) {
             const keys = name.split('.');
@@ -93,7 +60,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
            <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-                    <input type="text" className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
                 </div>
                 <div className="col">
                     <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto</label>
@@ -113,11 +80,11 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del Evento   </label>
-                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
                     <label htmlFor="resumen" className="label-personalizado mb-2"> Resumen del Evento   </label>
-                    <input type="text" className="form-control" name="resumen" id="resumen" value={formData.resumen} onChange={handleChange} required />
+                    <textarea className="form-control" name="resumen" id="resumen" value={formData.resumen} onChange={handleChange} required />
                 </div>
             </div>
             <div className="row mb-4">
@@ -141,24 +108,24 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del evento </label> <span className="disabled-input">(Opcional)</span>
-                    <input type="text" className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} />
+                    <textarea className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} />
                 </div>
                
             </div>
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombreArea" className="label-personalizado mb-2"> Nombre del Área del Evento   </label>
-                    <input type="text" className="form-control" name="id_area_fk.nombre" id="nombreArea" value={formData.id_area_fk.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_area_fk.nombre" id="nombreArea" value={formData.id_area_fk.nombre} onChange={handleChange} required />
                 </div>
                 <div className="col">
                     <label htmlFor="nombreInstitucion" className="label-personalizado mb-2"> Nombre Institución del Evento   </label>
-                    <input type="text" className="form-control" name="id_institucion_fk.nombre" id="nombreInstitucion" value={formData.id_institucion_fk.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_institucion_fk.nombre" id="nombreInstitucion" value={formData.id_institucion_fk.nombre} onChange={handleChange} required />
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle del Oficio Del Evento   </label>
-                    <input type="text" className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                 </div>
                 <div className="col">
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Oficio del Evento   </label>

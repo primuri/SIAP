@@ -96,7 +96,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             }
         }
 
-        
     
         const keys = name.split('.');
         let updatedValue = value;
@@ -266,6 +265,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             <div className="col">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
                                 <textarea className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
+
                             </div>
                         </div>
 
@@ -293,6 +293,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
                                 <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+
                             </div>
                             <div className="col">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>

@@ -6,24 +6,24 @@ const SIAPAPI = axios.create({
 });
 
 
-export const agregarDesinacionAsistente = async (designacionAsistente, token) => {
+export const agregarDesignacionAsistente = async (designacionAsistente, token) => {
     try { 
-        const response_desinacion =  await manejarErrores( SIAPAPI.post('version_proyecto/designacionasistente/', designacionAsistente, {
+        const response_designacion =  await manejarErrores( SIAPAPI.post('version_proyecto/designacionasistente/', designacionAsistente, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-        const id_desinacion_creada = response_desinacion.data.id_designacion_asistente;
-        return id_desinacion_creada;
+        const id_designacion_creada = response_designacion.data.id_designacion_asistente;
+        return id_designacion_creada;
     } catch(error) {
-        console.error("Error agregando desinacion de asistente del proyecto: ", error);
+        console.error("Error agregando designacion de asistente del proyecto: ", error);
         throw error;
     } 
 };
 
-export const editarDesinacionAsistente = async (id, desinacion, token) => {
-    const response_designacion = await manejarErrores( SIAPAPI.put(`version_proyecto/designacionasistente/${id}/`, desinacion, {
+export const editarDesignacionAsistente = async (id, designacion, token) => {
+    const response_designacion = await manejarErrores( SIAPAPI.put(`version_proyecto/designacionasistente/${id}/`, designacion, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ export const editarDesinacionAsistente = async (id, desinacion, token) => {
     return response_designacion;
 };
 
-export const eliminarDesinacionAsistente = async (id, token) => {
+export const eliminarDesignacionAsistente = async (id, token) => {
     return await manejarErrores( SIAPAPI.delete(`version_proyecto/designacionasistente/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
@@ -42,7 +42,7 @@ export const eliminarDesinacionAsistente = async (id, token) => {
 };
 
 
-export const obtenerDesinacionAsistente = async (token) => {
+export const obtenerDesignacionAsistente = async (token) => {
     return await manejarErrores( SIAPAPI.get('version_proyecto/designacionasistente/', {
         headers: {
             'Authorization': `token ${token}`,
