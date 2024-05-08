@@ -20,30 +20,23 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
         setItems(prevItems => [...prevItems, nuevoItem]);
     };
 
+    useEffect(() => {
+        // Aseguramos que el estado local refleje las propiedades actualizadas.
+        setShowDropdown(items.map(() => false));
+    }, [items]);
+    
+
     const handleInputChange = (event, index, campo) => {
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        if (event.target.type === 'date' && value.includes('T')) {
-            value = value.split('T')[0]; // Extrae solo la parte de la fecha
-        }
         let updatedItems = [...items];
-        let keys = campo.split('.');
-        let currentObj = updatedItems[index];
+        updatedItems[index][campo] = value;
 
-        
-        for (let i = 0; i < keys.length - 1; i++) {
-            currentObj = currentObj[keys[i]] = currentObj[keys[i]] || {};
-        }
-    
-        currentObj[keys[keys.length - 1]] = value;
-    
-        // Validar fechas si se cambia fecha_inicio o fecha_fin
-        if (campo.includes('fecha_inicio') || campo.includes('fecha_fin')) {
-            const vigencia = updatedItems[index]['id_vigencia_fk'];
-            const fechaInicio = new Date(vigencia['fecha_inicio']);
-            const fechaFin = new Date(vigencia['fecha_fin']);
+        if (campo === 'fecha_inicio' || campo === 'fecha_fin') {
+            const fechaInicio = campo === 'fecha_inicio' ? new Date(value) : new Date(items[index]['fecha_inicio']);
+            const fechaFin = campo === 'fecha_fin' ? new Date(value) : new Date(items[index]['fecha_fin']);
+
             if (fechaInicio > fechaFin) {
-                alert('La fecha de inicio no puede ser mayor que la fecha de fin.');
-                return; // No actualizar si la fecha de inicio es mayor que la fecha de fin
+                return;
             }
         }
     
@@ -75,7 +68,6 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
     const handleSelectAcademico = (index, academico) => {
         let updatedItems = [...items];
         updatedItems[index]['id_academico_fk'] = academico.id_academico; // Guarda el ID, pero muestra el nombre completo
-        updatedItems[index]['id_academico_nombre'] = `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`; // Opcional para mostrar en UI
         setItems(updatedItems);
         setAcademicosFilter([]);
         setShowDropdown(showDropdown.map((dropdown, idx) => idx === index ? false : dropdown));

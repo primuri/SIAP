@@ -492,7 +492,7 @@ export const GestionVersiones = () => {
 
             formData.delete('json');
 
-            const id_version_proy = Datos.id_version_proyecto;
+            const id_version_proy = parseInt(id_version)
             const id_codigo_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
             delete Datos.id_version_proyecto;
             delete Datos.id_codigo_vi_fk;
@@ -540,8 +540,11 @@ export const GestionVersiones = () => {
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
             //REVISAR
-            const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
+            const colaboradores = Datos.colaboradores
+            delete Datos.colaboradores
+            //const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
 
+            await editarColaboradorSecundario(colaboradores, id_version_proy, localStorage.getItem('token'))
 
 
             if (producto != null) {
@@ -560,52 +563,8 @@ export const GestionVersiones = () => {
 
             }
 
-            const id_vig_colab = Datos.colaborador.id_vigencia_fk.id_vigencia;
-
-            let fecha_inicio_colab = Datos.colaborador.id_vigencia_fk.fecha_inicio;
-            let fecha_fin_colab = Datos.colaborador.id_vigencia_fk.fecha_fin;
-
-
-            if (!fecha_inicio_colab) {
-                fecha_inicio_colab = null;
-            } else {
-                if (!fecha_inicio_colab.endsWith("Z")) {
-                    fecha_inicio_colab += "T00:00:00Z";
-                }
-            }
-
-            if (!fecha_fin_colab) {
-                fecha_fin_colab = null;
-            } else {
-                if (!fecha_fin_colab.endsWith("Z")) {
-                    fecha_fin_colab += "T00:00:00Z";
-                }
-            }
-
-            const vigencia_colab = {
-                fecha_inicio: fecha_inicio_colab,
-                fecha_fin: fecha_fin_colab
-            }
-
-            await editarVigencia(id_vig_colab, vigencia_colab, localStorage.getItem("token"))
-            const id_vigencia_colab = Datos.colaborador.id_vigencia_fk.id_vigencia;
-            delete Datos.colaborador.id_vigencia_fk.fecha_fin;
-            
-            delete Datos.colaborador.id_vigencia_fk;
-            Datos.colaborador.id_vigencia_fk = id_vigencia_colab;
-            Datos.colaborador.id_academico_fk =  Datos.colaborador.id_academico_fk.id_academico
-
-            Datos.colaborador.id_version_proyecto_fk = id_version_proyecto_editado.data.id_version_proyecto;
-
-
-            Datos.colaborador.id_version_proyecto_fk = id_version_proy;
            
-            await editarColaboradorSecundario(Datos.colaborador.id_colaborador_secundario, Datos.colaborador, localStorage.getItem('token'))
-            
-            
-
-          
-
+           
             toast.success('Versión proyecto actualizada correctamente', {
                 id: toastId,
                 duration: 4000,

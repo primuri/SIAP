@@ -21,13 +21,13 @@ const configuracionColaborador = [
         campo: 'carga',  placeholder: 'Carga', tipo: 'select', required: true, opciones: ['1/8', '1/4', '3/4', '3/8', '1/2', '5/8', '7/8', 'TS', 'SC']
     },
     { 
-        campo: 'id_vigencia_fk.fecha_inicio', 
+        campo: 'fecha_inicio', 
         placeholder: 'Fecha Inicio', 
         tipo: 'date', 
         required: true 
     },
     { 
-        campo: 'id_vigencia_fk.fecha_fin', 
+        campo: 'fecha_fin', 
         placeholder: 'Fecha Fin', 
         tipo: 'date', 
         required: true 
@@ -125,26 +125,24 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setFormData({ ...formData });
     };
 
-    const loadColaboradores = async (proyectoId) => {
-        try {
-            const res = await obtenerColaboradorSecundario(localStorage.getItem('token'));
-            if (res.data && res.data.length > 0) {
-                const colaboraFiltrados = res.data.filter(colaborador => colaborador.id_version_proyecto_fk.id_version_proyecto === proyectoId).map(col => ({
-                    ...col,
-                    'id_vigencia_fk.fecha_inicio': col.id_vigencia_fk.fecha_inicio.split('T')[0], // Extrae solo la parte de la fecha
-                    'id_vigencia_fk.fecha_fin': col.id_vigencia_fk.fecha_fin.split('T')[0], // Extrae solo la parte de la fecha
-                    estado: col.estado,
-                    carga: col.carga,
-                    id_academico_fk: col.id_academico_fk.id_academico // Asegúrate de que este es el valor correcto que esperas manejar
-                }));
-                setColaboradores(colaboraFiltrados);
-            } else {
-                setColaboradores([]);
-            }
-        } catch (error) {
-            console.error("Error al cargar los colaboradores: ", error);
+  const loadColaboradores = async (proyectoId) => {
+    try {
+        const res = await obtenerColaboradorSecundario(localStorage.getItem('token'));
+        if (res.data && res.data.length > 0) {
+            const colaboraFiltrados = res.data.filter(colaborador => colaborador.id_version_proyecto_fk.id_version_proyecto === proyectoId).map(col => ({
+                ...col,
+                fecha_inicio: col.id_vigencia_fk.fecha_inicio.split('T')[0], // Extrae solo la parte de la fecha
+                fecha_fin: col.id_vigencia_fk.fecha_fin.split('T')[0], // Extrae solo la parte de la fecha
+                id_academico_fk: col.id_academico_fk.id_academico
+            }));
+            setColaboradores(colaboraFiltrados);
+        } else {
+            setColaboradores([]);
         }
+    } catch (error) {
+        console.error("Error al cargar los colaboradores: ", error);
     }
+}
     
     function getValueByPath(object, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], object);

@@ -209,19 +209,51 @@ export const agregarColaboradorSecundario = async (colaboradores_secundarios, id
 };
 
 
-export const editarColaboradorSecundario = async (id, colaborador_secundario, token) => {
+export const editarColaboradorSecundario = async (colaboradores_secundarios, id_version , token) => {
     try { 
-        return await manejarErrores( SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id}/`, colaborador_secundario, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
+        colaboradores_secundarios.forEach(async colaborador_secundario => {
+            if(colaborador_secundario.id_colaborador_secundario){
+                let id_colaborador_secundario = colaborador_secundario.id_colaborador_secundario;
+                let id_version_proyecto = colaborador_secundario.id_version_proyecto_fk.id_version_proyecto;
+                let fecha_ini = colaborador_secundario.fecha_inicio;
+                let fecha_fi = colaborador_secundario.fecha_fin;
+                let id_vigencia = colaborador_secundario.id_vigencia_fk.id_vigencia
+    
+                if (!fecha_ini || fecha_ini.trim() === "") {
+                    fecha_ini = null;
+                }
+    
+                if (!fecha_fi || fecha_fi.trim() === "") {
+                    fecha_fi = null;
+                }
+                const vigencia = {
+                    fecha_inicio: fecha_ini,
+                    fecha_fin: fecha_fi
+                }
+                await editarVigencia(id_vigencia, vigencia, token)
+                delete colaborador_secundario.id_version_proyecto_fk;
+                delete colaborador_secundario.id_colaborador_secundario;
+                delete colaborador_secundario.id_vigencia_fk
+                delete colaborador_secundario.fecha_fin
+                delete colaborador_secundario.fecha_inicio
+                colaborador_secundario.id_version_proyecto_fk = id_version_proyecto;
+                colaborador_secundario.id_vigencia_fk = id_vigencia
+                await manejarErrores(SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id_colaborador_secundario}/`, colaborador_secundario, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }))
+            }else{
+                await agregarColaboradorSecundario(colaboradores_secundarios, id_version, token)
+
             }
-        }));
-       
-    } catch(error) {
-        console.error("Error editar colaborador secundario: ", error);
-        throw error;
-    } 
+            
+        });
+    } catch (error) {
+        console.error(error)
+        throw (error)
+    }
 };
 
 export const obtenerColaboradorSecundario = async (token) => {
