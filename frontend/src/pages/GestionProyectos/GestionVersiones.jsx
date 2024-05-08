@@ -543,9 +543,11 @@ export const GestionVersiones = () => {
             const colaboradores = Datos.colaboradores
             delete Datos.colaboradores
             //const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
+            if(colaboradores != undefined){
+                await editarColaboradorSecundario(colaboradores, id_version_proy, localStorage.getItem('token'))
 
-            await editarColaboradorSecundario(colaboradores, id_version_proy, localStorage.getItem('token'))
-
+            }
+           
 
             if (producto != null) {
                 producto.id_producto_fk.id_version_proyecto_fk = id_version_proy;
