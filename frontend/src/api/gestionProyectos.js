@@ -169,19 +169,43 @@ export const eliminarProyecto = async (id, token) => {
 };
 
 
-export const agregarColaboradorSecundario = async (colaborador_secundario, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.post('version_proyecto/colaboradorsecundario/', colaborador_secundario, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        }));
+export const agregarColaboradorSecundario = async (colaboradores_secundarios, id_version, token) => {
+    try {
+        if(colaboradores_secundarios != undefined){
+            colaboradores_secundarios.forEach(async colaborador_secundario => {
+                colaborador_secundario.id_version_proyecto_fk = id_version;
+                let fecha_ini = colaborador_secundario.fecha_inicio;
+                let fecha_fi = colaborador_secundario.fecha_fin;
+    
+                if (!fecha_ini || fecha_ini.trim() === "") {
+                    fecha_ini = null;
+                }
+    
+                if (!fecha_fi || fecha_fi.trim() === "") {
+                    fecha_fi = null;
+                }
+                const vigencia = {
+                    fecha_inicio: fecha_ini,
+                    fecha_fin: fecha_fi
+                }
+                const id_vigencia_creado = await agregarVigencia(vigencia, token)
+                delete colaborador_secundario.fecha_inicio
+                delete colaborador_secundario.fecha_fin
+                colaborador_secundario.id_vigencia_fk = id_vigencia_creado;
+                colaborador_secundario.tipo = "Secundario"
+                await manejarErrores(SIAPAPI.post('version_proyecto/colaboradorsecundario/', colaborador_secundario, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }))
+            });
+        }
        
-    } catch(error) {
-        console.error("Error agregando colaborador secundario: ", error);
-        throw error;
-    } 
+    } catch (error) {
+        console.error("Error agregando colaborador secundario:", error)
+        throw (error)
+    }
 };
 
 

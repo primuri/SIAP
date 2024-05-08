@@ -102,7 +102,7 @@ export const GestionVersiones = () => {
                 setTipo("evento");
                 return true;
             } else {
-                console.warn('No se encontró el evento que coincide con user.id_version_proyecto_fk.id_version_proyecto');
+                console.warn('No se encontró el evento que coincide con user.id_version_proyecto');
                 setProducto(null);
                 return false;
             }
@@ -128,7 +128,7 @@ export const GestionVersiones = () => {
                 setTipo("articulo");
                 return true;
             } else {
-                console.warn('No se encontró el articulo que coincide con user.id_version_proyecto_fk.id_version_proyecto');
+                console.warn('No se encontró el articulo que coincide con user.id_version_proyecto');
                 setProducto(null);
                 return false;
             }
@@ -154,7 +154,7 @@ export const GestionVersiones = () => {
                 setTipo("software");
                 return true;
             } else {
-                console.warn('No se encontró el software que coincide con user.id_version_proyecto_fk.id_version_proyecto');
+                console.warn('No se encontró el software que coincide con user.id_version_proyecto');
                 setProducto(null);
                 return false;
             }
@@ -167,35 +167,7 @@ export const GestionVersiones = () => {
 
 
 
-    async function loadColaborador(user) {
-        try {
-            const colaboradores = await obtenerColaboradorSecundario(localStorage.getItem('token'));
-
-            // Buscar el software que coincide con user.id_version_proyecto
-            const matchedColaborador = colaboradores.data.find(colaborador =>
-                colaborador.id_version_proyecto_fk &&
-                colaborador.id_version_proyecto_fk.id_version_proyecto === user.id_version_proyecto
-            );
-
-            if (matchedColaborador) {
-                setColaborador(matchedColaborador);
-                const matchedAcademico = academicos.find(academico =>
-                    academico.id_nombre_completo_fk &&
-                    academico.id_nombre_completo_fk.nombre === matchedColaborador.id_academico_fk.id_nombre_completo_fk.nombre
-                );
-                //matchedColaborador.id_colaborador_secundario = matchedAcademico.id_nombre_completo_fk.nombre;
-                
-                return true;
-            } else {
-                console.warn('No se encontró el software que coincide con user.id_version_proyecto_fk.id_version_proyecto');
-                setColaborador(null);
-                return false;
-            }
-
-        } catch (error) {
-           
-        }
-    }
+    
 
 
     useEffect(() => {
@@ -207,7 +179,6 @@ export const GestionVersiones = () => {
               setEdit(true);
               setAddClick(false);
               setProyecto(elemento);
-              await loadColaborador(elemento);
               try {
                 const isSoftware = await loadSoftware(elemento);
                 if (!isSoftware) {
@@ -380,30 +351,9 @@ export const GestionVersiones = () => {
             }
 
             
-
+           
             
-            
-            let fecha_ini_colab = Datos.colaborador.id_vigencia_fk.fecha_fin;
-            let fecha_fi_colab = Datos.colaborador.id_vigencia_fk.fecha_fin;
-
-            if (!fecha_ini_colab || fecha_ini_colab.trim() === "") {
-                fecha_ini_colab = null;
-            }
-
-            if (!fecha_fi_colab || fecha_fi_colab.trim() === "") {
-                fecha_fi_colab = null;
-            }
-            const vigencia_colab = {
-                fecha_inicio: fecha_ini_colab,
-                fecha_fin: fecha_fi_colab
-            }
-            const id_vigencia_colab_creado = await agregarVigencia(vigencia_colab, localStorage.getItem('token'))
-            delete Datos.colaborador.id_vigencia_fk;
-            Datos.colaborador.id_vigencia_fk = id_vigencia_colab_creado;
-            Datos.colaborador.id_academico_fk =  Datos.colaborador.id_academico_fk.id_academico
-            Datos.colaborador.id_version_proyecto_fk = id_version_creada;
-
-            await agregarColaboradorSecundario(Datos.colaborador, localStorage.getItem('token'))
+            await agregarColaboradorSecundario(Datos.colaboradores, id_version_creada, localStorage.getItem('token'))
 
             
 
@@ -792,7 +742,6 @@ export const GestionVersiones = () => {
                                             onDelete={() => deleteProyecto(proyecto)}
                                             proyecto={proyecto}
                                             producto={producto}
-                                            colaborador={colaborador}
                                             tipo={tipo}
                                             saveState={null}
                                             canVersiones={proyectosVersion.length}

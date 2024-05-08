@@ -4,7 +4,7 @@ export const Boton = ({onClick, text}) =>{
     return (
         <button
             type='button'
-            className='table-button border-0 p-2 rounded-3 text-white d-flex align-items-center'
+            className='table-button border-0 p-2 rounded-3 text-white d-flex align-items-center justify-content-center'
             onClick={() => onClick(text)}>
             {text}
         </button>

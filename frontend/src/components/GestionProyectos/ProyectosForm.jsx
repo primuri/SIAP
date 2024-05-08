@@ -5,33 +5,66 @@ import { Confirmar } from '../../utils/Confirmar'
 import { SoftwareForm } from "../GestionProductos/SoftwareForm";
 import { ArticuloForm } from "../GestionProductos/ArticuloForm";
 import { EventoForm } from "../GestionProductos/EventoForm";
-
 import { Boton } from "../../utils/Boton"
 import { GestionInformes } from "../../pages/GestionInformes/GestionInformes";
 import { useNavigate } from "react-router-dom";
 import Tooltip from '@mui/material/Tooltip';
-import { ColaboradorSecundarioForm } from "./ColaboradorSecundarioForm";
+import { obtenerColaboradorSecundario } from "../../api/gestionProyectos";
+import { FormularioDinamicoCheck } from "../../utils/FormularioDinamicoCheck"; 
 
 
-export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, academicos, colaborador }) => {
+const configuracionColaborador = [
+    { 
+        campo: 'estado', 
+        placeholder: 'Estado', 
+        tipo: 'select', 
+        required: true, 
+        opciones: ['Activo', 'Inactivo']
+    },
+    { 
+        campo: 'carga', 
+        placeholder: 'Carga', 
+        tipo: 'select', 
+        required: true, 
+        opciones: ['1/8', '1/4', '3/4', '3/8', '1/2', '5/8', '7/8', 'TS', 'SC']
+    },
+    { 
+        campo: 'fecha_inicio', 
+        placeholder: 'Fecha Inicio', 
+        tipo: 'date', 
+        required: true 
+    },
+    { 
+        campo: 'fecha_fin', 
+        placeholder: 'Fecha Fin', 
+        tipo: 'date', 
+        required: true 
+    },
+    { 
+        campo: 'id_academico_fk', 
+        placeholder: 'Nombre Colaborador', 
+        tipo: 'text', 
+        required: true
+    }
+];
 
-    // Cargar informacion
+
+export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, onDelete, id_codigo, tipo, saveState, canVersiones, academicos }) => {
     const navigate = useNavigate()
     const [fileData, setFileData] = useState(null);
     const [activeForm, setActiveForm] = useState('');
+    const [colaboradores, setColaboradores] = useState([])
     const [softwareData, setSoftwareData] = useState(null);
     const [softwareFile, setSoftwareFile] = useState(null);
     const [articuloData, setArticuloData] = useState(null);
     const [articuloFile, setArticuloFile] = useState(null);
-    const [colaboradorData, setColaboradorData] = useState(null);
     const [eventoData, setEventoData] = useState(null);
     const [eventoFile, setEventoFile] = useState(null);
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [showProductContent, setShowProductContent] = useState(false);
-   
     const [formData, setFormData] = useState({
-            id_version_proyecto: proyecto ? proyecto.id_version_proyecto : "",
+            id_version_proyecto: "",
             id_oficio_fk: proyecto ? proyecto.id_oficio_fk : {
                 id_oficio: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.id_oficio : "",
                 ruta_archivo: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.ruta_archivo : "",
@@ -46,36 +79,36 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 id_codigo_vi: proyecto && proyecto.id_codigo_vi_fk ? proyecto.id_codigo_vi_fk.id_codigo_vi : id_codigo,
                 nombre: proyecto && proyecto.nombre ? proyecto.id_codigo_vi_fk.nombre : "",
             },
-            detalle: proyecto ? proyecto.detalle : "",
-            numero_version: proyecto ? proyecto.numero_version : canVersiones + 1,
+            detalle: proyecto && proyecto.id_version_proyecto_fk  ? proyecto.detalle : "",
+            numero_version: proyecto && proyecto.id_version_proyecto_fk ? proyecto.numero_version : canVersiones + 1,
+        
     });
    
   
     useEffect(() => {
-        
+        if(proyecto){
+            loadColaboradores(proyecto.id_version_proyecto)
+        }
         if (mode === 2) {
             setActiveForm(tipo);
         }
-    }, [ mode, tipo]);
+    }, [mode, tipo]);
 
 
-    //Este handleChange acepta hasta 4 grados de anidacion
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-         // Validación específica para el campo de número de versión
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
-                // Si el valor incluye caracteres no permitidos, detiene la ejecución
                 return;
             }
         }
+
+        
     
-        // Procesamiento general para otros campos, incluidas las fechas
         const keys = name.split('.');
         let updatedValue = value;
     
-        // Si el campo modificado es de fecha, realiza la validación correspondiente
         if (keys.includes('fecha_inicio') || keys.includes('fecha_fin')) {
             const startDateKey = keys.slice(0, -1).join('.') + '.fecha_inicio';
             const endDateKey = keys.slice(0, -1).join('.') + '.fecha_fin';
@@ -83,12 +116,10 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             const endDate = keys[keys.length - 1] === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
     
             if (startDate > endDate) {
-                console.log("La fecha de inicio no puede ser posterior a la fecha de fin.");
-                return; // Detiene la ejecución si la fecha de inicio es mayor que la de fin
+                return;
             }
         }
     
-        // Navegar por el objeto formData para encontrar y actualizar el valor correcto
         const updateFormData = (path, value, obj) => {
             const keys = path.split('.');
             const lastKey = keys.pop();
@@ -101,8 +132,22 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         updateFormData(name, updatedValue, formData);
         setFormData({ ...formData });
     };
+
+    const loadColaboradores = async (proyectoId) => {
+        try {
+            const res = await obtenerColaboradorSecundario(localStorage.getItem('token'))
+            if (res.data && res.data.length > 0) {
+                const colaboraFiltrados = res.data.filter(colaborador => colaborador.id_version_proyecto_fk.id_version_proyecto === proyectoId)
+                setColaboradores(colaboraFiltrados)
+            } else {
+                setColaboradores([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+            }
+
+        } catch (error) {
+          
+        }
+    }
     
-    // Función auxiliar para obtener valor por ruta de acceso en objeto anidado
     function getValueByPath(object, path) {
         return path.split('.').reduce((acc, part) => acc && acc[part], object);
     }
@@ -113,7 +158,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     };
 
     const sendForm = (event) => {
-        //delete formData.asociar_academico
         event.preventDefault();
         const combinedData = new FormData();
         if (fileData) {
@@ -128,7 +172,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         if (eventoFile) {
             combinedData.append('id_oficio_fk.documento', eventoFile);
         }
-        const totalData = { ...formData, software: softwareData, articulo: articuloData, evento: eventoData, colaborador: colaboradorData };
+
+        if (colaboradores.length > 0) {
+            formData.colaboradores = colaboradores
+            console.log(colaboradores)
+        }
+        const totalData = { ...formData, software: softwareData, articulo: articuloData, evento: eventoData };
         combinedData.append('json', JSON.stringify(totalData));
         onSubmit(combinedData);
     };
@@ -172,10 +221,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         setArticuloFile(changes.articuloFile);
         setEventoData(changes.eventoData);
         setEventoFile(changes.eventoFile);
-        if (changes.colaboradorData) {
-            setColaboradorData(changes.colaboradorData);
-        }
     };
+
 
     return (
         <>
@@ -185,11 +232,13 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                         <img src={icono} alt="" width={'72px'} />
                     </div>
                 </div>
-                <div className="text-center" style={{ marginLeft: '3.5vw' }}>
-                    <h2>{mode === 1 ? ("Agregar una versión de proyecto") : ("Editar versión de proyecto")}</h2>
-                </div>
+                <div id="modal-header-proyecto" className="col-10 mb-0 text-center">
+                            <h2 className="headerForm">
+                                {mode === 1 ? "Agregar una  de proyecto" : "Editar una versión de proyecto"}
+                            </h2>
+                        </div>
                 <div>
-                    <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
+                    <button id="button-close-proyecto" type="button" onClick={onCancel} className="close" data-dismiss="modal">
                         <span aria-hidden="true" className="close-icon">&times;</span>
                     </button>
                 </div>
@@ -220,16 +269,15 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                             <div className="col">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <input type="text" className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
+                                <textarea className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
                             </div>
-
                         </div>
 
                         <div className="row mb-4">
                         <div className="col">
                                 <label htmlFor="fecha_inicio" className="label-personalizado mb-2">Fecha de inicio </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="date" className="form-control" name="id_vigencia_fk.fecha_inicio"
-                                    id="id_vigencia_fk.fecha_inicio"
+                                    id="fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
                                         ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
@@ -243,14 +291,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                         ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
                                     onChange={handleChange} />
                             </div>
-                           
-
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
-                                <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
                             </div>
                             <div className="col">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
@@ -263,15 +309,19 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                             {"Ver documento"}
                                         </a>
                                     </Tooltip>
-                                    ): ""}
-                                    <br/>
+
+                                )
+                                    : ""}
+                                    <div className="row mb-4"></div>
+                            </div>
+                            
+                            <div className="d-flex flex-column 4"> 
+                                <label htmlFor="colaboradores" className="label-personalizado mb-2 h5">Colaboradores Secundarios <span className="disabled-input">(Opcional)</span> </label> 
+                                <FormularioDinamicoCheck configuracion={configuracionColaborador} items={colaboradores} setItems={setColaboradores}  itemName="Colaborador" academicos={academicos}/>
                             </div>
                         </div>
-                        <hr></hr>
-                        <div className="row mb-2">
-                            <h5 className="text-center my-3 mt-2">Asociar Colaborador Secundario</h5>
-                            { <ColaboradorSecundarioForm mode={mode} setCambios={setCambios} colaborador={colaborador} academicos={academicos} />}
-                        </div>                                   
+                        <br />
+                        </div>
                         <hr></hr>
                         <div className="row mb-2">
                             <div className="col d-flex justify-content-center align-items-center">
@@ -293,7 +343,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             </div>
                         </div>
                         
-                       
                         {showProductContent && (
                             <div className="row mb-4">
                                 {mode !== 2 && (
@@ -320,8 +369,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                             </div>
                         )}
                     </div>
-                </div>
-
+          
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -338,8 +386,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 </div>
             </form>
         </>
-    )
-}
+    )};
+
 
 ProyectosForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -348,8 +396,7 @@ ProyectosForm.propTypes = {
     onDelete: PropTypes.func,
     proyecto: PropTypes.object,
     producto: PropTypes.object,
-    colaborador: PropTypes.object,
     id_codigo: PropTypes.object,
     tipo: PropTypes.oneOf(['evento', 'software', 'articulo']),
-    
+    academicos: PropTypes.arrayOf(PropTypes.object).isRequired
 };
