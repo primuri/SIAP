@@ -15,27 +15,19 @@ import { FormularioDinamicoCheck } from "../../utils/FormularioDinamicoCheck";
 
 const configuracionColaborador = [
     { 
-        campo: 'estado', 
-        placeholder: 'Estado', 
-        tipo: 'select', 
-        required: true, 
-        opciones: ['Activo', 'Inactivo']
+        campo: 'estado', placeholder: 'Estado', tipo: 'select', required: true, opciones: ['Activo', 'Inactivo']
     },
     { 
-        campo: 'carga', 
-        placeholder: 'Carga', 
-        tipo: 'select', 
-        required: true, 
-        opciones: ['1/8', '1/4', '3/4', '3/8', '1/2', '5/8', '7/8', 'TS', 'SC']
+        campo: 'carga',  placeholder: 'Carga', tipo: 'select', required: true, opciones: ['1/8', '1/4', '3/4', '3/8', '1/2', '5/8', '7/8', 'TS', 'SC']
     },
     { 
-        campo: 'fecha_inicio', 
+        campo: 'id_vigencia_fk.fecha_inicio', 
         placeholder: 'Fecha Inicio', 
         tipo: 'date', 
         required: true 
     },
     { 
-        campo: 'fecha_fin', 
+        campo: 'id_vigencia_fk.fecha_fin', 
         placeholder: 'Fecha Fin', 
         tipo: 'date', 
         required: true 
@@ -135,16 +127,22 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const loadColaboradores = async (proyectoId) => {
         try {
-            const res = await obtenerColaboradorSecundario(localStorage.getItem('token'))
+            const res = await obtenerColaboradorSecundario(localStorage.getItem('token'));
             if (res.data && res.data.length > 0) {
-                const colaboraFiltrados = res.data.filter(colaborador => colaborador.id_version_proyecto_fk.id_version_proyecto === proyectoId)
-                setColaboradores(colaboraFiltrados)
+                const colaboraFiltrados = res.data.filter(colaborador => colaborador.id_version_proyecto_fk.id_version_proyecto === proyectoId).map(col => ({
+                    ...col,
+                    'id_vigencia_fk.fecha_inicio': col.id_vigencia_fk.fecha_inicio.split('T')[0], // Extrae solo la parte de la fecha
+                    'id_vigencia_fk.fecha_fin': col.id_vigencia_fk.fecha_fin.split('T')[0], // Extrae solo la parte de la fecha
+                    estado: col.estado,
+                    carga: col.carga,
+                    id_academico_fk: col.id_academico_fk.id_academico // Asegúrate de que este es el valor correcto que esperas manejar
+                }));
+                setColaboradores(colaboraFiltrados);
             } else {
-                setColaboradores([]) // Establecer el estado a un array vacío si la respuesta es un array vacío
+                setColaboradores([]);
             }
-
         } catch (error) {
-          
+            console.error("Error al cargar los colaboradores: ", error);
         }
     }
     
