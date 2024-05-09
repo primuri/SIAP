@@ -290,7 +290,7 @@ export const GestionProyectos = () => {
         setProyectos(matches)
     }
 
-    user.groups[0] !== "administrador" ? setError(true) : null
+    user.groups[0] !== "administrador" && user.groups[0] !== "investigador" && user.groups[1] !== "investigador"  ? setError(true) : null
 
     return (
         <main>

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 export const Sidebar = () => {
    const usuario = JSON.parse(localStorage.getItem('user'));
+   console.log(usuario)
    const menu = {
     "administrador": [
       { label: 'Inicio',        link: '/inicio-administrador' },
@@ -21,9 +22,11 @@ export const Sidebar = () => {
 
       { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
     ],
-    "academico": [
+    "investigador": [
       { label: 'Inicio',        link: '/inicio-investigador' },
-      { label: 'Perfil', link: '/perfil' },
+      { label: 'Visualización Propuestas', link: '/gestion-propuestas' },
+      { label: 'Visualización Proyectos', link: '/gestion-proyectos' },
+
     ],
     "invitado": [
         { label: 'Inicio',        link: '/inicio-invitado' },
