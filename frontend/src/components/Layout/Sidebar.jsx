@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 
 export const Sidebar = () => {
    const usuario = JSON.parse(localStorage.getItem('user'));
-   console.log(usuario)
    const menu = {
     "administrador": [
       { label: 'Inicio',        link: '/inicio-administrador' },

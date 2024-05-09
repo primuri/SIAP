@@ -8,7 +8,7 @@ class PermisoPorRol(permissions.BasePermission):
                     (request.method in ['GET', 'POST', 'PATCH'] and view.view_name in ['evaluaciones', 'respuestas_evaluaciones']))
         else:
             if request.user.groups.filter(name='investigador').exists():
-                return (request.method in ['GET'] and (view.view_name in ['propuestas_proyectos', 'proyectos','academicos', 'documentos', 'documentos_asociados',  'versiones_proyectos', 'informes']))
+                return request.method == 'GET'
             else:
                 if request.user.groups.filter(name='invitado').exists():
                     return (request.method in ['GET'] and (view.view_name in ['organos_colegiados', 'integrantes', 'convocatorias', 'agendas', 'actas', 'sesiones', 'invitados', 'seguimientos', 'acuerdos', 'participantes']))
@@ -20,7 +20,7 @@ class PermisoPorRol(permissions.BasePermission):
                     (request.method in ['GET', 'POST', 'PATCH'] and view.view_name in ['evaluaciones', 'respuestas_evaluaciones']))
         else:
             if request.user.groups.filter(name='investigador').exists():
-                return (request.method in ['GET'] and (view.view_name in ['propuestas_proyectos','academicos', 'proyectos', 'documentos','documentos_asociados', 'version_proyecto', 'informes']))
+                return request.method == 'GET'
             else:
                 if request.user.groups.filter(name='invitado').exists():
                     return (request.method in ['GET'] and (view.view_name in ['organos_colegiados', 'integrantes', 'convocatorias', 'agendas', 'actas', 'sesiones', 'invitados', 'seguimientos', 'acuerdos', 'participantes']))
