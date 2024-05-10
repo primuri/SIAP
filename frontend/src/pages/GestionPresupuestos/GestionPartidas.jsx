@@ -112,7 +112,7 @@ export const GestionPartidas = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsPartidas} columns={dataKeyPartidas} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick ={elementClicked} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
                     <Back onClick={volverVersiones}>Regresar a versión de presupuesto</Back>
                 </div>
