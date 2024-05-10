@@ -42,7 +42,7 @@ export const InicioSesion = () => {
         window.location.href = '/organos-colegiados';
       }
       if(tipoUsuario === 'investigador') {
-        window.location.href = '/proyectos';
+        window.location.href = '/inicio-investigador';
       }
       
     } catch (error) {
