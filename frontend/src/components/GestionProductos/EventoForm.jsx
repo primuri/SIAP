@@ -36,6 +36,13 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
+
     const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -60,7 +67,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
            <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
                     <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto</label>
@@ -69,7 +76,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} required/>
+                        onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
             </div>
             <div className="row mb-2">
@@ -80,17 +87,17 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del Evento   </label>
-                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
                     <label htmlFor="resumen" className="label-personalizado mb-2"> Resumen del Evento   </label>
-                    <textarea className="form-control" name="resumen" id="resumen" value={formData.resumen} onChange={handleChange} required />
+                    <textarea className="form-control" name="resumen" id="resumen" value={formData.resumen} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="pais" className="label-personalizado mb-2">País del Evento   </label>
-                    <select className="form-control" name="pais" id="pais" value={formData.pais} onChange={handleChange} required>
+                    <select className="form-control" name="pais" id="pais" value={formData.pais} onChange={handleChange} required disabled={isInvestigador}>
                         <option value="">Seleccione un país</option>
                         {Paises.map((pais) => (
                             <option key={pais.value} value={pais.value}> {pais.label} </option>))}
@@ -98,7 +105,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                 </div>
                 <div className="col">
                     <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación   </label>                
-                    <select className="form-select seleccion" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange}  required>
+                    <select className="form-select seleccion" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange}  required disabled={isInvestigador}>
                         <option value="">Seleccionar tipo</option>
                         <option value="Activa">Activa</option>
                         <option value="Pasiva">Pasiva</option>
@@ -108,28 +115,28 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="enlace" className="label-personalizado mb-2"> Enlace del evento </label> <span className="disabled-input">(Opcional)</span>
-                    <textarea className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange} />
+                    <textarea className="form-control" name="enlace" id="enlace" value={formData.enlace} onChange={handleChange}  disabled={isInvestigador}/>
                 </div>
                
             </div>
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombreArea" className="label-personalizado mb-2"> Nombre del Área del Evento   </label>
-                    <textarea className="form-control" name="id_area_fk.nombre" id="nombreArea" value={formData.id_area_fk.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_area_fk.nombre" id="nombreArea" value={formData.id_area_fk.nombre} onChange={handleChange} required disabled={isInvestigador} />
                 </div>
                 <div className="col">
                     <label htmlFor="nombreInstitucion" className="label-personalizado mb-2"> Nombre Institución del Evento   </label>
-                    <textarea className="form-control" name="id_institucion_fk.nombre" id="nombreInstitucion" value={formData.id_institucion_fk.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_institucion_fk.nombre" id="nombreInstitucion" value={formData.id_institucion_fk.nombre} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle del Oficio Del Evento   </label>
-                    <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Oficio del Evento   </label>
-                    <input type="file" className="form-control" name="id_oficio_fk.documento" id="id_oficio_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
+                    <input type="file" className="form-control" name="id_oficio_fk.documento" id="id_oficio_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} disabled={isInvestigador}/>
                     {mode === 2 ? (
                         <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
                             <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >

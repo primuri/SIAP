@@ -75,7 +75,11 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             numero_version: proyecto && proyecto.id_version_proyecto_fk ? proyecto.numero_version : canVersiones + 1,
         
     });
-   
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
   
     useEffect(() => {
         if(proyecto){
@@ -229,7 +233,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 </div>
                 <div id="modal-header-proyecto" className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar una  de proyecto" : "Editar una versión de proyecto"}
+                                {mode === 1 ? "Agregar una versión de proyecto" : mode === 2 ? "Editar una versión de proyecto": "Visualizar versión de proyecto"}
                             </h2>
                         </div>
                 <div>
@@ -264,7 +268,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                             <div className="col">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <textarea className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required />
+                                <textarea className="form-control" name="detalle" id="detalle" onChange={handleChange} value={formData.detalle} required  disabled={isInvestigador}/>
 
                             </div>
                         </div>
@@ -276,7 +280,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     id="fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
                                         ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} />
+                                    onChange={handleChange} disabled={isInvestigador} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="fecha_fin" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
@@ -285,20 +289,20 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                     id="id_vigencia_fk.fecha_fin"
                                     value={formData.id_vigencia_fk.fecha_fin
                                         ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} />
+                                    onChange={handleChange} disabled={isInvestigador}/>
                             </div>
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Detalle del oficio   </label>
-                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
 
                             </div>
                             <div className="col">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
                                 <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
+                                    required={mode == 1 ? true : ''} disabled={isInvestigador} />
                                 {mode == 2 ? (
                                     <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_"
@@ -369,6 +373,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
           
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
+                        {!isInvestigador && (
                         <div className="col">
                             {mode === 1 ? (
                                 <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
@@ -379,6 +384,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                                 </>
                             )}
                         </div>
+                        )}
                     </div>
                 </div>
             </form>

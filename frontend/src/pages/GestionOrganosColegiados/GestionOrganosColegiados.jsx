@@ -243,7 +243,6 @@ export const GestionOrganosColegiados = () => {
 
     const elementClickedBtnIntegrantes = (selectedOrganoColegiado) => {
         setOrganoColegiado(selectedOrganoColegiado);
-        console.log(selectedOrganoColegiado)
         if (event.target.tagName.toLowerCase() === 'button') {
             navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-integrantes`)
         }
@@ -251,7 +250,6 @@ export const GestionOrganosColegiados = () => {
 
     const elementClickedBtnSesiones = (selectedOrganoColegiado) => {
         setOrganoColegiado(selectedOrganoColegiado);
-        console.log(selectedOrganoColegiado.id_organo_colegiado)
         if (event.target.tagName.toLowerCase() === 'button') {
             navigate(`${location.pathname}/o_id=${selectedOrganoColegiado.id_organo_colegiado}/gestion-sesiones`)
         }

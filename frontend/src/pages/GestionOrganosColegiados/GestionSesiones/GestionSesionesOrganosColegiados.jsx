@@ -9,6 +9,7 @@ import { Back } from "../../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
 import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda, eliminarActa, eliminarDocumento} from "../../../api/gestionOrganosColegiados"
 import { OrganosColegiadosSesionesForm  } from "../../../components/GestionOrganosColegiados/OrganosColegiadosSesionesForm"
+import { obtenerOrganoColegiadoPorId } from "../../../api/gestionOrganosColegiados"
 
 export const GestionSesionesOrganosColegiados= () => {
                                                              
@@ -24,8 +25,9 @@ export const GestionSesionesOrganosColegiados= () => {
     const [cargado, setCargado] = useState(false)   
     const [sesion, setSesion] = useState(null)                                
     const [sesiones, setSesiones] = useState([])   
-    
-                        
+    var [nombreOrganoC, setNombreOrganoC] = useState(null);
+    const token = localStorage.getItem('token')
+
     const [addClick, setAddClick] = useState(false)                              
     const [edit, setEdit] = useState(false)                                      
     const [error, setError] = useState(false)
@@ -54,7 +56,12 @@ export const GestionSesionesOrganosColegiados= () => {
         }
         fetchData();
     }, [reload]);
-    
+
+    async function nombreOrganoColegiado() {
+        var response = await obtenerOrganoColegiadoPorId(token, clean_id);
+        setNombreOrganoC(response.data.nombre);
+    }
+
     function formatearFecha(sesiones) {
         return sesiones.map(sesion => {
             const fechaISO = sesion.fecha;
@@ -70,6 +77,7 @@ export const GestionSesionesOrganosColegiados= () => {
 
 
     async function loadSesiones() {
+        nombreOrganoColegiado()
         try {
             const response = await obtenerSesiones(localStorage.getItem('token'));
             
@@ -184,8 +192,6 @@ export const GestionSesionesOrganosColegiados= () => {
             });
 
            
-
-            
             const convocatoraFile = formData.get('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
             formData.delete('id_agenda_fk.id_convocatoria_fk.id_documento_convocatoria_fk.documento');
     
@@ -346,13 +352,13 @@ export const GestionSesionesOrganosColegiados= () => {
 
                 {user.groups[0] === "administrador" && (
                     <div className=" flex-row">
-                            <h1>Gestión de sesiones del órgano colegiado: {clean_id}</h1>
+                            <h1>Gestión de sesiones del órgano colegiado: {nombreOrganoC}</h1>
                     </div>
                 )}
 
                 {user.groups[0] === "invitado" && (
                     <div className=" flex-row">
-                        <h1>Sesiones del órgano colegiado: {clean_id}</h1>
+                        <h1>Sesiones del órgano colegiado: {nombreOrganoC}</h1>
                     </div>
                 )}
 
