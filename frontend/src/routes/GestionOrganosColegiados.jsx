@@ -4,7 +4,6 @@ import { GestionSesionesOrganosColegiados } from "../pages/GestionOrganosColegia
 import { GestionAcuerdos } from "../pages/GestionOrganosColegiados/GestionAcuerdos/GestionAcuerdosSesiones"
 import { GestionIntegranteOrganoColegiado } from "../pages/GestionOrganosColegiados/GestionIntegranteOrganoColegiado"
 
-
 export default[
     <Route path="gestion-organos-colegiados/" Component={GestionOrganosColegiados} key="evaluacion-organos-colegiados"></Route>,
     <Route path="gestion-organos-colegiados/:id/gestion-integrantes" Component={GestionIntegranteOrganoColegiado} key="gestion-integrantes"></Route>,
