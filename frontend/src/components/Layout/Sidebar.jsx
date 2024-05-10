@@ -20,9 +20,11 @@ export const Sidebar = () => {
       { label: 'Inicio',        link: '/inicio-evaluador' },
       { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
     ],
-    "academico": [
+    "investigador": [
       { label: 'Inicio',        link: '/inicio-investigador' },
-      { label: 'Perfil', link: '/perfil' },
+      { label: 'Visualización Propuestas', link: '/gestion-propuestas' },
+      { label: 'Visualización Proyectos', link: '/gestion-proyectos' },
+
     ],
     "invitado": [
         { label: 'Inicio',        link: '/inicio-invitado' },
