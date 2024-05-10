@@ -1,7 +1,6 @@
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom' 
 import { Header } from './components/Layout/Header'
-import './App.css'
 import { useEffect } from 'react'
 import { Sidebar } from './components/Layout/Sidebar'
 import { Footer } from './components/Layout/Footer'
@@ -15,10 +14,9 @@ import GestionProyectos from "./routes/GestionProyectos"
 import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
-import pruebaReporte from './routes/pruebaReporte'
 import GestionAsistentes from "./routes/GestionAsistentes"
 import GestionPáginasInicio from './routes/GestionPáginasInicio'
-
+import './App.css'
 
 function App() {
   useEffect(() => {
@@ -51,7 +49,6 @@ function App() {
               {GestionEvaluaciones}
               {GestionOrganosColegiados}
               {GestionAsistentes}
-              {pruebaReporte}
               {GestionPáginasInicio}
             </Routes> 
           </div>
