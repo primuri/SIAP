@@ -58,7 +58,7 @@ function App() {
               {pruebaReporte}
               <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
               <Route path='/inicio-invitado' element={<InicioInvitado usuario={localStorage.getItem('user')} />}></Route>
-              <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
+              <Route path='/inicio-evaluador'  element={<InicioEvaluador usuario={localStorage.getItem('user')} />}></Route>
               <Route path='/inicio-investigador' element={<InicioInvestigador usuario={localStorage.getItem('user')} />}></Route>
               <Route path='/inicio-investigador-evaluador' element={<InicioInvestigadorEvaluador></InicioInvestigadorEvaluador>}></Route>
             </Routes> 
