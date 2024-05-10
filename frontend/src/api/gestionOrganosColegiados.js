@@ -18,6 +18,15 @@ export const obtenerOrganosColegiados = async () => {
     )
 }
 
+export const obtenerOrganoColegiadoPorId = async (token, organoID) => {
+    return await manejarErrores(SIAPAPI.get(`organo_colegiado/organo_colegiado/${organoID}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
 export const agregarOrganoColegiado = async (organo_colegiado) => {
     return await manejarErrores(SIAPAPI.post('organo_colegiado/organo_colegiado/', organo_colegiado, {
         headers: {

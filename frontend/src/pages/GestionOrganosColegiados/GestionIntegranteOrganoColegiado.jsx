@@ -9,6 +9,7 @@ import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, editarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, agregarOficio, editarOficio, eliminarOficio } from "../../api/gestionIntegranteOrganoColegiado"
 import { useNavigate, useParams } from "react-router-dom"
+import { obtenerOrganoColegiadoPorId } from "../../api/gestionOrganosColegiados"
 
 export const GestionIntegranteOrganoColegiado = () => {
   let {id_organo,id}                    = useParams()
@@ -20,6 +21,7 @@ export const GestionIntegranteOrganoColegiado = () => {
   const [data, setData]                                                 = useState([])
   const [reload, setReload]                                             = useState(false)
   const [cargado, setCargado]                                           = useState(false)
+  var [nombreOC, setNombreOC]                                            = useState(null);
   const [integrante, setIntegrante]                                     = useState(null)
   const [integrantes, setIntegrantes]                                   = useState([])
   const [organo_colegiado, setOrganoColegiado]                          = useState(null)
@@ -52,7 +54,13 @@ export const GestionIntegranteOrganoColegiado = () => {
     fetchData();
   }, [reload, clean_id]);
 
+  async function nombreOrganoColegiado() {
+    var response = await obtenerOrganoColegiadoPorId(token, clean_id);
+    setNombreOC(response.data.nombre);
+  }
+
   async function loadIntegrantes(clean_id) {
+    nombreOrganoColegiado()
     try {
         const response = await obtenerIntegrantes(token);
         response.data.forEach(item => {
@@ -326,14 +334,14 @@ export const GestionIntegranteOrganoColegiado = () => {
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
 
             {user.groups[0] === "administrador" && (
-                        <div className=" flex-row">
-                             <h1>Gestión de integrantes del órgano colegiado: {clean_id}</h1>
-                        </div>
+                <div className=" flex-row">
+                      <h1>Gestión de integrantes del órgano colegiado: {nombreOC}</h1>
+                </div>
             )}
 
             {user.groups[0] === "invitado" && (
                 <div className=" flex-row">
-                    <h1>Integrantes del órgano colegiado: {clean_id}</h1>
+                    <h1>Integrantes del órgano colegiado: {nombreOC}</h1>
                 </div>
             )}
 
