@@ -61,28 +61,9 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         }
         return; 
     }
-
-<<<<<<< HEAD
-    console.log(formData)
-    // Actualiza el estado para todos los demás casos, incluidos campos anidados.
-
-    if (name.includes('.')) {
-      const keys = name.split('.');
-      let ref = formData;
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (ref[keys[i]] === undefined) {
-          ref[keys[i]] = {}; // Asegúrate de crear un objeto si no existe
-        }
-        ref = ref[keys[i]];
-      }
-      ref[keys[keys.length - 1]] = value;
-    } else {
-      formData[name] = value;
-=======
    
     if (name === "cedula" && !checkCedula(value)) {
         return; 
->>>>>>> Development
     }
 
   

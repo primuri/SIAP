@@ -21,7 +21,7 @@ import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
 import pruebaReporte from './routes/pruebaReporte'
 
 import GestionAsistentes from "./routes/GestionAsistentes"
-import { InicioInvitado } from './pages/Inicio/InicioInvitado'
+//import { InicioInvitado } from './pages/Inicio/InicioInvitado'
 
 function App() {
   useEffect(() => {
@@ -55,8 +55,7 @@ function App() {
               {GestionOrganosColegiados}
               {GestionAsistentes}
               {pruebaReporte}
-              <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
-              <Route path='/inicio-invitado' element={<InicioInvitado usuario={localStorage.getItem('user')} />}></Route>
+              <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>  
               <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
               <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
             </Routes> 

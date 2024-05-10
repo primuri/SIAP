@@ -201,12 +201,12 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const handleInformesClick = () => {
         saveState()
-        navigate(`/gestion-informes/${proyecto.id_version_proyecto}`);
+        navigate(`/gestion-informes/${proyecto.id_version_proyecto_fk.id_version_proyecto}`);
     };
 
     const handlePresupuestoClick = () => {
         saveState()
-        navigate(`/gestion-presupuestos/${proyecto.id_version_proyecto}`)
+        navigate(`/gestion-presupuestos/${proyecto.id_version_proyecto_fk.id_version_proyecto}`)
     };
 
     const setCambios = (changes) => {
