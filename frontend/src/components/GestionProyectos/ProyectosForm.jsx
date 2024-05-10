@@ -136,7 +136,6 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 ...col,
                 fecha_inicio: col.id_vigencia_fk.fecha_inicio.split('T')[0], // Extrae solo la parte de la fecha
                 fecha_fin: col.id_vigencia_fk.fecha_fin.split('T')[0], // Extrae solo la parte de la fecha
-                id_academico_fk: col.id_academico_fk.id_academico
             }));
             setColaboradores(colaboraFiltrados);
         } else {
