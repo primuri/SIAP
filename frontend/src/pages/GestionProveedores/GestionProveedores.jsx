@@ -61,7 +61,7 @@ export const GestionProveedores = () => {
 
   const success = () => {
     window.location.href = '/gestion-proveedores'
-}
+  }
 
   const addProveedor = async (formData) => {
     try {

@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { obtenerProveedores, obtenerProductosServicios, obtenerFactura, obtenerGastos } from '../../api/gestionGastos';
-import Tooltip from '@mui/material/Tooltip';
 
 const filter = createFilterOptions();
 
@@ -20,7 +19,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const [selectedFactura, setSelectedFactura] = useState("");
     const [selectedProveedor, setSelectedProveedor] = useState('');
     const [value, setValue] = useState(null);
-    const detalle = gasto ? gasto.id_factura_fk.id_producto_servicio_fk.detalle : ""
 
     const [formData, setFormData] = useState({
         id_partida_fk: gasto ? gasto.id_partida_fk.id_partida : id_partida,
@@ -33,9 +31,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     });
 
     useEffect(() => {
-        if(mode == 2){
-            setValue(detalle)
-        }
         loadProveedores()
         loadProductosServicios()
         loadFacturas()
@@ -45,6 +40,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     useEffect(() =>{
         formData.id_factura_fk.id_producto_servicio_fk.detalle = value
     }, [value])
+    
     useEffect(() => {
         if (mode === 2) {
             setSelectedProveedor(formData.id_factura_fk.id_cedula_proveedor_fk);
@@ -130,16 +126,15 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     }
 
     const sendForm = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
-        const combinedData = new FormData();
-        if (documentoData) {
-            combinedData.append('documento', documentoData);
+        let sendingForm = { ...formData}
+        if(documentoData){
+            sendingForm.id_documento_fk.documento = documentoData
         }
-        combinedData.append('json', JSON.stringify(formData));
-        onSubmit(combinedData);
-    };
-
+        onSubmit(sendingForm);
+        sendingForm = { ...formData}
+    }
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -310,7 +305,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} />
+                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange}/>
                                 { typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_documento_fk.documento.split('/').pop()}

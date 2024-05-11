@@ -94,7 +94,6 @@ export const GestionGastos = () => {
     }, [data, partida]);
   
     const addGasto = async (formData) => {
-      const Data = JSON.parse(formData.get('json'))
       try {
           var toastId = toast.loading('Agregando...', {
               position: 'bottom-right',
@@ -104,60 +103,43 @@ export const GestionGastos = () => {
               fontSize: '18px',
               },
           });
-  
-          formData.delete('json');
-          console.log("add")
-          console.log(Data)
 
-          Data.id_partida_fk = clean_id;
-          delete Data.id_gasto;
+          formData.id_partida_fk = clean_id;
+          delete formData.id_gasto;
 
-          console.log("asignacion")
-          console.log(Data)
-
-          //no esta guardando
-          if (Data.id_documento_fk.documento !== "") {
-            console.log("if")
-            //formData.append("tipo", Data.id_documento_fk.tipo);
-            //formData.append("detalle", Data.id_documento_fk.detalle);
-            var responseDocumento = await API.agregarFacturaDocumento(Data.id_documento_fk, token)
-            Data.id_documento_fk = responseDocumento.data.id_documento;
+          if (formData.id_documento_fk.documento !== "") {
+            const responseDocumento = await API.agregarFacturaDocumento(formData.id_documento_fk, token)
+            formData.id_documento_fk = responseDocumento.data.id_documento;
           }
           else {
-            console.log("else")
-            Data.id_documento_fk = null;
+            formData.id_documento_fk = null;
           }
-          
-          console.log("paso")
 
-          if(Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined){
-              Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio
+          if(formData.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined){
+            formData.id_factura_fk.id_producto_servicio_fk = formData.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio
           }else{
-              var responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
-              Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
+              var responsePS = await API.agregarProductoServicio({detalle: formData.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+              formData.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
           }
 
-          console.log("antes de factura")
-          console.log(Data)
-
-          const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
-          Data.id_factura_fk = facturaResponse.data.id_factura;
-          delete Data.id_cedula_proveedor_fk;
-          delete Data.id_producto_servicio_fk;
-          Data.monto = parseInt(Data.monto);
+          const facturaResponse = await API.agregarFactura(formData.id_factura_fk, token);
+          formData.id_factura_fk = facturaResponse.data.id_factura;
+          delete formData.id_cedula_proveedor_fk;
+          delete formData.id_producto_servicio_fk;
+          formData.monto = parseInt(formData.monto);
           const Datos = {
-              monto: Data.monto,
-              fecha: Data.fecha,
-              id_documento_fk: Data.id_documento_fk,
-              id_factura_fk: Data.id_factura_fk,
-              id_partida_fk:  Data.id_partida_fk,
-              detalle: Data.detalle
+              monto: formData.monto,
+              fecha: formData.fecha,
+              id_documento_fk: formData.id_documento_fk,
+              id_factura_fk: formData.id_factura_fk,
+              id_partida_fk:  formData.id_partida_fk,
+              detalle: formData.detalle
           }
           await API.agregarGasto(Datos, token);
 
           setReload(!reload);
   
-          toast.success('Integrante agregado correctamente', {
+          toast.success('Gasto agregado correctamente', {
               id: toastId,
               duration: 4000,
               position: 'bottom-right',
@@ -182,49 +164,54 @@ export const GestionGastos = () => {
               fontSize: '18px',
               },
           });
-          const Data = JSON.parse(formData.get('json'));
-  
-          formData.delete('json');
 
           console.log("edit")
-          console.log(Data)
+          console.log(formData)
 
-          const id_gasto = Data.id_gasto;
-          const id_partida = Data.id_partida_fk.id_partida;
-          delete Data.id_gasto;
-          delete Data.id_partida_fk;
-          Data.id_partida_fk = id_partida;
+          const id_gasto = formData.id_gasto;
+          delete formData.id_gasto;
+          formData.id_partida_fk = clean_id;
+          console.log("variables")
 
-          if(typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){
-              Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
+          console.log("cod")
+          console.log(formData.id_factura_fk.id_producto_servicio_fk.id_producto_servicio )
+
+          console.log("det")
+          console.log(formData.id_factura_fk.id_producto_servicio_fk.detalle)
+
+          if(typeof formData.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){
+            formData.id_factura_fk.id_producto_servicio_fk = formData.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
           }else{    
               var responsePS = ""                                                             
               try{
-                  responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+                  responsePS = await API.agregarProductoServicio({detalle: formData.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
               } catch(error){
                   console.log(responsePS)
               }                                                               
-              Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
+              formData.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
           }
 
-          Data.id_factura_fk.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
-          const rF = await API.actualizarFactura(Data.id_factura_fk.id_factura, Data.id_factura_fk, token)
+          console.log("producto")
+          formData.id_factura_fk.id_cedula_proveedor_fk = formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
+          const rF = await API.actualizarFactura(formData.id_factura_fk.id_factura, formData.id_factura_fk, token)
 
-          Data.id_factura_fk = rF.data.id_factura
-          Data.monto = parseInt(Data.monto);
+          console.log("factura")
+          formData.id_factura_fk = rF.data.id_factura
+          formData.monto = parseInt(formData.monto);
 
           if (formData.id_documento_fk) {
-            var responseDocumento = await editarDocumentoFactura(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
+            var responseDocumento = await API.editarDocumentoFactura(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
             formData.id_documento_fk = responseDocumento.data.id_documento;
           }
           else {
             formData.id_documento_fk = null;
           }
 
-          await API.actualizarGasto(id_gasto, Data, localStorage.getItem("token"));
+          console.log("doc")
+          await API.actualizarGasto(id_gasto, formData, token);
           setReload(!reload);
   
-          toast.success('Integrante actualizado correctamente', {
+          toast.success('Gasto actualizado correctamente', {
               id: toastId,
               duration: 4000,
               position: 'bottom-right', 
@@ -252,10 +239,12 @@ export const GestionGastos = () => {
 
         await API.eliminarGasto(gasto.id_gasto, token);
         await API.eliminarFactura(gasto.id_factura_fk.id_factura, token);
-        await API.eliminarDocumentoFactura(gasto.id_documento_fk.id_documento, token);
+        if (gasto.id_documento_fk.id_documento !== ""){
+            await API.eliminarDocumentoFactura(gasto.id_documento_fk.id_documento, token);
+        }
         setReload(!reload);
   
-        toast.success('Integrante eliminado correctamente', {
+        toast.success('Gasto eliminado correctamente', {
           id: toastId,
           duration: 4000,
           position: 'bottom-right', 

@@ -129,7 +129,7 @@ export const actualizarFacturaDocumento = async (id, documento, token) => {
     return await manejarErrores( manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     })));
 };
@@ -138,7 +138,7 @@ export const eliminarFacturaDocumento = async (id, token) => {
     return SIAPAPI.delete(`version_proyecto/documentos/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     });
 };
