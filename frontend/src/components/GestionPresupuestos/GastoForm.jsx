@@ -19,6 +19,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const [selectedFactura, setSelectedFactura] = useState("");
     const [selectedProveedor, setSelectedProveedor] = useState('');
     const [value, setValue] = useState(null);
+    const detalle = gasto ? gasto.id_factura_fk.id_producto_servicio_fk.detalle : ""
 
     const [formData, setFormData] = useState({
         id_partida_fk: gasto ? gasto.id_partida_fk.id_partida : id_partida,
@@ -31,6 +32,9 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     });
 
     useEffect(() => {
+        if(mode == 2){
+            setValue(detalle)
+        }
         loadProveedores()
         loadProductosServicios()
         loadFacturas()

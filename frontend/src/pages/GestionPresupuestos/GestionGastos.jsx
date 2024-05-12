@@ -9,11 +9,11 @@ import { Back }                                 from "../../utils/Back"
 import { toast, Toaster }                       from 'react-hot-toast'
 import { PermisoDenegado }                      from "../../utils/PermisoDenegado"
 import * as API                                 from "../../api/gestionGastos"
-import { useLocation, useNavigate, useParams }  from "react-router-dom"
+import { useNavigate, useParams }  from "react-router-dom"
 import { ReportButton } from "../../utils/ReportButton";
 
 export const GestionGastos = () => {
-    let {id_partida,partidaID}                   = useParams()
+    let {id_partida,partidaID}            = useParams()
     const user                            = JSON.parse(localStorage.getItem('user'))
     const navigate                        = useNavigate()
     const [clean_id, setClean_id]         = useState(partidaID.startsWith('g_id=') ? partidaID.split('g_id=')[1] : '')
@@ -29,6 +29,8 @@ export const GestionGastos = () => {
     const [error, setError]                   = useState(false)
     const [addClick, setAddClick]             = useState(false)
     const [edit, setEdit]                     = useState(false)
+    const [JsonIsReady, setJsonIsReady]       = useState(false)
+    const [JsonForReport, setJsonForReport]   = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
   
     user.groups[0] !== "administrador" ? setError(true) : null  
   
@@ -38,6 +40,54 @@ export const GestionGastos = () => {
       ...gasto,  
       fecha: formatDate(gasto.fecha) 
     }));
+
+    useEffect(() => {
+      setJsonIsReady(false)
+      createJsonForReport()
+    }, [gastos])
+
+    const configureReportData = () => {
+        if (gastos.length > 0) {
+            try {
+                const gastos_ = gastos.map((gasto) => {
+                    gasto.partidaID = partidaID;
+                    return gasto;
+                });
+                JsonForReport.reportData = gastos_;
+                return true;
+    
+            } catch (exception) {
+                console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
+                return false;
+            }
+        }
+    }
+
+    const createJsonForReport = () => {
+        JsonForReport.reportTitle = "Gastos de partida";
+        JsonForReport.idKey = 'id_partida_fk.id_partida';
+
+        JsonForReport.dataKeys = [
+            'id_gasto',
+            'id_factura_fk.id_factura',
+            'fecha',
+            'detalle',
+            'id_factura_fk.id_cedula_proveedor_fk.nombre',
+            'id_factura_fk.id_producto_servicio_fk.detalle',
+            'monto'
+        ];
+        JsonForReport.colNames = [
+            'Código del gasto',
+            'Código de la factura',
+            'Fecha', 
+            'Detalle', 
+            'Proveedor',
+            'Producto o Servicio',
+            'Monto'
+        ];
+        setJsonIsReady(false)
+        setJsonIsReady(configureReportData());
+    };
   
     useEffect(() => {
       async function fetchData() {
@@ -108,7 +158,7 @@ export const GestionGastos = () => {
           delete formData.id_gasto;
 
           if (formData.id_documento_fk.documento !== "") {
-            const responseDocumento = await API.agregarFacturaDocumento(formData.id_documento_fk, token)
+            var responseDocumento = await API.agregarFacturaDocumento(formData.id_documento_fk, token)
             formData.id_documento_fk = responseDocumento.data.id_documento;
           }
           else {
@@ -165,19 +215,10 @@ export const GestionGastos = () => {
               },
           });
 
-          console.log("edit")
           console.log(formData)
 
           const id_gasto = formData.id_gasto;
-          delete formData.id_gasto;
           formData.id_partida_fk = clean_id;
-          console.log("variables")
-
-          console.log("cod")
-          console.log(formData.id_factura_fk.id_producto_servicio_fk.id_producto_servicio )
-
-          console.log("det")
-          console.log(formData.id_factura_fk.id_producto_servicio_fk.detalle)
 
           if(typeof formData.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){
             formData.id_factura_fk.id_producto_servicio_fk = formData.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
@@ -191,26 +232,23 @@ export const GestionGastos = () => {
               formData.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
           }
 
-          console.log("producto")
           formData.id_factura_fk.id_cedula_proveedor_fk = formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
           const rF = await API.actualizarFactura(formData.id_factura_fk.id_factura, formData.id_factura_fk, token)
-
-          console.log("factura")
           formData.id_factura_fk = rF.data.id_factura
           formData.monto = parseInt(formData.monto);
 
           if (formData.id_documento_fk) {
-            var responseDocumento = await API.editarDocumentoFactura(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
+            delete formData.id_documento_fk.documento
+            var responseDocumento = await API.actualizarFacturaDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
             formData.id_documento_fk = responseDocumento.data.id_documento;
           }
           else {
             formData.id_documento_fk = null;
           }
 
-          console.log("doc")
           await API.actualizarGasto(id_gasto, formData, token);
           setReload(!reload);
-  
+
           toast.success('Gasto actualizado correctamente', {
               id: toastId,
               duration: 4000,
@@ -239,10 +277,7 @@ export const GestionGastos = () => {
 
         await API.eliminarGasto(gasto.id_gasto, token);
         await API.eliminarFactura(gasto.id_factura_fk.id_factura, token);
-        if (gasto.id_documento_fk.id_documento !== ""){
-            await API.eliminarDocumentoFactura(gasto.id_documento_fk.id_documento, token);
-        }
-        setReload(!reload);
+        await API.eliminarDocumentoFactura(gasto.id_documento_fk.id_documento, token);
   
         toast.success('Gasto eliminado correctamente', {
           id: toastId,
@@ -312,7 +347,10 @@ export const GestionGastos = () => {
               )}
   
               <div className="d-flex justify-content-between mt-4">
+                <div className="col">
                   <Add onClick={addClicked}></Add>
+                </div>
+                  {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
                   <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
               </div>
   
