@@ -15,7 +15,7 @@ import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
 import GestionAsistentes from "./routes/GestionAsistentes"
-import GestionPáginasInicio from './routes/GestionPáginasInicio'
+//import GestionPáginasInicio from './routes/GestionPáginasInicio'
 import './App.css'
 
 function App() {
@@ -49,7 +49,6 @@ function App() {
               {GestionEvaluaciones}
               {GestionOrganosColegiados}
               {GestionAsistentes}
-              {GestionPáginasInicio}
             </Routes> 
           </div>
         </div>
@@ -60,3 +59,4 @@ function App() {
 }
 
 export default App
+//{GestionPáginasInicio}
