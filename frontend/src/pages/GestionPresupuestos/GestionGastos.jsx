@@ -272,19 +272,11 @@ export const GestionGastos = () => {
           },
         });
 
-        console.log("data")
-        console.log(gasto.id_documento_fk)
-
-        console.log("gasto")
         await API.eliminarGasto(gasto.id_gasto, token);
-        console.log("factura")
         await API.eliminarFactura(gasto.id_factura_fk.id_factura, token);
-        console.log("doc")
         if(gasto.id_documento_fk.documento !== null){
-          console.log("if")
           await API.eliminarFacturaDocumento(gasto.id_documento_fk.id_documento, token);
         }
-        console.log("reload")
         setReload(!reload)
 
         toast.success('Gasto eliminado correctamente', {

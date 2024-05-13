@@ -66,6 +66,15 @@ export const obtenerCuentasBancarias = async (token) => {
     }));
 };
 
+export const eliminarCuentasBancarias = (id, token) => {
+    return SIAPAPI.delete(`presupuesto/cuentas_bancarias/${id}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, token) => {
     try {
         cuentasBancarias.forEach(async cuentaBancaria => {
@@ -124,17 +133,6 @@ export const actualizarCuentasBancarias = (cuentasBancarias, proveedor_ID, token
         throw (error)
     }
 };
-
-export const eliminarCuentasBancarias = (id, token) => {
-    return SIAPAPI.delete(`presupuesto/cuentas_bancarias/${id}/`, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-};
-
-
 
 export const editarDocumentoCuentaAndDocumento = async (id, documento, token) => {
     return await manejarErrores( manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {

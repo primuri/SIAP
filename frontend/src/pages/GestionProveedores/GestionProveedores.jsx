@@ -4,7 +4,7 @@ import { Modal } from "../../utils/Modal"
 import { ProveedoresForm } from "../../components/GestionProveedores/ProveedoresForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, eliminarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta, eliminarDocumentoCuentas } from "../../api/gestionProveedores"
+import { obtenerProveedores, agregarProveedor, editarProveedor, eliminarProveedor, agregarCuentasBancarias, actualizarCuentasBancarias, editarDocumentoCuentaAndDocumento, agregarDocumentoCuenta, editarDocumentoCuenta, eliminarDocumentoCuentas } from "../../api/gestionProveedores"
 import { toast, Toaster } from 'react-hot-toast'
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { useNavigate, useParams } from "react-router-dom"
@@ -25,6 +25,9 @@ export const GestionProveedores = () => {
   const dataKeys = ['id_cedula_proveedor', 'tipo', 'correo', 'nombre', 'telefono']
 
   user.groups[0] !== "administrador" ? setError(true) : null
+
+  const token = localStorage.getItem('token')
+
   useEffect(() => { loadProveedores() }, [reload])
 
   async function loadProveedores() {
@@ -59,10 +62,7 @@ export const GestionProveedores = () => {
     }
   },[data,id_cedula_proveedor])
 
-  const success = () => {
-    window.location.href = '/gestion-proveedores'
-  }
-
+  //funciona perfectamente
   const addProveedor = async (formData) => {
     try {
       var toastId = toast.loading('Agregando...', {
@@ -75,14 +75,16 @@ export const GestionProveedores = () => {
       });
 
       if (formData.id_documento_fk.documento !== "") {
-        var responseDocumento = await agregarDocumentoCuenta(formData.id_documento_fk, localStorage.getItem('token'))
+        var responseDocumento = await agregarDocumentoCuenta(formData.id_documento_fk, token)
         formData.id_documento_fk = responseDocumento.data.id_documento;
       }
       else {
         formData.id_documento_fk = null;
       }
 
-      await agregarProveedor(formData, localStorage.getItem('token'))
+      await agregarProveedor(formData, token)
+      setReload(!reload);
+
       toast.success('Proveedor agregado correctamente', {
         id: toastId,
         duration: 4000,
@@ -93,15 +95,12 @@ export const GestionProveedores = () => {
         },
       })
       setAddClick(false)
-      document.body.classList.remove('modal-open');
-      success()
     } catch (error) {
-      toast.dismiss(toastId)
-     
+      toast.dismiss(toastId)   
     }
-
   }
- 
+
+  //no deja editar si tiene cuentas
   const editProveedor = async (formData) => {
     try {
       var toastId = toast.loading('Editando...', {
@@ -114,10 +113,10 @@ export const GestionProveedores = () => {
     });
       if (formData.id_documento_fk) {
         if (typeof formData.id_documento_fk.documento === 'object') {
-          var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
+          var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
         } else {
           delete formData.id_documento_fk.documento
-          var responseDocumento = await editarDocumentoCuenta(formData.id_documento_fk.id_documento, formData.id_documento_fk, localStorage.getItem("token"))
+          var responseDocumento = await editarDocumentoCuenta(formData.id_documento_fk.id_documento, token)
         }
         formData.id_documento_fk = responseDocumento.data.id_documento;
       }
@@ -130,12 +129,14 @@ export const GestionProveedores = () => {
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;
       if (cuentasBancarias) {
-        await actualizarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, localStorage.getItem("token"));
+        await actualizarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, token);
       }
 
       delete Datos.cuentaBancaria
 
-      await editarProveedor(proveedor.id_cedula_proveedor, Datos, localStorage.getItem('token'))
+      await editarProveedor(proveedor.id_cedula_proveedor, Datos, token)
+      setReload(!reload);
+
       toast.success('Proveedor actualizado correctamente', {
         id: toastId,
         duration: 4000,
@@ -146,14 +147,12 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
-      document.body.classList.remove('modal-open');
-      success()
     } catch (error) {
       toast.dismiss(toastId)
-     
     }
   }
 
+  //no elimina el que tienen 2 cuentas
   const deleteProveedor = async (id, doc_id) => {
     try {
       var toastId = toast.loading('Eliminando...', {
@@ -164,8 +163,10 @@ export const GestionProveedores = () => {
             fontSize: '18px',
         },
     });
-      await eliminarProveedor(id, localStorage.getItem('token'))
-      await eliminarDocumentoCuentas(doc_id, localStorage.getItem('token'))
+      await eliminarProveedor(id, token)
+      await eliminarDocumentoCuentas(doc_id, token)
+      setReload(!reload);
+
       toast.success('Proveedor eliminado correctamente', {
         id: toastId,
         duration: 4000,
@@ -176,11 +177,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
-      document.body.classList.remove('modal-open');
-      success()
     } catch (error) {
       toast.dismiss(toastId)
-     
     }
   }
   
