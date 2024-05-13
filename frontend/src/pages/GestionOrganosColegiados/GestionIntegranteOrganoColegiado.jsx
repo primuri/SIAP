@@ -9,16 +9,19 @@ import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, editarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, agregarOficio, editarOficio, eliminarOficio } from "../../api/gestionIntegranteOrganoColegiado"
 import { useNavigate, useParams } from "react-router-dom"
+import { obtenerOrganoColegiadoPorId } from "../../api/gestionOrganosColegiados"
 
 export const GestionIntegranteOrganoColegiado = () => {
   let {id_organo,id}                    = useParams()
   const user                            = JSON.parse(localStorage.getItem('user'))
+  const rol = user.groups[0]
   const navigate                        = useNavigate()
   const [clean_id, setClean_id]         = useState(id.startsWith('o_id=') ? id.split('o_id=')[1] : '')
 
   const [data, setData]                                                 = useState([])
   const [reload, setReload]                                             = useState(false)
   const [cargado, setCargado]                                           = useState(false)
+  var [nombreOC, setNombreOC]                                            = useState(null);
   const [integrante, setIntegrante]                                     = useState(null)
   const [integrantes, setIntegrantes]                                   = useState([])
   const [organo_colegiado, setOrganoColegiado]                          = useState(null)
@@ -31,7 +34,9 @@ export const GestionIntegranteOrganoColegiado = () => {
   const columns = ['Integrante', 'Inicio de funciones', 'Puesto', 'Número oficio', 'Normativa reguladora', 'Órgano Colegiado']
   const dataKeys = ['nombre_integrante', 'inicio_funciones', 'puesto', 'id_oficio_fk.id_oficio', 'normativa_reguladora', 'id_organo_colegiado_fk.nombre']
 
-  user.groups[0] !== "administrador" ? setError(true) : null  
+  if (rol !== "administrador" && rol !== "invitado") {
+    setError(true);
+  }
 
   const token = localStorage.getItem('token')
 
@@ -49,7 +54,13 @@ export const GestionIntegranteOrganoColegiado = () => {
     fetchData();
   }, [reload, clean_id]);
 
+  async function nombreOrganoColegiado() {
+    var response = await obtenerOrganoColegiadoPorId(token, clean_id);
+    setNombreOC(response.data.nombre);
+  }
+
   async function loadIntegrantes(clean_id) {
+    nombreOrganoColegiado()
     try {
         const response = await obtenerIntegrantes(token);
         response.data.forEach(item => {
@@ -321,18 +332,35 @@ export const GestionIntegranteOrganoColegiado = () => {
     <main >
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-            <div className="d-flex flex-row">
-                <h1>Gestión de integrantes del Órgano Colegiado</h1>
-            </div>
+
+            {user.groups[0] === "administrador" && (
+                <div className=" flex-row">
+                      <h1>Gestión de integrantes del órgano colegiado: {nombreOC}</h1>
+                </div>
+            )}
+
+            {user.groups[0] === "invitado" && (
+                <div className=" flex-row">
+                    <h1>Integrantes del órgano colegiado: {nombreOC}</h1>
+                </div>
+            )}
 
             {(!cargado) && (
                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
             )}
 
-            <div className="d-flex justify-content-between mt-4">
+            {user.groups[0] === "administrador" && (
+              <div className="d-flex justify-content-between mt-4">
                 <Add onClick={addClicked}></Add>
                 <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
-            </div>
+              </div>
+            )}
+
+          {user.groups[0] === "invitado" && (
+              <div className="d-flex justify-content-between mt-4">
+                  <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+              </div>
+          )}
 
           <Table columns={columns} data={transformedIntegrantes} dataKeys={dataKeys} onDoubleClick={elementClicked} hasButtonColumn={false} navigate={navigate} ></Table>
            {addClick && (
@@ -349,7 +377,8 @@ export const GestionIntegranteOrganoColegiado = () => {
                     onSubmit={editIntegrante}
                     onCancel={onCancel}
                     onDelete={() => deleteIntegrante(integrante)}
-                    integrante={integrante}>
+                    integrante={integrante}
+                    rol={rol}>
                 </IntegranteOrganoColegiadoForm></Modal>
             )}
           <Toaster></Toaster>

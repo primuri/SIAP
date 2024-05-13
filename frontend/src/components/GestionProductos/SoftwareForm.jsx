@@ -19,29 +19,19 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         }
     };
 
-    const checkLetraNum = (value) => {
-        const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-        return regex.test(value);
-    };
-
-
-    const camposAValidar = [
-        "id_producto_fk.detalle",
-        "id_documento_documentacion_fk.detalle",
-        "nombre"
-    ];
-
     const initialFormData = producto || defaultFormData;
     const [formData, setFormData] = useState(initialFormData);
 
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
 
 
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        if (camposAValidar.includes(name) && !checkLetraNum(value)) {
-            return;
-        }
 
         if (name === "numero_version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
@@ -88,7 +78,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
                     <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto  </label>
@@ -97,7 +87,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} required />
+                        onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
             </div>
 
@@ -109,21 +99,21 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre   </label>
-                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
                     <label htmlFor="numero_version" className="label-personalizado mb-2"> Num. versión   </label>
-                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required />
+                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required disabled={isInvestigador}/>
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="detalleDocumentación" className="label-personalizado mb-2"> Detalle documentación   </label>
-                    <textarea className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required />
+                    <textarea className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
                     <label htmlFor="documento" className="label-personalizado mb-2"> Documento documentación   </label>
-                    <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
+                    <input type="file" className="form-control" name="id_documento_documentacion_fk.documento" id="id_documento_documentacion_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} disabled={isInvestigador}/>
                     {mode == 2 ? (
                         <Tooltip title={formData.id_documento_documentacion_fk.documento.split('/').pop()} placement="right-start">
                             <a href={"http://localhost:8000" + formData.id_documento_documentacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">

@@ -162,7 +162,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         const { name, value } = event.target;
     
         const check = (value) => {
-            const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
+            const regex = /^[A-Za-záéíóúÁÉÍÓÚñ\s]*$/;
             return regex.test(value) || value === "";
         };
 

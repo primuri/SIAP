@@ -10,12 +10,12 @@ import { agregarDocumento, editarColaborador, editarDocumento, editarPropuesta, 
 import { obtenerAcademicos } from "../../api/gestionAcademicos"
 import { useNavigate, useParams } from "react-router-dom"
 import { ReportButton } from "../../utils/ReportButton";
-import axios from 'axios' 
+import axios from 'axios'
 
 import { agregarProyectos, agregarVigencia, editarVigencia, eliminarProyecto, eliminarVigencia, obtenerProyectos, obtenerVersionProyectos } from "../../api/gestionProyectos"
 
 export const GestionPropuestas = () => {
-    let {id_codigo_cimpa} =  useParams()
+    let { id_codigo_cimpa } = useParams()
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
@@ -31,8 +31,12 @@ export const GestionPropuestas = () => {
     const [JsonIsReady, setJsonIsReady] = useState(false)
     const columns = ['Código CIMPA', 'Nombre', 'Estado', 'Vigencia', 'Actividad', 'Colaborador(a)', 'Documento']
     const dataKeys = ['id_codigo_cimpa_fk.id_codigo_cimpa', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.estado', 'id_codigo_cimpa_fk.fecha_vigencia', 'id_codigo_cimpa_fk.actividad', 'id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre', 'documento']
-    user.groups[0] !== "administrador" ? setError(true) : null
-    
+    user.groups[0] !== "administrador" && user.groups[0] !== "investigador" && user.groups[1] !== "investigador" ? setError(true) : null
+
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     //===============================================================================================================================
 
     useEffect(() => {
@@ -41,7 +45,7 @@ export const GestionPropuestas = () => {
     }, [propuestas])
 
     const configureReportData = async () => {
-    
+
         const getColaborador = async (id_colaborador_principal) => {
             const token = localStorage.getItem('token');
             var colaborador = null
@@ -134,7 +138,7 @@ export const GestionPropuestas = () => {
             fecha_vigencia: formatDate(propuesta.id_codigo_cimpa_fk.fecha_vigencia)
         }
     }));
-    
+
     // Detecta cambios y realiza la solicitud nuevamente  
     useEffect(() => {
         async function fetchData() {
@@ -164,27 +168,33 @@ export const GestionPropuestas = () => {
 
     async function loadPropuestas() {
         try {
-            const res = await obtenerPropuestas(localStorage.getItem('token'))
-            setData(res.data)
-            setPropuestas(res.data)
-
+            if (isInvestigador) {
+                const res = await obtenerPropuestas(localStorage.getItem('token'))
+                const propuestasFiltradas = res.data.filter(propuesta => propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo === user.academico_fk.correo);
+                setData(propuestasFiltradas)
+                setPropuestas(propuestasFiltradas)
+            } else {
+                const res = await obtenerPropuestas(localStorage.getItem('token'))
+                setData(res.data)
+                setPropuestas(res.data)
+            }
         } catch (error) {
-           
+            console.error(error)
         }
     }
 
-    useEffect(()=>{
-        if(id_codigo_cimpa && data.length > 0){
+    useEffect(() => {
+        if (id_codigo_cimpa && data.length > 0) {
             const elemento = data.find(e => e.id_codigo_cimpa_fk.id_codigo_cimpa === id_codigo_cimpa);
-            if(elemento){
+            if (elemento) {
                 setPropuesta(elemento)
                 setEdit(true)
                 setAddClick(false)
-            }else{
+            } else {
                 navigate('/gestion-propuestas')
             }
         }
-    },[data,id_codigo_cimpa])
+    }, [data, id_codigo_cimpa])
 
     const success = () => {
         window.location.href = '/gestion-propuestas'
@@ -301,7 +311,7 @@ export const GestionPropuestas = () => {
             const fecha_vigencia_adaptada = Datos.id_codigo_cimpa_fk.fecha_vigencia;
             if (!fecha_vigencia_adaptada.endsWith("Z")) {
                 fecha_vigencia = fecha_vigencia_adaptada + "T00:00:00Z";
-            }else{
+            } else {
                 fecha_vigencia = fecha_vigencia_adaptada;
             }
             delete Datos.id_codigo_cimpa_fk.fecha_vigencia;
@@ -431,10 +441,10 @@ export const GestionPropuestas = () => {
                     <div className="d-flex flex-row"><h1>Gestión de propuestas</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
                     <div className="d-flex mt-4">
                         <div className="col">
-                            <Add onClick={addClicked}></Add>
-                        </div> 
+                            {!isInvestigador && (<Add onClick={addClicked}></Add>)}
+                        </div>
                         {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
-                        <Search colNames={columns} columns={dataKeys} onSearch={search}></Search> 
+                        <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
                     <Table columns={columns} data={transformedPropuestas} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
                     {addClick && (<Modal ><PropuestasForm academicos={academicos} onSubmit={addPropuesta} onCancel={onCancel} mode={1}></PropuestasForm></Modal>)}

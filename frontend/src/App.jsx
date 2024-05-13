@@ -1,11 +1,7 @@
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom' 
 import { Header } from './components/Layout/Header'
-import './App.css'
 import { useEffect } from 'react'
-import { InicioAdministrador } from './pages/Inicio/InicioAdministrador'
-import { InicioInvestigador } from './pages/Inicio/InicioInvestigador'
-import { InicioEvaluador } from './pages/Inicio/InicioEvaluador'
 import { Sidebar } from './components/Layout/Sidebar'
 import { Footer } from './components/Layout/Footer'
 import BreadcrumbsCustom from './utils/BreadCrumbs'
@@ -18,9 +14,9 @@ import GestionProyectos from "./routes/GestionProyectos"
 import GestionEvaluaciones from './routes/GestionEvaluaciones'
 import EvaluacionProyectos from './routes/EvaluacionProyectos'
 import GestionOrganosColegiados from "./routes/GestionOrganosColegiados"
-import pruebaReporte from './routes/pruebaReporte'
-
 import GestionAsistentes from "./routes/GestionAsistentes"
+//import GestionPáginasInicio from './routes/GestionPáginasInicio'
+import './App.css'
 
 function App() {
   useEffect(() => {
@@ -53,10 +49,6 @@ function App() {
               {GestionEvaluaciones}
               {GestionOrganosColegiados}
               {GestionAsistentes}
-              {pruebaReporte}
-              <Route path='/inicio-administrador' element={<InicioAdministrador usuario={localStorage.getItem('user')} />}></Route>
-              <Route path='/inicio-evaluador' element={<InicioEvaluador></InicioEvaluador>}></Route>
-              <Route path='/inicio-investigador' element={<InicioInvestigador></InicioInvestigador>}></Route>
             </Routes> 
           </div>
         </div>
@@ -67,3 +59,4 @@ function App() {
 }
 
 export default App
+//{GestionPáginasInicio}

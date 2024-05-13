@@ -357,7 +357,7 @@ export const GestionAsistentes = () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        <h1>Gestión de Asistentes de la versión {numVersion} de: </h1>
+                        <h1>Gestión de asistentes de la versión {numVersion} de: </h1>
                         <br></br>
                         <h3>{id_proyecto}</h3>
                     </div>
@@ -388,7 +388,7 @@ export const GestionAsistentes = () => {
                     )}
                     <Toaster></Toaster>
                     <div className="d-flex justify-content-start">
-                        <Back onClick={volver}>Regresar</Back>
+                        <Back onClick={volver}>Regresar a versión de proyecto</Back>
                     </div>
                 </div>
             ) : (

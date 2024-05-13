@@ -26,6 +26,10 @@ export const GestionProyectos = () => {
     const columns = ['Código VI', 'Nombre', 'Descripción', 'Actividad', 'Versiones']
     const dataKeys = ['id_codigo_vi', 'id_codigo_cimpa_fk.nombre', 'id_codigo_cimpa_fk.descripcion', 'id_codigo_cimpa_fk.actividad', 'Versiones']
 
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     //===============================================================================================================================
     // Configuración particular para reporte de proyectos
     //===============================================================================================================================
@@ -255,9 +259,19 @@ export const GestionProyectos = () => {
 
     async function loadProyectos() {
         try {
-            const res = await obtenerProyectos(localStorage.getItem('token'))
-            setData(res.data)
-            setProyectos(res.data)
+            if(isInvestigador){
+                const res = await obtenerProyectos(localStorage.getItem('token'))
+
+                const proyectosFiltrados = res.data.filter(proyecto => proyecto.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.correo === user.academico_fk.correo);
+
+                setData(res.data)
+                setProyectos(res.data)
+            } else {
+                const res = await obtenerProyectos(localStorage.getItem('token'))
+                setData(res.data)
+                setProyectos(res.data)
+            }
+           
 
         } catch (error) {
             toast.error('Error al cargar los datos de proyectos', {
@@ -290,7 +304,7 @@ export const GestionProyectos = () => {
         setProyectos(matches)
     }
 
-    user.groups[0] !== "administrador" ? setError(true) : null
+    user.groups[0] !== "administrador" && user.groups[0] !== "investigador" && user.groups[1] !== "investigador"  ? setError(true) : null
 
     return (
         <main>

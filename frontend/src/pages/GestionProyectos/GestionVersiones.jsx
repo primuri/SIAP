@@ -36,7 +36,10 @@ export const GestionVersiones = () => {
     const columns2 = ['Código VI', 'Nombre', 'Versión', 'Detalle', 'Informes', 'Presupuesto', 'Asistentes']
     const dataKeys2 = ['id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi', 'id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre', 'id_version_proyecto_fk.numero_version', 'id_version_proyecto_fk.detalle', '', '', '']
 
-    user.groups[0] !== "administrador" ? setError(true) : null  
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     const volver = () => {
         navigate(`/gestion-proyectos`)
     };
@@ -692,7 +695,12 @@ export const GestionVersiones = () => {
                             )}
                         </div>
                         <div className="d-flex justify-content-between mt-4">
-                            <Add onClick={addClicked}></Add>
+                            <div className="col">
+
+                        {!isInvestigador && (<Add onClick={addClicked}></Add>)}
+
+                            </div>
+
                             <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                         </div>
                         <div className="mt-3">

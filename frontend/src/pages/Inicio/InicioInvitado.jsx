@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-export const InicioInvestigador = ({ usuario }) => {
+export const InicioInvitado = ({ usuario }) => {
 
   const usuarioObjeto = JSON.parse(usuario);
   const correo = usuarioObjeto.correo;
@@ -53,7 +53,8 @@ export const InicioInvestigador = ({ usuario }) => {
                   El sistema <b>SIAP</b> es una solución para la Administración de Proyectos en el Centro de Investigación en Matemática Pura y Aplicada de la UCR.  Está diseñado para proporcionar una plataforma centralizada, organizada y segura para el manejo de cada proyecto.
                 </p>
                 <p className="fs-5 m-5 mt-0 mb-4">
-                 Cada investigador puede <b>visualizar</b> el módulo de Propuestas de Proyectos a través de la barra de navegación ubicada a la izquierda. Adicionalmente, también puede visualizar el módulo de Proyectos de Investigación y todo lo que compone cada uno de ellos: versiones, informes, presupuesto, asistentes, entre otros.</p>
+                 Cada invitado puede <b>visualizar</b> el módulo de Órganos Colegiados a través de la barra de navegación ubicada a la izquierda. Además, también puede acceder a la información de cada órgano colegiado así como de los integrantes, las sesiones y los acuerdos de cada sesión.
+                </p>
               </div>
             </div>
 
@@ -71,18 +72,6 @@ export const InicioInvestigador = ({ usuario }) => {
                               <div id="collapseOne" className="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div className="accordion-body">
                                     Haga doble click en la fila de la tabla que desea visualizar y esto le abrirá un cuadro con toda la información detallada.
-                                </div>
-                              </div>
-                      </div>
-                      <div className="accordion-item">
-                              <h2 className="accordion-header" id="headingTwo">
-                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    ¿Por qué al darle click a un registro de la tabla de proyectos no se abre el cuadro con información?
-                                </button>
-                              </h2>
-                              <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                <div className="accordion-body">
-                                Esta tabla de registros de proyectos no contiene información adicional que sea necesaria para su visualización. Para obtener más detalles, puede dirigirse al botón de versiones, donde podrá explorar cada registro de manera más detallada.
                                 </div>
                               </div>
                       </div>

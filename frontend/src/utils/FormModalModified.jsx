@@ -13,9 +13,13 @@ export const FormModalModified = ({ icono, mode, borrar, nombreForm, onCancel, h
               </div>
             </div>
             <div className="col-10 mb-0 text-center">
-              <h2 className="headerForm">
-                {mode === 1 ? `Agregar ${nombreForm}` : `Editar ${nombreForm}`}
-              </h2>
+            <h2 className="headerForm">
+              {mode === 1 && `Agregar ${nombreForm}`}
+              
+              {mode === 2 && !borrar && `Editar ${nombreForm}`}
+              
+              {mode === 2 && borrar && `Visualizar ${nombreForm}`}
+            </h2>
             </div>
             <div className="col-1 mb-0 text-center">
               <button
@@ -34,7 +38,7 @@ export const FormModalModified = ({ icono, mode, borrar, nombreForm, onCancel, h
       </div>
       <form onSubmit={sendForm} className='d-flex flex-column'>
         <div className="modal-body" style={{ padding: '0px' }} > 
-          {children}  {/*Se agrega el body del form*/}
+          {children}  
         </div>
         <div className="modal-footer justify-content-center position-sticky bottom-0">
           <div className="row">

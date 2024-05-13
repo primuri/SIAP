@@ -18,6 +18,15 @@ export const obtenerOrganosColegiados = async () => {
     )
 }
 
+export const obtenerOrganoColegiadoPorId = async (token, organoID) => {
+    return await manejarErrores(SIAPAPI.get(`organo_colegiado/organo_colegiado/${organoID}/`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};
+
 export const agregarOrganoColegiado = async (organo_colegiado) => {
     return await manejarErrores(SIAPAPI.post('organo_colegiado/organo_colegiado/', organo_colegiado, {
         headers: {
@@ -276,3 +285,67 @@ export const eliminarActa = async (id) => {
     })
     )
 }
+
+
+export const agregarOficio = async (oficio) => {
+    const ofi = await manejarErrores(SIAPAPI.post('version_proyecto/oficios/', oficio, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+    return ofi.data.id_oficio
+};
+
+
+export const agregarSeguimiento = async (seguimiento) => {
+
+    const seguimientoid = await manejarErrores(SIAPAPI.post('organo_colegiado/seguimiento/', seguimiento,{
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
+    return seguimientoid.data.id_seguimiento;
+}
+
+
+export const agregarAcuerdo = async (acuerdo) => {
+    return await manejarErrores(SIAPAPI.post('organo_colegiado/acuerdo/', acuerdo,{
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    )
+}
+
+
+export const eliminarOficio = async (id) => {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`,{
+        headers: {'Authorization': `token ${token}`, 
+                  'Content-Type':'application/json'}
+     }));
+};
+
+
+
+export const editarOficio = async (id, oficio) => {
+    return await manejarErrores(SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }));
+};
+
+
+export const editarAcuerdo = async (id, acuerdo) => {
+    return await manejarErrores(SIAPAPI.patch(`organo_colegiado/acuerdo/${id}/`, acuerdo, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
+};

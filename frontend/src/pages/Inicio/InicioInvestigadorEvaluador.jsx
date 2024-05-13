@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-export const InicioAdministrador = ({ usuario }) => {
+export const InicioInvestigadorEvaluador = ({ usuario }) => {
 
   const usuarioObjeto = JSON.parse(usuario);
   const correo = usuarioObjeto.correo;

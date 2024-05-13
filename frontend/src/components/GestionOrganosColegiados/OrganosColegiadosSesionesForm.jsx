@@ -11,8 +11,7 @@ import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
 
-export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel, onDelete, organoColegiado }) => {
-        // Cargar informacion
+export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel, onDelete, organoColegiado, rol }) => {
         const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
         const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
         const [fileData, setFileData] = useState(null);
@@ -52,28 +51,27 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
         }, [sesion])
       
         const handleChange = (event) => {
+
+            if (rol === "invitado") {
+                return;
+            }
+
             const target = event.target;
             const value = target.type === 'checkbox' ? target.checked : target.value;
             const name = target.name;
         
             setFormData(prevFormData => {
-                // Función recursiva para establecer datos anidados
-                console.log(`Field name: ${name}, Value: ${value}`);
-
                 const setNestedData = (path, value, obj) => {
                     let levels = path.split('.');
                     let lastLevel = levels.pop();
                     let depth = levels.reduce((o, level) => {
-                        if (!o[level]) o[level] = {};  // Crear el nivel si no existe
+                        if (!o[level]) o[level] = {}; 
                         return o[level];
                     }, obj);
                     depth[lastLevel] = value;
                 };
-        
-                // Crea una copia del estado anterior para evitar mutaciones
                 const updatedFormData = {...prevFormData};
-        
-                // Actualizar el estado usando la función para manejar datos anidados
+    
                 setNestedData(name, value, updatedFormData);
         
                 return updatedFormData;
@@ -95,11 +93,6 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
         combinedData.append('json', JSON.stringify(formData));
         onSubmit(combinedData);
     };
-
-    function formDate(dateString){
-        if(!dateString) return "";
-        return new Date(dateString).toISOString().split('T')[0];
-    }
       
         const handleDeleteClick = () => {
           setShowConfirmationDelete(true);
@@ -148,7 +141,16 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar sesión" : "Editar sesión"}
+                                {rol === "administrador" && (
+                                    <span>
+                                        {mode === 1 ? "Agregar sesión" : "Editar sesión"}
+                                    </span>
+                                )}
+                                {rol === "invitado" && (
+                                    <span>
+                                        Sesión
+                                    </span>
+                                )}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -167,13 +169,13 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_sesion" className="label-personalizado mb-2">Identificador</label>
-                                    <input type="text" className="form-control" name="id_sesion" id="id_sesion" value={formData.id_sesion} onChange={handleChange} readOnly = {mode === 2}/>
+                                    <input type="text" className="form-control" name="id_sesion" id="id_sesion" value={formData.id_sesion} onChange={handleChange} readOnly = {mode === 2} disabled={rol === "invitado"}/>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="fecha" className="label-personalizado mb-2">Fecha</label>
-                                        <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} required />
+                                        <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={rol === "invitado"}/>
                                     </div>
                             </div>
                         </div>
@@ -181,12 +183,12 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_acta_fk.id_documento_acta_fk.detalle" className="label-personalizado mb-2">Detalle de acta</label>
-                                    <input type="text" className="form-control" name="id_acta_fk.id_documento_acta_fk.detalle" id="id_acta_fk.id_documento_acta_fk.detalle" value={formData.id_acta_fk.id_documento_acta_fk.detalle} onChange={handleChange} required/>
+                                    <input type="text" className="form-control" name="id_acta_fk.id_documento_acta_fk.detalle" id="id_acta_fk.id_documento_acta_fk.detalle" value={formData.id_acta_fk.id_documento_acta_fk.detalle} onChange={handleChange} required disabled={rol === "invitado"}/>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento_acta" className="label-personalizado mb-2">Documento del acta</label>
-                                <input type="file" className="form-control" name="id_acta_fk.id_documento_acta_fk.documento" id="id_acta_fk.id_documento_acta_fk.documento"  onChange={handleFileChange} required />
+                                <input type="file" className="form-control" name="id_acta_fk.id_documento_acta_fk.documento" id="id_acta_fk.id_documento_acta_fk.documento"  onChange={handleFileChange} required disabled={rol === "invitado"}/>
                                 {mode === 2 ? (
                                     <Tooltip title={formData.id_acta_fk.id_documento_acta_fk.documento.split('/').pop()} placement="right-start">
                                     <a href={"http://localhost:8000" + formData.id_acta_fk.id_documento_acta_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -200,26 +202,28 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="medio" className="label-personalizado mb-2">Medio</label>
-                                <input type="text" className="form-control" name="medio" id="medio" value={formData.medio} onChange={handleChange} required />
+                                <input type="text" className="form-control" name="medio" id="medio" value={formData.medio} onChange={handleChange} required disabled={rol === "invitado"}/>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="link_carpeta" className="label-personalizado mb-2">Enlace a la documentación</label>
-                                    <input type="text" className="form-control" name="link_carpeta" id="link_carpeta" value={formData.link_carpeta} onChange={handleChange}/>
+                                    <input type="text" className="form-control" name="link_carpeta" id="link_carpeta" value={formData.link_carpeta} onChange={handleChange} disabled={rol === "invitado"}/>
                                 </div>
                             </div>
                         </div>       
 
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="id_agenda_fk.tipo" className="label-personalizado mb-2">Tipo de agenda</label>
+                                <label htmlFor="id_agenda_fk.tipo" className="label-personalizado mb-2" >Tipo de agenda </label >
                                 <select
+                                
                                 className="form-control"
                                 name="id_agenda_fk.tipo"
                                 id="id_agenda_fk.tipo"
                                 value={formData.id_agenda_fk.tipo}
                                 onChange={handleChange}
-                                required
+                                required 
+                                disabled={rol === "invitado"}
                                 >
                                     <option value="">Selecciona un tipo</option>
                                     <option value="inicial">Inicial</option>
@@ -229,7 +233,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_agenda_fk.detalle" className="label-personalizado mb-2">Detalle agenda</label>
-                                    <input type="text" className="form-control" name="id_agenda_fk.detalle" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange}/>
+                                    <input type="text" className="form-control" name="id_agenda_fk.detalle" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange} disabled={rol === "invitado"}/>
                                 </div>
                             </div>
                         </div>   
@@ -237,7 +241,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="doc_convocatoria" className="label-personalizado mb-2">Documento de la convocatoria</label>
-                                    <input type="file" className="form-control" name="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" id="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" onChange={handleFileChange} required />
+                                    <input disabled={rol === "invitado"} type="file" className="form-control" name="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" id="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" onChange={handleFileChange} required />
                                     {mode === 2 ? ( 
                                         <Tooltip title={formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -254,29 +258,30 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                         </div>           
                     </div>
                 </div>
-       
-                <div className="modal-footer justify-content-center position-sticky bottom-0">
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-20 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="sesión" />)}
-                                </>
-                            )}
-                        </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="sesión" />)}
-                                </>
-                            )}
+                {rol === "administrador" && (                
+                    <div className="modal-footer justify-content-center position-sticky bottom-0">
+                        <div className="row">
+                            <div className="col">
+                                {mode === 1 ? (
+                                    <button id="boton-personalizado" type="submit" className='table-button border-0 p-20 rounded text-white'>Agregar</button>
+                                ) : (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                        {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="sesión" />)}
+                                    </>
+                                )}
+                            </div>
+                            <div className="col">
+                                {mode === 2 && (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                        {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="sesión" />)}
+                                    </>
+                                  )}
+                            </div>
                         </div>
                     </div>
-                </div>
+              )}
             </form>
             <Toaster></Toaster>
         </div>

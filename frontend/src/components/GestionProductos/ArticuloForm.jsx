@@ -42,25 +42,11 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
   const initialFormData = producto || defaultFormData;
   const [formData, setFormData] = useState(initialFormData);
 
-  const updateNestedField = (formData, fieldPath, value) => {
-    const keys = fieldPath.split('.');
-    const lastKey = keys.pop();
+  const user = JSON.parse(localStorage.getItem('user'))
 
-    keys.reduce((obj, key) => obj[key] = obj[key] || {}, formData)[lastKey] = value;
-
-    return { ...formData };
-  };
-
-
-  const check = (value) => {
-    const regex = /^[A-Za-záéíóúÁÉÍÓÚ\s]*$/;
-    return regex.test(value) || value === "";
-  };
-
-  const checkLetraNum = (value) => {
-    const regex = /^[A-Za-z0-9áéíóúÁÉÍÓÚ\s]*$/;
-    return regex.test(value);
-  };
+  const isInvestigador = user.groups.some((grupo) => {
+      return grupo === 'investigador';
+  });
 
 
   const checkCedula = (value) => {
@@ -68,18 +54,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     return regex.test(value);
   };
 
-  const camposSoloLetras = [
-    "id_autor_fk.id_nombre_completo_fk.nombre",
-    "id_autor_fk.id_nombre_completo_fk.apellido",
-    "id_autor_fk.id_nombre_completo_fk.segundo_apellido",
-    "tipo"
-  ];
 
-
-  const camposLetrasNum = [
-    "id_revista_fk.nombre",
-    "nombre"
-  ];
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -94,11 +69,8 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         return; 
     }
 
-    if (camposSoloLetras.includes(name) && !check(value)) {
-        return;
-    } else if (name === "cedula" && !checkCedula(value)) {
-        return; 
-    } else if (camposLetrasNum.includes(name) && !checkLetraNum(value)) {
+   
+    if (name === "cedula" && !checkCedula(value)) {
         return; 
     }
 
@@ -130,7 +102,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col-md-6">
           <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-          <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required />
+          <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto   </label>
@@ -139,7 +111,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
             id="id_producto_fk.fecha"
             value={formData.id_producto_fk.fecha
               ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-            onChange={handleChange} required />
+            onChange={handleChange} required disabled={isInvestigador}/>
         </div>
       </div>
       <div className="row mb-2">
@@ -150,34 +122,34 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre del artículo   </label>
-          <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+          <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="fecha_publicacion" className="label-personalizado mb-2">Fecha de Publicación  </label>
           <input type="date" className="form-control" name="fecha_publicacion" id="fecha_publicacion"
             value={formData.fecha_publicacion
               ? new Date(formData.fecha_publicacion).toISOString().split('T')[0] : ""}
-            onChange={handleChange} required />
+            onChange={handleChange} required disabled={isInvestigador}/>
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="tipo" className="label-personalizado mb-2"> Tipo   </label>
-          <input type="text" className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required />
+          <input type="text" className="form-control" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="doi" className="label-personalizado mb-2"> DOI   </label>
-          <input type="text" className="form-control" name="doi" id="doi" value={formData.doi} onChange={handleChange} required />
+          <input type="text" className="form-control" name="doi" id="doi" value={formData.doi} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="isbn" className="label-personalizado mb-2"> ISBN   </label>
-          <input type="text" className="form-control" name="isbn" id="isbn" value={formData.isbn} onChange={handleChange} required />
+          <input type="text" className="form-control" name="isbn" id="isbn" value={formData.isbn} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="cant_paginas" className="label-personalizado mb-2"> Cantidad de Páginas   </label>
-          <input type="number" className="form-control" name="cant_paginas" id="cant_paginas" value={formData.cant_paginas} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required />
+          <input type="number" className="form-control" name="cant_paginas" id="cant_paginas" value={formData.cant_paginas} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required disabled={isInvestigador}/>
         </div>
       </div>
       <div className="row mb-2">
@@ -188,11 +160,11 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="nombreRevista" className="label-personalizado mb-2"> Nombre de la Revista   </label>
-          <textarea className="form-control" name="id_revista_fk.nombre" id="nombreRevista" value={formData.id_revista_fk.nombre} onChange={handleChange} required />
+          <textarea className="form-control" name="id_revista_fk.nombre" id="nombreRevista" value={formData.id_revista_fk.nombre} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col-md-6">
           <label htmlFor="paisRevista" className="label-personalizado mb-2">País de la Revista   </label>
-          <select className="form-control" name="id_revista_fk.pais" id="id_revista_fk.pais" value={formData.id_revista_fk.pais} onChange={handleChange} required>
+          <select className="form-control" name="id_revista_fk.pais" id="id_revista_fk.pais" value={formData.id_revista_fk.pais} onChange={handleChange} required disabled={isInvestigador}>
             <option value="">Seleccione un país</option>
             {Paises.map((pais) => (
               <option key={pais.value} value={pais.value}> {pais.label} </option>))}
@@ -207,25 +179,25 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="nombreAutor" className="label-personalizado mb-2"> Nombre   </label>
-          <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.nombre" id="nombreAutor" value={formData.id_autor_fk.id_nombre_completo_fk.nombre} onChange={handleChange} required />
+          <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.nombre" id="nombreAutor" value={formData.id_autor_fk.id_nombre_completo_fk.nombre} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="apellidoAutor" className="label-personalizado mb-2"> Apellido  </label>
-          <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.apellido" id="apellidoAutor" value={formData.id_autor_fk.id_nombre_completo_fk.apellido} onChange={handleChange} required />
+          <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.apellido" id="apellidoAutor" value={formData.id_autor_fk.id_nombre_completo_fk.apellido} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="segundoApellidoAutor" className="label-personalizado mb-2"> Segundo Apellido <span className="optional"> (Opcional)</span> </label>
-          <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.segundo_apellido" id="segundoApellidoAutor" value={formData.id_autor_fk.id_nombre_completo_fk.segundo_apellido} onChange={handleChange} />
+          <input type="text" className="form-control" name="id_autor_fk.id_nombre_completo_fk.segundo_apellido" id="segundoApellidoAutor" value={formData.id_autor_fk.id_nombre_completo_fk.segundo_apellido} onChange={handleChange} disabled={isInvestigador}/>
         </div>
       </div>
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="detalleArticulo" className="label-personalizado mb-2"> Detalle Artículo   </label>
-          <textarea className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required />
+          <textarea className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
           <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo   </label>
-          <input type="file" className="form-control" name="id_documento_articulo_fk.documento" id="documento" onChange={handleFileChange} required={mode == 1 ? true : ''} />
+          <input type="file" className="form-control" name="id_documento_articulo_fk.documento" id="documento" onChange={handleFileChange} required={mode == 1 ? true : ''} disabled={isInvestigador}/>
           {mode === 2 ? (
             <Tooltip title={formData.id_documento_articulo_fk.documento.split('/').pop()} placement="right-start">
               <a href={"http://localhost:8000" + formData.id_documento_articulo_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -239,7 +211,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
       <div className="row mb-4">
         <div className="col">
           <label htmlFor="observaciones" className="label-personalizado mb-2"> Observaciones <span className="optional"> (Opcional)</span> </label>
-          <textarea className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} />
+          <textarea className="form-control" name="observaciones" id="observaciones" value={formData.observaciones} onChange={handleChange} disabled={isInvestigador}/>
         </div>
       </div>
     </>

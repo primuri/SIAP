@@ -112,9 +112,9 @@ export const GestionVersionPresupuesto = () => {
                     <Add onClick={addBtnClicked}></Add>
                     <Search colNames={columnsVI.slice(0, -1)} columns={dataKeyVI.slice(0, -1)} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsVI} data={versionesPresupuestoList} dataKeys={dataKeyVI} onDoubleClick ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+                <Table columns={columnsVI} data={versionesPresupuestoList} dataKeys={dataKeyVI} onDoubleClick ={elementClicked} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
-                    <Back onClick={volverPresupuestos}>Regresar a Presupuestos</Back>
+                    <Back onClick={volverPresupuestos}>Regresar a presupuestos</Back>
                 </div>
                 {(addClicked || editClicked) && (
                     <Modal>
