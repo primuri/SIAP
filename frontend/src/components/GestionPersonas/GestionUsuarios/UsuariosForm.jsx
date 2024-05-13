@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Toaster, toast } from "react-hot-toast";
 import { obtenerAcademicos } from "../../../api/gestionAcademicos";
 import { obtenerEvaluadores } from "../../../api/gestionEvaluadores";
-import icono from '../../../assets/person-i.png';
+import icono from '../../../assets/add_person.svg';
 import { Confirmar } from '../../../utils/Confirmar'
 
 export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) => {
@@ -244,7 +244,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono} alt="" width={'72px'} />
+                                <img src={icono}/>
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">

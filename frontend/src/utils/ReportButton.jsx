@@ -117,13 +117,16 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
     }
     return (
         <div style={{ marginRight: '1vw' }}>
-            <button type="button" className="background-color-celeste-ucr border-0 text-light rounded-3 p-2 d-flex" onClick={handleButtonClick}>
-                <span className='icono'><img width={"20px"} src={reporte} /></span>
-                <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
-                    <option>PDF</option>
-                    <option>EXCEL</option>
-                </select>
-            </button>
+            <div class="mi-boton-wrapper">
+                <button type="button" className="boton-reporte" onClick={handleButtonClick}>
+                    <span className='icono'><img width={"30px"} src={reporte} /></span>
+                    <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
+                        <option>PDF</option>
+                        <option>EXCEL</option>
+                    </select>
+                </button>
+                <span class="hover-text">Generar reporte de la información en pantalla</span>
+            </div>
             {
                 (buttonClicked && (
                     <div style={{ position: 'absolute', left: -9999, top: -9999, margin: '0px' }}>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../../utils/FomularioDinamico"
 import { obtenerTelefonos, obtenerTitulos, obtenerUniversidades, obtenerPropuestas } from "../../../api/gestionAcademicos"
 import { toast, Toaster } from 'react-hot-toast'
-import icono from '../../../assets/person-i.png';
+import icono from '../../../assets/add_person.svg';
 import icono2 from '../../../assets/upload_image.svg';
 import Upload from '../../../utils/UploadImage';
 import TextField from '@mui/material/TextField';
@@ -283,7 +283,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono} alt="" width={'72px'} />
+                                <img src={icono}/>
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">

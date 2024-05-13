@@ -20,14 +20,14 @@ const UploadDoc = ({ mode, handleFileChange, formData, icono2 }) => {
           <label htmlFor="documento_asociado.documento" className="label-personalizado mb-2">
             {mode === 1 ? (
               <>
-                Documento
+                Agregar documento
                 <br />
                 <label htmlFor="documento" style={{ cursor: 'pointer' }}>
                   <input type="file" className="form-control" name="documento" id="documento" onChange={updateSelectedFileName} style={{ display: 'none' }} />
                   {selectedFileName ? (
                     <span>Nombre del archivo: {selectedFileName}</span>
                   ) : (
-                    <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                    <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginLeft: '100px' }} />
                   )}
                 </label>
               </>

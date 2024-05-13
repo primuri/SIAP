@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import icono from '../../assets/person-i.png';
+import icono from '../../assets/budget.svg';
 import { Confirmar } from '../../utils/Confirmar';
 import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
@@ -168,7 +168,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono} alt="" width={'72px'} />
+                                <img src={icono}/>
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">

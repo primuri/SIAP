@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
-import icono from '../../assets/person-i.png';
+import icono from '../../assets/proposal.svg';
 import Upload from '../../utils/UploadDoc';
 import icono2 from '../../assets/upload_doc.svg';
 import { Confirmar } from '../../utils/Confirmar'
@@ -186,7 +186,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                 <div className="text-center">
                     <div className="img-space">
-                        <img src={icono} alt="" width={'72px'} />
+                        <img src={icono}/>
                     </div>
                 </div>
                 <div className="col-10 mb-0 text-center" >

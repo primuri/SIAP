@@ -2,7 +2,7 @@ import { FormModal } from "../../utils/FormModal";
 import { VIFields } from "../../pages/GestionInformes/utils";
 import { useState, useEffect } from "react";
 import Tooltip from '@mui/material/Tooltip';
-import icono from '../../assets/person-i.png'
+import icono from '../../assets/document.svg'
 
 export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, versionInforme }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false)

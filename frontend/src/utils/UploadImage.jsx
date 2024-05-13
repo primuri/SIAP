@@ -18,13 +18,13 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
           <label className="label-personalizado mt-4" htmlFor="foto">
             {mode === 1 ? (
               <>
-                Subir foto
+                Agregar foto
                 <br />
                 <input type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
                 {selectedFileName ? (
                   <span>Nombre del archivo: {selectedFileName}</span>
                 ) : (
-                  <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                  <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginLeft: '100px'}} />
                 )}
               </>
             ) : (
@@ -42,7 +42,7 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
                 {selectedFileName ? (
                   <span>Nombre del archivo: {selectedFileName}</span>
                 ) : (
-                  <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginRight: '5px' }} />
+                  <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginLeft: '100px'}} />
                 )}
               </>
             ) : (

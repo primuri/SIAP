@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import icono from '../../assets/person-i.png';
+import icono from '../../assets/project_version.svg';
 import { Confirmar } from '../../utils/Confirmar'
 import { SoftwareForm } from "../GestionProductos/SoftwareForm";
 import { ArticuloForm } from "../GestionProductos/ArticuloForm";
@@ -216,7 +216,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
             <div className="modal-header pb-0 position-sticky top-0">
                 <div className="text-center">
                     <div className="img-space">
-                        <img src={icono} alt="" width={'72px'} />
+                        <img src={icono}/>
                     </div>
                 </div>
                 <div id="modal-header-proyecto" className="col-10 mb-0 text-center">

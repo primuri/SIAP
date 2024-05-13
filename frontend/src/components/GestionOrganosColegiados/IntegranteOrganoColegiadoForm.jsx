@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { toast, Toaster } from 'react-hot-toast'
-import icono from '../../assets/person-i.png';
+import icono from '../../assets/add_person.svg';
 import { Confirmar } from '../../utils/Confirmar'
 import Tooltip from '@mui/material/Tooltip';
 
@@ -117,7 +117,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono} alt="" width={'72px'} />
+                                <img src={icono}/>
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">

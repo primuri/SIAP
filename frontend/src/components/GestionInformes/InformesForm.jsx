@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { toast, Toaster } from 'react-hot-toast'
-import icono from '../../assets/person-i.png';
+import icono from '../../assets/document.svg';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../utils/Confirmar'
@@ -82,7 +82,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono} alt="" width={'72px'} />
+                                <img src={icono}/>
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
