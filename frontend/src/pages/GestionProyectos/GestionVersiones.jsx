@@ -17,18 +17,18 @@ import { obtenerAcademicos } from "../../api/gestionAcademicos"
 import { agregarColaboradorSecundario, editarColaboradorSecundario, eliminarColaboradorSecundario } from "../../api/gestionProyectos";
 export const GestionVersiones = () => {
 
-    let {id_version,id} = useParams()
+    let { id_version, id } = useParams()
     const navigate = useNavigate()
-    const [proyectosVersion, setProyectosVersion] = useState([]) 
+    const [proyectosVersion, setProyectosVersion] = useState([])
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
     const [cargado, setCargado] = useState(false)
     const [data, setData] = useState([])
-    const [proyecto, setProyecto] = useState(null) 
+    const [proyecto, setProyecto] = useState(null)
     const [producto, setProducto] = useState(null)
     const [clean_id, setClean_id] = useState(id.startsWith('p_id=') ? id.split('p_id=')[1] : '')
     const [tipo, setTipo] = useState(null)
-    const [error, setError] = useState(false) 
+    const [error, setError] = useState(false)
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [academicos, setAcademicos] = useState([]);
@@ -79,7 +79,7 @@ export const GestionVersiones = () => {
             setProyectosVersion(filteredData)
             setCargado(true);
         } catch (error) {
-            
+
         }
     }
 
@@ -128,7 +128,7 @@ export const GestionVersiones = () => {
             }
 
         } catch (error) {
-           
+
         }
     }
 
@@ -151,42 +151,42 @@ export const GestionVersiones = () => {
                 return false;
             }
         } catch (error) {
-           
+
         }
     }
 
 
     useEffect(() => {
         const fetchData = async () => {
-          if (id_version && data.length > 0) {
-            const idNum = parseInt(id_version, 10);
-            const elemento = data.find(e => e.id_version_proyecto_fk.id_version_proyecto === idNum);
-            if (elemento) {
-              setEdit(true);
-              setAddClick(false);
-              setProyecto(elemento);
-              try {
-                const isSoftware = await loadSoftware(elemento);
-                if (!isSoftware) {
-                    const isArticulo = await loadArticulo(elemento);
-                    if (!isArticulo) {
-                        await loadEvento(elemento);
+            if (id_version && data.length > 0) {
+                const idNum = parseInt(id_version, 10);
+                const elemento = data.find(e => e.id_version_proyecto_fk.id_version_proyecto === idNum);
+                if (elemento) {
+                    setEdit(true);
+                    setAddClick(false);
+                    setProyecto(elemento);
+                    try {
+                        const isSoftware = await loadSoftware(elemento);
+                        if (!isSoftware) {
+                            const isArticulo = await loadArticulo(elemento);
+                            if (!isArticulo) {
+                                await loadEvento(elemento);
+                            }
+                        }
+                        setEdit(true);
+                        setAddClick(false);
+                    } catch (error) {
+                        console.error('Error al obtener los datos de la linea:', error);
                     }
+                } else {
+                    navigate(`/gestion-proyectos/${id}/gestion-versiones`);
                 }
-                setEdit(true);
-                setAddClick(false);
-              } catch (error) {
-                console.error('Error al obtener los datos de la linea:', error);
-              }
-            } else {
-              navigate(`/gestion-proyectos/${id}/gestion-versiones`);
             }
-          }
         };
-      
+
         fetchData();
-      }, [data, id_version]);
-      
+    }, [data, id_version]);
+
     const success = () => {
         window.location.href = `/gestion-proyectos/${id}/gestion-versiones`
     }
@@ -205,7 +205,7 @@ export const GestionVersiones = () => {
             let soft = null;
             let artic = null;
             let ev = null;
-            
+
 
             if ('software' in Datos) {
                 const DocumentacionData = new FormData();
@@ -346,7 +346,7 @@ export const GestionVersiones = () => {
             const id_vigencia_colab_creado = await agregarVigencia(vigencia_colab, localStorage.getItem('token'))
             delete Datos.id_vigencia_fk;
             Datos.id_vigencia_fk = id_vigencia_colab_creado;
-            Datos.id_academico_fk =  Datos.id_academico_fk.id_academico
+            Datos.id_academico_fk = Datos.id_academico_fk.id_academico
             Datos.id_version_proyecto_fk = id_version_creada;
 
             await agregarColaboradorSecundario(Datos, localStorage.getItem('token'))
@@ -360,7 +360,7 @@ export const GestionVersiones = () => {
                     background: 'var(--celeste-ucr)',
                     color: '#fff',
                     fontSize: '18px',
-                    height: '60px', 
+                    height: '60px',
                     width: '300px',
                 },
             })
@@ -573,12 +573,12 @@ export const GestionVersiones = () => {
             const id_vigencia_colab = Datos.id_vigencia_fk.id_vigencia;
             delete Datos.id_vigencia_fk;
             Datos.id_vigencia_fk = id_vigencia_colab;
-            Datos.id_academico_fk =  Datos.id_academico_fk.id_academico
+            Datos.id_academico_fk = Datos.id_academico_fk.id_academico
 
             Datos.id_version_proyecto_fk = id_version_proyecto_editado.data.id_version_proyecto;
 
             Datos.id_version_proyecto_fk = id_version_proy;
-           
+
             await editarColaboradorSecundario(Datos.id_colaborador_secundario, Datos, localStorage.getItem('token'))
 
             loadVersionProyectos(Datos.id_version_proyecto_fk.id_codigo_vi_fk)
@@ -597,7 +597,7 @@ export const GestionVersiones = () => {
             success()
         } catch (error) {
             toast.dismiss(toastId)
-            
+
         }
     }
 
@@ -681,8 +681,8 @@ export const GestionVersiones = () => {
         })
         setProyectosVersion(matches)
     }
-    
-    return(
+
+    return (
         <main>
 
             {!error ? (
@@ -696,11 +696,8 @@ export const GestionVersiones = () => {
                         </div>
                         <div className="d-flex justify-content-between mt-4">
                             <div className="col">
-
-                        {!isInvestigador && (<Add onClick={addClicked}></Add>)}
-
+                                {!isInvestigador && (<Add onClick={addClicked}></Add>)}
                             </div>
-
                             <Search colNames={columns2} columns={dataKeys2} onSearch={search}></Search>
                         </div>
                         <div className="mt-3">

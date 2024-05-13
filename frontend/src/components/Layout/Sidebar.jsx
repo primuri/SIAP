@@ -44,9 +44,14 @@ export const Sidebar = () => {
     ]
   };
     
-  var keyForSidebar = usuario.groups[0]
-  usuario.groups[1] ? keyForSidebar += "-" + usuario.groups[1] : "";
-  console.log(keyForSidebar)
+  if (usuario){
+    if(usuario.groups.length > 0){
+        var keyForSidebar = usuario.groups[0]
+        usuario.groups[1] ? keyForSidebar += "-" + usuario.groups[1] : "";
+        console.log(keyForSidebar)
+    }
+  }
+  
 
    return(
     <>
