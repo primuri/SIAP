@@ -135,7 +135,7 @@ export const GestionGastos = () => {
             setAddClick(false);
             setPartida(elemento);
           } else {
-            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos`);
+            navigate(`/gestion-partidas/${partidaID}/gestion-gastos`);
           }
         }
       };
@@ -215,8 +215,6 @@ export const GestionGastos = () => {
               },
           });
 
-          console.log(formData)
-
           const id_gasto = formData.id_gasto;
           formData.id_partida_fk = clean_id;
 
@@ -232,7 +230,6 @@ export const GestionGastos = () => {
               formData.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
           }
 
-          formData.id_factura_fk.id_cedula_proveedor_fk = formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
           const rF = await API.actualizarFactura(formData.id_factura_fk.id_factura, formData.id_factura_fk, token)
           formData.id_factura_fk = rF.data.id_factura
           formData.monto = parseInt(formData.monto);
@@ -275,10 +272,21 @@ export const GestionGastos = () => {
           },
         });
 
+        console.log("data")
+        console.log(gasto.id_documento_fk)
+
+        console.log("gasto")
         await API.eliminarGasto(gasto.id_gasto, token);
+        console.log("factura")
         await API.eliminarFactura(gasto.id_factura_fk.id_factura, token);
-        await API.eliminarDocumentoFactura(gasto.id_documento_fk.id_documento, token);
-  
+        console.log("doc")
+        if(gasto.id_documento_fk.documento !== null){
+          console.log("if")
+          await API.eliminarFacturaDocumento(gasto.id_documento_fk.id_documento, token);
+        }
+        console.log("reload")
+        setReload(!reload)
+
         toast.success('Gasto eliminado correctamente', {
           id: toastId,
           duration: 4000,

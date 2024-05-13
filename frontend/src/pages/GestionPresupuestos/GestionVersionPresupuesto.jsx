@@ -81,7 +81,7 @@ export const GestionVersionPresupuesto = () => {
     const elementClicked = (selectedVersionPresupuesto) => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setVersionPresupuesto(selectedVersionPresupuesto);
-            navigate(`${location.pathname}/${selectedVersionPresupuesto.id_version_presupuesto}/gestion-partidas/`)
+            navigate(`${location.pathname}/${selectedVersionPresupuesto.id_version_presupuesto}/gestion-partidas`)
             
         } else {
             setVersionPresupuesto(selectedVersionPresupuesto)
