@@ -22,6 +22,9 @@ function obtenerNombreDeUsuario(correoElectronico) {
   const usuario = JSON.parse(localStorage.getItem('user'));
   if (usuario) {
     rol = usuario.groups[0];
+    if(usuario.groups[1]) {
+      usuario.groups[1] ? rol += "-" + usuario.groups[1] : "";
+    }
   }
 
 export const Header = () => {

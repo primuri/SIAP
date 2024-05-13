@@ -31,13 +31,13 @@ export const Sidebar = () => {
         { label: 'Órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
       ],
     "evaluador-investigador": [
-//      { label: 'Inicio',        link: '/inicio-evaluador-investigador' },
+        { label: 'Inicio',        link: '/inicio-evaluador-investigador' },
         { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
         { label: 'Visualización Propuestas', link: '/gestion-propuestas' },
         { label: 'Visualización Proyectos', link: '/gestion-proyectos' },
     ],
     "investigador-evaluador": [
-//      { label: 'Inicio',        link: '/inicio-evaluador-investigador' },
+        { label: 'Inicio',        link: '/inicio-evaluador-investigador' },
         { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
         { label: 'Visualización Propuestas', link: '/gestion-propuestas' },
         { label: 'Visualización Proyectos', link: '/gestion-proyectos' },
@@ -52,7 +52,6 @@ export const Sidebar = () => {
     }
   }
   
-
    return(
     <>
         {usuario && (
