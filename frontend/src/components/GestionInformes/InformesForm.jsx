@@ -17,6 +17,11 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
 
+    const user = JSON.parse(localStorage.getItem('user'))
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     const [formData, setFormData] = useState({
         id: informe ? informe.id_informe : "",
         estado: informe ? informe.estado : "",
@@ -87,7 +92,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar informe" : "Editar informe"}
+                                {mode === 1 ? "Agregar informe" : !isInvestigador ? "Editar informe": "Visualizar informe"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -112,7 +117,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado   </label>
-                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required>
+                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required> disabled={isInvestigador} 
                                         <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
                                         <option value="En desarrollo">En desarrollo</option>
                                         <option value="En evaluación">En evaluación</option>
@@ -126,7 +131,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="tipo" className="label-personalizado mb-2">Tipo   </label>
-                                    <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
+                                    <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required disabled={isInvestigador} >
                                         <option value="" disabled defaultValue={""}>Seleccione un tipo</option>
                                         <option value="Primer parcial">Primer parcial</option>
                                         <option value="Segundo parcial">Segundo parcial</option>
@@ -138,7 +143,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación   </label>
-                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} required />
+                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
                                 </div>
                             </div>
                         </div>
@@ -146,7 +151,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="fecha_debe_presentar" className="label-personalizado mb-2">Fecha que se debe presentar  </label>
-                                <input type="date" className="form-control" name="fecha_debe_presentar" id="fecha_debe_presentar" value={formData.fecha_debe_presentar ? new Date(formData.fecha_debe_presentar).toISOString().split('T')[0] : ""} onChange={handleChange} required />
+                                <input type="date" className="form-control" name="fecha_debe_presentar" id="fecha_debe_presentar" value={formData.fecha_debe_presentar ? new Date(formData.fecha_debe_presentar).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                         </div>                  
                     </div>
@@ -154,7 +159,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
 
 
              
-
+                {!isInvestigador && (
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -176,7 +181,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             )}
                         </div>
                     </div>
-                </div>
+                </div>)}
             </form>
             <Toaster></Toaster>
         </div>

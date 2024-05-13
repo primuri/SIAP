@@ -41,6 +41,11 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
         }
     });
 
+    const user = JSON.parse(localStorage.getItem('user'))
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     useEffect(() => {
         loadTiposDePresupuesto()
         loadEntidades()
@@ -176,7 +181,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar presupuesto" : "Editar presupuesto"}
+                                {mode === 1 ? "Agregar presupuesto" : isInvestigador ? "Visualizar presupuesto" : "Editar presupuesto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -208,7 +213,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="tipoDePresupuesto" className="label-personalizado mb-2">Tipo   </label>
-                                <select className="form-select seleccion" name="tipoPresupuesto.id_tipo_presupuesto" id="tipoDePresupuesto" value={formData.tipoPresupuesto.id_tipo_presupuesto} onChange={handleChange} required>
+                                <select className="form-select seleccion" name="tipoPresupuesto.id_tipo_presupuesto" id="tipoDePresupuesto" value={formData.tipoPresupuesto.id_tipo_presupuesto} onChange={handleChange} required disabled={isInvestigador}>
                                     <option value="" disabled defaultValue>Seleccione el tipo de presupuesto</option>
                                     {tiposDePresupuesto && (
                                         tiposDePresupuesto.map((tipo, index) => {
@@ -224,7 +229,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="version" className="label-personalizado mb-2">Versión del proyecto  </label>
-                                    <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled />
+                                    <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled/>
                                 </div>
                             </div>
                         </div>
@@ -268,6 +273,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     }}
                                     selectOnFocus
                                     clearOnBlur
+                                    disabled={isInvestigador}
                                     handleHomeEndKeys
                                     id="ente_nombre"
                                     options={obtenerEntidadesPorNombre(entidades)}
@@ -326,6 +332,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     }}
                                     selectOnFocus
                                     clearOnBlur
+                                    disabled={isInvestigador}
                                     handleHomeEndKeys
                                     id="codigoFinanciero"
                                     options={obtenerCodigosFinancierosPorCodigo(codigoFinancieros)}
@@ -349,12 +356,12 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio  </label>
-                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador}/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento" className="label-personalizado mb-2">Oficio   </label>
                                 <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
+                                    required={mode == 1 ? true : ''} disabled={isInvestigador} />
                                 {mode == 2 ? (
                                     <Tooltip title={formData.oficio.ruta_archivo.split('/').pop()} placement="right-start">
                                         <a href={'http://localhost:8000' + formData.oficio.ruta_archivo} target="blank_"
@@ -370,7 +377,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="anioAprobacion" className="label-personalizado mb-2">Año de aprobación  </label>
-                                <input type="number" className="form-control" name="presupuesto.anio_aprobacion" id="anioAprobacion" value={formData.presupuesto.anio_aprobacion} onChange={handleChange} required min={2000} max={currentYear} />
+                                <input type="number" className="form-control" name="presupuesto.anio_aprobacion" id="anioAprobacion" value={formData.presupuesto.anio_aprobacion} onChange={handleChange} required min={2000} max={currentYear} disabled={isInvestigador}/>
                             </div>
 
                         </div>
@@ -378,6 +385,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
+                    {!isInvestigador && (
                     <div className="row">
                         <div className="col">
                             {mode === 1 ? (
@@ -398,6 +406,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             )}
                         </div>
                     </div>
+                    )}
                 </div>
             </form>
             <Toaster></Toaster>

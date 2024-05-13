@@ -221,7 +221,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 </div>
                 <div id="modal-header-proyecto" className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar una versión de proyecto" : mode === 2 ? "Editar una versión de proyecto": "Visualizar versión de proyecto"}
+                                {mode === 1 ? "Agregar una versión de proyecto" : mode === 2 && !isInvestigador ? "Editar una versión de proyecto": "Visualizar versión de proyecto"}
                             </h2>
                         </div>
                 <div>

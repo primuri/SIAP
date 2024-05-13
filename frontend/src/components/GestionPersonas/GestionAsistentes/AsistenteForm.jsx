@@ -16,33 +16,39 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
   const [fileData, setFileData] = useState(null);
 
   const [formData, setFormData] = useState({
-    id_designacion_asistente: asistente ? asistente.id_designacion_asistente: "",
-    cantidad_horas: asistente ? asistente.cantidad_horas: "",
-    consecutivo: asistente ? asistente.consecutivo: "",
-    id_asistente_carnet_fk: asistente ? asistente.id_asistente_carnet_fk: { 
-      carrera: asistente ? asistente.id_asistente_carnet_fk.carrera: "",
-      promedio_ponderado: asistente ? asistente.id_asistente_carnet_fk.promedio_ponderado: "",
-      cedula: asistente ? asistente.id_asistente_carnet_fk.cedula: "", 
-      condicion_estudiante: asistente ? asistente.id_asistente_carnet_fk.condicion_estudiante: "",
-      id_nombre_completo_fk: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk : { 
-        nombre: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.nombre : "" , 
-        apellido: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.apellido: "", 
-        segundo_apellido: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido: "" }
+    id_designacion_asistente: asistente ? asistente.id_designacion_asistente : "",
+    cantidad_horas: asistente ? asistente.cantidad_horas : "",
+    consecutivo: asistente ? asistente.consecutivo : "",
+    id_asistente_carnet_fk: asistente ? asistente.id_asistente_carnet_fk : {
+      carrera: asistente ? asistente.id_asistente_carnet_fk.carrera : "",
+      promedio_ponderado: asistente ? asistente.id_asistente_carnet_fk.promedio_ponderado : "",
+      cedula: asistente ? asistente.id_asistente_carnet_fk.cedula : "",
+      condicion_estudiante: asistente ? asistente.id_asistente_carnet_fk.condicion_estudiante : "",
+      id_nombre_completo_fk: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk : {
+        nombre: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.nombre : "",
+        apellido: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.apellido : "",
+        segundo_apellido: asistente && asistente.id_asistente_carnet_fk.id_nombre_completo_fk ? asistente.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido : ""
+      }
     },
-      id_documento_inopia_fk: asistente?.id_documento_inopia_fk || { id_documento: "", tipo: "Asistente", detalle: "", documento: "" }
+    id_documento_inopia_fk: asistente?.id_documento_inopia_fk || { id_documento: "", tipo: "Asistente", detalle: "", documento: "" }
 
+  });
+
+  const user = JSON.parse(localStorage.getItem('user'))
+  const isInvestigador = user.groups.some((grupo) => {
+    return grupo === 'investigador';
   });
 
   useEffect(() => {
   }, [asistente])
 
 
-  
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
     if ((name === "cantidad_horas" || name === "consecutivo") && (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value))) {
-        return;
+      return;
     }
 
     if (name.includes('.')) {
@@ -73,16 +79,16 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
         [name]: value,
       });
     }
-};
-const sendForm = (event) => {
-  event.preventDefault()
-  const combinedData = new FormData();
-  if (fileData) {
+  };
+  const sendForm = (event) => {
+    event.preventDefault()
+    const combinedData = new FormData();
+    if (fileData) {
       combinedData.append('id_documento_inopia_fk', fileData);
+    }
+    combinedData.append('json', JSON.stringify(formData))
+    onSubmit(combinedData)
   }
-  combinedData.append('json', JSON.stringify(formData))
-  onSubmit(combinedData)
-}
 
   const handleDeleteClick = () => {
     setShowConfirmationDelete(true);
@@ -91,8 +97,8 @@ const sendForm = (event) => {
   const handleEditClick = () => {
     setShowConfirmationEdit(true);
   };
-  
-  
+
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileData(file);
@@ -133,7 +139,7 @@ const sendForm = (event) => {
             </div>
             <div className="col-10 mb-0 text-center">
               <h2 className="headerForm">
-                {mode === 1 ? "Agregar Asistente" : "Editar Asistente"}
+                {mode === 1 ? "Agregar Asistente" : isInvestigador ? "Visualizar asistente" : "Editar Asistente"}
               </h2>
             </div>
             <div className="col-1 mb-0 text-center">
@@ -156,79 +162,79 @@ const sendForm = (event) => {
         <div className="modal-body" style={{ padding: '3vh 4vw' }}>
           <div className="container">
 
-          <div className="row mb-4">
-            <div className="col">
+            <div className="row mb-4">
+              <div className="col">
                 <label htmlFor="nombreAsistente" className="label-personalizado mb-4"> Nombre   </label>
-                <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.nombre" id="nombreAsistente" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.nombre} onChange={handleChange} required />
-            </div>
-            <div className="col">
+                <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.nombre" id="nombreAsistente" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.nombre} onChange={handleChange} required disabled={isInvestigador} />
+              </div>
+              <div className="col">
                 <label htmlFor="apellidoAsistente" className="label-personalizado mb-4"> Apellido  </label>
-                <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.apellido" id="apellidoAsistente" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} onChange={handleChange} required />
-            </div>
-            <div className="col">
+                <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.apellido" id="apellidoAsistente" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.apellido} onChange={handleChange} required disabled={isInvestigador} />
+              </div>
+              <div className="col">
                 <label htmlFor="segundoApellidoid_asistente_carnet_fk" className="label-personalizado"> Segundo Apellido </label> <span className="disabled-input">(Opcional)</span>
-                <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido" id="segundoApellidoid_asistente_carnet_fk" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido} onChange={handleChange} />
+                <input type="text" className="form-control" name="id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido" id="segundoApellidoid_asistente_carnet_fk" value={formData.id_asistente_carnet_fk.id_nombre_completo_fk.segundo_apellido} onChange={handleChange} disabled={isInvestigador} />
+              </div>
             </div>
-        </div>
-        <div className="row mb-4">
-            <div className="col">
+            <div className="row mb-4">
+              <div className="col">
                 <label htmlFor="cedula" className="label-personalizado mb-2">Cedula </label>
-                <input type="text" className="form-control" name="id_asistente_carnet_fk.cedula" id="cedula" value={formData.id_asistente_carnet_fk.cedula} onChange={handleChange} required />
-            </div>
-            <div className="col-md-6">
+                <input type="text" className="form-control" name="id_asistente_carnet_fk.cedula" id="cedula" value={formData.id_asistente_carnet_fk.cedula} onChange={handleChange} required disabled={isInvestigador} />
+              </div>
+              <div className="col-md-6">
                 <label htmlFor="condicionEstudiante" className="label-personalizado mb-2">Condicion Estudiante   </label>
-                <select className="form-control" name="id_asistente_carnet_fk.condicion_estudiante" id="condicion_estudiante" value={formData.id_asistente_carnet_fk.condicion_estudiante} onChange={handleChange} required>
-                    <option value="">Seleccionar Condición</option>
-                    <option value="Activo">Activo</option>
-                    <option value="Inactivo">Inactivo</option>
+                <select className="form-control" name="id_asistente_carnet_fk.condicion_estudiante" id="condicion_estudiante" value={formData.id_asistente_carnet_fk.condicion_estudiante} onChange={handleChange} required disabled={isInvestigador}>
+                  <option value="">Seleccionar Condición</option>
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
+              </div>
             </div>
-        </div>
-        <div className="row mb-4">
-            <div className="col">
+            <div className="row mb-4">
+              <div className="col">
                 <label htmlFor="id_asistente_carnet_fk.carrera" className="label-personalizado mb-2"> Carrera</label>
-                <input type="text" className="form-control" name="id_asistente_carnet_fk.carrera" id="id_asistente_carnet_fk.carrera" value={formData.id_asistente_carnet_fk.carrera} onChange={handleChange} required />
-            </div>
-            <div className="col">
+                <input type="text" className="form-control" name="id_asistente_carnet_fk.carrera" id="id_asistente_carnet_fk.carrera" value={formData.id_asistente_carnet_fk.carrera} onChange={handleChange} required disabled={isInvestigador} />
+              </div>
+              <div className="col">
                 <label htmlFor="id_asistente_carnet_fk.promedio_ponderado" className="label-personalizado mb-2"> Promedio Ponderado   </label>
-                <input type="number" className="form-control" name="id_asistente_carnet_fk.promedio_ponderado" id="id_asistente_carnet_fk.promedio_ponderado" value={formData.id_asistente_carnet_fk.promedio_ponderado} onChange={handleChange} min="0" step="0.01" max="10" pattern="^\d+(\.\d{1,2})?$" required />
+                <input type="number" className="form-control" name="id_asistente_carnet_fk.promedio_ponderado" id="id_asistente_carnet_fk.promedio_ponderado" value={formData.id_asistente_carnet_fk.promedio_ponderado} onChange={handleChange} min="0" step="0.01" max="10" pattern="^\d+(\.\d{1,2})?$" required disabled={isInvestigador} />
+              </div>
             </div>
-        </div>
 
-        <div className="row mb-4">
-            <div className="col">
+            <div className="row mb-4">
+              <div className="col">
                 <label htmlFor="cantidad_horas" className="label-personalizado mb-2"> Cantidad de Horas</label>
-                <input type="number" className="form-control" name="cantidad_horas" id="cantidad_horas" value={formData.cantidad_horas} onChange={handleChange} min="0" step="1"  pattern="^[0-9]+$" required />
-            </div>
-            <div className="col">
+                <input type="number" className="form-control" name="cantidad_horas" id="cantidad_horas" value={formData.cantidad_horas} onChange={handleChange} min="0" step="1" pattern="^[0-9]+$" required disabled={isInvestigador} />
+              </div>
+              <div className="col">
                 <label htmlFor="consecutivo" className="label-personalizado mb-2"> Consecutivo </label>
-                <input type="number" className="form-control" name="consecutivo" id="consecutivo" value={formData.consecutivo} onChange={handleChange} min="0" step="1"  pattern="^[0-9]+$" required />
+                <input type="number" className="form-control" name="consecutivo" id="consecutivo" value={formData.consecutivo} onChange={handleChange} min="0" step="1" pattern="^[0-9]+$" required disabled={isInvestigador} />
+              </div>
             </div>
-        </div>
 
-        <div className="row mb-4">
-            <div className="col">
+            <div className="row mb-4">
+              <div className="col">
                 <label htmlFor="detalleInopia" className="label-personalizado mb-2"> Detalle Inopia   </label> <span className="disabled-input">(Opcional)</span>
-                <textarea className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle || ''} onChange={handleChange} />
-            </div>
-            <div className="col">
+                <textarea className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle || ''} onChange={handleChange} disabled={isInvestigador} />
+              </div>
+              <div className="col">
                 <label htmlFor="documentoInopia" className="label-personalizado mb-2"> Documento del Inopia   </label> <span className="disabled-input">(Opcional)</span>
-                <input type="file" className="form-control" name="id_documento_inopia_fk.documento" id="documento" onChange={handleFileChange} />
+                <input type="file" className="form-control" name="id_documento_inopia_fk.documento" id="documento" onChange={handleFileChange} disabled={isInvestigador} />
                 {mode === 2 && formData.id_documento_inopia_fk.documento ? (
-                <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
-                  {formData.id_documento_inopia_fk.documento !== "" && (
-                    <a href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                      {"Descargar documento"}
-                    </a>
-                  )}
-                </Tooltip>
-              ) : null}
+                  <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
+                    {formData.id_documento_inopia_fk.documento !== "" && (
+                      <a href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                        {"Descargar documento"}
+                      </a>
+                    )}
+                  </Tooltip>
+                ) : null}
+              </div>
             </div>
+
+          </div>
         </div>
-        
-        </div>
-         </div>
-          
+        {!isInvestigador && (
         <div className="modal-footer justify-content-center position-sticky bottom-0">
           <div className="row">
             <div className="col">
@@ -251,6 +257,7 @@ const sendForm = (event) => {
             </div>
           </div>
         </div>
+        )}
       </form>
       <Toaster></Toaster>
     </>)

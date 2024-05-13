@@ -30,13 +30,30 @@ export const Sidebar = () => {
         { label: 'Inicio',        link: '/inicio-invitado' },
         { label: 'Órganos <br/> colegiados',    link: '/gestion-organos-colegiados' },
       ],
+    "evaluador-investigador": [
+//      { label: 'Inicio',        link: '/inicio-evaluador-investigador' },
+        { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
+        { label: 'Visualización Propuestas', link: '/gestion-propuestas' },
+        { label: 'Visualización Proyectos', link: '/gestion-proyectos' },
+    ],
+    "investigador-evaluador": [
+//      { label: 'Inicio',        link: '/inicio-evaluador-investigador' },
+        { label: 'Evaluación de proyectos', link: '/evaluacion-proyectos' },
+        { label: 'Visualización Propuestas', link: '/gestion-propuestas' },
+        { label: 'Visualización Proyectos', link: '/gestion-proyectos' },
+    ]
   };
+    
+  var keyForSidebar = usuario.groups[0]
+  usuario.groups[1] ? keyForSidebar += "-" + usuario.groups[1] : "";
+  console.log(keyForSidebar)
+
    return(
     <>
         {usuario && (
             <nav className='d-flex justify-content-center'>
                 <ul className='d-flex flex-column justify-content-start list-unstyled pt-5 row-gap-3 side-bar'>
-                {menu[usuario.groups[0]].map((e)=>{
+                {menu[keyForSidebar].map((e)=>{
                     return(<>
                         <li key={e.link} className='d-flex align-items-center'>
                             <NavLink

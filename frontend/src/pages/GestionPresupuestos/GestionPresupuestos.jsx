@@ -29,7 +29,6 @@ export const GestionPresupuestos = () => {
   const [JsonIsReady, setJsonIsReady] = useState(false)
   const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero', 'Versiones']
   const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo', 'Versiones']
-  user.groups[0] !== "administrador" ? setError(true) : null
 
   //===============================================================================================================================
 
@@ -377,7 +376,7 @@ export const GestionPresupuestos = () => {
             <h3>{version ? version[0].id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion : ""} </h3>
             {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className={`d-flex ${data.length < 1 ? "justify-content-between" : "justify-content-end"} mt-4`}>
-            {data.length < 1 && !isInvestigador ? <Add onClick={addClicked}></Add> : ''}
+            {(data.length < 1) && (!isInvestigador) ? <Add onClick={addClicked}></Add> : ''}
             {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>

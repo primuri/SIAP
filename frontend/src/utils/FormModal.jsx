@@ -2,6 +2,11 @@ import PropTypes from 'prop-types';
 import { Confirmar } from './Confirmar'
 
 export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, handleDeleteClick, handleDeleteConfirm, handleEditCancel, handleDeleteCancel, showConfirmationDelete, showConfirmationEdit, sendForm, children }) => {
+  const user = JSON.parse(localStorage.getItem('user'))
+  const isInvestigador = user.groups.some((grupo) => {
+      return grupo === 'investigador';
+  });
+
   return (
     <>
       <div className="modal-header pb-0 position-sticky top-0">
@@ -14,7 +19,7 @@ export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, 
             </div>
             <div className="col-10 mb-0 text-center">
               <h2 className="headerForm">
-                {mode === 1 ? `Agregar ${nombreForm}` : `Editar ${nombreForm}`}
+                {mode === 1 ? `Agregar ${nombreForm}` : !isInvestigador ? `Editar ${nombreForm}`: `Visualizar ${nombreForm}`}
               </h2>
             </div>
             <div className="col-1 mb-0 text-center">
@@ -38,6 +43,7 @@ export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, 
         </div>
         <div className="modal-footer justify-content-center position-sticky bottom-0">
           <div className="row">
+            {!isInvestigador && (<>
             <div className="col">
               {mode === 1 ? (
                 <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
@@ -56,6 +62,7 @@ export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, 
                 </>
               )}
             </div>
+            </>)}
           </div>
         </div>
       </form>
