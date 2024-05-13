@@ -19,15 +19,32 @@ import GestionPáginasInicio from './routes/GestionPáginasInicio'
 import './App.css'
 
 function App() {
-  useEffect(() => {
+
     const user = localStorage.getItem('user');
     const currentPath = window.location.pathname;
   
-    if (!user && currentPath !== '/login') {
-      window.location.href = '/login';
+    let rol = "";
+    const usuario = JSON.parse(localStorage.getItem('user'));
+    if (usuario) {
+      rol = usuario.groups[0];
+      if(usuario.groups[1]) {
+        rol += "-" + usuario.groups[1];
+      }
     }
 
-  }, []);
+    if (!user && currentPath !== '/inicio-sesion') {
+      window.location.href = '/inicio-sesion';
+    }
+
+    if (user && currentPath === '/') {
+      window.location.href = `/inicio-${rol}`;
+    }
+
+    if (user && currentPath === '/inicio-sesion') {
+      window.location.href = `/inicio-${rol}`;
+    }
+
+
 
   return (
     <BrowserRouter>
@@ -58,5 +75,4 @@ function App() {
     </BrowserRouter>
   )
 }
-
 export default App
