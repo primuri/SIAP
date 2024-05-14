@@ -38,21 +38,29 @@ export const GestionAsistentes = () => {
     useEffect(() => {                                                          
         async function fetchData() {
             
-            setCargado(true);
             const id_version_proyecto = await loadAsistenteById(proyectoID);
 
             setIdProyecto(id_version_proyecto[2]);
             setNumVersion(id_version_proyecto[1]);
+            setCargado(true);
+
         }
         fetchData();
     }, [reload]);
 
     async function loadAsistentes( numVersion) {
         try {
-          const response = await obtenerDesignacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
-          const filteredData = response.data.filter(item => item.id_version_proyecto_fk.numero_version === numVersion);
-          setData(filteredData);                                                                     
-          setAsistentes(filteredData);                                                               
+          const response = await obtenerDesignacionAsistente(localStorage.getItem('token'));
+          response.data.filter(item => {
+            // Verificar si el item tiene la propiedad id_version_proyecto_fk
+            if (item.id_version_proyecto_fk && item.id_version_proyecto_fk.id_version_proyecto !== undefined) {
+              // Asegurarse de que proyectoID y id_version_proyecto sean del mismo tipo
+              return item.id_version_proyecto_fk.id_version_proyecto === proyectoID;
+            }
+            return false;
+          });
+          setData(response.data);                                                                     
+          setAsistentes(response.data);                                                               
           setCargado(true);                                                                          
       } catch (error) {
           console.error("Error al cargar asistentes:", error);
