@@ -29,20 +29,28 @@ export const InicioSesion = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      
       var user = JSON.parse(localStorage.getItem("user"));
       var tipoUsuario = user.groups[0]
+
       if(tipoUsuario === 'administrador') {
         window.location.href = '/inicio-administrador';
-      }
-      if(tipoUsuario === 'evaluador') {
-        window.location.href = '/inicio-evaluador';
       }
       if(tipoUsuario === 'invitado') {
         window.location.href = '/organos-colegiados';
       }
+      if(tipoUsuario === 'evaluador') {
+        if(user.groups[1]) {
+          window.location.href = '/inicio-evaluador-investigador';
+        } else {
+          window.location.href = '/inicio-evaluador';
+        }
+      }
       if(tipoUsuario === 'investigador') {
-        window.location.href = '/proyectos';
+        if(user.groups[1]) {
+          window.location.href = '/inicio-investigador-evaluador';
+        } else {
+          window.location.href = '/inicio-investigador';
+        }
       }
       
     } catch (error) {

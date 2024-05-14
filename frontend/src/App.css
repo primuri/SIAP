@@ -1,7 +1,13 @@
 header {
   height: 108px;
   z-index: 1000;
+  cursor: default !important;
 }
+
+header:hover {
+  cursor: default !important;
+}
+
 
 #breadcrums {
   background-color: var(--gris-claro-ucr);

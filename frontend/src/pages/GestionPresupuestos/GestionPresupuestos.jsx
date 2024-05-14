@@ -10,7 +10,7 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte, buscaCodigoFinanciero, agregarCodigosFinancieros, obtenerVersionesProyectos } from "../../api/gestionPresupuestos"
 import { useNavigate, useParams } from "react-router-dom"
 import { ReportButton } from "../../utils/ReportButton";
-import axios from 'axios' 
+import axios from 'axios'
 
 export const GestionPresupuestos = () => {
   const { proyectoID } = useParams();
@@ -19,7 +19,7 @@ export const GestionPresupuestos = () => {
   const navigate = useNavigate();
   const [presupuestos, setPresupuestos] = useState([])
   const [data, setData] = useState([])
-  const [presupuesto, setPresupuesto] = useState(null) 
+  const [presupuesto, setPresupuesto] = useState(null)
   const [version, setVersion] = useState(null)
   const [cargado, setCargado] = useState(false)
   const [error, setError] = useState(false)
@@ -27,10 +27,9 @@ export const GestionPresupuestos = () => {
   const [edit, setEdit] = useState(false)
   const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
   const [JsonIsReady, setJsonIsReady] = useState(false)
-  const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero','Versiones']
-  const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo','Versiones']
-  user.groups[0] !== "administrador" ? setError(true) : null 
-  
+  const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero', 'Versiones']
+  const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo', 'Versiones']
+
   //===============================================================================================================================
 
   useEffect(() => {
@@ -38,107 +37,111 @@ export const GestionPresupuestos = () => {
     createJsonForReport()
   }, [presupuestos])
 
+  const isInvestigador = user.groups.some((grupo) => {
+    return grupo === 'investigador';
+  });
+
   const configureReportData = async () => {
     const getLastVersionPresupuesto = async (id_presupuesto) => {
-        const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
-        const SIAPAPI = axios.create({
-            baseURL: 'http://localhost:8000/'
-        }, [])
+      const SIAPAPI = axios.create({
+        baseURL: 'http://localhost:8000/'
+      }, [])
 
-        var response = await SIAPAPI.get('presupuesto/version_presupuestos/', {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
+      var response = await SIAPAPI.get('presupuesto/version_presupuestos/', {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
 
-        var lastVersion = { id_version_presupuesto: 0 }
+      var lastVersion = { id_version_presupuesto: 0 }
 
-        response.data.map((version) => {
-            if (version.id_presupuesto_fk.id_presupuesto === id_presupuesto && lastVersion.id_version_presupuesto < version.id_version_presupuesto) {
-                lastVersion = version
-            }
-        })
+      response.data.map((version) => {
+        if (version.id_presupuesto_fk.id_presupuesto === id_presupuesto && lastVersion.id_version_presupuesto < version.id_version_presupuesto) {
+          lastVersion = version
+        }
+      })
 
-        return (lastVersion ? lastVersion : {})
+      return (lastVersion ? lastVersion : {})
     }
 
     const getPartidas = async (id_version_presupuesto) => {
-        const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
-        const SIAPAPI = axios.create({
-            baseURL: 'http://localhost:8000/'
-        })
+      const SIAPAPI = axios.create({
+        baseURL: 'http://localhost:8000/'
+      })
 
-        var response = await SIAPAPI.get('presupuesto/partidas/', {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        const filteredData = response.data.filter(item => item.id_version_presupuesto_fk.id_version_presupuesto === id_version_presupuesto);
+      var response = await SIAPAPI.get('presupuesto/partidas/', {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      const filteredData = response.data.filter(item => item.id_version_presupuesto_fk.id_version_presupuesto === id_version_presupuesto);
 
-        return filteredData ? filteredData : {}
+      return filteredData ? filteredData : {}
     }
 
     if (presupuestos.length > 0) {
-        try {
-            const promises = presupuestos.map(async (presupuesto) => {
-                const ultimaVersion = await getLastVersionPresupuesto(presupuesto.id_presupuesto);
-                const partidasLista = await getPartidas(ultimaVersion.id_version_presupuesto);
+      try {
+        const promises = presupuestos.map(async (presupuesto) => {
+          const ultimaVersion = await getLastVersionPresupuesto(presupuesto.id_presupuesto);
+          const partidasLista = await getPartidas(ultimaVersion.id_version_presupuesto);
 
-                presupuesto.id_version_presupuesto_fk = ultimaVersion;
-                presupuesto[JsonForReport.colNames.length - 1] = partidasLista;
+          presupuesto.id_version_presupuesto_fk = ultimaVersion;
+          presupuesto[JsonForReport.colNames.length - 1] = partidasLista;
 
-                return presupuesto;
-            });
+          return presupuesto;
+        });
 
-            const presupuestosConDatosCompletos = await Promise.all(promises);
-            JsonForReport.reportData = presupuestosConDatosCompletos;
-            return true
+        const presupuestosConDatosCompletos = await Promise.all(promises);
+        JsonForReport.reportData = presupuestosConDatosCompletos;
+        return true
 
-        } catch (exception) {
-            console.error("Ocurrió un error al crear el Json para reporte: ")
-            return false
-        }
+      } catch (exception) {
+        console.error("Ocurrió un error al crear el Json para reporte: ")
+        return false
+      }
     }
   }
 
   const createJsonForReport = async () => {
-      JsonForReport.reportTitle = "Presupuesto"
-      JsonForReport.idKey = "id_presupuesto"
-      JsonForReport.dataKeys = [
-          'id_presupuesto',
-          'id_codigo_vi.id_codigo_vi',
-          'id_version_proyecto_fk.numero_version',
-          'id_tipo_presupuesto_fk.tipo',
-          'id_ente_financiero_fk.nombre',
-          'id_codigo_financiero_fk.codigo',
-          'anio_aprobacion',
-          'id_version_presupuesto_fk.id_version_presupuesto',
-          'id_version_presupuesto_fk.monto',
-          'id_version_presupuesto_fk.fecha',
-          'id_version_presupuesto_fk.detalle',
-          ['id_partida', 'detalle', 'monto', 'saldo']
-      ]
+    JsonForReport.reportTitle = "Presupuesto"
+    JsonForReport.idKey = "id_presupuesto"
+    JsonForReport.dataKeys = [
+      'id_presupuesto',
+      'id_codigo_vi.id_codigo_vi',
+      'id_version_proyecto_fk.numero_version',
+      'id_tipo_presupuesto_fk.tipo',
+      'id_ente_financiero_fk.nombre',
+      'id_codigo_financiero_fk.codigo',
+      'anio_aprobacion',
+      'id_version_presupuesto_fk.id_version_presupuesto',
+      'id_version_presupuesto_fk.monto',
+      'id_version_presupuesto_fk.fecha',
+      'id_version_presupuesto_fk.detalle',
+      ['id_partida', 'detalle', 'monto', 'saldo']
+    ]
 
-      JsonForReport.colNames = [
-          'Presupuesto',
-          'Código VI',
-          'Versión de proyecto',
-          'Tipo',
-          'Ente financiero',
-          'Código financiero',
-          'Año de aprobación',
-          'Versión de presupuesto',
-          'Monto',
-          'Fecha',
-          'Detalle',
-          {'tableName': 'Partidas', 'colNames': ['Identificador', 'Detalle', 'Monto', 'Saldo']}
-      ]
+    JsonForReport.colNames = [
+      'Presupuesto',
+      'Código VI',
+      'Versión de proyecto',
+      'Tipo',
+      'Ente financiero',
+      'Código financiero',
+      'Año de aprobación',
+      'Versión de presupuesto',
+      'Monto',
+      'Fecha',
+      'Detalle',
+      { 'tableName': 'Partidas', 'colNames': ['Identificador', 'Detalle', 'Monto', 'Saldo'] }
+    ]
 
-      setJsonIsReady(await configureReportData())
+    setJsonIsReady(await configureReportData())
   }
 
   // ==============================================================================================================================
@@ -155,7 +158,7 @@ export const GestionPresupuestos = () => {
       setCargado(true)
     } catch (error) {
       toast.error('Error al cargar los datos de Presupuestos', {
-        duration: 4000, 
+        duration: 4000,
         position: 'bottom-right',
         style: {
           background: '#670000',
@@ -179,7 +182,7 @@ export const GestionPresupuestos = () => {
       navigate(-1);
     }, 1000);
   }
-  
+
   const addPresupuesto = async (formData) => {
     try {
       const Data = JSON.parse(formData.get('json'))
@@ -275,8 +278,8 @@ export const GestionPresupuestos = () => {
       await actualizarPresupuesto(presupuesto.id_presupuesto, Data.presupuesto, formData, localStorage.getItem('token'))
       toast.success('Presupuesto actualizado correctamente', {
         id: toastId,
-        duration: 4000, 
-        position: 'bottom-right', 
+        duration: 4000,
+        position: 'bottom-right',
         style: {
           background: 'var(--celeste-ucr)',
           color: '#fff',
@@ -334,7 +337,7 @@ export const GestionPresupuestos = () => {
   const elementClicked = (presupuesto) => {
     if (event.target.tagName.toLowerCase() === 'button') {
       navigate(`${location.pathname}/${presupuesto.id_presupuesto}/gestion-versiones`)
-    }else{
+    } else {
       setPresupuesto(presupuesto)
       setEdit(true)
       setAddClick(false)
@@ -373,11 +376,11 @@ export const GestionPresupuestos = () => {
             <h3>{version ? version[0].id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion : ""} </h3>
             {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
           <div className={`d-flex ${data.length < 1 ? "justify-content-between" : "justify-content-end"} mt-4`}>
-            {data.length < 1 ? <Add onClick={addClicked}></Add> : ''}
+            {(data.length < 1) && (!isInvestigador) ? <Add onClick={addClicked}></Add> : ''}
             {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
-          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick ={elementClicked} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+          <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
           {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1}></PresupuestoForm></Modal>)}
           {edit &&
             (

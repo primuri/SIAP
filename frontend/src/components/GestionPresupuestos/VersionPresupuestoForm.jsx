@@ -21,6 +21,11 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
             "detalle": version ? version.detalle : "",
     });
 
+    const user = JSON.parse(localStorage.getItem('user'))
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     const handleChange = (event) => {
         const { name, value } = event.target
 
@@ -86,7 +91,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar versión de presupuesto" : "Editar versión de presupuesto"}
+                                {mode === 1 ? "Agregar versión de presupuesto" : isInvestigador ? "Visualizar versión de presupuesto" : "Editar versión de presupuesto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -112,29 +117,30 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="version" className="label-personalizado mb-2">Versión</label>
-                                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required/>
+                                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required disabled={isInvestigador}/>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="fecha_presentacion" className="label-personalizado mb-2"> Fecha   </label>
-                                <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required />
+                                <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador}/>
                                 
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador}/>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {!isInvestigador && (
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -157,6 +163,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                         </div>
                     </div>
                 </div>
+                )}
             </form>
             <Toaster></Toaster>
         </div>

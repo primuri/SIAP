@@ -165,7 +165,7 @@ class Titulos(models.Model):
 class Evaluador(models.Model):
     id_evaluador = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=45)
-    correo = models.CharField(max_length=45)
+    correo = models.CharField(max_length=45, unique=True)
     universidad_fk = models.ForeignKey(Universidad, on_delete=models.PROTECT, db_column='universidad_fk')
     id_area_especialidad_fk = models.ForeignKey(AreaEspecialidad, on_delete=models.PROTECT, db_column='id_area_especialidad_fk')
     id_nombre_completo_fk = models.ForeignKey(NombreCompleto, on_delete=models.PROTECT, db_column='id_nombre_completo_fk')
