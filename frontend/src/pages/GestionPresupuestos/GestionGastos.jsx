@@ -55,7 +55,7 @@ export const GestionGastos = () => {
                 });
                 JsonForReport.reportData = gastos_;
                 return true;
-    
+
             } catch (exception) {
                 console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
                 return false;
@@ -79,8 +79,8 @@ export const GestionGastos = () => {
         JsonForReport.colNames = [
             'Código del gasto',
             'Código de la factura',
-            'Fecha', 
-            'Detalle', 
+            'Fecha',
+            'Detalle',
             'Proveedor',
             'Producto o Servicio',
             'Monto'

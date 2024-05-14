@@ -21,6 +21,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const [value, setValue] = useState(null);
     const detalle = gasto ? gasto.id_factura_fk.id_producto_servicio_fk.detalle : ""
 
+    const user = JSON.parse(localStorage.getItem('user'))
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     const [formData, setFormData] = useState({
         id_partida_fk: gasto ? gasto.id_partida_fk.id_partida : id_partida,
         id_gasto: gasto ? gasto.id_gasto : "",
@@ -173,7 +178,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar gasto" : "Editar gasto"}
+                                {mode === 1 ? "Agregar gasto" :  isInvestigador ? "Visualizar gasto" : "Editar gasto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -206,7 +211,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="fecha" className="label-personalizado mb-2"> Fecha   </label>
-                                <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required />
+                                <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             {mode === 2 && (<div className="col-md-6">
                                 <label htmlFor="id_gasto" className="label-personalizado mb-2">Código de gasto</label>
@@ -216,11 +221,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto   </label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                         </div>
 
@@ -242,7 +247,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                         }));
                                     }}
                                     value={mode === 2 ? formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor : formData.id_factura_fk.id_cedula_proveedor_fk || ''}
-                                required>
+                                required disabled={isInvestigador}>
                                     <option value="">Seleccione un proveedor</option>
                                     {proveedor.map((proveedorItem) => (
                                         <option key={proveedorItem.id_cedula_proveedor} value={proveedorItem.id_cedula_proveedor}>
@@ -286,6 +291,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     clearOnBlur
                                     handleHomeEndKeys
                                     id="free-solo-with-text-demo"
+                                    disabled={isInvestigador}
                                     options={producto}
                                     getOptionLabel={(option) => {
                                         if (typeof option === 'string') {
@@ -309,7 +315,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange}/>
+                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} disabled={isInvestigador}/>
                                 { typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_documento_fk.documento.split('/').pop()}
@@ -319,6 +325,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                     </div>
                 </div>
+                {!isInvestigador && (
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
                         <div className="col">
@@ -341,6 +348,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                     </div>
                 </div>
+                )}
             </form>
             <Toaster></Toaster>
         </div>

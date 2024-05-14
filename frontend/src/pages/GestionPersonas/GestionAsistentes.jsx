@@ -31,26 +31,36 @@ export const GestionAsistentes = () => {
     const columns = ['Cedula', 'Nombre', 'Carrera', 'Ponderado', 'Condicion de Estudiante']
     const dataKeys = ['id_asistente_carnet_fk.cedula', 'id_asistente_carnet_fk.id_nombre_completo_fk.nombre', 'id_asistente_carnet_fk.carrera', 'id_asistente_carnet_fk.promedio_ponderado', 'id_asistente_carnet_fk.condicion_estudiante']
 
-    user.groups[0] !== "administrador" ? setError(true) : null                
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+      });
 
     useEffect(() => {                                                          
         async function fetchData() {
             
-            setCargado(true);
             const id_version_proyecto = await loadAsistenteById(proyectoID);
 
             setIdProyecto(id_version_proyecto[2]);
             setNumVersion(id_version_proyecto[1]);
+            setCargado(true);
+
         }
         fetchData();
     }, [reload]);
 
     async function loadAsistentes( numVersion) {
         try {
-          const response = await obtenerDesignacionAsistente(localStorage.getItem('token')); // Asegúrate de pasar proyectoID aquí
-          const filteredData = response.data.filter(item => item.id_version_proyecto_fk.numero_version === numVersion);
-          setData(filteredData);                                                                     
-          setAsistentes(filteredData);                                                               
+          const response = await obtenerDesignacionAsistente(localStorage.getItem('token'));
+          response.data.filter(item => {
+            // Verificar si el item tiene la propiedad id_version_proyecto_fk
+            if (item.id_version_proyecto_fk && item.id_version_proyecto_fk.id_version_proyecto !== undefined) {
+              // Asegurarse de que proyectoID y id_version_proyecto sean del mismo tipo
+              return item.id_version_proyecto_fk.id_version_proyecto === proyectoID;
+            }
+            return false;
+          });
+          setData(response.data);                                                                     
+          setAsistentes(response.data);                                                               
           setCargado(true);                                                                          
       } catch (error) {
           console.error("Error al cargar asistentes:", error);
@@ -367,7 +377,9 @@ export const GestionAsistentes = () => {
                     )}             
 
                     <div className="d-flex justify-content-between mt-4">
-                        <Add onClick={addClicked}></Add>
+                        <div className="col">
+                            {!isInvestigador && (<Add onClick={addClicked}></Add>)}
+                        </div>
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
                     <Table columns={columns} data={asistentes} dataKeys={dataKeys} onDoubleClick ={elementClicked} />

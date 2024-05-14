@@ -22,17 +22,20 @@ function obtenerNombreDeUsuario(correoElectronico) {
   const usuario = JSON.parse(localStorage.getItem('user'));
   if (usuario) {
     rol = usuario.groups[0];
+    if(usuario.groups[1]) {
+      usuario.groups[1] ? rol += "-" + usuario.groups[1] : "";
+    }
   }
 
 export const Header = () => {
   const usuarioGuardado = JSON.parse(localStorage.getItem('user'));
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = '/login'
+    window.location.href = '/inicio-sesion'
   }
   return (
     <header className="bg-light w-100 d-flex justify-content-between align-items-center position-fixed top-0 end-0 start-0 shadow">
-      <Link to={rol ? `/inicio-${rol}` : "/login"} className='w-100'>
+      <Link to={rol ? `/inicio-${rol}` : "/inicio-sesion"} className='w-100'>
   <img src={logo} className='logo' alt='Logo a página principal' />
 </Link>
 

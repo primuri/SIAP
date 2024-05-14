@@ -68,7 +68,6 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         }
         return; 
     }
-
    
     if (name === "cedula" && !checkCedula(value)) {
         return; 

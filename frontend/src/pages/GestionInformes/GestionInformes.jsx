@@ -18,22 +18,25 @@ export const GestionInformes = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const location = useLocation()
     const navigate = useNavigate()
-    const [reload, setReload] = useState(false)                           
-    const [informes, setInformes] = useState([])                             
-    const [cargado, setCargado] = useState(false)  
-    const [data, setData] = useState([])                                                                 
-    const [informe, setInforme] = useState(null)                              
-    const [addClick, setAddClick] = useState(false)                             
-    const [edit, setEdit] = useState(false)                                    
+    const [reload, setReload] = useState(false)
+    const [informes, setInformes] = useState([])
+    const [cargado, setCargado] = useState(false)
+    const [data, setData] = useState([])
+    const [informe, setInforme] = useState(null)
+    const [addClick, setAddClick] = useState(false)
+    const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
-    const [id_proyecto, setIdProyecto] = useState(null)                        
+    const [id_proyecto, setIdProyecto] = useState(null)
     const columns = ['Identificador', 'Estado', 'Tipo', 'Versiones']
     const dataKeys = ['id_informe', 'estado', 'tipo', 'Versiones']
 
-    user.groups[0] !== "administrador" ? setError(true) : null
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
 
-    useEffect(() => {                    
+
+    useEffect(() => {
         async function fetchData() {
             loadInformes()
             setCargado(true);
@@ -48,11 +51,11 @@ export const GestionInformes = () => {
     async function loadInformes() {
         try {
             const response = await obtenerInformesProyecto(localStorage.getItem('token'), proyectoID)
-            setData(response.data)                                                                    
-            setInformes(response.data)                                                                
-            setCargado(true)                                                                         
+            setData(response.data)
+            setInformes(response.data)
+            setCargado(true)
         } catch (error) {
-        
+
         }
     }
 
@@ -98,7 +101,7 @@ export const GestionInformes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            
+
         }
     }
 
@@ -118,7 +121,7 @@ export const GestionInformes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            
+
         }
         setEdit(false)
     }
@@ -182,8 +185,8 @@ export const GestionInformes = () => {
             for (let version of versiones.data) {
                 if (version.id_version_proyecto == informeId) {
                     idCodigoVi = version.id_codigo_vi_fk.id_codigo_vi;
-                    numVersion = version.numero_version;                 
-                    descripcion = version.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion;                
+                    numVersion = version.numero_version;
+                    descripcion = version.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion;
                     break;
                 }
             }
@@ -195,7 +198,7 @@ export const GestionInformes = () => {
             }
 
         } catch (error) {
-        
+
             return null;
         }
     }
@@ -213,13 +216,15 @@ export const GestionInformes = () => {
 
                     {(!cargado) && (
                         <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
-                    )}             
+                    )}
 
                     <div className="d-flex justify-content-between mt-4">
-                        <Add onClick={addClicked}></Add>
+                        <div className="col">
+                            {!isInvestigador && (<Add onClick={addClicked}></Add>)}
+                        </div>
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick ={elementClicked} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
+                    <Table columns={columns} data={informes} dataKeys={dataKeys} onDoubleClick={elementClicked} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar" />
                     {addClick && (
                         <Modal><InformesForm onSubmit={addInforme} onCancel={onCancel} mode={1}></InformesForm></Modal>
                     )}
@@ -245,5 +250,5 @@ export const GestionInformes = () => {
             )}
         </main>
     );
-    
+
 }    

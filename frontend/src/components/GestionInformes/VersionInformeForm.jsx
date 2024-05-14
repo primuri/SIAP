@@ -12,6 +12,11 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const [fileInforme, setFileInforme] = useState(null);  
     const [fileEvaluacion, setFileEvaluacion] = useState(null);
 
+    const user = JSON.parse(localStorage.getItem('user'))
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     useEffect(() => {
         if (versionInforme) {
             setFormData(VIFields(versionInforme));
@@ -105,21 +110,21 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="numero_version" className="label-personalizado mb-2"> Número versión   </label>
-                                <input type="number" className="form-control" name="numero_version" id="numero_version" value={formData.numero_version} onChange={handleChange} required />
+                                <input type="number" className="form-control" name="numero_version" id="numero_version" value={formData.numero_version} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             <div className="col">
                                 <label htmlFor="fecha_presentacion" className="label-personalizado mb-2"> Fecha presentación   </label>
-                                <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion" value={formData.fecha_presentacion} onChange={handleChange} required />
+                                <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion" value={formData.fecha_presentacion} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle oficio   </label>
-                                <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio   </label>
-                                <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={(event) => handleFileChange(event, 'oficio')} required={mode == 1} />
+                                <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={(event) => handleFileChange(event, 'oficio')} required={mode == 1} disabled={isInvestigador}/>
                                 {mode == 2 && formData.id_oficio_fk.ruta_archivo ?(
                                      <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
                                       {formData.id_oficio_fk.ruta_archivo !== "" && (
@@ -134,11 +139,11 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleInforme" className="label-personalizado mb-2"> Detalle informe   </label>
-                                <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe   </label>
-                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event, 'informe')} required={mode == 1} />
+                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event, 'informe')} required={mode == 1} disabled={isInvestigador}/>
                                 {mode == 2 && (
 
                                     <Tooltip title={formData.id_documento_informe_fk.documento.split('/').pop()} placement="right-start">
@@ -152,11 +157,11 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                             <div className="row mb-4">
                                 <div className="col">
                                     <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="disabled-input">(Opcional)</span>  </label>
-                                    <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange}/>
+                                    <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange} disabled={isInvestigador}/>
                                 </div>
                                 <div className="col">
                                     <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="disabled-input">(Opcional)</span> </label>
-                                    <input type="file" className="form-control" name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento" id="documentoEvaluacionCC" onChange={(event) => handleFileChange(event, 'evaluacion')} />
+                                    <input type="file" className="form-control" name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento" id="documentoEvaluacionCC" onChange={(event) => handleFileChange(event, 'evaluacion')} disabled={isInvestigador}/>
                                 {mode === 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk?.documento  ? (
                                     <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
                                         {formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento !== "" && (
