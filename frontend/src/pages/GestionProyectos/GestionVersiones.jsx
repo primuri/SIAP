@@ -545,7 +545,6 @@ export const GestionVersiones = () => {
              await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
             if(colaboradores != undefined){
                 await editarColaboradorSecundario(colaboradores, id_version_proy, localStorage.getItem('token'))
-
             }
            
 

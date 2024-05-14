@@ -218,6 +218,7 @@ export const editarColaboradorSecundario = async (colaboradores_secundarios, id_
                 let fecha_ini = colaborador_secundario.fecha_inicio;
                 let fecha_fi = colaborador_secundario.fecha_fin;
                 let id_vigencia = colaborador_secundario.id_vigencia_fk.id_vigencia
+                let id_academic = colaborador_secundario.id_academico_fk
     
                 if (!fecha_ini || fecha_ini.trim() === "") {
                     fecha_ini = null;
@@ -230,15 +231,29 @@ export const editarColaboradorSecundario = async (colaboradores_secundarios, id_
                     fecha_inicio: fecha_ini,
                     fecha_fin: fecha_fi
                 }
-                await editarVigencia(id_vigencia, vigencia, token)
+               
                 delete colaborador_secundario.id_version_proyecto_fk;
                 delete colaborador_secundario.id_colaborador_secundario;
                 delete colaborador_secundario.id_vigencia_fk
                 delete colaborador_secundario.fecha_fin
                 delete colaborador_secundario.fecha_inicio
-                colaborador_secundario.id_version_proyecto_fk = id_version_proyecto;
+
+                if (colaborador_secundario.id_academico_fk.id_academico){
+                    id_academic = colaborador_secundario.id_academico_fk.id_academico
+                }
+                
                 colaborador_secundario.id_vigencia_fk = id_vigencia
-                await manejarErrores(SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id_colaborador_secundario}/`, colaborador_secundario, {
+                const colaborador = {
+                    id_version_proyecto_fk: id_version_proyecto,
+                    id_vigencia_fk: id_vigencia,
+                    id_academico_fk: id_academic,
+                    tipo: colaborador_secundario.tipo,
+                    carga: colaborador_secundario.carga,
+                    estado: colaborador_secundario.estado
+
+                }
+                await editarVigencia(id_vigencia, vigencia, token)
+                await manejarErrores(SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id_colaborador_secundario}/`, colaborador, {
                     headers: {
                         'Authorization': `token ${token}`,
                         'Content-Type': 'application/json'
