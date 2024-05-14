@@ -14,8 +14,8 @@ import add from '../../assets/plus-i.png'
 import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionAcciones = () => {
-    let {versionID,informeID} = useParams() 
-    const navigate = useNavigate()                                                              
+    let { versionID, informeID } = useParams()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
     const [acciones, setAcciones] = useState([])
@@ -29,7 +29,9 @@ export const GestionAcciones = () => {
     const columns = ['Identificador', 'Fecha', 'Origen', 'Destino', 'Estado', 'Documento']
     const dataKeys = ['id_accion', 'fecha', 'origen', 'destino', 'estado', 'id_documento_accion_fk.documento']
 
-    user.groups[0] !== "administrador" ? setError(true) : null
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
 
     useEffect(() => {
         async function fetchData() {
@@ -73,7 +75,7 @@ export const GestionAcciones = () => {
         } catch (error) {
         }
     }
- 
+
     const editAccion = async (formData) => {
         try {
             formData.id_version_informe_fk = versionID;
@@ -99,7 +101,7 @@ export const GestionAcciones = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            
+
         }
     }
 
@@ -119,7 +121,7 @@ export const GestionAcciones = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            
+
         }
         setEdit(false)
     }
@@ -189,10 +191,12 @@ export const GestionAcciones = () => {
                         )}
                     </div>
                     <div className="d-flex justify-content-between mt-4">
-                        <Add onClick={addClicked}></Add>
+                        <div className="col">
+                            {!isInvestigador && (<Add onClick={addClicked}></Add>)}
+                        </div>
                         <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={acciones} dataKeys={dataKeys} onDoubleClick ={elementClicked} />
+                    <Table columns={columns} data={acciones} dataKeys={dataKeys} onDoubleClick={elementClicked} />
                     <div>
                         <Back onClick={volverVersionInformes}>Regresar a versión de informe</Back>
                     </div>

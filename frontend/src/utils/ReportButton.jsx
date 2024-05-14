@@ -11,7 +11,7 @@ import { ReportePDF } from "./ReportePDF";
 export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKey }) => {
     const [selectedOption, setSelectedOption] = useState("PDF");
     const [buttonClicked, setButtonClicked] = useState(true);
-    const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
+    const { toPDF, targetRef } = usePDF({ filename: ('Reporte de ' + reportData) });
 
     const handleButtonClick = () => {
         if (buttonClicked) {
@@ -109,7 +109,7 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
         // Crear libro de trabajo y guardar archivo
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
-        XLSX.writeFile(wb, `${fileName}.xlsx`);
+        XLSX.writeFile(wb, `Reporte de ${fileName}.xlsx`);
     };
 
     if (reportData.length < 1) {

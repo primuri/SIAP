@@ -169,35 +169,130 @@ export const eliminarProyecto = async (id, token) => {
 };
 
 
-export const agregarColaboradorSecundario = async (colaborador_secundario, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.post('version_proyecto/colaboradorsecundario/', colaborador_secundario, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            }
-        }));
+export const agregarColaboradorSecundario = async (colaboradores_secundarios, id_version, token) => {
+    try {
+        if(colaboradores_secundarios != undefined){
+            colaboradores_secundarios.forEach(async colaborador_secundario => {
+                colaborador_secundario.id_version_proyecto_fk = id_version;
+                let fecha_ini = colaborador_secundario.fecha_inicio;
+                let fecha_fi = colaborador_secundario.fecha_fin;
+    
+                if (!fecha_ini || fecha_ini.trim() === "") {
+                    fecha_ini = null;
+                }
+    
+                if (!fecha_fi || fecha_fi.trim() === "") {
+                    fecha_fi = null;
+                }
+                const vigencia = {
+                    fecha_inicio: fecha_ini,
+                    fecha_fin: fecha_fi
+                }
+                const id_vigencia_creado = await agregarVigencia(vigencia, token)
+                delete colaborador_secundario.fecha_inicio
+                delete colaborador_secundario.fecha_fin
+                colaborador_secundario.id_vigencia_fk = id_vigencia_creado;
+                colaborador_secundario.tipo = "Secundario"
+                await manejarErrores(SIAPAPI.post('version_proyecto/colaboradorsecundario/', colaborador_secundario, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }))
+            });
+        }
        
-    } catch(error) {
-        console.error("Error agregando colaborador secundario: ", error);
-        throw error;
-    } 
+    } catch (error) {
+        console.error("Error agregando colaborador secundario:", error)
+        throw (error)
+    }
 };
 
 
-export const editarColaboradorSecundario = async (id, colaborador_secundario, token) => {
+export const editarColaboradorSecundario = async (colaboradores_secundarios, id_version , token) => {
     try { 
-        return await manejarErrores( SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id}/`, colaborador_secundario, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
+        colaboradores_secundarios.forEach(async colaborador_secundario => {
+            if(colaborador_secundario.id_colaborador_secundario){
+                let id_colaborador_secundario = colaborador_secundario.id_colaborador_secundario;
+                let id_version_proyecto = colaborador_secundario.id_version_proyecto_fk.id_version_proyecto;
+                let fecha_ini = colaborador_secundario.fecha_inicio;
+                let fecha_fi = colaborador_secundario.fecha_fin;
+                let id_vigencia = colaborador_secundario.id_vigencia_fk.id_vigencia
+                let id_academic = colaborador_secundario.id_academico_fk
+    
+                if (!fecha_ini || fecha_ini.trim() === "") {
+                    fecha_ini = null;
+                }
+    
+                if (!fecha_fi || fecha_fi.trim() === "") {
+                    fecha_fi = null;
+                }
+                const vigencia = {
+                    fecha_inicio: fecha_ini,
+                    fecha_fin: fecha_fi
+                }
+               
+                delete colaborador_secundario.id_version_proyecto_fk;
+                delete colaborador_secundario.id_colaborador_secundario;
+                delete colaborador_secundario.id_vigencia_fk
+                delete colaborador_secundario.fecha_fin
+                delete colaborador_secundario.fecha_inicio
+
+                if (colaborador_secundario.id_academico_fk.id_academico){
+                    id_academic = colaborador_secundario.id_academico_fk.id_academico
+                }
+                
+                colaborador_secundario.id_vigencia_fk = id_vigencia
+                const colaborador = {
+                    id_version_proyecto_fk: id_version_proyecto,
+                    id_vigencia_fk: id_vigencia,
+                    id_academico_fk: id_academic,
+                    tipo: colaborador_secundario.tipo,
+                    carga: colaborador_secundario.carga,
+                    estado: colaborador_secundario.estado
+
+                }
+                await editarVigencia(id_vigencia, vigencia, token)
+                await manejarErrores(SIAPAPI.put(`version_proyecto/colaboradorsecundario/${id_colaborador_secundario}/`, colaborador, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }))
+            }else{
+                colaborador_secundario.id_version_proyecto_fk = id_version;
+                let fecha_ini = colaborador_secundario.fecha_inicio;
+                let fecha_fi = colaborador_secundario.fecha_fin;
+    
+                if (!fecha_ini || fecha_ini.trim() === "") {
+                    fecha_ini = null;
+                }
+    
+                if (!fecha_fi || fecha_fi.trim() === "") {
+                    fecha_fi = null;
+                }
+                const vigencia = {
+                    fecha_inicio: fecha_ini,
+                    fecha_fin: fecha_fi
+                }
+                const id_vigencia_creado = await agregarVigencia(vigencia, token)
+                delete colaborador_secundario.fecha_inicio
+                delete colaborador_secundario.fecha_fin
+                colaborador_secundario.id_vigencia_fk = id_vigencia_creado;
+                colaborador_secundario.tipo = "Secundario"
+                await manejarErrores(SIAPAPI.post('version_proyecto/colaboradorsecundario/', colaborador_secundario, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }))
             }
-        }));
-       
-    } catch(error) {
-        console.error("Error editar colaborador secundario: ", error);
-        throw error;
-    } 
+            
+        });
+    } catch (error) {
+        console.error(error)
+        throw (error)
+    }
 };
 
 export const obtenerColaboradorSecundario = async (token) => {

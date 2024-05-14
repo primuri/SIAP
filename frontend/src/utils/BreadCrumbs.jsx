@@ -28,7 +28,7 @@ const routeNames = {
     'gestion-acuerdos': 'Acuerdos'
 };
 
-const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/inicio-invitado', '/inicio-investigador', '/inicio-investigador-evaluador', '/login', '/']);
+const excludedRoutes = new Set(['/inicio-administrador', '/inicio-evaluador', '/inicio-invitado', '/inicio-investigador', '/inicio-investigador-evaluador', '/inicio-evaluador-investigador', '/inicio-sesion', '/']);
 
 const BreadcrumbsCustom = () => {
     const location = useLocation();

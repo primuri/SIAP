@@ -13,31 +13,42 @@ export const manejarErrores = async (peticion) => {
 
 const mostrarError = (error) => {
     const inputStr = error.request.response;
-    const matches = inputStr.match(/"(.*?)"/g);
+    var resultStr = "";
 
-    let resultStr = "";
-    if (matches) {
-        matches.forEach((match, index) => {
-            const words = match.split(' ');
-            const processedWords = words.map((word, i) => (i === 0 && index === 0) ? word.charAt(0).toUpperCase() + word.slice(1) : word);
-            const processedStr = processedWords.join(' ');
-            resultStr += processedStr + (index < matches.length - 1 ? ' - ' : '');
-        });
-    }else{
-        resultStr = "Error no identificado."
+    if (inputStr.includes("ProtectedError")){
+        resultStr = "El elemento que se intentó eliminar, está asociado a otro/s elementos."
+    } else {
+        const matches = inputStr.match(/"(.*?)"/g);
+
+        if (matches) {
+            matches.forEach((match, index) => {
+                const words = match.split(' ');
+                const processedWords = words.map((word, i) => (i === 0 && index === 0) ? word.charAt(0).toUpperCase() + word.slice(1) : word);
+                const processedStr = processedWords.join(' ');
+                resultStr += processedStr + (index < matches.length - 1 ? ' - ' : '');
+            });
+            if(inputStr.length > 100){
+                resultStr = "Error no identificado."
+            }    
+        }else{
+            resultStr = "Error no identificado."
+        }    
     }
 
     resultStr = resultStr.replace(/"/g, '');
 
     resultStr = resultStr.replace(/_/g, ' ');
 
-    toast.error(`Error: ${resultStr}`, {
-        duration: 10000,
-        position: 'bottom-right',
-        style: {
-            background: '#670000',
-            color: '#fff',
-        },
-    });
+    if(resultStr !== "missing user"){
+        toast.error(`Error: ${resultStr}`, {
+            duration: 10000,
+            position: 'bottom-right',
+            style: {
+                background: '#670000',
+                color: '#fff',
+            },
+        });
+    }
+
 };
 

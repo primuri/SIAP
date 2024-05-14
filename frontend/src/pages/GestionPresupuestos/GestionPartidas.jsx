@@ -22,7 +22,14 @@ export const GestionPartidas = () => {
     const [addClicked, setAddClicked]                     = useState(false)         
     const [editClicked, setEditClicked]                   = useState(false)     
 
-    useEffect(() => { loadPartidaData() }, [reload])                       
+    useEffect(() => { loadPartidaData() }, [reload])  
+
+  const user = JSON.parse(localStorage.getItem('user'))
+
+
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });                     
 
     async function loadPartidaData() {
         try{
@@ -109,7 +116,9 @@ export const GestionPartidas = () => {
                     <h1>Partida de la versión del presupuesto {presupuestoID} </h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
-                    <Add onClick={addBtnClicked}></Add>
+                <div className="col">
+                        {!isInvestigador && (<Add onClick={addBtnClicked}></Add>)}
+                    </div>
                     <Search colNames={columnsPartidas} columns={dataKeyPartidas} onSearch={filtrarVersionesInfome}></Search>
                 </div>
                 <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick ={elementClicked} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>

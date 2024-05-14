@@ -1,34 +1,36 @@
-import { useEffect, useState }                  from "react"
-import { columnsGastos, dataKeyGastos}          from "./utils"
-import { Add }                                  from "../../utils/Add"
-import { Modal }                                from "../../utils/Modal"
-import { GastoForm }                            from "../../components/GestionPresupuestos/GastoForm"
-import { Table }                                from "../../utils/Table"
-import { Search }                               from "../../utils/Search"
-import { Back }                                 from "../../utils/Back"
-import { toast, Toaster }                       from 'react-hot-toast'
-import { PermisoDenegado }                      from "../../utils/PermisoDenegado"
-import * as API                                 from "../../api/gestionGastos"
-import { useLocation, useNavigate, useParams }  from "react-router-dom"
+import { useEffect, useState } from "react"
+import { columnsGastos, dataKeyGastos } from "./utils"
+import { Add } from "../../utils/Add"
+import { Modal } from "../../utils/Modal"
+import { GastoForm } from "../../components/GestionPresupuestos/GastoForm"
+import { Table } from "../../utils/Table"
+import { Search } from "../../utils/Search"
+import { Back } from "../../utils/Back"
+import { toast, Toaster } from 'react-hot-toast'
+import { PermisoDenegado } from "../../utils/PermisoDenegado"
+import * as API from "../../api/gestionGastos"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { ReportButton } from "../../utils/ReportButton";
 
-export const GestionGastos = () => {   
-    const {partidaID}                   = useParams() 
-    const user                          = JSON.parse(localStorage.getItem('user'))  
-    const [reload, setReload]           = useState(false)                        
-    const navigate                      = useNavigate()
-    const location                      = useLocation()                       
-    const [gastos, setGastos]           = useState([])                             
-    const [data, setData]               = useState([])                             
-    const [gasto, setGasto]             = useState(null)                            
-    const [cargado, setCargado]         = useState(false)
-    const [error, setError]             = useState(false) 
-    const [addClick, setAddClick]       = useState(false)                      
-    const [edit, setEdit]               = useState(false)              
+export const GestionGastos = () => {
+    const { partidaID } = useParams()
+    const user = JSON.parse(localStorage.getItem('user'))
+    const [reload, setReload] = useState(false)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [gastos, setGastos] = useState([])
+    const [data, setData] = useState([])
+    const [gasto, setGasto] = useState(null)
+    const [cargado, setCargado] = useState(false)
+    const [error, setError] = useState(false)
+    const [addClick, setAddClick] = useState(false)
+    const [edit, setEdit] = useState(false)
     const [JsonIsReady, setJsonIsReady] = useState(false)
     const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
 
-    user.groups[0] !== "administrador" ? setError(true) : null              
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
 
     useEffect(() => {
         setJsonIsReady(false)
@@ -44,7 +46,7 @@ export const GestionGastos = () => {
                 });
                 JsonForReport.reportData = gastos_;
                 return true;
-    
+
             } catch (exception) {
                 console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
                 return false;
@@ -68,8 +70,8 @@ export const GestionGastos = () => {
         JsonForReport.colNames = [
             'Código del gasto',
             'Código de la factura',
-            'Fecha', 
-            'Detalle', 
+            'Fecha',
+            'Detalle',
             'Proveedor',
             'Producto o Servicio',
             'Monto'
@@ -78,7 +80,7 @@ export const GestionGastos = () => {
         setJsonIsReady(configureReportData());
     };
 
-    useEffect(() => { loadGastosData(partidaID) }, [reload, partidaID]) 
+    useEffect(() => { loadGastosData(partidaID) }, [reload, partidaID])
 
     async function loadGastosData(partidaID) {
         try {
@@ -88,13 +90,13 @@ export const GestionGastos = () => {
             setCargado(true)
         } catch (error) {
             toast.error('Error al cargar los datos de Gastos', {
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                background: '#670000',
-                color: '#fff',
+                    background: '#670000',
+                    color: '#fff',
                 },
-          })
+            })
         }
     }
 
@@ -111,23 +113,23 @@ export const GestionGastos = () => {
                 },
             });
             formData.delete('json');
-    
+
             delete Data.id_gasto;
             Data.id_partida_fk = parseInt(partidaID);
             Data.id_cedula_proveedor_fk = Data.id_factura_fk.id_cedula_proveedor_fk;
             Data.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk;
-    
+
             formData.append('id_factura_fk', Data.id_factura_fk.id_factura);
-    
+
             formData.append("tipo", Data.id_documento_fk.tipo)
             formData.append("detalle", Data.id_documento_fk.detalle)
             const documentoResponse = await API.agregarFacturaDocumento(formData, token);
             Data.id_documento_fk = documentoResponse.data.id_documento;
 
-            if(Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined){
+            if (Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio !== undefined) {
                 Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.detalle.id_producto_servicio
-            }else{
-                var responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+            } else {
+                var responsePS = await API.agregarProductoServicio({ detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle }, token)
                 Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
             }
             const facturaResponse = await API.agregarFactura(Data.id_factura_fk, token);
@@ -135,17 +137,17 @@ export const GestionGastos = () => {
             delete Data.id_cedula_proveedor_fk;
             delete Data.id_producto_servicio_fk;
             Data.monto = parseInt(Data.monto);
-           
+
             const Datos = {
                 monto: Data.monto,
                 fecha: Data.fecha,
                 id_documento_fk: Data.id_documento_fk,
                 id_factura_fk: Data.id_factura_fk,
-                id_partida_fk:  Data.id_partida_fk,
+                id_partida_fk: Data.id_partida_fk,
                 detalle: Data.detalle
             }
             await API.agregarGasto(Datos, token);
-    
+
             toast.success('Gasto agregado correctamente', {
                 id: toastId,
                 duration: 4000,
@@ -189,17 +191,17 @@ export const GestionGastos = () => {
             Data.id_partida_fk = parseInt(partidaID);
 
 
-            if(typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object'){
-                Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.id_producto_servicio 
+            if (typeof Data.id_factura_fk.id_producto_servicio_fk.detalle !== 'object') {
+                Data.id_factura_fk.id_producto_servicio_fk = Data.id_factura_fk.id_producto_servicio_fk.id_producto_servicio
 
-            }else{    
-                var responsePS = ""                                                             
-                try{
-                    responsePS = await API.agregarProductoServicio({detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle}, token)
+            } else {
+                var responsePS = ""
+                try {
+                    responsePS = await API.agregarProductoServicio({ detalle: Data.id_factura_fk.id_producto_servicio_fk.detalle.detalle }, token)
 
-                } catch(error){
+                } catch (error) {
                     console.error(responsePS)
-                }                                                               
+                }
                 Data.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
             }
 
@@ -209,10 +211,10 @@ export const GestionGastos = () => {
             Data.id_factura_fk = rF.data.id_factura
             Data.monto = parseInt(Data.monto);
 
-            delete Data.id_documento_fk 
+            delete Data.id_documento_fk
 
             await API.actualizarGasto(Data.id_gasto, Data, token);
-    
+
             toast.success('Gasto editado correctamente', {
                 id: toastId,
                 duration: 4000,
@@ -244,19 +246,19 @@ export const GestionGastos = () => {
             var toastId = toast.loading('Eliminando...', {
                 position: 'bottom-right',
                 style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                fontSize: '18px',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
                 },
             });
             await API.eliminarGasto(id, localStorage.getItem('token'))
             toast.success('Gasto eliminado correctamente', {
                 id: toastId,
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
             })
             setEdit(false)
@@ -277,7 +279,7 @@ export const GestionGastos = () => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setGasto(selectedGasto);
             navigate(`${location.pathname}${selectedGasto.id_gasto}`)
-            
+
         } else {
             setGasto(selectedGasto)
             setEdit(true)
@@ -291,17 +293,17 @@ export const GestionGastos = () => {
 
     const search = (col, filter) => {
         const matches = data.filter((e) => {
-          if (col.includes('.')) {
-            const value = getValueByPath(e, col)
-            return value && value.toString().includes(filter)
-          }
-          return e[col].toString().includes(filter)
+            if (col.includes('.')) {
+                const value = getValueByPath(e, col)
+                return value && value.toString().includes(filter)
+            }
+            return e[col].toString().includes(filter)
         })
         setGastos(matches)
         setJsonIsReady(false)
     }
 
-    function addBtnClicked () {
+    function addBtnClicked() {
         setAddClick(true)
         setEdit(false)
     }
@@ -324,54 +326,53 @@ export const GestionGastos = () => {
     const formattedData = gastos.map(item => {
         const formattedItem = {};
         Object.keys(item).forEach(key => {
-          if (key === 'fecha') {
-            formattedItem[key] = formatDate(item[key]);
-          } else {
-            formattedItem[key] = item[key];
-          }
+            if (key === 'fecha') {
+                formattedItem[key] = formatDate(item[key]);
+            } else {
+                formattedItem[key] = item[key];
+            }
         });
         return formattedItem;
     });
 
     return (
         <main >
-          {!error ? (
-            <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-              <div className="flex-row">
-                <h1>Gestión de gastos de la partida </h1>
-                {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
-              <div className="d-flex justify-content-between mt-4">
-                <div className="col">
-                    <Add onClick={addBtnClicked}></Add>
+            {!error ? (
+                <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
+                    <div className="flex-row">
+                        <h1>Gestión de gastos de la partida </h1>
+                        {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+                    <div className="d-flex justify-content-between mt-4">
+                        <div className="col">
+                            {!isInvestigador && (<Add onClick={addBtnClicked}></Add>)}
+                        </div>
+                        {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
+                        <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
+                    </div>
+                    <Table columns={columnsGastos} data={formattedData} dataKeys={dataKeyGastos} onDoubleClick={elementClicked} hasButtonColumn={false} buttonText="Gestionar"></Table>
+                    {addClick && (<Modal ><GastoForm onSubmit={addGasto} onCancel={onCancel} mode={1}></GastoForm></Modal>)}
+                    {edit &&
+                        (
+                            <Modal>
+                                <GastoForm
+                                    mode={2}
+                                    onSubmit={editGasto}
+                                    onCancel={onCancel}
+                                    onDelete={() => deleteGasto(gasto.id_gasto)}
+                                    gasto={gasto}
+                                >
+                                </GastoForm>
+                            </Modal>
+                        )
+                    }
+                    <Toaster></Toaster>
+                    <div className="d-flex justify-content-start">
+                        <Back onClick={volver}>Regresar a partidas</Back>
+                    </div>
                 </div>
-                
-                {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
-                <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
-              </div>
-              <Table columns={columnsGastos} data={formattedData} dataKeys={dataKeyGastos} onDoubleClick={elementClicked} hasButtonColumn={false} buttonText="Gestionar"></Table>
-              {addClick && (<Modal ><GastoForm onSubmit={addGasto} onCancel={onCancel} mode={1}></GastoForm></Modal>)}
-              {edit &&
-                (
-                  <Modal>
-                    <GastoForm
-                      mode={2}
-                      onSubmit={editGasto}
-                      onCancel={onCancel}
-                      onDelete={() => deleteGasto(gasto.id_gasto)}
-                      gasto={gasto}
-                    >
-                    </GastoForm>
-                  </Modal>
-                )
-              }
-              <Toaster></Toaster>
-              <div className="d-flex justify-content-start">
-                <Back onClick={volver}>Regresar a partidas</Back>
-              </div>
-            </div>
-          ) : (
-            <PermisoDenegado></PermisoDenegado>
-          )}
+            ) : (
+                <PermisoDenegado></PermisoDenegado>
+            )}
         </main>
     )
 }
