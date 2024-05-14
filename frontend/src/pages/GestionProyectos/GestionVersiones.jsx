@@ -48,17 +48,33 @@ export const GestionVersiones = () => {
     useEffect(() => {
         async function fetchData() {
             await loadVersionProyectos(clean_id);
-            await loadAcademicos();
+            await loadAcademicos(clean_id);
             setCargado(true);
         }
 
         fetchData();
     }, [reload, clean_id]);
 
-    async function loadAcademicos() {
+    async function loadAcademicos(proyecto) {
         try {
             const res = await obtenerAcademicos(localStorage.getItem('token'));
-            setAcademicos(res.data);
+        const resp = await obtenerVersionProyectos(localStorage.getItem('token'));
+        const filteredData = resp.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === proyecto);
+
+        if (filteredData.length > 0) {
+            // Suponiendo que siempre hay un colaborador principal
+            const nombrePrincipal = filteredData.map(item => 
+                `${item.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} ${item.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido}`.toLowerCase()
+            );
+
+            const academicosFiltrados = res.data.filter(academico => 
+                !nombrePrincipal.includes(`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido}`.toLowerCase())
+            );
+
+            setAcademicos(academicosFiltrados);
+        } else {
+            setAcademicos(res.data);  // Si no hay colaboradores principales, se usa la lista completa
+        }
         } catch (error) {
             toast.error('Error al cargar los datos de investigadores', {
                 duration: 4000,
@@ -321,6 +337,12 @@ export const GestionVersiones = () => {
             Datos.id_oficio_fk = id_oficio_creado;
             
             //REVISAR
+            const res = await obtenerVersionProyectos(localStorage.getItem('token'));
+            const filteredData = res.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === clean_id);
+
+            const maxVersionNumber = filteredData.reduce((max, item) => Math.max(max, item.numero_version), 0);
+            const newVersionNumber = maxVersionNumber + 1;
+            Datos.numero_version = newVersionNumber;
             const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
 
             producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
@@ -354,7 +376,7 @@ export const GestionVersiones = () => {
                 },
             })
             setAddClick(false)
-            loadVersionProyectos(id_vi)
+            setReload(!reload)
             success()
 
         } catch (error) {
@@ -517,7 +539,10 @@ export const GestionVersiones = () => {
             //REVISAR
             const colaboradores = Datos.colaboradores
             delete Datos.colaboradores
-            //const id_version_proyecto_editado = await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
+            delete Datos.software
+            delete Datos.evento
+            delete Datos.articulo
+             await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
             if(colaboradores != undefined){
                 await editarColaboradorSecundario(colaboradores, id_version_proy, localStorage.getItem('token'))
 
@@ -550,7 +575,7 @@ export const GestionVersiones = () => {
                 },
             })
             setEdit(false)
-            loadVersionProyectos(Datos.id_codigo_vi_fk)
+            setReload(!reload)
             success()
         } catch (error) {
             toast.dismiss(toastId)

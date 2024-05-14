@@ -56,7 +56,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [showProductContent, setShowProductContent] = useState(false);
     const [formData, setFormData] = useState({
-            id_version_proyecto: "",
+            id_version_proyecto: proyecto ? proyecto.id_version_proyecto: "",
             id_oficio_fk: proyecto ? proyecto.id_oficio_fk : {
                 id_oficio: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.id_oficio : "",
                 ruta_archivo: proyecto && proyecto.id_oficio_fk ? proyecto.id_oficio_fk.ruta_archivo : "",
@@ -71,8 +71,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
                 id_codigo_vi: proyecto && proyecto.id_codigo_vi_fk ? proyecto.id_codigo_vi_fk.id_codigo_vi : id_codigo,
                 nombre: proyecto && proyecto.nombre ? proyecto.id_codigo_vi_fk.nombre : "",
             },
-            detalle: proyecto && proyecto.id_version_proyecto_fk  ? proyecto.detalle : "",
-            numero_version: proyecto && proyecto.id_version_proyecto_fk ? proyecto.numero_version : canVersiones + 1,
+            detalle: proyecto ? proyecto.detalle: "",
+            numero_version: proyecto ? proyecto.numero_version : "" ,
         
     });
     const user = JSON.parse(localStorage.getItem('user'))

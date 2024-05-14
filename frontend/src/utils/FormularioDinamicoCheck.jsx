@@ -10,6 +10,7 @@ import { eliminarColaboradorSecundario } from "../api/gestionProyectos";
 export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemName, academicos }) => {
     const [academicosFilter, setAcademicosFilter] = useState([]);
     const [showDropdown, setShowDropdown] = useState(items.map(() => false));
+    const [inputValue, setInputValue] = useState("");
 
     const agregarItem = () => {
         const nuevoItem = configuracion.reduce((acc, conf) => {
@@ -28,6 +29,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         let updatedItems = [...items];
         updatedItems[index][campo] = value;
+        
 
         if (campo === 'fecha_inicio' || campo === 'fecha_fin') {
             const fechaInicio = campo === 'fecha_inicio' ? new Date(value) : new Date(items[index]['fecha_inicio']);
@@ -39,9 +41,11 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
         }
 
         if (campo === 'id_academico_fk') {
+            setInputValue(value);
             const filtered = academicos.filter(academico =>
                 `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`.toLowerCase().includes(value.toLowerCase())
             );
+            
             setAcademicosFilter(filtered);
             setShowDropdown(showDropdown.map((dropdown, idx) => index === idx ? true : dropdown));
         } else {
@@ -57,6 +61,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
         let updatedItems = [...items];
         updatedItems[index]['id_academico_fk'] = academico.id_academico; // Guarda el ID, pero muestra el nombre completo
         updatedItems[index]['nombre_academico'] = `${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`; // Mostramos el nombre en la interfaz
+        setInputValue(`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`);
         setItems(updatedItems);
         setAcademicosFilter([]);
         setShowDropdown(showDropdown.map((dropdown, idx) => idx === index ? false : dropdown));
@@ -103,7 +108,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                                                 id={`${conf.campo}-${index}`}
                                                 type="text"
                                                 name={conf.campo}
-                                                value={item['nombre_academico'] || ''}
+                                                value={inputValue || `${item.id_academico_fk?.id_nombre_completo_fk?.nombre || ''} ${item.id_academico_fk?.id_nombre_completo_fk?.apellido || ''} ${item.id_academico_fk?.id_nombre_completo_fk?.segundo_apellido || ''}`.trim()}
                                                 onFocus={() => setShowDropdown(showDropdown.map((dropdown, idx) => index === idx ? true : dropdown))}
                                                 onBlur={() => setTimeout(() => setShowDropdown(showDropdown.map((dropdown, idx) => index === idx ? false : dropdown)), 300)}
                                                 onChange={e => handleInputChange(e, index, 'id_academico_fk')}
