@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { toast, Toaster } from 'react-hot-toast'
-import icono from '../../assets/person-i.png';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../utils/Confirmar'
