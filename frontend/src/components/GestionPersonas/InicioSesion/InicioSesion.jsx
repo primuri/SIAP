@@ -36,7 +36,11 @@ export const InicioSesion = () => {
         window.location.href = '/inicio-administrador';
       }
       if(tipoUsuario === 'invitado') {
-        window.location.href = '/organos-colegiados';
+        if(user.groups[1]) {
+          window.location.href = '/gestion-organos-colegiados';
+        } else {
+          window.location.href = '/inicio-invitado';
+        }
       }
       if(tipoUsuario === 'evaluador') {
         if(user.groups[1]) {
