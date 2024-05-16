@@ -368,7 +368,8 @@ export const GestionIntegranteOrganoColegiado = () => {
                     id_organo={selectedIdOrganoColegiado} 
                     onSubmit={addIntegrante} 
                     onCancel={onCancel} 
-                    mode={1}>
+                    mode={1}
+                    rol={rol}>
                 </IntegranteOrganoColegiadoForm></Modal>
            )}
             {edit && (
