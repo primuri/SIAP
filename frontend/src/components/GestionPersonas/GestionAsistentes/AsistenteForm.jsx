@@ -50,6 +50,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
     if ((name === "cantidad_horas" || name === "consecutivo") && (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value))) {
       return;
     }
+    
 
     if (name.includes('.')) {
       const keys = name.split('.');
@@ -184,7 +185,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
               <div className="col-md-6">
                 <label htmlFor="condicionEstudiante" className="label-personalizado mb-2">Condicion Estudiante   </label>
                 <select className="form-control" name="id_asistente_carnet_fk.condicion_estudiante" id="condicion_estudiante" value={formData.id_asistente_carnet_fk.condicion_estudiante} onChange={handleChange} required disabled={isInvestigador}>
-                  <option value="">Seleccionar Condición</option>
+                  <option value="" disabled defaultValue={""}>Seleccionar Condición</option>
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>
@@ -193,7 +194,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
             <div className="row mb-4">
               <div className="col">
                 <label htmlFor="id_asistente_carnet_fk.carrera" className="label-personalizado mb-2"> Carrera</label>
-                <input type="text" className="form-control" name="id_asistente_carnet_fk.carrera" id="id_asistente_carnet_fk.carrera" value={formData.id_asistente_carnet_fk.carrera} onChange={handleChange} required disabled={isInvestigador} />
+                <textarea type="text" className="form-control" name="id_asistente_carnet_fk.carrera" id="id_asistente_carnet_fk.carrera" value={formData.id_asistente_carnet_fk.carrera} onChange={handleChange} required disabled={isInvestigador} />
               </div>
               <div className="col">
                 <label htmlFor="id_asistente_carnet_fk.promedio_ponderado" className="label-personalizado mb-2"> Promedio Ponderado   </label>
