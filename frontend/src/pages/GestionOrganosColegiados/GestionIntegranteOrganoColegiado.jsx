@@ -169,7 +169,7 @@ export const GestionIntegranteOrganoColegiado = () => {
             },
         })
         setAddClick(false);
-        success();
+        setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId);
     }
@@ -248,7 +248,7 @@ export const GestionIntegranteOrganoColegiado = () => {
             },
         })
         setEdit(false);
-        success();
+        setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId);
     }
@@ -282,7 +282,7 @@ export const GestionIntegranteOrganoColegiado = () => {
         },
       })
       setEdit(false);
-      success();
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId);
     }

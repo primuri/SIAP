@@ -175,8 +175,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             "id_nombre_completo_fk.nombre",
             "id_nombre_completo_fk.apellido",
             "id_nombre_completo_fk.segundo_apellido",
-            "id_area_especialidad_fk.nombre",
-            "id_area_especialidad_secundaria_fk.nombre"
+            "id_area_especialidad_fk.nombre"
         ];
     
         if (camposAValidar.includes(name)) {
