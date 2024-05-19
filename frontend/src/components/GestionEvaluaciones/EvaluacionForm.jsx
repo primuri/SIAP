@@ -262,7 +262,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
                             <div className="col">
                                 <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
+                                <input  accept=".pdf,.xls,.xlsx,.doc,.docx,.odt,.ods,.rar,.zip"  type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
                                 {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">

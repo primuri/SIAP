@@ -38,7 +38,7 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
           <label className="label-personalizado mb-2" htmlFor="foto">
             {noFileSelected ? (
               <>
-                <input type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
+                <input  accept=".jpg,.png,.svg"  type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
                 {selectedFileName ? (
                   <span>Nombre del archivo: {selectedFileName}</span>
                 ) : (

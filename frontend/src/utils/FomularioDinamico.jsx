@@ -25,8 +25,14 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
         if (campo === 'anio' && valor < '1930') {
             valor = '1930';
         }
-
-        nuevosItems[index][campo] = valor;
+        if (campo === 'numero_tel') {
+            // Permitir solo números, signo de más (+) y paréntesis ()
+            if (/^[0-9+()]*$/.test(valor)) {
+                nuevosItems[index][campo] = valor;
+            }
+        } else {
+            nuevosItems[index][campo] = valor;
+        }
         setItems(nuevosItems);
     };
 
