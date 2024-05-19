@@ -8,7 +8,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export const FormularioDinamico = ({ items, setItems, configuracion, itemName }) => {
+export const FormularioDinamico = ({ items, setItems, configuracion, itemName, mode }) => {
     const agregarItem = () => {
         const nuevoItem = {};
         configuracion.forEach(conf => {
@@ -83,6 +83,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                                 onChange={e => handleInputChange(e, index, conf.campo)}
                                                 required={conf.required}
                                                 className="form-control"
+                                                
                                             >
                                                 <option value="" disabled>Selecciona una opción</option>
                                                 {conf.opciones.map((opcion, opcionIndex) => (
@@ -98,6 +99,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                                 required={conf.required}
                                                 className="form-control"
                                                 min={conf.campo === 'anio' ? '1930' : undefined}
+                                                
                                             />
                                         )}
                                     </div>

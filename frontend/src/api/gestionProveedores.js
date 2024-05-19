@@ -116,8 +116,7 @@ export const actualizarCuentasBancarias = (cuentasBancarias, proveedor_ID, token
                 let id_cedula_proveedor = cuenta.id_proveedor_fk.id_cedula_proveedor;
                 delete cuenta.id_proveedor_fk;
                 cuenta.id_proveedor_fk = id_cedula_proveedor;
-                cuenta.cuenta_principal === "" ? cuenta.cuenta_principal = false : cuenta.cuenta_principal = true
-
+                
                 await manejarErrores( SIAPAPI.put(`presupuesto/cuentas_bancarias/${id_numero}/`, cuenta, {
                     headers: {
                         'Authorization': `token ${token}`,

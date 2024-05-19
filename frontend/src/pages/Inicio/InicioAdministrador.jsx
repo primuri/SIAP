@@ -167,6 +167,19 @@ export const InicioAdministrador = ({ usuario }) => {
                             </div>
                         </div>
 
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingNine">
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                  ¿Por qué al editar el número de cuenta bancaria se agrega una nueva cuenta bancaria?
+                              </button>
+                            </h2>
+                            <div id="collapseNine" className="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
+                                El número de cuenta, al ser un identificador único, no puede modificarse. Cualquier intento de edición resultará en la creación de una nueva cuenta bancaria.
+                              </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

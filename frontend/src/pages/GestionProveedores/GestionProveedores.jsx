@@ -116,7 +116,9 @@ export const GestionProveedores = () => {
           var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
         } else {
           delete formData.id_documento_fk.documento
-          var responseDocumento = await editarDocumentoCuenta(formData.id_documento_fk.id_documento, token)
+          let id_doc = formData.id_documento_fk.id_documento
+          delete formData.id_documento_fk.id_documento
+          var responseDocumento = await editarDocumentoCuenta(id_doc,formData.id_documento_fk, token)
         }
         formData.id_documento_fk = responseDocumento.data.id_documento;
       }
@@ -128,6 +130,7 @@ export const GestionProveedores = () => {
 
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;
+      
       if (cuentasBancarias) {
         await actualizarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, token);
       }
@@ -135,7 +138,6 @@ export const GestionProveedores = () => {
       delete Datos.cuentaBancaria
 
       await editarProveedor(proveedor.id_cedula_proveedor, Datos, token)
-      setReload(!reload);
 
       toast.success('Proveedor actualizado correctamente', {
         id: toastId,
@@ -147,6 +149,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
+      setReload(!reload);
+      navigate('/gestion-proveedores')
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -165,7 +169,7 @@ export const GestionProveedores = () => {
     });
       await eliminarProveedor(id, token)
       await eliminarDocumentoCuentas(doc_id, token)
-      setReload(!reload);
+      
 
       toast.success('Proveedor eliminado correctamente', {
         id: toastId,
@@ -177,6 +181,8 @@ export const GestionProveedores = () => {
         },
       })
       setEdit(false)
+      setReload(!reload);
+      navigate('/gestion-proveedores')
     } catch (error) {
       toast.dismiss(toastId)
     }
