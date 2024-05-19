@@ -45,15 +45,28 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
 
         const { name, value } = event.target
 
+      
+
         const keys = name.split('.');
         let updatedValue = value;
+
+        if (keys.includes('inicio_funciones')) {
+            const date = new Date(value);
+            const year = date.getFullYear();
+            if (year < 1980) {
+                event.target.setCustomValidity("La fecha de inicio de funciones no puede ser anterior a 1980.");
+                event.target.reportValidity();
+                return;
+            }
+        }
+
     
         if (keys.includes('fecha_inicio') || keys.includes('fecha_fin')) {
             const startDateKey = keys.slice(0, -1).join('.') + '.fecha_inicio';
             const endDateKey = keys.slice(0, -1).join('.') + '.fecha_fin';
             const startDate = keys[keys.length - 1] === 'fecha_inicio' ? new Date(value) : new Date(getValueByPath(formData, startDateKey));
             const endDate = keys[keys.length - 1] === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
-    
+            
             if (startDate > endDate) {
                 return;
             }
@@ -178,7 +191,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="puesto" className="label-personalizado mb-2">Puesto</label>
-                                <input type="text" className="form-control" name="puesto" id="puesto" value={formData.puesto} onChange={handleChange} required disabled={rol === "invitado"}/>
+                                <textarea type="text" className="form-control" name="puesto" id="puesto" value={formData.puesto} onChange={handleChange} required disabled={rol === "invitado"}/>
                             </div>
                         </div>   
 
@@ -205,7 +218,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Número de oficio  </label>
-                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} disabled={rol === "invitado"}/>
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} disabled={rol === "invitado"} required/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio de nombramiento  </label>

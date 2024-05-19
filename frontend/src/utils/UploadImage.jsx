@@ -18,7 +18,7 @@ const UploadImage = ({ mode, handleFileChange, formData, icono2 }) => {
           <label className="label-personalizado mt-4" htmlFor="foto">
             {mode === 1 ? (
               <>
-                Agregar foto
+                Agregar foto <span className="disabled-input">(Opcional)</span>
                 <br />
                 <input type="file" className="form-control justify-content-center align-items-center" name="foto" id="foto" onChange={updateSelectedFileName} style={{ display: 'none' }} />
                 {selectedFileName ? (

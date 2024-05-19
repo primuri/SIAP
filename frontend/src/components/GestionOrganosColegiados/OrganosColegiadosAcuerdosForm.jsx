@@ -70,8 +70,25 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                     if (!o[level]) o[level] = {};
                     return o[level];
                 }, obj);
-                depth[lastLevel] = value;
+                if (path === "encargado") {
+                    if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
+                        value = value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '');
+                    }
+                    depth[lastLevel] = value;
+                } else if (path === "fecha_cumplimiento") {
+                    const date = new Date(value);
+                    const year = date.getFullYear();
+                    if (year < 1980) {
+                        event.target.setCustomValidity("La fecha de cumplimiento no puede ser anterior a 1980.");
+                        event.target.reportValidity();
+                    } else {
+                        depth[lastLevel] = value;
+                    }
+                } else {
+                    depth[lastLevel] = value;
+                }
             };
+            
     
             const updatedFormData = {...prevFormData};
     
@@ -205,7 +222,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                     onChange={handleChange}
                                     required
                                     >
-                                        <option value="">Selecciona un estado</option>
+                                        <option value="" disabled defaultValue={""}>Selecciona un estado</option>
                                         <option value="Tramitado">Tramitado</option>
                                         <option value="En tramite">En trámite</option>
                                         <option value="No tramite">No requiere trámite</option>
@@ -227,7 +244,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento_seguimiento" className="label-personalizado mb-2">Documento del segimiento</label>
-                                <input type="file" className="form-control" name="id_seguimiento_fk.id_documento_seguimiento_fk.documento" id="id_seguimiento_fk.id_documento_seguimiento_fk.documento" onChange={handleFileChange} required disabled={rol === "invitado"} />
+                                <input  accept=".pdf,.xls,.xlsx,.doc,.docx,.odt,.ods,.rar,.zip" type="file" className="form-control" name="id_seguimiento_fk.id_documento_seguimiento_fk.documento" id="id_seguimiento_fk.id_documento_seguimiento_fk.documento" onChange={handleFileChange} required disabled={rol === "invitado"} />
                                 {mode === 2 && formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento ? (
                                     <Tooltip title={formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento.split('/').pop()} placement="right-start">
                                     <a href={"http://localhost:8000" + formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -241,7 +258,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             
                             <div className="col-md-6">
                                 <label htmlFor="documento_acuerdo" className="label-personalizado mb-2">Documento del acuerdo</label>
-                                <input type="file" className="form-control" name="id_documento_acuerdo_fk.documento" id="id_documento_acuerdo_fk.documento"  onChange={handleFileChange} required disabled={rol === "invitado"} />
+                                <input  accept=".pdf,.xls,.xlsx,.doc,.docx,.odt,.ods,.rar,.zip" type="file" className="form-control" name="id_documento_acuerdo_fk.documento" id="id_documento_acuerdo_fk.documento"  onChange={handleFileChange} required disabled={rol === "invitado"} />
                                 {mode === 2 && formData.id_documento_acuerdo_fk?.documento ? (
                                     <Tooltip title={formData.id_documento_acuerdo_fk.documento.split('/').pop()} placement="right-start">
                                     <a href={"http://localhost:8000" + formData.id_documento_acuerdo_fk?.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
@@ -253,14 +270,14 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                             <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="detalle_oficio" className="label-personalizado mb-2">Detalle oficio</label>
-                                        <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange}  required disabled={rol === "invitado"}/>
+                                        <textarea type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange}  required disabled={rol === "invitado"}/>
                                     </div>
                                 </div>
                         </div> 
                         <div className="row mb-4">
                                 <div className="col-md-6">
                                     <label htmlFor="documento_oficio" className="label-personalizado mb-2">Documento del oficio</label>
-                                    <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo"  onChange={handleFileChange} required disabled={rol === "invitado"}/>
+                                    <input  accept=".pdf,.xls,.xlsx,.doc,.docx,.odt,.ods,.rar,.zip" type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo"  onChange={handleFileChange} required disabled={rol === "invitado"}/>
                                     {mode === 2 && formData.id_oficio_fk?.ruta_archivo ? (
                                         <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
                                         <a href={"http://localhost:8000" + formData.id_oficio_fk?.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
