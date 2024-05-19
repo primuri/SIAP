@@ -101,7 +101,8 @@ export const GestionEvaluadores = () => {
         },
       })
       setAddClick(false)
-      success()
+      navigate('/gestion-evaluadores')
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -129,7 +130,8 @@ export const GestionEvaluadores = () => {
         },
       })
       setEdit(false)
-      success()
+      navigate('/gestion-evaluadores')
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }
@@ -156,7 +158,8 @@ export const GestionEvaluadores = () => {
         },
       })
       setEdit(false)
-      success()
+      navigate('/gestion-evaluadores')
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId)
     }

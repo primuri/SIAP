@@ -224,8 +224,24 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         setFotoData(foto);
     }
 
+    function validateEmail(email) {
+        const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(String(email).toLowerCase());
+      }
+
     const sendForm = (event) => {
         event.preventDefault()
+        if (!validateEmail(formData.correo)) {
+            toast.error('Por favor, introduce una dirección de correo electrónico con un formato valido válido.', {
+              position: 'bottom-right',
+              style: {
+                  background: 'var(--rojo-ucr)',
+                  color: '#fff',
+                  fontSize: '18px',
+              },
+          });
+            return;
+          }
         if (titulos.length > 0) {
             formData.titulos = titulos
         }
