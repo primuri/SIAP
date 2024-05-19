@@ -230,7 +230,7 @@ export const GestionVersiones = () => {
             let ev = null;
 
 
-            if ('software' in Datos) {
+            if ('software' in Datos && Datos.software != null) {
                 const DocumentacionData = new FormData();
                 const documentacionFile = formData.get('id_documento_documentacion_fk.documento');
                 if (documentacionFile) {
@@ -246,7 +246,7 @@ export const GestionVersiones = () => {
                 producto = Datos.software;
                 delete Datos.software;
                 soft = true;
-            } else if ('articulo' in Datos) {
+            } else if ('articulo' in Datos && Datos.articulo != null) {
                 const DocumentoData = new FormData();
                 const documentoFile = formData.get('id_documento_articulo_fk.documento');
                 if (documentoFile) {
@@ -277,7 +277,7 @@ export const GestionVersiones = () => {
                 delete Datos.articulo;
                 artic = true;
 
-            } else if ('evento' in Datos) {
+            } else if ('evento' in Datos && Datos.evento != null) {
                 const DocumentoOficioData = new FormData();
                 const documentoOficioFile = formData.get('id_oficio_fk.documento');
                 if (documentoOficioFile) {
@@ -304,81 +304,102 @@ export const GestionVersiones = () => {
                 delete Datos.evento;
                 ev = true;
             }
-            formData.delete('json');
-            let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
-            let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
+            if(soft || artic || ev){
+                formData.delete('json');
+                let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
+                let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
 
-            if (!fecha_ini || fecha_ini.trim() === "") {
-                fecha_ini = null;
+                if (!fecha_ini || fecha_ini.trim() === "") {
+                    fecha_ini = null;
+                }
+
+                if (!fecha_fi || fecha_fi.trim() === "") {
+                    fecha_fi = null;
+                }
+                const vigencia = {
+                    fecha_inicio: fecha_ini,
+                    fecha_fin: fecha_fi
+                }
+                const id_vigencia_creado = await agregarVigencia(vigencia, localStorage.getItem('token'))
+                delete Datos.id_vigencia_fk;
+                const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
+                delete Datos.id_codigo_vi_fk;
+                Datos.id_codigo_vi_fk = clean_id;
+                delete Datos.id_version_proyecto;
+                Datos.id_vigencia_fk = id_vigencia_creado;
+
+                formData.delete(formData.id_version_proyecto);
+                formData.delete(formData.id_vigencia_fk);
+                formData.delete(formData.id_codigo_vi_fk);
+                formData.append('detalle', Datos.id_oficio_fk.detalle);
+
+                const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
+                delete Datos.id_oficio_fk;
+                Datos.id_oficio_fk = id_oficio_creado;
+                
+                
+                const res = await obtenerVersionProyectos(localStorage.getItem('token'));
+                const filteredData = res.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === clean_id);
+
+                const maxVersionNumber = filteredData.reduce((max, item) => Math.max(max, item.numero_version), 0);
+                const newVersionNumber = maxVersionNumber + 1;
+                Datos.numero_version = newVersionNumber;
+                const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
+
+                producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
+    
+                const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))
+    
+                delete producto.id_producto_fk;
+                producto.id_producto_fk = id_producto_creado;
+    
+                if (soft) {
+                    await agregarSoftware(producto, localStorage.getItem('token'))
+                } else if (artic) {
+                    await agregarArticulo(producto, localStorage.getItem('token'));
+                } else if (ev) {
+                    await agregarevento(producto, localStorage.getItem('token'));
+                }
+                
+                await agregarColaboradorSecundario(Datos.colaboradores, id_version_creada, localStorage.getItem('token'))
+    
+               
+                toast.success('Versión de proyecto agregada correctamente', {
+                    id: toastId,
+                    duration: 4000,
+                    position: 'bottom-right',
+                    style: {
+                        background: 'var(--celeste-ucr)',
+                        color: '#fff',
+                        fontSize: '18px',
+                        height: '60px',
+                        width: '300px',
+                    },
+                })
+                loadVersionProyectos(id_vi)
+                setAddClick(false)
+                setReload(!reload)
+                navigate(`/gestion-proyectos/${id}/gestion-versiones`)
+    
+            }else{
+                setAddClick(false)
+                setReload(!reload)
+                navigate(`/gestion-proyectos/${id}/gestion-versiones`)
+                toast.dismiss(toastId)
+                toast.error('Se debe de agregar un producto para crear una versión de proyecto', {
+                    id: toastId,
+                    duration: 4000,
+                    position: 'bottom-right',
+                    style: {
+                        background: 'var(--rojo-ucr)',
+                        color: '#fff',
+                        fontSize: '18px',
+                    },
+                });
             }
-
-            if (!fecha_fi || fecha_fi.trim() === "") {
-                fecha_fi = null;
-            }
-            const vigencia = {
-                fecha_inicio: fecha_ini,
-                fecha_fin: fecha_fi
-            }
-            const id_vigencia_creado = await agregarVigencia(vigencia, localStorage.getItem('token'))
-            delete Datos.id_vigencia_fk;
-            const id_vi = Datos.id_codigo_vi_fk.id_codigo_vi;
-            delete Datos.id_codigo_vi_fk;
-            Datos.id_codigo_vi_fk = clean_id;
-            delete Datos.id_version_proyecto;
-            Datos.id_vigencia_fk = id_vigencia_creado;
-
-            formData.delete(formData.id_version_proyecto);
-            formData.delete(formData.id_vigencia_fk);
-            formData.delete(formData.id_codigo_vi_fk);
-            formData.append('detalle', Datos.id_oficio_fk.detalle);
-
-            const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
-            delete Datos.id_oficio_fk;
-            Datos.id_oficio_fk = id_oficio_creado;
-            
-            //REVISAR
-            const res = await obtenerVersionProyectos(localStorage.getItem('token'));
-            const filteredData = res.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === clean_id);
-
-            const maxVersionNumber = filteredData.reduce((max, item) => Math.max(max, item.numero_version), 0);
-            const newVersionNumber = maxVersionNumber + 1;
-            Datos.numero_version = newVersionNumber;
-            const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
-
-            producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
-
-            const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))
-
-            delete producto.id_producto_fk;
-            producto.id_producto_fk = id_producto_creado;
-
-            if (soft) {
-                await agregarSoftware(producto, localStorage.getItem('token'))
-            } else if (artic) {
-                await agregarArticulo(producto, localStorage.getItem('token'));
-            } else if (ev) {
-                await agregarevento(producto, localStorage.getItem('token'));
-            }
-            
-            await agregarColaboradorSecundario(Datos.colaboradores, id_version_creada, localStorage.getItem('token'))
-
             loadVersionProyectos(id_vi)
-            toast.success('Versión de proyecto agregada correctamente', {
-                id: toastId,
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: 'var(--celeste-ucr)',
-                    color: '#fff',
-                    fontSize: '18px',
-                    height: '60px',
-                    width: '300px',
-                },
-            })
-            setAddClick(false)
-            setReload(!reload)
-            success()
-
+           
+           
         } catch (error) {
             toast.dismiss(toastId)
             await eliminarVersion(producto.id_producto_fk, localStorage.getItem("token"))
@@ -536,7 +557,7 @@ export const GestionVersiones = () => {
             delete Datos.id_oficio_fk;
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
-            //REVISAR
+            
             const colaboradores = Datos.colaboradores
             delete Datos.colaboradores
             delete Datos.software
@@ -575,7 +596,7 @@ export const GestionVersiones = () => {
             })
             setEdit(false)
             setReload(!reload)
-            success()
+            navigate(`/gestion-proyectos/${id}/gestion-versiones`)
         } catch (error) {
             toast.dismiss(toastId)
 
@@ -629,7 +650,7 @@ export const GestionVersiones = () => {
             })
             setEdit(false)
             loadVersionProyectos(id)
-            success()
+            navigate(`/gestion-proyectos/${id}/gestion-versiones`)
         } catch (error) {
             console.error(error);
             toast.dismiss(toastId)

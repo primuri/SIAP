@@ -103,7 +103,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                                             required={conf.required}
                                             disabled={isInvestigador}
                                         >
-                                            <option value="">Selecciona una opción</option>
+                                            <option value="" disabled defaultValue={""}>Selecciona una opción</option>
                                             {conf.opciones?.map((opcion, opcionIdx) => (
                                                 <option key={opcionIdx} value={opcion}>{opcion}</option>
                                             ))}

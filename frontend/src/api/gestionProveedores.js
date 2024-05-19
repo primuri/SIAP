@@ -128,7 +128,7 @@ export const actualizarCuentasBancarias = (cuentasBancarias, proveedor_ID, token
             }
         });
     } catch (error) {
-        console.error(error)
+        console.error(error)//ver como personalizar el mensaje de error al intentar modificar el numero de cuenta
         throw (error)
     }
 };

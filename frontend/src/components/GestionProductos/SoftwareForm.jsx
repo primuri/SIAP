@@ -33,7 +33,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         const { name, value } = event.target;
 
 
-        if (name === "numero_version") {
+        if (name === "version") {
             if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
                 return;
             }
@@ -41,6 +41,16 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         
         if (name.includes('.')) {
             const keys = name.split('.');
+            if (keys[0] === 'id_producto_fk' && keys[1] === 'fecha') {
+                const year = new Date(value).getFullYear();
+                if (year < 1980) {
+                    event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                    event.target.reportValidity();
+                    return;
+                } else {
+                    event.target.setCustomValidity("");
+                }
+            }
             formData[keys[0]][keys[1]] = value;
         } else {
             formData[name] = value;

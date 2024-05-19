@@ -172,7 +172,7 @@ export const eliminarProyecto = async (id, token) => {
 export const agregarColaboradorSecundario = async (colaboradores_secundarios, id_version, token) => {
     try {
         if(colaboradores_secundarios != undefined){
-            colaboradores_secundarios.forEach(async colaborador_secundario => {
+            for (const colaborador_secundario of colaboradores_secundarios) {
                 colaborador_secundario.id_version_proyecto_fk = id_version;
                 let fecha_ini = colaborador_secundario.fecha_inicio;
                 let fecha_fi = colaborador_secundario.fecha_fin;
@@ -199,7 +199,7 @@ export const agregarColaboradorSecundario = async (colaboradores_secundarios, id
                         'Content-Type': 'application/json'
                     }
                 }))
-            });
+            };
         }
        
     } catch (error) {

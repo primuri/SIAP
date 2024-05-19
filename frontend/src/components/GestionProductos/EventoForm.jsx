@@ -48,6 +48,16 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
 
         if (name.includes('.')) {
             const keys = name.split('.');
+            if (keys[0] === 'id_producto_fk' && keys[1] === 'fecha') {
+                const year = new Date(value).getFullYear();
+                if (year < 1980) {
+                    event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                    event.target.reportValidity();
+                    return;
+                } else {
+                    event.target.setCustomValidity("");
+                }
+            }
             formData[keys[0]][keys[1]] = value;
         } else {
             formData[name] = value;
@@ -98,7 +108,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                 <div className="col-md-6">
                     <label htmlFor="pais" className="label-personalizado mb-2">País del Evento   </label>
                     <select className="form-control" name="pais" id="pais" value={formData.pais} onChange={handleChange} required disabled={isInvestigador}>
-                        <option value="">Seleccione un país</option>
+                        <option value="" disabled defaultValue={""}>Seleccione un país</option>
                         {Paises.map((pais) => (
                             <option key={pais.value} value={pais.value}> {pais.label} </option>))}
                     </select>
@@ -106,7 +116,7 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                 <div className="col">
                     <label htmlFor="tipo_participacion" className="label-personalizado mb-2"> Tipo de Participación   </label>                
                     <select className="form-select seleccion" name="tipo_participacion" id="tipo_participacion" value={formData.tipo_participacion} onChange={handleChange}  required disabled={isInvestigador}>
-                        <option value="">Seleccionar tipo</option>
+                        <option value="" disabled defaultValue={""}>Seleccionar tipo</option>
                         <option value="Activa">Activa</option>
                         <option value="Pasiva">Pasiva</option>
                     </select>
