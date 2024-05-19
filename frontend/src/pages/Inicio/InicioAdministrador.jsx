@@ -84,7 +84,7 @@ export const InicioAdministrador = ({ usuario }) => {
                             </h2>
                             <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
-                               Haga clic en el registro que desea, esto abrirá un formulario con los datos del registros. Haga las modificaciones necesarias y de click en el botón "Guardar" ubicado en la parte inferior del formulario. En caso de ya no querer guardarlo, dele click a la "x" en la esquina superior derecha.
+                               Haga doble clic en el registro que desea, esto abrirá un formulario con los datos del registros. Haga las modificaciones necesarias y de click en el botón "Guardar" ubicado en la parte inferior del formulario. En caso de ya no querer guardarlo, dele click a la "x" en la esquina superior derecha.
                               </div>
                             </div>
                       </div>
@@ -97,7 +97,7 @@ export const InicioAdministrador = ({ usuario }) => {
                             </h2>
                             <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
-                               Haga clic en el registro que desea, esto abrirá un formulario. De click en el botón "Eliminar" ubicado en la parte inferior del formulario. En caso de ya no querer eliminarlo, dele click a la "x" en la esquina superior derecha.
+                               Haga doble clic en el registro que desea, esto abrirá un formulario. De click en el botón "Eliminar" ubicado en la parte inferior del formulario. En caso de ya no querer eliminarlo, dele click a la "x" en la esquina superior derecha.
                               </div>
                             </div>
                     </div>
@@ -136,7 +136,7 @@ export const InicioAdministrador = ({ usuario }) => {
                             </h2>
                             <div id="collapseSix" className="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
-                              Un proyecto tiene únicamente un presupuesto, no se deben ingresar varios. En caso de desear modificarlo, se puede hacer.
+                              Un proyecto tiene únicamente un presupuesto, no se deben ingresar varios. En caso de desear modificarlo, se puede hacer una version de presupuesto y está si se podría modificar
                               </div>
                             </div>
                         </div>

@@ -320,6 +320,7 @@ export const GestionProyectos = () => {
                         </div>
 
                         <div className="d-flex justify-content-between mt-4">
+                        {user && user.groups.includes("administrador") && (
                             <div >
                                 <HtmlTooltip
                                     title={
@@ -347,6 +348,7 @@ export const GestionProyectos = () => {
 
 
                             </div>
+                             )}
                             <div className="d-flex container-fluid justify-content-end">
                                 {/* ---------> Añadir la siguiente linea de codigo en el div del search. Posiblemente requiera ajustes de CSS <-----------*/}
                                 {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}

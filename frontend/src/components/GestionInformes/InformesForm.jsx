@@ -117,7 +117,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado   </label>
-                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required> disabled={isInvestigador} 
+                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required  disabled={isInvestigador} >
                                         <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
                                         <option value="En desarrollo">En desarrollo</option>
                                         <option value="En evaluación">En evaluación</option>

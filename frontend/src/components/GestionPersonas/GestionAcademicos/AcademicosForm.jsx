@@ -346,7 +346,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label>
+                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="email" className="form-control" name="correo_secundario" id="correo" value={formData.correo_secundario} onChange={handleChange} />
                             </div>
                         </div>
@@ -354,7 +354,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6">
                                 <label htmlFor="paisProcedencia" className="label-personalizado mb-2">País de procedencia </label>
                                 <select className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} required>
-                                    <option value="">Seleccione un país</option>
+                                    <option value="" disabled defaultValue={""}>Seleccione un país</option>
                                     {Paises.map((pais) => (
                                         <option key={pais.value} value={pais.value}> {pais.label} </option>))}
                                 </select>
@@ -369,7 +369,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en régimen </label>
                                 <select className="form-select seleccion" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange} required>
-                                    <option value="">Seleccionar categoría</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar categoría</option>
                                     <option value="Catedrático">Catedrático</option>
                                     <option value="Exbecario">Exbecario</option>
                                     <option value="Instructor">Instructor</option>
@@ -509,10 +509,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado máximo </label>
                                 <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange} required>
-                                    <option value="">Seleccionar grado</option>
-                                    <option value="Br">Bachiller</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar grado</option>
+                                    <option value="Bach">Bachiller</option>
                                     <option value="Lic">Licenciado</option>
-                                    <option value="Mtr">Máster</option>
+                                    <option value="Master">Máster</option>
                                     <option value="Dr">Doctor</option>
                                 </select>
                             </div>

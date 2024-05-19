@@ -318,7 +318,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "60px", margin: "5px" }}
+                                                        style={{ maxHeight: "60px", margin: "10px" }}
                                                     >
                                                         {academicosFilter.map((academico) => {
                                                             return (
@@ -356,7 +356,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                                 {evaluadoresFilter.length > 0 && (
                                                     <div
                                                         className=" form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "60px", margin: "5px" }}
+                                                        style={{ maxHeight: "60px", margin: "10px" }}
                                                     >
                                                         {evaluadoresFilter.map((evaluador) => {
                                                             return (
