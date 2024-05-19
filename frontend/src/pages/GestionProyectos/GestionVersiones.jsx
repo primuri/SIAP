@@ -360,10 +360,12 @@ export const GestionVersiones = () => {
                 } else if (ev) {
                     await agregarevento(producto, localStorage.getItem('token'));
                 }
-                
-                await agregarColaboradorSecundario(Datos.colaboradores, id_version_creada, localStorage.getItem('token'))
+                if(Datos.colaboradores != undefined){
+                    await agregarColaboradorSecundario(Datos.colaboradores, id_version_creada, localStorage.getItem('token'))
     
+                }
                
+                loadVersionProyectos(id_vi)
                 toast.success('Versión de proyecto agregada correctamente', {
                     id: toastId,
                     duration: 4000,
@@ -376,7 +378,6 @@ export const GestionVersiones = () => {
                         width: '300px',
                     },
                 })
-                loadVersionProyectos(id_vi)
                 setAddClick(false)
                 setReload(!reload)
                 navigate(`/gestion-proyectos/${id}/gestion-versiones`)
@@ -397,12 +398,12 @@ export const GestionVersiones = () => {
                     },
                 });
             }
-            loadVersionProyectos(id_vi)
+          
            
            
         } catch (error) {
             toast.dismiss(toastId)
-            await eliminarVersion(producto.id_producto_fk, localStorage.getItem("token"))
+            //await eliminarVersion(producto?.id_producto_fk, localStorage.getItem("token"))
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
         }
