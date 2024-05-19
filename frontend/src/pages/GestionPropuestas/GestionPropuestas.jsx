@@ -221,7 +221,8 @@ export const GestionPropuestas = () => {
             })
             setAddClick(false)
             document.body.classList.remove('modal-open');
-            success()
+            setReload(!reload)
+            navigate('/gestion-propuestas')
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -366,7 +367,8 @@ export const GestionPropuestas = () => {
             })
             setEdit(false)
             document.body.classList.remove('modal-open');
-            success()
+            setReload(!reload)
+            navigate('/gestion-propuestas')
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -398,7 +400,8 @@ export const GestionPropuestas = () => {
             })
             setEdit(false)
             document.body.classList.remove('modal-open');
-            success()
+            setReload(!reload)
+            navigate('/gestion-propuestas')
         } catch (error) {
             toast.dismiss(toastId)
         }
