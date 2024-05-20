@@ -29,6 +29,21 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
     const handleChange = (event) => {
         const { name, value } = event.target
 
+        if (name === "fecha") {
+            const selectedYear = new Date(value).getFullYear();
+            if (selectedYear < 1980) {
+                event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                event.target.reportValidity();
+                return;
+            }else {
+                event.target.setCustomValidity("");
+            }
+        }
+
+        if ((name === "version" || name === "monto") && parseFloat(value) < 0) {
+            return;
+        }
+
         if (name.includes('.')) {
             const keys = name.split('.')
             setFormData(prev => ({
@@ -117,7 +132,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="version" className="label-personalizado mb-2">Versión</label>
-                                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required disabled={isInvestigador}/>
+                                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required disabled={isInvestigador} min="0"/>
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -129,12 +144,12 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador}/>
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0"/>
                                 
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador}/>
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador} required/>
                             </div>
                         </div>
                     </div>

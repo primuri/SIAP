@@ -48,7 +48,11 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                 ...prev,
                 [name]: updatedValue
             };
-    
+            
+            if (name === 'saldo' || name === 'monto') {
+                const numericValue = parseFloat(value);
+                updatedValue = isNaN(numericValue) ? '' : numericValue >= 0 ? numericValue : ''; // Asegura que solo valores no negativos sean considerados
+            }        
             // Validar después de actualizar, solo para campos numéricos
             if (name === 'saldo' || name === 'monto') {
                 const saldo = parseFloat(newFormData.saldo || 0);
@@ -147,19 +151,19 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                             </div>)}
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador}/>
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador} required/>
                             </div>
                             
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador}/>
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0"/>
                                 {formErrors.monto && <div style={{ color: 'red' }}>{formErrors.monto}</div>}
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="saldo" className="label-personalizado mb-2">Saldo</label>
-                                <input type="number" className="form-control" name="saldo" id="saldo" value={formData.saldo} onChange={handleChange} required disabled={isInvestigador} />
+                                <input type="number" className="form-control" name="saldo" id="saldo" value={formData.saldo} onChange={handleChange} required disabled={isInvestigador} min="0"  />
                                 {formErrors.saldo && <div style={{ color: 'red' }}>{formErrors.saldo}</div>}
                             </div>
                         </div>

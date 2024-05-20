@@ -50,6 +50,8 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                     event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
                     event.target.reportValidity();
                     return;
+                }else {
+                    event.target.setCustomValidity("");
                 }
             }
 
