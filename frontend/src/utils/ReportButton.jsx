@@ -11,7 +11,7 @@ import { ReportePDF } from "./ReportePDF";
 export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKey }) => {
     const [selectedOption, setSelectedOption] = useState("PDF");
     const [buttonClicked, setButtonClicked] = useState(true);
-    const { toPDF, targetRef } = usePDF({ filename: ('Reporte de ' + reportData) });
+    const { toPDF, targetRef } = usePDF({ filename: ('Reporte de ' + reportTitle) });
 
     const handleButtonClick = () => {
         if (buttonClicked) {
@@ -20,9 +20,6 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
                     toPDF();
                 }, 0);
 
-                //const reporte = document.getElementById("REPORTE")
-               // const root = document.getElementById("root")
-                //root.replaceChildren(reporte)
             } else {
                 if (selectedOption === 'EXCEL') {
                     generarReporteExcel(reportData, colNames, dataKeys, reportTitle)

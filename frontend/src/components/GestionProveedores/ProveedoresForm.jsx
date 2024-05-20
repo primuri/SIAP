@@ -200,7 +200,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                                 <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula </label>
                                 <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required >
                                     <option value="" disabled defaultValue={""}>Seleccionar tipo</option>
-                                    <option value="Fisica">Física</option>
+                                    <option value="Física">Física</option>
                                     <option value="Jurídica">Jurídica</option>
                                 </select>
                             </div>
