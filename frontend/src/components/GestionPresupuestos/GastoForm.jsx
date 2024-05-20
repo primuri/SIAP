@@ -27,24 +27,30 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         monto: gasto ? gasto.monto : "",
         fecha: gasto ? gasto.fecha.split('T')[0] : "",
         detalle: gasto ? gasto.detalle : "",
-        id_factura_fk: gasto ? gasto.id_factura_fk : { id_cedula_proveedor_fk: { detalle: "" }, id_producto_servicio_fk: {detalle: ""} },
+        id_factura_fk: gasto ? gasto.id_factura_fk : { id_cedula_proveedor_fk: { detalle: "" }, id_producto_servicio_fk: { detalle: "" } },
         id_documento_fk: gasto ? { ...gasto.id_documento_fk } : { tipo: "Documento factura", detalle: "", documento: "" }
+    });
+    const user = JSON.parse(localStorage.getItem('user'))
+
+
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
     });
 
     useEffect(() => {
-        if(mode == 2){
+        if (mode == 2) {
             setValue(detalle)
         }
         loadProveedores()
         loadProductosServicios()
         loadFacturas()
-        
+
     }, [])
 
-    useEffect(() =>{
+    useEffect(() => {
         formData.id_factura_fk.id_producto_servicio_fk.detalle = value
     }, [value])
-    
+
     useEffect(() => {
         if (mode === 2) {
             setSelectedProveedor(formData.id_factura_fk.id_cedula_proveedor_fk);
@@ -132,12 +138,12 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const sendForm = (event) => {
         event.preventDefault()
 
-        let sendingForm = { ...formData}
-        if(documentoData){
+        let sendingForm = { ...formData }
+        if (documentoData) {
             sendingForm.id_documento_fk.documento = documentoData
         }
         onSubmit(sendingForm);
-        sendingForm = { ...formData}
+        sendingForm = { ...formData }
     }
 
     const handleDeleteClick = () => {
@@ -173,7 +179,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar gasto" : "Editar gasto"}
+                                {mode === 1 ? "Agregar gasto" : isInvestigador ? "Visualizar gasto" : "Editar gasto"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -216,11 +222,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle   </label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required />
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto   </label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required />
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                         </div>
 
@@ -242,7 +248,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                         }));
                                     }}
                                     value={mode === 2 ? formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor : formData.id_factura_fk.id_cedula_proveedor_fk || ''}
-                                required>
+                                    required disabled={isInvestigador}>
                                     <option value="">Seleccione un proveedor</option>
                                     {proveedor.map((proveedorItem) => (
                                         <option key={proveedorItem.id_cedula_proveedor} value={proveedorItem.id_cedula_proveedor}>
@@ -299,8 +305,9 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     renderOption={(props, option) => <li {...props}>{option.detalle}</li>}
                                     sx={{ width: 300 }}
                                     freeSolo
+                                    disabled={isInvestigador}
                                     renderInput={(params) => (
-                                        <TextField {...params} required/>
+                                        <TextField {...params} required />
                                     )}
                                 />
 
@@ -309,36 +316,40 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange}/>
-                                { typeof formData.id_documento_fk.documento === 'string' && (
+                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} disabled={isInvestigador}/>
+                                {typeof formData.id_documento_fk.documento === 'string' && (
                                     <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                                         {formData.id_documento_fk.documento.split('/').pop()}
                                     </a>
-                                ) }
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="gasto" />)}
-                                </>
-                            )}
-                        </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="gasto" />)}
-                                </>
-                            )}
-                        </div>
+                        {!isInvestigador && (
+                            <>
+                                <div className="col">
+                                    {mode === 1 ? (
+                                        <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                    ) : (
+                                        <>
+                                            <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                            {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="gasto" />)}
+                                        </>
+                                    )}
+                                </div>
+                                <div className="col">
+                                    {mode === 2 && (
+                                        <>
+                                            <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                            {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="gasto" />)}
+                                        </>
+                                    )}
+                                </div></>
+                        )}
+
                     </div>
                 </div>
             </form>

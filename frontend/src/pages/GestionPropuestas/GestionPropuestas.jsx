@@ -441,7 +441,10 @@ export const GestionPropuestas = () => {
         <main >
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-                    <div className="d-flex flex-row"><h1>Gestión de propuestas</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+                    <div className="d-flex flex-row">
+                        {isInvestigador ?(<h1>Visualizar propuestas</h1>) : (<h1>Gestión de propuestas</h1>)}
+                        {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
+                    </div>
                     <div className="d-flex mt-4">
                         <div className="col">
                             {!isInvestigador && (<Add onClick={addClicked}></Add>)}

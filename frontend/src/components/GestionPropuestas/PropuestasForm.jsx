@@ -193,7 +193,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 </div>
                 <div className="col-10 mb-0 text-center" >
                             <h2 className="headerForm" id="header-propuestas">
-                                {mode === 1 ? "Agregar propuesta" : mode === 2 ? "Editar propuesta": "Visualizar propuesta"}
+                                {mode === 1 ? "Agregar propuesta" : !isInvestigador ? "Editar propuesta": "Visualizar propuesta"}
                             </h2>
                         </div>
                 <div>

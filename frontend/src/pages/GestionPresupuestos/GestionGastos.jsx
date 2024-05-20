@@ -33,6 +33,9 @@ export const GestionGastos = () => {
     const [JsonForReport, setJsonForReport]   = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
   
     //user.groups[0] !== "administrador" ? setError(true) : null  
+    const isInvestigador = user.groups.some((grupo) => {
+      return grupo === 'investigador';
+    });
   
     const token = localStorage.getItem('token')
   
@@ -349,7 +352,7 @@ export const GestionGastos = () => {
   
               <div className="d-flex justify-content-between mt-4">
                 <div className="col">
-                  <Add onClick={addClicked}></Add>
+                  {!isInvestigador && (<Add onClick={addClicked}></Add>)}
                 </div>
                   {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
                   <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
