@@ -111,6 +111,26 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const handleChange = (event) => {
         const { name, value } = event.target
 
+        if (name === "monto") {
+            const numericValue = parseFloat(value);
+            if (numericValue < 0) {
+                return; 
+            }
+        }
+    
+        
+        if (name === "fecha") {
+            const selectedYear = new Date(value).getFullYear();
+            if (selectedYear < 1980) {
+                event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                event.target.reportValidity();
+                return;
+            }else {
+                event.target.setCustomValidity("");
+            }
+        }
+    
+
         if (name.includes('.')) {
             const keys = name.split('.')
             setFormData(prev => ({
