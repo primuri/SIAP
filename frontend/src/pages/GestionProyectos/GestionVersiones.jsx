@@ -692,7 +692,8 @@ export const GestionVersiones = () => {
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div>
                         <div className="d-flex flex-row">
-                            <h1>Gestión de versiones del proyecto {clean_id}</h1>
+                            {isInvestigador ? (<h1>Visualizar versiones del proyecto {clean_id}</h1>): (<h1>Gestión de versiones del proyecto {clean_id}</h1>)}
+
                             {!cargado && (
                                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
                             )}

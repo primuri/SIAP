@@ -339,7 +339,8 @@ export const GestionGastos = () => {
         {!error ? (
           <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
               <div className="d-flex flex-row">
-                  <h1>Gestión de gastos</h1>
+                  {isInvestigador ? (<h1>Visualizar gastos</h1>): (<h1>Gestión de gastos </h1>)}
+
               </div>
   
               {(!cargado) && (
