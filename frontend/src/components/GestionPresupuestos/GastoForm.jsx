@@ -322,7 +322,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="row mb-4">
                             <div className="col">
-<<<<<<< HEAD
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2" style={{ display: 'block' }}>
                                     Factura
                                     <span className="disabled-input">(Opcional)</span>
@@ -352,12 +351,6 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                         rel="noopener noreferrer"
                                         className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
                                     >
-=======
-                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} disabled={isInvestigador}/>
-                                {typeof formData.id_documento_fk.documento === 'string' && (
-                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
->>>>>>> Development
                                         {formData.id_documento_fk.documento.split('/').pop()}
                                     </a>
                                 )}
