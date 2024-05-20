@@ -1,13 +1,9 @@
 from rest_framework import serializers
 
 from version_proyecto.models import Documento, Oficio, Proyecto, VersionProyecto
-from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
+from .models import EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
 from version_proyecto.serializers import OficioSerializer, ProyectoSerializer, DocumentoSerializer, VersionProyectoSerializer
 
-class TipoPresupuestoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TipoPresupuesto
-        fields = '__all__'
 
 class EnteFinancieroSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,7 +16,7 @@ class CodigoFinancieroSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PresupuestoSerializer(serializers.ModelSerializer):
-    id_tipo_presupuesto_fk = serializers.PrimaryKeyRelatedField(queryset=TipoPresupuesto.objects.all())
+    tipo_presupuesto = serializers.CharField()
     id_ente_financiero_fk = serializers.PrimaryKeyRelatedField(queryset=EnteFinanciero.objects.all())
     id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
     id_codigo_vi = serializers.PrimaryKeyRelatedField(queryset=Proyecto.objects.all())
@@ -33,7 +29,7 @@ class PresupuestoSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super(PresupuestoSerializer, self).to_representation(instance)
-        rep['id_tipo_presupuesto_fk'] = TipoPresupuestoSerializer(instance.id_tipo_presupuesto_fk).data
+        rep['tipo_presupuesto'] = instance.tipo_presupuesto
         rep['id_ente_financiero_fk'] = EnteFinancieroSerializer(instance.id_ente_financiero_fk).data
         rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
         rep['id_codigo_vi'] = ProyectoSerializer(instance.id_codigo_vi).data

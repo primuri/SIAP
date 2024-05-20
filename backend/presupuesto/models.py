@@ -11,14 +11,6 @@ from django.db.models.signals import pre_delete
 from django.db.models.signals import pre_save, post_delete
 
 
-class TipoPresupuesto(models.Model):
-    id_tipo_presupuesto = models.AutoField(primary_key=True)
-    tipo = models.CharField(max_length=45)
-    detalle = models.CharField(max_length=255, null=True)
-    
-    class Meta:
-        db_table = 'tipo_presupuesto'
-
 class EnteFinanciero(models.Model):
     id_ente_financiero = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=150, unique=True)
@@ -36,7 +28,7 @@ class CodigoFinanciero(models.Model):
 class Presupuesto(models.Model):
     id_presupuesto = models.AutoField(primary_key=True)
     anio_aprobacion = models.IntegerField()
-    id_tipo_presupuesto_fk = models.ForeignKey(TipoPresupuesto, on_delete=models.PROTECT)
+    tipo_presupuesto = models.CharField(max_length=255, default='')
     id_ente_financiero_fk = models.ForeignKey(EnteFinanciero, on_delete=models.PROTECT)
     id_oficio_fk = models.ForeignKey(Oficio, on_delete=models.PROTECT)
     id_codigo_vi = models.ForeignKey(Proyecto, on_delete=models.PROTECT)
@@ -57,7 +49,7 @@ def enviar_correo_presupuesto(asunto, instance, destinatario):
             contexto = {
                 'anio_aprobacion': instance.anio_aprobacion ,
                 'ente_financiero': instance.id_ente_financiero_fk.nombre,
-                'tipo_presupuesto':f"{instance.id_tipo_presupuesto_fk.tipo}",
+                'tipo_presupuesto':f"{instance.tipo_presupuesto}",
                 'version': instance.id_version_proyecto_fk.numero_version,
                 'codigo_financiero': instance.id_codigo_financiero_fk.codigo,
                 'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
@@ -105,7 +97,7 @@ def enviar_correo_presupuesto_investigador(asunto, instance, destinatario):
             contexto = {
                 'anio_aprobacion': instance.anio_aprobacion ,
                 'ente_financiero': instance.id_ente_financiero_fk.nombre,
-                'tipo_presupuesto':f"{instance.id_tipo_presupuesto_fk.tipo}",
+                'tipo_presupuesto':f"{instance.tipo_presupuesto}",
                 'version': instance.id_version_proyecto_fk.numero_version,
                 'codigo_financiero': instance.id_codigo_financiero_fk.codigo,
                 'proyecto': f"{instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
