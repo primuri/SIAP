@@ -274,6 +274,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     selectOnFocus
                                     clearOnBlur
                                     disabled={isInvestigador}
+                                    required={true}
                                     handleHomeEndKeys
                                     id="ente_nombre"
                                     options={obtenerEntidadesPorNombre(entidades)}
@@ -289,7 +290,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
                                     )}
                                 />
                             </div>
@@ -348,7 +349,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     renderOption={(props, option) => <li {...props}>{option.codigo}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
                                     )}
                                 />
                             </div>
@@ -356,7 +357,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio  </label>
-                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador}/>
+                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador} required/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento" className="label-personalizado mb-2">Oficio   </label>
