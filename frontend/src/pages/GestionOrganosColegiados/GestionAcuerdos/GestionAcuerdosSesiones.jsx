@@ -354,7 +354,7 @@ export const GestionAcuerdos = () => {
                     <div className="mt-3">
                     <Table columns={columns} data={acuerdos} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={false} hasButtonColumn2={false} buttonText="Gestionar" />
                     {addClick && (
-                        <Modal><OrganosColegiadosAcuerdosForm onSubmit={addAcuerdo} onCancel={onCancel} mode={1} sesion={parseInt(idSesion)}></OrganosColegiadosAcuerdosForm></Modal>
+                        <Modal><OrganosColegiadosAcuerdosForm onSubmit={addAcuerdo} onCancel={onCancel} mode={1} sesion={parseInt(idSesion)} rol={rol}></OrganosColegiadosAcuerdosForm></Modal>
                     )}
                     {edit && (
                         <Modal>

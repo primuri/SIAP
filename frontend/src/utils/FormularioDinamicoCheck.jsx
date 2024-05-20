@@ -12,6 +12,11 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
     const [showDropdown, setShowDropdown] = useState(items.map(() => false));
     const [inputValue, setInputValue] = useState("");
 
+    const user = JSON.parse(localStorage.getItem('user'))
+    const isInvestigador = user.groups.some((grupo) => {
+        return grupo === 'investigador';
+    });
+
     const agregarItem = () => {
         const nuevoItem = configuracion.reduce((acc, conf) => {
             acc[conf.campo] = conf.default || '';
@@ -96,8 +101,9 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                                             onChange={e => handleInputChange(e, index, conf.campo)}
                                             className="form-control"
                                             required={conf.required}
+                                            disabled={isInvestigador}
                                         >
-                                            <option value="">Selecciona una opción</option>
+                                            <option value="" disabled defaultValue={""}>Selecciona una opción</option>
                                             {conf.opciones?.map((opcion, opcionIdx) => (
                                                 <option key={opcionIdx} value={opcion}>{opcion}</option>
                                             ))}
@@ -114,6 +120,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                                                 onChange={e => handleInputChange(e, index, 'id_academico_fk')}
                                                 className="form-control"
                                                 required={conf.required}
+                                                disabled={isInvestigador}
                                             />
                                             {showDropdown[index] && academicosFilter.length > 0 && (
                                                 <div className="autocomplete-dropdown-container">
@@ -138,17 +145,22 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                                             onChange={e => handleInputChange(e, index, conf.campo)}
                                             className="form-control"
                                             required={conf.required}
+                                            disabled={isInvestigador}
                                         />
                                     )}
                                 </div>
                             ))}
                         </div>
-                        <button type="button" className="mb-2 eliminarBtn" onClick={() => eliminarItem(index)}>Eliminar</button>
-                    </AccordionDetails>
+                        {user && user.groups.includes("administrador") && (
+                            <button  type="button" className="mb-2 eliminarBtn" onClick={() => eliminarItem(index)} disabled={isInvestigador}>Eliminar</button>
+                        )}
+                        </AccordionDetails>
                 </Accordion>
             ))}
-            <button type="button" className="agregarBtn" style={{ width: "6%", backgroundColor: "#005da4", color: "white" }} onClick={agregarItem}>+</button>
-        </>
+            {user && user.groups.includes("administrador") && (
+                <button type="button" className="agregarBtn" style={{ width: "6%", backgroundColor: "#005da4", color: "white" }} onClick={agregarItem} disabled={isInvestigador}>+</button>
+            )}
+            </>
     );
 };
 

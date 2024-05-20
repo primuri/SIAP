@@ -8,7 +8,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export const FormularioDinamico = ({ items, setItems, configuracion, itemName }) => {
+export const FormularioDinamico = ({ items, setItems, configuracion, itemName, mode }) => {
     const agregarItem = () => {
         const nuevoItem = {};
         configuracion.forEach(conf => {
@@ -25,8 +25,14 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
         if (campo === 'anio' && valor < '1930') {
             valor = '1930';
         }
-
-        nuevosItems[index][campo] = valor;
+        if (campo === 'numero_tel') {
+            // Permitir solo números, signo de más (+) y paréntesis ()
+            if (/^[0-9+()]*$/.test(valor)) {
+                nuevosItems[index][campo] = valor;
+            }
+        } else {
+            nuevosItems[index][campo] = valor;
+        }
         setItems(nuevosItems);
     };
 
@@ -77,6 +83,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                                 onChange={e => handleInputChange(e, index, conf.campo)}
                                                 required={conf.required}
                                                 className="form-control"
+                                                
                                             >
                                                 <option value="" disabled>Selecciona una opción</option>
                                                 {conf.opciones.map((opcion, opcionIndex) => (
@@ -92,6 +99,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName })
                                                 required={conf.required}
                                                 className="form-control"
                                                 min={conf.campo === 'anio' ? '1930' : undefined}
+                                                
                                             />
                                         )}
                                     </div>

@@ -49,7 +49,7 @@ const UploadDoc = ({ mode, handleFileChange, formData, icono2 }) => {
               {!selectedFileName && (
                 <>
                   <br />
-                  <input type="file" className="form-control" name="documento" id="documento" onChange={updateSelectedFileName} style={{ display: 'none' }} />
+                  <input type="file" className="form-control" name="documento" id="documento" onChange={updateSelectedFileName} style={{ display: 'none' }}/>
                 </>
               )}
               {selectedFileName && (

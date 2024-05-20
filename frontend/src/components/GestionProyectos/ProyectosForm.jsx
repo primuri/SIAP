@@ -25,13 +25,13 @@ const configuracionColaborador = [
         campo: 'fecha_inicio', 
         placeholder: 'Fecha Inicio', 
         tipo: 'date', 
-        required: true 
+        required: false 
     },
     { 
         campo: 'fecha_fin', 
         placeholder: 'Fecha Fin', 
         tipo: 'date', 
-        required: true 
+        required: false 
     },
     { 
         campo: 'id_academico_fk', 
@@ -136,8 +136,8 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
         if (res.data && res.data.length > 0) {
             const colaboraFiltrados = res.data.filter(colaborador => colaborador.id_version_proyecto_fk.id_version_proyecto === proyectoId).map(col => ({
                 ...col,
-                fecha_inicio: col.id_vigencia_fk.fecha_inicio.split('T')[0], // Extrae solo la parte de la fecha
-                fecha_fin: col.id_vigencia_fk.fecha_fin.split('T')[0], // Extrae solo la parte de la fecha
+                fecha_inicio: col.id_vigencia_fk.fecha_inicio ? col.id_vigencia_fk.fecha_inicio.split('T')[0] : null,
+                fecha_fin: col.id_vigencia_fk.fecha_fin ? col.id_vigencia_fk.fecha_fin.split('T')[0] : null,
             }));
             setColaboradores(colaboraFiltrados);
         } else {

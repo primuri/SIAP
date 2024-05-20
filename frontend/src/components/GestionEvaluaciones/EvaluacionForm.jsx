@@ -264,7 +264,6 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>)}
                         </div>
                         <div className="row mb-4">
-
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2" style={{ display: 'block' }}>
                                     Documento evaluación

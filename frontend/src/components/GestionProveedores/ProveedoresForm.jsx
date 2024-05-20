@@ -102,8 +102,24 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         }
     }
 
+    function validateEmail(email) {
+        const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(String(email).toLowerCase());
+      }
+
     const sendForm = (event) => {
         event.preventDefault()
+        if (!validateEmail(formData.correo)) {
+            toast.error('Por favor, introduce una dirección de correo electrónico con un formato valido válido.', {
+              position: 'bottom-right',
+              style: {
+                  background: 'var(--rojo-ucr)',
+                  color: '#fff',
+                  fontSize: '18px',
+              },
+          });
+            return;
+          }
         formData.cuentaBancaria = cuentaBancaria
 
         let sendingForm = { ...formData}
@@ -184,14 +200,14 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="cedula" className="label-personalizado mb-2">Cédula</label>
-                                    <input type="text" className="form-control" name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} required/>
+                                    <input type="text" className={mode === 2 ? 'form-control disabled-input' : 'form-control'} name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange}  disabled={(mode === 2)} required/>
                                 </div>
                             </div>
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="tipo" className="label-personalizado mb-2">Tipo de cédula </label>
                                 <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required >
-                                    <option value="">Seleccionar tipo</option>
-                                    <option value="Fisica">Física</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar tipo</option>
+                                    <option value="Física">Física</option>
                                     <option value="Jurídica">Jurídica</option>
                                 </select>
                             </div>
@@ -259,7 +275,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
 
                         <div className="d-flex flex-column">
                             <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria</label>
-                            <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria" />
+                            <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria" mode={mode} />
                         </div>
 
                     </div>
@@ -273,7 +289,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             ) : (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="investigador(a)" />)}
+                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="proveedor(a)" />)}
                                 </>
                             )}
                         </div>
@@ -281,7 +297,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             {mode === 2 && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="investigador(a)" />)}
+                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="proveedor(a)" />)}
                                 </>
                             )}
                         </div>

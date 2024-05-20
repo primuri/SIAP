@@ -382,7 +382,7 @@ export const GestionSesionesOrganosColegiados= () => {
                     <div className="mt-3">
                     <Table columns={columns} data={sesiones} dataKeys={dataKeys} onDoubleClick ={elementClicked} hasButtonColumn={true} hasButtonColumn2={false}  onClickButton2={elementClickedBtnAcuerdos} buttonText="Gestionar" />
                     {addClick && (
-                        <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={parseInt(clean_id)}></OrganosColegiadosSesionesForm></Modal>
+                        <Modal><OrganosColegiadosSesionesForm onSubmit={addSesiones} onCancel={onCancel} mode={1} organoColegiado={parseInt(clean_id)} rol={rol}></OrganosColegiadosSesionesForm></Modal>
                     )}
                     {edit && (
                         <Modal>

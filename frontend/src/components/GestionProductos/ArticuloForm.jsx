@@ -64,12 +64,13 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
     if (name === "pais_procedencia") {
         setPaisRevista(value);
         return;  
-    } else if (name === "cant_paginas") {
-        if (/^[0-9]*$/.test(value) || value === "") {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        }
-        return; 
     }
+
+    if (name === "cant_paginas") {
+      if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
+          return;
+      }
+  }
    
     if (name === "cedula" && !checkCedula(value)) {
         return; 
@@ -78,6 +79,26 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
   
     function updateNestedObject(obj, path, newValue) {
         const keys = path.split('.');
+        if (keys[0] === 'fecha_publicacion') {
+          const year = new Date(value).getFullYear();
+          if (year < 1980) {
+              event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+              event.target.reportValidity();
+              return;
+          } else {
+              event.target.setCustomValidity("");
+          }
+      }
+        if (keys[0] === 'id_producto_fk' && keys[1] === 'fecha') {
+          const year = new Date(value).getFullYear();
+          if (year < 1980) {
+              event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+              event.target.reportValidity();
+              return;
+          } else {
+              event.target.setCustomValidity("");
+          }
+      }
         const lastKey = keys.pop();  
         const lastObj = keys.reduce((o, key) => o[key] = o[key] || {}, obj);
         lastObj[lastKey] = newValue;
@@ -171,7 +192,7 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
         <div className="col-md-6">
           <label htmlFor="paisRevista" className="label-personalizado mb-2">País de la Revista   </label>
           <select className="form-control" name="id_revista_fk.pais" id="id_revista_fk.pais" value={formData.id_revista_fk.pais} onChange={handleChange} required disabled={isInvestigador}>
-            <option value="">Seleccione un país</option>
+            <option value="" disabled defaultValue={""}>Seleccione un país</option>
             {Paises.map((pais) => (
               <option key={pais.value} value={pais.value}> {pais.label} </option>))}
           </select>

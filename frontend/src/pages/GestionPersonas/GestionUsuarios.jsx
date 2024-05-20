@@ -80,7 +80,8 @@ export const GestionUsuarios = () => {
                 },
             })
             setAddClick(false)
-            success()
+            setReload(!reload)
+            navigate('/gestion-usuarios')
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -111,7 +112,8 @@ export const GestionUsuarios = () => {
                 },
             })
             setEdit(false)
-            success()
+            setReload(!reload)
+            navigate('/gestion-usuarios')
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -140,7 +142,8 @@ export const GestionUsuarios = () => {
                 },
             })
             setEdit(false)
-            success()
+            setReload(!reload)
+            navigate('/gestion-usuarios')
         } catch (error) {
             toast.dismiss(toastId)
         }

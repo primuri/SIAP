@@ -32,7 +32,10 @@ export const GestionGastos = () => {
     const [JsonIsReady, setJsonIsReady]       = useState(false)
     const [JsonForReport, setJsonForReport]   = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
   
-    user.groups[0] !== "administrador" ? setError(true) : null  
+    //user.groups[0] !== "administrador" ? setError(true) : null  
+    const isInvestigador = user.groups.some((grupo) => {
+      return grupo === 'investigador';
+    });
   
     const token = localStorage.getItem('token')
   
@@ -55,7 +58,7 @@ export const GestionGastos = () => {
                 });
                 JsonForReport.reportData = gastos_;
                 return true;
-
+    
             } catch (exception) {
                 console.error("Ocurrió un error al crear el JSON para reporte: ", exception);
                 return false;
@@ -79,8 +82,8 @@ export const GestionGastos = () => {
         JsonForReport.colNames = [
             'Código del gasto',
             'Código de la factura',
-            'Fecha',
-            'Detalle',
+            'Fecha', 
+            'Detalle', 
             'Proveedor',
             'Producto o Servicio',
             'Monto'
@@ -135,7 +138,7 @@ export const GestionGastos = () => {
             setAddClick(false);
             setPartida(elemento);
           } else {
-            navigate(`/gestion-partidas/${partidaID}/gestion-gastos`);
+            navigate(`${location.pathname}${selectedPartida.id_partida}/gestion-gastos`);
           }
         }
       };
@@ -215,6 +218,8 @@ export const GestionGastos = () => {
               },
           });
 
+          console.log(formData)
+
           const id_gasto = formData.id_gasto;
           formData.id_partida_fk = clean_id;
 
@@ -230,6 +235,7 @@ export const GestionGastos = () => {
               formData.id_factura_fk.id_producto_servicio_fk = responsePS.data.id_producto_servicio
           }
 
+          formData.id_factura_fk.id_cedula_proveedor_fk = formData.id_factura_fk.id_cedula_proveedor_fk.id_cedula_proveedor
           const rF = await API.actualizarFactura(formData.id_factura_fk.id_factura, formData.id_factura_fk, token)
           formData.id_factura_fk = rF.data.id_factura
           formData.monto = parseInt(formData.monto);
@@ -274,11 +280,8 @@ export const GestionGastos = () => {
 
         await API.eliminarGasto(gasto.id_gasto, token);
         await API.eliminarFactura(gasto.id_factura_fk.id_factura, token);
-        if(gasto.id_documento_fk.documento !== null){
-          await API.eliminarFacturaDocumento(gasto.id_documento_fk.id_documento, token);
-        }
-        setReload(!reload)
-
+        await API.eliminarDocumentoFactura(gasto.id_documento_fk.id_documento, token);
+  
         toast.success('Gasto eliminado correctamente', {
           id: toastId,
           duration: 4000,
@@ -339,7 +342,8 @@ export const GestionGastos = () => {
         {!error ? (
           <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
               <div className="d-flex flex-row">
-                  <h1>Gestión de gastos</h1>
+                  {isInvestigador ? (<h1>Visualizar gastos</h1>): (<h1>Gestión de gastos </h1>)}
+
               </div>
   
               {(!cargado) && (
@@ -348,7 +352,7 @@ export const GestionGastos = () => {
   
               <div className="d-flex justify-content-between mt-4">
                 <div className="col">
-                  <Add onClick={addClicked}></Add>
+                  {!isInvestigador && (<Add onClick={addClicked}></Add>)}
                 </div>
                   {(JsonIsReady && (<ReportButton reportData={JsonForReport.reportData} reportTitle={JsonForReport.reportTitle} colNames={JsonForReport.colNames} dataKeys={JsonForReport.dataKeys} idKey={JsonForReport.idKey}></ReportButton>))}
                   <Search colNames={columnsGastos} columns={dataKeyGastos} onSearch={search}></Search>
@@ -382,4 +386,3 @@ export const GestionGastos = () => {
         )}
       </main>)
   } 
-  

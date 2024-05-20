@@ -107,7 +107,8 @@ export const GestionAcademicos = () => {
               })
             setAddClick(false)
             document.body.classList.remove('modal-open');
-            success()
+            setReload(!reload)
+            navigate('/gestion-investigadores')
 
         } catch (error) {
             toast.dismiss(toastId)
@@ -191,7 +192,8 @@ export const GestionAcademicos = () => {
               })
             setEdit(false)
             document.body.classList.remove('modal-open');
-            success()
+            setReload(!reload)
+            navigate('/gestion-investigadores')
         } catch (error) {
             toast.dismiss(toastId)
         }
@@ -224,7 +226,8 @@ export const GestionAcademicos = () => {
               })
             setEdit(false)
             document.body.classList.remove('modal-open');
-            success()
+            setReload(!reload)
+            navigate('/gestion-investigadores')
         } catch (error) {
             toast.dismiss(toastId)
         }

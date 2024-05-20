@@ -37,6 +37,15 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
     const handleChange = (event) => {
         const { name, value } = event.target;
 
+        if (name === "fecha") {
+            const selectedYear = new Date(value).getFullYear();
+            if (selectedYear < 1980) {
+                event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                event.target.reportValidity();
+                return;
+            }
+        }
+
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData((prev) => ({

@@ -162,7 +162,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         const { name, value } = event.target;
     
         const check = (value) => {
-            const regex = /^[A-Za-záéíóúÁÉÍÓÚñ\s]*$/;
+            const regex = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s]*$/;
             return regex.test(value) || value === "";
         };
 
@@ -175,8 +175,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             "id_nombre_completo_fk.nombre",
             "id_nombre_completo_fk.apellido",
             "id_nombre_completo_fk.segundo_apellido",
-            "id_area_especialidad_fk.nombre",
-            "id_area_especialidad_secundaria_fk.nombre"
+            "id_area_especialidad_fk.nombre"
         ];
     
         if (camposAValidar.includes(name)) {
@@ -225,8 +224,24 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         setFotoData(foto);
     }
 
+    function validateEmail(email) {
+        const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(String(email).toLowerCase());
+      }
+
     const sendForm = (event) => {
         event.preventDefault()
+        if (!validateEmail(formData.correo)) {
+            toast.error('Por favor, introduce una dirección de correo electrónico con un formato valido válido.', {
+              position: 'bottom-right',
+              style: {
+                  background: 'var(--rojo-ucr)',
+                  color: '#fff',
+                  fontSize: '18px',
+              },
+          });
+            return;
+          }
         if (titulos.length > 0) {
             formData.titulos = titulos
         }
@@ -347,7 +362,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                 <input type="email" className="form-control" name="correo" id="correo" value={formData.correo} onChange={handleChange} required />
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label>
+                                <label htmlFor="correo_secundario" className="label-personalizado mb-2">Correo electrónico secundario </label> <span className="disabled-input">(Opcional)</span>
                                 <input type="email" className="form-control" name="correo_secundario" id="correo" value={formData.correo_secundario} onChange={handleChange} />
                             </div>
                         </div>
@@ -355,7 +370,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6">
                                 <label htmlFor="paisProcedencia" className="label-personalizado mb-2">País de procedencia </label>
                                 <select className="form-control" name="pais_procedencia" id="pais_procedencia" value={formData.pais_procedencia} onChange={handleChange} required>
-                                    <option value="">Seleccione un país</option>
+                                    <option value="" disabled defaultValue={""}>Seleccione un país</option>
                                     {Paises.map((pais) => (
                                         <option key={pais.value} value={pais.value}> {pais.label} </option>))}
                                 </select>
@@ -370,7 +385,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="categoriaEnRegimen" className="label-personalizado mb-2">Categoría en régimen </label>
                                 <select className="form-select seleccion" name="categoria_en_regimen" id="categoria_en_regimen" value={formData.categoria_en_regimen} onChange={handleChange} required>
-                                    <option value="">Seleccionar categoría</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar categoría</option>
                                     <option value="Catedrático">Catedrático</option>
                                     <option value="Exbecario">Exbecario</option>
                                     <option value="Instructor">Instructor</option>
@@ -510,10 +525,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             <div className="col-md-6 position-relative">
                                 <label htmlFor="gradoMaximo" className="label-personalizado mb-2">Grado máximo </label>
                                 <select className="form-select seleccion" name="grado_maximo" id="grado_maximo" value={formData.grado_maximo} onChange={handleChange} required>
-                                    <option value="">Seleccionar grado</option>
-                                    <option value="Br">Bachiller</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar grado</option>
+                                    <option value="Bach">Bachiller</option>
                                     <option value="Lic">Licenciado</option>
-                                    <option value="Mtr">Máster</option>
+                                    <option value="Master">Máster</option>
                                     <option value="Dr">Doctor</option>
                                 </select>
                             </div>
@@ -523,7 +538,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6 mt-4">
                                 <Tooltip title="Separar áreas secundarias con coma" placement="right-start">
-                                    <label data-toggle="tooltip" data-placement="top" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label>
+                                    <label data-toggle="tooltip" data-placement="top" htmlFor="areaEspecialidadSecundaria" className="label-personalizado mb-2">Áreas de especialidad secundarias</label> <span className="disabled-input">(Opcional)</span>
                                 </Tooltip>
                                 <textarea className="form-control" name="id_area_especialidad_secundaria_fk.nombre" id="areaEspecialidadSecundaria" value={formData.id_area_especialidad_secundaria_fk.nombre} onChange={handleChange} />
                             </div>

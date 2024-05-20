@@ -109,13 +109,23 @@ class SeguimientoSerializer(serializers.ModelSerializer):
         return rep
 
 class AcuerdoSerializer(serializers.ModelSerializer):
-    id_seguimiento_fk = SeguimientoSerializer()
-    id_oficio_fk = OficioSerializer()
-    id_sesion_fk = SesionSerializer()
-    id_documento_acuerdo_fk = DocumentoSerializer()
+    id_seguimiento_fk = serializers.PrimaryKeyRelatedField(queryset=Seguimiento.objects.all())
+    id_oficio_fk = serializers.PrimaryKeyRelatedField(queryset=Oficio.objects.all())
+    id_sesion_fk = serializers.PrimaryKeyRelatedField(queryset=Sesion.objects.all())
+    id_documento_acuerdo_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all())
+    
     class Meta:
         model = Acuerdo
         fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super(AcuerdoSerializer, self).to_representation(instance)
+        rep['id_seguimiento_fk'] = SeguimientoSerializer(instance.id_seguimiento_fk).data
+        rep['id_oficio_fk'] = OficioSerializer(instance.id_oficio_fk).data
+        rep['id_sesion_fk'] = SesionSerializer(instance.id_sesion_fk).data
+        rep['id_documento_acuerdo_fk'] = DocumentoSerializer(instance.id_documento_acuerdo_fk).data
+        return rep
+
 
 class ParticipanteSerializer(serializers.ModelSerializer):
     id_nombre_completo_fk = NombreCompletoSerializer() 

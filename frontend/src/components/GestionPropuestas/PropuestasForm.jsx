@@ -49,6 +49,8 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
     
     const handleChange = (event) => {
         const { name, value } = event.target;
+        
+
         if (name === "id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico") {
             formData.asociar_academico = value;
             if (value === "") {
@@ -191,7 +193,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 </div>
                 <div className="col-10 mb-0 text-center" >
                             <h2 className="headerForm" id="header-propuestas">
-                                {mode === 1 ? "Agregar propuesta" : mode === 2 ? "Editar propuesta": "Visualizar propuesta"}
+                                {mode === 1 ? "Agregar propuesta" : !isInvestigador ? "Editar propuesta": "Visualizar propuesta"}
                             </h2>
                         </div>
                 <div>
@@ -245,7 +247,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             <div className="col-md-6">
                                 <label htmlFor="actividad" className="label-personalizado mb-2">Actividad</label>
                                 <select className="form-select seleccion" name="id_codigo_cimpa_fk.actividad" id="id_codigo_cimpa_fk.actividad" value={formData.id_codigo_cimpa_fk.actividad} onChange={handleChange} required disabled={isInvestigador}>
-                                    <option value="">Seleccionar actividad</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar actividad</option>
                                     <option value="Acción social">Acción social</option>
                                     <option value="Investigación">Investigación</option>
                                 </select>
@@ -304,7 +306,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             <div className="col-md-6">
                                 <label htmlFor="estadoColaborador" className="label-personalizado mb-2">Estado colaborador(a) </label>
                                 <select className="form-select seleccion" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.estado" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.estado} onChange={handleChange} required disabled={isInvestigador}>
-                                    <option value="">Seleccionar estado</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar estado</option>
                                     <option value="Activo">Activo</option>
                                     <option value="Inactivo">Inactivo</option>
                                 </select>
@@ -312,7 +314,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                             <div className="col-md-6">
                                 <label htmlFor="cargaColaborador" className="label-personalizado mb-2">Carga colaborador(a) </label>
                                 <select className="form-select seleccion" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" id="id_codigo_cimpa_fk.id_colaborador_principal_fk.carga" value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.carga} onChange={handleChange} required disabled={isInvestigador}>
-                                    <option value="">Seleccionar carga</option>
+                                    <option value="" disabled defaultValue={""}>Seleccionar carga</option>
                                     <option value="1/8">1/8</option>
                                     <option value="1/4">1/4</option>
                                     <option value="3/4">3/4</option>

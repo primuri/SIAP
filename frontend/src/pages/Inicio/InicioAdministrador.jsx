@@ -84,7 +84,7 @@ export const InicioAdministrador = ({ usuario }) => {
                             </h2>
                             <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
-                               Haga clic en el registro que desea, esto abrirá un formulario con los datos del registros. Haga las modificaciones necesarias y de click en el botón "Guardar" ubicado en la parte inferior del formulario. En caso de ya no querer guardarlo, dele click a la "x" en la esquina superior derecha.
+                               Haga doble clic en el registro que desea, esto abrirá un formulario con los datos del registros. Haga las modificaciones necesarias y de click en el botón "Guardar" ubicado en la parte inferior del formulario. En caso de ya no querer guardarlo, dele click a la "x" en la esquina superior derecha.
                               </div>
                             </div>
                       </div>
@@ -97,7 +97,7 @@ export const InicioAdministrador = ({ usuario }) => {
                             </h2>
                             <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
-                               Haga clic en el registro que desea, esto abrirá un formulario. De click en el botón "Eliminar" ubicado en la parte inferior del formulario. En caso de ya no querer eliminarlo, dele click a la "x" en la esquina superior derecha.
+                               Haga doble clic en el registro que desea, esto abrirá un formulario. De click en el botón "Eliminar" ubicado en la parte inferior del formulario. En caso de ya no querer eliminarlo, dele click a la "x" en la esquina superior derecha.
                               </div>
                             </div>
                     </div>
@@ -136,7 +136,7 @@ export const InicioAdministrador = ({ usuario }) => {
                             </h2>
                             <div id="collapseSix" className="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
-                              Un proyecto tiene únicamente un presupuesto, no se deben ingresar varios. En caso de desear modificarlo, se puede hacer.
+                              Un proyecto tiene únicamente un presupuesto, no se deben ingresar varios. En caso de desear modificarlo, se puede hacer una version de presupuesto y está si se podría modificar
                               </div>
                             </div>
                         </div>
@@ -163,6 +163,19 @@ export const InicioAdministrador = ({ usuario }) => {
                             <div id="collapseEight" className="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
                               <div className="accordion-body">
                                   Cuando el estado de una evaluación pasa a ser Completa ya no puede ser editada o eliminada, esto con el fin de evitar discrepancias y pérdida de datos. 
+                              </div>
+                            </div>
+                        </div>
+
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="headingNine">
+                              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                  ¿Por qué al editar el número de cuenta bancaria se agrega una nueva cuenta bancaria?
+                              </button>
+                            </h2>
+                            <div id="collapseNine" className="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+                              <div className="accordion-body">
+                                El número de cuenta, al ser un identificador único, no puede modificarse. Cualquier intento de edición resultará en la creación de una nueva cuenta bancaria.
                               </div>
                             </div>
                         </div>

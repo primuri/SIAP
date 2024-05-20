@@ -169,7 +169,7 @@ export const GestionIntegranteOrganoColegiado = () => {
             },
         })
         setAddClick(false);
-        success();
+        setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId);
     }
@@ -248,7 +248,7 @@ export const GestionIntegranteOrganoColegiado = () => {
             },
         })
         setEdit(false);
-        success();
+        setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId);
     }
@@ -282,7 +282,7 @@ export const GestionIntegranteOrganoColegiado = () => {
         },
       })
       setEdit(false);
-      success();
+      setReload(!reload)
     } catch (error) {
       toast.dismiss(toastId);
     }
@@ -368,7 +368,8 @@ export const GestionIntegranteOrganoColegiado = () => {
                     id_organo={selectedIdOrganoColegiado} 
                     onSubmit={addIntegrante} 
                     onCancel={onCancel} 
-                    mode={1}>
+                    mode={1}
+                    rol={rol}>
                 </IntegranteOrganoColegiadoForm></Modal>
            )}
             {edit && (

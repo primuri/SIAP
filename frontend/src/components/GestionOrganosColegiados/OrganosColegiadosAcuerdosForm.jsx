@@ -74,8 +74,25 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                     if (!o[level]) o[level] = {};
                     return o[level];
                 }, obj);
-                depth[lastLevel] = value;
+                if (path === "encargado") {
+                    if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
+                        value = value.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '');
+                    }
+                    depth[lastLevel] = value;
+                } else if (path === "fecha_cumplimiento") {
+                    const date = new Date(value);
+                    const year = date.getFullYear();
+                    if (year < 1980) {
+                        event.target.setCustomValidity("La fecha de cumplimiento no puede ser anterior a 1980.");
+                        event.target.reportValidity();
+                    } else {
+                        depth[lastLevel] = value;
+                    }
+                } else {
+                    depth[lastLevel] = value;
+                }
             };
+            
     
             const updatedFormData = {...prevFormData};
     
@@ -212,7 +229,7 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                     onChange={handleChange}
                                     required
                                     >
-                                        <option value="">Selecciona un estado</option>
+                                        <option value="" disabled defaultValue={""}>Selecciona un estado</option>
                                         <option value="Tramitado">Tramitado</option>
                                         <option value="En tramite">En trámite</option>
                                         <option value="No tramite">No requiere trámite</option>

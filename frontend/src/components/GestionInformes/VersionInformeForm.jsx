@@ -41,6 +41,24 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === "numero_version") {
+            if (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value)) {
+                return;
+            }
+        }
+
+            if (name === "fecha_presentacion") {
+                const selectedYear = new Date(value).getFullYear();
+                if (selectedYear < 1980) {
+                    event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                    event.target.reportValidity();
+                    return;
+                }else {
+                    event.target.setCustomValidity("");
+                }
+            }
+
         const updatedFormData = updateNestedField(formData, name, value);
         setFormData(updatedFormData);
     };

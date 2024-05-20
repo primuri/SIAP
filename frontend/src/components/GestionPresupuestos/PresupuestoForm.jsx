@@ -12,19 +12,15 @@ import Tooltip from '@mui/material/Tooltip';
 const filter = createFilterOptions();
 const currentYear = new Date().getFullYear();
 
-export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDelete }) => {
+export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel, onDelete, canDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [tiposDePresupuesto, setTiposDePresupuesto] = useState([]);
     const [entidades, setEntidades] = useState([]);
     const [codigoFinancieros, setCodigosFinancieros] = useState([]);
     const [oficioData, setOficioData] = useState(null);
     const [selectedFileName, setSelectedFileName] = useState('');
     const [formData, setFormData] = useState({
-        tipoPresupuesto: {
-            id_tipo_presupuesto: presupuesto ? presupuesto.id_tipo_presupuesto_fk.id_tipo_presupuesto : "",
-            tipo: presupuesto ? presupuesto.id_tipo_presupuesto_fk.tipo : "",
-        },
+        tipoPresupuesto: presupuesto ? presupuesto.tipo_presupuesto : "",
         ente_financiero_fk: presupuesto ? presupuesto.id_ente_financiero_fk : { id_ente_financiero: "", nombre: "" },
         id_codigo_financiero_fk: presupuesto ? presupuesto.id_codigo_financiero_fk : { id_codigo_financiero: "", codigo: "" },
         presupuesto: {
@@ -42,34 +38,17 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
             nombre: version ? version.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre : "",
         }
     });
-
+    console.log("Can delete", canDelete)
     const user = JSON.parse(localStorage.getItem('user'))
     const isInvestigador = user.groups.some((grupo) => {
         return grupo === 'investigador';
     });
 
     useEffect(() => {
-        loadTiposDePresupuesto()
         loadEntidades()
         loadCodigosFinancieros()
-    }, [])
+    }, [canDelete])
 
-    const loadTiposDePresupuesto = async () => {
-        try {
-            const res = await obtenerTiposDePresupuestos(localStorage.getItem('token'))
-            setTiposDePresupuesto(res.data)
-
-        } catch (error) {
-            toast.error('Error al cargar tipos de presupuestos', {
-                duration: 4000,
-                position: 'bottom-right',
-                style: {
-                    background: '#670000',
-                    color: '#fff',
-                },
-            })
-        }
-    }
 
     const loadEntidades = async () => {
         try {
@@ -219,18 +198,12 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="tipoDePresupuesto" className="label-personalizado mb-2">Tipo   </label>
-                                <select className="form-select seleccion" name="tipoPresupuesto.id_tipo_presupuesto" id="tipoDePresupuesto" value={formData.tipoPresupuesto.id_tipo_presupuesto} onChange={handleChange} required disabled={isInvestigador}>
+                                <label htmlFor="tipoDePresupuesto" className="label-personalizado mb-2">Tipo </label>
+                                <select className="form-select seleccion" name="tipoPresupuesto" id="tipoDePresupuesto" value={formData.tipoPresupuesto} onChange={handleChange} required disabled={isInvestigador}>
                                     <option value="" disabled defaultValue>Seleccione el tipo de presupuesto</option>
-                                    {tiposDePresupuesto && (
-                                        tiposDePresupuesto.map((tipo, index) => {
-                                            return (
-                                                <option value={tipo.id_tipo_presupuesto} key={index}>
-                                                    {tipo.tipo}
-                                                </option>
-                                            )
-                                        })
-                                    )}
+                                    <option value="Ordinario">Ordinario</option>
+                                    <option value="Fondo Concursable Interno">Fondo Concursable (Interno)</option>
+                                    <option value="Fondo Concursable Externo">Fondo Concursable (Externo)</option>
                                 </select>
                             </div>
                             <div className="col-md-6">
@@ -281,6 +254,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     selectOnFocus
                                     clearOnBlur
                                     disabled={isInvestigador}
+                                    required={true}
                                     handleHomeEndKeys
                                     id="ente_nombre"
                                     options={obtenerEntidadesPorNombre(entidades)}
@@ -296,7 +270,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
                                     )}
                                 />
                             </div>
@@ -355,7 +329,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     renderOption={(props, option) => <li {...props}>{option.codigo}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" />
+                                        <TextField {...params} className="form-control" required/>
                                     )}
                                 />
                             </div>
@@ -363,7 +337,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio  </label>
-                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador}/>
+                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador} required/>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -426,7 +400,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             )}
                         </div>
                         <div className="col">
-                            {mode === 2 && (
+                            {((mode === 2) && canDelete) && (
                                 <>
                                     <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
                                     {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
@@ -450,4 +424,5 @@ PresupuestoForm.propTypes = {
     onDelete: PropTypes.func,
     presupuesto: PropTypes.object,
     version: PropTypes.object,
+    canDelete: PropTypes.bool,
 }

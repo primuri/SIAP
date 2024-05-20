@@ -71,7 +71,18 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                         if (!o[level]) o[level] = {}; 
                         return o[level];
                     }, obj);
-                    depth[lastLevel] = value;
+                    if (path === "fecha") {
+                        const date = new Date(value);
+                        const year = date.getFullYear();
+                        if (year < 1980) {
+                            event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                            event.target.reportValidity();
+                        } else {
+                            depth[lastLevel] = value;
+                        }
+                    } else {
+                        depth[lastLevel] = value;
+                    }
                 };
                 const updatedFormData = {...prevFormData};
     
@@ -174,7 +185,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_sesion" className="label-personalizado mb-2">Identificador</label>
-                                    <input type="text" className="form-control" name="id_sesion" id="id_sesion" value={formData.id_sesion} onChange={handleChange} readOnly = {mode === 2} disabled={rol === "invitado"}/>
+                                    <input type="text" className="form-control" name="id_sesion" id="id_sesion" value={formData.id_sesion} onChange={handleChange} readOnly = {mode === 2} disabled={rol === "invitado"} required/>
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -233,12 +244,12 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="medio" className="label-personalizado mb-2">Medio</label>
-                                <input type="text" className="form-control" name="medio" id="medio" value={formData.medio} onChange={handleChange} required disabled={rol === "invitado"}/>
+                                <textarea type="text" className="form-control" name="medio" id="medio" value={formData.medio} onChange={handleChange} required disabled={rol === "invitado"}/>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="link_carpeta" className="label-personalizado mb-2">Enlace a la documentación</label>
-                                    <input type="text" className="form-control" name="link_carpeta" id="link_carpeta" value={formData.link_carpeta} onChange={handleChange} disabled={rol === "invitado"}/>
+                                    <textarea type="text" className="form-control" name="link_carpeta" id="link_carpeta" value={formData.link_carpeta} onChange={handleChange} disabled={rol === "invitado"} required/>
                                 </div>
                             </div>
                         </div>       
@@ -256,7 +267,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                                 required 
                                 disabled={rol === "invitado"}
                                 >
-                                    <option value="">Selecciona un tipo</option>
+                                    <option value="" disabled defaultValue={""}>Selecciona un tipo</option>
                                     <option value="inicial">Inicial</option>
                                     <option value="modificacion">Modificación</option>
                                 </select>
@@ -264,7 +275,7 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_agenda_fk.detalle" className="label-personalizado mb-2">Detalle agenda</label>
-                                    <input type="text" className="form-control" name="id_agenda_fk.detalle" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange} disabled={rol === "invitado"}/>
+                                    <textarea type="text" className="form-control" name="id_agenda_fk.detalle" id="id_agenda_fk.detalle" value={formData.id_agenda_fk.detalle} onChange={handleChange} disabled={rol === "invitado"} required/>
                                 </div>
                             </div>
                         </div>   

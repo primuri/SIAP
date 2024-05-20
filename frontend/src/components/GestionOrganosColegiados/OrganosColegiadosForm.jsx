@@ -129,13 +129,13 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
-                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} disabled={rol === "invitado"} />
+                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} disabled={rol === "invitado"} required/>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                     <div className="form-group">
                                         <label htmlFor="quorum" className="label-personalizado mb-2">Quorum</label>
-                                        <input type="number" className="form-control" name="quorum" id="quorum" value={formData.quorum} onChange={handleChange} disabled={rol === "invitado"}/>
+                                        <input type="number" className="form-control" name="quorum" id="quorum" value={formData.quorum} onChange={handleChange} disabled={rol === "invitado"} required/>
                                     </div>
                             </div>
                         </div>
@@ -144,7 +144,7 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="numero_miembros" className="label-personalizado mb-2">Cantidad de integrantes</label>
-                                    <input type="number" className="form-control" name="numero_miembros" id="numero_miembros"  value={formData.numero_miembros} onChange={handleChange} disabled={rol === "invitado"}/>
+                                    <input type="number" className="form-control" name="numero_miembros" id="numero_miembros"  value={formData.numero_miembros} onChange={handleChange} disabled={rol === "invitado"} required/>
                                 </div>
                             </div>
                             <div className="col-md-6">
