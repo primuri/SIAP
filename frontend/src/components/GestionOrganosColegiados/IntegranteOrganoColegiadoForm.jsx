@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/add_person.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import { Confirmar } from '../../utils/Confirmar'
 import Tooltip from '@mui/material/Tooltip';
 
@@ -11,6 +12,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
     const [oficioData, setOficioData] = useState(null);
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
+    const [selectedFileName, setSelectedFileName] = useState('');
 
     const [formData, setFormData] = useState({
         id_integrante: integrante ? integrante.id_integrante : "",
@@ -76,6 +78,11 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
 
     const handleFileChange = (event) => {
         const oficio = event.target.files[0];
+        
+        if (file) {
+            setSelectedFileName(file.name);
+        }
+  
         setOficioData(oficio);
     }
     
@@ -208,19 +215,40 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                 <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} disabled={rol === "invitado"}/>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio de nombramiento  </label>
-                                <input disabled={rol === "invitado"} type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} />
-                                {mode == 2 ? (
+                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Oficio de nombramiento
+                                </label>
+                                <input
+                                    type="file"
+                                    className={rol === "invitado" ? "form-control disabled-input" : "form-control"}
+                                    name="id_oficio_fk.ruta_archivo"
+                                    id="id_oficio_fk.ruta_archivo"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    disabled={rol === "invitado"}
+                                    required={mode == 1 ? true : false}
+                                />
+                                <label htmlFor="id_oficio_fk.ruta_archivo" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode == 2 && formData.id_oficio_fk.ruta_archivo && (
                                     <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                        <a href={'http://localhost:8000' + formData.id_oficio_fk.ruta_archivo} target="blank_"
-                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver Oficio"}
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver Oficio
                                         </a>
                                     </Tooltip>
-
-                                )
-                                    : ""}
+                                )}
                             </div>
                         </div>             
                     </div>

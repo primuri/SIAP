@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Paises from '../../utils/Paises.json'
 import Tooltip from '@mui/material/Tooltip';
-
+import icono2 from '../../assets/upload_doc.svg'
 
 export const EventoForm = ({ mode, producto, setCambios }) => {
     const [fileData, setFileData] = useState(null);
     const [eventoPais, setEventoPais] = useState(producto ? producto.pais: "");
+    const [selectedFileName, setSelectedFileName] = useState('');
     const defaultFormData = {
         id_producto_fk: {
             id_producto: "",
@@ -58,6 +59,11 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+
+        if (file) {
+            setSelectedFileName(file.name);
+        }
+
         setFileData(file);
         setCambios({ eventoData: formData, eventoFile: file }); 
     };
@@ -135,16 +141,42 @@ export const EventoForm = ({ mode, producto, setCambios }) => {
                     <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                 </div>
                 <div className="col">
-                    <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Oficio del Evento   </label>
-                    <input type="file" className="form-control" name="id_oficio_fk.documento" id="id_oficio_fk.documento" onChange={handleFileChange} required={mode == 1 ? true : ''} disabled={isInvestigador}/>
-                    {mode === 2 ? (
+                    <label htmlFor="id_oficio_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                        Documento del Oficio del Evento
+                    </label>
+                    <input
+                        type="file"
+                        className={isInvestigador ? "form-control disabled-input" : "form-control"}
+                        name="id_oficio_fk.documento"
+                        id="id_oficio_fk.documento"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                        required={mode == 1}
+                        disabled={isInvestigador}
+                    />
+                    <label htmlFor="id_oficio_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+                        {selectedFileName ? (
+                            <span>Nombre del archivo: {selectedFileName}</span>
+                        ) : (
+                            <div className="file-upload-icon-container">
+                                <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                            </div>
+                        )}
+                    </label>
+                    {mode === 2 && formData.id_oficio_fk?.ruta_archivo && (
                         <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                            <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                                {"Descargar oficio"}
+                            <a
+                                href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                            >
+                                Descargar oficio
                             </a>
                         </Tooltip>
-                    ): ""}
+                    )}
                 </div>
+
             </div>
         </>
     );

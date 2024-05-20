@@ -3,6 +3,7 @@ import { VIFields } from "../../pages/GestionInformes/utils";
 import { useState, useEffect } from "react";
 import Tooltip from '@mui/material/Tooltip';
 import icono from '../../assets/document.svg'
+import icono2 from '../../assets/upload_doc.svg'
 
 export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, versionInforme }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false)
@@ -11,6 +12,9 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const [fileOficio, setFileOficio] = useState(null);
     const [fileInforme, setFileInforme] = useState(null);  
     const [fileEvaluacion, setFileEvaluacion] = useState(null);
+    const [selectedFileNameOficio, setSelectedFileNameOficio] = useState('');
+    const [selectedFileNameInforme, setSelectedFileNameInforme] = useState('');
+    const [selectedFileNameEvaluacion, setSelectedFileNameEvaluacion] = useState('');
 
     const user = JSON.parse(localStorage.getItem('user'))
     const isInvestigador = user.groups.some((grupo) => {
@@ -94,10 +98,13 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
         
 
         if (obj === "oficio") {
+            setSelectedFileNameOficio(file.name);
             setFileOficio(file);
         } else if (obj === "informe") {
+            setSelectedFileNameInforme(file.name);
             setFileInforme(file)
         } else if (obj === "evaluacion"){
+            setSelectedFileNameEvaluacion(file.name);
             setFileEvaluacion(file)
         }
     };
@@ -123,17 +130,40 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             <div className="col">
-                                <label htmlFor="documentoOficio" className="label-personalizado mb-2"> Documento oficio   </label>
-                                <input type="file" className="form-control" name="id_oficio_fk.documento" id="documentoOficio" onChange={(event) => handleFileChange(event, 'oficio')} required={mode == 1} disabled={isInvestigador}/>
-                                {mode == 2 && formData.id_oficio_fk.ruta_archivo ?(
-                                     <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                      {formData.id_oficio_fk.ruta_archivo !== "" && (
-                                     <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                        {"Ver documento"}
-                                    </a>
+                                <label htmlFor="documentoOficio" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento oficio
+                                </label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    name="id_oficio_fk.documento"
+                                    id="documentoOficio"
+                                    onChange={(event) => handleFileChange(event, 'oficio')}
+                                    required={mode === 1}
+                                    disabled={isInvestigador}
+                                    style={{ display: 'none' }} 
+                                />
+                                <label htmlFor="documentoOficio" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameOficio ? (
+                                        <span>Nombre del archivo: {selectedFileNameOficio}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
                                     )}
+                                </label>
+                                {mode === 2 && formData.id_oficio_fk.ruta_archivo && (
+                                    <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
+                                        </a>
                                     </Tooltip>
-                                ) : null}
+                                )}
                             </div>
                         </div>
                         <div className="row mb-4">
@@ -142,13 +172,37 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
                             </div>
                             <div className="col">
-                                <label htmlFor="documentoInforme" className="label-personalizado mb-2"> Documento informe   </label>
-                                <input type="file" className="form-control" name="id_documento_informe_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event, 'informe')} required={mode == 1} disabled={isInvestigador}/>
-                                {mode == 2 && (
-
+                                <label htmlFor="documentoInforme" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento informe
+                                </label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    name="id_documento_informe_fk.documento"
+                                    id="documentoInforme"
+                                    onChange={(event) => handleFileChange(event, 'informe')}
+                                    required={mode === 1}
+                                    disabled={isInvestigador}
+                                    style={{ display: 'none' }} 
+                                />
+                                <label htmlFor="documentoInforme" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameInforme ? (
+                                        <span>Nombre del archivo: {selectedFileNameInforme}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_documento_informe_fk.documento && (
                                     <Tooltip title={formData.id_documento_informe_fk.documento.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_documento_informe_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver documento"}
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_documento_informe_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
                                         </a>
                                     </Tooltip>
                                 )}
@@ -160,17 +214,40 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                     <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange} disabled={isInvestigador}/>
                                 </div>
                                 <div className="col">
-                                    <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2"> Documento evaluación CC <span className="disabled-input">(Opcional)</span> </label>
-                                    <input type="file" className="form-control" name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento" id="documentoEvaluacionCC" onChange={(event) => handleFileChange(event, 'evaluacion')} disabled={isInvestigador}/>
-                                {mode === 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk?.documento  ? (
-                                    <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
-                                        {formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento !== "" && (
-                                        <a href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento} target="blank_" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver documento"}
-                                        </a>
+                                    <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                        Documento evaluación CC
+                                        <span className="disabled-input">(Opcional)</span>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}
+                                        name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento"
+                                        id="documentoEvaluacionCC"
+                                        onChange={(event) => handleFileChange(event, 'evaluacion')}
+                                        style={{ display: 'none' }}
+                                        disabled={isInvestigador}
+                                    />
+                                    <label htmlFor="documentoEvaluacionCC" style={{ cursor: 'pointer', display: 'block' }}>
+                                        {selectedFileNameEvaluacion ? (
+                                            <span>Nombre del archivo: {selectedFileNameEvaluacion}</span>
+                                        ) : (
+                                            <div className="file-upload-icon-container">
+                                                <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                            </div>
                                         )}
-                                    </Tooltip>
-                                 ) : ""}
+                                    </label>
+                                    {mode === 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk?.documento && (
+                                        <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
+                                            <a
+                                                href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                            >
+                                                Ver documento
+                                            </a>
+                                        </Tooltip>
+                                    )}
                                 </div>
                             </div>
                     </div>

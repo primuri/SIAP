@@ -719,3 +719,13 @@ input[type="submit"]:focus {
 .mi-boton-wrapper:hover .hover-text {
   opacity: 1; 
 }
+
+/* Estilo para iconos de subir documento */
+.file-upload-icon-container {
+  text-align: center;
+}
+
+.file-upload-icon {
+  width: 50px;
+  height: 50px;
+}

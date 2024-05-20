@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/document.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../utils/Confirmar'
@@ -17,6 +18,7 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
     const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [fileAccion, setFileAccion] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState('');
 
     const [formData, setFormData] = useState({
         id: accion ? accion.id_accion : "",
@@ -64,8 +66,14 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+      
+        if (file) {
+          setSelectedFileName(file.name);
+        }
+      
         setFileAccion(file);
     };
+
 
     const handleDeleteClick = () => {
         setShowConfirmationDelete(true);
@@ -150,14 +158,38 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                         </div>
 
                         <div className="row mb-4">
-                            <div className="">
-                                <label htmlFor="id_documento_accion" className="label-personalizado mb-2"> Documento   </label>
-                                <input type="file" className="form-control" name="id_documento_accion_fk.documento" id="id_documento_accion" onChange={handleFileChange} required={mode == 1} disabled={isInvestigador}/>
+                            <div className="col">
+                                <label htmlFor="id_documento_accion" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento asociado
+                                </label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    name="id_documento_accion_fk.documento"
+                                    id="id_documento_accion"
+                                    onChange={handleFileChange}
+                                    required={mode === 1}
+                                    disabled={isInvestigador}
+                                    style={{ display: 'none' }} 
+                                />
+                                <label htmlFor="id_documento_accion" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
                                 {typeof formData.id_documento_accion_fk.documento === 'string' && formData.id_documento_accion_fk.documento !== '' && (
-
                                     <Tooltip title={formData.id_documento_accion_fk.documento.split('/').pop()} placement="right-start">
-                                        <a href={'http://localhost:8000' + formData.id_documento_accion_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver documento"}
+                                        <a
+                                            href={'http://localhost:8000' + formData.id_documento_accion_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
                                         </a>
                                     </Tooltip>
                                 )}

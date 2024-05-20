@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../../assets/add_person.svg';
+import icono2 from '../../../assets/upload_doc.svg'
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import * as React from 'react';
@@ -14,6 +15,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
   const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
   const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
   const [fileData, setFileData] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState('');
 
   const [formData, setFormData] = useState({
     id_designacion_asistente: asistente ? asistente.id_designacion_asistente : "",
@@ -101,6 +103,11 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
+    if (file) {
+      setSelectedFileName(file.name);
+    }
+
     setFileData(file);
   };
 
@@ -218,20 +225,42 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
                 <textarea className="form-control" name="id_documento_inopia_fk.detalle" id="detalleInopia" value={formData.id_documento_inopia_fk.detalle || ''} onChange={handleChange} disabled={isInvestigador} />
               </div>
               <div className="col">
-                <label htmlFor="documentoInopia" className="label-personalizado mb-2"> Documento del Inopia   </label> <span className="disabled-input">(Opcional)</span>
-                <input type="file" className="form-control" name="id_documento_inopia_fk.documento" id="documento" onChange={handleFileChange} disabled={isInvestigador} />
-                {mode === 2 && formData.id_documento_inopia_fk.documento ? (
-                  <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
-                    {formData.id_documento_inopia_fk.documento !== "" && (
-                      <a href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                        {"Descargar documento"}
-                      </a>
+                <label htmlFor="id_documento_inopia_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                    Documento del Inopia
+                    <span className="disabled-input">(Opcional)</span>
+                </label>
+                <input
+                    type="file"
+                    className={isInvestigador ? "form-control disabled-input" : "form-control"}
+                    name="id_documento_inopia_fk.documento"
+                    id="id_documento_inopia_fk.documento"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                    disabled={isInvestigador}
+                />
+                <label htmlFor="id_documento_inopia_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+                    {selectedFileName ? (
+                        <span>Nombre del archivo: {selectedFileName}</span>
+                    ) : (
+                        <div className="file-upload-icon-container">
+                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                        </div>
                     )}
-                  </Tooltip>
-                ) : null}
+                </label>
+                {mode === 2 && formData.id_documento_inopia_fk?.documento && (
+                    <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
+                        <a
+                            href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                        >
+                            Descargar documento
+                        </a>
+                    </Tooltip>
+                )}
               </div>
             </div>
-
           </div>
         </div>
         {!isInvestigador && (

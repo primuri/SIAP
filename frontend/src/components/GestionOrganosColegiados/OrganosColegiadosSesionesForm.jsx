@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/session.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../utils/Confirmar'
@@ -16,6 +17,8 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
         const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
         const [fileData, setFileData] = useState(null);
         const [fileData2, setFileData2] = useState(null);
+        const [selectedFileNameActa, setSelectedFileNameActa] = useState('');
+        const [selectedFileNameConvocatoria, setSelectedFileNameConvocatoria] = useState('');
       
         const [formData, setFormData] = useState({
             id_sesion: sesion ? sesion.id_sesion: "",
@@ -109,8 +112,10 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
         
             if (!file) return;  
             if (id === "id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento") {
+                setSelectedFileNameConvocatoria(file.name);
                 setFileData(file); 
             } else if (id === "id_acta_fk.id_documento_acta_fk.documento") {
+                setSelectedFileNameActa(file.name);
                 setFileData2(file); 
             }
         };
@@ -187,16 +192,42 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="documento_acta" className="label-personalizado mb-2">Documento del acta</label>
-                                <input type="file" className="form-control" name="id_acta_fk.id_documento_acta_fk.documento" id="id_acta_fk.id_documento_acta_fk.documento"  onChange={handleFileChange} required disabled={rol === "invitado"}/>
-                                {mode === 2 ? (
+                                <label htmlFor="id_acta_fk.id_documento_acta_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento del acta
+                                </label>
+                                <input
+                                    type="file"
+                                    className={rol === "invitado" ? "form-control disabled-input" : "form-control"}
+                                    name="id_acta_fk.id_documento_acta_fk.documento"
+                                    id="id_acta_fk.id_documento_acta_fk.documento"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required
+                                    disabled={rol === "invitado"}
+                                />
+                                <label htmlFor="id_acta_fk.id_documento_acta_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameActa ? (
+                                        <span>Nombre del archivo: {selectedFileNameActa}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_acta_fk.id_documento_acta_fk.documento && (
                                     <Tooltip title={formData.id_acta_fk.id_documento_acta_fk.documento.split('/').pop()} placement="right-start">
-                                    <a href={"http://localhost:8000" + formData.id_acta_fk.id_documento_acta_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                                        {"Ver documento"}
-                                    </a>
-                                </Tooltip>
-                            ): ""}
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_acta_fk.id_documento_acta_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
+                                        </a>
+                                    </Tooltip>
+                                )}
                             </div>
+
                         </div> 
           
                         <div className="row mb-4">
@@ -240,15 +271,40 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="doc_convocatoria" className="label-personalizado mb-2">Documento de la convocatoria</label>
-                                    <input disabled={rol === "invitado"} type="file" className="form-control" name="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" id="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" onChange={handleFileChange} required />
-                                    {mode === 2 ? ( 
+                                    <label htmlFor="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                        Documento de la convocatoria
+                                    </label>
+                                    <input
+                                        type="file"
+                                        className={rol === "invitado" ? "form-control disabled-input" : "form-control"}
+                                        name="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento"
+                                        id="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento"
+                                        onChange={handleFileChange}
+                                        style={{ display: 'none' }}
+                                        required
+                                        disabled={rol === "invitado"}
+                                    />
+                                    <label htmlFor="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+                                        {selectedFileNameConvocatoria ? (
+                                            <span>Nombre del archivo: {selectedFileNameConvocatoria}</span>
+                                        ) : (
+                                            <div className="file-upload-icon-container">
+                                                <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                            </div>
+                                        )}
+                                    </label>
+                                    {mode === 2 && formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento && (
                                         <Tooltip title={formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                                            {"Descargar documento"}
-                                        </a>
-                                    </Tooltip>
-                                ): ""}
+                                            <a
+                                                href={"http://localhost:8000" + formData.id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                            >
+                                                Descargar documento
+                                            </a>
+                                        </Tooltip>
+                                    )}
                                 </div>
                             </div>
                         </div>     

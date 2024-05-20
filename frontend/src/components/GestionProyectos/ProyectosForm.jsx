@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import icono from '../../assets/project_version.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import { Confirmar } from '../../utils/Confirmar'
 import { SoftwareForm } from "../GestionProductos/SoftwareForm";
 import { ArticuloForm } from "../GestionProductos/ArticuloForm";
@@ -55,6 +56,7 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [showProductContent, setShowProductContent] = useState(false);
+    const [selectedFileName, setSelectedFileName] = useState('');
     const [formData, setFormData] = useState({
             id_version_proyecto: proyecto ? proyecto.id_version_proyecto: "",
             id_oficio_fk: proyecto ? proyecto.id_oficio_fk : {
@@ -152,6 +154,11 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+
+        if (file) {
+            setSelectedFileName(file.name);
+        }
+
         setFileData(file);
     };
 
@@ -299,20 +306,41 @@ export const ProyectosForm = ({ onSubmit, mode, proyecto, producto, onCancel, on
 
                             </div>
                             <div className="col">
-                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2">Oficio   </label>
-                                <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} disabled={isInvestigador} />
-                                {mode == 2 ? (
+                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Oficio
+                                </label>
+                                <input
+                                    type="file"
+                                    className={isInvestigador ? "form-control disabled-input" : "form-control"}
+                                    name="id_oficio_fk.ruta_archivo"
+                                    id="id_oficio_fk.ruta_archivo"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required={mode == 1}
+                                    disabled={isInvestigador}
+                                />
+                                <label htmlFor="id_oficio_fk.ruta_archivo" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode == 2 && formData.id_oficio_fk?.ruta_archivo && (
                                     <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo} target="blank_"
-                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver documento"}
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
                                         </a>
                                     </Tooltip>
-
-                                )
-                                    : ""}
-                                    <div className="row mb-4"></div>
+                                )}
+                                <div className="row mb-4"></div>
                             </div>
                             
                             <div className="d-flex flex-column 4"> 

@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import icono from '../../assets/evaluation.svg'
+import icono2 from '../../assets/upload_doc.svg'
 import * as API from '../../api/gestionEvaluaciones'
 //coment
 
@@ -22,6 +23,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     const [evaluadorSeleccionado, setEvaluadorSeleccionado] = useState('')
     const [loadedEvaluadores, setLoadedEvaluadores] = useState(true)
     const [canDelete, setCanDelete] = useState(true)
+    const [selectedFileName, setSelectedFileName] = useState('');
     useEffect(() => {
         obtenerProyectos()
         obtenerEvaluadores()
@@ -146,12 +148,15 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         setShowConfirmationEdit(false);
     };
 
-    const handleFileChange = (event, obj) => {
+    const handleFileChange = (event,obj) => {
         const file = event.target.files[0];
-
-        setDocumento(file)
+      
+        if (file) {
+          setSelectedFileName(file.name);
+        }
+      
+        setDocumento(file);
     };
-
 
     const sendForm = (event) => {
         event.preventDefault();
@@ -261,16 +266,43 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                         <div className="row mb-4">
 
                             <div className="col">
-                                <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
-                                {mode == 2 && typeof formData.id_documento_evaluacion_fk.documento !== 'object' && (
+                                <label htmlFor="documentoInforme" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento evaluación
+                                    <span className="disabled-input">(Opcional)</span>
+                                </label>
+                                <input
+                                    accept=".pdf,.xls,.xlsx,.doc,.docx,.odt,.ods,.rar,.zip"
+                                    type="file"
+                                    className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}
+                                    name="id_documento_evaluacion_fk.documento"
+                                    id="documentoInforme"
+                                    onChange={(event) => handleFileChange(event)}
+                                    style={{ display: 'none' }} 
+                                    disabled={formData.estado === "Completa"}
+                                />
+                                <label htmlFor="documentoInforme" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_documento_evaluacion_fk.documento && (
                                     <Tooltip title={formData.id_documento_evaluacion_fk.documento.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver documento"}
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_documento_evaluacion_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
                                         </a>
                                     </Tooltip>
                                 )}
                             </div>
+
                             <div className="col">
                                 <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación </label> <span className="disabled-input">(Opcional)</span>
                                 <textarea className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />

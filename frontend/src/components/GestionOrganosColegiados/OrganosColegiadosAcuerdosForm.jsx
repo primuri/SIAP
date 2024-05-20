@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/document.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Confirmar } from '../../utils/Confirmar'
@@ -16,6 +17,9 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
     const [oficioFile, setOficioFile] = useState(null);
     const [seguimientoFile, setSeguimientoFile] = useState(null);
     const [acuerdoFile, setAcuerdoFile] = useState(null);
+    const [selectedFileNameAcuerdo, setSelectedFileNameAcuerdo] = useState('');
+    const [selectedFileNameOficio, setSelectedFileNameOficio] = useState('');
+    const [selectedFileNameSeguimiento, setSelectedFileNameSeguimiento] = useState('');
 
     const [formData, setFormData] = useState({
         id_acuerdo: acuerdo ? acuerdo.id_acuerdo: "",
@@ -88,10 +92,13 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
     
         if (!file) return;  
         if (id === "id_seguimiento_fk.id_documento_seguimiento_fk.documento") {
+            setSelectedFileNameSeguimiento(file.name);
             setSeguimientoFile(file); 
         } else if (id === "id_documento_acuerdo_fk.documento") {
+            setSelectedFileNameAcuerdo(file.name);
             setAcuerdoFile(file); 
         } else if(id === "id_oficio_fk.ruta_archivo"){
+            setSelectedFileNameOficio(file.name);
             setOficioFile(file);
         }
     };
@@ -226,49 +233,123 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="documento_seguimiento" className="label-personalizado mb-2">Documento del segimiento</label>
-                                <input type="file" className="form-control" name="id_seguimiento_fk.id_documento_seguimiento_fk.documento" id="id_seguimiento_fk.id_documento_seguimiento_fk.documento" onChange={handleFileChange} required disabled={rol === "invitado"} />
-                                {mode === 2 && formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento ? (
-                                    <Tooltip title={formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento.split('/').pop()} placement="right-start">
-                                    <a href={"http://localhost:8000" + formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                                        {"Ver seguimiento"}
-                                    </a>
+                                <label htmlFor="id_seguimiento_fk.id_documento_seguimiento_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento del seguimiento
+                                </label>
+                                <input
+                                    type="file"
+                                    className={rol === "invitado" ? "form-control disabled-input" : "form-control"}
+                                    name="id_seguimiento_fk.id_documento_seguimiento_fk.documento"
+                                    id="id_seguimiento_fk.id_documento_seguimiento_fk.documento"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required
+                                    disabled={rol === "invitado"}
+                                />
+                                <label htmlFor="id_seguimiento_fk.id_documento_seguimiento_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameSeguimiento ? (
+                                        <span>Nombre del archivo: {selectedFileNameSeguimiento}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_seguimiento_fk.id_documento_seguimiento_fk?.documento && (
+                                    <Tooltip title={formData.id_seguimiento_fk.id_documento_seguimiento_fk.documento.split('/').pop()} placement="right-start">
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_seguimiento_fk.id_documento_seguimiento_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver seguimiento
+                                        </a>
                                     </Tooltip>
-                                ): ""}
-                            </div> 
+                                )}
+                            </div>
                         </div>           
-                        <div className="row mb-4">
-                            
+                        <div className="row mb-4">            
                             <div className="col-md-6">
-                                <label htmlFor="documento_acuerdo" className="label-personalizado mb-2">Documento del acuerdo</label>
-                                <input type="file" className="form-control" name="id_documento_acuerdo_fk.documento" id="id_documento_acuerdo_fk.documento"  onChange={handleFileChange} required disabled={rol === "invitado"} />
-                                {mode === 2 && formData.id_documento_acuerdo_fk?.documento ? (
+                                <label htmlFor="id_documento_acuerdo_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento del acuerdo
+                                </label>
+                                <input
+                                    type="file"
+                                    className={rol === "invitado" ? "form-control disabled-input" : "form-control"}
+                                    name="id_documento_acuerdo_fk.documento"
+                                    id="id_documento_acuerdo_fk.documento"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required
+                                    disabled={rol === "invitado"}
+                                />
+                                <label htmlFor="id_documento_acuerdo_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameAcuerdo ? (
+                                        <span>Nombre del archivo: {selectedFileNameAcuerdo}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_documento_acuerdo_fk?.documento && (
                                     <Tooltip title={formData.id_documento_acuerdo_fk.documento.split('/').pop()} placement="right-start">
-                                    <a href={"http://localhost:8000" + formData.id_documento_acuerdo_fk?.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                                        {"Ver acuerdo"}
-                                    </a>
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_documento_acuerdo_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver acuerdo
+                                        </a>
                                     </Tooltip>
-                                ): ""}
-                            </div> 
+                                )}
+                            </div>
                             <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label htmlFor="detalle_oficio" className="label-personalizado mb-2">Detalle oficio</label>
-                                        <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange}  required disabled={rol === "invitado"}/>
-                                    </div>
+                                <div className="form-group">
+                                    <label htmlFor="detalle_oficio" className="label-personalizado mb-2">Detalle oficio</label>
+                                    <input type="text" className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange}  required disabled={rol === "invitado"}/>
                                 </div>
+                            </div>
                         </div> 
                         <div className="row mb-4">
-                                <div className="col-md-6">
-                                    <label htmlFor="documento_oficio" className="label-personalizado mb-2">Documento del oficio</label>
-                                    <input type="file" className="form-control" name="id_oficio_fk.ruta_archivo" id="id_oficio_fk.ruta_archivo"  onChange={handleFileChange} required disabled={rol === "invitado"}/>
-                                    {mode === 2 && formData.id_oficio_fk?.ruta_archivo ? (
-                                        <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
-                                        <a href={"http://localhost:8000" + formData.id_oficio_fk?.ruta_archivo} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                                            {"Ver oficio"}
+                            <div className="col-md-6">
+                                <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento del oficio
+                                </label>
+                                <input
+                                    type="file"
+                                    className={rol === "invitado" ? "form-control disabled-input" : "form-control"}
+                                    name="id_oficio_fk.ruta_archivo"
+                                    id="id_oficio_fk.ruta_archivo"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required
+                                    disabled={rol === "invitado"}
+                                />
+                                <label htmlFor="id_oficio_fk.ruta_archivo" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameOficio ? (
+                                        <span>Nombre del archivo: {selectedFileNameOficio}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_oficio_fk?.ruta_archivo && (
+                                    <Tooltip title={formData.id_oficio_fk.ruta_archivo.split('/').pop()} placement="right-start">
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_oficio_fk.ruta_archivo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver oficio
                                         </a>
-                                        </Tooltip>
-                                    ): ""}
-                                </div> 
+                                    </Tooltip>
+                                )}
+                            </div>
                         </div>  
                         
                     </div>

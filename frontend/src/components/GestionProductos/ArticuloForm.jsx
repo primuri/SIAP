@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Paises from '../../utils/Paises.json'
 import Tooltip from '@mui/material/Tooltip';
+import icono2 from '../../assets/upload_doc.svg'
 
 export const ArticuloForm = ({ mode, producto, setCambios }) => {
   const [fileData, setFileData] = useState(null);
   const [paisRevista, setPaisRevista] = useState(producto ? producto.id_revista_fk.pais : "");
+  const [selectedFileName, setSelectedFileName] = useState('');
   const defaultFormData = {
     nombre: "",
     fecha_publicacion: "",
@@ -92,6 +94,11 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
+    if (file) {
+      setSelectedFileName(file.name);
+    }
+
     setFileData(file);
     setCambios({ articuloData: formData, articuloFile: file });
   };
@@ -195,17 +202,42 @@ export const ArticuloForm = ({ mode, producto, setCambios }) => {
           <textarea className="form-control" name="id_documento_articulo_fk.detalle" id="detalleArticulo" value={formData.id_documento_articulo_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
         </div>
         <div className="col">
-          <label htmlFor="documento" className="label-personalizado mb-2"> Documento del Artículo   </label>
-          <input type="file" className="form-control" name="id_documento_articulo_fk.documento" id="documento" onChange={handleFileChange} required={mode == 1 ? true : ''} disabled={isInvestigador}/>
-          {mode === 2 ? (
-            <Tooltip title={formData.id_documento_articulo_fk.documento.split('/').pop()} placement="right-start">
-              <a href={"http://localhost:8000" + formData.id_documento_articulo_fk.documento} target="blank_" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2" >
-                {"Descargar documento"}
-              </a>
-            </Tooltip>
+          <label htmlFor="id_documento_articulo_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+              Documento del Artículo
+          </label>
+          <input
+              type="file"
+              className={isInvestigador ? "form-control disabled-input" : "form-control"}
+              name="id_documento_articulo_fk.documento"
+              id="id_documento_articulo_fk.documento"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+              required={mode == 1}
+              disabled={isInvestigador}
+          />
+          <label htmlFor="id_documento_articulo_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
+              {selectedFileName ? (
+                  <span>Nombre del archivo: {selectedFileName}</span>
+              ) : (
+                  <div className="file-upload-icon-container">
+                      <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                  </div>
+              )}
+          </label>
+          {mode === 2 && formData.id_documento_articulo_fk?.documento && (
+              <Tooltip title={formData.id_documento_articulo_fk.documento.split('/').pop()} placement="right-start">
+                  <a
+                      href={"http://localhost:8000" + formData.id_documento_articulo_fk.documento}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                  >
+                      Descargar documento
+                  </a>
+              </Tooltip>
+          )}
+      </div>
 
-          ) : ""}
-        </div>
       </div>
       <div className="row mb-4">
         <div className="col">

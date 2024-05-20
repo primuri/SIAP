@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import icono from '../../assets/budget.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import { Confirmar } from '../../utils/Confirmar';
 import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
@@ -18,6 +19,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
     const [entidades, setEntidades] = useState([]);
     const [codigoFinancieros, setCodigosFinancieros] = useState([]);
     const [oficioData, setOficioData] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState('');
     const [formData, setFormData] = useState({
         tipoPresupuesto: {
             id_tipo_presupuesto: presupuesto ? presupuesto.id_tipo_presupuesto_fk.id_tipo_presupuesto : "",
@@ -126,6 +128,11 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
 
     const handleFileChange = (event) => {
         const foto = event.target.files[0];
+
+        if (file) {
+            setSelectedFileName(file.name);
+        }
+          
         setOficioData(foto);
     }
 
@@ -359,19 +366,40 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                 <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador}/>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="documento" className="label-personalizado mb-2">Oficio   </label>
-                                <input type="file" className="form-control" name="documento" id="documento" onChange={handleFileChange}
-                                    required={mode == 1 ? true : ''} disabled={isInvestigador} />
-                                {mode == 2 ? (
+                                <label htmlFor="documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Oficio
+                                </label>
+                                <input
+                                    type="file"
+                                    className={isInvestigador ? "form-control disabled-input" : "form-control"}
+                                    name="documento"
+                                    id="documento"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required={mode == 1}
+                                    disabled={isInvestigador}
+                                />
+                                <label htmlFor="documento" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {mode == 2 && formData.oficio?.ruta_archivo && (
                                     <Tooltip title={formData.oficio.ruta_archivo.split('/').pop()} placement="right-start">
-                                        <a href={'http://localhost:8000' + formData.oficio.ruta_archivo} target="blank_"
-                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
-                                            {"Ver Oficio"}
+                                        <a
+                                            href={'http://localhost:8000' + formData.oficio.ruta_archivo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver Oficio
                                         </a>
                                     </Tooltip>
-
-                                )
-                                    : ""}
+                                )}
                             </div>
                         </div>
                         <div className="row mb-4">

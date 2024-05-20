@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import icono from '../../assets/budget.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import { Confirmar } from '../../utils/Confirmar';
 import { toast, Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
@@ -19,6 +20,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
     const [selectedFactura, setSelectedFactura] = useState("");
     const [selectedProveedor, setSelectedProveedor] = useState('');
     const [value, setValue] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState('');
     const detalle = gasto ? gasto.id_factura_fk.id_producto_servicio_fk.detalle : ""
 
     const user = JSON.parse(localStorage.getItem('user'))
@@ -131,6 +133,11 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+
+        if (file) {
+            setSelectedFileName(file.name);
+        }
+   
         setDocumentoData(file);
     }
 
@@ -314,13 +321,38 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                         </div>
                         <div className="row mb-4">
                             <div className="col">
-                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2">Factura</label> <span className="disabled-input">(Opcional)</span>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} disabled={isInvestigador}/>
-                                { typeof formData.id_documento_fk.documento === 'string' && (
-                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Factura
+                                    <span className="disabled-input">(Opcional)</span>
+                                </label>
+                                <input
+                                    type="file"
+                                    className={isInvestigador ? "form-control disabled-input" : "form-control"}
+                                    name="id_documento_fk.documento"
+                                    id="id_documento_fk"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    disabled={isInvestigador}
+                                />
+                                <label htmlFor="id_documento_fk" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {typeof formData.id_documento_fk.documento === 'string' && (
+                                    <a
+                                        href={'http://localhost:8000' + formData.id_documento_fk.documento}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                    >
                                         {formData.id_documento_fk.documento.split('/').pop()}
                                     </a>
-                                ) }
+                                )}
                             </div>
                         </div>
                     </div>

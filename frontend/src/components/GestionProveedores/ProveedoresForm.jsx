@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { toast, Toaster } from 'react-hot-toast'
 import icono from '../../assets/add_person.svg';
+import icono2 from '../../assets/upload_doc.svg'
 import { Confirmar } from '../../utils/Confirmar'
 import { FormularioDinamico } from "../../utils/FomularioDinamico"
 import { obtenerCuentasBancarias } from "../../api/gestionProveedores"
@@ -21,6 +22,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const [addClick, setAddClick] = useState(false) 
     const [edit, setEdit] = useState(false)
     const [fileProveedor, setFileProveedor] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState('');
 
     const [formData, setFormData] = useState({
         id_cedula_proveedor: proveedor ? proveedor.id_cedula_proveedor : "",
@@ -114,6 +116,11 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+
+        if (file) {
+            setSelectedFileName(file.name);
+        }
+  
         setFileProveedor(file);
     };
 
@@ -209,13 +216,37 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                                 <input type="text" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} pattern="^\d+(\.\d{1,2})?$" required/>
                             </div>
                             <div className="col-md-6">
-                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2"> Documento </label>
-                                <input type="file" className="form-control" name="id_documento_fk.documento" id="id_documento_fk" onChange={handleFileChange} required/>
-                                { typeof formData.id_documento_fk.documento === 'string' && (
-                                    <a href={'http://localhost:8000' + formData.id_documento_fk.documento} target="blank" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
+                                <label htmlFor="id_documento_fk" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento
+                                </label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    name="id_documento_fk.documento"
+                                    id="id_documento_fk"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    required
+                                />
+                                <label htmlFor="id_documento_fk" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileName ? (
+                                        <span>Nombre del archivo: {selectedFileName}</span>
+                                    ) : (
+                                        <div className="file-upload-icon-container">
+                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
+                                        </div>
+                                    )}
+                                </label>
+                                {typeof formData.id_documento_fk.documento === 'string' && (
+                                    <a
+                                        href={'http://localhost:8000' + formData.id_documento_fk.documento}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                    >
                                         {formData.id_documento_fk.documento.split('/').pop()}
                                     </a>
-                                ) }
+                                )}
                             </div>
                         </div>
 
