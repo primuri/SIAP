@@ -52,9 +52,9 @@ export const GestionVersionInforme = () => {
         }
     }
 
-    async function addVersionInforme(formData) {
-        try {
-            const data = { ...formData }
+    async function addVersionInforme (formData) {
+        try{
+            const data = { ...formData}
 
             let responseOficio = await API.agregarOficio(data.id_oficio_fk)
             data.id_oficio_fk = responseOficio.data.id_oficio
@@ -62,103 +62,102 @@ export const GestionVersionInforme = () => {
             let responseDocumento = await API.agregarDocumentoInforme(data.id_documento_informe_fk)
             data.id_documento_informe_fk = responseDocumento.data.id_documento
 
-            if (data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento instanceof File) {
+            if(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento instanceof File ){
                 let responseDocEvaluacion = await API.agregarDocumentoInforme(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk)
                 data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = responseDocEvaluacion.data.id_documento
-                if (data.id_evaluacion_cc_fk.detalle === "") {
+                if(data.id_evaluacion_cc_fk.detalle === ""){
                     delete data.id_evaluacion_cc_fk.detalle
                 }
                 let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
                 data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
-            } else {
+            }else{
                 data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = null
-
+               
                 let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
                 data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
             }
-
+            
 
             data.id_informe_fk = informeID
 
             await API.agregarVersionInforme(data)
-
             setAddClicked(false)
             setReload(!reload)
             mostrarExito("Versión informe agregada correctamente")
-        } catch (error) {
+        } catch(error){
         }
     }
 
     async function editVersionInforme(dataForm) {
-        try {
-            var data = { ...dataForm }
+        try{
+            var data = { ...dataForm}
             if (typeof data.id_oficio_fk.ruta_archivo === 'object') {
                 var responseOficio = await API.editarOficioAndDocumento(data.id_oficio_fk.id_oficio, data.id_oficio_fk);
             } else {
                 delete data.id_oficio_fk.ruta_archivo
                 var responseOficio = await API.editarOficio(data.id_oficio_fk.id_oficio, data.id_oficio_fk);
             }
-
+            
             data.id_oficio_fk = responseOficio.data.id_oficio;
-
+            
             if (typeof data.id_documento_informe_fk.documento === 'object') {
                 var responseDocumento = await API.editarDocumentoInformeAndDocumento(data.id_documento_informe_fk.id_documento, data.id_documento_informe_fk);
             } else {
                 delete data.id_documento_informe_fk.documento
                 var responseDocumento = await API.editarDocumentoInforme(data.id_documento_informe_fk.id_documento, data.id_documento_informe_fk);
             }
-            if (data.id_evaluacion_cc_fk.id_documento_evualuacion_fk === null) {
-                if (data.id_evaluacion_cc_fk.detalle !== "") {
-                    let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
-                    data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
-                } else {
-                    data.id_evaluacion_cc_fk = null
-                }
-
+            if (data.id_evaluacion_cc_fk.id_documento_evualuacion_fk === null){
+                    if(data.id_evaluacion_cc_fk.detalle !== ""){
+                        let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+                        data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+                    }else{
+                        data.id_evaluacion_cc_fk = null
+                    }
+                   
             } else {
 
-                if (data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento instanceof File) {
+                    if(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento instanceof File ){
 
-                    let responseDocEvaluacion = await API.agregarDocumentoInforme(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk)
-                    data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = responseDocEvaluacion.data.id_documento
-                    if (data.id_evaluacion_cc_fk.detalle === "") {
-                        delete data.id_evaluacion_cc_fk.detalle
+                        let responseDocEvaluacion = await API.agregarDocumentoInforme(data.id_evaluacion_cc_fk.id_documento_evualuacion_fk)
+                        data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = responseDocEvaluacion.data.id_documento
+                        if(data.id_evaluacion_cc_fk.detalle === ""){
+                            delete data.id_evaluacion_cc_fk.detalle
+                        }
+                        let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
+                        data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
+
+                        //
+                    }else{
+                        data.id_evaluacion_cc_fk.id_documento_evualuacion_fk =  data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.id_documento
+
+                        await API.editarEvaluacionCC(data.id_evaluacion_cc_fk.id_evaluacion_cc, data.id_evaluacion_cc_fk)
+                        data.id_evaluacion_cc_fk = data.id_evaluacion_cc_fk.id_evaluacion_cc  
                     }
-                    let responseEvaluacion = await API.agregarEvaluacionCC(data.id_evaluacion_cc_fk)
-                    data.id_evaluacion_cc_fk = responseEvaluacion.data.id_evaluacion_cc
-
-                    //
-                } else {
-                    data.id_evaluacion_cc_fk.id_documento_evualuacion_fk = data.id_evaluacion_cc_fk.id_documento_evualuacion_fk.id_documento
-
-                    await API.editarEvaluacionCC(data.id_evaluacion_cc_fk.id_evaluacion_cc, data.id_evaluacion_cc_fk)
-                    data.id_evaluacion_cc_fk = data.id_evaluacion_cc_fk.id_evaluacion_cc
-                }
 
 
 
 
             }
-
+     
             data.id_documento_informe_fk = responseDocumento.data.id_documento;
 
             data.id_informe_fk = informeID
             await API.editarVersionInforme(versionInforme.id_version_informe, data)
-
+            
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Versión informe editada correctamente")
-        } catch (error) {
+        }catch(error){
         }
     }
 
     async function deleteVersionInforme(id_version_informe) {
-        try {
+        try{
             await API.eliminarVersionInforme(id_version_informe)
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Versión informe borrada correctamente")
-        } catch (error) {
+        }catch(error){
         }
     }
 

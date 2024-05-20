@@ -37,7 +37,7 @@ class DocumentoSerializer(serializers.ModelSerializer):
 
 class EvaluacionCCSerializer(serializers.ModelSerializer):
     id_documento_evualuacion_fk = serializers.PrimaryKeyRelatedField(queryset=Documento.objects.all(), required=False, allow_null=True)
-
+    detalle = serializers.CharField(allow_blank=True, required=False)
     class Meta:
         model = EvaluacionCC
         fields = '__all__'
