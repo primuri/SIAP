@@ -7,7 +7,7 @@ import { Search } from "../../utils/Search"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { Back } from "../../utils/Back"
 import { toast, Toaster } from 'react-hot-toast'
-import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda, eliminarActa, eliminarDocumento} from "../../api/gestionOrganosColegiados"
+import { obtenerSesiones, obtenerNumeroAcuerdos, agregarSesion, editarSesion, agregarDocumento, addActa, addConvocatoria, addAgenda, editarDocumento, editarAgenda, eliminarActa, eliminarDocumento } from "../../api/gestionOrganosColegiados"
 import { obtenerOrganosColegiados, agregarOrganoColegiado, editarOrganoColegiado, eliminarOrganoColegiado } from "../../api/gestionOrganosColegiados"
 import { agregarIntegrante, obtenerIntegrantes, eliminarIntegrante, editarIntegrante, agregarVigencia, editarVigencia, eliminarVigencia, agregarOficio, editarOficio, eliminarOficio } from "../../api/gestionIntegranteOrganoColegiado"
 import { OrganosColegiadosForm } from "../../components/GestionOrganosColegiados/OrganosColegiadosForm"
@@ -54,11 +54,11 @@ export const GestionOrganosColegiados = () => {
             'Quorum',
             'Acuerdo firme',
             { 'tableName': 'Integrantes', 'colNames': ['Integrante', 'Inicio', 'Puesto', 'Número oficio', 'Normativa reguladora'] },
-            { 'tableName': 'Sesiones', 'colNames': ['Fecha', 'Medio','Detalle acta', 'Cantidad acuerdos'] }
+            { 'tableName': 'Sesiones', 'colNames': ['Fecha', 'Medio', 'Detalle acta', 'Cantidad acuerdos'] }
         ]
 
         JsonForReport.reportData = OrganosColegiados
-        
+
         await configureReportData()
         setJsonIsReady(true)
     }
@@ -66,23 +66,23 @@ export const GestionOrganosColegiados = () => {
     function formatDate(dateString) {
         if (!dateString) return "";
         return new Date(dateString).toISOString().split('T')[0];
-      }
+    }
 
-      function formatearFecha(sesiones) {
+    function formatearFecha(sesiones) {
         return sesiones.map(sesion => {
             const fechaISO = sesion.fecha;
             if (!fechaISO) {
-                return { ...sesion, fecha: "" }; 
+                return { ...sesion, fecha: "" };
             }
             const dateObj = new Date(fechaISO);
-            
+
             const fechaFormateada = dateObj.toLocaleDateString('en-CA', { timeZone: 'UTC' });
             return { ...sesion, fecha: fechaFormateada };
         });
     }
 
     const configureReportData = async () => {
-        
+
         if (JsonForReport.reportData.length > 0) {
             try {
                 const promises = OrganosColegiados.map(async (organo) => {
@@ -114,10 +114,9 @@ export const GestionOrganosColegiados = () => {
 
                 return true
             } catch (error) {
-                console.log(error)
                 return false
             }
-        }else{
+        } else {
             return false
         }
 

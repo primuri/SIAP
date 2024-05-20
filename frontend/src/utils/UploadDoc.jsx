@@ -23,11 +23,11 @@ const UploadDoc = ({ mode, handleFileChange, formData, icono2 }) => {
                 Agregar documento
                 <br />
                 <label htmlFor="documento" style={{ cursor: 'pointer' }}>
-                  <input type="file" className="form-control" name="documento" id="documento" onChange={updateSelectedFileName} style={{ display: 'none' }} />
+                  <input type="file" className="form-control" name="documento" id="documento" onChange={updateSelectedFileName}  />
                   {selectedFileName ? (
                     <span>Nombre del archivo: {selectedFileName}</span>
                   ) : (
-                    <img src={icono2} alt="Seleccionar archivo" style={{ width: '50px', height: '50px', marginLeft: '100px' }} />
+                    ""
                   )}
                 </label>
               </>
@@ -43,6 +43,7 @@ const UploadDoc = ({ mode, handleFileChange, formData, icono2 }) => {
           </label>
           {formData.documento && (
             <>
+              <input type="file" className="form-control" name="documento" id="documento" onChange={updateSelectedFileName} />
               <a href={formData.documento} target="_blank" rel="noopener noreferrer" className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2">
                 {formData.documento.split('/').pop()}
               </a>

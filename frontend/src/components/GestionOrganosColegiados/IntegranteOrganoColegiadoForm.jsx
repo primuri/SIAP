@@ -10,7 +10,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [oficioData, setOficioData] = useState(null);
-    const [addClick, setAddClick] = useState(false) 
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [selectedFileName, setSelectedFileName] = useState('');
 
@@ -21,16 +21,16 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
         inicio_funciones: integrante ? integrante.inicio_funciones.split('T')[0] : "",
         nombre_integrante: integrante ? integrante.nombre_integrante : "",
         id_organo_colegiado_fk: integrante ? integrante.id_organo_colegiado_fk : {
-            id_organo_colegiado : integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
-            nombre : integrante ? integrante.id_organo_colegiado_fk.nombre : "",
-            numero_miembros : integrante ? integrante.id_organo_colegiado_fk.numero_miembros : "",
-            quorum : integrante ? integrante.id_organo_colegiado_fk.quorum : "",
-            acuerdo_firme : integrante ? integrante.id_organo_colegiado_fk.acuerdo_firme : "",
+            id_organo_colegiado: integrante ? integrante.id_organo_colegiado_fk.id_organo_colegiado : id_organo,
+            nombre: integrante ? integrante.id_organo_colegiado_fk.nombre : "",
+            numero_miembros: integrante ? integrante.id_organo_colegiado_fk.numero_miembros : "",
+            quorum: integrante ? integrante.id_organo_colegiado_fk.quorum : "",
+            acuerdo_firme: integrante ? integrante.id_organo_colegiado_fk.acuerdo_firme : "",
         },
         id_vigencia_fk: integrante ? integrante.id_vigencia_fk : {
-            id_vigencia : integrante ? integrante.id_vigencia_fk.id_vigencia : "",
-            fecha_inicio : integrante ? integrante.id_vigencia_fk.fecha_inicio : "",
-            fecha_fin : integrante ? integrante.id_vigencia_fk.fecha_fin : "",
+            id_vigencia: integrante ? integrante.id_vigencia_fk.id_vigencia : "",
+            fecha_inicio: integrante ? integrante.id_vigencia_fk.fecha_inicio : "",
+            fecha_fin: integrante ? integrante.id_vigencia_fk.fecha_fin : "",
         },
         id_oficio_fk: integrante ? integrante.id_oficio_fk : {
             id_oficio: integrante ? integrante.id_oficio_fk.id_oficio : "",
@@ -47,7 +47,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
 
         const { name, value } = event.target
 
-      
+
 
         const keys = name.split('.');
         let updatedValue = value;
@@ -62,13 +62,13 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
             }
         }
 
-    
+
         if (keys.includes('fecha_inicio') || keys.includes('fecha_fin')) {
             const startDateKey = keys.slice(0, -1).join('.') + '.fecha_inicio';
             const endDateKey = keys.slice(0, -1).join('.') + '.fecha_fin';
             const startDate = keys[keys.length - 1] === 'fecha_inicio' ? new Date(value) : new Date(getValueByPath(formData, startDateKey));
             const endDate = keys[keys.length - 1] === 'fecha_fin' ? new Date(value) : new Date(getValueByPath(formData, endDateKey));
-            
+
             if (startDate > endDate) {
                 return;
             }
@@ -80,7 +80,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
             const lastObj = keys.reduce((obj, key) => obj[key] = obj[key] || {}, obj);
             lastObj[lastKey] = value;
         };
-    
+
         updateFormData(name, updatedValue, formData);
         setFormData({ ...formData });
     };
@@ -90,15 +90,15 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
     }
 
     const handleFileChange = (event) => {
-        const oficio = event.target.files[0];
-        
-        if (file) {
-            setSelectedFileName(file.name);
+        const ruta_archivo = event.target.files[0];
+
+        if (ruta_archivo) {
+            setSelectedFileName(ruta_archivo.name);
         }
-  
-        setOficioData(oficio);
+
+        setOficioData(ruta_archivo);
     }
-    
+
     const sendForm = (event) => {
         event.preventDefault()
         const combinedData = new FormData();
@@ -137,7 +137,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
@@ -182,25 +182,25 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label htmlFor="inicioFunciones" className="label-personalizado mb-2">Inicio de funciones</label>
-                                        <input type="date" className="form-control" name="inicio_funciones" id="inicioFunciones" value={formData.inicio_funciones} onChange={handleChange} required disabled={rol === "invitado"}/>
-                                    </div>
+                                <div className="form-group">
+                                    <label htmlFor="inicioFunciones" className="label-personalizado mb-2">Inicio de funciones</label>
+                                    <input type="date" className="form-control" name="inicio_funciones" id="inicioFunciones" value={formData.inicio_funciones} onChange={handleChange} required disabled={rol === "invitado"} />
+                                </div>
                             </div>
                         </div>
-          
+
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="normativaReguladora" className="label-personalizado mb-2">Normativa reguladora</label>
-                                    <textarea className="form-control" name="normativa_reguladora" id="normativaReguladora"  value={formData.normativa_reguladora} onChange={handleChange} required disabled={rol === "invitado"}/>
+                                    <textarea className="form-control" name="normativa_reguladora" id="normativaReguladora" value={formData.normativa_reguladora} onChange={handleChange} required disabled={rol === "invitado"} />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="puesto" className="label-personalizado mb-2">Puesto</label>
-                                <textarea type="text" className="form-control" name="puesto" id="puesto" value={formData.puesto} onChange={handleChange} required disabled={rol === "invitado"}/>
+                                <textarea type="text" className="form-control" name="puesto" id="puesto" value={formData.puesto} onChange={handleChange} required disabled={rol === "invitado"} />
                             </div>
-                        </div>   
+                        </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
@@ -209,7 +209,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                     id="id_vigencia_fk.fecha_inicio"
                                     value={formData.id_vigencia_fk.fecha_inicio
                                         ? new Date(formData.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} disabled={rol === "invitado"}/>
+                                    onChange={handleChange} disabled={rol === "invitado"} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_vigencia_fk.fecha_fin" className="label-personalizado mb-2">Finalización de vigencia </label> <span className="disabled-input">(Opcional)</span>
@@ -218,14 +218,14 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                     id="id_vigencia_fk.fecha_fin"
                                     value={formData.id_vigencia_fk.fecha_fin
                                         ? new Date(formData.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} disabled={rol === "invitado"}/>
+                                    onChange={handleChange} disabled={rol === "invitado"} />
                             </div>
                         </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.detalle" className="label-personalizado mb-2">Número de oficio  </label>
-                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} disabled={rol === "invitado"} required/>
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="id_oficio_fk.detalle" value={formData.id_oficio_fk.detalle} onChange={handleChange} disabled={rol === "invitado"} required />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_oficio_fk.ruta_archivo" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -237,7 +237,6 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                     name="id_oficio_fk.ruta_archivo"
                                     id="id_oficio_fk.ruta_archivo"
                                     onChange={handleFileChange}
-                                    style={{ display: 'none' }}
                                     disabled={rol === "invitado"}
                                     required={mode == 1 ? true : false}
                                 />
@@ -245,9 +244,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                     {selectedFileName ? (
                                         <span>Nombre del archivo: {selectedFileName}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ""
                                     )}
                                 </label>
                                 {mode == 2 && formData.id_oficio_fk.ruta_archivo && (
@@ -263,10 +260,10 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                     </Tooltip>
                                 )}
                             </div>
-                        </div>             
+                        </div>
                     </div>
                 </div>
-                {rol === "administrador" && (                
+                {rol === "administrador" && (
                     <div className="modal-footer justify-content-center position-sticky bottom-0">
                         <div className="row">
                             <div className="col">
@@ -288,7 +285,7 @@ export const IntegranteOrganoColegiadoForm = ({ onSubmit, mode, integrante, id_o
                                 )}
                             </div>
                         </div>
-                    </div>  
+                    </div>
                 )}
             </form>
             <Toaster></Toaster>

@@ -4,28 +4,28 @@ import { Modal } from "../../utils/Modal"
 import { AcademicosForm } from "../../components/GestionPersonas/GestionAcademicos/AcademicosForm"
 import { Table } from "../../utils/Table"
 import { Search } from "../../utils/Search"
-import {toast, Toaster} from 'react-hot-toast'
-import { obtenerAcademicos,agregarAcademico,editarAcademico,eliminarAcademico, agregarTitulos, agregarTelefonos,  actualizarTelefonos, actualizarTitulos, obtenerUniversidad,obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre} from "../../api/gestionAcademicos"
-import {editarNombre,editarArea,editarUniversidad} from "../../api/utils/usuariosUtils"
+import { toast, Toaster } from 'react-hot-toast'
+import { obtenerAcademicos, agregarAcademico, editarAcademico, eliminarAcademico, agregarTitulos, agregarTelefonos, actualizarTelefonos, actualizarTitulos, obtenerUniversidad, obtenerUniversidadCompleta, buscarUniversidad, eliminarArea, eliminarNombre } from "../../api/gestionAcademicos"
+import { editarNombre, editarArea, editarUniversidad } from "../../api/utils/usuariosUtils"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionAcademicos = () => {
-    let {id_academico} = useParams()
+    let { id_academico } = useParams()
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'))
     const [reload, setReload] = useState(false)
-    const [academicos, setAcademicos] = useState([])  
-    const [cargado, setCargado] = useState(false)                  
-    const [data, setData] = useState([])                              
-    const [academico, setAcademico] = useState(null)                   
-    const [addClick, setAddClick] = useState(false) 
+    const [academicos, setAcademicos] = useState([])
+    const [cargado, setCargado] = useState(false)
+    const [data, setData] = useState([])
+    const [academico, setAcademico] = useState(null)
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
-    const [error, setError] = useState(false)                           
-    const columns = ['Cédula', 'Nombre','Correo','Universidad']
-    const dataKeys = ['cedula','id_nombre_completo_fk.nombre','correo', 'universidad_fk.nombre']
+    const [error, setError] = useState(false)
+    const columns = ['Cédula', 'Nombre', 'Correo', 'Universidad']
+    const dataKeys = ['cedula', 'id_nombre_completo_fk.nombre', 'correo', 'universidad_fk.nombre']
 
-    user.groups[0] !== "administrador" ? setError(true) : null         
+    user.groups[0] !== "administrador" ? setError(true) : null
     useEffect(() => { loadAcademicos() }, [reload])
 
     async function loadAcademicos() {
@@ -37,36 +37,36 @@ export const GestionAcademicos = () => {
         } catch (error) {
             toast.error('Error al cargar los datos de investigadores', {
                 duration: 4000,
-                position: 'bottom-right', 
+                position: 'bottom-right',
                 style: {
-                  background: '#670000',
-                  color: '#fff',
+                    background: '#670000',
+                    color: '#fff',
                 },
-              })
+            })
         }
     }
 
-    useEffect(()=>{
-        if(id_academico && data.length > 0){
+    useEffect(() => {
+        if (id_academico && data.length > 0) {
             const idNum = parseInt(id_academico, 10);
             const elemento = data.find(e => e.id_academico === idNum);
-            if(elemento){
+            if (elemento) {
                 setAcademico(elemento)
                 setEdit(true)
                 setAddClick(false)
-            }else{
+            } else {
                 navigate('/gestion-investigadores')
             }
         }
-    },[data,id_academico])
+    }, [data, id_academico])
 
     const success = () => {
         window.location.href = '/gestion-investigadores'
     }
 
-    const addAcademico = async (formData) => {       
+    const addAcademico = async (formData) => {
         try {
-            
+
             const Datos = JSON.parse(formData.get('json'))
             var toastId = toast.loading('Agregando...', {
                 position: 'bottom-right',
@@ -81,12 +81,12 @@ export const GestionAcademicos = () => {
             let pais = Datos.universidad_fk.pais;
 
             let responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
-            
+
             var id_univ = {};
 
-            if(responseUniversidad !== undefined){
-               id_univ  = responseUniversidad.id_universidad;
-            }else{
+            if (responseUniversidad !== undefined) {
+                id_univ = responseUniversidad.id_universidad;
+            } else {
                 id_univ = await obtenerUniversidadCompleta(Datos.universidad_fk, localStorage.getItem("token"));
                 id_univ = id_univ.id_universidad;
             }
@@ -98,13 +98,13 @@ export const GestionAcademicos = () => {
             await agregarAcademico(formData, localStorage.getItem("token"))
             toast.success('Investigador agregado correctamente', {
                 id: toastId,
-                duration: 1000, 
-                position: 'bottom-right', 
+                duration: 1000,
+                position: 'bottom-right',
                 style: {
-                  background: 'var(--celeste-ucr)',
-                  color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
-              })
+            })
             setAddClick(false)
             document.body.classList.remove('modal-open');
             setReload(!reload)
@@ -115,7 +115,7 @@ export const GestionAcademicos = () => {
         }
     }
 
-    const editAcademico = async (formData) => {       
+    const editAcademico = async (formData) => {
         try {
             const Datos = JSON.parse(formData.get('json'))
             var toastId = toast.loading('Editando...', {
@@ -128,32 +128,32 @@ export const GestionAcademicos = () => {
             });
             formData.delete('json')
             const id_nom = Datos.id_nombre_completo_fk.id_nombre_completo
-            await editarNombre(id_nom,Datos.id_nombre_completo_fk, localStorage.getItem("token"))
+            await editarNombre(id_nom, Datos.id_nombre_completo_fk, localStorage.getItem("token"))
             const id_nombre_editado = Datos.id_nombre_completo_fk.id_nombre_completo
             delete Datos.id_nombre_completo_fk
             Datos.id_nombre_completo_fk = id_nombre_editado
 
             const id_are = Datos.id_area_especialidad_fk.id_area_especialidad
-            await editarArea(id_are,Datos.id_area_especialidad_fk, localStorage.getItem("token"))
+            await editarArea(id_are, Datos.id_area_especialidad_fk, localStorage.getItem("token"))
             const id_area_editada = Datos.id_area_especialidad_fk.id_area_especialidad
             delete Datos.id_area_especialidad_fk
             Datos.id_area_especialidad_fk = id_area_editada
 
             const id_are_sec = Datos.id_area_especialidad_secundaria_fk.id_area_especialidad
-            await editarArea(id_are_sec,Datos.id_area_especialidad_secundaria_fk, localStorage.getItem("token"))
+            await editarArea(id_are_sec, Datos.id_area_especialidad_secundaria_fk, localStorage.getItem("token"))
             const id_area_editada_sec = Datos.id_area_especialidad_secundaria_fk.id_area_especialidad
             delete Datos.id_area_especialidad_secundaria_fk
             Datos.id_area_especialidad_secundaria_fk = id_area_editada_sec
             let nombre = Datos.universidad_fk.nombre;
             let pais = Datos.universidad_fk.pais;
 
-           const responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
-            
+            const responseUniversidad = await buscarUniversidad(nombre, pais, localStorage.getItem("token"));
+
             var id_univ = {};
 
-            if(responseUniversidad !== undefined){
-               id_univ  = responseUniversidad.id_universidad;
-            }else{
+            if (responseUniversidad !== undefined) {
+                id_univ = responseUniversidad.id_universidad;
+            } else {
                 id_univ = await obtenerUniversidad(Datos.universidad_fk, localStorage.getItem("token"));
             }
 
@@ -164,32 +164,32 @@ export const GestionAcademicos = () => {
             const telefonos = Datos?.telefonos;
             delete academico.titulos;
             delete academico.telefonos;
-            if(titulos) {
-                actualizarTitulos(titulos, academico.id_academico,localStorage.getItem("token"));
+            if (titulos) {
+                actualizarTitulos(titulos, academico.id_academico, localStorage.getItem("token"));
             }
 
-            if(telefonos){
-                actualizarTelefonos(telefonos, academico.id_academico,localStorage.getItem("token"));
+            if (telefonos) {
+                actualizarTelefonos(telefonos, academico.id_academico, localStorage.getItem("token"));
             }
             delete Datos.foto
             delete Datos.telefonos
             delete Datos.titulos
-    
+
             for (const key in Datos) {
                 if (Object.prototype.hasOwnProperty.call(academico, key)) {
-                   formData.append(key, Datos[key]);
+                    formData.append(key, Datos[key]);
                 }
             }
             await editarAcademico(academico.id_academico, formData, localStorage.getItem("token"))
             toast.success('Investigador editado correctamente', {
                 id: toastId,
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                  background: 'var(--celeste-ucr)',
-                  color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
-              })
+            })
             setEdit(false)
             document.body.classList.remove('modal-open');
             setReload(!reload)
@@ -214,16 +214,16 @@ export const GestionAcademicos = () => {
             await eliminarArea(academico.id_area_especialidad_fk.id_area_especialidad, localStorage.getItem('token'))
             await eliminarArea(academico.id_area_especialidad_secundaria_fk.id_area_especialidad, localStorage.getItem('token'))
             await eliminarNombre(academico.id_nombre_completo_fk.id_nombre_completo, localStorage.getItem('token'))
-             
+
             toast.success('Investigador eliminado correctamente', {
                 id: toastId,
-                duration: 4000, 
-                position: 'bottom-right', 
+                duration: 4000,
+                position: 'bottom-right',
                 style: {
-                  background: 'var(--celeste-ucr)',
-                  color: '#fff',
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
                 },
-              })
+            })
             setEdit(false)
             document.body.classList.remove('modal-open');
             setReload(!reload)
@@ -240,7 +240,7 @@ export const GestionAcademicos = () => {
         setEdit(false)
         document.body.classList.remove('modal-open');
         navigate('/gestion-investigadores')
-        
+
     }
 
     const addClicked = () => {
@@ -249,7 +249,7 @@ export const GestionAcademicos = () => {
         document.body.classList.add('modal-open');
     }
 
-    const elementClicked = (selectedAcademico) =>{
+    const elementClicked = (selectedAcademico) => {
         navigate(`/gestion-investigadores/${selectedAcademico.id_academico}`)
     }
 
@@ -259,44 +259,44 @@ export const GestionAcademicos = () => {
 
     const search = (col, filter) => {
         const matches = data.filter((e) => {
-        if (col.includes('.')) {
-            const value = getValueByPath(e, col)
-            return value && value.toString().includes(filter)
-        }
-        return e[col].toString().includes(filter)
+            if (col.includes('.')) {
+                const value = getValueByPath(e, col)
+                return value && value.toString().includes(filter)
+            }
+            return e[col].toString().includes(filter)
         })
         setAcademicos(matches)
     }
 
-    return(
-    <main >
-        {!error ? (
-        <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
-            <div className="d-flex flex-row"><h1>Gestión de investigadores</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
-            <div className="d-flex justify-content-between mt-4">
-                <Add onClick={addClicked}></Add>
-                <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
-            </div>
-            <Table columns={columns} data={academicos} dataKeys={dataKeys} onDoubleClick ={elementClicked}></Table>
-                {addClick && (<Modal ><AcademicosForm onSubmit={addAcademico} onCancel={onCancel} mode={1}></AcademicosForm></Modal>)}
-                { edit && 
-                    (
-                        <Modal>
-                            <AcademicosForm 
-                                mode={2}
-                                onSubmit={editAcademico} 
-                                onCancel={onCancel} 
-                                onDelete={() => deleteAcademicos(academico)}
-                                academico={academico}
-                            >
-                            </AcademicosForm>
-                        </Modal>
-                    )
-                }
-                <Toaster></Toaster>
-        </div>
-        ):(
-            <PermisoDenegado></PermisoDenegado>
-        )}
-    </main>)
+    return (
+        <main >
+            {!error ? (
+                <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
+                    <div className="d-flex flex-row"><h1>Gestión de investigadores</h1>{(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>
+                    <div className="d-flex justify-content-between mt-4">
+                        <Add onClick={addClicked}></Add>
+                        <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
+                    </div>
+                    <Table columns={columns} data={academicos} dataKeys={dataKeys} onDoubleClick={elementClicked}></Table>
+                    {addClick && (<Modal ><AcademicosForm onSubmit={addAcademico} onCancel={onCancel} mode={1}></AcademicosForm></Modal>)}
+                    {edit &&
+                        (
+                            <Modal>
+                                <AcademicosForm
+                                    mode={2}
+                                    onSubmit={editAcademico}
+                                    onCancel={onCancel}
+                                    onDelete={() => deleteAcademicos(academico)}
+                                    academico={academico}
+                                >
+                                </AcademicosForm>
+                            </Modal>
+                        )
+                    }
+                    <Toaster></Toaster>
+                </div>
+            ) : (
+                <PermisoDenegado></PermisoDenegado>
+            )}
+        </main>)
 } 

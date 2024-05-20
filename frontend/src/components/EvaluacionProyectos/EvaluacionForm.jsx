@@ -10,13 +10,13 @@ import { Modal } from "../../utils/Modal"
 import { Table } from "../../utils/Table"
 const filter = createFilterOptions();
 
-export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
+export const EvaluacionForm = ({ onSubmit, onCancel, evaluacion }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [seccion, setSeccion] = useState(0);
 
     const [data, setData] = useState({
         nombreEvaluador: evaluacion ? evaluacion.id_evaluador_fk.id_nombre_completo_fk.nombre : "",
-        apellidoEvaluador: evaluacion ? evaluacion.id_evaluador_fk.id_nombre_completo_fk.apellido: "",
+        apellidoEvaluador: evaluacion ? evaluacion.id_evaluador_fk.id_nombre_completo_fk.apellido : "",
         id: evaluacion ? evaluacion.id_evaluacion : "",
         detalle: evaluacion ? evaluacion.detalle : "",
         nombre: evaluacion ? evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre : "",
@@ -40,7 +40,7 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
+
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData((prev) => ({
@@ -60,7 +60,7 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
 
 
     const sendForm = (event) => {
-        event.preventDefault();    
+        event.preventDefault();
         const allFieldsFilled = Object.values(formData).every(value => value !== "");
         if (allFieldsFilled) {
             const jsonData = JSON.stringify(formData);
@@ -73,7 +73,7 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
                     background: '#670000',
                     color: '#fff',
                 },
-                })
+            })
         }
     };
 
@@ -103,47 +103,47 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
                                 <span aria-hidden="true" className="close-icon">&times;</span>
                             </button>
                         </div>
-                      
+
                         {seccion === 0 && (
-                        <div>
-                            <h2 className="headerForm text-center mt-2 mb-2"> Evaluación del proyecto {data.nombre}</h2>                                 
-                            <div className="form-group">
-                                <p htmlFor="intro" className="label-personalizado m-4 mb-2 mt-4" style={{ fontWeight: 'normal', textAlign: 'justify' }}>
-                                 A continuación, se presenta una lista de indicadores para evaluar la propuesta de investigación asignada a su juicio experto. Después de leer cada uno de ellos, otorgue una calificación del 1 al 5, donde 1 corresponde a Muy insatisfactorio, 3 Satisfactorio y 5 Muy Satisfactorio. A mayor calificación, mayor satisfacción con la calidad y excelencia en el rubro indicado. Debe aportarse, sin excepción, una breve justificación de la calificación asignada a cada rubro. Puede optarse por completar “No aplica” cuando parezca que el indicador no es pertinente para la propuesta evaluada y se deben adicionar las observaciones respectivas, así como los comentarios cualitativos.
-                                </p>
-                                <div className="row mb-4">
-                            <div className="col mt-2 text-center">
-                                <div className="form-check form-check-inline">       
-                                    <label className="form-check-label" for="inlineRadio1">1: Muy insactisfactorio</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <label className="form-check-label" for="inlineRadio3">3: Satisfactorio</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <label className="form-check-label" for="inlineRadio4">5: Muy Satisfactorio</label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <label className="form-check-label" for="inlineRadio4">N/A: No aplica</label>
+                            <div>
+                                <h2 className="headerForm text-center mt-2 mb-2"> Evaluación del proyecto {data.nombre}</h2>
+                                <div className="form-group">
+                                    <p htmlFor="intro" className="label-personalizado m-4 mb-2 mt-4" style={{ fontWeight: 'normal', textAlign: 'justify' }}>
+                                        A continuación, se presenta una lista de indicadores para evaluar la propuesta de investigación asignada a su juicio experto. Después de leer cada uno de ellos, otorgue una calificación del 1 al 5, donde 1 corresponde a Muy insatisfactorio, 3 Satisfactorio y 5 Muy Satisfactorio. A mayor calificación, mayor satisfacción con la calidad y excelencia en el rubro indicado. Debe aportarse, sin excepción, una breve justificación de la calificación asignada a cada rubro. Puede optarse por completar “No aplica” cuando parezca que el indicador no es pertinente para la propuesta evaluada y se deben adicionar las observaciones respectivas, así como los comentarios cualitativos.
+                                    </p>
+                                    <div className="row mb-4">
+                                        <div className="col mt-2 text-center">
+                                            <div className="form-check form-check-inline">
+                                                <label className="form-check-label" for="inlineRadio1">1: Muy insactisfactorio</label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <label className="form-check-label" for="inlineRadio3">3: Satisfactorio</label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <label className="form-check-label" for="inlineRadio4">5: Muy Satisfactorio</label>
+                                            </div>
+                                            <div className="form-check form-check-inline">
+                                                <label className="form-check-label" for="inlineRadio4">N/A: No aplica</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="m-4" >
+                                        Para todos los casos: <br></br>
+                                        a) Brindar el argumento correspondiente para justificar el puntaje asignado <br></br>
+                                        b) Explicitar la oportunidad de mejora: ¿cómo puede mejorar la propuesta en este rubro?
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="m-4" >
-                        Para todos los casos: <br></br>
-                            a) Brindar el argumento correspondiente para justificar el puntaje asignado <br></br>
-                            b) Explicitar la oportunidad de mejora: ¿cómo puede mejorar la propuesta en este rubro?
-                        </div>
+                        )}
                     </div>
                 </div>
-                        )}                  
             </div>
-        </div>
-    </div>
 
-       
-            {seccion === 1 && (    
-                <div>                
-                    <h2 className="headerForm text-center mt-2 mb-2"> Evaluación del proyecto {data.nombre}</h2>   
-                    
+
+            {seccion === 1 && (
+                <div>
+                    <h2 className="headerForm text-center mt-2 mb-2"> Evaluación del proyecto {data.nombre}</h2>
+
                     <form onSubmit={sendForm} className='d-flex flex-column position-relative justify-content-center m-5 mt-4' encType="multipart/form-data">
                         <div className="form-group m-2">
                             <label>1. {formData.pregunta1}</label>
@@ -170,28 +170,28 @@ export const EvaluacionForm = ({onSubmit, onCancel, evaluacion}) => {
                             <textarea className="form-control mt-2" rows="10" required value={formData.respuesta6} onChange={(e) => handleChange({ target: { name: 'respuesta6', value: e.target.value } })}></textarea>
                         </div>
                     </form>
-                </div>        
+                </div>
             )}
-     
+
 
             <div className="modal-footer justify-content-center position-sticky bottom-0">
                 <div className="row">
                     <div className="col">
                         {seccion === 1 && (
-                        <div>
+                            <div>
 
-                            <button onClick={handleVolver} className='table-button border-0 p-2 m-2 rounded text-white' id="boton-personalizado">Volver</button>
-                            <button id="boton-evaluacion" type="button" onClick={handleEvaluarClick} className='table-button border-0 p-2 rounded text-white'>Enviar respuestas</button>
-                            {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEvaluarCancel} accion="Enviar respuestas" objeto="evaluación" />)}    
-                        </div>
-                        
+                                <button onClick={handleVolver} className='table-button border-0 p-2 m-2 rounded text-white' id="boton-personalizado">Volver</button>
+                                <button id="boton-evaluacion" type="button" onClick={handleEvaluarClick} className='table-button border-0 p-2 rounded text-white'>Enviar respuestas</button>
+                                {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEvaluarCancel} accion="Enviar respuestas" objeto="evaluación" />)}
+                            </div>
+
                         )}
                         {seccion === 0 && (<button onClick={handleSiguiente} className='table-button border-0 p-2 m-2 rounded text-white' id="boton-personalizado">Ir a la evaluación ➜</button>)}
-                      
+
                     </div>
                 </div>
             </div>
-            
+
             <Toaster></Toaster>
         </div>
     )

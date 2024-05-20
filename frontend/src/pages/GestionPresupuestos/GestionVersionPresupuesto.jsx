@@ -56,7 +56,6 @@ export const GestionVersionPresupuesto = () => {
 
     async function editVersionPresupuesto(dataForm) {
         try {
-            console.log(dataForm)
             await API.editarVersionesPresupuesto(versionPresupuesto.id_version_presupuesto, localStorage.getItem('token'), dataForm)
             setEditClicked(false)
             setReload(!reload)
@@ -88,7 +87,7 @@ export const GestionVersionPresupuesto = () => {
         if (event.target.tagName.toLowerCase() === 'button') {
             setVersionPresupuesto(selectedVersionPresupuesto);
             navigate(`${location.pathname}/${selectedVersionPresupuesto.id_version_presupuesto}/gestion-partidas`)
-            
+
         } else {
             setVersionPresupuesto(selectedVersionPresupuesto)
             setEditClicked(true)

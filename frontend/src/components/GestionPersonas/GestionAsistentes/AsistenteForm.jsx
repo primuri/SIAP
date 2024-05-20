@@ -52,7 +52,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
     if ((name === "cantidad_horas" || name === "consecutivo") && (value.includes('e') || value.includes('+') || value.includes('-') || !/^[0-9]*$/.test(value))) {
       return;
     }
-    
+
 
     if (name.includes('.')) {
       const keys = name.split('.');
@@ -142,7 +142,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
           <div className="row justify-content-center">
             <div className="col-1 mb-0 text-center">
               <div className="img-space">
-                <img src={icono}/>
+                <img src={icono} />
               </div>
             </div>
             <div className="col-10 mb-0 text-center">
@@ -215,7 +215,7 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
                 <input type="number" className="form-control" name="cantidad_horas" id="cantidad_horas" value={formData.cantidad_horas} onChange={handleChange} min="0" step="1" pattern="^[0-9]+$" required disabled={isInvestigador} />
               </div>
               <div className="col">
-                <label htmlFor="consecutivo" className="label-personalizado mb-2"> Consecutivo </label>
+                <label htmlFor="consecutivo" className="label-personalizado mb-2"> Número P9 </label>
                 <input type="number" className="form-control" name="consecutivo" id="consecutivo" value={formData.consecutivo} onChange={handleChange} min="0" step="1" pattern="^[0-9]+$" required disabled={isInvestigador} />
               </div>
             </div>
@@ -227,66 +227,63 @@ export const AsistenteForm = ({ onSubmit, mode, asistente, onCancel, onDelete })
               </div>
               <div className="col">
                 <label htmlFor="id_documento_inopia_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
-                    Documento del Inopia
-                    <span className="disabled-input">(Opcional)</span>
+                  Documento del Inopia
+                  <span className="disabled-input">(Opcional)</span>
                 </label>
                 <input
-                    type="file"
-                    className={isInvestigador ? "form-control disabled-input" : "form-control"}
-                    name="id_documento_inopia_fk.documento"
-                    id="id_documento_inopia_fk.documento"
-                    onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                    disabled={isInvestigador}
+                  type="file"
+                  className={isInvestigador ? "form-control disabled-input" : "form-control"}
+                  name="id_documento_inopia_fk.documento"
+                  id="id_documento_inopia_fk.documento"
+                  onChange={handleFileChange}
+                  disabled={isInvestigador}
                 />
                 <label htmlFor="id_documento_inopia_fk.documento" style={{ cursor: 'pointer', display: 'block' }}>
-                    {selectedFileName ? (
-                        <span>Nombre del archivo: {selectedFileName}</span>
-                    ) : (
-                        <div className="file-upload-icon-container">
-                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                        </div>
-                    )}
+                  {selectedFileName ? (
+                    <span>Nombre del archivo: {selectedFileName}</span>
+                  ) : (
+                    ""
+                  )}
                 </label>
                 {mode === 2 && formData.id_documento_inopia_fk?.documento && (
-                    <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
-                        <a
-                            href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
-                        >
-                            Descargar documento
-                        </a>
-                    </Tooltip>
+                  <Tooltip title={formData.id_documento_inopia_fk.documento.split('/').pop()} placement="right-start">
+                    <a
+                      href={"http://localhost:8000" + formData.id_documento_inopia_fk.documento}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                    >
+                      Descargar documento
+                    </a>
+                  </Tooltip>
                 )}
               </div>
             </div>
           </div>
         </div>
         {!isInvestigador && (
-        <div className="modal-footer justify-content-center position-sticky bottom-0">
-          <div className="row">
-            <div className="col">
-              {mode === 1 ? (
-                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-              ) : (
-                <>
-                  <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                  {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="asistente" />)}
-                </>
-              )}
-            </div>
-            <div className="col">
-              {mode === 2 && (
-                <>
-                  <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                  {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="asistente" />)}
-                </>
-              )}
+          <div className="modal-footer justify-content-center position-sticky bottom-0">
+            <div className="row">
+              <div className="col">
+                {mode === 1 ? (
+                  <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                ) : (
+                  <>
+                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="asistente" />)}
+                  </>
+                )}
+              </div>
+              <div className="col">
+                {mode === 2 && (
+                  <>
+                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="asistente" />)}
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
         )}
       </form>
       <Toaster></Toaster>

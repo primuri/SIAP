@@ -75,11 +75,11 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-      
+
         if (file) {
-          setSelectedFileName(file.name);
+            setSelectedFileName(file.name);
         }
-      
+
         setFileAccion(file);
     };
 
@@ -112,7 +112,7 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
@@ -136,13 +136,13 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha" className="label-personalizado mb-2">Fecha   </label>
-                                    <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador}/>
+                                    <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha ? new Date(formData.fecha).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="origen" className="label-personalizado mb-2">Origen   </label>
-                                    <input type="text" className="form-control" name="origen" id="origen" value={formData.origen} onChange={handleChange} required disabled={isInvestigador}/>
+                                    <label htmlFor="origen" className="label-personalizado mb-2">Órgano origen   </label>
+                                    <input type="text" className="form-control" name="origen" id="origen" value={formData.origen} onChange={handleChange} required disabled={isInvestigador} />
                                 </div>
                             </div>
                         </div>
@@ -151,7 +151,7 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Destino   </label>
-                                    <input type="text" className="form-control" name="destino" id="destino" value={formData.destino} onChange={handleChange} required disabled={isInvestigador}/>
+                                    <input type="text" className="form-control" name="destino" id="destino" value={formData.destino} onChange={handleChange} required disabled={isInvestigador} />
                                 </div>
                             </div>
                             <div className="col-md-6">
@@ -179,15 +179,12 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                                     onChange={handleFileChange}
                                     required={mode === 1}
                                     disabled={isInvestigador}
-                                    style={{ display: 'none' }} 
                                 />
                                 <label htmlFor="id_documento_accion" style={{ cursor: 'pointer', display: 'block' }}>
                                     {selectedFileName ? (
                                         <span>Nombre del archivo: {selectedFileName}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ""
                                     )}
                                 </label>
                                 {typeof formData.id_documento_accion_fk.documento === 'string' && formData.id_documento_accion_fk.documento !== '' && (
@@ -209,28 +206,28 @@ export const AccionesForm = ({ onSubmit, mode, accion, onCancel, onDelete }) => 
                 </div>
 
                 {!isInvestigador && (
-                <div className="modal-footer justify-content-center position-sticky bottom-0">
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="acción" />)}
-                                </>
-                            )}
-                        </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="acción" />)}
-                                </>
-                            )}
+                    <div className="modal-footer justify-content-center position-sticky bottom-0">
+                        <div className="row">
+                            <div className="col">
+                                {mode === 1 ? (
+                                    <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                ) : (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                        {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="acción" />)}
+                                    </>
+                                )}
+                            </div>
+                            <div className="col">
+                                {mode === 2 && (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                        {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="acción" />)}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
                 )}
             </form>
             <Toaster></Toaster>

@@ -37,8 +37,6 @@ export const GestionPropuestas = () => {
         return grupo === 'investigador';
     });
 
-    //===============================================================================================================================
-
     useEffect(() => {
         setJsonIsReady(false)
         createJsonForReport()
@@ -129,7 +127,6 @@ export const GestionPropuestas = () => {
         setJsonIsReady(await configureReportData())
     }
 
-    // ==============================================================================================================================
 
     const transformedPropuestas = propuestas.map(propuesta => ({
         ...propuesta,
@@ -138,8 +135,7 @@ export const GestionPropuestas = () => {
             fecha_vigencia: formatDate(propuesta.id_codigo_cimpa_fk.fecha_vigencia)
         }
     }));
-
-    // Detecta cambios y realiza la solicitud nuevamente  
+ 
     useEffect(() => {
         async function fetchData() {
             await loadPropuestas();
@@ -442,7 +438,7 @@ export const GestionPropuestas = () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className="d-flex flex-row">
-                        {isInvestigador ?(<h1>Visualizar propuestas</h1>) : (<h1>Gestión de propuestas</h1>)}
+                        {isInvestigador ? (<h1>Visualizar propuestas</h1>) : (<h1>Gestión de propuestas</h1>)}
                         {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                     </div>
                     <div className="d-flex mt-4">

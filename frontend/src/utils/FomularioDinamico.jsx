@@ -26,7 +26,6 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName, m
             valor = '1930';
         }
         if (campo === 'numero_tel') {
-            // Permitir solo números, signo de más (+) y paréntesis ()
             if (/^[0-9+()]*$/.test(valor)) {
                 nuevosItems[index][campo] = valor;
             }
@@ -83,7 +82,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName, m
                                                 onChange={e => handleInputChange(e, index, conf.campo)}
                                                 required={conf.required}
                                                 className="form-control"
-                                                
+
                                             >
                                                 <option value="" disabled>Selecciona una opción</option>
                                                 {conf.opciones.map((opcion, opcionIndex) => (
@@ -99,7 +98,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName, m
                                                 required={conf.required}
                                                 className="form-control"
                                                 min={conf.campo === 'anio' ? '1930' : undefined}
-                                                
+
                                             />
                                         )}
                                     </div>
@@ -110,7 +109,7 @@ export const FormularioDinamico = ({ items, setItems, configuracion, itemName, m
                     </AccordionDetails>
                 </Accordion>
             ))}
-            <button type="button" className={items.length == 0 ? "agregarBtn": "agregarBtnMod"} style={{ width: "6%", backgroundColor: "#005da4", color: "white"}} onClick={agregarItem}>+</button>
+            <button type="button" className={items.length == 0 ? "agregarBtn" : "agregarBtnMod"} style={{ width: "6%", backgroundColor: "#005da4", color: "white" }} onClick={agregarItem}>+</button>
         </>
     );
 };

@@ -49,33 +49,33 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
     const { name, value } = event.target;
 
 
-    
+
     const check = (value) => {
       const regex = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s]*$/;
       return regex.test(value);
-  };
+    };
 
-  const camposAValidar = [
+    const camposAValidar = [
       "id_nombre_completo_fk.nombre",
       "id_nombre_completo_fk.apellido",
       "id_nombre_completo_fk.segundo_apellido",
       "unidad_base",
       "id_area_especialidad_fk.nombre"
-  ];
+    ];
 
-  if (camposAValidar.includes(name)) {
+    if (camposAValidar.includes(name)) {
       if (check(value)) {
-          const [objectName, attributeName] = name.split('.');
-          setFormData(prevFormData => ({
-              ...prevFormData,
-              [objectName]: {
-                  ...prevFormData[objectName],
-                  [attributeName]: value,
-              },
-          }));
+        const [objectName, attributeName] = name.split('.');
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          [objectName]: {
+            ...prevFormData[objectName],
+            [attributeName]: value,
+          },
+        }));
       }
       return;
-  } 
+    }
 
     if (name.includes('.')) {
       const keys = name.split('.');
@@ -93,7 +93,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
       });
     }
   };
-  
+
   function validateEmail(email) {
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regex.test(String(email).toLowerCase());
@@ -105,11 +105,11 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
       toast.error('Por favor, introduce una dirección de correo electrónico con un formato valido válido.', {
         position: 'bottom-right',
         style: {
-            background: 'var(--rojo-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--rojo-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
-    });
+      });
       return;
     }
     const jsonData = JSON.stringify(formData);
@@ -155,7 +155,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
           <div className="row justify-content-center">
             <div className="col-1 mb-0 text-center">
               <div className="img-space">
-                <img src={icono}/>
+                <img src={icono} />
               </div>
             </div>
             <div className="col-10 mb-0 text-center">
@@ -213,7 +213,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
               <div className="col-md-6">
                 <label htmlFor="tipo" className="label-personalizado mb-2">Tipo </label>
                 <select className="form-select seleccion" name="tipo" id="tipo" value={formData.tipo} onChange={handleChange} required>
-                <option value="" disabled selected>Selecciona una opción</option>
+                  <option value="" disabled selected>Selecciona una opción</option>
                   <option value="Interno">Interno</option>
                   <option value="Externo">Externo</option>
                 </select>
@@ -274,7 +274,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                   renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} className="form-control" required/>
+                    <TextField {...params} className="form-control" required />
                   )}
                 />
               </div >
@@ -332,7 +332,7 @@ export const EvaluadoresForm = ({ onSubmit, mode, evaluador, onCancel, onDelete 
                   sx={{ width: 300 }}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} className="form-control" required/>
+                    <TextField {...params} className="form-control" required />
                   )}
                 />
               </div>

@@ -47,7 +47,7 @@ export const EvaluacionListaForm = ({ onCancel, preguntas }) => {
 
                     </>
 
-                ) : (<div className="spinner-border text-info" style={{ marginBottom: '30vh', marginTop: '30vh', marginLeft: '50%', marginRight:'50%', width:'8vh', height:'8vh' }} role="status"></div>)}
+                ) : (<div className="spinner-border text-info" style={{ marginBottom: '30vh', marginTop: '30vh', marginLeft: '50%', marginRight: '50%', width: '8vh', height: '8vh' }} role="status"></div>)}
             </div>
 
 

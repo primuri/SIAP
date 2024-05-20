@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
@@ -30,21 +30,21 @@ export const agregarAcademico = async (formData, token) => {
         const id_area_creada = await manejarErrores(obtenerArea(academico.id_area_especialidad_fk, token));
         delete academico.id_area_especialidad_fk;
         academico.id_area_especialidad_fk = id_area_creada;
-        if(academico.id_area_especialidad_secundaria_fk){
+        if (academico.id_area_especialidad_secundaria_fk) {
             const id_area_sec_creada = await manejarErrores(obtenerArea(academico.id_area_especialidad_secundaria_fk, token));
             delete academico.id_area_especialidad_secundaria_fk;
             academico.id_area_especialidad_secundaria_fk = id_area_sec_creada;
-        }else{
+        } else {
             delete academico.id_area_especialidad_secundaria_fk
         }
-       
+
         delete academico.foto
         for (const key in academico) {
             if (Object.prototype.hasOwnProperty.call(academico, key)) {
                 formData.append(key, academico[key]);
             }
         }
-        
+
         const response_academico = await manejarErrores(SIAPAPI.post('personas/academico/', formData, {
             headers: {
                 'Authorization': `token ${token}`,
@@ -149,8 +149,8 @@ export const agregarTelefonos = (telefonos, id_academico, token) => {
 export const actualizarTitulos = (titulos, academico, token) => {
     try {
         titulos.forEach(async titulo => {
-            if(titulo.institución && titulo.grado && titulo.detalle && titulo.anio){
-                if(titulo.id_titulos){
+            if (titulo.institución && titulo.grado && titulo.detalle && titulo.anio) {
+                if (titulo.id_titulos) {
                     let id_titulos = titulo.id_titulos;
                     let id_academico = titulo.id_academico_fk.id_academico;
                     delete titulo.id_academico_fk;
@@ -162,7 +162,7 @@ export const actualizarTitulos = (titulos, academico, token) => {
                             'Content-Type': 'application/json'
                         }
                     }))
-                }else{
+                } else {
                     titulo.id_academico_fk = academico;
                     await manejarErrores(SIAPAPI.post('personas/titulos/', titulo, {
                         headers: {
@@ -182,8 +182,8 @@ export const actualizarTitulos = (titulos, academico, token) => {
 export const actualizarTelefonos = (telefonos, academico, token) => {
     try {
         telefonos.forEach(async telefono => {
-            if(telefono.numero_tel){
-                if(telefono.id_telefono){
+            if (telefono.numero_tel) {
+                if (telefono.id_telefono) {
                     let id_academico = telefono.id_academico_fk.id_academico;
                     let id_telefono = telefono.id_telefono;
                     delete telefono.id_academico_fk;
@@ -195,7 +195,7 @@ export const actualizarTelefonos = (telefonos, academico, token) => {
                             'Content-Type': 'application/json'
                         }
                     }))
-                }else{
+                } else {
                     telefono.id_academico_fk = academico;
                     await manejarErrores(SIAPAPI.post('personas/telefono/', telefono, {
                         headers: {
@@ -214,19 +214,19 @@ export const actualizarTelefonos = (telefonos, academico, token) => {
 
 export const eliminarTelefonos = (id, token) => {
     return SIAPAPI.delete(`personas/telefono/${id}/`, {
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                }
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
     });
 };
 
 export const eliminarTitulos = (id, token) => {
     return SIAPAPI.delete(`personas/titulos/${id}/`, {
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                }
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
     });
 };
 

@@ -14,7 +14,7 @@ const filter = createFilterOptions();
 export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [addClick, setAddClick] = useState(false) 
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
 
     const user = JSON.parse(localStorage.getItem('user'))
@@ -28,12 +28,12 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
         tipo: informe ? informe.tipo : "",
         fecha_presentacion: informe ? informe.fecha_presentacion : "",
         fecha_debe_presentar: informe ? informe.fecha_debe_presentar : "",
-        id_version_proyecto_fk: informe ? informe.id_version_proyecto_fk.id_version_proyecto: "",
+        id_version_proyecto_fk: informe ? informe.id_version_proyecto_fk.id_version_proyecto : "",
     })
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
+
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData((prev) => ({
@@ -87,12 +87,12 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar informe" : !isInvestigador ? "Editar informe": "Visualizar informe"}
+                                {mode === 1 ? "Agregar informe" : !isInvestigador ? "Editar informe" : "Visualizar informe"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -111,13 +111,13 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="id_informe" className="label-personalizado mb-2">Identificador   </label>
-                                    <input type="text" className="form-control" name="id" id="id" value={mode === 2 ? formData.id: "Auto - generado"} onChange={handleChange} disabled />
+                                    <input type="text" className="form-control" name="id" id="id" value={mode === 2 ? formData.id : "Auto - generado"} onChange={handleChange} disabled />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado   </label>
-                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required  disabled={isInvestigador} >
+                                    <select className="form-select seleccion" name="estado" id="estado" value={formData.estado} onChange={handleChange} required disabled={isInvestigador} >
                                         <option value="" disabled defaultValue={""}>Seleccione un Estado</option>
                                         <option value="En desarrollo">En desarrollo</option>
                                         <option value="En evaluación">En evaluación</option>
@@ -143,7 +143,7 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="fecha_presentacion" className="label-personalizado mb-2">Fecha de presentación   </label>
-                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion"    value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
+                                    <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion" value={formData.fecha_presentacion ? new Date(formData.fecha_presentacion).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
                                 </div>
                             </div>
                         </div>
@@ -153,35 +153,35 @@ export const InformesForm = ({ onSubmit, mode, informe, onCancel, onDelete }) =>
                                 <label htmlFor="fecha_debe_presentar" className="label-personalizado mb-2">Fecha que se debe presentar  </label>
                                 <input type="date" className="form-control" name="fecha_debe_presentar" id="fecha_debe_presentar" value={formData.fecha_debe_presentar ? new Date(formData.fecha_debe_presentar).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
-                        </div>                  
+                        </div>
                     </div>
                 </div>
 
 
-             
+
                 {!isInvestigador && (
-                <div className="modal-footer justify-content-center position-sticky bottom-0">
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="informe" />)}
-                                </>
-                            )}
+                    <div className="modal-footer justify-content-center position-sticky bottom-0">
+                        <div className="row">
+                            <div className="col">
+                                {mode === 1 ? (
+                                    <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                ) : (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                        {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="informe" />)}
+                                    </>
+                                )}
+                            </div>
+                            <div className="col">
+                                {mode === 2 && (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                        {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="informe" />)}
+                                    </>
+                                )}
+                            </div>
                         </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="informe" />)}
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>)}
+                    </div>)}
             </form>
             <Toaster></Toaster>
         </div>

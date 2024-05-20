@@ -11,11 +11,11 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionEvaluadores = () => {
-  let {id_evaluador} = useParams()
+  let { id_evaluador } = useParams()
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
-  const [evaluadores, setEvaluadores] = useState([]) 
+  const [evaluadores, setEvaluadores] = useState([])
   const [data, setData] = useState([])
   const [evaluador, setEvaluador] = useState(null)
   const [cargado, setCargado] = useState(false)
@@ -24,7 +24,7 @@ export const GestionEvaluadores = () => {
   const [edit, setEdit] = useState(false)
   const columns = ['Nombre', 'Correo', 'Tipo', 'Universidad']
   const dataKeys = ['id_nombre_completo_fk.nombre', 'correo', 'tipo', 'universidad_fk.nombre']
-  user.groups[0] !== "administrador" ? setError(true) : null 
+  user.groups[0] !== "administrador" ? setError(true) : null
   useEffect(() => { loadEvaluadores() }, [reload])
   async function loadEvaluadores() {
     try {
@@ -45,19 +45,19 @@ export const GestionEvaluadores = () => {
     }
   }
 
-  useEffect(()=>{
-    if(id_evaluador && data.length > 0){
-        const idNum = parseInt(id_evaluador, 10);
-        const elemento = data.find(e => e.id_evaluador === idNum);
-        if(elemento){
-            setEvaluador(elemento)
-            setEdit(true)
-            setAddClick(false)
-        }else{
-            navigate('/gestion-evaluadores')
-        }
+  useEffect(() => {
+    if (id_evaluador && data.length > 0) {
+      const idNum = parseInt(id_evaluador, 10);
+      const elemento = data.find(e => e.id_evaluador === idNum);
+      if (elemento) {
+        setEvaluador(elemento)
+        setEdit(true)
+        setAddClick(false)
+      } else {
+        navigate('/gestion-evaluadores')
+      }
     }
-  },[data,id_evaluador])
+  }, [data, id_evaluador])
 
   const success = () => {
     window.location.href = '/gestion-evaluadores'
@@ -68,11 +68,11 @@ export const GestionEvaluadores = () => {
       var toastId = toast.loading('Agregando...', {
         position: 'bottom-right',
         style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--celeste-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
-    });
+      });
       let nombre = Datos.universidad_fk.nombre;
       let pais = Datos.universidad_fk.pais;
 
@@ -114,11 +114,11 @@ export const GestionEvaluadores = () => {
       var toastId = toast.loading('Editando...', {
         position: 'bottom-right',
         style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--celeste-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
-    });
+      });
       await editarEvaluador(evaluador.id_evaluador, Datos, localStorage.getItem('token'))
       toast.success('Evaluador actualizado correctamente', {
         id: toastId,
@@ -142,11 +142,11 @@ export const GestionEvaluadores = () => {
       var toastId = toast.loading('Eliminando...', {
         position: 'bottom-right',
         style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--celeste-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
-    });
+      });
       await eliminarEvaluador(correo, localStorage.getItem('token'))
       toast.success('Evaluador eliminado correctamente', {
         id: toastId,

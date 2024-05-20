@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import React from 'react';
 import * as XLSX from 'xlsx';
-import reporte from '../assets/reporte.png'
+import reporte from '../assets/upload_doc.svg'
 import { ReportHeader } from "../components/Layout/ReportHeader";
 import { usePDF } from 'react-to-pdf';
 import { ReportePDF } from "./ReportePDF";
@@ -92,18 +92,15 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
 
         const ws = XLSX.utils.json_to_sheet(flattenData);
 
-        // Calcular el ancho de cada columna
         const columnWidths = Object.keys(flattenData[0]).map(columnName => {
-            const columnData = flattenData.map(item => item[columnName] || ''); // Manejar datos nulos
+            const columnData = flattenData.map(item => item[columnName] || ''); 
             const dataMaxLength = Math.max(...columnData.map(value => String(value).length));
-            const nameLength = columnName.length; // Longitud del nombre de columna
-            return { wch: Math.max(dataMaxLength, nameLength) + 2 }; // Ajuste adicional de ancho
+            const nameLength = columnName.length;
+            return { wch: Math.max(dataMaxLength, nameLength) + 2 }; 
         });
 
-        // Aplicar los anchos de columna al libro de trabajo
         ws['!cols'] = columnWidths;
 
-        // Crear libro de trabajo y guardar archivo
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
         XLSX.writeFile(wb, `Reporte de ${fileName}.xlsx`);
@@ -116,7 +113,8 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
         <div style={{ marginRight: '1vw' }}>
             <div class="mi-boton-wrapper">
                 <button type="button" className="boton-reporte" onClick={handleButtonClick}>
-                    <span className='icono'><img width={"30px"} src={reporte} /></span>
+                    <p>Generar reporte</p>
+                    <span className='icono'><img width={"35px"} src={reporte} /></span>
                     <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
                         <option>PDF</option>
                         <option>EXCEL</option>

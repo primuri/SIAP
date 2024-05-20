@@ -18,7 +18,7 @@ const columns = ['Numeros de Telefono']
 const dataKeys = ['numero_tel']
 
 const columns2 = ['Institucion', 'Año', 'Grado', 'Detalle']
-const dataKeys2 = ['institución', 'anio','grado', 'detalle']
+const dataKeys2 = ['institución', 'anio', 'grado', 'detalle']
 
 const configuracionTitulos = [
     { campo: 'anio', placeholder: 'Año', tipo: 'number', required: true },
@@ -28,7 +28,7 @@ const configuracionTitulos = [
 ]
 
 const configuracionTelefonos = [
-    { campo: 'numero_tel', placeholder: 'Número', tipo: 'tel', required: true},
+    { campo: 'numero_tel', placeholder: 'Número', tipo: 'tel', required: true },
 ]
 export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }) => {
     const [titulos, setTitulos] = useState([])
@@ -38,7 +38,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [paisSeleccionado, setPaisSeleccionado] = useState(academico ? academico.pais_procedencia : "");
     const [fotoData, setFotoData] = useState(null);
-    const [addClick, setAddClick] = useState(false) 
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [propuestas, setPropuestas] = useState([]);
     const [togglePropuestas, setTogglePropuestas] = useState(false);
@@ -65,11 +65,11 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             loadTelefonos()
         }
         loadUniversidades()
-        if(mode === 2){
+        if (mode === 2) {
             loadPropuestas()
         }
-        
-    }, [academico]) 
+
+    }, [academico])
 
     const loadPropuestas = async () => {
         try {
@@ -81,10 +81,10 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     if (colaboradorPrincipal && colaboradorPrincipal.id_academico_fk.cedula === academico.cedula) {
                         const resultado = prop.nombre;
                         resultados.push(resultado);
-                       
+
                     }
-                  });
-               
+                });
+
             }
             setPropuestas(resultados);
         } catch (error) {
@@ -160,7 +160,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
+
         const check = (value) => {
             const regex = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s]*$/;
             return regex.test(value) || value === "";
@@ -177,7 +177,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
             "id_nombre_completo_fk.segundo_apellido",
             "id_area_especialidad_fk.nombre"
         ];
-    
+
         if (camposAValidar.includes(name)) {
             if (check(value)) {
                 const [objectName, attributeName] = name.split('.');
@@ -193,7 +193,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
         } else if (name === "cedula" && !checkCedula(value)) {
             return;
         }
-    
+
         if (name === "pais_procedencia") {
             setPaisSeleccionado(value);
             setFormData(prevFormData => ({
@@ -201,7 +201,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                 [name]: value,
             }));
         }
-    
+
         if (name.includes('.')) {
             const keys = name.split('.');
             setFormData(prev => ({
@@ -227,21 +227,21 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
     function validateEmail(email) {
         const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(String(email).toLowerCase());
-      }
+    }
 
     const sendForm = (event) => {
         event.preventDefault()
         if (!validateEmail(formData.correo)) {
             toast.error('Por favor, introduce una dirección de correo electrónico con un formato valido válido.', {
-              position: 'bottom-right',
-              style: {
-                  background: 'var(--rojo-ucr)',
-                  color: '#fff',
-                  fontSize: '18px',
-              },
-          });
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--rojo-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             return;
-          }
+        }
         if (titulos.length > 0) {
             formData.titulos = titulos
         }
@@ -289,7 +289,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
 
     const handleToggleClick = () => {
         setTogglePropuestas(!togglePropuestas);
-      };
+    };
 
     return (
         <div>
@@ -298,7 +298,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
@@ -329,7 +329,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="cedula" className="label-personalizado mb-2">Cédula </label>
+                                    <label htmlFor="cedula" className="label-personalizado mb-2">Identificación </label>
                                     <input type="text" className="form-control" name="cedula" id="cedula" value={formData.cedula} onChange={handleChange} required />
                                 </div>
                             </div>
@@ -377,7 +377,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="sitioWeb" className="label-personalizado mb-2" >Página personal </label> <span className="disabled-input">(Opcional)</span>
-                                <textarea  className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
+                                <textarea className="form-control" name="sitio_web" id="sitio_web" value={formData.sitio_web} onChange={handleChange} pattern="^[^\s]+(\.[^\s]+)+$" />
                             </div>
 
                         </div>
@@ -456,7 +456,7 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" required/>
+                                        <TextField {...params} className="form-control" required />
                                     )}
                                 />
                             </div >
@@ -514,8 +514,8 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                                     sx={{ width: 300 }}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" required/>
-                                        
+                                        <TextField {...params} className="form-control" required />
+
                                     )}
                                 />
                             </div>
@@ -547,35 +547,35 @@ export const AcademicosForm = ({ onSubmit, mode, academico, onCancel, onDelete }
                             </div>
                         </div>
                         <hr></hr>
-              
+
                         <div className="d-flex flex-column">
-                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label>
-                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos}  itemName="Título"/>
+                            <label htmlFor="titulos" className="label-personalizado mb-2 h5">Títulos</label> <span className="disabled-input">(Opcional)</span>
+                            <FormularioDinamico configuracion={configuracionTitulos} items={titulos} setItems={setTitulos} itemName="Título" />
                         </div>
 
                         <div className="d-flex flex-column mt-4">
-                            <label htmlFor="telefonos" className="label-personalizado mb-2 h5">Teléfonos </label>
-                             <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} itemName="Telefono"/>
-                        </div>              
+                            <label htmlFor="telefonos" className="label-personalizado mb-2 h5">Teléfonos </label><span className="disabled-input">(Opcional)</span>
+                            <FormularioDinamico configuracion={configuracionTelefonos} items={telefonos} setItems={setTelefonos} itemName="Telefono" />
+                        </div>
                         {mode === 2 && (
                             <>
-                            <hr></hr>
-                            <div>
-                                {togglePropuestas && propuestas.length > 0 && (
-                                    <div>
-                                        <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
-                                        <ul>
-                                            {propuestas.map((propuesta, index) => (<li key={index}>{propuesta}</li>))}
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="d-flex align-items-center">
-                                <button id="boton-mostrar-propuestas" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
-                                {togglePropuestas ? 'Ocultar Propuestas' : 'Mostrar Propuestas'}
-                                </button>
-                            </div>
-                        </>
+                                <hr></hr>
+                                <div>
+                                    {togglePropuestas && propuestas.length > 0 && (
+                                        <div>
+                                            <label className="label-personalizado mb-2 h4" htmlFor="propuestas">Propuestas Asociadas </label>
+                                            <ul>
+                                                {propuestas.map((propuesta, index) => (<li key={index}>{propuesta}</li>))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="d-flex align-items-center">
+                                    <button id="boton-mostrar-propuestas" type="button" className='table-button border-0 p-2 rounded text-white' onClick={handleToggleClick}>
+                                        {togglePropuestas ? 'Ocultar Propuestas' : 'Mostrar Propuestas'}
+                                    </button>
+                                </div>
+                            </>
                         )}
                     </div>
                 </div>

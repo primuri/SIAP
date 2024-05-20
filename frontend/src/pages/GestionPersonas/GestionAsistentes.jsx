@@ -1,7 +1,7 @@
 import { AsistenteForm } from "../../components/GestionPersonas/GestionAsistentes/AsistenteForm"
 import { agregarAsistente, editarAsistente, obtenerAsistente, eliminarAsistente, eliminarDesignacionAsistente, editarDesignacionAsistente, agregarDesignacionAsistente, obtenerDesignacionAsistente } from "../../api/gestionAsistentes"
 import { editarNombre, obtenerNombre } from "../../api/gestionAcademicos"
-import { agregarDocumentacion,editarDocumentacion, eliminarDocumentacion } from "../../api/gestionProductos"
+import { agregarDocumentacion, editarDocumentacion, eliminarDocumentacion } from "../../api/gestionProductos"
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react"
 import { Add } from "../../utils/Add"
@@ -14,33 +14,33 @@ import { toast, Toaster } from 'react-hot-toast'
 import { obtenerVersionProyectos } from '../../api/gestionProyectos';
 export const GestionAsistentes = () => {
     let { proyectoID } = useParams();
-                                                               
-    const user = JSON.parse(localStorage.getItem('user'))                     
+
+    const user = JSON.parse(localStorage.getItem('user'))
     const location = useLocation()
     const navigate = useNavigate()
-    const [reload, setReload] = useState(false)                                  
-    const [asistentes, setAsistentes] = useState([])                                
-    const [cargado, setCargado] = useState(false)                               
-    const [data, setData] = useState([])                                                           
-    const [asistente, setAsistente] = useState(null)                             
-    const [addClick, setAddClick] = useState(false)                           
-    const [edit, setEdit] = useState(false)                                     
+    const [reload, setReload] = useState(false)
+    const [asistentes, setAsistentes] = useState([])
+    const [cargado, setCargado] = useState(false)
+    const [data, setData] = useState([])
+    const [asistente, setAsistente] = useState(null)
+    const [addClick, setAddClick] = useState(false)
+    const [edit, setEdit] = useState(false)
     const [error, setError] = useState(false)
     const [numVersion, setNumVersion] = useState(null)
-    const [id_proyecto, setIdProyecto] = useState(null)                    
+    const [id_proyecto, setIdProyecto] = useState(null)
     const columns = ['Cedula', 'Nombre', 'Carrera', 'Ponderado', 'Condicion de Estudiante']
     const dataKeys = ['id_asistente_carnet_fk.cedula', 'id_asistente_carnet_fk.id_nombre_completo_fk.nombre', 'id_asistente_carnet_fk.carrera', 'id_asistente_carnet_fk.promedio_ponderado', 'id_asistente_carnet_fk.condicion_estudiante']
 
     const isInvestigador = user.groups.some((grupo) => {
         return grupo === 'investigador';
-      });
+    });
 
-    useEffect(() => {                                                          
+    useEffect(() => {
         async function fetchData() {
-            
+
             const id_version_proyecto = await loadAsistenteById(proyectoID);
 
-            setIdProyecto(id_version_proyecto[2]);
+            setIdProyecto(id_version_proyecto[0]);
             setNumVersion(id_version_proyecto[1]);
             setCargado(true);
 
@@ -48,110 +48,109 @@ export const GestionAsistentes = () => {
         fetchData();
     }, [reload]);
 
-    async function loadAsistentes( numVersion) {
+    async function loadAsistentes(idVersion) {
         try {
-          const response = await obtenerDesignacionAsistente(localStorage.getItem('token'));
-          response.data.filter(item => {
-            // Verificar si el item tiene la propiedad id_version_proyecto_fk
-            if (item.id_version_proyecto_fk && item.id_version_proyecto_fk.id_version_proyecto !== undefined) {
-              // Asegurarse de que proyectoID y id_version_proyecto sean del mismo tipo
-              return item.id_version_proyecto_fk.id_version_proyecto === proyectoID;
-            }
-            return false;
-          });
-          setData(response.data);                                                                     
-          setAsistentes(response.data);                                                               
-          setCargado(true);                                                                          
-      } catch (error) {
-          console.error("Error al cargar asistentes:", error);
-          toast.error('Error al cargar los datos de asistentes', {
-              duration: 4000,
-              position: 'bottom-right',
-              style: {
-                  background: '#670000',
-                  color: '#fff',
-              },
-          });
-      }
-  }
-    
-
-  const addAsistente = async (formData) => {
-    try {
-        var toastId = toast.loading('Agregando...', {
-            position: 'bottom-right',
-            style: {
-                background: 'var(--celeste-ucr)',
-                color: '#fff',
-                fontSize: '18px',
-            },
-        });
-
-        let id_documento_creada = ""
-        const documentoFile = formData.get('id_documento_inopia_fk');
-        formData.delete('id_documento_inopia_fk');
-    
-
-        const Datos = JSON.parse(formData.get('json'));
-        formData.delete('json');
-
-        if (documentoFile) {
-            const DocumentoData = new FormData();
-            DocumentoData.append('documento', documentoFile);
-            DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
-            DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
-
-            id_documento_creada = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
-            formData.delete('json')
-            delete Datos.id_documento_inopia_fk;
+            const response = await obtenerDesignacionAsistente(localStorage.getItem('token'));
+            var datafiltered = response.data.filter(item => {
+                if (item.id_version_proyecto_fk && item.id_version_proyecto_fk.id_version_proyecto !== undefined) {
+                    var accept = item.id_version_proyecto_fk.id_version_proyecto === idVersion;
+                    return accept
+                }
+                return false;
+            });
+            setData(datafiltered);
+            setAsistentes(datafiltered);
+            setCargado(true);
+        } catch (error) {
+            console.error("Error al cargar asistentes:", error);
+            toast.error('Error al cargar los datos de asistentes', {
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: '#670000',
+                    color: '#fff',
+                },
+            });
         }
-
-        delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
-        const nombre_asistente = Datos.id_asistente_carnet_fk.id_nombre_completo_fk;
-        const id_nombre_creado = await obtenerNombre(nombre_asistente, localStorage.getItem('token'))
-        Datos.id_asistente_carnet_fk.id_nombre_completo_fk = id_nombre_creado;
-        
-
-        delete Datos.id_asistente_carnet_fk.id_asistente_carnet;
-        const id_asistente_creado = await agregarAsistente(Datos.id_asistente_carnet_fk, localStorage.getItem('token'))
-        delete  Datos.id_asistente_carnet_fk;
-        let designacion_asistente;
-        if(id_documento_creada === ""){
-            designacion_asistente = {  
-                id_version_proyecto_fk: proyectoID,              
-                id_asistente_carnet_fk : id_asistente_creado,
-                cantidad_horas : Datos.cantidad_horas,
-                consecutivo : Datos.consecutivo
-            }
-        } else {
-            designacion_asistente = {  
-                id_version_proyecto_fk: proyectoID,              
-                id_asistente_carnet_fk : id_asistente_creado,
-                id_documento_inopia_fk : id_documento_creada,
-                cantidad_horas : Datos.cantidad_horas,
-                consecutivo : Datos.consecutivo
-            }
-        }
-        await agregarDesignacionAsistente(designacion_asistente, localStorage.getItem('token'));
-
-
-        toast.success('Asistente agregado correctamente', {
-        id: toastId,
-        duration: 4000,
-        position: 'bottom-right',
-        style: {
-          background: 'var(--celeste-ucr)',
-          color: '#fff',
-        },
-      })
-      setAddClick(false)
-      setReload(!reload)
-    } catch (error) {
-      console.error(error);
-      toast.dismiss(toastId)
     }
 
-  }
+
+    const addAsistente = async (formData) => {
+        try {
+            var toastId = toast.loading('Agregando...', {
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
+
+            let id_documento_creada = ""
+            const documentoFile = formData.get('id_documento_inopia_fk');
+            formData.delete('id_documento_inopia_fk');
+
+
+            const Datos = JSON.parse(formData.get('json'));
+            formData.delete('json');
+
+            if (documentoFile) {
+                const DocumentoData = new FormData();
+                DocumentoData.append('documento', documentoFile);
+                DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
+                DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
+
+                id_documento_creada = await agregarDocumentacion(DocumentoData, localStorage.getItem('token'));
+                formData.delete('json')
+                delete Datos.id_documento_inopia_fk;
+            }
+
+            delete Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
+            const nombre_asistente = Datos.id_asistente_carnet_fk.id_nombre_completo_fk;
+            const id_nombre_creado = await obtenerNombre(nombre_asistente, localStorage.getItem('token'))
+            Datos.id_asistente_carnet_fk.id_nombre_completo_fk = id_nombre_creado;
+
+
+            delete Datos.id_asistente_carnet_fk.id_asistente_carnet;
+            const id_asistente_creado = await agregarAsistente(Datos.id_asistente_carnet_fk, localStorage.getItem('token'))
+            delete Datos.id_asistente_carnet_fk;
+            let designacion_asistente;
+            if (id_documento_creada === "") {
+                designacion_asistente = {
+                    id_version_proyecto_fk: proyectoID,
+                    id_asistente_carnet_fk: id_asistente_creado,
+                    cantidad_horas: Datos.cantidad_horas,
+                    consecutivo: Datos.consecutivo
+                }
+            } else {
+                designacion_asistente = {
+                    id_version_proyecto_fk: proyectoID,
+                    id_asistente_carnet_fk: id_asistente_creado,
+                    id_documento_inopia_fk: id_documento_creada,
+                    cantidad_horas: Datos.cantidad_horas,
+                    consecutivo: Datos.consecutivo
+                }
+            }
+            await agregarDesignacionAsistente(designacion_asistente, localStorage.getItem('token'));
+
+
+            toast.success('Asistente agregado correctamente', {
+                id: toastId,
+                duration: 4000,
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--celeste-ucr)',
+                    color: '#fff',
+                },
+            })
+            setAddClick(false)
+            setReload(!reload)
+        } catch (error) {
+            console.error(error);
+            toast.dismiss(toastId)
+        }
+
+    }
     const editAsistente = async (formData) => {
         try {
             let id_docu = -1;
@@ -167,28 +166,28 @@ export const GestionAsistentes = () => {
                 DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
                 DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
                 id_docu = Datos.id_documento_inopia_fk.id_documento;
-                if(id_docu === ""){
-                    id_docu = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+                if (id_docu === "") {
+                    id_docu = await agregarDocumentacion(DocumentoData, localStorage.getItem('token'));
                     await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
-            }else{
-                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
-            }
-           
-            }else{
+                } else {
+                    await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+                }
+
+            } else {
                 const DocumentoData = new FormData();
                 DocumentoData.append('detalle', Datos.id_documento_inopia_fk.detalle);
                 DocumentoData.append('tipo', Datos.id_documento_inopia_fk.tipo);
                 id_docu = Datos.id_documento_inopia_fk.id_documento;
-                if(id_docu === ""){
-                    id_docu = await agregarDocumentacion( DocumentoData, localStorage.getItem('token'));
+                if (id_docu === "") {
+                    id_docu = await agregarDocumentacion(DocumentoData, localStorage.getItem('token'));
                     await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
-            }else{
-                await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
-            }
+                } else {
+                    await editarDocumentacion(id_docu, DocumentoData, localStorage.getItem('token'));
+                }
             }
 
-           
-            
+
+
             const id_nombre_compl = Datos.id_asistente_carnet_fk.id_nombre_completo_fk.id_nombre_completo;
 
             const nombre_completo = {
@@ -217,12 +216,12 @@ export const GestionAsistentes = () => {
             delete Datos.id_asistente_carnet_fk
             Datos.id_asistente_carnet_fk = id_asistente_editado
             let id_doc;
-            if(id_docu === -1){
+            if (id_docu === -1) {
                 id_doc = Datos.id_documento_inopia_fk.id_documento;
-            }else{
+            } else {
                 id_doc = id_docu;
             }
-           
+
             delete Datos.id_documento_inopia_fk.id_documento;
 
             Datos.id_documento_inopia_fk = id_doc
@@ -239,8 +238,8 @@ export const GestionAsistentes = () => {
             }
             await editarDesignacionAsistente(id_designacion, designacion, localStorage.getItem("token"))
 
-            
-            
+
+
 
             toast.success('Asistente editado correctamente', {
                 duration: 4000,
@@ -260,8 +259,8 @@ export const GestionAsistentes = () => {
 
     const deleteAsistente = async (asistente) => {
         try {
-          
-            
+
+
             await eliminarDesignacionAsistente(asistente.id_designacion_asistente, localStorage.getItem('token'))
             await eliminarDocumentacion(asistente.id_documento_inopia_fk.id_documento, localStorage.getItem('token'))
             await eliminarAsistente(asistente.id_asistente_carnet_fk.id_asistente_carnet, localStorage.getItem('token'))
@@ -278,7 +277,7 @@ export const GestionAsistentes = () => {
             setReload(!reload)
             document.body.classList.remove('modal-open');
         } catch (error) {
-            
+
         }
     }
 
@@ -334,40 +333,40 @@ export const GestionAsistentes = () => {
     async function loadAsistenteById(asistenteId) {
         try {
             const versiones = await obtenerVersionProyectos(localStorage.getItem('token'));
-            let idCodigoVi = null;
-            let numVersion = null;
-            let descripcion = null;
+            var idCodigoVi = null;
+            var idVersion = null;
+            var descripcion = null;
 
             for (let version of versiones.data) {
                 if (version.id_version_proyecto == asistenteId) {
                     idCodigoVi = version.id_codigo_vi_fk.id_codigo_vi;
-                    numVersion = version.numero_version;                 
-                    descripcion = version.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion;                
+                    idVersion = version.id_version_proyecto;
+                    descripcion = version.id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion;
                     break;
                 }
             }
 
-            if (idCodigoVi && numVersion && descripcion) {
-              loadAsistentes(numVersion) 
-              return [idCodigoVi, numVersion, descripcion];
+            if (idCodigoVi && idVersion && descripcion) {
+                loadAsistentes(idVersion)
+                return [idCodigoVi, idVersion, descripcion];
             } else {
                 throw new Error('No se encontró una versión de proyecto que coincida con el asistente');
             }
 
         } catch (error) {
-        
+
             return null;
         }
     }
 
-  
+
 
     return (
         <main>
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        {isInvestigador ? (<h1>Visualizar asistentes de la versión {numVersion} de: </h1>): (<h1>Gestión de asistentes de la versión {numVersion} de:</h1>)}
+                        {isInvestigador ? (<h1>Visualizar asistentes de la versión {numVersion} de: </h1>) : (<h1>Gestión de asistentes de la versión {numVersion} de:</h1>)}
 
                         <br></br>
                         <h3>{id_proyecto}</h3>
@@ -375,7 +374,7 @@ export const GestionAsistentes = () => {
 
                     {(!cargado) && (
                         <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>
-                    )}             
+                    )}
 
                     <div className="d-flex justify-content-between mt-4">
                         <div className="col">
@@ -383,7 +382,7 @@ export const GestionAsistentes = () => {
                         </div>
                         <Search colNames={columns.slice(0, -1)} columns={dataKeys.slice(0, -1)} onSearch={search}></Search>
                     </div>
-                    <Table columns={columns} data={asistentes} dataKeys={dataKeys} onDoubleClick ={elementClicked} />
+                    <Table columns={columns} data={asistentes} dataKeys={dataKeys} onDoubleClick={elementClicked} />
                     {addClick && (
                         <Modal><AsistenteForm onSubmit={addAsistente} onCancel={onCancel} mode={1}></AsistenteForm></Modal>
                     )}
@@ -409,5 +408,5 @@ export const GestionAsistentes = () => {
             )}
         </main>
     );
-    
+
 }    

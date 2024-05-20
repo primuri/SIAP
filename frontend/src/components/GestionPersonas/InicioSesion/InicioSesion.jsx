@@ -32,31 +32,31 @@ export const InicioSesion = () => {
       var user = JSON.parse(localStorage.getItem("user"));
       var tipoUsuario = user.groups[0]
 
-      if(tipoUsuario === 'administrador') {
+      if (tipoUsuario === 'administrador') {
         window.location.href = '/inicio-administrador';
       }
-      if(tipoUsuario === 'invitado') {
-        if(user.groups[1]) {
+      if (tipoUsuario === 'invitado') {
+        if (user.groups[1]) {
           window.location.href = '/gestion-organos-colegiados';
         } else {
           window.location.href = '/inicio-invitado';
         }
       }
-      if(tipoUsuario === 'evaluador') {
-        if(user.groups[1]) {
+      if (tipoUsuario === 'evaluador') {
+        if (user.groups[1]) {
           window.location.href = '/inicio-evaluador-investigador';
         } else {
           window.location.href = '/inicio-evaluador';
         }
       }
-      if(tipoUsuario === 'investigador') {
-        if(user.groups[1]) {
+      if (tipoUsuario === 'investigador') {
+        if (user.groups[1]) {
           window.location.href = '/inicio-investigador-evaluador';
         } else {
           window.location.href = '/inicio-investigador';
         }
       }
-      
+
     } catch (error) {
       toast.error('Usuario o contraseña incorrectos', {
         duration: 4000,

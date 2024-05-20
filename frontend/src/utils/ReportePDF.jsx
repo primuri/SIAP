@@ -96,7 +96,7 @@ export const ReportePDF = ({ reportData, reportTitle, colNames, dataKeys, idKey 
                                 <div className="card d-flex flex-column h-100 border-0 container-fluid elemento-reporte" >
                                     <div className="card-body item-padding">
                                         <h6 className="card-title">{colName.tableName}:</h6>
-                                        <TableReport columns={colName.colNames} data={data[index]} dataKeys={dataKeys[index]}/> {/* Las tablas, en reporteData deben ir con numero de la posición en la que están, es decir, por ejemplo: 8: {[tabla]} */}
+                                        <TableReport columns={colName.colNames} data={data[index]} dataKeys={dataKeys[index]}/> 
                                     </div>
                                 </div>
                             </div>

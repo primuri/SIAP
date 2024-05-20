@@ -10,7 +10,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false)
     const [formData, setFormData] = useState(VIFields(versionInforme))
     const [fileOficio, setFileOficio] = useState(null);
-    const [fileInforme, setFileInforme] = useState(null);  
+    const [fileInforme, setFileInforme] = useState(null);
     const [fileEvaluacion, setFileEvaluacion] = useState(null);
     const [selectedFileNameOficio, setSelectedFileNameOficio] = useState('');
     const [selectedFileNameInforme, setSelectedFileNameInforme] = useState('');
@@ -48,16 +48,16 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
             }
         }
 
-            if (name === "fecha_presentacion") {
-                const selectedYear = new Date(value).getFullYear();
-                if (selectedYear < 1980) {
-                    event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
-                    event.target.reportValidity();
-                    return;
-                }else {
-                    event.target.setCustomValidity("");
-                }
+        if (name === "fecha_presentacion") {
+            const selectedYear = new Date(value).getFullYear();
+            if (selectedYear < 1980) {
+                event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
+                event.target.reportValidity();
+                return;
+            } else {
+                event.target.setCustomValidity("");
             }
+        }
 
         const updatedFormData = updateNestedField(formData, name, value);
         setFormData(updatedFormData);
@@ -72,18 +72,18 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
         if (fileInforme) {
             sendingForm.id_documento_informe_fk.documento = fileInforme
         }
-        if (fileEvaluacion){
-           if(sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk === null){
+        if (fileEvaluacion) {
+            if (sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk === null) {
                 sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk = {
                     tipo: "Evaluacion",
                     detalle: "Doc EVCC",
                     documento: null
                 };
-           }
-            sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento = fileEvaluacion 
-           
-            
-           
+            }
+            sendingForm.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento = fileEvaluacion
+
+
+
         }
 
         onSubmit(sendingForm);
@@ -113,7 +113,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
 
     const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
-        
+
 
         if (obj === "oficio") {
             setSelectedFileNameOficio(file.name);
@@ -121,7 +121,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
         } else if (obj === "informe") {
             setSelectedFileNameInforme(file.name);
             setFileInforme(file)
-        } else if (obj === "evaluacion"){
+        } else if (obj === "evaluacion") {
             setSelectedFileNameEvaluacion(file.name);
             setFileEvaluacion(file)
         }
@@ -135,17 +135,17 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="numero_version" className="label-personalizado mb-2"> Número versión   </label>
-                                <input type="number" className="form-control" name="numero_version" id="numero_version" value={formData.numero_version} onChange={handleChange} required disabled={isInvestigador}/>
+                                <input type="number" className="form-control" name="numero_version" id="numero_version" value={formData.numero_version} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                             <div className="col">
                                 <label htmlFor="fecha_presentacion" className="label-personalizado mb-2"> Fecha presentación   </label>
-                                <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion" value={formData.fecha_presentacion} onChange={handleChange} required disabled={isInvestigador}/>
+                                <input type="date" className="form-control" name="fecha_presentacion" id="fecha_presentacion" value={formData.fecha_presentacion} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2"> Detalle oficio   </label>
-                                <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
+                                <textarea className="form-control" name="id_oficio_fk.detalle" id="detalleOficio" value={formData.id_oficio_fk.detalle} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoOficio" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -159,15 +159,12 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                     onChange={(event) => handleFileChange(event, 'oficio')}
                                     required={mode === 1}
                                     disabled={isInvestigador}
-                                    style={{ display: 'none' }} 
                                 />
                                 <label htmlFor="documentoOficio" style={{ cursor: 'pointer', display: 'block' }}>
                                     {selectedFileNameOficio ? (
                                         <span>Nombre del archivo: {selectedFileNameOficio}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ''
                                     )}
                                 </label>
                                 {mode === 2 && formData.id_oficio_fk.ruta_archivo && (
@@ -187,7 +184,7 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleInforme" className="label-personalizado mb-2"> Detalle informe   </label>
-                                <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
+                                <textarea className="form-control" name="id_documento_informe_fk.detalle" id="detalleInforme" value={formData.id_documento_informe_fk.detalle} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                             <div className="col">
                                 <label htmlFor="documentoInforme" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -201,15 +198,12 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                     onChange={(event) => handleFileChange(event, 'informe')}
                                     required={mode === 1}
                                     disabled={isInvestigador}
-                                    style={{ display: 'none' }} 
                                 />
                                 <label htmlFor="documentoInforme" style={{ cursor: 'pointer', display: 'block' }}>
                                     {selectedFileNameInforme ? (
                                         <span>Nombre del archivo: {selectedFileNameInforme}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ''
                                     )}
                                 </label>
                                 {mode === 2 && formData.id_documento_informe_fk.documento && (
@@ -226,48 +220,45 @@ export const VersionInformeForm = ({ onSubmit, onDelete, onCancel, mode, version
                                 )}
                             </div>
                         </div>
-                            <div className="row mb-4">
-                                <div className="col">
-                                    <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="disabled-input">(Opcional)</span>  </label>
-                                    <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange} disabled={isInvestigador}/>
-                                </div>
-                                <div className="col">
-                                    <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2" style={{ display: 'block' }}>
-                                        Documento evaluación CC
-                                        <span className="disabled-input">(Opcional)</span>
-                                    </label>
-                                    <input
-                                        type="file"
-                                        className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}
-                                        name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento"
-                                        id="documentoEvaluacionCC"
-                                        onChange={(event) => handleFileChange(event, 'evaluacion')}
-                                        style={{ display: 'none' }}
-                                        disabled={isInvestigador}
-                                    />
-                                    <label htmlFor="documentoEvaluacionCC" style={{ cursor: 'pointer', display: 'block' }}>
-                                        {selectedFileNameEvaluacion ? (
-                                            <span>Nombre del archivo: {selectedFileNameEvaluacion}</span>
-                                        ) : (
-                                            <div className="file-upload-icon-container">
-                                                <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                            </div>
-                                        )}
-                                    </label>
-                                    {mode === 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk?.documento && (
-                                        <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
-                                            <a
-                                                href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
-                                            >
-                                                Ver documento
-                                            </a>
-                                        </Tooltip>
-                                    )}
-                                </div>
+                        <div className="row mb-4">
+                            <div className="col">
+                                <label htmlFor="detalleEvaluacionCC" className="label-personalizado mb-2"> Detalle evaluación CC <span className="disabled-input">(Opcional)</span>  </label>
+                                <textarea className="form-control" name="id_evaluacion_cc_fk.detalle" id="detalleEvaluacion" value={formData.id_evaluacion_cc_fk.detalle} onChange={handleChange} disabled={isInvestigador} />
                             </div>
+                            <div className="col">
+                                <label htmlFor="documentoEvaluacionCC" className="label-personalizado mb-2" style={{ display: 'block' }}>
+                                    Documento evaluación CC
+                                    <span className="disabled-input">(Opcional)</span>
+                                </label>
+                                <input
+                                    type="file"
+                                    className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}
+                                    name="id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento"
+                                    id="documentoEvaluacionCC"
+                                    onChange={(event) => handleFileChange(event, 'evaluacion')}
+                                    disabled={isInvestigador}
+                                />
+                                <label htmlFor="documentoEvaluacionCC" style={{ cursor: 'pointer', display: 'block' }}>
+                                    {selectedFileNameEvaluacion ? (
+                                        <span>Nombre del archivo: {selectedFileNameEvaluacion}</span>
+                                    ) : (
+                                        ""
+                                    )}
+                                </label>
+                                {mode === 2 && formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk?.documento && (
+                                    <Tooltip title={formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento.split('/').pop()} placement="right-start">
+                                        <a
+                                            href={"http://localhost:8000" + formData.id_evaluacion_cc_fk.id_documento_evualuacion_fk.documento}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-2"
+                                        >
+                                            Ver documento
+                                        </a>
+                                    </Tooltip>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </FormModal>

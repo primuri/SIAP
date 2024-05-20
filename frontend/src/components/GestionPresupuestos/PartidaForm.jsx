@@ -10,74 +10,58 @@ import Tooltip from '@mui/material/Tooltip';
 const filter = createFilterOptions();
 const currentYear = new Date().getFullYear();
 
-export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDelete }) => {
+export const PartidaForm = ({ onSubmit, mode, version, id_version, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [formData, setFormData] = useState({
-        "id_partida": version? version.id_partida : "",
-        "id_version_presupuesto_fk": version? version.id_version_presupuesto_fk.id_version_presupuesto : id_version,
+        "id_partida": version ? version.id_partida : "",
+        "id_version_presupuesto_fk": version ? version.id_version_presupuesto_fk.id_version_presupuesto : id_version,
         "monto": version ? version.monto : "",
-        "saldo": version ? version.saldo : "",
         "detalle": version ? version.detalle : "",
     });
-    
+
     const user = JSON.parse(localStorage.getItem('user'))
     const isInvestigador = user.groups.some((grupo) => {
         return grupo === 'investigador';
     });
-    
-    //Agregado para verificacion de saldo<monto. Mostrar error en el form
-    const [formErrors, setFormErrors] = useState({
-        saldo: '',
-        monto: ''
-    });
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         let updatedValue = value;
-    
+
         // Determinar si el campo es numérico o de texto
-        if (name === 'saldo' || name === 'monto') {
+        if (name === 'monto') {
             const numericValue = parseFloat(value);
-            updatedValue = isNaN(numericValue) ? '' : numericValue; // Si no es numérico, establecer a 0
+            updatedValue = isNaN(numericValue) ? '' : numericValue;
         }
-    
-        // Actualizar el estado del formulario
+
         setFormData(prev => {
             const newFormData = {
                 ...prev,
                 [name]: updatedValue
             };
-            
-            if (name === 'saldo' || name === 'monto') {
+
+            if (name === 'monto') {
                 const numericValue = parseFloat(value);
-                updatedValue = isNaN(numericValue) ? '' : numericValue >= 0 ? numericValue : ''; // Asegura que solo valores no negativos sean considerados
-            }        
-            // Validar después de actualizar, solo para campos numéricos
-            if (name === 'saldo' || name === 'monto') {
-                const saldo = parseFloat(newFormData.saldo || 0);
+                updatedValue = isNaN(numericValue) ? '' : numericValue >= 0 ? numericValue : ''; 
+            }
+            if (name === 'monto') {
+
                 const monto = parseFloat(newFormData.monto || 0);
-    
-                if (saldo > monto) {
-                    setFormErrors(errors => ({
-                        ...errors,
-                        saldo: saldo > monto ? "El saldo no puede ser mayor al monto." : ''
-                    }));
-                    return prev; // Devolver el estado anterior si la validación falla
-                }
+
             }
 
-            // Limpiar errores si todo está correcto
             setFormErrors(errors => ({
                 ...errors,
                 [name]: ''
             }));
-    
-            return newFormData; // Si todo está correcto, actualizamos el estado
+
+            return newFormData; 
         });
     };
-    
-    
+
+
 
     const sendForm = (event) => {
         event.preventDefault()
@@ -117,12 +101,12 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
                             <h2 className="headerForm">
-                                {mode === 1 ? "Agregar partida" :  isInvestigador ? "Visualizar partida" : "Editar partida"}
+                                {mode === 1 ? "Agregar partida" : isInvestigador ? "Visualizar partida" : "Editar partida"}
                             </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
@@ -151,47 +135,42 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version,onCancel, onDe
                             </div>)}
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador} required/>
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador} required />
                             </div>
-                            
+
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0"/>
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0" />
                                 {formErrors.monto && <div style={{ color: 'red' }}>{formErrors.monto}</div>}
                             </div>
-                            <div className="col-md-6">
-                                <label htmlFor="saldo" className="label-personalizado mb-2">Saldo</label>
-                                <input type="number" className="form-control" name="saldo" id="saldo" value={formData.saldo} onChange={handleChange} required disabled={isInvestigador} min="0"  />
-                                {formErrors.saldo && <div style={{ color: 'red' }}>{formErrors.saldo}</div>}
+                        </div>
+                    </div>
+                </div>
+                {!isInvestigador && (
+                    <div className="modal-footer justify-content-center position-sticky bottom-0">
+                        <div className="row">
+                            <div className="col">
+                                {mode === 1 ? (
+                                    <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                ) : (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                        {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="partida" />)}
+                                    </>
+                                )}
+                            </div>
+                            <div className="col">
+                                {mode === 2 && (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                        {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="partida" />)}
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
-                </div>
-            {!isInvestigador && (
-                <div className="modal-footer justify-content-center position-sticky bottom-0">
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="partida" />)}
-                                </>
-                            )}
-                        </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="partida" />)}
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
                 )}
             </form>
             <Toaster></Toaster>

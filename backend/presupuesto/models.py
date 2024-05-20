@@ -211,7 +211,6 @@ class Partida(models.Model):
     id_partida = models.AutoField(primary_key=True)
     detalle = models.CharField(max_length=255)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
-    saldo = models.DecimalField(max_digits=10, decimal_places=2)
     id_version_presupuesto_fk = models.ForeignKey(VersionPresupuesto, on_delete=models.PROTECT)
 
     class Meta:
@@ -226,7 +225,6 @@ def enviar_correo_partida(asunto, instance, destinatario):
             contexto = {
                 'id_partida': instance.id_partida if instance.id_partida else "No encontrado",
                 'monto': instance.monto,
-                'saldo':f"{instance.saldo}",
                 'detalle': instance.detalle,
                 'version_presupuesto': instance.id_version_presupuesto_fk.version,
                 'proyecto': f"{instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",
@@ -273,7 +271,6 @@ def enviar_correo_partida_investigador(asunto, instance, destinatario):
             contexto = {
                 'id_partida': instance.id_partida if instance.id_partida else "No encontrado",
                 'monto': instance.monto,
-                'saldo':f"{instance.saldo}",
                 'detalle': instance.detalle,
                 'version_presupuesto': instance.id_version_presupuesto_fk.version,
                 'proyecto': f"{instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | {instance.id_version_presupuesto_fk.id_presupuesto_fk.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}",

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -16,7 +16,7 @@ export const obtenerGastos = async (token) => {
 
 export const agregarGasto = async (gasto, token) => {
     try {
-        const response_gasto =  await manejarErrores( SIAPAPI.post('presupuesto/gastos/', gasto, {
+        const response_gasto = await manejarErrores(SIAPAPI.post('presupuesto/gastos/', gasto, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ export const agregarProductoServicio = async (productoServicio, token) => {
 };
 
 export const obtenerFactura = async (token) => {
-    return await manejarErrores( SIAPAPI.get('presupuesto/facturas/', {
+    return await manejarErrores(SIAPAPI.get('presupuesto/facturas/', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -117,7 +117,7 @@ export const eliminarFactura = async (id, token) => {
 };
 
 export const agregarFacturaDocumento = async (documento, token) => {
-    return await manejarErrores( manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
+    return await manejarErrores(manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -126,7 +126,7 @@ export const agregarFacturaDocumento = async (documento, token) => {
 };
 
 export const actualizarFacturaDocumento = async (id, documento, token) => {
-    return await manejarErrores( manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+    return await manejarErrores(manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'

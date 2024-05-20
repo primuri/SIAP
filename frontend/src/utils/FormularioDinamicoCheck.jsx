@@ -92,7 +92,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                         <div className="row mb-4">
                             {configuracion.map((conf, idx) => (
                                 <div key={idx} className="col-md-6">
-                                    <label htmlFor={`${conf.campo}-${index}`} className="label-personalizado mb-2">{conf.placeholder}</label>
+                                    <label htmlFor={`${conf.campo}-${index}`} className="label-personalizado mb-2">{conf.placeholder}</label> {conf.placeholder === 'Nombre Colaborador' && <span className="disabled-input">(Buscador)</span>}
                                     {conf.tipo === 'select' ? (
                                         <select
                                             id={`${conf.campo}-${index}`}
@@ -121,6 +121,7 @@ export const FormularioDinamicoCheck = ({ items, setItems, configuracion, itemNa
                                                 className="form-control"
                                                 required={conf.required}
                                                 disabled={isInvestigador}
+                                                placeholder={conf.campo === 'id_academico_fk' ? "Ingrese el nombre de un investigador previamente registrado" : ""}
                                             />
                                             {showDropdown[index] && academicosFilter.length > 0 && (
                                                 <div className="autocomplete-dropdown-container">

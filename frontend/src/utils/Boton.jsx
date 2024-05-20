@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import back from '../assets/back.png'
-export const Boton = ({onClick, text}) =>{
+export const Boton = ({ onClick, text }) => {
     return (
         <button
             type='button'

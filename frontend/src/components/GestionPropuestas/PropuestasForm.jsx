@@ -43,13 +43,13 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 }
             }
         },
-        asociar_academico: propuesta ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.nombre + " " + propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.apellido +" " + propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.segundo_apellido: ""
+        asociar_academico: propuesta ? propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.nombre + " " + propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.apellido + " " + propuesta.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk?.segundo_apellido : ""
     });
 
-    
+
     const handleChange = (event) => {
         const { name, value } = event.target;
-        
+
 
         if (name === "id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico") {
             formData.asociar_academico = value;
@@ -63,7 +63,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                 );
                 setAcademicosFilter(filteredAcademicos);
             }
-        }else{
+        } else {
             const keys = name.split('.');
             switch (keys.length) {
                 case 1:
@@ -118,7 +118,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                     console.error("Anidacion fuera de rango");
             }
         }
-        
+
     };
 
 
@@ -175,7 +175,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
         setAcademicosFilter([]);
     };
 
-    
+
 
 
 
@@ -188,14 +188,14 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
 
                 <div className="text-center">
                     <div className="img-space">
-                        <img src={icono}/>
+                        <img src={icono} />
                     </div>
                 </div>
                 <div className="col-10 mb-0 text-center" >
-                            <h2 className="headerForm" id="header-propuestas">
-                                {mode === 1 ? "Agregar propuesta" : !isInvestigador ? "Editar propuesta": "Visualizar propuesta"}
-                            </h2>
-                        </div>
+                    <h2 className="headerForm" id="header-propuestas">
+                        {mode === 1 ? "Agregar propuesta" : !isInvestigador ? "Editar propuesta" : "Visualizar propuesta"}
+                    </h2>
+                </div>
                 <div>
                     <button type="button" onClick={onCancel} className="close" data-dismiss="modal" id="close-propuestas">
                         <span aria-hidden="true" className="close-icon">&times;</span>
@@ -211,38 +211,38 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                 <label htmlFor="codigoCimpa" className="label-personalizado mb-2">Código CIMPA</label>
                                 <input type="text" className="form-control disabled-input" name="id_codigo_cimpa_fk.id_codigo_cimpa" id="id_codigo_cimpa_fk.id_codigo_cimpa" value={mode === 2 ? formData.id_codigo_cimpa_fk.id_codigo_cimpa : "Auto - generado"} onChange={handleChange} disabled={true} />
                             </div>)}
-                            
+
                             <div className="col">
                                 <label htmlFor="nombre" className="label-personalizado mb-2">Nombre </label>
-                                <textarea className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required disabled={isInvestigador}/>
+                                <textarea className="form-control" name="id_codigo_cimpa_fk.nombre" id="id_codigo_cimpa_fk.nombre" value={formData.id_codigo_cimpa_fk.nombre} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                         </div>
 
-               
+
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 {mode === 1 && (
-                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado </label> 
+                                    <label htmlFor="estado" className="label-personalizado mb-2">Estado </label>
                                 )}
                                 {mode === 1 && (
-                                  <span className="optional"> (Predeterminado) </span> 
+                                    <span className="optional"> (Predeterminado) </span>
                                 )}
                                 {mode === 2 && (
                                     <label htmlFor="estado" className="label-personalizado mb-2">Estado</label>
                                 )}
-                                <input type="text" className="form-control disabled-input" name="id_codigo_cimpa_fk.estado" id="id_codigo_cimpa_fk.estado" value={mode === 2 ? formData.id_codigo_cimpa_fk.estado : "En desarrollo"} disabled/>
+                                <input type="text" className="form-control disabled-input" name="id_codigo_cimpa_fk.estado" id="id_codigo_cimpa_fk.estado" value={mode === 2 ? formData.id_codigo_cimpa_fk.estado : "En desarrollo"} disabled />
                             </div>
 
                             <div className="col-md-6">
                                 <label htmlFor="id_codigo_cimpa_fk.fecha_vigencia" className="label-personalizado mb-2">Fecha </label>
-                                <input type="date" className="form-control" name="id_codigo_cimpa_fk.fecha_vigencia" id="id_codigo_cimpa_fk.fecha_vigencia" value={formData.id_codigo_cimpa_fk.fecha_vigencia ? new Date(formData.id_codigo_cimpa_fk.fecha_vigencia).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador}/>
+                                <input type="date" className="form-control" name="id_codigo_cimpa_fk.fecha_vigencia" id="id_codigo_cimpa_fk.fecha_vigencia" value={formData.id_codigo_cimpa_fk.fecha_vigencia ? new Date(formData.id_codigo_cimpa_fk.fecha_vigencia).toISOString().split('T')[0] : ""} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
-                        </div>                        
+                        </div>
 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="descripcion" className="label-personalizado mb-2">Descripción</label>
-                                <textarea className="form-control" name="id_codigo_cimpa_fk.descripcion" id="id_codigo_cimpa_fk.descripcion" value={formData.id_codigo_cimpa_fk.descripcion} onChange={handleChange} required disabled={isInvestigador}/>
+                                <textarea className="form-control" name="id_codigo_cimpa_fk.descripcion" id="id_codigo_cimpa_fk.descripcion" value={formData.id_codigo_cimpa_fk.descripcion} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="actividad" className="label-personalizado mb-2">Actividad</label>
@@ -257,48 +257,50 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Objetivo general </label> <span className="disabled-input">(Opcional)</span>
-                                <textarea className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange} disabled={isInvestigador}/>
+                                <textarea className="form-control" name="id_codigo_cimpa_fk.objetivo_general" id="id_codigo_cimpa_fk.objetivo_general" value={formData.id_codigo_cimpa_fk.objetivo_general} onChange={handleChange} disabled={isInvestigador} />
                             </div>
                         </div>
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} required disabled={isInvestigador}/>
+                                <Upload mode={mode} handleFileChange={handleFileChange} formData={formData} icono2={icono2} required disabled={isInvestigador} />
                             </div>
 
                             <div className="col-md-6">
                                 <label htmlFor="documento_asociado.detalle" className="label-personalizado mb-2">Detalle del documento </label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required disabled={isInvestigador}/>
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
                         </div>
                         <hr />
                         <div className="row mb-4">
                             <h5 className="text-center my-3">Asociar Colaborador Principal</h5>
+
                             <div className="col">
+
                                 <label htmlFor="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk" className="label-personalizado mb-2">Investigador(a) </label>
-                                
+                                <span className="disabled-input">(Buscador)</span>
                                 <div className="position-relative">
-                                                <input type="text" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
-                                                id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange}  required disabled={isInvestigador}/>
-                                                {(academicosFilter.length > 0) && (
+                                    <input type="text" placeholder="Ingrese el nombre de un investigador previamente registrado" className="form-control" name="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico"
+                                        id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_academico" value={formData.asociar_academico} onChange={handleChange} required disabled={isInvestigador} />
+                                    {(academicosFilter.length > 0) && (
+                                        <div
+                                            className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
+                                            style={{ maxHeight: "60px" }}
+                                        >
+                                            {academicosFilter.map((academico) => {
+                                                return (
                                                     <div
-                                                        className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
-                                                        style={{ maxHeight: "60px"}}
+                                                        key={academico.id_academico}
+                                                        className="pointer-event ms-1"
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={(e) => handleSelectAcademico(e, academico)}
                                                     >
-                                                        {academicosFilter.map((academico) => {
-                                                        return (
-                                                            <div
-                                                            key={academico.id_academico}
-                                                            className="pointer-event ms-1"
-                                                            style={{ cursor: "pointer" }}
-                                                            onClick={(e) => handleSelectAcademico(e, academico)}
-                                                            >
-                                                            {`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`}
-                                                            </div>
-                                                        );
-                                                        })}
+                                                        {`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido} ${academico.id_nombre_completo_fk.segundo_apellido}`}
                                                     </div>
-                                                )}
-                                            </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -334,7 +336,7 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio"
                                     value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio
                                         ? new Date(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_inicio).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} disabled={isInvestigador}/>
+                                    onChange={handleChange} disabled={isInvestigador} />
                             </div>
                             <div className="col">
                                 <label htmlFor="finVigenciaColaborador" className="label-personalizado mb-2">Fecha finalización</label> <span className="disabled-input">(Opcional)</span>
@@ -343,60 +345,60 @@ export const PropuestasForm = ({ onSubmit, mode, propuesta, onCancel, onDelete, 
                                     id="id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin"
                                     value={formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin
                                         ? new Date(formData.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_vigencia_fk.fecha_fin).toISOString().split('T')[0] : ""}
-                                    onChange={handleChange} disabled={isInvestigador}/>
+                                    onChange={handleChange} disabled={isInvestigador} />
                             </div>
                         </div>
                         <br />
-                        
+
                     </div>
                 </div>
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     {!isInvestigador && (<div className="row">
                         <div className="col">
-                        {mode === 1 ? (
-                            <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
-                            Agregar
-                            </button>
-                        ) : (
-                            <>
-                            {!isPropuestaAprobada && (
-                                <button
-                                id="boton-personalizado"
-                                type="button"
-                                onClick={aprobarPropuesta}
-                                className='table-button border-0 p-2 rounded text-white'
-                                style={{ backgroundColor: "#005da4" }}
-                                >
-                                Aprobar propuesta
+                            {mode === 1 ? (
+                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>
+                                    Agregar
                                 </button>
+                            ) : (
+                                <>
+                                    {!isPropuestaAprobada && (
+                                        <button
+                                            id="boton-personalizado"
+                                            type="button"
+                                            onClick={aprobarPropuesta}
+                                            className='table-button border-0 p-2 rounded text-white'
+                                            style={{ backgroundColor: "#005da4" }}
+                                        >
+                                            Aprobar propuesta
+                                        </button>
+                                    )}
+                                    <button
+                                        id="boton-personalizado"
+                                        type="button"
+                                        onClick={handleEditClick}
+                                        className='table-button border-0 p-2 rounded text-white m-2'
+                                    >
+                                        Guardar
+                                    </button>
+                                    {showConfirmationEdit && (
+                                        <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
+                                    )}
+                                    {showConfirmationAprobar && (
+                                        <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
+                                    )}
+                                </>
                             )}
-                            <button
-                                id="boton-personalizado"
-                                type="button"
-                                onClick={handleEditClick}
-                                className='table-button border-0 p-2 rounded text-white m-2'
-                            >
-                                Guardar
-                            </button>
-                            {showConfirmationEdit && (
-                                <Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="propuesta" />
-                            )}
-                            {showConfirmationAprobar && (
-                                <Confirmar onConfirm={sendForm} onCancel={handleEditCancelAp} accion="aprobar" objeto="propuesta" />
-                            )}
-                            </>
-                        )}
                         </div>
                     </div>)}
-                    
-                    </div>
-                                </form>
-                                
-                            </>
 
-                        )
-                    }
+                </div>
+            </form>
+
+        </>
+
+    )
+}
 
 PropuestasForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,

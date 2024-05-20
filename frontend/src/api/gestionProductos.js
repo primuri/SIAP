@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -7,8 +7,8 @@ const SIAPAPI = axios.create({
 
 
 export const agregarProducto = async (producto, token) => {
-    try { 
-        const response_producto =  await manejarErrores( SIAPAPI.post('producto/productos/', producto, {
+    try {
+        const response_producto = await manejarErrores(SIAPAPI.post('producto/productos/', producto, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -16,31 +16,31 @@ export const agregarProducto = async (producto, token) => {
         }));
         const id_producto_creado = response_producto.data.id_producto;
         return id_producto_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando producto: ", error);
         throw error;
-    } 
+    }
 };
 
-export const agregarDocumentacion = async(documentacion, token) => {
+export const agregarDocumentacion = async (documentacion, token) => {
     try {
-        const response_documento =  await manejarErrores( SIAPAPI.post('version_proyecto/documentos/', documentacion, {
-        headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'multipart/form-data'
-        }
+        const response_documento = await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documentacion, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
         }));
         const id_documento_creado = response_documento.data.id_documento;
         return id_documento_creado;
-    } catch(error) {
-    console.error("Error agregando documento: ", error);
-    throw error;
-    } 
+    } catch (error) {
+        console.error("Error agregando documento: ", error);
+        throw error;
+    }
 };
 
 export const agregarSoftware = async (software, token) => {
-    try { 
-        const response_software =  await manejarErrores( SIAPAPI.post('producto/softwares/', software, {
+    try {
+        const response_software = await manejarErrores(SIAPAPI.post('producto/softwares/', software, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -48,14 +48,14 @@ export const agregarSoftware = async (software, token) => {
         }));
         const id_software_creado = response_software.data.id_software;
         return id_software_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando software: ", error);
         throw error;
-    } 
+    }
 };
 
 export const obtenerSoftware = async (token) => {
-    return await manejarErrores( SIAPAPI.get('producto/softwares/', {
+    return await manejarErrores(SIAPAPI.get('producto/softwares/', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ export const obtenerSoftware = async (token) => {
 };
 
 export const obtenerArticulo = async (token) => {
-    return await manejarErrores( SIAPAPI.get('producto/articulos/', {
+    return await manejarErrores(SIAPAPI.get('producto/articulos/', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -73,53 +73,53 @@ export const obtenerArticulo = async (token) => {
 };
 
 export const editarDocumentacion = async (id, documentacion, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documentacion, {
+    try {
+        return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documentacion, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'multipart/form-data'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Documentacion Sotware: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const editarProducto = async (id, producto, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`producto/productos/${id}/`, producto, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`producto/productos/${id}/`, producto, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Producto: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarSoftware = async (id, software, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`producto/softwares/${id}/`, software, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`producto/softwares/${id}/`, software, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Software: ", error);
         throw error;
-    } 
+    }
 };
 
 export const eliminarDocumentacion = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`version_proyecto/documentos/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/documentos/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -128,8 +128,8 @@ export const eliminarDocumentacion = async (id, token) => {
 };
 
 export const agregarRevista = async (revista, token) => {
-    try { 
-        const response_revista =  await manejarErrores( SIAPAPI.post('producto/revistas/', revista, {
+    try {
+        const response_revista = await manejarErrores(SIAPAPI.post('producto/revistas/', revista, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -137,16 +137,16 @@ export const agregarRevista = async (revista, token) => {
         }));
         const id_revista_creado = response_revista.data.id_revista;
         return id_revista_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando revista: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const agregarAutor = async (autor, token) => {
-    try { 
-        const response_autor =  await manejarErrores( SIAPAPI.post('personas/autor/', autor, {
+    try {
+        const response_autor = await manejarErrores(SIAPAPI.post('personas/autor/', autor, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -154,16 +154,16 @@ export const agregarAutor = async (autor, token) => {
         }));
         const id_autor_creado = response_autor.data.id_autor;
         return id_autor_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando autor: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const agregarArticulo = async (articulo, token) => {
-    try { 
-        const response_articulo =  await manejarErrores( SIAPAPI.post('producto/articulos/', articulo, {
+    try {
+        const response_articulo = await manejarErrores(SIAPAPI.post('producto/articulos/', articulo, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -171,60 +171,60 @@ export const agregarArticulo = async (articulo, token) => {
         }));
         const id_articulo_creado = response_articulo.data.id_articulo;
         return id_articulo_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando articulo: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarArticulo = async (id, articulo, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`producto/articulos/${id}/`, articulo, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`producto/articulos/${id}/`, articulo, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Articulo: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarAutor = async (id, autor, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`personas/autor/${id}/`, autor, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`personas/autor/${id}/`, autor, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Autor: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const editarRevista = async (id, revista, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`producto/revistas/${id}/`, revista, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`producto/revistas/${id}/`, revista, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Revista: ", error);
         throw error;
-    } 
+    }
 };
 
 export const eliminarRevista = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`producto/revistas/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`producto/revistas/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -233,7 +233,7 @@ export const eliminarRevista = async (id, token) => {
 };
 
 export const eliminarSoftware = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`producto/softwares/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`producto/softwares/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -242,7 +242,7 @@ export const eliminarSoftware = async (id, token) => {
 };
 
 export const eliminarProducto = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`producto/productos/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`producto/productos/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -253,7 +253,7 @@ export const eliminarProducto = async (id, token) => {
 
 
 export const eliminarArea = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`producto/areas/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`producto/areas/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -262,24 +262,24 @@ export const eliminarArea = async (id, token) => {
 };
 
 export const editarArea = async (id, area, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`producto/areas/${id}/`, area, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`producto/areas/${id}/`, area, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Area: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const agregarArea = async (area, token) => {
-    try { 
-        const response_area =  await manejarErrores( SIAPAPI.post('producto/areas/', area, {
+    try {
+        const response_area = await manejarErrores(SIAPAPI.post('producto/areas/', area, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -287,16 +287,16 @@ export const agregarArea = async (area, token) => {
         }));
         const id_area_creado = response_area.data.id_area;
         return id_area_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando area: ", error);
         throw error;
-    } 
+    }
 };
 
 
 
 export const eliminarInstitucion = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`personas/institucion/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`personas/institucion/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -305,24 +305,24 @@ export const eliminarInstitucion = async (id, token) => {
 };
 
 export const editarInstitucion = async (id, institucion, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`personas/institucion/${id}/`, institucion, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`personas/institucion/${id}/`, institucion, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar institucion: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const agregarInstitucion = async (institucion, token) => {
-    try { 
-        const response_institucion =  await manejarErrores( SIAPAPI.post('personas/institucion/', institucion, {
+    try {
+        const response_institucion = await manejarErrores(SIAPAPI.post('personas/institucion/', institucion, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -330,15 +330,15 @@ export const agregarInstitucion = async (institucion, token) => {
         }));
         const id_institucion_creado = response_institucion.data.id_institucion;
         return id_institucion_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando institucion: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const eliminarEvento = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`producto/eventos/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`producto/eventos/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -347,24 +347,24 @@ export const eliminarEvento = async (id, token) => {
 };
 
 export const editarevento = async (id, evento, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`producto/eventos/${id}/`, evento, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`producto/eventos/${id}/`, evento, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar evento: ", error);
         throw error;
-    } 
+    }
 };
 
 
 export const agregarevento = async (evento, token) => {
-    try { 
-        const response_evento =  await manejarErrores( SIAPAPI.post('producto/eventos/', evento, {
+    try {
+        const response_evento = await manejarErrores(SIAPAPI.post('producto/eventos/', evento, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -372,14 +372,14 @@ export const agregarevento = async (evento, token) => {
         }));
         const id_evento_creado = response_evento.data.id_evento;
         return id_evento_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando evento: ", error);
         throw error;
-    } 
+    }
 };
 
 export const obtenerEvento = async (token) => {
-    return await manejarErrores( SIAPAPI.get('producto/eventos/', {
+    return await manejarErrores(SIAPAPI.get('producto/eventos/', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'

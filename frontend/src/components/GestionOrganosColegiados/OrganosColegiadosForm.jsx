@@ -15,7 +15,7 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
 
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [addClick, setAddClick] = useState(false) 
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
 
     const [formData, setFormData] = useState({
@@ -32,7 +32,7 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
         if (rol === "invitado") {
             return;
         }
-    
+
         if (name === 'numero_miembros' || name === 'quorum' || name === 'acuerdo_firme') {
             const numericValue = Number(value);
             if (!isNaN(numericValue) && numericValue >= 0) {
@@ -57,7 +57,7 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
             }));
         }
     };
-    
+
 
 
     const sendForm = (event) => {
@@ -96,22 +96,22 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
-                        <h2 className="headerForm">
-                            {rol === "administrador" && (
-                                <span>
-                                    {mode === 1 ? "Agregar órgano colegiado" : "Editar órgano colegiado"}
-                                </span>
-                            )}
-                            {rol === "invitado" && (
-                                <span>
-                                    Órgano Colegiado
-                                </span>
-                            )}
-                        </h2>
+                            <h2 className="headerForm">
+                                {rol === "administrador" && (
+                                    <span>
+                                        {mode === 1 ? "Agregar órgano colegiado" : "Editar órgano colegiado"}
+                                    </span>
+                                )}
+                                {rol === "invitado" && (
+                                    <span>
+                                        Órgano Colegiado
+                                    </span>
+                                )}
+                            </h2>
                         </div>
                         <div className="col-1 mb-0 text-center">
                             <button type="button" onClick={onCancel} className="close" data-dismiss="modal">
@@ -129,32 +129,32 @@ export const OrganosColegiadosForm = ({ onSubmit, mode, organo_colegiado, onCanc
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="nombre" className="label-personalizado mb-2">Nombre</label>
-                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} disabled={rol === "invitado"} required/>
+                                    <input type="text" className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} disabled={rol === "invitado"} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label htmlFor="quorum" className="label-personalizado mb-2">Quorum</label>
-                                        <input type="number" className="form-control" name="quorum" id="quorum" value={formData.quorum} onChange={handleChange} disabled={rol === "invitado"} required/>
-                                    </div>
+                                <div className="form-group">
+                                    <label htmlFor="quorum" className="label-personalizado mb-2">Quorum</label>
+                                    <input type="number" className="form-control" name="quorum" id="quorum" value={formData.quorum} onChange={handleChange} disabled={rol === "invitado"} required />
+                                </div>
                             </div>
                         </div>
-          
+
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="numero_miembros" className="label-personalizado mb-2">Cantidad de integrantes</label>
-                                    <input type="number" className="form-control" name="numero_miembros" id="numero_miembros"  value={formData.numero_miembros} onChange={handleChange} disabled={rol === "invitado"} required/>
+                                    <input type="number" className="form-control" name="numero_miembros" id="numero_miembros" value={formData.numero_miembros} onChange={handleChange} disabled={rol === "invitado"} required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="acuerdo_firme" className="label-personalizado mb-2">Acuerdo en firme</label>
                                 <input type="number" className="form-control" name="acuerdo_firme" id="acuerdo_firme" value={formData.acuerdo_firme} onChange={handleChange} required disabled={rol === "invitado"} />
                             </div>
-                        </div>                
+                        </div>
                     </div>
                 </div>
-                  
+
                 {rol === "administrador" && (
                     <div className="modal-footer justify-content-center position-sticky bottom-0">
                         <div className="row">

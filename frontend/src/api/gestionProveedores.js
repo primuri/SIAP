@@ -1,12 +1,12 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 });
 
 export const obtenerProveedores = async (token) => {
-    return await manejarErrores( SIAPAPI.get('presupuesto/proveedores', {
+    return await manejarErrores(SIAPAPI.get('presupuesto/proveedores', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -20,8 +20,8 @@ export const agregarProveedor = async (formData, token) => {
         const proveedor = formData;
         const cuentaBancaria = proveedor?.cuentaBancaria;
         delete proveedor.cuentaBancaria;
-        
-        const response_proveedor = await manejarErrores( SIAPAPI.post('presupuesto/proveedores/', proveedor, {
+
+        const response_proveedor = await manejarErrores(SIAPAPI.post('presupuesto/proveedores/', proveedor, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export const agregarProveedor = async (formData, token) => {
 
 export const editarProveedor = async (id, proveedor, token) => {
 
-    const responseProveedor = await manejarErrores( SIAPAPI.put(`presupuesto/proveedores/${id}/`, proveedor, {
+    const responseProveedor = await manejarErrores(SIAPAPI.put(`presupuesto/proveedores/${id}/`, proveedor, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ export const eliminarProveedor = (id, token) => {
 };
 
 export const obtenerCuentasBancarias = async (token) => {
-    return await manejarErrores( SIAPAPI.get('presupuesto/cuentas_bancarias', {
+    return await manejarErrores(SIAPAPI.get('presupuesto/cuentas_bancarias', {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
     try {
         cuentasBancarias.forEach(async cuentaBancaria => {
             cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
-            await manejarErrores( SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
+            await manejarErrores(SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Content-Type': 'application/json'
@@ -92,10 +92,10 @@ export const agregarCuentasBancarias = (cuentasBancarias, id_cedula_proveedor, t
     }
 };
 
-export const agregarCuentaBancaria  = async (cuentaBancaria, id_cedula_proveedor, token) => {
+export const agregarCuentaBancaria = async (cuentaBancaria, id_cedula_proveedor, token) => {
     try {
         cuentaBancaria.id_proveedor_fk = id_cedula_proveedor;
-        await manejarErrores( SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
+        await manejarErrores(SIAPAPI.post('presupuesto/cuentas_bancarias/', cuentaBancaria, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -111,20 +111,20 @@ export const agregarCuentaBancaria  = async (cuentaBancaria, id_cedula_proveedor
 export const actualizarCuentasBancarias = (cuentasBancarias, proveedor_ID, token) => {
     try {
         cuentasBancarias.forEach(async cuenta => {
-            try{
+            try {
                 let id_numero = cuenta.id_numero;
                 let id_cedula_proveedor = cuenta.id_proveedor_fk.id_cedula_proveedor;
                 delete cuenta.id_proveedor_fk;
                 cuenta.id_proveedor_fk = id_cedula_proveedor;
-                
-                await manejarErrores( SIAPAPI.put(`presupuesto/cuentas_bancarias/${id_numero}/`, cuenta, {
+
+                await manejarErrores(SIAPAPI.put(`presupuesto/cuentas_bancarias/${id_numero}/`, cuenta, {
                     headers: {
                         'Authorization': `token ${token}`,
                         'Content-Type': 'application/json'
                     }
                 }));
-            } catch (error){
-                await manejarErrores( agregarCuentaBancaria(cuenta, proveedor_ID, token));
+            } catch (error) {
+                await manejarErrores(agregarCuentaBancaria(cuenta, proveedor_ID, token));
             }
         });
     } catch (error) {
@@ -134,7 +134,7 @@ export const actualizarCuentasBancarias = (cuentasBancarias, proveedor_ID, token
 };
 
 export const editarDocumentoCuentaAndDocumento = async (id, documento, token) => {
-    return await manejarErrores( manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
+    return await manejarErrores(manejarErrores(SIAPAPI.put(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -143,7 +143,7 @@ export const editarDocumentoCuentaAndDocumento = async (id, documento, token) =>
 };
 
 export const agregarDocumentoCuenta = async (documento, token) => {
-    return await manejarErrores( manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
+    return await manejarErrores(manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -152,7 +152,7 @@ export const agregarDocumentoCuenta = async (documento, token) => {
 };
 
 export const editarDocumentoCuenta = async (id, documento, token) => {
-    return await manejarErrores( manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+    return await manejarErrores(manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'

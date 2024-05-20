@@ -40,7 +40,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                 return;
             }
         }
-        
+
         if (name.includes('.')) {
             const keys = name.split('.');
             if (keys[0] === 'id_producto_fk' && keys[1] === 'fecha') {
@@ -84,7 +84,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         if (file) {
             setSelectedFileName(file.name);
         }
-  
+
         setFileData(file);
         setCambios({ softwareData: formData, softwareFile: file });
     };
@@ -95,7 +95,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col-md-6">
                     <label htmlFor="producto_detalle" className="label-personalizado mb-2">Detalle del Producto   </label>
-                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required disabled={isInvestigador}/>
+                    <textarea className="form-control" name="id_producto_fk.detalle" id="id_producto_fk.detalle" onChange={handleChange} value={formData.id_producto_fk.detalle} required disabled={isInvestigador} />
                 </div>
                 <div className="col">
                     <label htmlFor="producto_fecha" className="label-personalizado mb-2">Fecha del Producto  </label>
@@ -104,7 +104,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                         id="id_producto_fk.fecha"
                         value={formData.id_producto_fk.fecha
                             ? new Date(formData.id_producto_fk.fecha).toISOString().split('T')[0] : ""}
-                        onChange={handleChange} required disabled={isInvestigador}/>
+                        onChange={handleChange} required disabled={isInvestigador} />
                 </div>
             </div>
 
@@ -116,17 +116,17 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="nombre" className="label-personalizado mb-2"> Nombre   </label>
-                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required disabled={isInvestigador}/>
+                    <textarea className="form-control" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required disabled={isInvestigador} />
                 </div>
                 <div className="col">
                     <label htmlFor="numero_version" className="label-personalizado mb-2"> Num. versión   </label>
-                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required disabled={isInvestigador}/>
+                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} min="1" step="1" pattern="^[0-9]+$" required disabled={isInvestigador} />
                 </div>
             </div>
             <div className="row mb-4">
                 <div className="col">
                     <label htmlFor="detalleDocumentación" className="label-personalizado mb-2"> Detalle documentación   </label>
-                    <textarea className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required disabled={isInvestigador}/>
+                    <textarea className="form-control" name="id_documento_documentacion_fk.detalle" id="detalleDocumentación" value={formData.id_documento_documentacion_fk.detalle} onChange={handleChange} required disabled={isInvestigador} />
                 </div>
                 <div className="col">
                     <label htmlFor="id_documento_documentacion_fk.documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -138,7 +138,6 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                         name="id_documento_documentacion_fk.documento"
                         id="id_documento_documentacion_fk.documento"
                         onChange={handleFileChange}
-                        style={{ display: 'none' }}
                         required={mode == 1}
                         disabled={isInvestigador}
                     />
@@ -146,9 +145,7 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
                         {selectedFileName ? (
                             <span>Nombre del archivo: {selectedFileName}</span>
                         ) : (
-                            <div className="file-upload-icon-container">
-                                <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                            </div>
+                            ""
                         )}
                     </label>
                     {mode == 2 && formData.id_documento_documentacion_fk?.documento && (
@@ -169,14 +166,3 @@ export const SoftwareForm = ({ mode, producto, setCambios }) => {
         </>
     )
 }
-/*
-    NOTA PARA SETCAMBIOS: La idea es que este componente reciba una función set cambios que permita que el componente
-    padre pueda tener siempre actualizado el formdata del software, por lo que se debe trabajar debidamente esa función
-*/
-/*
-    NOTA PARA DOCUMENTO: Debe tratarse diferente cuando se edita el archivo (documentación) y cuando no. Dado que, puede mandar
-    un 'editar' con un archivo o un 'editar' con una ruta al archivo... Esto dependiendo de si se activó
-    el handleFileChange o no.
-*/
-
-

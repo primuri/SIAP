@@ -38,7 +38,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
             nombre: version ? version.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre : "",
         }
     });
-    console.log("Can delete", canDelete)
     const user = JSON.parse(localStorage.getItem('user'))
     const isInvestigador = user.groups.some((grupo) => {
         return grupo === 'investigador';
@@ -106,13 +105,13 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
     }
 
     const handleFileChange = (event) => {
-        const foto = event.target.files[0];
+        const documento = event.target.files[0];
 
-        if (file) {
-            setSelectedFileName(file.name);
+        if (documento) {
+            setSelectedFileName(documento.name);
         }
-          
-        setOficioData(foto);
+
+        setOficioData(documento);
     }
 
     const sendForm = (event) => {
@@ -162,7 +161,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
@@ -209,7 +208,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="version" className="label-personalizado mb-2">Versión del proyecto  </label>
-                                    <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled/>
+                                    <input type="text" className="form-control disabled-input" name="version" id="version" value={version?.numero_version} required disabled />
                                 </div>
                             </div>
                         </div>
@@ -270,7 +269,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     renderOption={(props, option) => <li {...props}>{option.nombre}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" required/>
+                                        <TextField {...params} className="form-control" required />
                                     )}
                                 />
                             </div>
@@ -329,7 +328,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     renderOption={(props, option) => <li {...props}>{option.codigo}</li>}
                                     freeSolo
                                     renderInput={(params) => (
-                                        <TextField {...params} className="form-control" required/>
+                                        <TextField {...params} className="form-control" required />
                                     )}
                                 />
                             </div>
@@ -337,7 +336,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="detalleOficio" className="label-personalizado mb-2">Detalle Oficio  </label>
-                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador} required/>
+                                <textarea className="form-control" name="oficio.detalle" id="detalleOficio" value={formData.oficio.detalle} onChange={handleChange} disabled={isInvestigador} required />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="documento" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -349,7 +348,6 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     name="documento"
                                     id="documento"
                                     onChange={handleFileChange}
-                                    style={{ display: 'none' }}
                                     required={mode == 1}
                                     disabled={isInvestigador}
                                 />
@@ -357,9 +355,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                                     {selectedFileName ? (
                                         <span>Nombre del archivo: {selectedFileName}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ""
                                     )}
                                 </label>
                                 {mode == 2 && formData.oficio?.ruta_archivo && (
@@ -379,7 +375,7 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="anioAprobacion" className="label-personalizado mb-2">Año de aprobación  </label>
-                                <input type="number" className="form-control" name="presupuesto.anio_aprobacion" id="anioAprobacion" value={formData.presupuesto.anio_aprobacion} onChange={handleChange} required min={2000} max={currentYear} disabled={isInvestigador}/>
+                                <input type="number" className="form-control" name="presupuesto.anio_aprobacion" id="anioAprobacion" value={formData.presupuesto.anio_aprobacion} onChange={handleChange} required min={2000} max={currentYear} disabled={isInvestigador} />
                             </div>
 
                         </div>
@@ -388,26 +384,26 @@ export const PresupuestoForm = ({ onSubmit, mode, presupuesto, version, onCancel
 
                 <div className="modal-footer justify-content-center position-sticky bottom-0">
                     {!isInvestigador && (
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="presupuesto" />)}
-                                </>
-                            )}
+                        <div className="row">
+                            <div className="col">
+                                {mode === 1 ? (
+                                    <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                ) : (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                        {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="presupuesto" />)}
+                                    </>
+                                )}
+                            </div>
+                            <div className="col">
+                                {((mode === 2) && canDelete) && (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                        {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
+                                    </>
+                                )}
+                            </div>
                         </div>
-                        <div className="col">
-                            {((mode === 2) && canDelete) && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="presupuesto" />)}
-                                </>
-                            )}
-                        </div>
-                    </div>
                     )}
                 </div>
             </form>

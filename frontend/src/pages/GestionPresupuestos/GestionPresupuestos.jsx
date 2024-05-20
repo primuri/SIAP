@@ -31,8 +31,6 @@ export const GestionPresupuestos = () => {
   const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero', 'Versiones']
   const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'tipo_presupuesto', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo', 'Versiones']
 
-  //===============================================================================================================================
-
   useEffect(() => {
     setJsonIsReady(false)
     createJsonForReport()
@@ -124,7 +122,7 @@ export const GestionPresupuestos = () => {
       'id_version_presupuesto_fk.monto',
       'id_version_presupuesto_fk.fecha',
       'id_version_presupuesto_fk.detalle',
-      ['id_partida', 'detalle', 'monto', 'saldo']
+      ['id_partida', 'detalle', 'monto']
     ]
 
     JsonForReport.colNames = [
@@ -139,13 +137,12 @@ export const GestionPresupuestos = () => {
       'Monto',
       'Fecha',
       'Detalle',
-      { 'tableName': 'Partidas', 'colNames': ['Identificador', 'Detalle', 'Monto', 'Saldo'] }
+      { 'tableName': 'Partidas', 'colNames': ['Identificador', 'Detalle', 'Monto'] }
     ]
 
     setJsonIsReady(await configureReportData())
   }
 
-  // ==============================================================================================================================
 
   useEffect(() => {
     loadPresupuestos(proyectoID)
@@ -182,14 +179,14 @@ export const GestionPresupuestos = () => {
   async function loadVersionesPresupuestos() {
     try {
       const res = await obtenerVersionesPresupuesto(localStorage.getItem('token'))
-      if (presupuestos.length > 0){
+      if (presupuestos.length > 0) {
         const versionesFiltered = res.data.filter((versionP) => versionP.id_presupuesto_fk.id_presupuesto == presupuestos[0].id_presupuesto)
-        if(versionesFiltered.length > 0){
+        if (versionesFiltered.length > 0) {
           setCanDelete(false)
-        }else{
+        } else {
           setCanDelete(true)
         }
-      }else{
+      } else {
         setCanDelete(true)
       }
     } catch (error) {
@@ -392,7 +389,7 @@ export const GestionPresupuestos = () => {
       {!error ? (
         <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
           <div className="flex-row">
-            {isInvestigador ? (<h1>Visualizar presupuesto de la versión {version ? version[0].numero_version : ""} de: </h1>): (<h1>Gestión de presupuesto de la versión {version ? version[0].numero_version : ""} de: </h1>)}
+            {isInvestigador ? (<h1>Visualizar presupuesto de la versión {version ? version[0].numero_version : ""} de: </h1>) : (<h1>Gestión de presupuesto de la versión {version ? version[0].numero_version : ""} de: </h1>)}
 
             <h3>{version ? version[0].id_codigo_vi_fk.id_codigo_cimpa_fk.descripcion : ""} </h3>
             {(!cargado) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}</div>

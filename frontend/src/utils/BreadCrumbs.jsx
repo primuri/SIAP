@@ -21,7 +21,7 @@ const routeNames = {
     'evaluacion-proyectos': 'Evaluaciones',
     'gestion-organos-colegiados': 'Órganos Colegiados',
     'gestion-evaluaciones': 'Evaluaciones',
-    'gestion-asistentes': 'Asistentes', 
+    'gestion-asistentes': 'Asistentes',
     'organos-colegiados': 'Órganos Colegiados',
     'gestion-integrantes': 'Integrantes',
     'gestion-sesiones': 'Sesiones',
@@ -39,7 +39,7 @@ const BreadcrumbsCustom = () => {
 
     let pathnames = location.pathname.split('/').filter(x => x);
 
-    const homeBreadcrumb = { name: 'Inicio', path: '/inicio-administrador', variant: 'h6'};
+    const homeBreadcrumb = { name: 'Inicio', path: '/inicio-administrador', variant: 'h6' };
     pathnames = [homeBreadcrumb, ...pathnames.map((value, index, array) => {
         const isNoLink = noLinks.some(noLink => value.includes(noLink));
         const displayName = isNoLink ? value.split('=')[1] : (routeNames[value] || value);
@@ -55,11 +55,11 @@ const BreadcrumbsCustom = () => {
                 const last = index === pathnames.length - 1;
 
                 return breadcrumb.isNoLink || last ? (
-                    <Typography variant="h6" color="text.primary" key={breadcrumb.path}  className={`${breadcrumb.isNoLink? 'no_link': 'last_bread'}`}>
+                    <Typography variant="h6" color="text.primary" key={breadcrumb.path} className={`${breadcrumb.isNoLink ? 'no_link' : 'last_bread'}`}>
                         {breadcrumb.name}
                     </Typography>
                 ) : (
-                    <Link to={breadcrumb.path} key={breadcrumb.path} style={{ textDecoration: 'none', color: 'black'}} >
+                    <Link to={breadcrumb.path} key={breadcrumb.path} style={{ textDecoration: 'none', color: 'black' }} >
                         {breadcrumb.name}
                     </Link>
                 );

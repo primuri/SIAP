@@ -1,85 +1,85 @@
-import { columnsPartidas, dataKeyPartidas} from "./utils"
-import { useEffect, useState }  from "react"
-import { PartidaForm }   from "../../components/GestionPresupuestos/PartidaForm"
-import { toast, Toaster }       from 'react-hot-toast'
-import { Search }               from "../../utils/Search"
-import { Modal }                from "../../utils/Modal"
-import { Back }                 from "../../utils/Back"
-import { Table }                from "../../utils/Table"
-import { Add }                  from "../../utils/Add"
-import * as API                 from "../../api/gestionPresupuestos"
+import { columnsPartidas, dataKeyPartidas } from "./utils"
+import { useEffect, useState } from "react"
+import { PartidaForm } from "../../components/GestionPresupuestos/PartidaForm"
+import { toast, Toaster } from 'react-hot-toast'
+import { Search } from "../../utils/Search"
+import { Modal } from "../../utils/Modal"
+import { Back } from "../../utils/Back"
+import { Table } from "../../utils/Table"
+import { Add } from "../../utils/Add"
+import * as API from "../../api/gestionPresupuestos"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 
-export const GestionPartidas = () => {   
-    let {versionPresupuestoID, presupuestoID} = useParams()      
+export const GestionPartidas = () => {
+    let { versionPresupuestoID, presupuestoID } = useParams()
     const navigate = useNavigate()
-    const location = useLocation()                      
-    const [PartidaData, setPartidaData] = useState([])           
-    const [PartidaList, setPartidaList] = useState([])            
-    const [Partida, setPartida]             = useState(null)       
-    const [loaded, setLoaded]                             = useState(false)        
-    const [reload, setReload]                             = useState(false)         
-    const [addClicked, setAddClicked]                     = useState(false)         
-    const [editClicked, setEditClicked]                   = useState(false)     
+    const location = useLocation()
+    const [PartidaData, setPartidaData] = useState([])
+    const [PartidaList, setPartidaList] = useState([])
+    const [Partida, setPartida] = useState(null)
+    const [loaded, setLoaded] = useState(false)
+    const [reload, setReload] = useState(false)
+    const [addClicked, setAddClicked] = useState(false)
+    const [editClicked, setEditClicked] = useState(false)
 
-    useEffect(() => { loadPartidaData() }, [reload])  
+    useEffect(() => { loadPartidaData() }, [reload])
 
-  const user = JSON.parse(localStorage.getItem('user'))
+    const user = JSON.parse(localStorage.getItem('user'))
 
 
     const isInvestigador = user.groups.some((grupo) => {
         return grupo === 'investigador';
-    });                     
+    });
 
     async function loadPartidaData() {
-        try{
+        try {
             var response = await API.obtenerPartidas(localStorage.getItem('token'))
             let filteredResponse = response.data.filter(element => element.id_version_presupuesto_fk.id_version_presupuesto == versionPresupuestoID);
             setPartidaData(filteredResponse)
             setPartidaList(filteredResponse)
 
             setLoaded(true)
-        } catch (error){
+        } catch (error) {
             console.error(error)
         }
     }
 
     async function addPartida(formData) {
-        try{
+        try {
             await API.agregarPartidas(formData, localStorage.getItem('token'))
             setAddClicked(false)
             setReload(!reload)
             mostrarExito("Partida agregada correctamente")
-        } catch(error){
+        } catch (error) {
             console.error(error)
         }
     }
 
     async function editPartida(dataForm) {
-        try{
+        try {
             await API.editarPartidas(Partida.id_partida, localStorage.getItem('token'), dataForm)
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Partida editada correctamente")
-        }catch(error){
+        } catch (error) {
         }
     }
 
     async function deletePartida(id_partida) {
-        try{
+        try {
             await API.eliminarPartidas(id_partida, localStorage.getItem('token'))
             setEditClicked(false)
             setReload(!reload)
             mostrarExito("Partida borrada correctamente")
-        }catch(error){
+        } catch (error) {
         }
     }
 
-    function filtrarVersionesInfome (col, filter) {
+    function filtrarVersionesInfome(col, filter) {
         setPartidaList(filtrar(col, filter, PartidaData))
     }
 
-    function addBtnClicked () {
+    function addBtnClicked() {
         setAddClicked(true)
         setEditClicked(false)
     }
@@ -96,7 +96,7 @@ export const GestionPartidas = () => {
         }
     };
 
-    function onCancel () {
+    function onCancel() {
         setAddClicked(false)
         setEditClicked(false)
     }
@@ -116,12 +116,12 @@ export const GestionPartidas = () => {
                     <h1>Partida de la versión del presupuesto {presupuestoID} </h1>{(!loaded) && (<div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>)}
                 </div>
                 <div className="d-flex justify-content-between mt-4">
-                <div className="col">
+                    <div className="col">
                         {!isInvestigador && (<Add onClick={addBtnClicked}></Add>)}
                     </div>
                     <Search colNames={columnsPartidas} columns={dataKeyPartidas} onSearch={filtrarVersionesInfome}></Search>
                 </div>
-                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick ={elementClicked} onClickButton2 ={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
+                <Table columns={columnsPartidas} data={PartidaList} dataKeys={dataKeyPartidas} onDoubleClick={elementClicked} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
                 <div>
                     <Back onClick={volverVersiones}>Regresar a versión de presupuesto</Back>
                 </div>
@@ -143,13 +143,13 @@ export const GestionPartidas = () => {
     );
 }
 
-function mostrarExito (mensaje) {
+function mostrarExito(mensaje) {
     toast.success(mensaje, {
         duration: 4000,
         position: 'bottom-right',
         style: {
-          background: 'var(--celeste-ucr)',
-          color: '#fff',
+            background: 'var(--celeste-ucr)',
+            color: '#fff',
         },
     })
 }
@@ -162,8 +162,7 @@ function filtrar(col, filter, data) {
     return data.filter((element) => {
         const value = col.includes('.') ? getValueByPath(element, col) : element[col];
         return value && value.toString().includes(filter);
-      })
+    })
 }
 
 
-  

@@ -149,7 +149,7 @@ class Acta(models.Model):
         db_table = 'acta'
 
 class Sesion(models.Model):
-    id_sesion = models.CharField(max_length=64, primary_key=True)
+    id_sesion = models.AutoField( primary_key=True)
     fecha = models.DateTimeField()
     id_organo_colegiado_fk = models.ForeignKey(OrganoColegiado, on_delete=models.CASCADE)
     id_agenda_fk = models.ForeignKey(Agenda, on_delete=models.CASCADE)

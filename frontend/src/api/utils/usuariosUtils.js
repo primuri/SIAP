@@ -14,10 +14,10 @@ export const obtenerNombre = async (nombre, token) => {
         });
         const id_nombre_creado = response_nombre.data.id_nombre_completo;
         return id_nombre_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando nombre: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarNombre = async (id, nombre, token) => {
@@ -40,7 +40,7 @@ export const eliminarNombre = async (id, token) => {
 };
 
 export const obtenerArea = async (area, token) => {
-     try {
+    try {
         const response_area = await SIAPAPI.post('personas/area_especialidad/', area, {
             headers: {
                 'Authorization': `token ${token}`,
@@ -49,7 +49,7 @@ export const obtenerArea = async (area, token) => {
         });
         const id_area_creada = response_area.data.id_area_especialidad;
         return id_area_creada;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando area de especialidad: ", error);
         throw error;
     }
@@ -85,7 +85,7 @@ export const obtenerUniversidad = async (universidad, token) => {
         });
         const id_universidad_creada = response_universidad.data.id_universidad;
         return id_universidad_creada;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando universidad: ", error);
         throw error;
     }

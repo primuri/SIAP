@@ -19,7 +19,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     const [cuentaBancaria, setCuentaBancaria] = useState([])
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
-    const [addClick, setAddClick] = useState(false) 
+    const [addClick, setAddClick] = useState(false)
     const [edit, setEdit] = useState(false)
     const [fileProveedor, setFileProveedor] = useState(null);
     const [selectedFileName, setSelectedFileName] = useState('');
@@ -30,14 +30,14 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         tipo: proveedor ? proveedor.tipo : "",
         nombre: proveedor ? proveedor.nombre : "",
         telefono: proveedor ? proveedor.telefono : "",
-        id_documento_fk: proveedor ? {...proveedor.id_documento_fk} : {tipo: "Documento cuentas", detalle: "", documento: ""}
+        id_documento_fk: proveedor ? { ...proveedor.id_documento_fk } : { tipo: "Documento cuentas", detalle: "", documento: "" }
     })
 
     useEffect(() => {
         if (proveedor) {
             loadCuentaBancaria()
         }
-    }, [proveedor]) 
+    }, [proveedor])
 
     const loadCuentaBancaria = async () => {
         try {
@@ -69,7 +69,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
             return regex.test(value);
         };
 
-    
+
         if (name === "id_cedula_proveedor" && !checkCedula(value)) {
             return;
         }
@@ -105,29 +105,29 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
     function validateEmail(email) {
         const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(String(email).toLowerCase());
-      }
+    }
 
     const sendForm = (event) => {
         event.preventDefault()
         if (!validateEmail(formData.correo)) {
             toast.error('Por favor, introduce una dirección de correo electrónico con un formato valido válido.', {
-              position: 'bottom-right',
-              style: {
-                  background: 'var(--rojo-ucr)',
-                  color: '#fff',
-                  fontSize: '18px',
-              },
-          });
+                position: 'bottom-right',
+                style: {
+                    background: 'var(--rojo-ucr)',
+                    color: '#fff',
+                    fontSize: '18px',
+                },
+            });
             return;
-          }
+        }
         formData.cuentaBancaria = cuentaBancaria
 
-        let sendingForm = { ...formData}
-        if(fileProveedor){
+        let sendingForm = { ...formData }
+        if (fileProveedor) {
             sendingForm.id_documento_fk.documento = fileProveedor
         }
         onSubmit(sendingForm);
-        sendingForm = { ...formData}
+        sendingForm = { ...formData }
     }
 
     const handleFileChange = (event) => {
@@ -136,7 +136,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
         if (file) {
             setSelectedFileName(file.name);
         }
-  
+
         setFileProveedor(file);
     };
 
@@ -200,7 +200,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="cedula" className="label-personalizado mb-2">Cédula</label>
-                                    <input type="text" className={mode === 2 ? 'form-control disabled-input' : 'form-control'} name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange}  disabled={(mode === 2)} required/>
+                                    <input type="text" className={mode === 2 ? 'form-control disabled-input' : 'form-control'} name="id_cedula_proveedor" id="id_cedula_proveedor" value={formData.id_cedula_proveedor} onChange={handleChange} disabled={(mode === 2)} required />
                                 </div>
                             </div>
                             <div className="col-md-6 position-relative">
@@ -229,7 +229,7 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="telefono" className="label-personalizado mb-2">Teléfono </label>
-                                <input type="text" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} pattern="^\d+(\.\d{1,2})?$" required/>
+                                <input type="text" className="form-control" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} pattern="^\d+(\.\d{1,2})?$" required />
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="id_documento_fk" className="label-personalizado mb-2" style={{ display: 'block' }}>
@@ -241,16 +241,13 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                                     name="id_documento_fk.documento"
                                     id="id_documento_fk"
                                     onChange={handleFileChange}
-                                    style={{ display: 'none' }}
                                     required
                                 />
                                 <label htmlFor="id_documento_fk" style={{ cursor: 'pointer', display: 'block' }}>
                                     {selectedFileName ? (
                                         <span>Nombre del archivo: {selectedFileName}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ""
                                     )}
                                 </label>
                                 {typeof formData.id_documento_fk.documento === 'string' && (
@@ -269,13 +266,13 @@ export const ProveedoresForm = ({ onSubmit, mode, proveedor, onCancel, onDelete 
                         <div className="row mb-4">
                             <div className="col">
                                 <label htmlFor="detalleDocumento" className="label-personalizado mb-2"> Detalle del documento </label>
-                                <textarea className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} required/>
+                                <textarea className="form-control" name="id_documento_fk.detalle" id="detalleDocumento" value={formData.id_documento_fk.detalle} onChange={handleChange} required />
                             </div>
                         </div>
 
                         <div className="d-flex flex-column">
-                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria</label>
-                            <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria}  itemName="Cuenta Bancaria" mode={mode} />
+                            <label htmlFor="cuentaBancaria" className="label-personalizado mb-2 h5">Cuenta Bancaria</label><span className="disabled-input">(Opcional)</span>
+                            <FormularioDinamico configuracion={configuracionCuentaBancaria} items={cuentaBancaria} setItems={setCuentaBancaria} itemName="Cuenta Bancaria" mode={mode} />
                         </div>
 
                     </div>

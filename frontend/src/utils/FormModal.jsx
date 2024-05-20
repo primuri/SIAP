@@ -39,7 +39,7 @@ export const FormModal = ({ icono, mode, nombreForm, onCancel, handleEditClick, 
       </div>
       <form onSubmit={sendForm} className='d-flex flex-column'>
         <div className="modal-body" style={{ padding: '0px' }} > 
-          {children}  {/*Se agrega el body del form*/}
+          {children}  
         </div>
         <div className="modal-footer justify-content-center position-sticky bottom-0">
           <div className="row">

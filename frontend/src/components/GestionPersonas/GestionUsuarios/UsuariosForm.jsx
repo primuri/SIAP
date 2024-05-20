@@ -244,7 +244,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
@@ -312,9 +312,9 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                 <div className="row mb-4">
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label>
+                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label><span className="disabled-input">(Buscador)</span>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required />
+                                                <input placeholder="Ingrese el nombre de un investigador previamente registrado" type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required />
                                                 {(academicosFilter.length > 0) && (
                                                     <div
                                                         className="form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"
@@ -350,9 +350,9 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                 <div className="row mb-4">
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label>
+                                            <label htmlFor="asociarEvaluador" className="label-personalizado mb-2">Asociar Evaluador(a)</label><span className="disabled-input">(Buscador)</span>
                                             <div className="position-relative">
-                                                <input type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required />
+                                                <input placeholder="Ingrese el nombre de un evaluador previamente registrado" type="text" className="form-control" name="asociar_evaluador" id="asociar_evaluador" value={formData.asociar_evaluador} onChange={handleChange} required />
                                                 {evaluadoresFilter.length > 0 && (
                                                     <div
                                                         className=" form-control bg-light position-absolute d-flex flex-column justify-content-center shadow ps-1 pe-1 row-gap-1 overflow-y-scroll pt-2"

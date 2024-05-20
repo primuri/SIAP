@@ -8,7 +8,6 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import icono from '../../assets/evaluation.svg'
 import icono2 from '../../assets/upload_doc.svg'
 import * as API from '../../api/gestionEvaluaciones'
-//coment
 
 export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false)
@@ -28,7 +27,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         obtenerProyectos()
         obtenerEvaluadores()
         checkCanDelete()
-        if(mode === 2 && evaluacion){
+        if (mode === 2 && evaluacion) {
             setProyectoSeleccionado(`${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_vi} | ${evaluacion.id_version_proyecto_fk.id_codigo_vi_fk.id_codigo_cimpa_fk.nombre}`)
             setEvaluadorSeleccionado(`${evaluacion.id_evaluador_fk.id_evaluador} | ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.nombre} ${evaluacion.id_evaluador_fk.id_nombre_completo_fk.apellido}`)
         }
@@ -42,20 +41,20 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         id_evaluacion: evaluacion ? evaluacion.id_evaluacion : '',
         detalle: evaluacion ? evaluacion.detalle : "",
         estado: evaluacion ? evaluacion.estado : "Pendiente",
-        id_version_proyecto_fk: evaluacion ? evaluacion.id_version_proyecto_fk.id_version_proyecto: null,
+        id_version_proyecto_fk: evaluacion ? evaluacion.id_version_proyecto_fk.id_version_proyecto : null,
         id_evaluador_fk: evaluacion ? evaluacion.id_evaluador_fk.id_evaluador : null,
         id_documento_evaluacion_fk: evaluacion ? { ...evaluacion.id_documento_evaluacion_fk } : { tipo: "Evaluacion", detalle: "", documento: null }
     })
 
     const checkCanDelete = async () => {
-        if(evaluacion){
+        if (evaluacion) {
             var canDelete = await API.canDelete(evaluacion.id_evaluacion)
             if (!canDelete) {
                 setCanDelete(false)
             }
             setCanDelete(true)
         }
-        
+
     }
     var obtenerProyectos = async () => {
         var listaProyectos = [];
@@ -65,7 +64,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
             for (const proyecto of response.data) {
                 let stringProyecto = `${proyecto.id_codigo_vi} | ${proyecto.id_codigo_cimpa_fk.nombre}`;
                 listaProyectos.push(stringProyecto);
-                
+
             }
         } catch (error) {
             console.error(error);
@@ -94,7 +93,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         }
     }
 
-    var obtenerEvaluadores = async () =>{
+    var obtenerEvaluadores = async () => {
         var listaEvaluadores = []
 
         try {
@@ -148,13 +147,13 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         setShowConfirmationEdit(false);
     };
 
-    const handleFileChange = (event,obj) => {
+    const handleFileChange = (event, obj) => {
         const file = event.target.files[0];
-      
+
         if (file) {
-          setSelectedFileName(file.name);
+            setSelectedFileName(file.name);
         }
-      
+
         setDocumento(file);
     };
 
@@ -185,7 +184,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                     id="free-solo-demo"
                                     freeSolo
                                     options={proyectos}
-                                    renderInput={(params) => <TextField {...params} required/>}
+                                    renderInput={(params) => <TextField {...params} required />}
                                     onChange={(event, newValue) => {
                                         if (newValue) {
                                             setProyectoSeleccionado(newValue)
@@ -194,7 +193,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                         }
                                     }}
                                     disabled={(formData.estado === "Completa")}
-                                    
+
                                 />
                             </div>
                             <div className="col">
@@ -224,9 +223,9 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                         </div>
                         <div className="row mb-4">
                             <div className="col">
-                        <label htmlFor="numero_version" className="label-personalizado mb-2">Evaluador asignado</label>
+                                <label htmlFor="numero_version" className="label-personalizado mb-2">Evaluador asignado</label>
 
-                            {(!loadedEvaluadores) && (
+                                {(!loadedEvaluadores) && (
                                     <div className="spinner-border text-info" style={{ marginLeft: '1vw', width: '15px', height: '15px' }} role="status"></div>
                                 )}
                                 <Autocomplete
@@ -234,7 +233,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                     id="free-solo-demo1"
                                     freeSolo
                                     options={evaluadores}
-                                    renderInput={(params) => <TextField {...params} required/>}
+                                    renderInput={(params) => <TextField {...params} required />}
                                     onChange={(event, newValue) => {
                                         if (newValue) {
                                             setEvaluadorSeleccionado(newValue)
@@ -242,7 +241,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
                                             try {
                                                 const match = newValue.match(regex);
-                                    
+
                                                 if (match && match[0]) {
                                                     const idEvaluador = match[0];
                                                     formData.id_evaluador_fk = idEvaluador
@@ -258,10 +257,10 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                 />
                             </div>
                             {mode == 2 && (
-                            <div className="col">
-                                <label htmlFor="numero_version" className="label-personalizado mb-2">Estado </label> <span className="disabled-input">(Solo lectura)</span>
-                                <input type="text" className="form-control disabled-input" name="detalle" id="detalle" value={formData.estado} disabled/>
-                            </div>)}
+                                <div className="col">
+                                    <label htmlFor="numero_version" className="label-personalizado mb-2">Estado </label> <span className="disabled-input">(Solo lectura)</span>
+                                    <input type="text" className="form-control disabled-input" name="detalle" id="detalle" value={formData.estado} disabled />
+                                </div>)}
                         </div>
                         <div className="row mb-4">
                             <div className="col">
@@ -276,16 +275,13 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                                     name="id_documento_evaluacion_fk.documento"
                                     id="documentoInforme"
                                     onChange={(event) => handleFileChange(event)}
-                                    style={{ display: 'none' }} 
                                     disabled={formData.estado === "Completa"}
                                 />
                                 <label htmlFor="documentoInforme" style={{ cursor: 'pointer', display: 'block' }}>
                                     {selectedFileName ? (
                                         <span>Nombre del archivo: {selectedFileName}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ""
                                     )}
                                 </label>
                                 {mode === 2 && formData.id_documento_evaluacion_fk.documento && (
@@ -304,7 +300,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
 
                             <div className="col">
                                 <label htmlFor="detalleEvaluacion" className="label-personalizado mb-2"> Detalle evaluación </label> <span className="disabled-input">(Opcional)</span>
-                                <textarea className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"}  name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
+                                <textarea className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={formData.estado === "Completa"} />
                             </div>
                         </div>
                     </div>

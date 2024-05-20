@@ -10,15 +10,15 @@ import Tooltip from '@mui/material/Tooltip';
 const filter = createFilterOptions();
 const currentYear = new Date().getFullYear();
 
-export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto,onCancel, onDelete }) => {
+export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto, onCancel, onDelete }) => {
     const [showConfirmationEdit, setShowConfirmationEdit] = useState(false);
     const [showConfirmationDelete, setShowConfirmationDelete] = useState(false);
     const [formData, setFormData] = useState({
-            "id_presupuesto_fk": version? version.id_presupuesto_fk.id_presupuesto : id_presupuesto,
-            "version": version ? version.version : "",
-            "monto": version ? version.monto : "",
-            "fecha": version ? version.fecha.split('T')[0] : "",
-            "detalle": version ? version.detalle : "",
+        "id_presupuesto_fk": version ? version.id_presupuesto_fk.id_presupuesto : id_presupuesto,
+        "version": version ? version.version : "",
+        "monto": version ? version.monto : "",
+        "fecha": version ? version.fecha.split('T')[0] : "",
+        "detalle": version ? version.detalle : "",
     });
 
     const user = JSON.parse(localStorage.getItem('user'))
@@ -35,7 +35,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                 event.target.setCustomValidity("La fecha no puede ser anterior a 1980.");
                 event.target.reportValidity();
                 return;
-            }else {
+            } else {
                 event.target.setCustomValidity("");
             }
         }
@@ -101,7 +101,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                     <div className="row justify-content-center">
                         <div className="col-1 mb-0 text-center">
                             <div className="img-space">
-                                <img src={icono}/>
+                                <img src={icono} />
                             </div>
                         </div>
                         <div className="col-10 mb-0 text-center">
@@ -132,52 +132,52 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label htmlFor="version" className="label-personalizado mb-2">Versión</label>
-                                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required disabled={isInvestigador} min="0"/>
+                                    <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required disabled={isInvestigador} min="0" />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="fecha_presentacion" className="label-personalizado mb-2"> Fecha   </label>
-                                <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required disabled={isInvestigador}/>
+                                <input type="date" className="form-control" name="fecha" id="fecha" value={formData.fecha} onChange={handleChange} required disabled={isInvestigador} />
                             </div>
-                            
+
                         </div>
                         <div className='row mb-4'>
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
-                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0"/>
-                                
+                                <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0" />
+
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="detalle" className="label-personalizado mb-2">Detalle</label>
-                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador} required/>
+                                <textarea className="form-control" name="detalle" id="detalle" value={formData.detalle} onChange={handleChange} disabled={isInvestigador} required />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {!isInvestigador && (
-                <div className="modal-footer justify-content-center position-sticky bottom-0">
-                    <div className="row">
-                        <div className="col">
-                            {mode === 1 ? (
-                                <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
-                            ) : (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
-                                    {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="versión de presupuesto" />)}
-                                </>
-                            )}
-                        </div>
-                        <div className="col">
-                            {mode === 2 && (
-                                <>
-                                    <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
-                                    {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="versión de presupuesto" />)}
-                                </>
-                            )}
+                    <div className="modal-footer justify-content-center position-sticky bottom-0">
+                        <div className="row">
+                            <div className="col">
+                                {mode === 1 ? (
+                                    <button id="boton-personalizado" type="submit" className='table-button border-0 p-2 rounded text-white'>Agregar</button>
+                                ) : (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleEditClick} className='table-button border-0 p-2 rounded text-white'>Guardar</button>
+                                        {showConfirmationEdit && (<Confirmar onConfirm={sendForm} onCancel={handleEditCancel} accion="editar" objeto="versión de presupuesto" />)}
+                                    </>
+                                )}
+                            </div>
+                            <div className="col">
+                                {mode === 2 && (
+                                    <>
+                                        <button id="boton-personalizado" type="button" onClick={handleDeleteClick} className="delete-button border-0 p-2 rounded text-white"> Eliminar </button>
+                                        {showConfirmationDelete && (<Confirmar onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} accion="eliminar" objeto="versión de presupuesto" />)}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
                 )}
             </form>
             <Toaster></Toaster>

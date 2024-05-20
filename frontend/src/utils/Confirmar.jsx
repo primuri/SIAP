@@ -14,11 +14,11 @@ export const Confirmar = ({ onConfirm, onCancel, accion, objeto }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content" >
           <div className="modal-header" id="header-confirmar">
-              <h4 >{accionMa} {objeto}</h4>
+            <h4 >{accionMa} {objeto}</h4>
 
-              <button id='close-confirmar' type="button" onClick={onCancel} className="close" data-dismiss="modal">
-                <span aria-hidden="true" className="close-icon">&times;</span>
-              </button>
+            <button id='close-confirmar' type="button" onClick={onCancel} className="close" data-dismiss="modal">
+              <span aria-hidden="true" className="close-icon">&times;</span>
+            </button>
 
           </div>
           <div className="modal-body">
@@ -26,7 +26,7 @@ export const Confirmar = ({ onConfirm, onCancel, accion, objeto }) => {
           </div>
           <div className="modal-footer">
 
-              <button type="button" className={accion === 'eliminar' ? 'delete-button w-100 p-2 rounded text-white': 'table-button w-100 p-2 rounded text-white'} onClick={onConfirm}> {accionMa} </button>
+            <button type="button" className={accion === 'eliminar' ? 'delete-button w-100 p-2 rounded text-white' : 'table-button w-100 p-2 rounded text-white'} onClick={onConfirm}> {accionMa} </button>
           </div>
         </div>
       </div>

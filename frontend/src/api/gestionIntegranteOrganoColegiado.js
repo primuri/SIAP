@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 
 const SIAPAPI = axios.create({
     baseURL: 'http://localhost:8000/'
@@ -16,8 +16,8 @@ export const obtenerIntegrantes = async (token) => {
 };
 
 export const agregarIntegrante = async (integrante, token) => {
-    try { 
-        const response_integrante =  await manejarErrores( SIAPAPI.post('organo_colegiado/integrante/', integrante, {
+    try {
+        const response_integrante = await manejarErrores(SIAPAPI.post('organo_colegiado/integrante/', integrante, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -25,25 +25,25 @@ export const agregarIntegrante = async (integrante, token) => {
         }));
         const id_integrante_creado = response_integrante.data.id_integrante;
         return id_integrante_creado;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando integrante: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarIntegrante = async (id, integrante, token) => {
-    try { 
-        return await manejarErrores( SIAPAPI.put(`organo_colegiado/integrante/${id}/`, integrante, {
+    try {
+        return await manejarErrores(SIAPAPI.put(`organo_colegiado/integrante/${id}/`, integrante, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error al editar integrante: ", error);
         throw error;
-    } 
+    }
 };
 
 export const eliminarIntegrante = async (id, token) => {
@@ -58,7 +58,7 @@ export const eliminarIntegrante = async (id, token) => {
 
 export const agregarVigencia = async (vigencia, token) => {
     try {
-        const response_vigencia = await manejarErrores( SIAPAPI.post('propuesta_proyecto/vigencia/', vigencia, {
+        const response_vigencia = await manejarErrores(SIAPAPI.post('propuesta_proyecto/vigencia/', vigencia, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'application/json'
@@ -66,14 +66,14 @@ export const agregarVigencia = async (vigencia, token) => {
         }));
         const id_vigencia_creada = response_vigencia.data.id_vigencia;
         return id_vigencia_creada;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando vigencia: ", error);
         throw error;
     }
 };
 
 export const editarVigencia = async (id, vigencia, token) => {
-    const responseVigencia = await manejarErrores( SIAPAPI.put(`propuesta_proyecto/vigencia/${id}/`, vigencia, {
+    const responseVigencia = await manejarErrores(SIAPAPI.put(`propuesta_proyecto/vigencia/${id}/`, vigencia, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ export const editarVigencia = async (id, vigencia, token) => {
 };
 
 export const eliminarVigencia = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`propuesta_proyecto/vigencia/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`propuesta_proyecto/vigencia/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ export const eliminarVigencia = async (id, token) => {
 
 export const agregarOficio = async (oficio, token) => {
     try {
-        const response_oficio =  await manejarErrores( SIAPAPI.post('version_proyecto/oficios/', oficio, {
+        const response_oficio = await manejarErrores(SIAPAPI.post('version_proyecto/oficios/', oficio, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'multipart/form-data'
@@ -102,14 +102,14 @@ export const agregarOficio = async (oficio, token) => {
         }));
         const id_oficio_creada = response_oficio.data.id_oficio;
         return id_oficio_creada;
-    } catch(error) {
+    } catch (error) {
         console.error("Error agregando oficio: ", error);
         throw error;
-    } 
+    }
 };
 
 export const editarOficio = async (id, oficio, token) => {
-    const responseOficio = await manejarErrores( SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
+    const responseOficio = await manejarErrores(SIAPAPI.patch(`version_proyecto/oficios/${id}/`, oficio, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -119,7 +119,7 @@ export const editarOficio = async (id, oficio, token) => {
 };
 
 export const eliminarOficio = async (id, token) => {
-    return await manejarErrores( SIAPAPI.delete(`version_proyecto/oficios/${id}/`, {
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}/`, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'

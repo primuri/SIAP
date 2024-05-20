@@ -138,7 +138,7 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
         if (file) {
             setSelectedFileName(file.name);
         }
-   
+
         setDocumentoData(file);
     }
 
@@ -332,16 +332,13 @@ export const GastoForm = ({ onSubmit, mode, gasto, id_partida, onCancel, onDelet
                                     name="id_documento_fk.documento"
                                     id="id_documento_fk"
                                     onChange={handleFileChange}
-                                    style={{ display: 'none' }}
                                     disabled={isInvestigador}
                                 />
                                 <label htmlFor="id_documento_fk" style={{ cursor: 'pointer', display: 'block' }}>
                                     {selectedFileName ? (
                                         <span>Nombre del archivo: {selectedFileName}</span>
                                     ) : (
-                                        <div className="file-upload-icon-container">
-                                            <img src={icono2} alt="Seleccionar archivo" className="file-upload-icon" />
-                                        </div>
+                                        ""
                                     )}
                                 </label>
                                 {typeof formData.id_documento_fk.documento === 'string' && (

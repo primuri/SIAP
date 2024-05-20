@@ -10,11 +10,11 @@ import { PermisoDenegado } from "../../utils/PermisoDenegado"
 import { useNavigate, useParams } from "react-router-dom"
 
 export const GestionProveedores = () => {
-  let {id_cedula_proveedor} = useParams()
+  let { id_cedula_proveedor } = useParams()
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const [reload, setReload] = useState(false)
-  const [proveedores, setProveedores] = useState([]) 
+  const [proveedores, setProveedores] = useState([])
   const [data, setData] = useState([])
   const [proveedor, setProveedor] = useState(null)
   const [cargado, setCargado] = useState(false)
@@ -49,28 +49,27 @@ export const GestionProveedores = () => {
     }
   }
 
-  useEffect(()=>{
-    if(id_cedula_proveedor && data.length > 0){
-        const elemento = data.find(e => e.id_cedula_proveedor === id_cedula_proveedor);
-        if(elemento){
-            setProveedor(elemento)
-            setEdit(true)
-            setAddClick(false)
-        }else{
-            navigate('/gestion-proveedores')
-        }
+  useEffect(() => {
+    if (id_cedula_proveedor && data.length > 0) {
+      const elemento = data.find(e => e.id_cedula_proveedor === id_cedula_proveedor);
+      if (elemento) {
+        setProveedor(elemento)
+        setEdit(true)
+        setAddClick(false)
+      } else {
+        navigate('/gestion-proveedores')
+      }
     }
-  },[data,id_cedula_proveedor])
+  }, [data, id_cedula_proveedor])
 
-  //funciona perfectamente
   const addProveedor = async (formData) => {
     try {
       var toastId = toast.loading('Agregando...', {
         position: 'bottom-right',
         style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--celeste-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
       });
 
@@ -96,21 +95,20 @@ export const GestionProveedores = () => {
       })
       setAddClick(false)
     } catch (error) {
-      toast.dismiss(toastId)   
+      toast.dismiss(toastId)
     }
   }
 
-  //no deja editar si tiene cuentas
   const editProveedor = async (formData) => {
     try {
       var toastId = toast.loading('Editando...', {
         position: 'bottom-right',
         style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--celeste-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
-    });
+      });
       if (formData.id_documento_fk) {
         if (typeof formData.id_documento_fk.documento === 'object') {
           var responseDocumento = await editarDocumentoCuentaAndDocumento(formData.id_documento_fk.id_documento, formData.id_documento_fk, token)
@@ -118,7 +116,7 @@ export const GestionProveedores = () => {
           delete formData.id_documento_fk.documento
           let id_doc = formData.id_documento_fk.id_documento
           delete formData.id_documento_fk.id_documento
-          var responseDocumento = await editarDocumentoCuenta(id_doc,formData.id_documento_fk, token)
+          var responseDocumento = await editarDocumentoCuenta(id_doc, formData.id_documento_fk, token)
         }
         formData.id_documento_fk = responseDocumento.data.id_documento;
       }
@@ -130,7 +128,7 @@ export const GestionProveedores = () => {
 
       const cuentasBancarias = Datos?.cuentaBancaria;
       delete proveedor.cuentaBancaria;
-      
+
       if (cuentasBancarias) {
         await actualizarCuentasBancarias(cuentasBancarias, proveedor.id_cedula_proveedor, token);
       }
@@ -156,20 +154,19 @@ export const GestionProveedores = () => {
     }
   }
 
-  //no elimina el que tienen 2 cuentas
   const deleteProveedor = async (id, doc_id) => {
     try {
       var toastId = toast.loading('Eliminando...', {
         position: 'bottom-right',
         style: {
-            background: 'var(--celeste-ucr)',
-            color: '#fff',
-            fontSize: '18px',
+          background: 'var(--celeste-ucr)',
+          color: '#fff',
+          fontSize: '18px',
         },
-    });
+      });
       await eliminarProveedor(id, token)
       await eliminarDocumentoCuentas(doc_id, token)
-      
+
 
       toast.success('Proveedor eliminado correctamente', {
         id: toastId,
@@ -187,14 +184,14 @@ export const GestionProveedores = () => {
       toast.dismiss(toastId)
     }
   }
-  
+
   const onCancel = () => {
     setAddClick(false)
     setEdit(false)
     document.body.classList.remove('modal-open');
     navigate('/gestion-proveedores')
   }
-  
+
   const addClicked = () => {
     setAddClick(true)
     setEdit(false)

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 
-const token = localStorage.getItem('token')                                     
+const token = localStorage.getItem('token')
 
 
 const SIAPAPI = axios.create({
@@ -114,7 +114,7 @@ export const obtenerNumeroAcuerdos = async (id_sesion) => {
         }
     }));
 
-    const acuerdosFiltrados = response.data.filter(acuerdo => 
+    const acuerdosFiltrados = response.data.filter(acuerdo =>
         acuerdo.id_sesion_fk.id_sesion == id_sesion
     );
 
@@ -132,19 +132,19 @@ export const obtenerAcuerdos = async () => {
 
 export const obtenerIntegrantes = async (id_organo_colegiado) => {
     const response = await manejarErrores(SIAPAPI.get('organo_colegiado/integrante/', {
-        headers:{
+        headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
         }
     }))
-    const integrantesFiltrados = response.data.filter( integrante => 
+    const integrantesFiltrados = response.data.filter(integrante =>
         integrante.id_organo_colegiado_fk == id_organo_colegiado
     );
     return integrantesFiltrados;
 }
 
 export const agregarDocumento = async (documento) => {
-    const uploadDoc = await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento,{
+    const uploadDoc = await manejarErrores(SIAPAPI.post('version_proyecto/documentos/', documento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -156,18 +156,18 @@ export const agregarDocumento = async (documento) => {
 
 
 export const editarDocumento = async (id, documento) => {
-    try { 
-        return await manejarErrores( SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
+    try {
+        return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
             headers: {
                 'Authorization': `token ${token}`,
                 'Content-Type': 'multipart/form-data'
             }
         }));
-       
-    } catch(error) {
+
+    } catch (error) {
         console.error("Error editar Documento sesion: ", error);
         throw error;
-    } 
+    }
 }
 
 
@@ -184,7 +184,7 @@ export const editarAgenda = async (id, agenda) => {
 
 
 export const agregarSesion = async (sesion) => {
-    return await manejarErrores(SIAPAPI.post('organo_colegiado/sesion/', sesion,{
+    return await manejarErrores(SIAPAPI.post('organo_colegiado/sesion/', sesion, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -194,7 +194,7 @@ export const agregarSesion = async (sesion) => {
 }
 
 export const addActa = async (acta) => {
-    const actaid = await manejarErrores(SIAPAPI.post('organo_colegiado/acta/', acta,{
+    const actaid = await manejarErrores(SIAPAPI.post('organo_colegiado/acta/', acta, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -206,7 +206,7 @@ export const addActa = async (acta) => {
 
 export const addConvocatoria = async (convocatoria) => {
 
-    let convocatoriaid = await manejarErrores(SIAPAPI.post('organo_colegiado/convocatoria/', convocatoria,{
+    let convocatoriaid = await manejarErrores(SIAPAPI.post('organo_colegiado/convocatoria/', convocatoria, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -219,7 +219,7 @@ export const addConvocatoria = async (convocatoria) => {
 
 export const addAgenda = async (agenda) => {
 
-    let agendaid = await manejarErrores(SIAPAPI.post('organo_colegiado/agenda/', agenda,{
+    let agendaid = await manejarErrores(SIAPAPI.post('organo_colegiado/agenda/', agenda, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -300,7 +300,7 @@ export const agregarOficio = async (oficio) => {
 
 export const agregarSeguimiento = async (seguimiento) => {
 
-    const seguimientoid = await manejarErrores(SIAPAPI.post('organo_colegiado/seguimiento/', seguimiento,{
+    const seguimientoid = await manejarErrores(SIAPAPI.post('organo_colegiado/seguimiento/', seguimiento, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -312,7 +312,7 @@ export const agregarSeguimiento = async (seguimiento) => {
 
 
 export const agregarAcuerdo = async (acuerdo) => {
-    return await manejarErrores(SIAPAPI.post('organo_colegiado/acuerdo/', acuerdo,{
+    return await manejarErrores(SIAPAPI.post('organo_colegiado/acuerdo/', acuerdo, {
         headers: {
             'Authorization': `token ${token}`,
             'Content-Type': 'application/json'
@@ -323,10 +323,12 @@ export const agregarAcuerdo = async (acuerdo) => {
 
 
 export const eliminarOficio = async (id) => {
-    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`,{
-        headers: {'Authorization': `token ${token}`, 
-                  'Content-Type':'application/json'}
-     }));
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
 };
 
 

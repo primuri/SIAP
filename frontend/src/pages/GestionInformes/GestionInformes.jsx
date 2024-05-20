@@ -209,7 +209,7 @@ export const GestionInformes = () => {
             {!error ? (
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div className=" flex-row">
-                        {isInvestigador ? (<h1>Visualizar informes de la versión {numVersion} de: </h1>): (<h1>Gestión de informes de la versión {numVersion} de: </h1>)}
+                        {isInvestigador ? (<h1>Visualizar informes de la versión {numVersion} de: </h1>) : (<h1>Gestión de informes de la versión {numVersion} de: </h1>)}
 
                         <br></br>
                         <h3>{id_proyecto}</h3>

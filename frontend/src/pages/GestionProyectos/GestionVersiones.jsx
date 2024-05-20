@@ -58,26 +58,25 @@ export const GestionVersiones = () => {
     async function loadAcademicos(proyecto) {
         try {
             const res = await obtenerAcademicos(localStorage.getItem('token'));
-        const resp = await obtenerVersionProyectos(localStorage.getItem('token'));
-        const filteredData = resp.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === proyecto);
+            const resp = await obtenerVersionProyectos(localStorage.getItem('token'));
+            const filteredData = resp.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === proyecto);
 
-        if (filteredData.length > 0) {
-            // Suponiendo que siempre hay un colaborador principal
-            const nombrePrincipal = filteredData.map(item => 
-                `${item.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} ${item.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido}`.toLowerCase()
-            );
+            if (filteredData.length > 0) {
+                const nombrePrincipal = filteredData.map(item =>
+                    `${item.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.nombre} ${item.id_codigo_vi_fk.id_codigo_cimpa_fk.id_colaborador_principal_fk.id_academico_fk.id_nombre_completo_fk.apellido}`.toLowerCase()
+                );
 
-            const academicosFiltrados = res.data.filter(academico => 
-                !nombrePrincipal.includes(`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido}`.toLowerCase())
-            );
+                const academicosFiltrados = res.data.filter(academico =>
+                    !nombrePrincipal.includes(`${academico.id_nombre_completo_fk.nombre} ${academico.id_nombre_completo_fk.apellido}`.toLowerCase())
+                );
 
-            setAcademicos(academicosFiltrados);
-        } else {
-            setAcademicos(res.data);  // Si no hay colaboradores principales, se usa la lista completa
-        }
+                setAcademicos(academicosFiltrados);
+            } else {
+                setAcademicos(res.data);  
+            }
         } catch (error) {
             toast.error('Error al cargar los datos de investigadores', {
-                duration: 4000,
+                duration: 10000,
                 position: 'bottom-right',
                 style: {
                     background: '#670000',
@@ -175,7 +174,7 @@ export const GestionVersiones = () => {
 
 
 
-    
+
 
 
     useEffect(() => {
@@ -304,7 +303,7 @@ export const GestionVersiones = () => {
                 delete Datos.evento;
                 ev = true;
             }
-            if(soft || artic || ev){
+            if (soft || artic || ev) {
                 formData.delete('json');
                 let fecha_ini = Datos.id_vigencia_fk.fecha_inicio;
                 let fecha_fi = Datos.id_vigencia_fk.fecha_fin;
@@ -336,8 +335,8 @@ export const GestionVersiones = () => {
                 const id_oficio_creado = await agregarOficio(formData, localStorage.getItem('token'));
                 delete Datos.id_oficio_fk;
                 Datos.id_oficio_fk = id_oficio_creado;
-                
-                
+
+
                 const res = await obtenerVersionProyectos(localStorage.getItem('token'));
                 const filteredData = res.data.filter(item => item.id_codigo_vi_fk.id_codigo_vi === clean_id);
 
@@ -347,12 +346,12 @@ export const GestionVersiones = () => {
                 const id_version_creada = await agregarVersionProyectos(Datos, localStorage.getItem('token'))
 
                 producto.id_producto_fk.id_version_proyecto_fk = id_version_creada;
-    
+
                 const id_producto_creado = await agregarProducto(producto.id_producto_fk, localStorage.getItem('token'))
-    
+
                 delete producto.id_producto_fk;
                 producto.id_producto_fk = id_producto_creado;
-    
+
                 if (soft) {
                     await agregarSoftware(producto, localStorage.getItem('token'))
                 } else if (artic) {
@@ -360,11 +359,11 @@ export const GestionVersiones = () => {
                 } else if (ev) {
                     await agregarevento(producto, localStorage.getItem('token'));
                 }
-                if(Datos.colaboradores != undefined){
+                if (Datos.colaboradores != undefined) {
                     await agregarColaboradorSecundario(Datos.colaboradores, id_version_creada, localStorage.getItem('token'))
-    
+
                 }
-               
+
                 loadVersionProyectos(id_vi)
                 toast.success('Versión de proyecto agregada correctamente', {
                     id: toastId,
@@ -381,15 +380,15 @@ export const GestionVersiones = () => {
                 setAddClick(false)
                 setReload(!reload)
                 navigate(`/gestion-proyectos/${id}/gestion-versiones`)
-    
-            }else{
+
+            } else {
                 setAddClick(false)
                 setReload(!reload)
                 navigate(`/gestion-proyectos/${id}/gestion-versiones`)
                 toast.dismiss(toastId)
                 toast.error('Se debe de agregar un producto para crear una versión de proyecto', {
                     id: toastId,
-                    duration: 4000,
+                    duration: 10000,
                     position: 'bottom-right',
                     style: {
                         background: 'var(--rojo-ucr)',
@@ -398,12 +397,11 @@ export const GestionVersiones = () => {
                     },
                 });
             }
-          
-           
-           
+
+
+
         } catch (error) {
             toast.dismiss(toastId)
-            //await eliminarVersion(producto?.id_producto_fk, localStorage.getItem("token"))
             await eliminarOficio(Datos.id_oficio_fk, localStorage.getItem("token"));
             await eliminarVigencia(Datos.id_vigencia_fk, localStorage.getItem("token"));
         }
@@ -558,17 +556,17 @@ export const GestionVersiones = () => {
             delete Datos.id_oficio_fk;
             Datos.id_oficio_fk = id_oficio_editada.data.id_oficio;
 
-            
+
             const colaboradores = Datos.colaboradores
             delete Datos.colaboradores
             delete Datos.software
             delete Datos.evento
             delete Datos.articulo
-             await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
-            if(colaboradores != undefined){
+            await editarVersionProyectos(id_version_proy, Datos, localStorage.getItem("token"))
+            if (colaboradores != undefined) {
                 await editarColaboradorSecundario(colaboradores, id_version_proy, localStorage.getItem('token'))
             }
-           
+
 
 
             if (producto != null) {
@@ -692,7 +690,7 @@ export const GestionVersiones = () => {
                 <div className="d-flex flex-column justify-content-center pt-5 ms-5 row-gap-3">
                     <div>
                         <div className="d-flex flex-row">
-                            {isInvestigador ? (<h1>Visualizar versiones del proyecto {clean_id}</h1>): (<h1>Gestión de versiones del proyecto {clean_id}</h1>)}
+                            {isInvestigador ? (<h1>Visualizar versiones del proyecto {clean_id}</h1>) : (<h1>Gestión de versiones del proyecto {clean_id}</h1>)}
 
                             {!cargado && (
                                 <div className="spinner-border text-info" style={{ marginTop: '1.2vh', marginLeft: '1.5vw' }} role="status"></div>

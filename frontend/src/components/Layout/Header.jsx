@@ -18,14 +18,14 @@ function obtenerNombreDeUsuario(correoElectronico) {
   }
 }
 
-  let rol = "";
-  const usuario = JSON.parse(localStorage.getItem('user'));
-  if (usuario) {
-    rol = usuario.groups[0];
-    if(usuario.groups[1]) {
-      usuario.groups[1] ? rol += "-" + usuario.groups[1] : "";
-    }
+let rol = "";
+const usuario = JSON.parse(localStorage.getItem('user'));
+if (usuario) {
+  rol = usuario.groups[0];
+  if (usuario.groups[1]) {
+    usuario.groups[1] ? rol += "-" + usuario.groups[1] : "";
   }
+}
 
 export const Header = () => {
   const usuarioGuardado = JSON.parse(localStorage.getItem('user'));
@@ -36,8 +36,8 @@ export const Header = () => {
   return (
     <header className="bg-light w-100 d-flex justify-content-between align-items-center position-fixed top-0 end-0 start-0 shadow">
       <Link to={rol ? `/inicio-${rol}` : "/inicio-sesion"} className='w-100'>
-  <img src={logo} className='logo' alt='Logo a página principal' />
-</Link>
+        <img src={logo} className='logo' alt='Logo a página principal' />
+      </Link>
 
 
       {usuarioGuardado && (
@@ -45,7 +45,7 @@ export const Header = () => {
           <div>
             {usuarioGuardado.groups.includes("administrador") ? (
               <p className='mb-0'>Administrador</p>
-            ) :  <p className='mb-0'>{obtenerNombreDeUsuario(usuarioGuardado.correo)}</p>}
+            ) : <p className='mb-0'>{obtenerNombreDeUsuario(usuarioGuardado.correo)}</p>}
             <p onClick={handleLogout} style={{ color: "var(--celeste-ucr)", cursor: "pointer" }} className='mb-0 cerrar-sesion'>Cerrar sesión</p>
           </div>
           <img src={user} alt="Imagen de perfil" className="container rounded-circle" />

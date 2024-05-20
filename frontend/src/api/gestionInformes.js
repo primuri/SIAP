@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {manejarErrores} from './errorHandler'
+import { manejarErrores } from './errorHandler'
 
 
 const token = localStorage.getItem('token')
@@ -155,10 +155,12 @@ export const editarOficioAndDocumento = async (id, oficio) => {
 };
 
 export const eliminarOficio = async (id) => {
-    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`,{
-        headers: {'Authorization': `token ${token}`, 
-                  'Content-Type':'application/json'}
-     }));
+    return await manejarErrores(SIAPAPI.delete(`version_proyecto/oficios/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
 };
 
 export const obtenerDocumentoInforme = async () => {
@@ -179,7 +181,7 @@ export const agregarDocumentoInforme = async (documento) => {
     }));
 };
 
-export const editarDocumentoInforme= async (id, documento) => {
+export const editarDocumentoInforme = async (id, documento) => {
     return await manejarErrores(SIAPAPI.patch(`version_proyecto/documentos/${id}/`, documento, {
         headers: {
             'Authorization': `token ${token}`,
@@ -234,10 +236,12 @@ export const editarVersionInforme = async (id, versionInforme) => {
 };
 
 export const eliminarVersionInforme = async (id) => {
-    return await manejarErrores(SIAPAPI.delete(`informe/versioninformes/${id}`,{
-        headers: {'Authorization': `token ${token}`, 
-                  'Content-Type':'application/json'}
-     }));
+    return await manejarErrores(SIAPAPI.delete(`informe/versioninformes/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }));
 };
 
 export const obtenerAccion = async () => {
@@ -306,10 +310,11 @@ export const editarDocumentoAccion = async (id, documento) => {
 };
 
 export const eliminarAccion = async (id) => {
-    return await manejarErrores(SIAPAPI.delete(`informe/acciones/${id}`,{
-        headers: {'Authorization': `token ${token}`, 
-                  'Content-Type':'application/json'
+    return await manejarErrores(SIAPAPI.delete(`informe/acciones/${id}`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
         }
-     }));
+    }));
 };
 
