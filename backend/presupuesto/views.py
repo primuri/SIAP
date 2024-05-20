@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from .models import TipoPresupuesto, EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
-from .serializers import TipoPresupuestoSerializer, EnteFinancieroSerializer, PresupuestoSerializer, VersionPresupuestoSerializer, PartidaSerializer, ProveedorSerializer, ProductoServicioSerializer, FacturaSerializer, GastoSerializer, CuentaBancariaSerializer, CodigoFinancieroSerializer
+from .models import EnteFinanciero, Presupuesto, VersionPresupuesto, Partida, Proveedor, ProductoServicio, Factura, Gasto, CuentaBancaria, CodigoFinanciero
+from .serializers import  EnteFinancieroSerializer, PresupuestoSerializer, VersionPresupuestoSerializer, PartidaSerializer, ProveedorSerializer, ProductoServicioSerializer, FacturaSerializer, GastoSerializer, CuentaBancariaSerializer, CodigoFinancieroSerializer
 
 from django_files.permisos import PermisoPorRol
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -11,10 +11,6 @@ from rest_framework.permissions import IsAuthenticated
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])
-class TipoPresupuestoViewSet(viewsets.ModelViewSet):
-    view_name = 'tipo_presupuestoss'
-    queryset = TipoPresupuesto.objects.all()
-    serializer_class = TipoPresupuestoSerializer
 
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated, PermisoPorRol])

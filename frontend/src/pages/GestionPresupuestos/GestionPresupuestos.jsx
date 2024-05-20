@@ -7,7 +7,7 @@ import { Search } from "../../utils/Search"
 import { Back } from "../../utils/Back"
 import { toast, Toaster } from "react-hot-toast"
 import { PermisoDenegado } from "../../utils/PermisoDenegado"
-import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte, buscaCodigoFinanciero, agregarCodigosFinancieros, obtenerVersionesProyectos } from "../../api/gestionPresupuestos"
+import { agregarPresupuesto, obtenerPresupuestos, eliminarPresupuesto, actualizarPresupuesto, buscaEnteFinanciero, agregarEnte, buscaCodigoFinanciero, agregarCodigosFinancieros, obtenerVersionesProyectos, obtenerVersionesPresupuesto } from "../../api/gestionPresupuestos"
 import { useNavigate, useParams } from "react-router-dom"
 import { ReportButton } from "../../utils/ReportButton";
 import axios from 'axios'
@@ -20,6 +20,7 @@ export const GestionPresupuestos = () => {
   const [presupuestos, setPresupuestos] = useState([])
   const [data, setData] = useState([])
   const [presupuesto, setPresupuesto] = useState(null)
+  const [canDelete, setCanDelete] = useState(false)
   const [version, setVersion] = useState(null)
   const [cargado, setCargado] = useState(false)
   const [error, setError] = useState(false)
@@ -28,7 +29,7 @@ export const GestionPresupuestos = () => {
   const [JsonForReport, setJsonForReport] = useState({ reportData: {}, reportTitle: {}, colNames: {}, dataKeys: {}, idKey: {} })
   const [JsonIsReady, setJsonIsReady] = useState(false)
   const columns = ['Proyecto', 'Año de aprobación', 'Tipo', 'Ente financiero', 'Oficio', 'Documento', 'Código Financiero', 'Versiones']
-  const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'id_tipo_presupuesto_fk.tipo', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo', 'Versiones']
+  const dataKeys = ['id_codigo_vi.id_codigo_vi', 'anio_aprobacion', 'tipo_presupuesto', 'id_ente_financiero_fk.nombre', 'id_oficio_fk.id_oficio', 'id_oficio_fk.ruta_archivo', 'id_codigo_financiero_fk.codigo', 'Versiones']
 
   //===============================================================================================================================
 
@@ -115,7 +116,7 @@ export const GestionPresupuestos = () => {
       'id_presupuesto',
       'id_codigo_vi.id_codigo_vi',
       'id_version_proyecto_fk.numero_version',
-      'id_tipo_presupuesto_fk.tipo',
+      'tipo_presupuesto',
       'id_ente_financiero_fk.nombre',
       'id_codigo_financiero_fk.codigo',
       'anio_aprobacion',
@@ -149,13 +150,14 @@ export const GestionPresupuestos = () => {
   useEffect(() => {
     loadPresupuestos(proyectoID)
     loadVersiones(proyectoID)
-  }, [reload, proyectoID])
+  }, [reload, proyectoID, canDelete])
   async function loadPresupuestos(proyectoID) {
     try {
       const res = await obtenerPresupuestos(proyectoID, localStorage.getItem('token'))
       setData(res.data)
       setPresupuestos(res.data)
       setCargado(true)
+      await loadVersionesPresupuestos()
     } catch (error) {
       toast.error('Error al cargar los datos de Presupuestos', {
         duration: 4000,
@@ -172,6 +174,24 @@ export const GestionPresupuestos = () => {
     try {
       const res = await obtenerVersionesProyectos(proyectoID, localStorage.getItem('token'))
       setVersion(res.data)
+    } catch (error) {
+
+    }
+  }
+
+  async function loadVersionesPresupuestos() {
+    try {
+      const res = await obtenerVersionesPresupuesto(localStorage.getItem('token'))
+      if (presupuestos.length > 0){
+        const versionesFiltered = res.data.filter((versionP) => versionP.id_presupuesto_fk.id_presupuesto == presupuestos[0].id_presupuesto)
+        if(versionesFiltered.length > 0){
+          setCanDelete(false)
+        }else{
+          setCanDelete(true)
+        }
+      }else{
+        setCanDelete(true)
+      }
     } catch (error) {
 
     }
@@ -198,7 +218,7 @@ export const GestionPresupuestos = () => {
       delete Data.presupuesto.id_presupuesto
       Data.presupuesto.id_codigo_vi = Data.proyecto.id_codigo_vi
       delete Data.proyecto.id_codigo_vi
-      Data.presupuesto.id_tipo_presupuesto_fk = Data.tipoPresupuesto.id_tipo_presupuesto
+      Data.presupuesto.tipo_presupuesto = Data.tipoPresupuesto
       let ente = await buscaEnteFinanciero(Data.ente_financiero_fk.nombre, localStorage.getItem('token'))
       if (ente) {
         delete Data.ente_financiero_fk
@@ -253,7 +273,7 @@ export const GestionPresupuestos = () => {
       delete Data.presupuesto.id_presupuesto
       Data.presupuesto.id_codigo_vi = Data.proyecto.id_codigo_vi
       delete Data.proyecto.id_codigo_vi
-      Data.presupuesto.id_tipo_presupuesto_fk = Data.tipoPresupuesto.id_tipo_presupuesto
+      Data.presupuesto.tipo_presupuesto = Data.tipoPresupuesto
       let ente = await buscaEnteFinanciero(Data.ente_financiero_fk.nombre, localStorage.getItem('token'))
       if (ente) {
         delete Data.ente_financiero_fk
@@ -381,7 +401,7 @@ export const GestionPresupuestos = () => {
             <Search colNames={columns} columns={dataKeys} onSearch={search}></Search>
           </div>
           <Table columns={columns} data={presupuestos} dataKeys={dataKeys} onDoubleClick={elementClicked} onClickButton2={elementClicked} hasButtonColumn={true} buttonText="Gestionar"></Table>
-          {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1}></PresupuestoForm></Modal>)}
+          {addClick && (<Modal ><PresupuestoForm onSubmit={addPresupuesto} version={version[0]} onCancel={onCancel} mode={1} canDelete={canDelete}></PresupuestoForm></Modal>)}
           {edit &&
             (
               <Modal>
@@ -392,6 +412,7 @@ export const GestionPresupuestos = () => {
                   onDelete={() => deletePresupuesto(presupuesto.id_presupuesto)}
                   presupuesto={presupuesto}
                   version={version[0]}
+                  canDelete={canDelete}
                 >
                 </PresupuestoForm>
               </Modal>
