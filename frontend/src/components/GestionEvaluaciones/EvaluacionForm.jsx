@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import icono from '../../assets/evaluation.svg'
+import icono2 from '../../assets/upload_doc.svg'
 import * as API from '../../api/gestionEvaluaciones'
 //coment
 
@@ -22,6 +23,7 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
     const [evaluadorSeleccionado, setEvaluadorSeleccionado] = useState('')
     const [loadedEvaluadores, setLoadedEvaluadores] = useState(true)
     const [canDelete, setCanDelete] = useState(true)
+
     useEffect(() => {
         obtenerProyectos()
         obtenerEvaluadores()
@@ -152,7 +154,6 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
         setDocumento(file)
     };
 
-
     const sendForm = (event) => {
         event.preventDefault();
         let sendingForm = { ...formData }
@@ -259,7 +260,6 @@ export const EvaluacionForm = ({ onSubmit, onDelete, onCancel, mode, evaluacion 
                             </div>)}
                         </div>
                         <div className="row mb-4">
-
                             <div className="col">
                                 <label htmlFor="documento" className="label-personalizado mb-2"> Documento evaluación</label> <span className="disabled-input">(Opcional)</span>
                                 <input  accept=".pdf,.xls,.xlsx,.doc,.docx,.odt,.ods,.rar,.zip"  type="file" className={formData.estado === "Completa" ? "form-control disabled-input" : "form-control"} name="id_documento_evaluacion_fk.documento" id="documentoInforme" onChange={(event) => handleFileChange(event)} disabled={formData.estado === "Completa"}/>
