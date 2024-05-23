@@ -112,16 +112,21 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
     return (
         <div style={{ marginRight: '1vw' }}>
             <div class="mi-boton-wrapper">
-                <button type="button" className="boton-reporte" onClick={handleButtonClick}>
-                    <p>Generar reporte</p>
-                    <span className='icono'><img width={"35px"} src={reporte} /></span>
-                    <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
-                        <option>PDF</option>
-                        <option>EXCEL</option>
-                    </select>
+                <button type="button" class="boton-reporte" onClick={handleButtonClick}>
+                    <div class="texto-boton">
+                        <p>Generar reporte</p>
+                    </div>
+                    <div class="contenedor-icono-selector">
+                        <span class='icono'><img width="35px" src={reporte} /></span>
+                        <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
+                            <option>PDF</option>
+                            <option>EXCEL</option>
+                        </select>
+                    </div>
                 </button>
                 <span class="hover-text">Generar reporte de la información en pantalla</span>
             </div>
+
             {
                 (buttonClicked && (
                     <div style={{ position: 'absolute', left: -9999, top: -9999, margin: '0px' }}>

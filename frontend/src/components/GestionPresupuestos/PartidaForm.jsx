@@ -52,11 +52,6 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version, onCancel, onD
 
             }
 
-            setFormErrors(errors => ({
-                ...errors,
-                [name]: ''
-            }));
-
             return newFormData; 
         });
     };
@@ -143,7 +138,6 @@ export const PartidaForm = ({ onSubmit, mode, version, id_version, onCancel, onD
                             <div className="col-md-6">
                                 <label htmlFor="monto" className="label-personalizado mb-2">Monto</label>
                                 <input type="number" className="form-control" name="monto" id="monto" value={formData.monto} onChange={handleChange} required disabled={isInvestigador} min="0" />
-                                {formErrors.monto && <div style={{ color: 'red' }}>{formErrors.monto}</div>}
                             </div>
                         </div>
                     </div>

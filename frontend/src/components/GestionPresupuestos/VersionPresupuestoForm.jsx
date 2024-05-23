@@ -131,7 +131,7 @@ export const VersionPresupuestoForm = ({ onSubmit, mode, version, id_presupuesto
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <div className="form-group">
-                                    <label htmlFor="version" className="label-personalizado mb-2">Versión</label>
+                                    <label htmlFor="version" className="label-personalizado mb-2">Número de versión</label>
                                     <input type="number" className="form-control" name="version" id="version" value={formData.version} onChange={handleChange} required disabled={isInvestigador} min="0" />
                                 </div>
                             </div>
