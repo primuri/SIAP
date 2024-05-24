@@ -677,14 +677,11 @@ input[type="submit"]:focus {
 }
 
 .boton-reporte {
-  background-color: #ffffff;
-  border: 0;
-  color: black;
+  background-color: #005da4;
+  color: white;
   border-radius: 0.75rem;
-  padding: 0.5rem;
+  padding:0.25rem;
   display: flex;
-  flex-direction: column; /* Alinea los elementos en columna */
-  align-items: center; /* Centra los elementos horizontalmente */
   font-size: 1.1rem;
   position: relative;
   z-index: 1;

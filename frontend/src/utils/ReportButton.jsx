@@ -113,18 +113,20 @@ export const ReportButton = ({ reportData, reportTitle, colNames, dataKeys, idKe
         <div style={{ marginRight: '1vw' }}>
             <div class="mi-boton-wrapper">
                 <button type="button" class="boton-reporte" onClick={handleButtonClick}>
-                    <div class="texto-boton">
-                        <p>Generar reporte</p>
-                    </div>
-                    <div class="contenedor-icono-selector">
-                        <span class='icono'><img width="35px" src={reporte} /></span>
-                        <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
-                            <option>PDF</option>
-                            <option>EXCEL</option>
-                        </select>
+                    <div className="row" id="reporte-container">
+                        <div className="texto-boton col">
+                            <p>Generar reporte</p>
+                        </div>
+                        <div className="col contenedor-icono-selector">
+                        
+                            <select className="rounded-start-3 selectPersonalized form-select d-inline p-2 shadow-sm" onBlur={handleBlur} onFocus={handleFocus} onChange={(event) => setSelectedOption(event.target.value)} value={selectedOption} style={{ fontSize: '12px', lineHeight: '80%', width: '3.5rem', backgroundPosition: 'right 0rem center' }}>
+                                <option>PDF</option>
+                                <option>EXCEL</option>
+                            </select>
+                        </div>
                     </div>
                 </button>
-                <span class="hover-text">Generar reporte de la información en pantalla</span>
+
             </div>
 
             {
