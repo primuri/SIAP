@@ -312,7 +312,7 @@ export const UsuariosForm = ({ onSubmit, mode, usuario, onCancel, onDelete, }) =
                                 <div className="row mb-4">
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label><span className="disabled-input">(Buscador)</span>
+                                            <label htmlFor="asociarAcademico" className="label-personalizado mb-2">Asociar Investigador(a)</label><span className="disabled-input m-1">(Buscador)</span>
                                             <div className="position-relative">
                                                 <input placeholder="Ingrese el nombre de un investigador previamente registrado" type="text" className="form-control" name="asociar_academico" id="asociar_academico" value={formData.asociar_academico} onChange={handleChange} required />
                                                 {(academicosFilter.length > 0) && (
