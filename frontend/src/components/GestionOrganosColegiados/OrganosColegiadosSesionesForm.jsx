@@ -288,7 +288,6 @@ export const OrganosColegiadosSesionesForm = ({ onSubmit, mode, sesion, onCancel
                                         name="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento"
                                         id="id_agenda_fk.id_convocatoria_fk?.id_documento_convocatoria_fk.documento"
                                         onChange={handleFileChange}
-                                        style={{ display: 'none' }}
                                         required
                                         disabled={rol === "invitado"}
                                     />

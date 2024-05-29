@@ -259,7 +259,6 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                     name="id_seguimiento_fk.id_documento_seguimiento_fk.documento"
                                     id="id_seguimiento_fk.id_documento_seguimiento_fk.documento"
                                     onChange={handleFileChange}
-                                    style={{ display: 'none' }}
                                     required
                                     disabled={rol === "invitado"}
                                 />
@@ -295,7 +294,6 @@ export const OrganosColegiadosAcuerdosForm = ({ onSubmit, mode, acuerdo, onCance
                                     name="id_documento_acuerdo_fk.documento"
                                     id="id_documento_acuerdo_fk.documento"
                                     onChange={handleFileChange}
-                                    style={{ display: 'none' }}
                                     required
                                     disabled={rol === "invitado"}
                                 />
