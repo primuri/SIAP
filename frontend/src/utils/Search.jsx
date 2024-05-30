@@ -25,7 +25,7 @@ export const Search = ({ columns, colNames, onSearch }) => {
                 onChange={(e) => setSelectedColumn(e.target.value)}
                 className="rounded-start-3 form-select d-inline p-2 shadow-sm" id="selectCol" style={{width: "11rem", backgroundPosition: 'right 0rem center' }}
             > 
-                <option>Seleccionar columna</option>
+                <option value="" disabled defaultValue={""}>Seleccionar columna</option>
                 { 
                     colNames.map((colName, index) => (
                         <option key={index} value={columns[index]}>
